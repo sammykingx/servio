@@ -1,0 +1,30 @@
+document.addEventListener("alpine:init", () => {
+  // Sidebar toggle logic
+  Alpine.store("sidebar", {
+    open: true, // sidebar is visible by default
+    toggle() {
+      this.open = !this.open;
+    },
+  });
+
+  // Main menu interactions (dropdowns, etc.)
+  Alpine.data("menu", () => ({
+    selected: "", // stores currently opened menu section
+    select(menu) {
+      this.selected = this.selected === menu ? "" : menu;
+    },
+  }));
+
+  // Theme (dark/light mode)
+  Alpine.data("themeHandler", () => ({
+    darkMode: JSON.parse(localStorage.getItem("darkMode")) || false,
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
+      localStorage.setItem("darkMode", JSON.stringify(this.darkMode));
+      document.documentElement.classList.toggle("dark", this.darkMode);
+    },
+  }));
+});
+
+window.Alpine = Alpine;
+Alpine.start();
