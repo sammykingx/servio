@@ -1,12 +1,4 @@
 document.addEventListener("alpine:init", () => {
-  // Sidebar toggle logic
-  Alpine.store("sidebar", {
-    open: true, // sidebar is visible by default
-    toggle() {
-      this.open = !this.open;
-    },
-  });
-
   // Main menu interactions (dropdowns, etc.)
   Alpine.data("menu", () => ({
     selected: "", // stores currently opened menu section
@@ -14,6 +6,7 @@ document.addEventListener("alpine:init", () => {
       this.selected = this.selected === menu ? "" : menu;
     },
   }));
+  console.log("Menu data read");
 
   // Theme (dark/light mode)
   Alpine.data("themeHandler", () => ({
@@ -24,7 +17,5 @@ document.addEventListener("alpine:init", () => {
       document.documentElement.classList.toggle("dark", this.darkMode);
     },
   }));
+  console.log("inside alpine:int listener");
 });
-
-window.Alpine = Alpine;
-Alpine.start();
