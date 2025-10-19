@@ -165,16 +165,16 @@
 										href="saas.html"
 										class="menu-dropdown-item group"
 										:class="page === 'saas' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									SaaS
-									<span class="absolute right-3 flex items-center gap-1">
-									<span
-										class="menu-dropdown-badge"
-										:class="page === 'saas' ? 'menu-dropdown-badge-active' : 'menu-dropdown-badge-inactive'"
-										>
-									New
-									</span>
-									</span>
+									>
+										SaaS
+										<span class="absolute right-3 flex items-center gap-1">
+											<span
+												class="menu-dropdown-badge"
+												:class="page === 'saas' ? 'menu-dropdown-badge-active' : 'menu-dropdown-badge-inactive'"
+											>
+												New
+											</span>
+										</span>
 									</a>
 								</li>
 								<li>
@@ -200,274 +200,6 @@
 					</li>
 					<!-- Menu Item Dashboard -->
 					
-					<!-- Menu Item AI -->
-					<li>
-						<a
-							href="blank.html#"
-							@click.prevent="selected = (selected === 'AI' ? '':'AI')"
-							class="menu-item group"
-							:class=" (selected === 'AI') || (page === 'textGenerator'  || page === 'imageGenerator' || page === 'codeGenerator' || page === 'videoGenerator') ? 'menu-item-active' : 'menu-item-inactive'"
-							>
-							<svg
-								:class="(selected === 'AI') || (page === 'AI' || page === 'textGenerator') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								>
-								<path
-									d="M18.75 2.42969V7.70424M9.42261 13.673C10.0259 14.4307 10.9562 14.9164 12 14.9164C13.0438 14.9164 13.9742 14.4307 14.5775 13.673M20 12V18.5C20 19.3284 19.3284 20 18.5 20H5.5C4.67157 20 4 19.3284 4 18.5V12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-								<path
-									d="M18.75 2.42969V2.43969M9.50391 9.875L9.50391 9.885M14.4961 9.875V9.885"
-									stroke="currentColor"
-									stroke-width="2.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-							</svg>
-							<span
-								class="menu-item-text"
-								:class="sidebarToggle ? 'xl:hidden' : ''"
-								>
-							AI Assistant
-							</span>
-							<span
-								:class="sidebarToggle ? 'xl:hidden' : ''"
-								class="absolute right-10 flex items-center gap-1"
-								>
-							<span
-								class="menu-dropdown-badge"
-								:class="page === 'textGenerator' ? 'menu-dropdown-badge-active' : 'menu-dropdown-badge-inactive'"
-								>
-							New
-							</span>
-							</span>
-							<svg
-								class="menu-item-arrow"
-								:class="[(selected === 'AI') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'xl:hidden' : '' ]"
-								width="20"
-								height="20"
-								viewBox="0 0 20 20"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								>
-								<path
-									d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-							</svg>
-						</a>
-						<!-- Dropdown Menu Start -->
-						<div
-							class="translate transform overflow-hidden"
-							:class="(selected === 'AI') ? 'block' :'hidden'"
-							>
-							<ul
-								:class="sidebarToggle ? 'xl:hidden' : 'flex'"
-								class="menu-dropdown mt-2 flex flex-col gap-1 pl-9"
-								>
-								<li>
-									<a
-										href="text-generator.html"
-										class="menu-dropdown-item group"
-										:class="page === 'textGenerator' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Text Generator
-									</a>
-								</li>
-								<li>
-									<a
-										href="image-generator.html"
-										class="menu-dropdown-item group"
-										:class="page === 'imageGenerator' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Image Generator
-									</a>
-								</li>
-								<li>
-									<a
-										href="code-generator.html"
-										class="menu-dropdown-item group"
-										:class="page === 'codeGenerator' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Code Generator
-									</a>
-								</li>
-								<li>
-									<a
-										href="video-generator.html"
-										class="menu-dropdown-item group"
-										:class="page === 'videoGenerator' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Video Generator
-									</a>
-								</li>
-							</ul>
-						</div>
-						<!-- Dropdown Menu End -->
-					</li>
-					<!-- Menu Item AI -->
-					<!-- Menu Item Ecommerce -->
-					<li>
-						<a
-							href="blank.html#"
-							@click.prevent="selected = (selected === 'E-commerce' ? '':'E-commerce')"
-							class="menu-item group"
-							:class=" (selected === 'E-commerce') || (page === 'products' || page === 'addProduct' || page === 'billing' || page === 'invoices' || page === 'singleInvoice' || page === 'createInvoice' || page === 'transactions' || page === 'singleTransaction') ? 'menu-item-active' : 'menu-item-inactive'"
-							>
-							<svg
-								:class="(selected === 'E-commerce') || (page === 'products' || page === 'addProduct' || page === 'billing' || page === 'invoices' || page === 'singleInvoice' || page === 'createInvoice' || page === 'transactions' || page === 'singleTransaction') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								>
-								<path
-									d="M2.31641 4H3.49696C4.24468 4 4.87822 4.55068 4.98234 5.29112L5.13429 6.37161M5.13429 6.37161L6.23641 14.2089C6.34053 14.9493 6.97407 15.5 7.72179 15.5L17.0833 15.5C17.6803 15.5 18.2205 15.146 18.4587 14.5986L21.126 8.47023C21.5572 7.4795 20.8312 6.37161 19.7507 6.37161H5.13429Z"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-								<path
-									d="M7.7832 19.5H7.7932M16.3203 19.5H16.3303"
-									stroke="currentColor"
-									stroke-width="3.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-							</svg>
-							<span
-								class="menu-item-text"
-								:class="sidebarToggle ? 'xl:hidden' : ''"
-								>
-							E-commerce
-							</span>
-							<span
-								:class="sidebarToggle ? 'xl:hidden' : ''"
-								class="absolute right-10 flex items-center gap-1"
-								>
-							<span
-								class="menu-dropdown-badge"
-								:class="page === 'products' ? 'menu-dropdown-badge-active' : 'menu-dropdown-badge-inactive'"
-								>
-							New
-							</span>
-							</span>
-							<svg
-								class="menu-item-arrow"
-								:class="[(selected === 'E-commerce') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'xl:hidden' : '' ]"
-								width="20"
-								height="20"
-								viewBox="0 0 20 20"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								>
-								<path
-									d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-							</svg>
-						</a>
-						<!-- Dropdown Menu Start -->
-						<div
-							class="translate transform overflow-hidden"
-							:class="(selected === 'E-commerce') ? 'block' :'hidden'"
-							>
-							<ul
-								:class="sidebarToggle ? 'xl:hidden' : 'flex'"
-								class="menu-dropdown mt-2 flex flex-col gap-1 pl-9"
-								>
-								<li>
-									<a
-										href="products-list.html"
-										class="menu-dropdown-item group"
-										:class="page === 'products' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Products
-									</a>
-								</li>
-								<li>
-									<a
-										href="add-product.html"
-										class="menu-dropdown-item group"
-										:class="page === 'addProduct' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Add Product
-									</a>
-								</li>
-								<li>
-									<a
-										href="billing.html"
-										class="menu-dropdown-item group"
-										:class="page === 'billing' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Billing
-									</a>
-								</li>
-								<li>
-									<a
-										href="invoices.html"
-										class="menu-dropdown-item group"
-										:class="page === 'invoices' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Invoices
-									</a>
-								</li>
-								<li>
-									<a
-										href="single-invoice.html"
-										class="menu-dropdown-item group"
-										:class="page === 'singleInvoice' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Single Invoice
-									</a>
-								</li>
-								<li>
-									<a
-										href="create-invoice.html"
-										class="menu-dropdown-item group"
-										:class="page === 'createInvoice' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Create Invoice
-									</a>
-								</li>
-								<li>
-									<a
-										href="transactions.html"
-										class="menu-dropdown-item group"
-										:class="page === 'transactions' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Transactions
-									</a>
-								</li>
-								<li>
-									<a
-										href="single-transaction.html"
-										class="menu-dropdown-item group"
-										:class="page === 'singleTransaction' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Single Transaction
-									</a>
-								</li>
-							</ul>
-						</div>
-						<!-- Dropdown Menu End -->
-					</li>
-					<!-- Menu Item AI -->
 					<!-- Menu Item Calendar -->
 					<li>
 						<a
@@ -1015,97 +747,7 @@
 						</a>
 					</li>
 					<!-- Menu Item Chat -->
-					<!-- Menu Item Tables -->
-					<li>
-						<a
-							href="blank.html#"
-							@click.prevent="selected = (selected === 'Support' ? '':'Support')"
-							class="menu-item group"
-							:class="(selected === 'Support') || (page === 'ticketLists' || page === 'ticketReply') ? 'menu-item-active' : 'menu-item-inactive'"
-							>
-							<svg
-								:class="(selected === 'Support') || (page === 'ticketLists' || page === 'ticketLists') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								>
-								<path
-									d="M20 17.0518V12C20 7.58174 16.4183 4 12 4C7.58168 4 3.99994 7.58174 3.99994 12V17.0518M19.9998 14.041V19.75C19.9998 20.5784 19.3282 21.25 18.4998 21.25H13.9998M6.5 18.75H5.5C4.67157 18.75 4 18.0784 4 17.25V13.75C4 12.9216 4.67157 12.25 5.5 12.25H6.5C7.32843 12.25 8 12.9216 8 13.75V17.25C8 18.0784 7.32843 18.75 6.5 18.75ZM17.4999 18.75H18.4999C19.3284 18.75 19.9999 18.0784 19.9999 17.25V13.75C19.9999 12.9216 19.3284 12.25 18.4999 12.25H17.4999C16.6715 12.25 15.9999 12.9216 15.9999 13.75V17.25C15.9999 18.0784 16.6715 18.75 17.4999 18.75Z"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-							</svg>
-							<span
-								class="menu-item-text"
-								:class="sidebarToggle ? 'xl:hidden' : ''"
-								>
-							Support Ticket
-							</span>
-							<span
-								:class="sidebarToggle ? 'xl:hidden' : ''"
-								class="absolute right-10 flex items-center gap-1"
-								>
-							<span
-								class="menu-dropdown-badge"
-								:class="page === 'products' ? 'menu-dropdown-badge-active' : 'menu-dropdown-badge-inactive'"
-								>
-							New
-							</span>
-							</span>
-							<svg
-								class="menu-item-arrow absolute top-1/2 right-2.5 -translate-y-1/2 stroke-current"
-								:class="[(selected === 'Support') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'xl:hidden' : '' ]"
-								width="20"
-								height="20"
-								viewBox="0 0 20 20"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								>
-								<path
-									d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									/>
-							</svg>
-						</a>
-						<!-- Dropdown Menu Start -->
-						<div
-							class="translate transform overflow-hidden"
-							:class="(selected === 'Support') ? 'block' :'hidden'"
-							>
-							<ul
-								:class="sidebarToggle ? 'xl:hidden' : 'flex'"
-								class="menu-dropdown mt-2 flex flex-col gap-1 pl-9"
-								>
-								<li>
-									<a
-										href="support-tickets.html"
-										class="menu-dropdown-item group"
-										:class="page === 'ticketLists' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Ticket List
-									</a>
-								</li>
-								<li>
-									<a
-										href="support-ticket-reply.html"
-										class="menu-dropdown-item group"
-										:class="page === 'ticketReply' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-										>
-									Ticket Reply
-									</a>
-								</li>
-							</ul>
-						</div>
-						<!-- Dropdown Menu End -->
-					</li>
-					<!-- Menu Item Tables -->
+					
 					<!-- Menu Item Inbox -->
 					<li>
 						<a
@@ -1667,10 +1309,10 @@
 			:class="sidebarToggle ? 'xl:hidden' : ''"
 			class="mx-auto mb-10 w-full max-w-60 rounded-2xl bg-gray-50 px-4 py-5 text-center dark:bg-white/[0.03]"
 			>
-			<h3 class="mb-2 font-semibold text-gray-900 dark:text-white">
+			<h3 class="mb-2 font-medium text-gray-700 dark:text-white">
 				#1 Tailwind CSS Dashboard
 			</h3>
-			<p class="text-theme-sm mb-4 text-gray-500 dark:text-gray-400">
+			<p class="text-sm mb-4 text-gray-500 dark:text-gray-400">
 				Leading Tailwind CSS Admin Template with 400+ UI Component and Pages.
 			</p>
 			<a

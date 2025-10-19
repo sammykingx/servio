@@ -6,7 +6,7 @@ document.addEventListener("alpine:init", () => {
       this.selected = this.selected === menu ? "" : menu;
     },
   }));
-  console.log("Menu data read");
+  
 
   // Theme (dark/light mode)
   Alpine.data("themeHandler", () => ({
@@ -17,5 +17,5 @@ document.addEventListener("alpine:init", () => {
       document.documentElement.classList.toggle("dark", this.darkMode);
     },
   }));
-  console.log("inside alpine:int listener");
+  
 });

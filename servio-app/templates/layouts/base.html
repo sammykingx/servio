@@ -56,26 +56,28 @@
 				<!-- ===== Main Content Start ===== -->
 				<main>
 					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-						{% include "components/breadcrumbs.html" %}
+						{% block content %}
+							{# include "components/breadcrumbs.html" #}
 
-						<div
-							class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
-						>
-							<div class="mx-auto w-full max-w-[630px] text-center">
-								<h3
-									class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl"
-									>
-									Card Title Here
-								</h3>
-								<p
-									class="text-sm text-gray-500 dark:text-gray-400 sm:text-base"
-									>
-									Start putting content on grids or panels, you can also use
-									different combinations of grids.Please check out the dashboard
-									and other pages
-								</p>
+							<div
+								class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
+							>
+								<div class="mx-auto w-full max-w-[630px] text-center">
+									<h3
+										class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl"
+										>
+										Card Title Here
+									</h3>
+									<p
+										class="text-sm text-gray-500 dark:text-gray-400 sm:text-base"
+										>
+										Start putting content on grids or panels, you can also use
+										different combinations of grids.Please check out the dashboard
+										and other pages
+									</p>
+								</div>
 							</div>
-						</div>
+						{% endblock %}
 					</div>
 				</main>
 
@@ -86,8 +88,6 @@
   	</body>
 	<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
 	<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
-	<script defer src="{% static 'js/vendors/alpine-persist.min.js' %}"></script>
-	<!-- <script defer src="{% static 'js/vendors/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script>
-	<script defer src="{% static 'js/bundle.js' %}"></script> -->
-	
+	{% block custom_page_js %}{% endblock %}
+	<!-- <script defer src="{% static 'js/vendors/alpine-persist.min.js' %}"></script> -->
 </html>
