@@ -40,7 +40,7 @@
 
     	<!-- ===== Page Wrapper Start ===== -->
     	<div class="flex h-screen overflow-hidden">
-      		{% include "partials/sidebar.html" %}
+      		{% include "partials/sidebar/base-menu.html" %}
       		
 
       		<!-- ===== Content Area Start ===== -->
@@ -85,9 +85,34 @@
       		<!-- ===== Content Area End ===== -->
     	</div>
     	<!-- ===== Page Wrapper End ===== -->
+		 <footer class="w-full border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+			<div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-gray-600 transition-all sm:flex-row dark:text-gray-400">
+				
+				<!-- Copyright -->
+				<p class="text-center sm:text-left">
+				© <span id="year"></span> Servio. All rights reserved.
+				</p>
+
+				<!-- Attribution -->
+				<p class="text-center sm:text-right">
+				Built with ❤️ by 
+				<a 
+					href="mailto:sammy.sammykingx.com.ng" 
+					target="_blank" 
+					class="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+				>
+					Divgm Technologies
+				</a>
+				</p>
+			</div>
+		</footer>
   	</body>
 	<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
 	<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
+	<script>
+		// Auto-update year dynamically
+		document.getElementById("year").textContent = new Date().getFullYear();
+	</script>
 	{% block custom_page_js %}{% endblock %}
 	<!-- <script defer src="{% static 'js/vendors/alpine-persist.min.js' %}"></script> -->
 </html>
