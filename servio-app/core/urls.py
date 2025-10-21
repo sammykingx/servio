@@ -23,5 +23,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name="layouts/base.html"), name="test-page"),
     path("dashboard/", TemplateView.as_view(template_name="accounts/dashboards/admin.html"), name="admin-dashboard"),
-    path("client/", TemplateView.as_view(template_name="accounts/dashboards/users.html"), name="user-dashboard")
+    path("client/", TemplateView.as_view(template_name="accounts/dashboards/users.html"), name="user-dashboard"),
+    path("provider/", TemplateView.as_view(template_name="accounts/dashboards/service-provider.html"), name="provider-dashboard")
 ]
