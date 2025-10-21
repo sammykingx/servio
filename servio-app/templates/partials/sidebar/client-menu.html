@@ -1,101 +1,66 @@
 <div>
+   <h3 class="mb-4 text-xs leading-[20px] text-gray-400 uppercase">
+      <span
+         class="menu-group-title"
+         :class="sidebarToggle ? 'xl:hidden' : ''"
+         >
+      Operations
+      </span>
+      <svg
+         :class="sidebarToggle ? 'xl:block hidden' : 'hidden'"
+         class="menu-group-icon mx-auto fill-current"
+         width="24"
+         height="24"
+         viewBox="0 0 24 24"
+         fill="none"
+         xmlns="http://www.w3.org/2000/svg"
+         >
+         <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M5.99915 10.2451C6.96564 10.2451 7.74915 11.0286 7.74915 11.9951V12.0051C7.74915 12.9716 6.96564 13.7551 5.99915 13.7551C5.03265 13.7551 4.24915 12.9716 4.24915 12.0051V11.9951C4.24915 11.0286 5.03265 10.2451 5.99915 10.2451ZM17.9991 10.2451C18.9656 10.2451 19.7491 11.0286 19.7491 11.9951V12.0051C19.7491 12.9716 18.9656 13.7551 17.9991 13.7551C17.0326 13.7551 16.2491 12.9716 16.2491 12.0051V11.9951C16.2491 11.0286 17.0326 10.2451 17.9991 10.2451ZM13.7491 11.9951C13.7491 11.0286 12.9656 10.2451 11.9991 10.2451C11.0326 10.2451 10.2491 11.0286 10.2491 11.9951V12.0051C10.2491 12.9716 11.0326 13.7551 11.9991 13.7551C12.9656 13.7551 13.7491 12.9716 13.7491 12.0051V11.9951Z"
+            fill="currentColor"
+            />
+      </svg>
+   </h3>
    <ul class="mb-6 flex flex-col gap-1">
       <li>
          <a
-            href="blank.html#"
-            @click.prevent="selected = (selected === 'Task' ? '':'Task')"
-            class="menu-item group"
-            :class=" (selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-active' : 'menu-item-inactive'"
+            href="#"
+            @click="selected = (selected === 'discover-gigs' ? '':'discover-gigs')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'discover-gigs') && (page === 'discover-gigs') ? 'menu-item-active' : 'menu-item-inactive'"
             >
             <svg
-               :class="(selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+               :class="(selected === 'discover-gigs') && (page === 'discover-gigs') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                width="24"
                height="24"
                viewBox="0 0 24 24"
                fill="none"
                xmlns="http://www.w3.org/2000/svg"
                >
-               <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M7.75586 5.50098C7.75586 5.08676 8.09165 4.75098 8.50586 4.75098H18.4985C18.9127 4.75098 19.2485 5.08676 19.2485 5.50098L19.2485 15.4956C19.2485 15.9098 18.9127 16.2456 18.4985 16.2456H8.50586C8.09165 16.2456 7.75586 15.9098 7.75586 15.4956V5.50098ZM8.50586 3.25098C7.26322 3.25098 6.25586 4.25834 6.25586 5.50098V6.26318H5.50195C4.25931 6.26318 3.25195 7.27054 3.25195 8.51318V18.4995C3.25195 19.7422 4.25931 20.7495 5.50195 20.7495H15.4883C16.7309 20.7495 17.7383 19.7421 17.7383 18.4995L17.7383 17.7456H18.4985C19.7411 17.7456 20.7485 16.7382 20.7485 15.4956L20.7485 5.50097C20.7485 4.25833 19.7411 3.25098 18.4985 3.25098H8.50586ZM16.2383 17.7456H8.50586C7.26322 17.7456 6.25586 16.7382 6.25586 15.4956V7.76318H5.50195C5.08774 7.76318 4.75195 8.09897 4.75195 8.51318V18.4995C4.75195 18.9137 5.08774 19.2495 5.50195 19.2495H15.4883C15.9025 19.2495 16.2383 18.9137 16.2383 18.4995L16.2383 17.7456Z"
-                  fill="currentColor"
-                  />
+               <circle cx="6" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/>
+               <circle cx="18" cy="6" r="2" stroke="currentColor" stroke-width="1.5"/>
+               <circle cx="18" cy="18" r="2" stroke="currentColor" stroke-width="1.5"/>
+               <path d="M7.5 11L16.5 7.5M7.5 13L16.5 16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
                >
-            Discover
+            Discover gigs
             </span>
-            <svg
-               class="menu-item-arrow"
-               :class="[(selected === 'Task') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'xl:hidden' : '' ]"
-               width="20"
-               height="20"
-               viewBox="0 0 20 20"
-               fill="none"
-               xmlns="http://www.w3.org/2000/svg"
-               >
-               <path
-                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  />
-            </svg>
          </a>
-         <!-- Dropdown Menu Start -->
-         <div
-            class="translate transform overflow-hidden"
-            :class="(selected === 'Task') ? 'block' :'hidden'"
-            >
-            <ul
-               :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-               class="menu-dropdown mt-2 flex flex-col gap-1 pl-9"
-               >
-               <li>
-                  <a
-                     href="#"
-                     class="menu-dropdown-item group"
-                     :class="page === 'taskList' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                  Create Gig
-                  </a>
-               </li>
-               <li>
-                  <a
-                     href="task-kanban.html"
-                     class="menu-dropdown-item group"
-                     :class="page === 'search-providers' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                  Search Providers
-                  </a>
-               </li>
-               <li>
-                  <a
-                     href="task-kanban.html"
-                     class="menu-dropdown-item group"
-                     :class="page === 'favourites' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                  Favourites
-                  </a>
-               </li>
-               <!-- Add more drop down menu-->
-            </ul>
-         </div>
-         <!-- Dropdown Menu End -->
       </li>
       <li>
          <a
             href="#"
-            @click.prevent="selected = (selected === 'Task' ? '':'Task')"
-            class="menu-item group"
-            :class=" (selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-active' : 'menu-item-inactive'"
+            @click="selected = (selected === 'bookings' ? '':'bookings')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'bookings') && (page === 'bookings') ? 'menu-item-active' : 'menu-item-inactive'"
             >
             <svg
-               :class="(selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+               :class="(selected === 'Bookings') && (page === 'bookings') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
                width="24"
                height="24"
                viewBox="0 0 24 24"
@@ -105,93 +70,97 @@
                <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"
-                  d="M7.75586 5.50098C7.75586 5.08676 8.09165 4.75098 8.50586 4.75098H18.4985C18.9127 4.75098 19.2485 5.08676 19.2485 5.50098L19.2485 15.4956C19.2485 15.9098 18.9127 16.2456 18.4985 16.2456H8.50586C8.09165 16.2456 7.75586 15.9098 7.75586 15.4956V5.50098ZM8.50586 3.25098C7.26322 3.25098 6.25586 4.25834 6.25586 5.50098V6.26318H5.50195C4.25931 6.26318 3.25195 7.27054 3.25195 8.51318V18.4995C3.25195 19.7422 4.25931 20.7495 5.50195 20.7495H15.4883C16.7309 20.7495 17.7383 19.7421 17.7383 18.4995L17.7383 17.7456H18.4985C19.7411 17.7456 20.7485 16.7382 20.7485 15.4956L20.7485 5.50097C20.7485 4.25833 19.7411 3.25098 18.4985 3.25098H8.50586ZM16.2383 17.7456H8.50586C7.26322 17.7456 6.25586 16.7382 6.25586 15.4956V7.76318H5.50195C5.08774 7.76318 4.75195 8.09897 4.75195 8.51318V18.4995C4.75195 18.9137 5.08774 19.2495 5.50195 19.2495H15.4883C15.9025 19.2495 16.2383 18.9137 16.2383 18.4995L16.2383 17.7456Z"
+                  d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V9V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V9V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM8 5.25H5.5C5.08579 5.25 4.75 5.58579 4.75 6V8.25H19.25V6C19.25 5.58579 18.9142 5.25 18.5 5.25H16H8ZM19.25 9.75H4.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75Z"
                   fill="currentColor"
                   />
             </svg>
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
-            >
-                Bookings
-            </span>
-            <svg
-               class="menu-item-arrow"
-               :class="[(selected === 'Task') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'xl:hidden' : '' ]"
-               width="20"
-               height="20"
-               viewBox="0 0 20 20"
-               fill="none"
-               xmlns="http://www.w3.org/2000/svg"
-            >
-               <path
-                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-            </svg>
-         </a>
-         <!-- Dropdown Menu Start -->
-         <div
-            class="translate transform overflow-hidden"
-            :class="(selected === 'Task') ? 'block' :'hidden'"
-            >
-            <ul
-               :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-               class="menu-dropdown mt-2 flex flex-col gap-1 pl-9"
                >
-               <li>
-                  <a
-                     href="#"
-                     class="menu-dropdown-item group"
-                     :class="page === 'all-bookings' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                    My Bookings
-                  </a>
-               </li>
-               <li>
-                  <a
-                    href="task-kanban.html"
-                    class="menu-dropdown-item group"
-                    :class="page === '#' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                    >
-                       In Progress
-                    </a>
-               </li>
-               <li>
-                  <a
-                     href="task-kanban.html"
-                     class="menu-dropdown-item group"
-                     :class="page === 'completed-bookings' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                        Completed Bookings
-                  </a>
-               </li>
-               <li>
-                  <a
-                     href="task-kanban.html"
-                     class="menu-dropdown-item group"
-                     :class="page === 'recuring-booking' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                        Recurring Booking
-                  </a>
-               </li>
-               <!-- Add more drop down menu-->
-            </ul>
-         </div>
-         <!-- Dropdown Menu End -->
+            Bookings
+            </span>
+         </a>
       </li>
       <li>
          <a
             href="#"
-            @click.prevent="selected = (selected === 'Task' ? '':'Task')"
-            class="menu-item group"
-            :class=" (selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-active' : 'menu-item-inactive'"
+            @click="selected = (selected === 'payments' ? '':'payments')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'payments') && (page === 'payments') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+           <svg
+               :class="(selected === 'payments') && (page === 'payments') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+               width="24"
+               height="24"
+               viewBox="0 0 24 24"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+               aria-hidden="true"
+            >
+
+               <!-- Hand / tray (subtle filled base to give depth) -->
+               <path
+                  d="M3 16.5C3 15.12 4.12 14 5.5 14h9.8c.9 0 1.72.49 2.14 1.27l1.58 2.69A1 1 0 0 1 17.9 20H5.5C4.12 20 3 18.88 3 17.5v-1z"
+                  fill="currentColor"
+                  opacity="0.12"
+               />
+
+               <!-- Hand outline -->
+               <path
+                  d="M5.5 14h12.4c.6 0 1.12.34 1.37.87l1.58 2.69a.75.75 0 0 1-.68 1.14H5.5A2.5 2.5 0 0 1 3 16.27V15"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  fill="none"
+               />
+
+               <!-- Coin / circle -->
+               <circle cx="12" cy="6.8" r="3" fill="currentColor" />
+
+               <!-- Dollar sign inside coin -->
+               <path
+                  d="M12 5.0v1.0
+                     c-.7 0-1.25.45-1.25 1.0s.55 1.0 1.25 1.0
+                     c.7 0 1.25.45 1.25 1.0s-.55 1.0-1.25 1.0"
+                  stroke="white"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  fill="none"
+               />
+               <path
+                  d="M12 4.2v0.6"
+                  stroke="white"
+                  stroke-width="1"
+                  stroke-linecap="round"
+               />
+               <path
+                  d="M12 11.4v0.6"
+                  stroke="white"
+                  stroke-width="1"
+                  stroke-linecap="round"
+               />
+            </svg>
+            <span
+               class="menu-item-text"
+               :class="sidebarToggle ? 'xl:hidden' : ''"
+            >
+               Payments
+            </span>
+         </a>
+      </li>
+      
+      <li>
+         <a
+            href="#"
+            @click="selected = (selected === 'favourites' ? '':'favourites')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'favourites') && (page === 'favourites') ? 'menu-item-active' : 'menu-item-inactive'"
             >
             <svg
-               :class="(selected === 'Task') || (page === 'taskList' || page === 'taskKanban') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+               :class="(selected === 'favourites') && (page === 'favourites') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
                width="24"
                height="24"
                viewBox="0 0 24 24"
@@ -201,83 +170,170 @@
                <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"
-                  d="M7.75586 5.50098C7.75586 5.08676 8.09165 4.75098 8.50586 4.75098H18.4985C18.9127 4.75098 19.2485 5.08676 19.2485 5.50098L19.2485 15.4956C19.2485 15.9098 18.9127 16.2456 18.4985 16.2456H8.50586C8.09165 16.2456 7.75586 15.9098 7.75586 15.4956V5.50098ZM8.50586 3.25098C7.26322 3.25098 6.25586 4.25834 6.25586 5.50098V6.26318H5.50195C4.25931 6.26318 3.25195 7.27054 3.25195 8.51318V18.4995C3.25195 19.7422 4.25931 20.7495 5.50195 20.7495H15.4883C16.7309 20.7495 17.7383 19.7421 17.7383 18.4995L17.7383 17.7456H18.4985C19.7411 17.7456 20.7485 16.7382 20.7485 15.4956L20.7485 5.50097C20.7485 4.25833 19.7411 3.25098 18.4985 3.25098H8.50586ZM16.2383 17.7456H8.50586C7.26322 17.7456 6.25586 16.7382 6.25586 15.4956V7.76318H5.50195C5.08774 7.76318 4.75195 8.09897 4.75195 8.51318V18.4995C4.75195 18.9137 5.08774 19.2495 5.50195 19.2495H15.4883C15.9025 19.2495 16.2383 18.9137 16.2383 18.4995L16.2383 17.7456Z"
+                  d="M4.00002 12.0957C4.00002 7.67742 7.58174 4.0957 12 4.0957C16.4183 4.0957 20 7.67742 20 12.0957C20 16.514 16.4183 20.0957 12 20.0957H5.06068L6.34317 18.8132C6.48382 18.6726 6.56284 18.4818 6.56284 18.2829C6.56284 18.084 6.48382 17.8932 6.34317 17.7526C4.89463 16.304 4.00002 14.305 4.00002 12.0957ZM12 2.5957C6.75332 2.5957 2.50002 6.849 2.50002 12.0957C2.50002 14.4488 3.35633 16.603 4.77303 18.262L2.71969 20.3154C2.50519 20.5299 2.44103 20.8525 2.55711 21.1327C2.6732 21.413 2.94668 21.5957 3.25002 21.5957H12C17.2467 21.5957 21.5 17.3424 21.5 12.0957C21.5 6.849 17.2467 2.5957 12 2.5957ZM7.62502 10.8467C6.93467 10.8467 6.37502 11.4063 6.37502 12.0967C6.37502 12.787 6.93467 13.3467 7.62502 13.3467H7.62512C8.31548 13.3467 8.87512 12.787 8.87512 12.0967C8.87512 11.4063 8.31548 10.8467 7.62512 10.8467H7.62502ZM10.75 12.0967C10.75 11.4063 11.3097 10.8467 12 10.8467H12.0001C12.6905 10.8467 13.2501 11.4063 13.2501 12.0967C13.2501 12.787 12.6905 13.3467 12.0001 13.3467H12C11.3097 13.3467 10.75 12.787 10.75 12.0967ZM16.375 10.8467C15.6847 10.8467 15.125 11.4063 15.125 12.0967C15.125 12.787 15.6847 13.3467 16.375 13.3467H16.3751C17.0655 13.3467 17.6251 12.787 17.6251 12.0967C17.6251 11.4063 17.0655 10.8467 16.3751 10.8467H16.375Z"
                   fill="currentColor"
                   />
             </svg>
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
-            >
-                Payments
+               >
+            Favourites
             </span>
+         </a>
+      </li>
+      
+      <li>
+         <a
+            href="#"
+            @click="selected = (selected === 'Rewards' ? '':'Rewards')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'Rewards') && (page === 'Rewards') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
             <svg
-               class="menu-item-arrow"
-               :class="[(selected === 'Task') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'xl:hidden' : '' ]"
-               width="20"
-               height="20"
-               viewBox="0 0 20 20"
+               :class="(selected === 'Rewards') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+               width="24"
+               height="24"
+               viewBox="0 0 24 24"
                fill="none"
                xmlns="http://www.w3.org/2000/svg"
             >
                <path
-                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 2C12.4142 2 12.75 2.33579 12.75 2.75V4H18C18.4142 4 18.75 4.33579 18.75 4.75V9C18.75 11.3284 17.0784 13.2975 14.8984 13.8675C14.4937 15.6618 13.4478 17.1995 12 18.1839C10.5522 17.1995 9.50628 15.6618 9.10159 13.8675C6.92156 13.2975 5.25 11.3284 5.25 9V4.75C5.25 4.33579 5.58579 4 6 4H11.25V2.75C11.25 2.33579 11.5858 2 12 2ZM12 5.5H6.75V9C6.75 10.7949 8.20507 12.25 10 12.25H14C15.7949 12.25 17.25 10.7949 17.25 9V5.5H12ZM9 20.25C9 19.8358 9.33579 19.5 9.75 19.5H14.25C14.6642 19.5 15 19.8358 15 20.25C15 21.2165 14.2165 22 13.25 22H10.75C9.7835 22 9 21.2165 9 20.25Z"
+                  fill="currentColor"
+               />
+            </svg>
+            <span
+               class="menu-item-text"
+               :class="sidebarToggle ? 'xl:hidden' : ''"
+            >
+               Offers & Rewards
+            </span>
+         </a>
+      </li>
+   </ul>
+</div>
+<div>
+   <h3 class="mb-4 text-xs leading-[20px] text-gray-400 uppercase">
+      <span
+         class="menu-group-title"
+         :class="sidebarToggle ? 'xl:hidden' : ''"
+         >
+      Communication
+      </span>
+      <svg
+         :class="sidebarToggle ? 'xl:block hidden' : 'hidden'"
+         class="menu-group-icon mx-auto fill-current"
+         width="24"
+         height="24"
+         viewBox="0 0 24 24"
+         fill="none"
+         xmlns="http://www.w3.org/2000/svg"
+         >
+         <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M5.99915 10.2451C6.96564 10.2451 7.74915 11.0286 7.74915 11.9951V12.0051C7.74915 12.9716 6.96564 13.7551 5.99915 13.7551C5.03265 13.7551 4.24915 12.9716 4.24915 12.0051V11.9951C4.24915 11.0286 5.03265 10.2451 5.99915 10.2451ZM17.9991 10.2451C18.9656 10.2451 19.7491 11.0286 19.7491 11.9951V12.0051C19.7491 12.9716 18.9656 13.7551 17.9991 13.7551C17.0326 13.7551 16.2491 12.9716 16.2491 12.0051V11.9951C16.2491 11.0286 17.0326 10.2451 17.9991 10.2451ZM13.7491 11.9951C13.7491 11.0286 12.9656 10.2451 11.9991 10.2451C11.0326 10.2451 10.2491 11.0286 10.2491 11.9951V12.0051C10.2491 12.9716 11.0326 13.7551 11.9991 13.7551C12.9656 13.7551 13.7491 12.9716 13.7491 12.0051V11.9951Z"
+            fill="currentColor"
+            />
+      </svg>
+   </h3>
+   <ul class="mb-6 flex flex-col gap-1">
+      <li>
+         <a
+            href="#"
+            @click="selected = (selected === 'messages' ? '':'messages')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'messages') && (page === 'messages') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+            <svg
+               :class="(selected === 'messages') && (page === 'messages') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+               width="24"
+               height="24"
+               viewBox="0 0 24 24"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+               >
+               <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M4.00002 12.0957C4.00002 7.67742 7.58174 4.0957 12 4.0957C16.4183 4.0957 20 7.67742 20 12.0957C20 16.514 16.4183 20.0957 12 20.0957H5.06068L6.34317 18.8132C6.48382 18.6726 6.56284 18.4818 6.56284 18.2829C6.56284 18.084 6.48382 17.8932 6.34317 17.7526C4.89463 16.304 4.00002 14.305 4.00002 12.0957ZM12 2.5957C6.75332 2.5957 2.50002 6.849 2.50002 12.0957C2.50002 14.4488 3.35633 16.603 4.77303 18.262L2.71969 20.3154C2.50519 20.5299 2.44103 20.8525 2.55711 21.1327C2.6732 21.413 2.94668 21.5957 3.25002 21.5957H12C17.2467 21.5957 21.5 17.3424 21.5 12.0957C21.5 6.849 17.2467 2.5957 12 2.5957ZM7.62502 10.8467C6.93467 10.8467 6.37502 11.4063 6.37502 12.0967C6.37502 12.787 6.93467 13.3467 7.62502 13.3467H7.62512C8.31548 13.3467 8.87512 12.787 8.87512 12.0967C8.87512 11.4063 8.31548 10.8467 7.62512 10.8467H7.62502ZM10.75 12.0967C10.75 11.4063 11.3097 10.8467 12 10.8467H12.0001C12.6905 10.8467 13.2501 11.4063 13.2501 12.0967C13.2501 12.787 12.6905 13.3467 12.0001 13.3467H12C11.3097 13.3467 10.75 12.787 10.75 12.0967ZM16.375 10.8467C15.6847 10.8467 15.125 11.4063 15.125 12.0967C15.125 12.787 15.6847 13.3467 16.375 13.3467H16.3751C17.0655 13.3467 17.6251 12.787 17.6251 12.0967C17.6251 11.4063 17.0655 10.8467 16.3751 10.8467H16.375Z"
+                  fill="currentColor"
+                  />
+            </svg>
+            <span
+               class="menu-item-text"
+               :class="sidebarToggle ? 'xl:hidden' : ''"
+               >
+            Messages
+            </span>
+         </a>
+      </li>
+      <li>
+         <a
+            href="#"
+            @click="selected = (selected === 'Ratings' ? '':'Ratings')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'reviews') && (page === 'reviews') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+            <svg
+               :class="(selected === 'Ratings') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+               width="24"
+               height="24"
+               viewBox="0 0 24 24"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img"
+               aria-label="star outline"
+            >
+               <path
+                  d="M12 2.3l2.7 5.47 6.04.88-4.37 4.25 1.03 6.01L12 17.9l-5.34 2.99 1.03-6.01L3.32 8.65l6.04-.88L12 2.3z"
                   stroke="currentColor"
                   stroke-width="1.5"
-                  stroke-linecap="round"
                   stroke-linejoin="round"
-                />
+                  stroke-linecap="round"
+                  fill="none"
+               />
             </svg>
-         </a>
-         <!-- Dropdown Menu Start -->
-         <div
-            class="translate transform overflow-hidden"
-            :class="(selected === 'Task') ? 'block' :'hidden'"
-            >
-            <ul
-               :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-               class="menu-dropdown mt-2 flex flex-col gap-1 pl-9"
+            <span
+               class="menu-item-text"
+               :class="sidebarToggle ? 'xl:hidden' : ''"
                >
-               <li>
-                  <a
-                     href="#"
-                     class="menu-dropdown-item group"
-                     :class="page === 'all-bookings' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                    Payment History
-                  </a>
-               </li>
-               <li>
-                  <a
-                    href="task-kanban.html"
-                    class="menu-dropdown-item group"
-                    :class="page === '#' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                    >
-                       Invoice & Receipts
-                    </a>
-               </li>
-               <li>
-                  <a
-                     href="task-kanban.html"
-                     class="menu-dropdown-item group"
-                     :class="page === 'completed-bookings' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                        Wallet / Saved Cards
-                  </a>
-               </li>
-               <li>
-                  <a
-                     href="task-kanban.html"
-                     class="menu-dropdown-item group"
-                     :class="page === 'recuring-booking' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                     >
-                        Refunds
-                  </a>
-               </li>
-               <!-- Add more drop down menu-->
-            </ul>
-         </div>
-         <!-- Dropdown Menu End -->
+            Reviews & Ratings
+            </span>
+         </a>
+      </li>
+      <li>
+         <a
+            href="#"
+            @click="selected = (selected === 'Support' ? '':'Support')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'Support') && (page === 'Support') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+            <svg
+               :class="(selected === 'Support') && (page === 'Support') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+               width="24"
+               height="24"
+               viewBox="0 0 24 24"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+               >
+               <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5 4C3.89543 4 3 4.89543 3 6V8.586C3 9.13828 3.44772 9.586 4 9.586C5.10457 9.586 6 10.4814 6 11.586C6 12.6906 5.10457 13.586 4 13.586C3.44772 13.586 3 14.0337 3 14.586V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V14.586C21 14.0337 20.5523 13.586 20 13.586C18.8954 13.586 18 12.6906 18 11.586C18 10.4814 18.8954 9.586 20 9.586C20.5523 9.586 21 9.13828 21 8.586V6C21 4.89543 20.1046 4 19 4H5ZM13.293 8.293C13.6835 8.68353 13.6835 9.31669 13.293 9.70722L12.7072 10.293C12.256 10.7442 12 11.3475 12 12C12 12.5523 11.5523 13 11 13C10.4477 13 10 12.5523 10 12C10 10.7865 10.4879 9.61808 11.3431 8.76287L11.9289 8.1771C12.3195 7.78658 12.9526 7.78658 13.3431 8.1771L13.293 8.293ZM12 16C12.5523 16 13 15.5523 13 15C13 14.4477 12.5523 14 12 14C11.4477 14 11 14.4477 11 15C11 15.5523 11.4477 16 12 16Z"
+                  fill="currentColor"
+               />
+            </svg>
+            <span
+               class="menu-item-text"
+               :class="sidebarToggle ? 'xl:hidden' : ''"
+               >
+            Support Ticket
+            </span>
+         </a>
       </li>
    </ul>
 </div>
