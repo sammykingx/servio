@@ -24,5 +24,8 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="layouts/base.html"), name="test-page"),
     path("dashboard/", TemplateView.as_view(template_name="accounts/dashboards/admin.html"), name="admin-dashboard"),
     path("client/", TemplateView.as_view(template_name="accounts/dashboards/users.html"), name="user-dashboard"),
-    path("provider/", TemplateView.as_view(template_name="accounts/dashboards/service-provider.html"), name="provider-dashboard")
+    path("provider/", TemplateView.as_view(template_name="accounts/dashboards/service-provider.html"), name="provider-dashboard"),
+    path("login/", TemplateView.as_view(template_name="accounts/authentication/signin.html"), name="sign-in"),
+    path("join/", TemplateView.as_view(template_name="accounts/authentication/signup.html"), name="sign-up"),
+    path("recover-account/", TemplateView.as_view(template_name="accounts/authentication/reset-password.html"), name="pwd-reset")
 ]
