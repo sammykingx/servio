@@ -16,16 +16,19 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.views.generic.base import TemplateView
+from template_map.accounts import Accounts
+import accounts.urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include(accounts.urls)),
     path("", TemplateView.as_view(template_name="layouts/base.html"), name="test-page"),
-    path("dashboard/", TemplateView.as_view(template_name="accounts/dashboards/admin.html"), name="admin-dashboard"),
-    path("client/", TemplateView.as_view(template_name="accounts/dashboards/users.html"), name="user-dashboard"),
-    path("provider/", TemplateView.as_view(template_name="accounts/dashboards/service-provider.html"), name="provider-dashboard"),
-    path("login/", TemplateView.as_view(template_name="accounts/authentication/signin.html"), name="sign-in"),
-    path("join/", TemplateView.as_view(template_name="accounts/authentication/signup.html"), name="sign-up"),
-    path("recover-account/", TemplateView.as_view(template_name="accounts/authentication/reset-password.html"), name="pwd-reset")
+    path("dashboard/", TemplateView.as_view(template_name=Accounts.Dashboards.ADMIN), name="admin-dashboard"),
+    path("client/", TemplateView.as_view(template_name=Accounts.Dashboards.USERS), name="user-dashboard"),
+    path("provider/", TemplateView.as_view(template_name=Accounts.Dashboards.SERVICE_PROVIDER), name="provider-dashboard"),
+    path("login/", TemplateView.as_view(template_name=Accounts.Auth.SIGNIN), name="sign-in"),
+    path("join/", TemplateView.as_view(template_name=Accounts.Auth.SIGNUP), name="sign-up"),
+    path("recover-account/", TemplateView.as_view(template_name=Accounts.Auth.PASSWORD_RESET), name="pwd-reset")
 ]
