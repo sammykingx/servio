@@ -6,8 +6,10 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
+# Virtual environments and secrets
 .venv
+*.env
+*.secrets
 
 # js files
 node_modules/

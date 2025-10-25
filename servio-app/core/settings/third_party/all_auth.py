@@ -5,26 +5,26 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-
 # ACCOUNT_AUTHENTICATION_METHOD = "email"   # login via email
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_UNIQUE_EMAIL = True
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # or "optional" / "none"
 # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
-LOGIN_REDIRECT_URL = "/"  # customize where user goes after login
-LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
+# LOGIN_REDIRECT_URL = "/"  # customize where user goes after login
+# LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
 
-ACCOUNT_SIGNUP_REDIRECT_URL = AuthURLNames.EMAIL_VERIFICATION_SENT # view that renders, verify email if not social auth
-ACCOUNT_LOGIN_REDIRECT_URL = AuthURLNames.ACCOUNT_DASHBOARD
-ACCOUNT_LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
+# NOT IN DOCS SO I DON'T THINK IT'S REQUIRED
+# ACCOUNT_SIGNUP_REDIRECT_URL = AuthURLNames.EMAIL_VERIFICATION_SENT # view that renders, verify email if not social auth
+# ACCOUNT_LOGIN_REDIRECT_URL = AuthURLNames.ACCOUNT_DASHBOARD
+# ACCOUNT_LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
 
 
 # SIGN UP CONFIG SETTINGS
 # url: https://docs.allauth.org/en/dev/account/configuration.html
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"] # ['username*', 'email', 'password1*', 'password2*']
+# url 2: using custom user model https://docs.allauth.org/en/dev/account/advanced.html
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # EMAIL VERIFICATION SETTINGS
 # url: https://docs.allauth.org/en/dev/account/configuration.html#email-verification

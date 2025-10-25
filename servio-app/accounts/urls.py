@@ -14,6 +14,7 @@ urlpatterns =[
     
     # REGISTRATION
     path("join/", registration.CustomSignup.as_view(), name=AuthURLNames.SIGNUP),
+    path("join/complete", TemplateView.as_view(template_name=Accounts.Auth.SIGNUP_VERV_EMAIL_SENT), name=AuthURLNames.EMAIL_VERIFICATION_SENT),
     
     
     # ACCOUNT RECOVERY

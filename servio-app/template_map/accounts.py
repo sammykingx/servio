@@ -27,7 +27,10 @@ class Accounts:
         SIGNIN = f"{__SUB_FOLDER}/signin.html"
         SIGNIN_OPTIONS = f"{__SUB_FOLDER}/signin-options.html"
         SIGNIN_ACCESS_CODE = f"{__SUB_FOLDER}/request-access-code.html"
+        
         SIGNUP = f"{__SUB_FOLDER}/signup.html"
+        SIGNUP_VERV_EMAIL_SENT = f"{__SUB_FOLDER}/email-verification-sent.html"
+        
         PASSWORD_RESET = f"{__SUB_FOLDER}/reset-password.html"
 
     class Dashboards:
@@ -43,6 +46,7 @@ class Accounts:
         ADMIN = f"{__SUB_FOLDER}/admin.html"
         USERS = f"{__SUB_FOLDER}/users.html"
         SERVICE_PROVIDER = f"{__SUB_FOLDER}/service-provider.html"
+        
         
         
 __all__ = [Accounts]

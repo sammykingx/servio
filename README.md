@@ -148,6 +148,14 @@ DEBUG=True
 SECRET_KEY=your-secret-key
 DATABASE_URL=postgres://username:password@localhost:5432/servio
 ALLOWED_HOSTS=127.0.0.1,localhost
+
+# EMAIL SETTINGS
+EMAIL_BACKEND=""
+EMAIL_HOST=""
+EMAIL_USERNAME=""
+EMAIL_PASSWORD=""
+EMAIL_PORT=""
+USE_SSL=""
 ```
 
 ### Database Migration
