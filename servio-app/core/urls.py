@@ -19,16 +19,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 from template_map.accounts import Accounts
+from core.url_names import AuthURLNames
 import accounts.urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
     path("", TemplateView.as_view(template_name="layouts/base.html"), name="test-page"),
     path("dashboard/", TemplateView.as_view(template_name=Accounts.Dashboards.ADMIN), name="admin-dashboard"),
     path("client/", TemplateView.as_view(template_name=Accounts.Dashboards.USERS), name="user-dashboard"),
     path("provider/", TemplateView.as_view(template_name=Accounts.Dashboards.SERVICE_PROVIDER), name="provider-dashboard"),
-    path("login/", TemplateView.as_view(template_name=Accounts.Auth.SIGNIN), name="sign-in"),
-    path("join/", TemplateView.as_view(template_name=Accounts.Auth.SIGNUP), name="sign-up"),
-    path("recover-account/", TemplateView.as_view(template_name=Accounts.Auth.PASSWORD_RESET), name="pwd-reset")
 ]

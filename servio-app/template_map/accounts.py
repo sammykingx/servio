@@ -25,8 +25,10 @@ class Accounts:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("authentication")
 
         SIGNIN = f"{__SUB_FOLDER}/signin.html"
+        SIGNIN_OPTIONS = f"{__SUB_FOLDER}/signin-options.html"
+        SIGNIN_ACCESS_CODE = f"{__SUB_FOLDER}/request-access-code.html"
         SIGNUP = f"{__SUB_FOLDER}/signup.html"
-        PASSWORD_RESET = f"{__SUB_FOLDER}/reset_password.html"
+        PASSWORD_RESET = f"{__SUB_FOLDER}/reset-password.html"
 
     class Dashboards:
         """

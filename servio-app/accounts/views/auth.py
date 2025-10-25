@@ -1,23 +1,24 @@
 from template_map.accounts import Accounts
+from django.urls import reverse_lazy
+from core.url_names import AuthURLNames
 from allauth.account.views import (
-    LoginView, 
-    SignupView, 
-    PasswordResetView, 
-    PasswordChangeView,
-    PasswordResetDoneView,
+    LoginView,
+    RequestLoginCodeView,
+    ConfirmLoginCodeView,
+    LogoutView
 )
 
 
 class CustomSignin(LoginView):
     template_name = Accounts.Auth.SIGNIN
-    
 
-class CustomSignup(SignupView):
-    template_name = Accounts.Auth.SIGNUP
     
+class GetLoginAccessCode(RequestLoginCodeView):
+    template_name = Accounts.Auth.SIGNIN_ACCESS_CODE
+ 
 
-class CustomPasswordReset(PasswordResetView):
-    template_name = Accounts.Auth.PASSWORD_RESET
-    
-    
-__all__ = [CustomSignin, CustomSignup, CustomPasswordReset]
+class VerifyLoginAccessCode(ConfirmLoginCodeView):
+    pass
+
+
+__all__ = [CustomSignin, GetLoginAccessCode, VerifyLoginAccessCode]

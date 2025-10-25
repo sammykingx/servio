@@ -1,8 +1,22 @@
 from django.urls import path
-from .views import auth
+from django.views.generic.base import TemplateView
+from .views import auth, registration
+from core.url_names import AuthURLNames
+from template_map.accounts import Accounts
+
 
 urlpatterns =[
-    path("enlist/", auth.CustomSignup.as_view(), name="register"),
-    path("access/", auth.CustomSignin.as_view(), name="login"),
-    # magic link endpiont
+    # LOGIN AND LOGOUT
+    path("access/", auth.CustomSignin.as_view(), name=AuthURLNames.LOGIN),
+    path("access-code/", auth.GetLoginAccessCode.as_view(), name=AuthURLNames.LOGIN_ACCESS_CODE),
+    path("access-code/verify", auth.VerifyLoginAccessCode.as_view(), name=AuthURLNames.VERIFY_ACCESS_CODE),
+    # logout view
+    
+    # REGISTRATION
+    path("join/", registration.CustomSignup.as_view(), name=AuthURLNames.SIGNUP),
+    
+    
+    # ACCOUNT RECOVERY
+    path("recovery-options/", TemplateView.as_view(template_name=Accounts.Auth.SIGNIN_OPTIONS), name=AuthURLNames.ACCOUNT_RECOVERY_OPTIONS),
+    path("recover-account/", TemplateView.as_view(template_name=Accounts.Auth.PASSWORD_RESET), name=AuthURLNames.PASSWORD_RESET)
 ]

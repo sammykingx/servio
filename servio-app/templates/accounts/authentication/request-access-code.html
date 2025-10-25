@@ -1,17 +1,15 @@
 {% extends "layouts/auth-base.html" %}
-{% block browser_title %}Password Reset Link- Servio{% endblock %}
+{% block browser_title %}Account Access Link - Servio{% endblock %}
 {% block content %}
 <div class="mb-5 sm:mb-8">
 	<h1
 		class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90"
 		>
-		Reset your password?
+		Passwordless Sign in
 	</h1>
-	<p class="text-xs m:text-sm text-gray-500 dark:text-gray-400">
-		Receive a secure link to create a new password for your account.
-	</p>
-	<p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 my-2">
-		Use this to choose a new password and regain access to your account.
+	<p class="text-sm text-gray-500 dark:text-gray-400">
+		Enter the email address linked to your account to receive a
+        special code for a password-free sign-in. 
 	</p>
 </div>
 <div>
@@ -37,7 +35,7 @@
 				<button
 					class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition"
 					>
-				Send Reset Link
+				Send access link
 				</button>
 			</div>
 		</div>

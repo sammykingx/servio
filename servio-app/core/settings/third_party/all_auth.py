@@ -6,27 +6,32 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USERNAME_REQUIRED = False
 
 # ACCOUNT_AUTHENTICATION_METHOD = "email"   # login via email
 # ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_UNIQUE_EMAIL = True
-# ACCOUNT_USERNAME_REQUIRED = False
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # or "optional" / "none"
 # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
-# LOGIN_REDIRECT_URL = "/"  # customize where user goes after login
-# LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"  # customize where user goes after login
+LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
 
-ACCOUNT_SIGNUP_REDIRECT_URL = AuthURLNames.SIGNUP
-ACCOUNT_LOGIN_REDIRECT_URL = AuthURLNames.LOGIN
+ACCOUNT_SIGNUP_REDIRECT_URL = AuthURLNames.EMAIL_VERIFICATION_SENT # view that renders, verify email if not social auth
+ACCOUNT_LOGIN_REDIRECT_URL = AuthURLNames.ACCOUNT_DASHBOARD
 ACCOUNT_LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
 
 
+# SIGN UP CONFIG SETTINGS
 # url: https://docs.allauth.org/en/dev/account/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory" # mandatory | optional | none
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"] # ['username*', 'email', 'password1*', 'password2*']
+
+# EMAIL VERIFICATION SETTINGS
+# url: https://docs.allauth.org/en/dev/account/configuration.html#email-verification
+ACCOUNT_EMAIL_VERIFICATION = "mandatory" # mandatory | optional | none
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
+
+# LOGIN CONFIG SETTINGS
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True # default is false
 ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 900 # 15mins
 ACCOUNT_LOGIN_METHODS = {"email"}
