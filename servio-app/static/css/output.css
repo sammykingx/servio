@@ -1370,6 +1370,12 @@
       fill: var(--color-brand-400);
     }
   }
+  .fill-blue-50 {
+    fill: var(--color-blue-50);
+  }
+  .fill-blue-600 {
+    fill: var(--color-blue-600);
+  }
   .fill-current {
     fill: currentcolor;
   }
@@ -1387,6 +1393,9 @@
   }
   .fill-gray-800 {
     fill: var(--color-gray-800);
+  }
+  .fill-red-50 {
+    fill: var(--color-red-50);
   }
   .fill-success-50 {
     fill: var(--color-success-50);
@@ -2558,6 +2567,19 @@
       }
     }
   }
+  .dark\:fill-blue-500 {
+    &:where(.dark, .dark *) {
+      fill: var(--color-blue-500);
+    }
+  }
+  .dark\:fill-blue-500\/15 {
+    &:where(.dark, .dark *) {
+      fill: color-mix(in srgb, oklch(62.3% 0.214 259.815) 15%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        fill: color-mix(in oklab, var(--color-blue-500) 15%, transparent);
+      }
+    }
+  }
   .dark\:fill-error-500 {
     &:where(.dark, .dark *) {
       fill: var(--color-error-500);
@@ -2584,6 +2606,14 @@
   .dark\:fill-orange-400 {
     &:where(.dark, .dark *) {
       fill: var(--color-orange-400);
+    }
+  }
+  .dark\:fill-red-500\/15 {
+    &:where(.dark, .dark *) {
+      fill: color-mix(in srgb, oklch(63.7% 0.237 25.331) 15%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        fill: color-mix(in oklab, var(--color-red-500) 15%, transparent);
+      }
     }
   }
   .dark\:fill-success-500 {

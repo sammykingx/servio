@@ -17,6 +17,30 @@ class CustomSignup(SignupView):
     """
     template_name = Accounts.Auth.SIGNUP
     
+    def form_valid(self, form):
+        """
+        Process a valid registration form.
+
+        This method is called when the submitted signup form passes
+        validation. It saves the new user and performs any additional
+        processing required upon successful registration.
+
+        Args:
+            form (SignupForm): The validated signup form instance.
+
+        Returns:
+            HttpResponse: A redirect response to the next page after
+            successful registration.
+        """
+        # Call the parent class's form_valid to handle user creation.
+        print("inside form valid")
+        response = super().form_valid(form)
+        print("super method called in form valid")
+
+        # Additional processing can be done here if needed.
+
+        return response
+    
     
 class EmailConfirmation(ConfirmEmailView):
     """

@@ -9,7 +9,7 @@
 			/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>
-			📥 Email activation sent - Servio
+			Email verified - Servio
 		</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,7 +59,7 @@
 					<div class="text-center pb-7">
 						<div class="relative flex items-center justify-center z-1 mb-7">
 							<svg
-								class="fill-blue-50 dark:fill-blue-500/15"
+								class="fill-success-50 dark:fill-success-500/15"
 								width="90"
 								height="90"
 								viewBox="0 0 90 90"
@@ -76,30 +76,40 @@
 								class="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2"
 							>
 								<svg
-    class="fill-blue-600 dark:fill-blue-500"
-    width="38"
-    height="38"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
->
-    <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M2.25 6.75A2.25 2.25 0 0 1 4.5 4.5h15a2.25 2.25 0 0 1 2.25 2.25v10.5A2.25 2.25 0 0 1 19.5 19.5h-15a2.25 2.25 0 0 1-2.25-2.25V6.75Zm2.154-.75a.75.75 0 0 0-.514.193L12 11.302l8.11-5.109a.75.75 0 0 0-.61-.193H4.404Zm-.654 1.628v9.872c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75V7.628l-7.563 4.762a1.75 1.75 0 0 1-1.874 0L3.75 7.628Z"
-    />
-</svg>
-
+									class="fill-success-600 dark:fill-success-500"
+									width="38"
+									height="38"
+									viewBox="0 0 38 38"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										fill-rule="evenodd"
+										clip-rule="evenodd"
+										d="M5.9375 19.0004C5.9375 11.7854 11.7864 5.93652 19.0014 5.93652C26.2164 5.93652 32.0653 11.7854 32.0653 19.0004C32.0653 26.2154 26.2164 32.0643 19.0014 32.0643C11.7864 32.0643 5.9375 26.2154 5.9375 19.0004ZM19.0014 2.93652C10.1296 2.93652 2.9375 10.1286 2.9375 19.0004C2.9375 27.8723 10.1296 35.0643 19.0014 35.0643C27.8733 35.0643 35.0653 27.8723 35.0653 19.0004C35.0653 10.1286 27.8733 2.93652 19.0014 2.93652ZM24.7855 17.0575C25.3713 16.4717 25.3713 15.522 24.7855 14.9362C24.1997 14.3504 23.25 14.3504 22.6642 14.9362L17.7177 19.8827L15.3387 17.5037C14.7529 16.9179 13.8031 16.9179 13.2173 17.5037C12.6316 18.0894 12.6316 19.0392 13.2173 19.625L16.657 23.0647C16.9383 23.346 17.3199 23.504 17.7177 23.504C18.1155 23.504 18.4971 23.346 18.7784 23.0647L24.7855 17.0575Z"
+										fill=""
+									/>
+								</svg>
 							</span>
 						</div>
 						<h4
 							class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm"
 							>
-							Email on it's way!
+							You’re all set!
 						</h4>
 						<p class="text-xs md:text-sm leading-6 text-gray-500 dark:text-gray-400">
-							We’ve sent a verification link to your inbox. Just tap the link 
-							to activate your account and you’ll be ready to roll.
+							Your account is good to go. You can now sign in and start exploring.
 						</p>
+						<div class="flex items-center justify-center w-full gap-3 mt-7">
+							<a href="{% url AUTH_URLS.LOGIN %}">
+                                <button
+                                    type="button"
+                                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-success-500 shadow-theme-xs hover:bg-success-600 sm:w-auto"
+							    >
+							        Signin Now
+							    </button>
+                            </a>
+						</div>
 					</div>
 				</div>
 			</div>

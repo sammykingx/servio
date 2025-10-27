@@ -25,6 +25,7 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_FORMS = {"signup": "accounts.forms.UserSignupForm"}
 
 # EMAIL VERIFICATION SETTINGS
 # url: https://docs.allauth.org/en/dev/account/configuration.html#email-verification
