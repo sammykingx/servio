@@ -5,11 +5,6 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# ACCOUNT_AUTHENTICATION_METHOD = "email"   # login via email
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-
-# ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # or "optional" / "none"
-# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 # LOGIN_REDIRECT_URL = "/"  # customize where user goes after login
 # LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
 

@@ -57,7 +57,7 @@
 				<main>
 					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
 						<div 
-							id="toast-container" 
+							id="center-alert-container" 
 			 				class="fixed top-4 left-1/2 -translate-x-1/2 z-999 
 								w-full max-w-md px-4 space-y-3 pointer-events-none">
 						</div>
@@ -114,7 +114,7 @@
   	</body>
 	<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
 	<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
-	<script src="{% static 'js/toast-notification.js' %}"></script>
+	<script src="{% static 'js/center-alert.js' %}"></script>
 	<script>
 		// Auto-update year dynamically
 		document.getElementById("year").textContent = new Date().getFullYear();

@@ -1,5 +1,5 @@
 function showToast(message, type = "success", title) {
-  const container = document.getElementById("toast-container");
+  const container = document.getElementById("center-alert-container");
 
   const types = {
     success: {
@@ -70,7 +70,7 @@ function showToast(message, type = "success", title) {
     toast.classList.add("opacity-100", "translate-y-0");
   }, 50);
 
-  // Auto-remove after 6s
+  // Auto-remove after 5s
   setTimeout(() => {
     toast.classList.remove("opacity-100", "translate-y-0");
     toast.classList.add("opacity-0", "-translate-y-4");
