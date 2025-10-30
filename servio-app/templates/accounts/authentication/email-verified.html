@@ -8,6 +8,7 @@
 			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 			/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<meta name="csrf-token" content="{{ csrf_token }}"/>"
 		<title>
 			Email verified - Servio
 		</title>
@@ -25,16 +26,31 @@
 				>
 			Success Alert
 			</button> -->
+			<div 
+							id="center-alert-container" 
+			 				class="fixed top-4 left-1/2 -translate-x-1/2 z-999 
+								w-full max-w-md px-4 space-y-3 pointer-events-none">
+						</div>
+			
 			<div
 				x-show="isModalOpen"
 				class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999"
-				>
+			>
 				<div
 					class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
-					></div>
+				></div>
+				
+				<!-- Loading Spinner -->
 				<div
+					id="loading-spinner"
+    				class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-blue-700 border-t-transparent"
+  				></div>
+
+				<!-- Modal -->
+				<div
+					id="contentModal"
 					@click.outside="isModalOpen = false"
-					class="relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10"
+					class="hidden relative w-full max-w-[600px] rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-10"
 					>
 					<!-- close btn -->
 					<!-- <button
@@ -114,5 +130,7 @@
 				</div>
 			</div>
 		</div>
+		<script src="{% static 'js/center-alert.js'}"></script>
+		<script src="{% static 'js/authentication/email-verification.js' %}"></script>
 	</body>
 </html>

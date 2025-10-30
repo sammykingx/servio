@@ -24,12 +24,12 @@ document.getElementById('signupForm').addEventListener('submit', async function 
     formData.set("password1", validator.escape(password1));
 
     try {
+        toggleBtnState();
         const response = await fetch(this.action, {
             method: this.method,
             body: formData,
         });
 
-        console.log("Backend Response: ", response);
 
         if (response.redirected) {
             showAuthAlert(
@@ -39,6 +39,7 @@ document.getElementById('signupForm').addEventListener('submit', async function 
             );
             setTimeout(() => {
                 window.location.href = response.url;
+                toggleBtnState();
             }, 1500);
             return;
         } else {
@@ -127,3 +128,18 @@ function validateFormData(formData) {
 //     body: ReadableStream, 
 //     bodyUsed: false
 // }
+
+function toggleBtnState() {
+    const signupBtn = document.getElementById("signupBtn");
+    const processingBtn = document.getElementById("processingBtn");
+
+    signupBtn.classList.toggle("hidden");
+    processingBtn.classList.toggle("hidden");
+    // if (isProcessing) {
+    //     signupBtn.classList.toggle("hidden");
+    //     processingBtn.classList.toggle("hidden");
+    // } else {
+    //     signupBtn.classList.toggle("hidden");
+    //     processingBtn.classList.toggle("hidden");
+    // }
+}

@@ -1,6 +1,6 @@
 from .django_base_settings import *
 from .third_party import *
-from .project_apps import *
+from .project_settings import *
 from .env.development import *
 from .email_config import *
 

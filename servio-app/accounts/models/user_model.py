@@ -7,7 +7,7 @@ from django.utils import timezone
     #   first_name, last_name, email, password,
     #   is_active, date_joined, last_login
     #   is_staff(can login into django admin), is_superuser(has all perms)
-    
+  
 class AuthUser(AbstractUser):
     """
     Custom User model that uses email as the unique identifier instead of username.
