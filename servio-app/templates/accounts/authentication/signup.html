@@ -130,7 +130,7 @@
                 >
         </div>
     </div>
-    <form method="POST" action="{% url AUTH_URLS.SIGNUP %}">
+    <form id="signupForm" method="POST" action="{% url AUTH_URLS.SIGNUP %}" autocomplete="off">
         <div class="space-y-5">
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 {% csrf_token %}
@@ -274,12 +274,12 @@
                             class="inline-block font-normal text-gray-500 dark:text-gray-400"
                             >
                             By creating an account means you agree to the
-                            <span class="text-gray-800 dark:text-white/90">
-                            Terms and Conditions,
+                            <span class="text-brand-500 dark:text-white/90">
+                                Terms and Conditions,
                             </span>
-                            and our
-                            <span class="text-gray-800 dark:text-white">
-                            Privacy Policy
+                                and our
+                            <span class="text-brand-500 dark:text-white">
+                                Privacy Policy
                             </span>
                         </p>
                     </label>
@@ -308,4 +308,8 @@
         </p>
     </div>
 </div>
+{% endblock %}
+{% block custom_page_js %}
+<script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
+<script defer src="{% static 'js/authentication/signup.js' %}"></script>
 {% endblock %}

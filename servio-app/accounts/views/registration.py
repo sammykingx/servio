@@ -2,8 +2,10 @@ from template_map.accounts import Accounts
 from allauth.account.views import (
     ConfirmEmailView,
     EmailView, 
-    SignupView, 
-    email_verification_sent,
+    SignupView,
+    EmailVerificationSentView,
+    EmailConfirmation,
+    EmailVerificationStage
 )
 
 
@@ -16,6 +18,11 @@ class CustomSignup(SignupView):
         render the registration interface.
     """
     template_name = Accounts.Auth.SIGNUP
+    
+    # def dispatch(self, request, *args, **kwargs):
+    #     print(">>> DISPATCH:", request.method)
+    #     return super().dispatch(request, *args, **kwargs)
+
     
     def form_valid(self, form):
         """
@@ -32,13 +39,13 @@ class CustomSignup(SignupView):
             HttpResponse: A redirect response to the next page after
             successful registration.
         """
-        # Call the parent class's form_valid to handle user creation.
-        print("inside form valid")
         response = super().form_valid(form)
-        print("super method called in form valid")
-
-        # Additional processing can be done here if needed.
-
+        
+        return response
+    
+    def form_invalid(self, form):
+        errors = form.errors.as_json()
+        response = super().form_invalid(form)
         return response
     
     
@@ -50,17 +57,17 @@ class EmailConfirmation(ConfirmEmailView):
     after signup. It verifies the provided key and activates the
     associated user account if key is valid.
     """
-    pass
+    template_name = Accounts.Auth.SIGNUP_EMAIL_VERIFIED
 
 
-class EmailConfirmationSent:
+class EmailConfirmationSent(EmailVerificationSentView):
     """
     Notification view for verification email dispatch.
 
-    This renders the page notifying the user the a verification email
-    has been successfully sent to the registered email address.
+    This renders the page notifying the user that a verification email
+    has been sent successfully to the registered email address.
     """
-    pass
+    template_name = Accounts.Auth.SIGNUP_VERV_EMAIL_SENT
 
 
 class ManageAccountEmail(EmailView):

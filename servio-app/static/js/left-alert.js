@@ -1,4 +1,4 @@
-function showAuthAlert(message, type = "success", title) {
+function showAuthAlert(title, message, type = "success") {
   const container = document.getElementById("left-alert-container");
 
   const types = {
@@ -83,9 +83,9 @@ function showAuthAlert(message, type = "success", title) {
 }
 
 // Example usage
-document.addEventListener("DOMContentLoaded", () => {
-  showAuthAlert("Operation completed successfully and this is long as fuck.", "success");
-//   setTimeout(() => showAuthAlert("Be careful with this action.", "warning"), 1000);
-//   setTimeout(() => showAuthAlert("Here’s some information.", "info"), 2000);
-//   setTimeout(() => showAuthAlert("Something went wrong!", "error"), 3000);
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   showAuthAlert("Success Msg", Operation completed successfully and this is long as fuck.", "success");
+//   setTimeout(() => showAuthAlert("Warning Msg", "Be careful with this action.", "warning"), 1000);
+//   setTimeout(() => showAuthAlert("Info msg", "Here’s some information.", "info"), 2000);
+//   setTimeout(() => showAuthAlert("Error msg","Something went wrong!", "error"), 3000);
+// });

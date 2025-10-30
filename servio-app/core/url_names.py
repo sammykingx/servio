@@ -32,3 +32,5 @@ class AuthURLNames:
     ACCOUNT_DASHBOARD = ""
     # account_reauthenticate
     # account_inactive
+
+# email heading = Please Confirm Your Email Address

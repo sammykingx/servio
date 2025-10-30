@@ -3,13 +3,15 @@ Django base settings for servio project.
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = "django-insecure-%cwmyad+l5!w$20n5pm6+x57_eyi0r0^oghznc@taf=ro5h0q-"
+DEFAULT_SECRET_KEY = "p93+y5z$6enmf4j51*7b=u@f*-idrmssw4-^j=oeugd4((9$o2myad+l5!w$20n5pm6+x57_eyi0r0^oghznc@taf=ro5h0q"
 
-# Application definition
+SECRET_KEY = config("SECRET_KEY", default=DEFAULT_SECRET_KEY)
+
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
