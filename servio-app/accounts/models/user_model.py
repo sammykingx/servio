@@ -26,6 +26,7 @@ class AuthUser(AbstractUser):
     
     
     class Meta:
+        db_table = "user_accounts"
         ordering = ["date_joined",]
         indexes = [
             models.Index(fields=["email"], name="email_idx",),

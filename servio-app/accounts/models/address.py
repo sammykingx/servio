@@ -22,3 +22,7 @@ class Address(models.Model):
     is_default = models.BooleanField(default=False)
     is_business_address = models.BooleanField(default=False)
     # connect the user and profile
+    
+    class Meta:
+        db_table = "user_addresses"
+    

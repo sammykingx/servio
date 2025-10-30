@@ -18,3 +18,6 @@ class UserProfile(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     is_business_owner = models.BooleanField(default=False)
     # role = models.CharField(choices=())
+    
+    class Meta:
+        db_table = "user_profiles"
