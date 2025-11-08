@@ -1,0 +1,55 @@
+{% load i18n %}
+{% load account %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% blocktrans %}Confirm your email{% endblocktrans %}</title>
+    <style>
+      body {
+        background: #f5f5f5;
+        font-family: Arial, sans-serif;
+        color: #333;
+        padding: 20px;
+      }
+      .container {
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        max-width: 500px;
+        margin: 0 auto;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+      a.button {
+        display: inline-block;
+        background: #007bff;
+        color: #fff !important;
+        padding: 10px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>{% trans "Email Verification" %}</h2>
+      <p>
+        {% user_display user as user_display %}
+        {% blocktrans with site_name=current_site.name %}Hi {{ user_display }}, please verify your email address to activate your {{ site_name }} account.{% endblocktrans %}
+      </p>
+      {% if activate_url %}
+      <p>
+        <a class="button" href="{{ activate_url }}">
+          {% trans "Verify Email" %}
+        </a>
+      </p>
+      {% endif %}
+      <p>
+        {% blocktrans %}If you didn’t request this, you can ignore this email.{% endblocktrans %}
+      </p>
+    </div>
+  </body>
+</html>
+

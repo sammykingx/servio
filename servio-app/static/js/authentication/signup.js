@@ -30,6 +30,7 @@ document.getElementById('signupForm').addEventListener('submit', async function 
             body: formData,
         });
 
+        console.log("Backend response", response);
 
         if (response.redirected) {
             showAuthAlert(
@@ -48,6 +49,8 @@ document.getElementById('signupForm').addEventListener('submit', async function 
                 "Kindly double-check your details and retry again, cheers.",
                 "info"
             );
+            toggleBtnState();
+            return;
         }
 
     } catch (error) {

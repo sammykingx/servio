@@ -9,7 +9,7 @@ clean, DRY, and maintainable way.
 
 from . import TemplateRegistryBase
 
-_BASE_FOLDER = TemplateRegistryBase("accounts")
+_BASE_FOLDER = TemplateRegistryBase("account")
 
 class Accounts:
     """Namespace container for all 'accounts' app templates."""

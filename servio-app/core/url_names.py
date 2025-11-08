@@ -8,7 +8,7 @@ class AuthURLNames:
     # REGISTRATION
     SIGNUP = "account_signup"
     EMAIL_VERIFICATION_SENT = "account_email_verification_sent"
-    EMAIL_CONFIRMATION = "account_confirm_email" # for email confirmation
+    EMAIL_CONFIRMATION = "account_confirm_email"
     # account_email: manages email addresses
     
     
@@ -34,3 +34,47 @@ class AuthURLNames:
     # account_inactive
 
 # email heading = Please Confirm Your Email Address
+# http://localhost:8000/accounts/email/verify/NQ:1vEljJ:m-_uJP8n_Shgzhtpin39SF0Fs1CCbJEGAr0bDE8bmr0
+
+# --------------------------------------
+# account already exist template
+# Content-Transfer-Encoding: 7bit
+# Subject: Servio - Account Already Exists
+# From: no-reply@servio.divgm.com
+# To: user2@example.com
+# Date: Sun, 02 Nov 2025 15:45:18 -0000
+# Message-ID: <176209831890.7046.5940175979619397062@sammykingx.localdomain>
+
+# Hello from localhost:8000!
+
+# You are receiving this email because you or someone else tried to signup for an
+# account using email address:
+
+# user2@example.com
+
+# However, an account using that email address already exists.  In case you have
+# forgotten about this, please use the password forgotten procedure to recover
+# your account:
+
+# http://localhost:8000/accounts/recover-account/
+
+# Thank you for using localhost:8000!
+# localhost:8000
+
+# --------------------------------------
+# to: user2@example.com
+# message: Hello from localhost:8000!
+
+# You are receiving this email because you or someone else tried to signup for an
+# account using email address:
+
+# user2@example.com
+
+# However, an account using that email address already exists.  In case you have
+# forgotten about this, please use the password forgotten procedure to recover
+# your account:
+
+# http://localhost:8000/accounts/recover-account/
+
+# Thank you for using localhost:8000!
+# localhost:8000

@@ -23,10 +23,10 @@ async function verifyEmail() {
 
         console.log(response);
         if (response.ok) {
-            console.log("Email successfully verified! Redirecting...", "success", "Account Activated");
+            // console.log("Email successfully verified! Redirecting...", "success", "Account Activated");
             toggleContentModal();
         } else {
-            console.log("Email verification failed. Please try again.", "error", "Verification Failed");
+            // console.log("Email verification failed. Please try again.", "error", "Verification Failed");
             toggleContentModal();
             return;
         }

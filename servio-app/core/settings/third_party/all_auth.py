@@ -21,6 +21,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_FORMS = {"signup": "accounts.forms.UserSignupForm"}
+ACCOUNT_ADAPTER = "accounts.adapters.CustomAccountAdapter"
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "Servio - "
 
 # EMAIL VERIFICATION SETTINGS
