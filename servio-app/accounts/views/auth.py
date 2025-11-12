@@ -1,8 +1,8 @@
 from template_map.accounts import Accounts
 from django.urls import reverse_lazy
 from core.url_names import AuthURLNames
+from django.contrib.auth.views import LoginView, LogoutView
 from allauth.account.views import (
-    LoginView,
     RequestLoginCodeView,
     ConfirmLoginCodeView,
     LogoutView

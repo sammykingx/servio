@@ -1,4 +1,9 @@
 from template_map.accounts import Accounts
+from django.views.generic import CreateView
+from accounts.forms import UserSignupForm
+from django.urls import reverse_lazy
+from core.url_names import AuthURLNames
+from allauth.account.adapter import get_adapter
 from allauth.account.views import (
     ConfirmEmailView,
     EmailView, 
@@ -9,7 +14,7 @@ from allauth.account.views import (
 )
 
 
-class CustomSignup(SignupView):
+class CustomSignup(CreateView):
     """
     Custom user registration view.
 
@@ -18,6 +23,8 @@ class CustomSignup(SignupView):
         render the registration interface.
     """
     template_name = Accounts.Auth.SIGNUP
+    form_class = UserSignupForm
+    success_url = reverse_lazy(AuthURLNames.EMAIL_VERIFICATION_SENT)
     
     # def dispatch(self, request, *args, **kwargs):
     #     print(">>> DISPATCH:", request.method)
@@ -33,42 +40,35 @@ class CustomSignup(SignupView):
         processing required upon successful registration.
 
         Args:
-            form (SignupForm): The validated signup form instance.
+            form (UserSignupForm): The validated signup form instance.
 
         Returns:
             HttpResponse: A redirect response to the next page after
             successful registration.
         """
+        print(self.object)
         response = super().form_valid(form)
+        self.send_verification_email()
+        # send user activation email in bg process
         
         return response
     
     def form_invalid(self, form):
         errors = form.errors.as_json()
+        print(errors)
         response = super().form_invalid(form)
         return response
     
-    
-class EmailConfirmation(ConfirmEmailView):
-    """
-    Email confirmation handler.
-
-    This view processes the verification link sent to a user's email
-    after signup. It verifies the provided key and activates the
-    associated user account if key is valid.
-    """
-    template_name = Accounts.Auth.SIGNUP_EMAIL_VERIFIED
-
-
-class EmailConfirmationSent(EmailVerificationSentView):
-    """
-    Notification view for verification email dispatch.
-
-    This renders the page notifying the user that a verification email
-    has been sent successfully to the registered email address.
-    """
-    template_name = Accounts.Auth.SIGNUP_VERV_EMAIL_SENT
-
+    def send_verification_email(self):
+        """
+        Send email verification to the newly registered user.
+        """
+        # email token
+        key = get_adapter().generate_emailconfirmation_key(self.object)
+        # email template
+        # template context: acct_activation_url
+        # send email
+        pass
 
 class ManageAccountEmail(EmailView):
     """
