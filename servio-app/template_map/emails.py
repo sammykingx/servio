@@ -11,12 +11,12 @@ from . import TemplateRegistryBase
 
 _BASE_FOLDER = TemplateRegistryBase("emails")
 
-class Accounts:
+class AccountMails:
     """Namespace container for all 'accounts' email templates."""
     
-    WELCOME_EMAIL = f"{_BASE_FOLDER}/welcome-email.html"
+    # WELCOME_EMAIL = f"{_BASE_FOLDER}/welcome-email.html"
     EMAIL_VERIFICATION = f"{_BASE_FOLDER}/email-verification.html"
-    PASSWORD_RESET = f"{_BASE_FOLDER}/password-reset.html"
+    # PASSWORD_RESET = f"{_BASE_FOLDER}/password-reset.html"
     
     class Subjects:
         """Namespace container for email subject lines."""
@@ -26,6 +26,6 @@ class Accounts:
         PASSWORD_RESET = "Servio - Password Reset Instructions"
     
         
-__all__ = [Accounts]
+__all__ = [AccountMails]
 
 

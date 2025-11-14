@@ -7,7 +7,7 @@ class UserProfile(models.Model):
     Extended profile for AuthUser (One-to-One relationship).
     """
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,
         to_field="email", 
         on_delete=models.CASCADE, 
         related_name="profile",

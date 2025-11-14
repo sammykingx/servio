@@ -1,9 +1,11 @@
-from template_map.accounts import Accounts
-from django.views.generic import CreateView
-from accounts.forms import UserSignupForm
 from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.template.loader import render_to_string
+from accounts.forms import UserSignupForm
+from template_map.accounts import Accounts
+from template_map.emails import AccountMails
 from core.url_names import AuthURLNames
-from allauth.account.adapter import get_adapter
+from accounts.models.user_tokens import TokenType, UserToken
 from allauth.account.views import (
     ConfirmEmailView,
     EmailView, 
@@ -46,9 +48,13 @@ class CustomSignup(CreateView):
             HttpResponse: A redirect response to the next page after
             successful registration.
         """
-        print(self.object)
         response = super().form_valid(form)
-        self.send_verification_email()
+        email_token, created = UserToken.objects.generate_token(
+            user=self.object,
+            token_type=TokenType.EMAIL_VERIFICATION,
+        )
+        self.send_verification_email(token=email_token)
+        # send mssgs to FE
         # send user activation email in bg process
         
         return response
@@ -59,12 +65,23 @@ class CustomSignup(CreateView):
         response = super().form_invalid(form)
         return response
     
-    def send_verification_email(self):
+    def send_verification_email(self, token):
         """
         Send email verification to the newly registered user.
         """
-        # email token
-        key = get_adapter().generate_emailconfirmation_key(self.object)
+        acct_activation_url = self.request.build_absolute_uri(
+            reverse_lazy(
+                AuthURLNames.EMAIL_CONFIRMATION,
+                kwargs={"token": token}
+            )
+        )
+        
+        print("ACCOUNT ACTIVATION URL:", acct_activation_url)
+        
+        msg = render_to_string(
+            template_name=AccountMails.EMAIL_VERIFICATION,
+            context={"acct_activation_url": acct_activation_url},
+        )
         # email template
         # template context: acct_activation_url
         # send email
