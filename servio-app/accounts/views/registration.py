@@ -1,7 +1,9 @@
+from django.views import View
 from django.urls import reverse_lazy
+from django.http import HttpResponse
 from django.views.generic import CreateView
-from django.template.loader import render_to_string
 from accounts.forms import UserSignupForm
+from services.email_service import EmailService
 from template_map.accounts import Accounts
 from template_map.emails import AccountMails
 from core.url_names import AuthURLNames
@@ -28,12 +30,7 @@ class CustomSignup(CreateView):
     form_class = UserSignupForm
     success_url = reverse_lazy(AuthURLNames.EMAIL_VERIFICATION_SENT)
     
-    # def dispatch(self, request, *args, **kwargs):
-    #     print(">>> DISPATCH:", request.method)
-    #     return super().dispatch(request, *args, **kwargs)
-
-    
-    def form_valid(self, form):
+    def form_valid(self, form:UserSignupForm) -> HttpResponse:
         """
         Process a valid registration form.
 
@@ -54,18 +51,16 @@ class CustomSignup(CreateView):
             token_type=TokenType.EMAIL_VERIFICATION,
         )
         self.send_verification_email(token=email_token)
-        # send mssgs to FE
-        # send user activation email in bg process
         
         return response
     
-    def form_invalid(self, form):
+    def form_invalid(self, form:UserSignupForm) -> HttpResponse:
         errors = form.errors.as_json()
         print(errors)
         response = super().form_invalid(form)
         return response
     
-    def send_verification_email(self, token):
+    def send_verification_email(self, token:str) -> None:
         """
         Send email verification to the newly registered user.
         """
@@ -76,22 +71,22 @@ class CustomSignup(CreateView):
             )
         )
         
+        context={"acct_activation_url": acct_activation_url},
+        
         print("ACCOUNT ACTIVATION URL:", acct_activation_url)
         
-        msg = render_to_string(
-            template_name=AccountMails.EMAIL_VERIFICATION,
-            context={"acct_activation_url": acct_activation_url},
-        )
-        # email template
-        # template context: acct_activation_url
-        # send email
-        pass
+        
+        EmailService(self.object.email) \
+            .set_subject(AccountMails.Subjects.EMAIL_VERIFICATION) \
+            .use_template(AccountMails.EMAIL_VERIFICATION) \
+            .with_context(**context) \
+            .send()
 
-class ManageAccountEmail(EmailView):
+        return None
+
+class EmailVerificationView(View):
     """
-    Users manage the email addresses tied to their account.
     
-    Here, users can add (and verify) email addresses, remove email,
-    choose a new primary email address.
     """
-    pass
+    template_name=Accounts.Auth.SIGNUP_EMAIL_VERIFIED
+    success_url = reverse_lazy(AuthURLNames.EMAIL_VERIFIED)

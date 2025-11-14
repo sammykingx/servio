@@ -14,7 +14,6 @@ def create_profile(sender, instance, created, **kwargs):
         except Exception as e:
             print(e)
             # raise
-        # UserProfile.objects.create(user=instance)
 
 
 @receiver(email_confirmed)

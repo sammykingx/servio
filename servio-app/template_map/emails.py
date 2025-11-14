@@ -15,7 +15,7 @@ class AccountMails:
     """Namespace container for all 'accounts' email templates."""
     
     # WELCOME_EMAIL = f"{_BASE_FOLDER}/welcome-email.html"
-    EMAIL_VERIFICATION = f"{_BASE_FOLDER}/email-verification.html"
+    EMAIL_VERIFICATION = _BASE_FOLDER.base_folder_files("email-verification.html")
     # PASSWORD_RESET = f"{_BASE_FOLDER}/password-reset.html"
     
     class Subjects:
