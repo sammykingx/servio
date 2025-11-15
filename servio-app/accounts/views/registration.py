@@ -9,6 +9,7 @@ from template_map.accounts import Accounts
 from template_map.emails import AccountMails
 from core.url_names import AuthURLNames
 from accounts.models.user_tokens import TokenType, UserToken
+from typing import Union
 
 
 class CustomSignup(CreateView):
@@ -77,42 +78,54 @@ class CustomSignup(CreateView):
 
         return None
 
+
 class EmailVerificationView(View):
     """
+    Handles email verification requests using a token provided in the URL.
     
+    This view checks whether the provided token exists and is valid.
+    If valid, the associated user's email is verified and the token is invalidated.
+    The response renders a template indicating whether verification succeeded or failed.
     """
     http_method_names = ["get"]
     
     def get(self, request, **kwargs) -> HttpResponse:
         token = kwargs.get("token")
-        user_token = self.fetch_token_obj(token=token)
+        token_obj = self.fetch_token_obj(token=token)
+        ctx = {}
+        if token_obj is None:
+            ctx.update(verified=False,)
+        else:
+            self.verify_email(token_obj)
+            ctx.update(verified=True)
         
         return render(
             request,
             Accounts.Auth.SIGNUP_EMAIL_VERIFIED,
+            context=ctx
         )
         
-    def fetch_token_obj(self, token:str):
+    def fetch_token_obj(self, token:str) -> Union[UserToken, None]:
+        """
+            Retrieves a UserToken object matching the provided token string.
+
+            Returns:
+                UserToken | None: The token object if it exists, otherwise None.
+        """
         try:
             user_token = UserToken.objects.get(token=token)
-            
         except UserToken.DoesNotExist:
-            # attach the message
             return None
-
-        return _user
+        return user_token
     
-    def activate_account(self, token: str) -> None:
+    def verify_email(self, token_obj: UserToken) -> None:
         """
-            updates user is_verified status to true directly
-            on the database.
-            
-            Note: This doesn't updates the previous call to
-            user model, so previous call will still have it's
-            is_verified property false if the user wasn't verified.
-        """
+        Marks the user’s email as verified and invalidates the token.
 
-        if not user.is_verified:
-            user.__class__.objects.filter(pk=user.pk).update(is_verified=True)
-            
+        Side effects:
+            - Invalidates the token so it cannot be reused.
+            - Updates the associated user account to mark it as verified.
+        """
+        token_obj.invalidate_token()
+        token_obj.user.verify_account()
         return None

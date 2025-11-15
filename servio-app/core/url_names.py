@@ -9,7 +9,7 @@ class AuthURLNames:
     SIGNUP = "account_signup"
     EMAIL_VERIFICATION_SENT = "account_email_verification_sent"
     EMAIL_CONFIRMATION = "account_confirm_email"
-    EMAIL_VERIFIED = "account_email_verified"
+    # EMAIL_VERIFIED = "account_email_verified"
     # account_email: manages email addresses
     
     

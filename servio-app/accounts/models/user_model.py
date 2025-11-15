@@ -24,6 +24,26 @@ class AuthUser(AbstractUser):
         "Returns the person's full name."
         return f"{self.first_name} {self.last_name}"
     
+    def verify_account(self) -> bool:
+        if not self.is_verified:
+            self.is_verified = True
+            self.save(update_fields=["is_verified"])
+        return True
+        
+    def deactivate_account(self) -> bool:
+        if self.is_active:
+            self.is_active = False
+            self.save(update_fields=["is_active"])
+            
+        return True
+        
+    def __str__(self):
+        return {
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "is_verified": self.is_verified,
+        }
     
     class Meta:
         db_table = "user_accounts"

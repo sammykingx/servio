@@ -1,5 +1,5 @@
 
-function toggleContentModal(modalType=null) {
+function toggleContentModal() {
     const contentModal = document.getElementById("contentModal");
     const loadingSpinner = document.getElementById("loading-spinner");
 
@@ -50,5 +50,6 @@ async function verifyEmail() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    verifyEmail();
+    // verifyEmail();
+    setTimeout(toggleContentModal, 2000);
 });

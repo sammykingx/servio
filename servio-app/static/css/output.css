@@ -26,6 +26,7 @@
     --color-green-700: oklch(52.7% 0.154 150.069);
     --color-green-800: oklch(44.8% 0.119 151.328);
     --color-blue-50: oklch(97% 0.014 254.604);
+    --color-blue-100: oklch(93.2% 0.032 255.585);
     --color-blue-300: oklch(80.9% 0.105 251.813);
     --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-blue-500: oklch(62.3% 0.214 259.815);
@@ -865,6 +866,9 @@
   .grow {
     flex-grow: 1;
   }
+  .border-collapse {
+    border-collapse: collapse;
+  }
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -1282,6 +1286,9 @@
   .bg-blue-50 {
     background-color: var(--color-blue-50);
   }
+  .bg-blue-500 {
+    background-color: var(--color-blue-500);
+  }
   .bg-blue-600 {
     background-color: var(--color-blue-600);
   }
@@ -1692,6 +1699,12 @@
   .text-\[\#ec4a0a\] {
     color: #ec4a0a;
   }
+  .text-blue-50 {
+    color: var(--color-blue-50);
+  }
+  .text-blue-100 {
+    color: var(--color-blue-100);
+  }
   .text-blue-500 {
     color: var(--color-blue-500);
   }
@@ -1790,6 +1803,10 @@
     outline-style: var(--tw-outline-style);
     outline-width: 1px;
   }
+  .grayscale {
+    --tw-grayscale: grayscale(100%);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
@@ -1871,6 +1888,13 @@
     &:hover {
       @media (hover: hover) {
         cursor: pointer;
+      }
+    }
+  }
+  .hover\:bg-blue-600 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-blue-600);
       }
     }
   }
@@ -2297,6 +2321,12 @@
       padding: calc(var(--spacing) * 6);
     }
   }
+  .md\:text-2xl {
+    @media (width >= 48rem) {
+      font-size: var(--text-2xl);
+      line-height: var(--tw-leading, var(--text-2xl--line-height));
+    }
+  }
   .md\:text-sm {
     @media (width >= 48rem) {
       font-size: var(--text-sm);
@@ -2721,6 +2751,19 @@
   .dark\:text-blue-400 {
     &:where(.dark, .dark *) {
       color: var(--color-blue-400);
+    }
+  }
+  .dark\:text-blue-500 {
+    &:where(.dark, .dark *) {
+      color: var(--color-blue-500);
+    }
+  }
+  .dark\:text-blue-500\/15 {
+    &:where(.dark, .dark *) {
+      color: color-mix(in srgb, oklch(62.3% 0.214 259.815) 15%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, var(--color-blue-500) 15%, transparent);
+      }
     }
   }
   .dark\:text-brand-400 {
