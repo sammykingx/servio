@@ -52,24 +52,23 @@ class UserTokenManager(models.Manager):
         existing = queryset.first()
         
         if existing:
-            return existing, False
-
-        token = get_random_string(124).lower()
+            return existing.token, False
 
         try:
-            return self.create(
+            user_token = self.create(
                 user=user,
-                token=token,
+                token=get_random_string(124).lower(),
                 token_type=token_type,
                 expires_at=now + lifetime if lifetime else None,
-            ), True
+            )
+            return user_token.token, True
 
         except IntegrityError:
             return self.get(
                 user=user,
                 token_type=token_type,
                 is_valid=True,
-            ), False
+            ).token, False
 
 
 class UserToken(models.Model):

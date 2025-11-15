@@ -24,7 +24,7 @@ class EmailService:
         return render_to_string(self.template, self.context)
 
     def _send(self, html_body: str):
-        if not self.subject or self.to_email:
+        if not (self.subject and self.to_email):
             raise ValueError("Email subject or recipient not set")
         
         msg = EmailMultiAlternatives(
@@ -35,8 +35,7 @@ class EmailService:
         )
         msg.attach_alternative(html_body, "text/html")
         try:
-            count = msg.send()
-            print(f"Response from msg.semd(): {count}")
+            msg.send()
             return True
         except Exception as e:
             # log err

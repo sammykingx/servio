@@ -1,4 +1,5 @@
 from django.views import View
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.views.generic import CreateView
@@ -8,14 +9,6 @@ from template_map.accounts import Accounts
 from template_map.emails import AccountMails
 from core.url_names import AuthURLNames
 from accounts.models.user_tokens import TokenType, UserToken
-from allauth.account.views import (
-    ConfirmEmailView,
-    EmailView, 
-    SignupView,
-    EmailVerificationSentView,
-    EmailConfirmation,
-    EmailVerificationStage
-)
 
 
 class CustomSignup(CreateView):
@@ -50,7 +43,7 @@ class CustomSignup(CreateView):
             user=self.object,
             token_type=TokenType.EMAIL_VERIFICATION,
         )
-        self.send_verification_email(token=email_token)
+        self.send_verification_email(email_token)
         
         return response
     
@@ -71,10 +64,10 @@ class CustomSignup(CreateView):
             )
         )
         
-        context={"acct_activation_url": acct_activation_url},
-        
-        print("ACCOUNT ACTIVATION URL:", acct_activation_url)
-        
+        context = {
+            "host": self.request.build_absolute_uri("/"),
+            "acct_activation_url": acct_activation_url,
+        }
         
         EmailService(self.object.email) \
             .set_subject(AccountMails.Subjects.EMAIL_VERIFICATION) \
@@ -88,5 +81,38 @@ class EmailVerificationView(View):
     """
     
     """
-    template_name=Accounts.Auth.SIGNUP_EMAIL_VERIFIED
-    success_url = reverse_lazy(AuthURLNames.EMAIL_VERIFIED)
+    http_method_names = ["get"]
+    
+    def get(self, request, **kwargs) -> HttpResponse:
+        token = kwargs.get("token")
+        user_token = self.fetch_token_obj(token=token)
+        
+        return render(
+            request,
+            Accounts.Auth.SIGNUP_EMAIL_VERIFIED,
+        )
+        
+    def fetch_token_obj(self, token:str):
+        try:
+            user_token = UserToken.objects.get(token=token)
+            
+        except UserToken.DoesNotExist:
+            # attach the message
+            return None
+
+        return _user
+    
+    def activate_account(self, token: str) -> None:
+        """
+            updates user is_verified status to true directly
+            on the database.
+            
+            Note: This doesn't updates the previous call to
+            user model, so previous call will still have it's
+            is_verified property false if the user wasn't verified.
+        """
+
+        if not user.is_verified:
+            user.__class__.objects.filter(pk=user.pk).update(is_verified=True)
+            
+        return None
