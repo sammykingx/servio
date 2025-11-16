@@ -1,14 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View
-from django.contrib.auth import get_user_model
 from django.http import HttpRequest, HttpResponse
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.views import LoginView
 from core.url_names import AuthURLNames
 from template_map.emails import AccountMails
 from services.email_service import EmailService
 from accounts.models.user_tokens import UserToken, TokenType
 from template_map.accounts import Accounts
+from typing import Union
 
 
 class CustomSignin(LoginView):
@@ -22,7 +25,7 @@ class CustomSignin(LoginView):
 
 class SigninLinkView(View):
     http_method_names = ["get", "post"]
-    _user_model = get_user_model()
+    _user_model:AbstractUser = get_user_model()
     
     def get(self, request, **kwargs) -> HttpResponse:
         return render(
@@ -31,32 +34,33 @@ class SigninLinkView(View):
         )
     
     def post(self, request:HttpRequest, *args, **kwargs) -> HttpResponse:
-        email = self.request.get("email")
+        email = self.request.POST.get("email")
         user = self.fetch_user(email)
-        if not user:
-            render(request, Accounts.Auth.SIGNUP_VERV_EMAIL_SENT)
+        if user is None:
+            return render(request, Accounts.Auth.SIGNIN_ACCESS_CODE_SENT)
         
-        result = self.fetch_token(user)
-        self.send_signin_link(result.token)
+        token = self.fetch_token(user)
+        self.send_signin_link(user, token)
         
         return render(
             request,
             Accounts.Auth.SIGNIN_ACCESS_CODE_SENT,
         )
     
-    def fetch_token(self, user):
+    def fetch_token(self, user:AbstractUser):
         return UserToken.objects.generate_token(
             user=user,
             token_type=TokenType.MAGIC_LINK,
-        )
+        ).token
         
-    def fetch_user(self, email):
-        user = self._user_model.objects.filter(email=email)
-        if user and user.is_verified:
+    def fetch_user(self, email) ->Union[AbstractUser, None]:
+        try:
+            user = self._user_model.objects.get(email=email)
+        except self._user_model.DoesNotExist:
             return None
         return user
            
-    def send_signin_link(self, user, token:str) -> None:
+    def send_signin_link(self, user:AbstractUser, token:str) -> bool:
         """
         Send magic link to user
         """
@@ -78,11 +82,37 @@ class SigninLinkView(View):
             .with_context(**context) \
             .send()
 
-        return None
+        return True
             
 
 class VerifySigninLinkView(View):
     http_method_names = ["get"]
+    
+    def get(self, request, **kwargs) -> HttpResponse:
+        token = kwargs.get("token")
+        token_obj = self.fetch_token_obj(token=token)
+
+        if not getattr(token_obj, "is_valid", False):
+            return render(request, Accounts.Auth.SIGNIN_ACCESS_CODE_FAILED)
+
+        token_obj.invalidate_token()
+        user = authenticate(request, token=token)  
+        login(request, user)
+        
+        return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
+        
+    def fetch_token_obj(self, token:str) -> Union[UserToken, None]:
+        """
+            Retrieves a UserToken object matching the provided token string.
+
+            Returns:
+                UserToken | None: The token object if it exists, otherwise None.
+        """
+        try:
+            user_token = UserToken.objects.get(token=token, token_type=TokenType.MAGIC_LINK)
+        except UserToken.DoesNotExist:
+            return None
+        return user_token
  
 
 

@@ -28,6 +28,7 @@ class Accounts:
         SIGNIN_OPTIONS = f"{__SUB_FOLDER}/signin-options.html"
         SIGNIN_ACCESS_CODE = f"{__SUB_FOLDER}/request-access-code.html"
         SIGNIN_ACCESS_CODE_SENT = f"{__SUB_FOLDER}/request-access-code-sent.html"
+        SIGNIN_ACCESS_CODE_FAILED = f"{__SUB_FOLDER}/request-access-code-failed.html"
         
         SIGNUP = f"{__SUB_FOLDER}/signup.html"
         SIGNUP_VERV_EMAIL_SENT = f"{__SUB_FOLDER}/email-verification-sent.html"

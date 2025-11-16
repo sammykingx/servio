@@ -15,6 +15,11 @@ LOCAL_APPS = [
 
 LOCAL_MIDDLEWARES = []
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'core.backends.login_token_backend.LoginTokenBackend'
+]
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",

@@ -5,7 +5,7 @@
 	<h1
 		class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90"
 		>
-		One-Tap Entry
+		One-Tap Entry -Servio by Divgm Agency
 	</h1>
 	<p class="text-sm text-gray-500 dark:text-gray-400">
 		Enter the email address linked to your account to receive a
@@ -13,14 +13,15 @@
 	</p>
 </div>
 <div>
-	<form>
+	<form method="POST" action="{% url AUTH_URLS.LOGIN_LINK %}">
+		{% csrf_token %}
 		<div class="space-y-5">
 			<!-- Email -->
 			<div>
 				<label
 					class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-					>
-				Email<span class="text-error-500">*</span>
+				>
+					Email<span class="text-error-500">*</span>
 				</label>
 				<input
 					type="email"

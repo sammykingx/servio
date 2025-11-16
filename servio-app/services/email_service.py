@@ -1,6 +1,7 @@
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+import traceback
 
 
 class EmailService:
@@ -38,8 +39,10 @@ class EmailService:
             msg.send()
             return True
         except Exception as e:
-            # log err
-            print("Error sending email:", e)
+            # logger.error("Error sending email: %s", e)
+            # logger.error(traceback.format_exc())
+            print("ERROR SENDING MAIL: ", e)
+            traceback.print_exc()
             return False
 
     def set_subject(self, subject: str):

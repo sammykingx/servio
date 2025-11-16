@@ -113,7 +113,7 @@ class EmailVerificationView(View):
                 UserToken | None: The token object if it exists, otherwise None.
         """
         try:
-            user_token = UserToken.objects.get(token=token)
+            user_token = UserToken.objects.get(token=token, token_type=TokenType.EMAIL_VERIFICATION)
         except UserToken.DoesNotExist:
             return None
         return user_token

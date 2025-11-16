@@ -44,9 +44,13 @@ class UserTokenManager(models.Manager):
                 valid token was reused.
 
         Raises:
+            ValueError: If the user model is not passed.
             IntegrityError: If a unique constraint is hit during token creation. In this
             case, the method falls back to returning the existing valid token.
         """
+        if user is None:
+            raise ValueError("User Object cannot be None or empty")
+        
         now = timezone.now()
         lifetime = _TOKEN_LIFETIMES.get(token_type)
         queryset = self.filter(user=user, token_type=token_type, is_valid=True)
