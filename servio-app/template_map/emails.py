@@ -16,14 +16,16 @@ class AccountMails:
     
     # WELCOME_EMAIL = f"{_BASE_FOLDER}/welcome-email.html"
     EMAIL_VERIFICATION = _BASE_FOLDER.base_folder_files("email-verification.html")
+    MAGIC_LINK = _BASE_FOLDER.base_folder_files("magic-link.html")
     # PASSWORD_RESET = f"{_BASE_FOLDER}/password-reset.html"
     
     class Subjects:
         """Namespace container for email subject lines."""
         
         WELCOME_EMAIL = "Welcome to Servio!"
-        EMAIL_VERIFICATION = "Please Confirm Your Email Address"
+        EMAIL_VERIFICATION = "Please Confirm Your Email Address - Divgm"
         PASSWORD_RESET = "Servio - Password Reset Instructions"
+        LOGIN_LINK = "Your One-Tap Login Is Ready - Divgm"
     
         
 __all__ = [AccountMails]

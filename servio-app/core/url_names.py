@@ -1,7 +1,7 @@
 class AuthURLNames:
     LOGIN = "account_login"
-    LOGIN_ACCESS_CODE = "account_request_login_code"
-    VERIFY_ACCESS_CODE = "account_confirm_login_code"
+    LOGIN_LINK = "account_request_login_code"
+    VERIFY_LOGIN_LINK = "account_confirm_login_code"
     LOGOUT = "account_logout"
     
     
@@ -30,7 +30,7 @@ class AuthURLNames:
     
     # OTHERS
     ACCOUNT_RECOVERY_OPTIONS = "account_recovery_options"
-    ACCOUNT_DASHBOARD = ""
+    ACCOUNT_DASHBOARD = "dashboard"
     # account_reauthenticate
     # account_inactive
 

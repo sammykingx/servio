@@ -27,6 +27,7 @@ class Accounts:
         SIGNIN = f"{__SUB_FOLDER}/signin.html"
         SIGNIN_OPTIONS = f"{__SUB_FOLDER}/signin-options.html"
         SIGNIN_ACCESS_CODE = f"{__SUB_FOLDER}/request-access-code.html"
+        SIGNIN_ACCESS_CODE_SENT = f"{__SUB_FOLDER}/request-access-code-sent.html"
         
         SIGNUP = f"{__SUB_FOLDER}/signup.html"
         SIGNUP_VERV_EMAIL_SENT = f"{__SUB_FOLDER}/email-verification-sent.html"
@@ -45,8 +46,8 @@ class Accounts:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("dashboards")
 
         ADMIN = f"{__SUB_FOLDER}/admin.html"
-        USERS = f"{__SUB_FOLDER}/users.html"
-        SERVICE_PROVIDER = f"{__SUB_FOLDER}/service-provider.html"
+        MEMBERS = f"{__SUB_FOLDER}/members.html"
+        PROVIDERS = f"{__SUB_FOLDER}/providers.html"
         
         
         

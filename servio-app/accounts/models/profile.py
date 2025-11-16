@@ -2,6 +2,12 @@ from django.db import models
 from django.conf import settings
 
 
+class UserRole(models.TextChoices):
+    MEMBERS = "member", "Members"
+    PROVIDERS = "provider", "Providers"
+    ADMIN = "admin", "Admin"
+    
+    
 class UserProfile(models.Model):
     """
     Extended profile for AuthUser (One-to-One relationship).

@@ -24,10 +24,9 @@ import accounts.urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("allauth/", include("allauth.urls")),
+    # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
     path("", TemplateView.as_view(template_name="layouts/base.html"), name="test-page"),
-    path("dashboard/", TemplateView.as_view(template_name=Accounts.Dashboards.ADMIN), name="admin-dashboard"),
-    path("client/", TemplateView.as_view(template_name=Accounts.Dashboards.USERS), name="user-dashboard"),
-    path("provider/", TemplateView.as_view(template_name=Accounts.Dashboards.SERVICE_PROVIDER), name="provider-dashboard"),
+    path("client/", TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS), name="user-dashboard"),
+    path("provider/", TemplateView.as_view(template_name=Accounts.Dashboards.PROVIDERS), name="provider-dashboard"),
 ]

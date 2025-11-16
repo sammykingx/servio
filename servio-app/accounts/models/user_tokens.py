@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.db.utils import IntegrityError
 from django.utils.crypto import get_random_string
+from collections import namedtuple
 from datetime import timedelta
 from typing import Union
 
@@ -14,15 +15,19 @@ _TOKEN_LIFETIMES = {
     "magic_link": None,
 }
 
+
 class TokenType(models.TextChoices):
     EMAIL_VERIFICATION = "email_verification", "Email Verification"
     PASSWORD_RESET = "password_reset", "Password Reset"
     MAGIC_LINK = "magic_link", "Magic Link"
 
 
+TokenResult = namedtuple('TokenResult', ['token', 'is_new'])
+
+
 class UserTokenManager(models.Manager):
     
-    def generate_token(self, user, token_type: TokenType) -> tuple["UserToken", bool]:
+    def generate_token(self, user, token_type: TokenType) -> TokenResult:
         """
         Returns an existing valid token for the given token_type, or creates a new one.
 
@@ -34,8 +39,8 @@ class UserTokenManager(models.Manager):
         Returns:
             tuple:
                 (token_instance, created)
-                - token_instance: The existing or newly created token object.
-                - created (bool): True if a new token was created, False if an existing
+                - *token_instance*: The existing or newly created token object.
+                - *created (bool)*: True if a new token was created, False if an existing
                 valid token was reused.
 
         Raises:
@@ -52,7 +57,7 @@ class UserTokenManager(models.Manager):
         existing = queryset.first()
         
         if existing:
-            return existing.token, False
+            return TokenResult(existing.token, False)
 
         try:
             user_token = self.create(
@@ -61,14 +66,14 @@ class UserTokenManager(models.Manager):
                 token_type=token_type,
                 expires_at=now + lifetime if lifetime else None,
             )
-            return user_token.token, True
+            return TokenResult(user_token.token, True)
 
         except IntegrityError:
-            return self.get(
+            return TokenResult(self.get(
                 user=user,
                 token_type=token_type,
                 is_valid=True,
-            ).token, False
+            ).token, False)
 
 
 class UserToken(models.Model):

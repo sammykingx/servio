@@ -37,13 +37,23 @@ class AuthUser(AbstractUser):
             
         return True
         
-    def __str__(self):
-        return {
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "email": self.email,
-            "is_verified": self.is_verified,
-        }
+    def __str__(self) -> str:
+        return (
+            f"{self.first_name} {self.last_name} "
+            f"<{self.email}> "
+            f"{'(verified)' if self.is_verified else '(not verified)'}"
+        )
+        
+    def __repr__(self) -> str:
+        return (
+            f"AuthUser(first_name={self.first_name!r}, "
+            f"last_name={self.last_name!r}, "
+            f"email={self.email!r}, "
+            f"is_verified={self.is_verified!r}, "
+            f"is_active={self.is_active!r})"
+        )
+
+
     
     class Meta:
         db_table = "user_accounts"

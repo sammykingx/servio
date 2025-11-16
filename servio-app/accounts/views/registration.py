@@ -40,11 +40,11 @@ class CustomSignup(CreateView):
             successful registration.
         """
         response = super().form_valid(form)
-        email_token, created = UserToken.objects.generate_token(
+        result = UserToken.objects.generate_token(
             user=self.object,
             token_type=TokenType.EMAIL_VERIFICATION,
         )
-        self.send_verification_email(email_token)
+        self.send_verification_email(result.token)
         
         return response
     
