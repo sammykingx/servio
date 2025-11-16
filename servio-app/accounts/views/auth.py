@@ -90,30 +90,11 @@ class VerifySigninLinkView(View):
     
     def get(self, request, **kwargs) -> HttpResponse:
         token = kwargs.get("token")
-        token_obj = self.fetch_token_obj(token=token)
-
-        if not getattr(token_obj, "is_valid", False):
+        user = authenticate(request, token=token)
+        if user is None:
             return render(request, Accounts.Auth.SIGNIN_ACCESS_CODE_FAILED)
-
-        token_obj.invalidate_token()
-        user = authenticate(request, token=token)  
         login(request, user)
-        
         return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
-        
-    def fetch_token_obj(self, token:str) -> Union[UserToken, None]:
-        """
-            Retrieves a UserToken object matching the provided token string.
-
-            Returns:
-                UserToken | None: The token object if it exists, otherwise None.
-        """
-        try:
-            user_token = UserToken.objects.get(token=token, token_type=TokenType.MAGIC_LINK)
-        except UserToken.DoesNotExist:
-            return None
-        return user_token
- 
 
 
 __all__ = [CustomSignin, SigninLinkView, VerifySigninLinkView]
