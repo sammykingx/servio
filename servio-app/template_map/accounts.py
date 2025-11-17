@@ -49,8 +49,9 @@ class Accounts:
         ADMIN = f"{__SUB_FOLDER}/admin.html"
         MEMBERS = f"{__SUB_FOLDER}/members.html"
         PROVIDERS = f"{__SUB_FOLDER}/providers.html"
+
         
-        
+    ACCOUNT_PROFILE = _BASE_FOLDER.base_folder_files("profile.html")
         
 __all__ = [Accounts]
 

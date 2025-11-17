@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
 from django.contrib.auth.views import LogoutView
-from .views import auth, registration, dashboard
+from .views import auth, registration,password,  dashboard
 from core.url_names import AuthURLNames
 from template_map.accounts import Accounts
 
@@ -20,10 +20,11 @@ urlpatterns =[
     
     # ACCOUNT RECOVERY
     path("recovery-options/", TemplateView.as_view(template_name=Accounts.Auth.SIGNIN_OPTIONS), name=AuthURLNames.ACCOUNT_RECOVERY_OPTIONS),
-    path("recover-account/", TemplateView.as_view(template_name=Accounts.Auth.PASSWORD_RESET), name=AuthURLNames.PASSWORD_RESET),
+    path("recover-account/", password.PasswordResetEmailView.as_view(), name=AuthURLNames.PASSWORD_RESET),
     
     # PASSWORD RESET
     
     # DASHBOARD
     path("dashboard/", dashboard.DashboardView.as_view(), name=AuthURLNames.ACCOUNT_DASHBOARD),
+    path("profile/", TemplateView.as_view(template_name=Accounts.ACCOUNT_PROFILE), name=AuthURLNames.ACCOUNT_PROFILE),
 ]
