@@ -17,7 +17,7 @@ class AccountMails:
     # WELCOME_EMAIL = f"{_BASE_FOLDER}/welcome-email.html"
     EMAIL_VERIFICATION = _BASE_FOLDER.base_folder_files("email-verification.html")
     MAGIC_LINK = _BASE_FOLDER.base_folder_files("magic-link.html")
-    PASSWORD_RESET = f"{_BASE_FOLDER}/password-reset.html"
+    PASSWORD_RESET = _BASE_FOLDER.base_folder_files("password-reset.html")
     
     class Subjects:
         """Namespace container for email subject lines."""

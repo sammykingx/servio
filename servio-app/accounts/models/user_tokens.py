@@ -55,8 +55,8 @@ class UserTokenManager(models.Manager):
         lifetime = _TOKEN_LIFETIMES.get(token_type)
         queryset = self.filter(user=user, token_type=token_type, is_valid=True)
         
-        if lifetime:
-            queryset = queryset.filter(expires_at__gte=now)
+        # if lifetime:
+        #     queryset = queryset.filter(expires_at__gte=now)
         
         existing = queryset.first()
         
@@ -96,7 +96,6 @@ class UserToken(models.Model):
     expires_at = models.DateTimeField(null=True)
     used_at = models.DateTimeField(null=True)
     is_valid = models.BooleanField(default=True)
-    
     
     objects = UserTokenManager()
     

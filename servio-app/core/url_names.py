@@ -12,13 +12,13 @@ class AuthURLNames:
     
     
     # PASSWORD RESET
-    PASSWORD_RESET = "account_reset_password" # request password reset link
+    REQUEST_PASSWORD_RESET = "account_reset_password" # request password reset link
+    PASSWORD_RESET ="account_set_password"
     PASSWORD_RESET_DONE = "account_reset_password_done"
     PASSWORD_CHANGE = "account_change_password" #actual password change
     PASSWORD_CHANGE_DONE = "account_change_password_done"
     # account_reset_password_from_key
     # account_reset_password_from_key_done
-    # account_set_password
     
     
     # SOCIAL ACCOUNTS

@@ -30,8 +30,6 @@ document.getElementById('signupForm').addEventListener('submit', async function 
             body: formData,
         });
 
-        console.log("Backend response", response);
-
         if (response.redirected) {
             showAuthAlert(
                 "Signup Successful",
@@ -119,30 +117,11 @@ function validateFormData(formData) {
     return valid;
 }
 
-// Response Object
-// Response {
-//     type: "basic",
-//     url: "http://localhost:8000/accounts/email/sent/",
-//     redirected: true,
-//     status: 200,
-//     ok: true,
-//     statusText: "OK", 
-//     headers: Headers(7), 
-//     body: ReadableStream, 
-//     bodyUsed: false
-// }
-
 function toggleBtnState() {
     const signupBtn = document.getElementById("signupBtn");
     const processingBtn = document.getElementById("processingBtn");
 
     signupBtn.classList.toggle("hidden");
     processingBtn.classList.toggle("hidden");
-    // if (isProcessing) {
-    //     signupBtn.classList.toggle("hidden");
-    //     processingBtn.classList.toggle("hidden");
-    // } else {
-    //     signupBtn.classList.toggle("hidden");
-    //     processingBtn.classList.toggle("hidden");
-    // }
+
 }

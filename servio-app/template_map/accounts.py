@@ -34,7 +34,8 @@ class Accounts:
         SIGNUP_VERV_EMAIL_SENT = f"{__SUB_FOLDER}/email-verification-sent.html"
         SIGNUP_EMAIL_VERIFIED = f"{__SUB_FOLDER}/email-verified.html"
         
-        PASSWORD_RESET = f"{__SUB_FOLDER}/reset-password.html"
+        REQUEST_PASSWORD_RESET = f"{__SUB_FOLDER}/request-password-reset.html"
+        PASSWORD_RESET = f"{__SUB_FOLDER}/password-reset.html"
 
     class Dashboards:
         """

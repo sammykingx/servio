@@ -20,9 +20,11 @@ urlpatterns =[
     
     # ACCOUNT RECOVERY
     path("recovery-options/", TemplateView.as_view(template_name=Accounts.Auth.SIGNIN_OPTIONS), name=AuthURLNames.ACCOUNT_RECOVERY_OPTIONS),
-    path("recover-account/", password.PasswordResetEmailView.as_view(), name=AuthURLNames.PASSWORD_RESET),
+    path("request-password-reset/", password.PasswordResetEmailView.as_view(), name=AuthURLNames.REQUEST_PASSWORD_RESET),
     
     # PASSWORD RESET
+    path("password-reset/<token>/", password.NewPasswordView.as_view(), name=AuthURLNames.PASSWORD_RESET),
+    
     
     # DASHBOARD
     path("dashboard/", dashboard.DashboardView.as_view(), name=AuthURLNames.ACCOUNT_DASHBOARD),
