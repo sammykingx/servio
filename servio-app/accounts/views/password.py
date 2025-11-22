@@ -4,9 +4,11 @@ from django.contrib.auth.views import (
     PasswordChangeDoneView,
 )
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.http import JsonResponse, HttpResponse, HttpRequest
+from django.contrib.auth import authenticate, login
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from services.email_service import EmailService
@@ -14,7 +16,7 @@ from accounts.models.user_tokens import UserToken, TokenType
 from core.url_names import AuthURLNames
 from template_map.accounts import Accounts
 from template_map.emails import AccountMails
-from typing import Union
+from typing import Optional, Union
 from loggers import default_logger as logger
 
 
@@ -77,23 +79,98 @@ class PasswordResetEmailView(View):
             
         return True
 
-    
+
 class NewPasswordView(View):
     """
         Used when a user is not logged in and wants to reset password
         using reset link sent to tmail address
     """
-    http_method_names = {"get", "post"}
-    
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        context = {"token" : kwargs.get("token")}
+    http_method_names = ["get", "post"]
+
+    def get(self, request: HttpRequest, *args, **kwargs):
+        context = self.build_context(kwargs.get("token"))
         return render(request, Accounts.Auth.PASSWORD_RESET, context)
-    
-    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        context = {"token" : kwargs.get("token")}
+
+    def post(self, request, *args, **kwargs):
+        token = kwargs.get("token")
+        context = self.build_context(token)
+
+        if context["disabled"]:
+            return render(request, Accounts.Auth.PASSWORD_RESET, context)
+
         data = self.request.POST.dict()
-        logger.info(data)
+        user_password = data.get("password1")
+        auto_login = data.get("auto_login", "").strip().lower() in ("true", "1", "yes", "on")
+        token_obj = self.fetch_token_obj(token)
+        
+        self.change_password(user_password, token_obj)
+        if auto_login:
+            print("auto login present")
+            self.login_user(token_obj.user.email, user_password)
+            return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
         return render(request, Accounts.Auth.PASSWORD_RESET, context)
+
+    def build_context(self, token: str) -> dict:
+        """
+            Centralized context building:
+            - fetch token
+            - determine disabled state
+        """
+        token_obj = self.fetch_token_obj(token)
+        disabled = self.is_token_invalid(token_obj)
+
+        return {
+            "token": token,
+            "disabled": disabled,
+        }
+
+    def fetch_token_obj(self, token: str) -> Optional[UserToken]:
+        """Fetch the token object or return None cleanly."""
+        try:
+            return UserToken.objects.get(
+                token=token,
+                token_type=TokenType.PASSWORD_RESET
+            )
+        except UserToken.DoesNotExist:
+            return None
+
+    def is_token_invalid(self, token_obj: Optional[UserToken]) -> bool:
+        """Centralized token validation logic."""
+        if token_obj is None:
+            return True
+        if not token_obj.is_valid:
+            return True
+        if token_obj.has_expired():
+            return True
+        return False
+
+    def change_password(self, new_password: str, token_obj: UserToken) -> bool:
+        """
+        Change the user's password and mark token as used.
+        Returns True if successful.
+        """
+        if not token_obj or not token_obj.is_valid:
+            return False
+        if not new_password:
+            raise ValueError("New password can't be None or empty")
+
+        user = token_obj.user
+        user.set_password(new_password)
+        user.save()
+
+        token_obj.is_valid = False
+        token_obj.used_at = timezone.now()
+        token_obj.save()
+
+        return True
+    
+    def login_user(self, email, passwd) -> bool:
+        user = authenticate(self.request, username=email, password=passwd)
+        if not user:
+            return False
+        login(self.request, user)
+        return True
+            
 
 
 class PasswordResetEmailDOneView(PasswordResetDoneView):

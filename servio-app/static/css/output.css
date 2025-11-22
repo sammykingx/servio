@@ -35,7 +35,6 @@
     --color-blue-800: oklch(42.4% 0.199 265.638);
     --color-slate-300: oklch(86.9% 0.022 252.894);
     --color-slate-500: oklch(55.4% 0.046 257.417);
-    --color-slate-800: oklch(27.9% 0.041 260.031);
     --color-gray-50: #f9fafb;
     --color-gray-100: #f2f4f7;
     --color-gray-200: #e4e7ec;
@@ -94,15 +93,16 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --color-brand-50: #ecf3ff;
-    --color-brand-100: #dde9ff;
-    --color-brand-200: #c2d6ff;
-    --color-brand-300: #9cb9ff;
-    --color-brand-400: #7592ff;
-    --color-brand-500: #465fff;
-    --color-brand-600: #3641f5;
-    --color-brand-800: #252dae;
-    --color-brand-950: #161950;
+    --color-brand-50: #eef2f9;
+    --color-brand-100: #dbe1f1;
+    --color-brand-200: #bcc7e4;
+    --color-brand-300: #94a5d1;
+    --color-brand-400: #6c81b6;
+    --color-brand-500: #49629a;
+    --color-brand-600: #193263;
+    --color-brand-700: #152b53;
+    --color-brand-800: #112242;
+    --color-brand-950: #090f1e;
     --color-gray-dark: #1a2231;
     --color-success-50: #ecfdf3;
     --color-success-100: #d1fadf;
@@ -125,22 +125,22 @@
     --color-warning-700: #b54708;
     --color-theme-pink-500: #ee46bc;
     --color-theme-purple-500: #7a5af8;
-    --text-title-2xl: 65px;
-    --text-title-2xl--line-height: 90px;
-    --text-title-xl: 55px;
-    --text-title-xl--line-height: 72px;
-    --text-title-lg: 43px;
-    --text-title-lg--line-height: 60px;
-    --text-title-md: 33px;
-    --text-title-md--line-height: 44px;
-    --text-title-sm: 25px;
-    --text-title-sm--line-height: 38px;
-    --text-theme-xl: 20px;
-    --text-theme-xl--line-height: 30px;
-    --text-theme-sm: 14px;
-    --text-theme-sm--line-height: 20px;
-    --text-theme-xs: 12px;
-    --text-theme-xs--line-height: 18px;
+    --text-title-2xl: 60px;
+    --text-title-2xl--line-height: 80px;
+    --text-title-xl: 50px;
+    --text-title-xl--line-height: 62px;
+    --text-title-lg: 40px;
+    --text-title-lg--line-height: 50px;
+    --text-title-md: 30px;
+    --text-title-md--line-height: 34px;
+    --text-title-sm: 22px;
+    --text-title-sm--line-height: 28px;
+    --text-theme-xl: 17px;
+    --text-theme-xl--line-height: 20px;
+    --text-theme-sm: 12px;
+    --text-theme-sm--line-height: 10px;
+    --text-theme-xs: 9px;
+    --text-theme-xs--line-height: 8px;
     --drop-shadow-4xl: 0 35px 35px rgba(0, 0, 0, 0.25),
     0 45px 65px rgba(0, 0, 0, 0.15);
   }
@@ -1201,7 +1201,7 @@
     background-color: var(--color-brand-50);
     color: var(--color-brand-500);
     &:where(.dark, .dark *) {
-      background-color: color-mix(in srgb, #465fff 12%, transparent);
+      background-color: color-mix(in srgb, #49629a 12%, transparent);
       @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-brand-500) 12%, transparent);
       }
@@ -1531,6 +1531,9 @@
   }
   .py-7 {
     padding-block: calc(var(--spacing) * 7);
+  }
+  .py-10 {
+    padding-block: calc(var(--spacing) * 10);
   }
   .py-\[4\.5px\] {
     padding-block: 4.5px;
@@ -2038,7 +2041,7 @@
   }
   .focus\:ring-brand-500\/10 {
     &:focus {
-      --tw-ring-color: color-mix(in srgb, #465fff 10%, transparent);
+      --tw-ring-color: color-mix(in srgb, #49629a 10%, transparent);
       @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-brand-500) 10%, transparent);
       }
@@ -2679,11 +2682,6 @@
       background-color: var(--color-gray-dark);
     }
   }
-  .dark\:bg-slate-800 {
-    &:where(.dark, .dark *) {
-      background-color: var(--color-slate-800);
-    }
-  }
   .dark\:bg-success-500\/15 {
     &:where(.dark, .dark *) {
       background-color: color-mix(in srgb, #12b76a 15%, transparent);
@@ -2902,7 +2900,7 @@
     &:where(.dark, .dark *) {
       &:hover {
         @media (hover: hover) {
-          background-color: color-mix(in srgb, #465fff 12%, transparent);
+          background-color: color-mix(in srgb, #49629a 12%, transparent);
           @supports (color: color-mix(in lab, red, red)) {
             background-color: color-mix(in oklab, var(--color-brand-500) 12%, transparent);
           }

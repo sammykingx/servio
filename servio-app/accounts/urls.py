@@ -1,5 +1,6 @@
 from django.urls import path
-from django.views.generic.base import TemplateView
+from django.urls import reverse_lazy
+from django.views.generic.base import TemplateView, RedirectView
 from django.contrib.auth.views import LogoutView
 from .views import auth, registration,password,  dashboard
 from core.url_names import AuthURLNames
@@ -8,6 +9,7 @@ from template_map.accounts import Accounts
 
 urlpatterns =[
     # LOGIN AND LOGOUT
+    path("", RedirectView.as_view(url=reverse_lazy(AuthURLNames.LOGIN), permanent=True)),
     path("access/", auth.CustomSignin.as_view(), name=AuthURLNames.LOGIN),
     path("access-code/", auth.SigninLinkView.as_view(), name=AuthURLNames.LOGIN_LINK),
     path("access-code/verify/<token>/", auth.VerifySigninLinkView.as_view(), name=AuthURLNames.VERIFY_LOGIN_LINK),

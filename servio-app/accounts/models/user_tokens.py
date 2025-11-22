@@ -11,7 +11,7 @@ from typing import Union
 
 _TOKEN_LIFETIMES = {
     "email_verification": None,
-    "password_reset": timedelta(minutes=20),
+    "password_reset": timedelta(minutes=50),
     "magic_link": None,
 }
 
