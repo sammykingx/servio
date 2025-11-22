@@ -5,7 +5,7 @@ from template_map.accounts import Accounts
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
-    template_name = Accounts.Dashboards.MEMBERS  # fallback (optional)
+    template_name = Accounts.Dashboards.MEMBERS
 
     def get_template_names(self):
         user = self.request.user
