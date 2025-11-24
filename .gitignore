@@ -17,6 +17,7 @@ node_modules/
 # backup files
 bkp*
 *.bkp
+profile.html
 
 # django files
 *.sqlite3

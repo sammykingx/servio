@@ -1,15 +1,15 @@
-<div x-data="{ pageName: `Base`}">
+<div x-data="{ pageName: `{{ page_name }}`}">
 	<div class="flex flex-wrap items-center justify-between gap-3 pb-6">
 		<h2
 			class="text-xl font-semibold text-gray-800 dark:text-white/90 pl-3"
 			x-text="pageName"
-			></h2>
+		></h2>
 		<nav>
 			<ol class="flex items-center gap-1.5">
 				<li>
 					<a
 						class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
-						href="#"
+						href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}"
 						>
 						Home
 						<svg

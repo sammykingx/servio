@@ -82,7 +82,6 @@
             <div class="space-y-5">
                 <!-- Email -->
                 <div>
-                    <!-- {{ form.as_p }} -->
                     <label
                         class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
                     >
@@ -93,7 +92,7 @@
                         id="email"
                         name="{{ form.username.html_name }}"
                         placeholder="info@gmail.com"
-                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                        class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 focus:ring-success-500/10 dark:focus:border-warning-200 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                         />
                 </div>
                 <!-- Password -->
@@ -108,7 +107,7 @@
                             :type="showPassword ? 'text' : 'password'"
                             placeholder="Enter your password"
                             name="{{ form.password.html_name }}"
-                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                            class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 focus:ring-success-500/10 dark:focus:border-warning-200 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                             />
                         <span
                             @click="showPassword = !showPassword"
@@ -191,7 +190,7 @@
                     </div>
                     <a
                         href="{% url AUTH_URLS.ACCOUNT_RECOVERY_OPTIONS %}"
-                        class="text-brand-500 hover:text-brand-600 dark:text-brand-400 text-xs md:text-sm"
+                        class="text-brand-500 hover:text-brand-600 dark:text-brand-200 dark:hover:text-warning-200 text-xs md:text-sm"
                         >Forgot password?</a
                         >
                 </div>
@@ -212,7 +211,7 @@
                 Don't have an account?
                 <a
                     href="{% url AUTH_URLS.SIGNUP %}"
-                    class="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                    class="text-brand-500 hover:text-brand-600 dark:text-brand-200 dark:hover:text-warning-200"
                     >Sign Up</a
                     >
             </p>
