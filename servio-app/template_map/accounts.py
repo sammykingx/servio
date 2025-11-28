@@ -53,6 +53,7 @@ class Accounts:
 
         
     ACCOUNT_PROFILE = _BASE_FOLDER.base_folder_files("profile.html")
+    ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files("account-settings.html")
         
 __all__ = [Accounts]
 

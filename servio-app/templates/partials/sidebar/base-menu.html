@@ -62,7 +62,7 @@
 					<!-- Menu Item Dashboard -->
 					<li>
 						<a
-							href="#"
+							href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}"
 							@click="selected = (selected === 'dashboard' ? '':'dashboard')"
 							class="menu-item group"
 							:class=" (selected === 'dashboard') && (page === 'dashboard') ? 'menu-item-active' : 'menu-item-inactive'"

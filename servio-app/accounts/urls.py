@@ -31,4 +31,5 @@ urlpatterns =[
     # DASHBOARD
     path("dashboard/", dashboard.DashboardView.as_view(), name=AuthURLNames.ACCOUNT_DASHBOARD),
     path("profile/", TemplateView.as_view(template_name=Accounts.ACCOUNT_PROFILE), name=AuthURLNames.ACCOUNT_PROFILE),
+    path("settings/", TemplateView.as_view(template_name=Accounts.ACCOUNT_SETTINGS), name=AuthURLNames.ACCOUNT_SETTINGS),
 ]

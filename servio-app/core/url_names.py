@@ -31,5 +31,6 @@ class AuthURLNames:
     ACCOUNT_RECOVERY_OPTIONS = "account_recovery_options"
     ACCOUNT_DASHBOARD = "dashboard"
     ACCOUNT_PROFILE = "account_profile"
+    ACCOUNT_SETTINGS = "account_settings"
     # account_reauthenticate
     # account_inactive
