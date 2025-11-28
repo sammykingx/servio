@@ -32,5 +32,6 @@ class AuthURLNames:
     ACCOUNT_DASHBOARD = "dashboard"
     ACCOUNT_PROFILE = "account_profile"
     ACCOUNT_SETTINGS = "account_settings"
+    BUSINESS_SETTINGS = "business_settings"
     # account_reauthenticate
     # account_inactive

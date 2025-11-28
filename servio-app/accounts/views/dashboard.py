@@ -9,15 +9,21 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_template_names(self):
         user = self.request.user
-        role = UserRole.PROVIDERS if user.profile.is_business_owner else UserRole.MEMBERS
-        # role = getattr(user.profile, "role", None)
+        role = getattr(user.profile, "role", UserRole.MEMBERS)
 
         template_map = {
-            "admin": Accounts.Dashboards.ADMIN,
+            UserRole.ADMIN: Accounts.Dashboards.ADMIN,
             UserRole.MEMBERS: Accounts.Dashboards.MEMBERS,
             UserRole.PROVIDERS: Accounts.Dashboards.PROVIDERS,
+            UserRole.STAFF: Accounts.Dashboards.STAFFS,
         }
 
         # Return template based on role, fallback to default
         return [template_map.get(role, self.template_name)]
 
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    """
+    View to display the user's profile page.
+    """
+    template_name = Accounts.ACCOUNT_PROFILE

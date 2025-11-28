@@ -50,10 +50,12 @@ class Accounts:
         ADMIN = f"{__SUB_FOLDER}/admin.html"
         MEMBERS = f"{__SUB_FOLDER}/members.html"
         PROVIDERS = f"{__SUB_FOLDER}/providers.html"
+        STAFFS = f"{__SUB_FOLDER}/staff.html"
 
         
     ACCOUNT_PROFILE = _BASE_FOLDER.base_folder_files("profile.html")
     ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files("account-settings.html")
+    BUSINESS_ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files("business-account-settings.html")
         
 __all__ = [Accounts]
 

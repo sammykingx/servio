@@ -2,7 +2,7 @@ from django.urls import path
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView, RedirectView
 from django.contrib.auth.views import LogoutView
-from .views import auth, registration,password,  dashboard
+from .views import auth, registration,password,  dashboard, settings
 from core.url_names import AuthURLNames
 from template_map.accounts import Accounts
 
@@ -26,10 +26,12 @@ urlpatterns =[
     
     # PASSWORD RESET
     path("password-reset/<token>/", password.NewPasswordView.as_view(), name=AuthURLNames.PASSWORD_RESET),
+    path("change-password/", password.ChangePasswordView.as_view(), name=AuthURLNames.PASSWORD_CHANGE),
     
     
     # DASHBOARD
     path("dashboard/", dashboard.DashboardView.as_view(), name=AuthURLNames.ACCOUNT_DASHBOARD),
-    path("profile/", TemplateView.as_view(template_name=Accounts.ACCOUNT_PROFILE), name=AuthURLNames.ACCOUNT_PROFILE),
-    path("settings/", TemplateView.as_view(template_name=Accounts.ACCOUNT_SETTINGS), name=AuthURLNames.ACCOUNT_SETTINGS),
+    path("profile/", dashboard.ProfileView.as_view(), name=AuthURLNames.ACCOUNT_PROFILE),
+    path("settings/", settings.AccountSettingsView.as_view(), name=AuthURLNames.ACCOUNT_SETTINGS),
+    path("settings/business", settings.BusinessSettingsView.as_view(), name=AuthURLNames.BUSINESS_SETTINGS),
 ]

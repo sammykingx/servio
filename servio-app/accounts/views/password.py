@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.http import JsonResponse, HttpResponse, HttpRequest
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import AbstractUser
 from services.email_service import EmailService
 from accounts.models.user_tokens import UserToken, TokenType
@@ -172,18 +173,8 @@ class NewPasswordView(View):
         return True
             
 
-
-class PasswordResetEmailDOneView(PasswordResetDoneView):
-    """
-    The page shown after a user has been emailed a link to
-    reset their password.
-    """
-    
-    pass
-
-
-class ChangePasswordView(PasswordChangeView):
-    """Allows a user to change their password."""
+class ChangePasswordView(LoginRequiredMixin, View):
+    """Allows logged-in user to change their password."""
     
     # Used when the logged-in user wants to change their own password
     # Key characteristics:
@@ -201,7 +192,15 @@ class ChangePasswordView(PasswordChangeView):
     # Password changes immediately
     # User stays logged in (unless configured otherwise)
     
-    pass
+    http_method_names = ["post"]
+    
+    def post(self, *args, **kwargs) -> HttpResponse:
+        data = self.request.POST.dict()
+        print(data)
+        print("USER: ", self.request.user)
+        
+        return reverse_lazy(Accounts.ACCOUNT_SETTINGS)
+        
 
 
 class ChangePasswordCompleteView(PasswordChangeDoneView):

@@ -6,6 +6,7 @@ class UserRole(models.TextChoices):
     MEMBERS = "member", "Members"
     PROVIDERS = "provider", "Providers"
     ADMIN = "admin", "Admin"
+    STAFF = "staff", "Staff"
     
     
 class UserProfile(models.Model):
@@ -23,7 +24,7 @@ class UserProfile(models.Model):
     avatar_url = models.ImageField(upload_to='avatars/', null=True, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     is_business_owner = models.BooleanField(default=False)
-    # role = models.CharField(choices=())
+    role = models.CharField(choices=UserRole.choices, default=UserRole.MEMBERS,)
     
     class Meta:
         db_table = "user_profiles"
