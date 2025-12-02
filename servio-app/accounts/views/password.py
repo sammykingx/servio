@@ -176,35 +176,12 @@ class NewPasswordView(View):
 class ChangePasswordView(LoginRequiredMixin, View):
     """Allows logged-in user to change their password."""
     
-    # Used when the logged-in user wants to change their own password
-    # Key characteristics:
-    #   - User must be authenticated
-    #   - User must know their current password
-    #   - Typical use: “Change Password” inside user settings
-    #   - Does not involve email or tokens
-    
-    # User is logged in
-    # They go to /accounts/password/change/
-    # They enter:
-    #   current password
-    #   new password
-    #   confirm password
-    # Password changes immediately
-    # User stays logged in (unless configured otherwise)
-    
     http_method_names = ["post"]
     
     def post(self, *args, **kwargs) -> HttpResponse:
         data = self.request.POST.dict()
-        print(data)
-        print("USER: ", self.request.user)
+        new_pwd = data.get("password1")
+        self.request.user.set_password(new_pwd)
+        self.request.user.save()
+        return HttpResponse()
         
-        return reverse_lazy(Accounts.ACCOUNT_SETTINGS)
-        
-
-
-class ChangePasswordCompleteView(PasswordChangeDoneView):
-    """The page shown after a user has changed their password."""
-    
-    pass
-    
