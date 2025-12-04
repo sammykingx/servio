@@ -8,23 +8,40 @@
 	<div
 		:class="sidebarToggle ? 'justify-center' : 'justify-between'"
 		class="sidebar-header flex items-center gap-2 pt-8 pb-7"
-		>
+	>
 		<a href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}">
-		<span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-		<img class="dark:hidden" src="{% static 'images/logo/sidebar-logo-light.png' %}" alt="Logo" />
-		<img
-			class="hidden dark:block"
-			src="{% static 'images/logo/sidebar-logo-dark.png' %}"
-			alt="Logo"
-			/>
-		</span>
-		<img
-			class="logo-icon"
-			:class="sidebarToggle ? 'xl:block' : 'hidden'"
-			src="{% static 'images/logo/logo-icon.svg' %}"
-			alt="Logo"
-			/>
-		</a>
+
+			<!-- FULL LOGO (show when sidebar is active on ALL screen sizes) -->
+			<span class="logo"
+				:class="sidebarToggle ? 'block' : 'hidden xl:block'">
+				<img class="dark:hidden"
+					src="{% static 'images/logo/sidebar-logo-light.png' %}" alt="Logo" />
+				<img class="hidden dark:block"
+					src="{% static 'images/logo/sidebar-logo-dark.png' %}" alt="Logo" />
+			</span>
+
+			<!-- ICON LOGO (desktop only, when collapsed) -->
+			<img class="logo-icon"
+				:class="sidebarToggle ? 'hidden xl:block' : 'hidden'"
+				src="{% static 'images/logo/logo-icon.svg' %}" alt="Logo" />
+
+    	</a>
+		<!-- <a href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}">
+			<span class="logo" :class="sidebarToggle ? 'hidden' : ''">
+			<img class="dark:hidden" src="{% static 'images/logo/sidebar-logo-light.png' %}" alt="Logo" />
+			<img
+				class="hidden dark:block"
+				src="{% static 'images/logo/sidebar-logo-dark.png' %}"
+				alt="Logo"
+				/>
+			</span>
+			<img
+				class="logo-icon"
+				:class="sidebarToggle ? 'xl:block' : 'hidden'"
+				src="{% static 'images/logo/logo-icon.svg' %}"
+				alt="Logo"
+				/>
+		</a> -->
 	</div>
 	<!-- SIDEBAR HEADER END -->
 	<div
