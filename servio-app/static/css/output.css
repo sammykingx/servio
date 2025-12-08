@@ -541,14 +541,14 @@
   .my-2 {
     margin-block: calc(var(--spacing) * 2);
   }
+  .my-3 {
+    margin-block: calc(var(--spacing) * 3);
+  }
   .my-5 {
     margin-block: calc(var(--spacing) * 5);
   }
   .my-6 {
     margin-block: calc(var(--spacing) * 6);
-  }
-  .my-10 {
-    margin-block: calc(var(--spacing) * 10);
   }
   .mt-0\.5 {
     margin-top: calc(var(--spacing) * 0.5);
@@ -2452,11 +2452,6 @@
       padding: calc(var(--spacing) * 0);
     }
   }
-  .sm\:p-2 {
-    @media (width >= 40rem) {
-      padding: calc(var(--spacing) * 2);
-    }
-  }
   .sm\:p-3 {
     @media (width >= 40rem) {
       padding: calc(var(--spacing) * 3);
@@ -3225,6 +3220,11 @@
   .dark\:text-error-500 {
     &:where(.dark, .dark *) {
       color: var(--color-error-500);
+    }
+  }
+  .dark\:text-gray-200 {
+    &:where(.dark, .dark *) {
+      color: var(--color-gray-200);
     }
   }
   .dark\:text-gray-300 {

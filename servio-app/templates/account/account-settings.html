@@ -17,35 +17,35 @@
 				<nav class="flex w-full flex-row sm:flex-col sm:space-y-2 whitespace-nowrap">
 					<button
 						class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
-						x-bind:class="activeTab === 'overview' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-brand-400 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-bind:class="activeTab === 'overview' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
 						x-on:click="activeTab = 'overview'"
 						>
 					Overview
 					</button>
 					<button
 						class="inline-flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
-						x-bind:class="activeTab === 'passwords' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-brand-400 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-bind:class="activeTab === 'passwords' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
 						x-on:click="activeTab = 'passwords'"
 						>
 					Passwords
 					</button>
 					<button
 						class="py-2.5å inline-flex items-center rounded-lg px-3 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
-						x-bind:class="activeTab === 'notifications' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-brand-400 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-bind:class="activeTab === 'notifications' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
 						x-on:click="activeTab = 'notifications'"
 						>
 					Notifications
 					</button>
-					<button
+					<!-- <button
 						class="inline-flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
 						x-bind:class="activeTab === 'payments' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-brand-400 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
 						x-on:click="activeTab = 'payments'"
 					>
 						Payments & Billing
-					</button>
+					</button> -->
 					<button
 						class="py-2.5å inline-flex items-center rounded-lg px-3 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
-						x-bind:class="activeTab === 'privacy' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-brand-400 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-bind:class="activeTab === 'privacy' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
 						x-on:click="activeTab = 'privacy'"
 						>
 					Privacy & Safety
@@ -79,16 +79,16 @@
 								<span class="font-medium">Phone:</span>
 								<span class="text-xs md:text-sm">{{ user.profile.mobile_num|default:"+1 345 654 123" }}</span>
 								{% if user.profile.is_business_owner %}
-								<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
-									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-									</svg>
-									Verified
-								</span>
+									<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
+										<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+										</svg>
+										Verified
+									</span>
 								{% else %}
-								<span class="flex items-center gap-1 text-gray-600 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
-								Not Verified
-								</span>
+									<span class="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+										Not Verified
+									</span>
 								{% endif %}
 							</p>
 							<p class="text-sm md:text-base text-gray-600 dark:text-white/90 flex items-center gap-2">
@@ -134,25 +134,20 @@
 							3. push notifications
 							-->
 					</div>
+					<!--
 					<div x-show="activeTab === 'payments'" class="space-y-5">
 						<h3 class="mb-3 text-xl font-medium text-gray-800 dark:text-white/90">
 							Billing & Payments
 						</h3>
 						{# include "partials/accounts/linked-cards.html" #}
-						<!-- 
-							Table with add buttone
-								- Add debit/credit card
-								- Actions(Remove card, freeze card)
-								- Set default card
-							- Billing address modal
-							-->
+						
 						<p class="text-sm text-gray-500 dark:text-gray-400">
 							Customers ipsum dolor sit amet consectetur. Non vitae facilisis urna
 							tortor placerat egestas donec. Faucibus diam gravida enim elit lacus
 							a.
 						</p>
 						{# include 'partials/accounts/billing-address.html' #}
-					</div>
+					</div> -->
 					<div x-show="activeTab === 'privacy'">
 						<h3 class="mb-3 text-xl font-medium text-gray-800 dark:text-white/90">
 							Privacy Settings
@@ -184,8 +179,8 @@
 {% include "partials/accounts/linked-cards.html" %}
 
 <!-- Adress information -->
-<div class="p-4 sm-p-6 my-10 flex flex-col gap-6 xl:flex-row">
-	<!-- Plan Benefits -->
+<div class="p-2 my-3 flex flex-col gap-6 xl:flex-row">
+	
 	<div
 		class="rounded-2xl border border-gray-200 bg-white xl:w-2/6 dark:border-gray-800 dark:bg-white/[0.03]"
 	>
@@ -260,7 +255,7 @@
 						>New York</span
 						>
 				</li>
-				<li class="flex items-center gap-5 py-2.5">
+				<!-- <li class="flex items-center gap-5 py-2.5">
 					<span
 						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
 						>VAT Number</span
@@ -269,7 +264,7 @@
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
 						>DE4920348</span
 						>
-				</li>
+				</li> -->
 			</ul>
 			<div
 				x-data="{isModalOpen: false}"
@@ -331,9 +326,9 @@
 						</button>
 						<div>
 							<h4
-								class="text-title-sm mb-1 font-semibold text-gray-800 dark:text-white/90"
+								class="text-title-sm mb-3 font-semibold text-gray-800 dark:text-white/90"
 								>
-								Update Primary Address
+								Update Address
 							</h4>
 							<p
 								class="mb-7 text-sm leading-6 text-gray-500 dark:text-gray-400"
@@ -547,7 +542,7 @@
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
-										<div>
+										<!-- <div>
 											<label
 												class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
 												>
@@ -558,7 +553,7 @@
 												value="DE4920348"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
-										</div>
+										</div> -->
 									</div>
 									<p
 										class="mt-4 text-sm text-gray-500 dark:text-gray-400"
@@ -612,7 +607,7 @@
 						>
 					<span
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>Mushafrof Chowdhury</span
+						>{{ user.full_name|title }}</span
 						>
 				</li>
 				<li class="flex items-center gap-5 py-2.5">
@@ -622,37 +617,7 @@
 						>
 					<span
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>800 E Elcamino Real, suite #400</span
-						>
-				</li>
-				<li class="flex items-center gap-5 py-2.5">
-					<span
-						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
-						>City/State</span
-						>
-					<span
-						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>Mountain View, CA, 94040</span
-						>
-				</li>
-				<li class="flex items-center gap-5 py-2.5">
-					<span
-						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
-						>Country</span
-						>
-					<span
-						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>United States of America</span
-						>
-				</li>
-				<li class="flex items-center gap-5 py-2.5">
-					<span
-						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
-						>Zip/Postal code</span
-						>
-					<span
-						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>19029</span
+						>{{ user.addresses.street|default:'800 E Elcamino Real, suite #400'|title }}</span
 						>
 				</li>
 				<li class="flex items-center gap-5 py-2.5">
@@ -662,10 +627,40 @@
 						>
 					<span
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>New York</span
+						>{{ user.addresses.city|default:'montreal'|title}}</span>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Province/State</span
+						>
+					<span
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ user.addresses.province|default:'quebec'|title}}</span
 						>
 				</li>
 				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Country</span
+						>
+					<span
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ user.addresses.country|default:'canada'|title}}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Zip/Postal code</span
+						>
+					<span
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ user.addresses.postal_code|default:'ert 1234'|upper }}</span
+						>
+				</li>
+				
+				<!-- <li class="flex items-center gap-5 py-2.5">
 					<span
 						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
 						>VAT Number</span
@@ -674,7 +669,7 @@
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
 						>DE4920348</span
 						>
-				</li>
+				</li> -->
 			</ul>
 			<div
 				x-data="{isModalOpen: false}"
@@ -736,9 +731,9 @@
 						</button>
 						<div>
 							<h4
-								class="text-title-xs mb-1 font-semibold text-gray-800 dark:text-white/90"
+								class="text-title-sm mb-3 font-semibold text-gray-800 dark:text-white/90"
 								>
-								Update Billing Address
+								Update Billing Info
 							</h4>
 							<p
 								class="mb-7 text-sm leading-6 text-gray-500 dark:text-gray-400"
@@ -762,7 +757,7 @@
 											</label>
 											<input
 												type="text"
-												value="Mushafrof"
+												value="{{ user.first_name|default:'Mushafrof' }}"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
@@ -774,7 +769,7 @@
 											</label>
 											<input
 												type="text"
-												value="Chowdhury"
+												value="{{ user.last_name|default:'Chowdhury' }}"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
@@ -786,7 +781,7 @@
 											</label>
 											<input
 												type="text"
-												value="800 E Elcamino Real, suite #400"
+												value="{{ user.profile.street|default:'800 E Elcamino Real, suite #400' }}"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
@@ -950,7 +945,7 @@
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
-										<div>
+										<!-- <div>
 											<label
 												class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
 												>
@@ -961,7 +956,7 @@
 												value="DE4920348"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
-										</div>
+										</div> -->
 									</div>
 									<p
 										class="mt-4 text-sm text-gray-500 dark:text-gray-400"
