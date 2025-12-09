@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
 
+            updateProfileUI(data.profile);
             showToast(
                 data.message || "Updated successfully!",
                 "success",
@@ -83,3 +84,55 @@ function isValidNumber(number) {
     }
     return true;
 };
+
+function updateProfileUI(profileData) {
+    Object.entries(profileData).forEach(([field, value]) => {
+        const el = document.querySelector(`[data-profile-field="${field}"]`);
+        if (el) {
+            const formatted = value ? formatPhone(value) : "N/A";
+            el.textContent = formatted;
+        }
+    });
+}
+
+function formatPhone(number) {
+    if (!number) return "N/A";
+
+    // Keep only digits
+    const digits = number.replace(/\D/g, "");
+
+    if (digits.length === 10) {
+        // US / Canada / Local Nigeria (assuming local 10-digit)
+        return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
+    }
+
+    if (digits.length === 11 && digits.startsWith("1")) {
+        // US / Canada with country code
+        return `+1 (${digits.slice(1,4)}) ${digits.slice(4,7)}-${digits.slice(7)}`;
+    }
+
+    if (digits.length === 11 && digits.startsWith("7")) {
+        // Russia
+        return `+7 (${digits.slice(1,4)}) ${digits.slice(4,7)}-${digits.slice(7,9)}-${digits.slice(9)}`;
+    }
+
+    if (digits.length === 13 && digits.startsWith("234")) {
+        // Nigeria with country code
+        return `+234 (${digits.slice(3,6)}) ${digits.slice(6,9)}-${digits.slice(9)}`;
+    }
+
+    if (digits.length === 12 && digits.startsWith("44")) {
+        // UK
+        return `+44 ${digits.slice(2,5)} ${digits.slice(5,8)} ${digits.slice(8)}`;
+    }
+
+    if (digits.length >= 11 && digits.startsWith("3")) {
+        // General Europe (France, Germany, etc.) fallback
+        return `+${digits.slice(0, digits.length - 9)} ${digits.slice(-9,-6)} ${digits.slice(-6,-3)} ${digits.slice(-3)}`;
+    }
+
+    // fallback: just show digits
+    return "+" + digits;
+}
+
+

@@ -5,7 +5,7 @@ from django.conf import settings
 class AddressType(models.TextChoices):
     HOME = "home", "Home"
     WORK = "work", "Work"
-    BILLING = "billing", "billing"
+    BILLING = "billing", "Billing"
 
 
 class Address(models.Model):
@@ -25,7 +25,9 @@ class Address(models.Model):
     province = models.CharField(max_length=20)
     postal_code = models.CharField(max_length=13)
     label = models.CharField(
-        max_length=20, blank=True, choices=AddressType.choices
+        max_length=20,
+        choices=AddressType.choices,
+        default=AddressType.HOME,
     )
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)

@@ -725,16 +725,26 @@
             class="relative"
             x-data="{ dropdownOpen: false }"
             @click.outside="dropdownOpen = false"
-            >
+         >
             <a
                class="flex items-center text-gray-700 dark:text-gray-400"
                href="blank.html#"
                @click.prevent="dropdownOpen = ! dropdownOpen"
-               >
-               <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
-               <img src="{% static 'images/user/owner.png' %}" alt="User" />
-               </span>
-               <span class="text-sm mr-1 block font-medium"> {{ user.first_name|capfirst }} </span>
+            >
+               {% if request.user.profile.avatar_url %}
+                  <span class="w-16 h-16 md:w-11 md:h-11 rounded-full overflow-hidden">
+                     <img 
+                        src="{{ request.user.profile.avatar_url.url }}"
+                        alt="user profile picture"
+                        class="profile-picture w-full h-full object-cover object-center"
+                     />
+                  </span>
+               {%else %}
+                  <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
+                     <img src="{% static 'images/user/owner.png' %}" alt="User" />
+                  </span>
+               {% endif %}
+               <span class="pl-3 text-sm mr-1 block font-medium"> {{ user.first_name|capfirst }} </span>
                <svg
                   :class="dropdownOpen && 'rotate-180'"
                   class="stroke-gray-500 dark:stroke-gray-400"
@@ -743,14 +753,14 @@
                   viewBox="0 0 18 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  >
+               >
                   <path
                      d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
                      stroke=""
                      stroke-width="1.5"
                      stroke-linecap="round"
                      stroke-linejoin="round"
-                     />
+                  />
                </svg>
             </a>
             <!-- Dropdown Start -->
