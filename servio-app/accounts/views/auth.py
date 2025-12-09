@@ -16,83 +16,86 @@ from typing import Union
 
 class CustomSignin(LoginView):
     template_name = Accounts.Auth.SIGNIN
-    
+
     def form_invalid(self, form) -> HttpResponse:
         errors = form.errors.as_json()
         print(errors)
         response = super().form_invalid(form)
         return response
 
+
 class SigninLinkView(View):
     http_method_names = ["get", "post"]
-    _user_model:AbstractUser = get_user_model()
-    
+    _user_model: AbstractUser = get_user_model()
+
     def get(self, request, **kwargs) -> HttpResponse:
         return render(
             request,
             Accounts.Auth.SIGNIN_ACCESS_CODE,
         )
-    
-    def post(self, request:HttpRequest, *args, **kwargs) -> HttpResponse:
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         email = self.request.POST.get("email")
         user = self.fetch_user(email)
         if user is None:
             return render(request, Accounts.Auth.SIGNIN_ACCESS_CODE_SENT)
-        
+
         token = self.fetch_token(user)
         self.send_signin_link(user, token)
-        
+
         return render(
             request,
             Accounts.Auth.SIGNIN_ACCESS_CODE_SENT,
         )
-    
-    def fetch_token(self, user:AbstractUser):
+
+    def fetch_token(self, user: AbstractUser):
         return UserToken.objects.generate_token(
             user=user,
             token_type=TokenType.MAGIC_LINK,
         ).token
-        
-    def fetch_user(self, email) ->Union[AbstractUser, None]:
+
+    def fetch_user(self, email) -> Union[AbstractUser, None]:
         try:
             user = self._user_model.objects.get(email=email)
         except self._user_model.DoesNotExist:
             return None
         return user
-           
-    def send_signin_link(self, user:AbstractUser, token:str) -> bool:
+
+    def send_signin_link(self, user: AbstractUser, token: str) -> bool:
         """
         Send magic link to user
         """
         login_url = self.request.build_absolute_uri(
             reverse_lazy(
                 AuthURLNames.VERIFY_LOGIN_LINK,
-                kwargs={"token": token}
+                kwargs={"token": token},
             )
         )
-        
+
         context = {
             "host": self.request.build_absolute_uri("/"),
             "login_url": login_url,
         }
-        
-        EmailService(user.email) \
-            .set_subject(AccountMails.Subjects.LOGIN_LINK) \
-            .use_template(AccountMails.MAGIC_LINK) \
-            .with_context(**context) \
-            .send()
+
+        EmailService(user.email).set_subject(
+            AccountMails.Subjects.LOGIN_LINK
+        ).use_template(AccountMails.MAGIC_LINK).with_context(
+            **context
+        ).send()
 
         return True
-            
+
 
 class VerifySigninLinkView(View):
     http_method_names = ["get"]
-    
+
     def get(self, request, **kwargs) -> HttpResponse:
         token = kwargs.get("token")
         user = authenticate(request, token=token)
         if user is None:
-            return render(request, Accounts.Auth.SIGNIN_ACCESS_CODE_FAILED)
+            return render(
+                request, Accounts.Auth.SIGNIN_ACCESS_CODE_FAILED
+            )
         login(request, user)
         return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
 

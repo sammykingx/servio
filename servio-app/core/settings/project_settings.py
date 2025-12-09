@@ -16,8 +16,8 @@ LOCAL_APPS = [
 LOCAL_MIDDLEWARES = []
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'core.backends.auth_backend.MagicLinkBackend'
+    "django.contrib.auth.backends.ModelBackend",
+    "core.backends.auth_backend.MagicLinkBackend",
 ]
 
 CACHES = {
@@ -26,4 +26,3 @@ CACHES = {
         "LOCATION": "django_cache_table",
     }
 }
-

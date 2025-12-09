@@ -3,7 +3,7 @@ from decouple import config
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'core.backends.email_backend.CustomEmailBackend'
+EMAIL_BACKEND = "core.backends.email_backend.CustomEmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_HOST = config("EMAIL_HOST", default=None)
 EMAIL_PORT = config("EMAIL_PORT", default=465, cast=int)
@@ -11,4 +11,6 @@ EMAIL_USE_SSL = config("USE_SSL", default=True, cast=bool)
 EMAIL_HOST_USER = config("EMAIL_USERNAME")
 EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
 
-DEFAULT_FROM_EMAIL = config("EMAIL_USERNAME", default="noreply@servio.com")
+DEFAULT_FROM_EMAIL = config(
+    "EMAIL_USERNAME", default="noreply@servio.com"
+)

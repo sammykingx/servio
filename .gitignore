@@ -21,3 +21,4 @@ profile.html
 
 # django files
 *.sqlite3
+servio-app/media/*

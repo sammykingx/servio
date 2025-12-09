@@ -3,30 +3,29 @@ class AuthURLNames:
     LOGIN_LINK = "account_request_login_code"
     VERIFY_LOGIN_LINK = "account_confirm_login_code"
     LOGOUT = "account_logout"
-    
-    
+
     # REGISTRATION
     SIGNUP = "account_signup"
     EMAIL_VERIFICATION_SENT = "account_email_verification_sent"
     EMAIL_CONFIRMATION = "account_confirm_email"
-    
-    
+
     # PASSWORD RESET
-    REQUEST_PASSWORD_RESET = "account_reset_password" # request password reset link
-    PASSWORD_RESET ="account_set_password"
+    REQUEST_PASSWORD_RESET = (
+        "account_reset_password"  # request password reset link
+    )
+    PASSWORD_RESET = "account_set_password"
     PASSWORD_RESET_DONE = "account_reset_password_done"
-    PASSWORD_CHANGE = "account_change_password" #actual password change
+    PASSWORD_CHANGE = "account_change_password"  # actual password change
     PASSWORD_CHANGE_DONE = "account_change_password_done"
     # account_reset_password_from_key
     # account_reset_password_from_key_done
-    
-    
+
     # SOCIAL ACCOUNTS
     # socialaccount_connections
     # socialaccount_signup
     # socialaccount_login_error
     # socialaccount_login_cancelled
-    
+
     # OTHERS
     ACCOUNT_RECOVERY_OPTIONS = "account_recovery_options"
     ACCOUNT_DASHBOARD = "dashboard"
@@ -35,3 +34,9 @@ class AuthURLNames:
     BUSINESS_SETTINGS = "business_settings"
     # account_reauthenticate
     # account_inactive
+
+    # ACCOUNT UPDATES
+    UPDATE_SOCIAL_LINKS = "update_social_links"
+    UPDATE_PROFILE_INFO = "update_profile_info"
+    UPDATE_ADDRESS_INFO = "update_address_info"
+    UPLOAD_PROFILE_PICTURE = "upload_profile_picture"

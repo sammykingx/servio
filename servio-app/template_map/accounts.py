@@ -11,6 +11,7 @@ from . import TemplateRegistryBase
 
 _BASE_FOLDER = TemplateRegistryBase("account")
 
+
 class Accounts:
     """Namespace container for all 'accounts' app templates."""
 
@@ -27,14 +28,22 @@ class Accounts:
         SIGNIN = f"{__SUB_FOLDER}/signin.html"
         SIGNIN_OPTIONS = f"{__SUB_FOLDER}/signin-options.html"
         SIGNIN_ACCESS_CODE = f"{__SUB_FOLDER}/request-access-code.html"
-        SIGNIN_ACCESS_CODE_SENT = f"{__SUB_FOLDER}/request-access-code-sent.html"
-        SIGNIN_ACCESS_CODE_FAILED = f"{__SUB_FOLDER}/request-access-code-failed.html"
-        
+        SIGNIN_ACCESS_CODE_SENT = (
+            f"{__SUB_FOLDER}/request-access-code-sent.html"
+        )
+        SIGNIN_ACCESS_CODE_FAILED = (
+            f"{__SUB_FOLDER}/request-access-code-failed.html"
+        )
+
         SIGNUP = f"{__SUB_FOLDER}/signup.html"
-        SIGNUP_VERV_EMAIL_SENT = f"{__SUB_FOLDER}/email-verification-sent.html"
+        SIGNUP_VERV_EMAIL_SENT = (
+            f"{__SUB_FOLDER}/email-verification-sent.html"
+        )
         SIGNUP_EMAIL_VERIFIED = f"{__SUB_FOLDER}/email-verified.html"
-        
-        REQUEST_PASSWORD_RESET = f"{__SUB_FOLDER}/request-password-reset.html"
+
+        REQUEST_PASSWORD_RESET = (
+            f"{__SUB_FOLDER}/request-password-reset.html"
+        )
         PASSWORD_RESET = f"{__SUB_FOLDER}/password-reset.html"
 
     class Dashboards:
@@ -52,10 +61,13 @@ class Accounts:
         PROVIDERS = f"{__SUB_FOLDER}/providers.html"
         STAFFS = f"{__SUB_FOLDER}/staff.html"
 
-        
     ACCOUNT_PROFILE = _BASE_FOLDER.base_folder_files("profile.html")
-    ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files("account-settings.html")
-    BUSINESS_ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files("business-account-settings.html")
-        
-__all__ = [Accounts]
+    ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files(
+        "account-settings.html"
+    )
+    BUSINESS_ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files(
+        "business-account-settings.html"
+    )
 
+
+__all__ = [Accounts]

@@ -1,8 +1,9 @@
 # django alluth settings
 from core.url_names import AuthURLNames
+
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # LOGIN_REDIRECT_URL = "/"  # customize where user goes after login
@@ -26,21 +27,15 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = "Servio - "
 
 # EMAIL VERIFICATION SETTINGS
 # url: https://docs.allauth.org/en/dev/account/configuration.html#email-verification
-ACCOUNT_EMAIL_VERIFICATION = "mandatory" # mandatory | optional | none
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # mandatory | optional | none
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 
 # LOGIN CONFIG SETTINGS
-ACCOUNT_LOGIN_BY_CODE_ENABLED = True # default is false
-ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 900 # 15mins
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True  # default is false
+ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 900  # 15mins
 ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_LOGIN_TIMEOUT = 1800 # 30mins
+ACCOUNT_LOGIN_TIMEOUT = 1800  # 30mins
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
-        }
-    }
+    "google": {"APP": {"client_id": "123", "secret": "456", "key": ""}}
 }

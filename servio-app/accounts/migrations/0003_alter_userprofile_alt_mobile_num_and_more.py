@@ -6,7 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("accounts", "0002_alter_address_table_alter_authuser_table_and_more"),
+        (
+            "accounts",
+            "0002_alter_address_table_alter_authuser_table_and_more",
+        ),
     ]
 
     operations = [
@@ -18,6 +21,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="userprofile",
             name="mobile_num",
-            field=models.CharField(blank=True, max_length=18, null=True, unique=True),
+            field=models.CharField(
+                blank=True, max_length=18, null=True, unique=True
+            ),
         ),
     ]

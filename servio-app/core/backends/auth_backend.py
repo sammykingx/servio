@@ -11,14 +11,15 @@ class MagicLinkBackend(ModelBackend):
 
     def authenticate(self, request, token) -> Union[AbstractUser, None]:
         try:
-            token_obj = UserToken.objects.get(token=token, token_type=TokenType.MAGIC_LINK)
+            token_obj = UserToken.objects.get(
+                token=token, token_type=TokenType.MAGIC_LINK
+            )
         except UserToken.DoesNotExist:
             return None
 
         if not getattr(token_obj, "is_valid", False):
             return None
-        
+
         token_obj.invalidate_token()
 
         return token_obj.user
-

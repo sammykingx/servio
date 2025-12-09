@@ -16,17 +16,39 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
+from django.views.generic import RedirectView
 from django.views.generic.base import TemplateView
 from template_map.accounts import Accounts
 from core.url_names import AuthURLNames
 import accounts.urls
 
 urlpatterns = [
+    path(
+        "",
+        RedirectView.as_view(
+            url=reverse_lazy(AuthURLNames.LOGIN), permanent=True
+        ),
+    ),
     path("admin/", admin.site.urls),
     # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
-    path("", TemplateView.as_view(template_name="layouts/base.html"), name="test-page"),
-    path("client/", TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS), name="user-dashboard"),
-    path("provider/", TemplateView.as_view(template_name=Accounts.Dashboards.PROVIDERS), name="provider-dashboard"),
+    path(
+        "client/",
+        TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
+        name="user-dashboard",
+    ),
+    path(
+        "provider/",
+        TemplateView.as_view(template_name=Accounts.Dashboards.PROVIDERS),
+        name="provider-dashboard",
+    ),
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

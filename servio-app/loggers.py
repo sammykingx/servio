@@ -2,22 +2,25 @@ import logging
 
 default_logger = logging.getLogger("django.contrib.auth")
 
+
 class RequestFormatter(logging.Formatter):
     """
     Extend logging to include request info (method, path, user)
     when available.
     """
+
     def format(self, record):
         record.method = getattr(record, "method", "-")
         record.path = getattr(record, "path", "-")
         record.user = getattr(record, "user", "-")
         return super().format(record)
-    
+
 
 class LoggingContextMiddleware:
     """
     Attach request-specific fields to log records.
     """
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -33,7 +36,8 @@ class LoggingContextMiddleware:
     #     )
 
     #     return self.get_response(request)
-    
+
+
 # Add the middleware to your settings:
 # MIDDLEWARE = [
 #     # ...

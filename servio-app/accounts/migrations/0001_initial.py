@@ -28,11 +28,18 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "password",
+                    models.CharField(
+                        max_length=128, verbose_name="password"
+                    ),
+                ),
                 (
                     "last_login",
                     models.DateTimeField(
-                        blank=True, null=True, verbose_name="last login"
+                        blank=True,
+                        null=True,
+                        verbose_name="last login",
                     ),
                 ),
                 (
@@ -46,13 +53,17 @@ class Migration(migrations.Migration):
                 (
                     "first_name",
                     models.CharField(
-                        blank=True, max_length=150, verbose_name="first name"
+                        blank=True,
+                        max_length=150,
+                        verbose_name="first name",
                     ),
                 ),
                 (
                     "last_name",
                     models.CharField(
-                        blank=True, max_length=150, verbose_name="last name"
+                        blank=True,
+                        max_length=150,
+                        verbose_name="last name",
                     ),
                 ),
                 (
@@ -74,11 +85,18 @@ class Migration(migrations.Migration):
                 (
                     "date_joined",
                     models.DateTimeField(
-                        default=django.utils.timezone.now, verbose_name="date joined"
+                        default=django.utils.timezone.now,
+                        verbose_name="date joined",
                     ),
                 ),
-                ("email", models.EmailField(max_length=254, unique=True)),
-                ("is_verified", models.BooleanField(default=False)),
+                (
+                    "email",
+                    models.EmailField(max_length=254, unique=True),
+                ),
+                (
+                    "is_verified",
+                    models.BooleanField(default=False),
+                ),
                 (
                     "groups",
                     models.ManyToManyField(
@@ -106,7 +124,10 @@ class Migration(migrations.Migration):
                 "ordering": ["date_joined"],
             },
             managers=[
-                ("objects", django.contrib.auth.models.UserManager()),
+                (
+                    "objects",
+                    django.contrib.auth.models.UserManager(),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -122,15 +143,30 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("street", models.CharField(max_length=60)),
-                ("street_line_2", models.CharField(blank=True, max_length=60)),
+                (
+                    "street_line_2",
+                    models.CharField(blank=True, max_length=60),
+                ),
                 ("city", models.CharField(max_length=20)),
                 ("province", models.CharField(max_length=20)),
                 ("postal_code", models.CharField(max_length=13)),
-                ("label", models.CharField(blank=True, max_length=20)),
-                ("longitude", models.FloatField(blank=True, null=True)),
-                ("latitude", models.FloatField(blank=True, null=True)),
+                (
+                    "label",
+                    models.CharField(blank=True, max_length=20),
+                ),
+                (
+                    "longitude",
+                    models.FloatField(blank=True, null=True),
+                ),
+                (
+                    "latitude",
+                    models.FloatField(blank=True, null=True),
+                ),
                 ("is_default", models.BooleanField(default=False)),
-                ("is_business_address", models.BooleanField(default=False)),
+                (
+                    "is_business_address",
+                    models.BooleanField(default=False),
+                ),
                 (
                     "user",
                     models.ForeignKey(
@@ -154,14 +190,28 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("mobile_num", models.CharField(max_length=18, unique=True)),
-                ("alt_mobile_num", models.CharField(blank=True, max_length=20)),
+                (
+                    "mobile_num",
+                    models.CharField(max_length=18, unique=True),
+                ),
+                (
+                    "alt_mobile_num",
+                    models.CharField(blank=True, max_length=20),
+                ),
                 (
                     "avatar_url",
-                    models.ImageField(blank=True, null=True, upload_to="avatars/"),
+                    models.ImageField(
+                        blank=True, null=True, upload_to="avatars/"
+                    ),
                 ),
-                ("date_of_birth", models.DateField(blank=True, null=True)),
-                ("is_business_owner", models.BooleanField(default=False)),
+                (
+                    "date_of_birth",
+                    models.DateField(blank=True, null=True),
+                ),
+                (
+                    "is_business_owner",
+                    models.BooleanField(default=False),
+                ),
                 (
                     "user",
                     models.OneToOneField(

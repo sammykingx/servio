@@ -8,8 +8,8 @@ import hashlib
 class LoginRateLimitMixin:
     max_attempts = 4
     cooldown_hours = 1
-    
-    def get_client_fingerprint(self, request:HttpRequest):
+
+    def get_client_fingerprint(self, request: HttpRequest):
         ip = request.META.get("REMOTE_ADDR", "")
         ua = request.META.get("HTTP_USER_AGENT", "")
         raw = f"{ip}:{ua}"
@@ -38,8 +38,14 @@ class LoginRateLimitMixin:
         cache.set(attempts_key, attempts, timeout=3600)
 
         if attempts >= self.max_attempts:
-            lockout_until = timezone.now() + timedelta(hours=self.cooldown_hours)
-            cache.set(lockout_key, lockout_until, timeout=self.cooldown_hours * 3600)
+            lockout_until = timezone.now() + timedelta(
+                hours=self.cooldown_hours
+            )
+            cache.set(
+                lockout_key,
+                lockout_until,
+                timeout=self.cooldown_hours * 3600,
+            )
             return False, self.cooldown_hours
 
         return True, self.max_attempts - attempts

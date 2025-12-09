@@ -18,7 +18,7 @@ class EmailService:
         self.subject = None
         self.template = None
         self.context = {}
-        
+
     def _build_message(self):
         if not self.template:
             raise ValueError("Email template not set")
@@ -27,7 +27,7 @@ class EmailService:
     def _send(self, html_body: str):
         if not (self.subject and self.to_email):
             raise ValueError("Email subject or recipient not set")
-        
+
         msg = EmailMultiAlternatives(
             subject=self.subject,
             body=html_body,

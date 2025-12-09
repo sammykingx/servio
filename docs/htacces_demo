@@ -1,0 +1,9 @@
+RewriteEngine On
+
+Alias /media/ /home/username/myapp/media/
+<Directory /home/username/myapp/media>
+    AllowOverride All
+    Require all granted
+</Directory>
+
+This tells Apache to serve /media/ from your project folder.

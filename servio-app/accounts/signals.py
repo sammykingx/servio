@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from .models.profile import UserProfile
 from django.conf import settings
 
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
     if created:
@@ -20,4 +21,4 @@ def create_profile(sender, instance, created, **kwargs):
 def mark_user_verified(request, email_address, **kwargs):
     user = email_address.user
     user.is_verified = True
-    user.save(update_fields=['is_verified'])
+    user.save(update_fields=["is_verified"])

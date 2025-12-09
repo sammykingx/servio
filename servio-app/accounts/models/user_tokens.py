@@ -22,11 +22,11 @@ class TokenType(models.TextChoices):
     MAGIC_LINK = "magic_link", "Magic Link"
 
 
-TokenResult = namedtuple('TokenResult', ['token', 'is_new'])
+TokenResult = namedtuple("TokenResult", ["token", "is_new"])
 
 
 class UserTokenManager(models.Manager):
-    
+
     def generate_token(self, user, token_type: TokenType) -> TokenResult:
         """
         Returns an existing valid token for the given token_type, or creates a new one.
@@ -50,16 +50,18 @@ class UserTokenManager(models.Manager):
         """
         if user is None:
             raise ValueError("User Object cannot be None or empty")
-        
+
         now = timezone.now()
         lifetime = _TOKEN_LIFETIMES.get(token_type)
-        queryset = self.filter(user=user, token_type=token_type, is_valid=True)
-        
+        queryset = self.filter(
+            user=user, token_type=token_type, is_valid=True
+        )
+
         # if lifetime:
         #     queryset = queryset.filter(expires_at__gte=now)
-        
+
         existing = queryset.first()
-        
+
         if existing:
             return TokenResult(existing.token, False)
 
@@ -73,16 +75,19 @@ class UserTokenManager(models.Manager):
             return TokenResult(user_token.token, True)
 
         except IntegrityError:
-            return TokenResult(self.get(
-                user=user,
-                token_type=token_type,
-                is_valid=True,
-            ).token, False)
+            return TokenResult(
+                self.get(
+                    user=user,
+                    token_type=token_type,
+                    is_valid=True,
+                ).token,
+                False,
+            )
 
 
 class UserToken(models.Model):
     """Model to store various user tokens for actions like
-        password reset, email verification, etc.
+    password reset, email verification, etc.
     """
 
     user = models.ForeignKey(
@@ -91,14 +96,15 @@ class UserToken(models.Model):
         related_name="tokens",
     )
     token = models.CharField(max_length=128, unique=True, db_index=True)
-    token_type = models.CharField(max_length=50, choices=TokenType.choices)
+    token_type = models.CharField(
+        max_length=50, choices=TokenType.choices
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(null=True)
     used_at = models.DateTimeField(null=True)
     is_valid = models.BooleanField(default=True)
-    
+
     objects = UserTokenManager()
-    
 
     class Meta:
         db_table = "user_tokens"
@@ -106,7 +112,8 @@ class UserToken(models.Model):
         indexes = [
             models.Index(
                 fields=["token", "token_type"],
-                name="usertoken_tokentype_idx"),
+                name="usertoken_tokentype_idx",
+            ),
         ]
         constraints = [
             models.UniqueConstraint(
@@ -115,7 +122,7 @@ class UserToken(models.Model):
                 name="unique_active_token_per_user_type",
             )
         ]
-        
+
     def has_expired(self) -> Union[bool, None]:
         if self.expires_at is None:
             return None
@@ -126,9 +133,8 @@ class UserToken(models.Model):
             self.is_valid = False
             self.used_at = timezone.now()
             self.save(update_fields=["is_valid", "used_at"])
-        
+
         return True
-        
+
     def __str__(self):
         return f"{self.user.email} - {self.token_type}"
-

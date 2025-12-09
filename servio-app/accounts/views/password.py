@@ -1,13 +1,8 @@
-from django.contrib.auth.views import (
-    PasswordResetDoneView,
-    PasswordChangeView,
-    PasswordChangeDoneView,
-)
 from django.views import View
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
-from django.http import JsonResponse, HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -27,13 +22,14 @@ class PasswordResetEmailView(View):
     one-time use link that can be used to reset the password,
     and sending that link to the user’s registered email address.
     """
+
     http_method_names = ["get", "post"]
-    _user_model:AbstractUser = get_user_model()
-    
+    _user_model: AbstractUser = get_user_model()
+
     def get(self, request, *args, **kwargs) -> HttpResponse:
         return render(request, Accounts.Auth.REQUEST_PASSWORD_RESET)
-    
-    def post(self, request: HttpRequest, *args, **kwargs) -> Union[HttpResponse, JsonResponse]:
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         email = self.request.POST.get("email")
         user = self.fetch_user(email)
         if user:
@@ -42,50 +38,50 @@ class PasswordResetEmailView(View):
                 token_type=TokenType.PASSWORD_RESET,
             ).token
             self.send_reset_link(user, token)
-            
+
         return render(request, Accounts.Auth.REQUEST_PASSWORD_RESET)
-        
-        
-    def fetch_user(self, email) ->Union[AbstractUser, None]:
+
+    def fetch_user(self, email) -> Union[AbstractUser, None]:
         try:
             user = self._user_model.objects.get(email=email)
         except self._user_model.DoesNotExist:
             return None
         return user
-    
-    def send_reset_link(self, user:AbstractUser, token:str) -> bool:
+
+    def send_reset_link(self, user: AbstractUser, token: str) -> bool:
         """
         Send reset link to user
         """
         if not user.is_verified:
             return False
-        
+
         login_url = self.request.build_absolute_uri(
             reverse_lazy(
                 AuthURLNames.PASSWORD_RESET,
-                kwargs={"token": token}
+                kwargs={"token": token},
             )
         )
-        
+
         context = {
             "host": self.request.build_absolute_uri("/"),
             "reset_url": login_url,
         }
-        
-        EmailService(user.email) \
-            .set_subject(AccountMails.Subjects.PASSWORD_RESET) \
-            .use_template(AccountMails.PASSWORD_RESET) \
-            .with_context(**context) \
-            .send()
-            
+
+        EmailService(user.email).set_subject(
+            AccountMails.Subjects.PASSWORD_RESET
+        ).use_template(AccountMails.PASSWORD_RESET).with_context(
+            **context
+        ).send()
+
         return True
 
 
 class NewPasswordView(View):
     """
-        Used when a user is not logged in and wants to reset password
-        using reset link sent to tmail address
+    Used when a user is not logged in and wants to reset password
+    using reset link sent to tmail address
     """
+
     http_method_names = ["get", "post"]
 
     def get(self, request: HttpRequest, *args, **kwargs):
@@ -101,9 +97,14 @@ class NewPasswordView(View):
 
         data = self.request.POST.dict()
         user_password = data.get("password1")
-        auto_login = data.get("auto_login", "").strip().lower() in ("true", "1", "yes", "on")
+        auto_login = data.get("auto_login", "").strip().lower() in (
+            "true",
+            "1",
+            "yes",
+            "on",
+        )
         token_obj = self.fetch_token_obj(token)
-        
+
         self.change_password(user_password, token_obj)
         if auto_login:
             print("auto login present")
@@ -113,9 +114,9 @@ class NewPasswordView(View):
 
     def build_context(self, token: str) -> dict:
         """
-            Centralized context building:
-            - fetch token
-            - determine disabled state
+        Centralized context building:
+        - fetch token
+        - determine disabled state
         """
         token_obj = self.fetch_token_obj(token)
         disabled = self.is_token_invalid(token_obj)
@@ -129,8 +130,7 @@ class NewPasswordView(View):
         """Fetch the token object or return None cleanly."""
         try:
             return UserToken.objects.get(
-                token=token,
-                token_type=TokenType.PASSWORD_RESET
+                token=token, token_type=TokenType.PASSWORD_RESET
             )
         except UserToken.DoesNotExist:
             return None
@@ -145,7 +145,9 @@ class NewPasswordView(View):
             return True
         return False
 
-    def change_password(self, new_password: str, token_obj: UserToken) -> bool:
+    def change_password(
+        self, new_password: str, token_obj: UserToken
+    ) -> bool:
         """
         Change the user's password and mark token as used.
         Returns True if successful.
@@ -164,24 +166,23 @@ class NewPasswordView(View):
         token_obj.save()
 
         return True
-    
+
     def login_user(self, email, passwd) -> bool:
         user = authenticate(self.request, username=email, password=passwd)
         if not user:
             return False
         login(self.request, user)
         return True
-            
+
 
 class ChangePasswordView(LoginRequiredMixin, View):
     """Allows logged-in user to change their password."""
-    
+
     http_method_names = ["post"]
-    
+
     def post(self, *args, **kwargs) -> HttpResponse:
         data = self.request.POST.dict()
         new_pwd = data.get("password1")
         self.request.user.set_password(new_pwd)
         self.request.user.save()
         return HttpResponse()
-        

@@ -8,7 +8,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("accounts", "0003_alter_userprofile_alt_mobile_num_and_more"),
+        (
+            "accounts",
+            "0003_alter_userprofile_alt_mobile_num_and_more",
+        ),
     ]
 
     operations = [
@@ -24,19 +27,30 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("token", models.CharField(db_index=True, max_length=128, unique=True)),
+                (
+                    "token",
+                    models.CharField(
+                        db_index=True, max_length=128, unique=True
+                    ),
+                ),
                 (
                     "token_type",
                     models.CharField(
                         choices=[
-                            ("email_verification", "Email Verification"),
+                            (
+                                "email_verification",
+                                "Email Verification",
+                            ),
                             ("password_reset", "Password Reset"),
                             ("magic_link", "Magic Link"),
                         ],
                         max_length=50,
                     ),
                 ),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "created_at",
+                    models.DateTimeField(auto_now_add=True),
+                ),
                 ("expires_at", models.DateTimeField(null=True)),
                 ("used_at", models.DateTimeField(null=True)),
                 ("is_valid", models.BooleanField(default=True)),
@@ -54,7 +68,8 @@ class Migration(migrations.Migration):
                 "ordering": ["-created_at"],
                 "indexes": [
                     models.Index(
-                        fields=["token", "token_type"], name="usertoken_tokentype_idx"
+                        fields=["token", "token_type"],
+                        name="usertoken_tokentype_idx",
                     )
                 ],
                 "constraints": [
