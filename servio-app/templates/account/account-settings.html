@@ -53,18 +53,18 @@
 							</h3> -->
 						<div class="space-y-4">
 							<p class="text-sm md:text-base text-gray-600 dark:text-white/90 flex items-center gap-2">
-								<span class="font-medium">Email:</span>
-								<span class="text-xs md:text-sm">{{ user.email }}</span>
-								{% if user.is_verified %}
+								<span class="font-medium">Account Status:</span>
+								<!-- <span class="text-xs md:text-sm">{{ user.email }}</span> -->
+								{% if user.is_active %}
 								<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
 									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 									</svg>
-									Verified
+									active
 								</span>
 								{% else %}
 								<span class="flex items-center gap-1 text-gray-600 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
-								Not Verified
+								In-active
 								</span>
 								{% endif %}
 							</p>
@@ -76,7 +76,7 @@
 									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 									</svg>
-									Verified
+									verified
 								</span>
 								{% else %}
 								<span class="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
@@ -85,18 +85,18 @@
 								{% endif %}
 							</p>
 							<p class="text-sm md:text-base text-gray-600 dark:text-white/90 flex items-center gap-2">
-								<span class="font-medium">Account Status:</span>
-								<!-- <span class="text-xs md:text-sm">{{ user.email }}</span> -->
-								{% if user.is_active %}
+								<span class="font-medium">Email:</span>
+								<span class="text-xs md:text-sm">{{ user.email }}</span>
+								{% if user.is_verified %}
 								<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
 									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 									</svg>
-									Active
+									verified
 								</span>
 								{% else %}
 								<span class="flex items-center gap-1 text-gray-600 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
-								In-active
+								Not Verified
 								</span>
 								{% endif %}
 							</p>
@@ -239,7 +239,7 @@
 					<span
 						data-address="home" data-field="country"
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>{{ home.country|default:'canada'|title }}</span
+						>{{ home.country|default:'n/a'|title }}</span
 						>
 				</li>
 				<li class="flex items-center gap-5 py-2.5">
@@ -354,7 +354,7 @@
 												name="street"
 												value="{{ home.street|default:'' }}"
 												placeholder="800 E Elcamino Real, suite #400"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div class="col-span-2">
@@ -368,7 +368,7 @@
 												name="street_line_2"
 												value="{{ home.street_line_2|default:'' }}"
 												placeholder="800 E Elcamino Real, suite #400"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div>
@@ -382,7 +382,7 @@
 												name="city"
 												value="{{ home.city|default:'' }}"
 												placeholder="Montreal"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div>
@@ -396,7 +396,7 @@
 												name="province"
 												value="{{ home.province|default:'' }}"
 												placeholder="Quebec"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div>
@@ -410,22 +410,33 @@
 												name="postal_code"
 												value="{{ home.postal_code|default:'' }}"
 												placeholder="A1A 1A1"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
-										<div>
+										<div class="sm:col-span-1">
 											<label
 												class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
 												>
 											Country
 											</label>
-											<input
-												type="text"
-												name="country"
-												value="{{ home.country|default:'' }}"
-												placeholder="canada"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-												/>
+											<div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
+												<select
+													name="country"
+													class="countrySelect dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+													:class="isOptionSelected && 'text-gray-800 dark:text-white/90'"
+													@change="isOptionSelected = true"
+													>
+													<option value="" disabled selected class="text-xs text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+														Select Country
+													</option>
+												</select>
+												<span class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+													<svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
+														<path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke-width="1.5"
+															stroke-linecap="round" stroke-linejoin="round"/>
+													</svg>
+												</span>
+											</div>
 										</div>
 									</div>
 									<p
@@ -533,7 +544,7 @@
 					<span
 						data-address="billing" data-field="country"
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>{{ billing.country|default:'canada'|title}}</span
+						>{{ billing.country|default:'n/a'|title}}</span
 						>
 				</li>
 				<li class="flex items-center gap-5 py-2.5">
@@ -623,7 +634,7 @@
 					<span
 						data-address="home" data-field="country"
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>{{ home.country|default:'canada'|title }}</span
+						>{{ home.country|default:'n/a'|title }}</span
 						>
 				</li>
 				<li class="flex items-center gap-5 py-2.5">
@@ -738,7 +749,7 @@
 												name="street"
 												value="{{ billing.street|default:'' }}"
 												placeholder="800 E Elcamino Real, suite #400"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div class="col-span-2">
@@ -752,7 +763,7 @@
 												name="street_line_2"
 												value="{{ billing.street_line_2|default:'' }}"
 												placeholder="800 E Elcamino Real, suite #400"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div>
@@ -766,7 +777,7 @@
 												name="city"
 												value="{{ billing.city|default:'' }}"
 												placeholder="Montreal"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div>
@@ -780,7 +791,7 @@
 												name="province"
 												value="{{ billing.province|default:'' }}"
 												placeholder="Quebec"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
 										<div>
@@ -794,22 +805,33 @@
 												name="postal_code"
 												value="{{ billing.postal_code|default:'' }}"
 												placeholder="A1A 1A1"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
 										</div>
-										<div>
+										<div class="sm:col-span-1">
 											<label
 												class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
 												>
 											Country
 											</label>
-											<input
-												type="text"
-												name="country"
-												value="{{ billing.country|default:'' }}"
-												placeholder="canada"
-												class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-												/>
+											<div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
+												<select
+													name="country"
+													class="countrySelect dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+													:class="isOptionSelected && 'text-gray-800 dark:text-white/90'"
+													@change="isOptionSelected = true"
+													>
+													<option value="" disabled selected class="text-xs text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+														Select Country
+													</option>
+												</select>
+												<span class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+													<svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
+														<path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke-width="1.5"
+															stroke-linecap="round" stroke-linejoin="round"/>
+													</svg>
+												</span>
+											</div>
 										</div>
 										<input 
 											type="text"
@@ -853,4 +875,7 @@
 <script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
 <script src="{% static 'js/authentication/change-password.js' %}"></script>
 <script src="{% static 'js/accounts/update-address.js' %}"></script>
+<script>
+	
+</script>
 {% endblock %}

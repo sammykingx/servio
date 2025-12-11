@@ -291,7 +291,7 @@
 						<p
 							class="text-sm font-medium text-gray-800 dark:text-white/90"
 							>
-							{{ user.addresses.street|default:"not provided" }}
+							{{ home.street|default:"not provided"|title }}
 						</p>
 					</div>
 					<div>
@@ -303,7 +303,7 @@
 						<p
 							class="text-sm font-medium text-gray-800 dark:text-white/90"
 							>
-							{{ user.addresses.street_line_1|default:"not provided" }}
+							{{ home.street_line_1|default:"not provided"|title }}
 						</p>
 					</div>
 					<div>
@@ -315,7 +315,7 @@
 						<p
 							class="text-sm font-medium text-gray-800 dark:text-white/90"
 							>
-							{{ user.addresses.country|default:"Canada" }}
+							{{ home.country|default:"not provided"|title }}
 						</p>
 					</div>
 					<div>
@@ -327,7 +327,7 @@
 						<p
 							class="text-sm font-medium text-gray-800 dark:text-white/90"
 							>
-							{{ user.addresses.city|default:"montreal"|title }}, {{ user.addresses.province|default:"quebec"|title }}
+							{{ home.city|default:"-"|title }}, {{ home.province|default:"-"|title }}
 						</p>
 					</div>
 					<div>
@@ -339,7 +339,7 @@
 						<p
 							class="text-sm font-medium text-gray-800 dark:text-white/90"
 							>
-							{{ user.profile.postal_code|default:"ert 2489"|upper }}
+							{{ home.postal_code|default:"n/a"|upper }}
 						</p>
 					</div>
 					<!-- <div>
@@ -429,6 +429,7 @@
 					<input
 						type="url"
 						name="facebook"
+						value="{{ social_links.facebook|default:'' }}"
 						placeholder="{{ social_links.facebook|default:'https://facebook.com/username' }}"
 						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
 						/>
@@ -442,6 +443,7 @@
 					<input
 						type="url"
 						name="twitter"
+						value="{{ social_links.twitter|default:'' }}"
 						placeholder="{{ social_links.twitter|default:'https://twitter.com/username' }}"
 						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
 						/>
@@ -455,6 +457,7 @@
 					<input
 						type="url"
 						name="linkedin"
+						value="{{ social_links.linkedin|default:'' }}"
 						placeholder="{{ social_links.linkedin|default:'https://linkedin.com/username' }}"
 						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
 						/>
@@ -468,6 +471,7 @@
 					<input
 						type="url"
 						name="instagram"
+						value="{{ social_links.instagram|default:'' }}"
 						placeholder="{{ social_links.instagram|default:'https://instagram.com/username' }}"
 						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
 					/>

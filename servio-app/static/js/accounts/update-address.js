@@ -1,3 +1,25 @@
+let COUNTRIES = [];
+
+document.addEventListener("DOMContentLoaded", async () => {
+	const selections = document.querySelectorAll(".countrySelect");
+	const countries = await fetch("/static/js/country-list.json").then(res => res.json());
+
+    COUNTRIES = countries;
+
+	if (!selections.length) return;
+	
+	selections.forEach(selection => {
+		countries.forEach(country => {
+			const option = document.createElement("option");
+			option.value = country.name;
+			option.textContent = country.name;
+			option.className = "text-gray-700 dark:bg-gray-900 dark:text-gray-400";
+		
+		    selection.appendChild(option);
+	    });
+	})	
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     const forms = document.querySelectorAll(".updateAddressForm");
 
@@ -51,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
 // Spinner & button functions
 const SPINNER = `
 <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -69,7 +90,8 @@ function validateFormData(formData) {
     const province = formData.get("province")?.trim();
     const postal_code = formData.get("postal_code")?.trim();
     const country = formData.get("country")?.trim();
-    const countryCode = country?.slice(0, 2).toUpperCase() || "any";
+    const countryObj = COUNTRIES.find(c => c.name === country);
+    const countryCode = countryObj ? countryObj.code : "any";
 
     // Required fields
     const requiredFields = { street, city, province, postal_code, country };
@@ -106,7 +128,8 @@ function validateFormData(formData) {
     // City, Province, Country: only letters & spaces
     const alphaFields = { city, province, country };
     for (const [fieldName, value] of Object.entries(alphaFields)) {
-        if (!validator.matches(value, /^[a-zA-Z\s]+$/)) {
+        if (!validator.matches(value, /^[a-zA-Z\s()*]+$/)) {
+            console.log(value);
             showToast(
                 `${capitalize(fieldName)} must contain only letters and spaces.`,
                 "warning",
@@ -131,6 +154,7 @@ function validateFormData(formData) {
 
 function updateAddressUI(addressData) {
     const label = addressData.label;
+    console.log(label);
     Object.entries(addressData).forEach(([field, value]) => {
         const el = document.querySelector(`[data-address="${label}"][data-field="${field}"]`);
         if (el) {

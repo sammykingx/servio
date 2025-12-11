@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.profile import UserRole
+from accounts.models.address import AddressType
 from template_map.accounts import Accounts
 
 
@@ -31,8 +32,11 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        addresses = self.request.user.addresses
         ctx["social_links"] = {
             link.platform: link.url
             for link in self.request.user.social_links.all()
         }
+
+        ctx["home"] = addresses.filter(label=AddressType.HOME).first()
         return ctx
