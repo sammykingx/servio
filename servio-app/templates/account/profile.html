@@ -29,7 +29,7 @@
 					class="h-20 w-20 overflow-hidden rounded-full border border-gray-200 dark:border-gray-800"
 				>
 					{% if request.user.profile.avatar_url %}
-						<div class="w-16 h-16 md:w-18 md:h-18 rounded-full overflow-hidden">
+						<div class="w-20 h-20 rounded-full overflow-hidden">
 							<img 
 								src="{{ request.user.profile.avatar_url.url }}"
 								alt="user profile picture"

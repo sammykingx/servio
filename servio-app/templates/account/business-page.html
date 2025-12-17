@@ -21,17 +21,18 @@
 					<div class="layout-content-container flex flex-col max-w-[960px] flex-1">
 						<header class="flex items-center justify-between whitespace-nowrap px-4 md:px-10 py-3">
 							<div class="flex items-center gap-4 md:gap-8">
-								<div class="flex items-center gap-4 cursor-pointer">
-									<div class="size-8 text-brand-500">
-										<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-											<path d="M4 4H17.3334V17.3333H4V4Z" fill="currentColor"></path>
-											<path d="M30.6666 4H44V17.3333H30.6666V4Z" fill="currentColor"></path>
-											<path d="M4 30.6667H17.3334V44H4V30.6667Z" fill="currentColor"></path>
-											<path d="M30.6666 30.6667H44V44H30.6666V30.6667Z" fill="currentColor"></path>
-										</svg>
-									</div>
-									<h2 class="hidden md:block text-gray-700 text-title-sm font-bold leading-tight tracking-tight">ServiceMarket</h2>
-								</div>
+								<div class="flex items-center gap-3 cursor-pointer">
+                           <!-- Logo container -->
+                           <div class="h-8 w-auto flex items-center">
+                              <img
+                                 src="{% static 'images/logo/sidebar-logo-light.png' %}"
+                                 alt="Servio"
+                                 class="h-20 w-auto object-contain"
+                              />
+                           </div>
+                           
+                        </div>
+
 								<label class="hidden md:flex flex-col min-w-40 !h-10 max-w-64">
 									<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-slate-100 focus-within:ring-2 focus-within:ring-success-500/20 transition-all">
 										<div class="text-gray-500 flex border-none bg-transparent items-center justify-center pl-4 rounded-l-xl border-r-0">
@@ -247,7 +248,13 @@
 								blur-[90px]"></div>
 							<!-- Content -->
 							<div class="relative z-10">
-								<p class="text-slate-600 text-base leading-relaxed mb-5">
+								<p class="text-slate-600 text-base leading-relaxed mb-5 text-justify">
+									Apex Landscaping Solutions has been transforming outdoor spaces in the Bay Area since 2016.
+									We specialize in sustainable garden design, hardscaping, and regular maintenance.
+									Our team is dedicated to bringing your vision to life with precision and care,
+									using eco-friendly practices whenever possible.
+								</p>
+                        <p class="text-slate-600 text-base leading-relaxed mb-5 text-justify">
 									Apex Landscaping Solutions has been transforming outdoor spaces in the Bay Area since 2016.
 									We specialize in sustainable garden design, hardscaping, and regular maintenance.
 									Our team is dedicated to bringing your vision to life with precision and care,
@@ -288,7 +295,7 @@
 							<h2 class="text-slate-800 text-[22px] font-bold leading-tight tracking-[-0.015em]">
 								Services & Pricing
 							</h2>
-							<a class="text-[#4c3aff] text-sm font-bold hover:underline" href="#">
+							<a class="text-brand-500 text-sm font-bold hover:underline" href="#">
 							View all
 							</a>
 						</div>
@@ -310,7 +317,7 @@
 								<div class="flex items-start gap-4 relative z-10">
 									<div class="flex items-center justify-center size-12 shrink-0
 										rounded-xl bg-brand-500/10
-										text-[#4c3aff]
+										text-brand-500
 										transition-colors">
 										<span class="material-symbols-outlined">yard</span>
 									</div>
@@ -356,7 +363,7 @@
 								<div class="flex items-start gap-4 relative z-10">
 									<div class="flex items-center justify-center size-12 shrink-0
 										rounded-xl bg-brand-500/10
-										text-[#4c3aff]
+										text-brand-500
 										transition-colors">
 										<span class="material-symbols-outlined">deck</span>
 									</div>
@@ -403,7 +410,7 @@
 								<div class="flex items-start gap-4 relative z-10">
 									<div class="flex items-center justify-center size-12 shrink-0
 										rounded-xl bg-brand-500/10
-										text-[#4c3aff]
+										text-brand-500
 										transition-colors">
 										<span class="material-symbols-outlined">park</span>
 									</div>
@@ -655,7 +662,7 @@
 									<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-50"></span>
 									<span class="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
 									</span>
-									<span class="text-[#4c3aff] font-semibold text-sm uppercase tracking-wider">
+									<span class="text-brand-500 font-semibold text-sm uppercase tracking-wider">
 									Accepting New Projects
 									</span>
 								</div>

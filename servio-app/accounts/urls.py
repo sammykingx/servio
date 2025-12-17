@@ -121,7 +121,7 @@ urlpatterns = [
         name=AuthURLNames.UPLOAD_PROFILE_PICTURE,
     ),
     path(
-        "become-provider/<state>/",
+        "become-provider/",
         settings.business_settings_toggle,
         name=AuthURLNames.SWITCH_TO_BUSINESS,
     ),
