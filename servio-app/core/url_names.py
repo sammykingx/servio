@@ -32,6 +32,7 @@ class AuthURLNames:
     ACCOUNT_PROFILE = "account_profile"
     ACCOUNT_SETTINGS = "account_settings"
     BUSINESS_SETTINGS = "business_settings"
+    SWITCH_TO_BUSINESS = "switch_to_business"
     # account_reauthenticate
     # account_inactive
 
@@ -40,3 +41,4 @@ class AuthURLNames:
     UPDATE_PROFILE_INFO = "update_profile_info"
     UPDATE_ADDRESS_INFO = "update_address_info"
     UPLOAD_PROFILE_PICTURE = "upload_profile_picture"
+    

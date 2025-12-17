@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const formData = new FormData(form);
             const isValid = validateFormData(formData);
+            
 
             if (!isValid) return;
 
@@ -129,7 +130,6 @@ function validateFormData(formData) {
     const alphaFields = { city, province, country };
     for (const [fieldName, value] of Object.entries(alphaFields)) {
         if (!validator.matches(value, /^[a-zA-Z\s()*]+$/)) {
-            console.log(value);
             showToast(
                 `${capitalize(fieldName)} must contain only letters and spaces.`,
                 "warning",
@@ -140,11 +140,20 @@ function validateFormData(formData) {
     }
 
     // Postal code
-    if (!validator.isPostalCode(postal_code, countryCode)) {
+    try {
+        if (!validator.isPostalCode(postal_code, countryCode)) {
+            showToast(
+                "Postal code does not match the selected country format.",
+                "warning",
+                "Validation Error"
+            );
+            return false;
+        }
+    } catch (err) {
         showToast(
-            "Postal code does not match the selected country format.",
-            "warning",
-            "Validation Error"
+            `Invalid postal/zip code for selected country region (${country}, ${countryCode})`,
+            "error",
+            "Postal/Zip code Error"
         );
         return false;
     }
@@ -152,16 +161,35 @@ function validateFormData(formData) {
     return true;
 }
 
+/**
+ * Converts a string to title case like Python's str.title()
+ * @param {string} str
+ * @returns {string}
+ */
 function updateAddressUI(addressData) {
     const label = addressData.label;
-    console.log(label);
     Object.entries(addressData).forEach(([field, value]) => {
-        const el = document.querySelector(`[data-address="${label}"][data-field="${field}"]`);
-        if (el) {
-            el.textContent = value || "N/A";
+        const el = document.querySelector(
+            `[data-address="${label}"][data-field="${field}"]`
+        );
+
+        if (!el) return;
+
+        if (field === "postal_code") {
+            el.textContent = value ? value.toUpperCase() : "N/A";
+            return;
         }
+
+        el.textContent = value ? title(value) : "N/A";
     });
 }
+
+function title(str) {
+    return str
+        .toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase());
+}
+
 
 function capitalize(str) {
     return str.replace(/\b\w/g, (c) => c.toUpperCase());

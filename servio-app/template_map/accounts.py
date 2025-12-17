@@ -68,6 +68,7 @@ class Accounts:
     BUSINESS_ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files(
         "business-account-settings.html"
     )
+    BUSINESS_PROFILE = _BASE_FOLDER.base_folder_files("business-page.html")
 
 
 __all__ = [Accounts]

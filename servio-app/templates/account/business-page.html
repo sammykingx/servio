@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+{% load static %}
+<html class="dark" lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+		<title>Business Profile Page</title>
+		<!-- Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+		<link href="{% static 'css/output.css' %}" rel="stylesheet">
+		<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+	</head>
+	<body class="bg-background-light dark:bg-background-dark text-[#111418] dark:text-white font-display overflow-x-hidden">
+		<!-- Top Navigation -->
+		<div class="relative flex w-full flex-col bg-background-dark border-b border-gray-200">
+			<div class="layout-container flex h-full grow flex-col">
+				<div class="px-4 md:px-40 flex flex-1 justify-center py-5">
+					<div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+						<header class="flex items-center justify-between whitespace-nowrap px-4 md:px-10 py-3">
+							<div class="flex items-center gap-4 md:gap-8">
+								<div class="flex items-center gap-4 cursor-pointer">
+									<div class="size-8 text-brand-500">
+										<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+											<path d="M4 4H17.3334V17.3333H4V4Z" fill="currentColor"></path>
+											<path d="M30.6666 4H44V17.3333H30.6666V4Z" fill="currentColor"></path>
+											<path d="M4 30.6667H17.3334V44H4V30.6667Z" fill="currentColor"></path>
+											<path d="M30.6666 30.6667H44V44H30.6666V30.6667Z" fill="currentColor"></path>
+										</svg>
+									</div>
+									<h2 class="hidden md:block text-gray-700 text-title-sm font-bold leading-tight tracking-tight">ServiceMarket</h2>
+								</div>
+								<label class="hidden md:flex flex-col min-w-40 !h-10 max-w-64">
+									<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-slate-100 focus-within:ring-2 focus-within:ring-success-500/20 transition-all">
+										<div class="text-gray-500 flex border-none bg-transparent items-center justify-center pl-4 rounded-l-xl border-r-0">
+											<span class="material-symbols-outlined">search</span>
+										</div>
+										<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-text-main focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-gray-500 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search services..." value=""/>
+									</div>
+								</label>
+							</div>
+							<div class="flex flex-1 justify-end gap-4 md:gap-8">
+								<div class="hidden md:flex items-center gap-9">
+									<a class="text-gray-800 text-sm font-medium leading-normal hover:text-brand-600 transition-colors" href="#">Browse</a>
+									<a class="text-gray-800 text-sm font-medium leading-normal hover:text-brand-600 transition-colors" href="#">Saved</a>
+									<a class="text-gray-800 text-sm font-medium leading-normal hover:text-brand-600 transition-colors" href="#">Messages</a>
+								</div>
+								<div class="flex gap-2">
+									<button class="flex items-center justify-center rounded-full size-10 bg-gray-100 text-gray-600 hover:text-white hover:bg-brand-500 transition-colors">
+									<span class="material-symbols-outlined text-[20px]">notifications</span>
+									</button>
+									<button class="flex items-center justify-center rounded-full size-10 bg-gray-100 text-gray-600 hover:text-white hover:bg-brand-600 transition-colors">
+									<span class="material-symbols-outlined text-[20px]">account_circle</span>
+									</button>
+								</div>
+							</div>
+						</header>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Main Content Area -->
+		<div class="layout-container flex h-full grow flex-col mb-20">
+			<div class="px-4 md:px-40 flex flex-1 justify-center py-5">
+				<div class="layout-content-container flex flex-col max-w-[960px] flex-1 gap-8">
+					<!-- Profile Header -->
+					<section class="relative overflow-hidden
+						flex flex-col p-4
+						rounded-2xl
+						bg-white
+						border border-slate-200">
+						<!-- Decorative brand glow -->
+						<div class="absolute -top-16 -right-16 w-48 h-48
+							bg-brand-400/20 blur-[90px]"></div>
+						<div class="absolute -bottom-20 -left-20 w-64 h-64
+							bg-brand-600/10 blur-[110px]"></div>
+						<div class="relative z-10 flex w-full flex-col gap-6
+							md:flex-row md:items-start md:justify-between">
+							<!-- Left: Profile info -->
+							<div class="flex gap-4 items-start w-full min-w-0">
+								<!-- Avatar -->
+								<div class="shrink-0">
+									<div class="bg-center bg-no-repeat bg-cover rounded-full
+										h-20 w-20 md:h-28 md:w-28
+										border-4 border-white
+										shadow-md"
+										data-alt="Landscaping business logo"
+										style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBSf4-3GSgewF_FBWi75hrseUDLwVxLwx2I_QSOA2tK47mb1P68XjuRb1SXvgvfjdr2i7KKH1glkbCdER_5JKqPsTg80BSxmoyIPzNNDmUPcVOB0uSC-oPqIzZeUIoE-_Ydn8FeIOPRGo1-gjLheG4GNy57xCqYLGyRMkW-V6Q8U8dqkl3Oh6k5VQ_fUeQaR7rVz1uIjshxdlWEfB9CFMg1bAvJ35v_nrBe0jfrFocg9Ied_hK5eauca5NRBN5S-ihEOOTC_zSk2RY");'>
+									</div>
+								</div>
+								<!-- Text -->
+								<div class="flex flex-col gap-1 min-w-0">
+									<div class="flex items-center gap-2 flex-nowrap">
+										<h1 class="text-slate-900 text-lg md:text-2xl font-bold break-words">
+											Apex Landscaping
+										</h1>
+										<span class="material-symbols-outlined text-emerald-500 text-[20px]"
+											title="Verified Business">
+										verified
+										</span>
+									</div>
+									<p class="text-slate-600 text-sm md:text-base break-words">
+										Landscaping &amp; Outdoor Design
+									</p>
+									<p class="text-slate-500 text-xs md:text-sm flex items-center gap-1 break-words">
+										<span class="material-symbols-outlined text-[16px]">location_on</span>
+										San Francisco, CA
+									</p>
+									<div class="flex items-center gap-2 mt-1 flex-wrap">
+										<div class="flex text-[#FFD700]">
+											<span class="material-symbols-outlined text-[18px] fill-1">star</span>
+											<span class="material-symbols-outlined text-[18px] fill-1">star</span>
+											<span class="material-symbols-outlined text-[18px] fill-1">star</span>
+											<span class="material-symbols-outlined text-[18px] fill-1">star</span>
+											<span class="material-symbols-outlined text-[18px] fill-1">star_half</span>
+										</div>
+										<span class="text-slate-900 font-bold text-sm">4.9</span>
+										<span class="text-slate-600 text-xs md:text-sm">(142 reviews)</span>
+									</div>
+								</div>
+							</div>
+							<!-- Right: Actions -->
+							<div class="flex w-full md:w-auto flex-col gap-3">
+								<div class="flex flex-col sm:flex-row gap-3 w-full">
+									<button class="w-full sm:w-auto
+										rounded-full h-11 px-8
+										bg-brand-500 text-white
+										font-bold text-sm whitespace-nowrap
+										shadow-md shadow-[#4c3aff]/30
+										hover:bg-brand-600
+										transition-all">
+									Book Now
+									</button>
+									<button class="w-full sm:w-auto
+										rounded-full h-11 px-6
+										bg-white border border-slate-300
+										text-slate-800 font-bold text-sm
+										hover:bg-slate-50
+										transition-all">
+									Message
+									</button>
+								</div>
+								<div class="flex items-center gap-2 justify-center md:justify-start">
+									<div class="w-2 h-2 rounded-full bg-success-500 animate-pulse"></div>
+									<p class="text-slate-500 text-xs font-medium">
+										Available for booking tomorrow
+									</p>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!-- Stats Row -->
+					<section class="grid grid-cols-2 md:grid-cols-4 gap-3 px-4">
+						<!-- Stat Card -->
+						<div class="relative overflow-hidden
+							flex flex-col gap-2
+							rounded-2xl bg-white
+							border border-slate-200
+							p-4 items-center text-center
+							group transition-all">
+							<!-- Brand glow -->
+							<div class="absolute -top-8 -right-8 w-24 h-24
+								bg-brand-400/20 blur-[50px]
+								transition-all duration-500
+								group-hover:bg-brand-500/25"></div>
+							<p class="relative z-10 tracking-tight text-2xl font-bold text-slate-900">
+								8 Years
+							</p>
+							<p class="relative z-10 text-slate-600 text-sm">
+								Experience
+							</p>
+						</div>
+						<!-- Stat Card -->
+						<div class="relative overflow-hidden
+							flex flex-col gap-2
+							rounded-2xl bg-white
+							border border-slate-200
+							p-4 items-center text-center
+							group transition-all">
+							<div class="absolute -top-8 -right-8 w-24 h-24
+								bg-brand-400/20 blur-[50px]
+								transition-all duration-500
+								group-hover:bg-brand-500/25"></div>
+							<p class="relative z-10 tracking-tight text-2xl font-bold text-slate-900">
+								142
+							</p>
+							<p class="relative z-10 text-slate-600 text-sm">
+								Jobs Done
+							</p>
+						</div>
+						<!-- Stat Card -->
+						<div class="relative overflow-hidden
+							flex flex-col gap-2
+							rounded-2xl bg-white
+							border border-slate-200
+							p-4 items-center text-center
+							group transition-all">
+							<div class="absolute -top-8 -right-8 w-24 h-24
+								bg-brand-400/20 blur-[50px]
+								transition-all duration-500
+								group-hover:bg-brand-500/25"></div>
+							<p class="relative z-10 tracking-tight text-2xl font-bold text-slate-900">
+								&lt; 1 Hr
+							</p>
+							<p class="relative z-10 text-slate-600 text-sm">
+								Response
+							</p>
+						</div>
+						<!-- Stat Card -->
+						<div class="relative overflow-hidden
+							flex flex-col gap-2
+							rounded-2xl bg-white
+							border border-slate-200
+							p-4 items-center text-center
+							group transition-all">
+							<div class="absolute -top-8 -right-8 w-24 h-24
+								bg-brand-400/20 blur-[50px]
+								transition-all duration-500
+								group-hover:bg-brand-500/25"></div>
+							<p class="relative z-10 tracking-tight text-2xl font-bold text-slate-900">
+								100%
+							</p>
+							<p class="relative z-10 text-slate-600 text-sm">
+								On Time
+							</p>
+						</div>
+					</section>
+					<!-- About Section -->
+					<section class="px-4">
+						<h2 class="text-slate-800 text-[22px] font-bold leading-tight tracking-[-0.015em] pb-4">
+							About the Business
+						</h2>
+						<div class="relative overflow-hidden
+							bg-white rounded-2xl p-6
+							border border-slate-200
+							group">
+							<!-- Decorative brand glow -->
+							<div class="absolute -top-12 -right-12 w-40 h-40
+								bg-brand-400/20
+								blur-[70px]
+								transition-all duration-500
+								group-hover:bg-brand-500/25"></div>
+							<div class="absolute -bottom-16 -left-16 w-56 h-56
+								bg-brand-600/10
+								blur-[90px]"></div>
+							<!-- Content -->
+							<div class="relative z-10">
+								<p class="text-slate-600 text-base leading-relaxed mb-5">
+									Apex Landscaping Solutions has been transforming outdoor spaces in the Bay Area since 2016.
+									We specialize in sustainable garden design, hardscaping, and regular maintenance.
+									Our team is dedicated to bringing your vision to life with precision and care,
+									using eco-friendly practices whenever possible.
+								</p>
+								<ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+									<li class="flex items-center gap-2 text-slate-600 text-sm">
+										<span class="material-symbols-outlined text-emerald-500 text-[20px]">
+										check_circle
+										</span>
+										Licensed &amp; Insured
+									</li>
+									<li class="flex items-center gap-2 text-slate-600 text-sm">
+										<span class="material-symbols-outlined text-emerald-500 text-[20px]">
+										check_circle
+										</span>
+										Eco-Friendly Materials
+									</li>
+									<li class="flex items-center gap-2 text-slate-600 text-sm">
+										<span class="material-symbols-outlined text-emerald-500 text-[20px]">
+										check_circle
+										</span>
+										Free Initial Consultation
+									</li>
+									<li class="flex items-center gap-2 text-slate-600 text-sm">
+										<span class="material-symbols-outlined text-emerald-500 text-[20px]">
+										check_circle
+										</span>
+										100% Satisfaction Guarantee
+									</li>
+								</ul>
+							</div>
+						</div>
+					</section>
+					<!-- Services Section -->
+					<section class="flex flex-col">
+						<div class="flex items-center justify-between px-4 pb-3 pt-2">
+							<h2 class="text-slate-800 text-[22px] font-bold leading-tight tracking-[-0.015em]">
+								Services & Pricing
+							</h2>
+							<a class="text-[#4c3aff] text-sm font-bold hover:underline" href="#">
+							View all
+							</a>
+						</div>
+						<div class="flex flex-col gap-4 px-4">
+							<!-- Service Item -->
+							<div class="relative overflow-hidden
+								flex flex-col md:flex-row gap-4
+								bg-white border border-slate-200
+								rounded-2xl p-4
+								justify-between items-start md:items-center
+								group transition-all">
+								<!-- Decorative glow -->
+								<div class="absolute -top-10 -right-10 w-32 h-32
+									bg-brand-400/20 blur-[60px]
+									transition-all duration-500
+									group-hover:bg-brand-500/25"></div>
+								<div class="absolute -bottom-12 -left-12 w-40 h-40
+									bg-brand-600/10 blur-[80px]"></div>
+								<div class="flex items-start gap-4 relative z-10">
+									<div class="flex items-center justify-center size-12 shrink-0
+										rounded-xl bg-brand-500/10
+										text-[#4c3aff]
+										transition-colors">
+										<span class="material-symbols-outlined">yard</span>
+									</div>
+									<div class="flex flex-col">
+										<p class="text-slate-900 text-base font-bold">
+											Lawn Maintenance
+										</p>
+										<p class="text-slate-600 text-sm max-w-md">
+											Mowing, edging, and debris removal for up to 0.5 acres.
+										</p>
+									</div>
+								</div>
+								<div class="w-full md:w-auto flex justify-between items-center
+									md:gap-4 mt-2 md:mt-0 pl-[76px] md:pl-0 relative z-10">
+									<span class="text-slate-600 font-bold md:hidden">
+									From $60
+									</span>
+									<button class="flex min-w-[120px] items-center justify-center
+										rounded-full h-10 px-6
+										bg-brand-500 text-white
+										font-bold text-sm
+										shadow-md shadow-[#4c3aff]/30
+										hover:bg-brand-600
+										transition-all">
+									<span class="hidden md:inline">Request - $60+</span>
+									<span class="md:hidden">Request</span>
+									</button>
+								</div>
+							</div>
+                      <div class="relative overflow-hidden
+								flex flex-col md:flex-row gap-4
+								bg-white border border-slate-200
+								rounded-2xl p-4
+								justify-between items-start md:items-center
+								group transition-all">
+								<!-- Decorative glow -->
+								<div class="absolute -top-10 -right-10 w-32 h-32
+									bg-brand-400/20 blur-[60px]
+									transition-all duration-500
+									group-hover:bg-brand-500/25"></div>
+								<div class="absolute -bottom-12 -left-12 w-40 h-40
+									bg-brand-600/10 blur-[80px]"></div>
+								<div class="flex items-start gap-4 relative z-10">
+									<div class="flex items-center justify-center size-12 shrink-0
+										rounded-xl bg-brand-500/10
+										text-[#4c3aff]
+										transition-colors">
+										<span class="material-symbols-outlined">deck</span>
+									</div>
+									<div class="flex flex-col">
+										<p class="text-slate-900 text-base font-bold">
+											Patio Installation
+										</p>
+										<p class="text-slate-600 text-sm max-w-md">
+											Custom stone or paver patio design and installation. Price varies by square footage and material.
+										</p>
+									</div>
+								</div>
+								<div class="w-full md:w-auto flex justify-between items-center
+									md:gap-4 mt-2 md:mt-0 pl-[76px] md:pl-0 relative z-10">
+									<span class="text-slate-600 font-bold md:hidden">
+									From $60
+									</span>
+									<button class="flex min-w-[120px] items-center justify-center
+										rounded-full h-10 px-6
+										bg-brand-500 text-white
+										font-bold text-sm
+										shadow-md shadow-[#4c3aff]/30
+										hover:bg-brand-600
+										transition-all">
+									<span class="hidden md:inline">Request - $60+</span>
+									<span class="md:hidden">Request</span>
+									</button>
+								</div>
+							</div>
+
+                     <div class="relative overflow-hidden
+								flex flex-col md:flex-row gap-4
+								bg-white border border-slate-200
+								rounded-2xl p-4
+								justify-between items-start md:items-center
+								group transition-all">
+								<!-- Decorative glow -->
+								<div class="absolute -top-10 -right-10 w-32 h-32
+									bg-brand-400/20 blur-[60px]
+									transition-all duration-500
+									group-hover:bg-brand-500/25"></div>
+								<div class="absolute -bottom-12 -left-12 w-40 h-40
+									bg-brand-600/10 blur-[80px]"></div>
+								<div class="flex items-start gap-4 relative z-10">
+									<div class="flex items-center justify-center size-12 shrink-0
+										rounded-xl bg-brand-500/10
+										text-[#4c3aff]
+										transition-colors">
+										<span class="material-symbols-outlined">park</span>
+									</div>
+									<div class="flex flex-col">
+										<p class="text-slate-900 text-base font-bold">
+											Tree Trimming
+										</p>
+										<p class="text-slate-600 text-sm max-w-md">
+											Professional pruning and trimming for healthy tree growth. Debris haul-away included.
+										</p>
+									</div>
+								</div>
+								<div class="w-full md:w-auto flex justify-between items-center
+									md:gap-4 mt-2 md:mt-0 pl-[76px] md:pl-0 relative z-10">
+									<span class="text-slate-600 font-bold md:hidden">
+									From $60
+									</span>
+									<button class="flex min-w-[120px] items-center justify-center
+										rounded-full h-10 px-6
+										bg-brand-500 text-white
+										font-bold text-sm
+										shadow-md shadow-[#4c3aff]/30
+										hover:bg-brand-600
+										transition-all">
+									<span class="hidden md:inline">Request - $60+</span>
+									<span class="md:hidden">Request</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!-- Portfolio Grid -->
+					<section class="flex flex-col px-4">
+						<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-4 pt-2">Portfolio</h2>
+						<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+							<div class="group relative aspect-square w-full cursor-pointer overflow-hidden rounded-2xl">
+								<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Modern backyard with stone pavers and firepit" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCoDgvpucfCWjFmNRKBgCYZI3u1q23LHfXnpejCho8dalajX2zm-qmMEY_CK5pJcLS60eobCrAvqykKBvtT1sEF_Hlhg6wpvu95VroM875vXjudjWB-Mf8XchLvoW8HMPZiWNGspO_hdsZiOUWjVjVewA-PZeoHdtEbfchgm2klQYMYzLfrLpCmTnv7XoP_yNdA-S4D8UIW3hLvqKuDOoNsHkmL9PNTn6bJTnHPWTUSICD5bdL1z45F0amGjuwUHOGEVoYWJ-91WT4");'></div>
+								<div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 flex items-center justify-center">
+									<span class="material-symbols-outlined text-white text-[32px]">zoom_in</span>
+								</div>
+							</div>
+							<div class="group relative aspect-square w-full cursor-pointer overflow-hidden rounded-2xl">
+								<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Beautifully manicured front lawn with flower beds" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDP-h3EMHrmLcaCWPDSPdqMg9WUsuESe6sG_kYPgnaE5z8DUmUgzmrhNjEbcZf1gWu8QyBoYguaDjlA6FHvnU8_-4nhVbwUOg20H-VF4Blv2nN9qK6H-t82MT6GKgQnJCqwTavmkcn1TnDGkpMI3ZKTMP7crMcPaR1Uyg2y6oAQGeoM_uNv33GcR8pEhN-XRuZfsIzwHfHtf-wSNFd_2zH-6wPgaRjDU7Pn63mDfTHmpSxq5IWzxqeKKXAQH6y89an2zZBhY6CzXek");'></div>
+								<div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 flex items-center justify-center">
+									<span class="material-symbols-outlined text-white text-[32px]">zoom_in</span>
+								</div>
+							</div>
+							<div class="group relative aspect-square w-full cursor-pointer overflow-hidden rounded-2xl">
+								<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Custom wooden deck with seating area" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJj5zc1Js4Z-1UpZ-5d0yqQ15MrXY_knP9C7nTS39iM-SI-rVnYxjoAkEn0MwLhj9L0emnm5mwmlwXCF73ITGXs_bL74Z-UmT2v8rhWxuuuFg-MxSGq2-MHwPTOXu8e2dcsa57NG5yqh8g3TJr2BKLJ57HBVyhzuvOkx5CagSYCIq0OeCF1jjczwuDahRKEFvj3wUS8dHHNgLyY1722L8oHe-xK1NNsgcmT8kiuGihF0J67wifTZbWyR0xZQGIzZMb2_MGdxii7nc");'></div>
+								<div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 flex items-center justify-center">
+									<span class="material-symbols-outlined text-white text-[32px]">zoom_in</span>
+								</div>
+							</div>
+							<div class="group relative aspect-square w-full cursor-pointer overflow-hidden rounded-2xl">
+								<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Garden pathway with night lighting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCANDzX-xJ91vXysiBfwdm042pZd8b0EZSBwSYWP2iZVaMORsROudWfsHXHQqstBjx3VA6h1DHQmUi35RKubNm_7emqzBv7QZ9No10xkVd_JqOSpwxH58zMvWVTzkdMR4vcgDIB5WLyCH5gtdQEudSMHS_8FlNizv6FveiJi13v_i02vYqDDwBQt60H7NyE7YIgkLWL_T3o0_0cGtm7-7Oxg4BjfdH2Lbb90jk020UVjDDHQjFZu7I_NXpP6mruq5R9drRTmartmQs");'></div>
+								<div class="absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 flex items-center justify-center">
+									<span class="material-symbols-outlined text-white text-[32px]">zoom_in</span>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!-- Reviews Section -->
+					<section class="flex flex-col px-4">
+						<div class="flex items-center justify-between pb-4 pt-2">
+							<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Reviews</h2>
+							<a class="text-primary text-sm font-bold hover:underline" href="#">See all 142 reviews</a>
+						</div>
+						<div class="flex flex-col md:flex-row gap-4 mb-4">
+							<!-- Summary Card -->
+							<div class="relative overflow-hidden
+								flex flex-col items-center justify-center
+								bg-white
+								rounded-2xl p-6
+								border border-slate-200
+								w-full md:w-1/3
+								group">
+								<!-- Decorative brand glow -->
+								<div class="absolute -top-10 -right-10 w-32 h-32
+									bg-brand-400/25
+									blur-[60px]
+									transition-all duration-500
+									group-hover:bg-brand-500/30"></div>
+								<div class="absolute -bottom-12 -left-12 w-40 h-40
+									bg-brand-600/15
+									blur-[80px]"></div>
+								<!-- Rating -->
+								<span class="relative z-10 text-5xl font-extrabold text-slate-900">
+								4.9
+								</span>
+								<!-- Stars -->
+								<div class="relative z-10 flex text-[#FFD700] my-2">
+									<span class="material-symbols-outlined fill-1">star</span>
+									<span class="material-symbols-outlined fill-1">star</span>
+									<span class="material-symbols-outlined fill-1">star</span>
+									<span class="material-symbols-outlined fill-1">star</span>
+									<span class="material-symbols-outlined fill-1">star_half</span>
+								</div>
+								<!-- Meta -->
+								<p class="relative z-10 text-slate-600 text-sm">
+									Based on <span class="font-medium text-slate-800">142 reviews</span>
+								</p>
+							</div>
+							<!-- Review Cards -->
+							<div class="flex flex-col gap-4 w-full md:w-2/3">
+								<!-- Review Card -->
+								<div class="relative overflow-hidden
+									bg-white p-4 rounded-2xl
+									border border-slate-200
+									group">
+									<!-- Decorative glow -->
+									<div class="absolute -top-10 -right-10 w-32 h-32
+										bg-brand-400/20
+										blur-[60px]
+										transition-all duration-500
+										group-hover:bg-brand-500/25"></div>
+									<div class="absolute -bottom-12 -left-12 w-40 h-40
+										bg-brand-600/10
+										blur-[80px]"></div>
+									<div class="relative z-10">
+										<div class="flex items-center justify-between mb-2">
+											<div class="flex items-center gap-3">
+												<div class="size-8 rounded-full bg-cover bg-center"
+													data-alt="Portrait of Sarah M."
+													style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxfQmrKII3MntBKbsE5ZkzWoiL1PeywUdKyu9Zm8bl5bhsNiDlUjKqOUbtNCnrDR0VGLrXA9nlTXRyQGitFp6Zr60QyJdFIrdSS5vz5Oa2kQikhARNZ59Qsgguoi91RpcBZ2wiUTxU8q5xt85nTA9wDZrpxLoZIbcmS2XhxeTguOa8Vkw6o3IFSaTn3zuvkAoNqGNzUzEpwlG4U_E_RKhsPZWjUPCpHT8cDW7XmxhUBBnhgmLPiKep-JWyXpDDnVZpd4EYwPrnSOg");'></div>
+												<div>
+													<p class="text-slate-900 text-sm font-bold">Sarah M.</p>
+													<p class="text-slate-500 text-xs">2 days ago</p>
+												</div>
+											</div>
+											<div class="flex text-[#FFD700]">
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+											</div>
+										</div>
+										<p class="text-slate-600 text-sm leading-relaxed">
+											Apex Landscaping did a fantastic job with our backyard. They were on time,
+											professional, and the price was exactly as quoted. Highly recommend!
+										</p>
+									</div>
+								</div>
+                        <div class="relative overflow-hidden
+									bg-white p-4 rounded-2xl
+									border border-slate-200
+									group">
+									<!-- Decorative glow -->
+									<div class="absolute -top-10 -right-10 w-32 h-32
+										bg-brand-400/20
+										blur-[60px]
+										transition-all duration-500
+										group-hover:bg-brand-500/25"></div>
+									<div class="absolute -bottom-12 -left-12 w-40 h-40
+										bg-brand-600/10
+										blur-[80px]"></div>
+									<div class="relative z-10">
+										<div class="flex items-center justify-between mb-2">
+											<div class="flex items-center gap-3">
+												<div class="size-8 rounded-full bg-cover bg-center"
+													data-alt="Portrait of Sarah M."
+													style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDxfQmrKII3MntBKbsE5ZkzWoiL1PeywUdKyu9Zm8bl5bhsNiDlUjKqOUbtNCnrDR0VGLrXA9nlTXRyQGitFp6Zr60QyJdFIrdSS5vz5Oa2kQikhARNZ59Qsgguoi91RpcBZ2wiUTxU8q5xt85nTA9wDZrpxLoZIbcmS2XhxeTguOa8Vkw6o3IFSaTn3zuvkAoNqGNzUzEpwlG4U_E_RKhsPZWjUPCpHT8cDW7XmxhUBBnhgmLPiKep-JWyXpDDnVZpd4EYwPrnSOg");'></div>
+												<div>
+													<p class="text-slate-900 text-sm font-bold">Sarah M.</p>
+													<p class="text-slate-500 text-xs">2 days ago</p>
+												</div>
+											</div>
+											<div class="flex text-[#FFD700]">
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+											</div>
+										</div>
+										<p class="text-slate-600 text-sm leading-relaxed">
+											Apex Landscaping did a fantastic job with our backyard. They were on time,
+											professional, and the price was exactly as quoted. Highly recommend!
+										</p>
+									</div>
+								</div>
+								<!-- Review Card -->
+								<div class="relative overflow-hidden
+									bg-white p-4 rounded-2xl
+									border border-slate-200
+									group">
+									<!-- Decorative glow -->
+									<div class="absolute -top-10 -right-10 w-32 h-32
+										bg-brand-400/20
+										blur-[60px]
+										transition-all duration-500
+										group-hover:bg-brand-500/25"></div>
+									<div class="absolute -bottom-12 -left-12 w-40 h-40
+										bg-brand-600/10
+										blur-[80px]"></div>
+									<div class="relative z-10">
+										<div class="flex items-center justify-between mb-2">
+											<div class="flex items-center gap-3">
+												<div class="size-8 rounded-full bg-cover bg-center"
+													data-alt="Portrait of Michael R."
+													style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD6zfrlFcbDPAQz4eq2GrGjCkuj2EMdjeIm_ppauaSG7tgILi6STbYOZI2-fm86I6SL0IGh6qAK-D8eo2SoO9DoONPgWk5fOvxqi6Ga1-4-27xYtcSkKGeTbo1Qg9eM5xttwuylJHuKfC8w_NfpyKk7golt5TVCtR65krI5fnbJgUaCgJ_zb2J-Ld-gmJLmxIEv-aGfw6hpOa4EXjt3H29fP1FRB2I8QRjhAoL2GnrKXrb2UPMPw3gYg-4XbJalmOhBurZ1Qwc2p5Q");'></div>
+												<div>
+													<p class="text-slate-900 text-sm font-bold">Michael R.</p>
+													<p class="text-slate-500 text-xs">1 week ago</p>
+												</div>
+											</div>
+											<div class="flex text-[#FFD700]">
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+												<span class="material-symbols-outlined text-[16px] fill-1">star</span>
+											</div>
+										</div>
+										<p class="text-slate-600 text-sm leading-relaxed">
+											Very knowledgeable about native plants. They transformed our dry garden
+											into something lush and low maintenance.
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!-- Availability Block -->
+					<section class="px-4 pb-10">
+						<div class="relative overflow-hidden
+							flex flex-col md:flex-row items-center justify-between
+							bg-white
+							p-6 md:p-8
+							rounded-[2rem]
+							border border-slate-200
+							gap-6 group">
+							<!-- Decorative brand glow -->
+							<div class="absolute -top-16 -right-16 w-56 h-56
+								bg-brand-400/25
+								blur-[90px]
+								transition-all duration-500
+								group-hover:bg-brand-500/30">
+							</div>
+							<div class="absolute -bottom-20 -left-20 w-72 h-72
+								bg-brand-600/15
+								blur-[110px]">
+							</div>
+							<!-- Content -->
+							<div class="flex flex-col gap-3 z-10 text-center md:text-left">
+								<!-- Status -->
+								<div class="flex items-center justify-center md:justify-start gap-3">
+									<span class="flex h-3 w-3 relative">
+									<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-500 opacity-50"></span>
+									<span class="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
+									</span>
+									<span class="text-[#4c3aff] font-semibold text-sm uppercase tracking-wider">
+									Accepting New Projects
+									</span>
+								</div>
+								<!-- Heading -->
+								<h2 class="text-slate-900 text-2xl md:text-3xl font-bold leading-tight">
+									Ready to transform your space?
+								</h2>
+								<!-- Description -->
+								<p class="text-slate-600 max-w-md">
+									Our next available slot is
+									<span class="text-slate-900 font-medium">Tomorrow, 9:00 AM</span>.
+									Book now to secure your consultation.
+								</p>
+							</div>
+							<!-- Actions -->
+							<div class="flex flex-col gap-4 w-full md:w-auto z-10">
+								<!-- Primary CTA -->
+								<button
+									class="flex w-full md:w-auto min-w-[220px]
+									items-center justify-center
+									rounded-full h-14 px-8
+									bg-brand-500 text-white
+									font-bold text-base
+									shadow-lg shadow-[#4c3aff]/30
+									hover:bg-brand-600 hover:shadow-[#1b17ff]/40
+									transform hover:-translate-y-0.5
+									transition-all duration-300">
+								Book Consultation
+								</button>
+								<!-- Secondary CTA -->
+								<button
+									class="flex w-full md:w-auto min-w-[220px]
+									items-center justify-center
+									rounded-full h-14 px-8
+									bg-transparent
+									border border-slate-300
+									text-slate-700 font-semibold text-base
+									hover:bg-slate-50 hover:border-slate-400
+									transition-all duration-300">
+								Contact Us
+								</button>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

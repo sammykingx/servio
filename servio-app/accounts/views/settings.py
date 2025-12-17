@@ -1,6 +1,9 @@
 from django.views.generic.base import TemplateView
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from template_map.accounts import Accounts
+from accounts.models.profile import UserRole
 from accounts.models.address import AddressType
 
 
@@ -29,3 +32,22 @@ class BusinessSettingsView(LoginRequiredMixin, TemplateView):
     """
 
     template_name = Accounts.BUSINESS_ACCOUNT_SETTINGS
+
+
+@login_required
+def business_settings_toggle(request):
+    if request.htmx:
+        state = request.GET.get("state")
+
+        if state not in ("on", "off"):
+            return HttpResponseBadRequest("Invalid state")
+
+        new_value = (state == "on")
+
+        print("FURTHER PROCESSSS.......", new_value)
+        # profile = request.user.profile
+        # profile.is_business_owner = new_value
+        # profile.role = UserRole.PROVIDERS
+        # profile.save(update_fields=["is_business_owner", "role"])
+
+    return HttpResponse(status=200)

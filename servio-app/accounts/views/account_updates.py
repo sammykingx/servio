@@ -92,7 +92,7 @@ class UpdateAddressView(LoginRequiredMixin, View):
             address.save()
         
         message = (
-            f"Your address has been successfully added." if created else
+            "Your address has been successfully added." if created else
             "Your address has been successfully updated." if updated else
             "No changes were made to your address."
         )
@@ -105,7 +105,7 @@ class UpdateAddressView(LoginRequiredMixin, View):
                 "street_line_2": address.street_line_2,
                 "city": address.city,
                 "province": address.province,
-                "postal_code": address.postal_code,
+                "postal_code": address.postal_code.upper(),
                 "country": address.country,
                 "label": address.label,
             }

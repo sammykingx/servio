@@ -20,6 +20,7 @@
 		<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 	</head>
 	<body
+		
 		x-data="
 			{ 
 				page: 'base',
@@ -34,7 +35,6 @@
 			$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
 		:class="{'dark bg-gray-900': darkMode === true}"
   	>
-	<!-- <body> -->
     	<!-- ===== Preloader Start ===== -->
 		{% include "components/preloader.html" %}
 		
@@ -55,7 +55,7 @@
 				{% include "partials/header.html" %}
 
 				<!-- ===== Main Content Start ===== -->
-				<main>
+				<main hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
 					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
 						<div 
 							id="center-alert-container" 

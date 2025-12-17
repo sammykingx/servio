@@ -1,4 +1,6 @@
 from django.urls import path
+from django.urls import path, include, reverse_lazy
+from django.views.generic import RedirectView
 from django.views.generic.base import TemplateView
 from django.contrib.auth.views import LogoutView
 from .views import (
@@ -7,7 +9,7 @@ from .views import (
     password,
     dashboard,
     settings,
-    account_info,
+    account_updates,
 )
 from core.url_names import AuthURLNames
 from template_map.accounts import Accounts
@@ -15,6 +17,12 @@ from template_map.accounts import Accounts
 
 urlpatterns = [
     # LOGIN AND LOGOUT
+    path(
+        "",
+        RedirectView.as_view(
+            url=reverse_lazy(AuthURLNames.LOGIN), permanent=True
+        ),
+    ),
     path(
         "access/",
         auth.CustomSignin.as_view(),
@@ -94,22 +102,34 @@ urlpatterns = [
     ),
     path(
         "update/social-links/",
-        account_info.UpdateSocialLinksView.as_view(),
+        account_updates.UpdateSocialLinksView.as_view(),
         name=AuthURLNames.UPDATE_SOCIAL_LINKS,
     ),
     path(
         "update/profile-info/",
-        account_info.UpdatePersonalInfoView.as_view(),
+        account_updates.UpdatePersonalInfoView.as_view(),
         name=AuthURLNames.UPDATE_PROFILE_INFO,
     ),
     path(
         "update/address-info/",
-        account_info.UpdateAddressView.as_view(),
+        account_updates.UpdateAddressView.as_view(),
         name=AuthURLNames.UPDATE_ADDRESS_INFO,
     ),
     path(
         "upload/profile-picture/",
-        account_info.UpdateProfilePictureView.as_view(),
+        account_updates.UpdateProfilePictureView.as_view(),
         name=AuthURLNames.UPLOAD_PROFILE_PICTURE,
     ),
+    path(
+        "become-provider/<state>/",
+        settings.business_settings_toggle,
+        name=AuthURLNames.SWITCH_TO_BUSINESS,
+    ),
+    path(
+        "biz-profile/",
+        TemplateView.as_view(template_name=Accounts.BUSINESS_PROFILE),
+        name="biz-temp",
+        
+    ),
+    
 ]

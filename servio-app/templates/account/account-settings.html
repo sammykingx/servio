@@ -1,6 +1,8 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+{% load django_htmx %}
 {% block browser_title %}Account Settings{% endblock %}
+{% htmx_script %}
 {% block content %}
 {% include "components/breadcrumbs.html" with page_name="Account Settings" %}
 <div
@@ -206,7 +208,7 @@
 					<span
 						data-address="home" data-field="street_line_2"
 						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
-						>{{ home.street_line_2|default:'N/A'|title }}</span
+						>{{ home.street_line_2|default:'n/a'|title }}</span
 						>
 				</li>
 				<li class="flex items-center gap-5 py-2.5">
@@ -475,7 +477,7 @@
 			<h3
 				class="text-base font-medium text-gray-800 dark:text-white/90"
 				>
-				Billing Info
+				Billing Address
 			</h3>
 		</div>
 		<div
@@ -747,7 +749,7 @@
 											<input
 												type="text"
 												name="street"
-												value="{{ billing.street|default:'' }}"
+												value="{{ billing.street|default:''|title }}"
 												placeholder="800 E Elcamino Real, suite #400"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
@@ -761,7 +763,7 @@
 											<input
 												type="text"
 												name="street_line_2"
-												value="{{ billing.street_line_2|default:'' }}"
+												value="{{ billing.street_line_2|default:''|title }}"
 												placeholder="800 E Elcamino Real, suite #400"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
@@ -775,7 +777,7 @@
 											<input
 												type="text"
 												name="city"
-												value="{{ billing.city|default:'' }}"
+												value="{{ billing.city|default:''|title }}"
 												placeholder="Montreal"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
@@ -789,7 +791,7 @@
 											<input
 												type="text"
 												name="province"
-												value="{{ billing.province|default:'' }}"
+												value="{{ billing.province|default:''|title }}"
 												placeholder="Quebec"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
@@ -803,7 +805,7 @@
 											<input
 												type="text"
 												name="postal_code"
-												value="{{ billing.postal_code|default:'' }}"
+												value="{{ billing.postal_code|default:''|upper }}"
 												placeholder="A1A 1A1"
 												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 												/>
