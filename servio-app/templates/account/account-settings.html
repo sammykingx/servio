@@ -38,13 +38,13 @@
 						>
 					Notifications
 					</button>
-					<button
+					<!-- <button
 						class="py-2.5å inline-flex items-center rounded-lg px-3 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
 						x-bind:class="activeTab === 'privacy' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
 						x-on:click="activeTab = 'privacy'"
 						>
 					Privacy & Safety
-					</button>
+					</button> -->
 				</nav>
 			</div>
 			<div class="flex-1">
@@ -101,31 +101,7 @@
 								Not Verified
 								</span>
 								{% endif %}
-							</p>
-							<div x-data="{ switcherToggle: false }">
-								<label
-									for="is_business_owner"
-									class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
-									>
-									<div class="relative">
-										<input
-											type="checkbox"
-											id="is_business_owner"
-											class="sr-only"
-											@change="switcherToggle = !switcherToggle"
-											/>
-										<div
-											class="block h-6 w-11 rounded-full"
-											:class="switcherToggle ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
-											></div>
-										<div
-											:class="switcherToggle ? 'translate-x-full': 'translate-x-0'"
-											class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
-											></div>
-									</div>
-									Switch to provider account.
-								</label>
-							</div>
+							</p>							
 						</div>
 					</div>
 					<div x-show="activeTab === 'passwords'">
@@ -146,23 +122,23 @@
 						<p class="text-sm text-gray-500 dark:text-gray-400 my-5">
 							Manage communication channels.
 						</p>
-						{% include "partials/accounts/notification-preferences.html" %}
+						{% include "partials/accounts/notification-channels.html" %}
 					</div>
-					<div x-show="activeTab === 'privacy'">
+					<!-- <div x-show="activeTab === 'privacy'">
 						<h3 class="mb-3 text-xl font-medium text-gray-800 dark:text-white/90">
 							Privacy Settings
 						</h3>
 						<p class="text-sm text-gray-500 dark:text-gray-400 my-5">
 							Manage your data accross servio.
 						</p>
-						{% include "partials/accounts/privacy-preference.html" %}
-					</div>
+						{# include "partials/accounts/privacy-preference.html" #}
+					</div> -->
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-{% include "partials/accounts/linked-cards.html" %}
+{# include "partials/accounts/linked-cards.html" #}
 <!-- Adress information -->
 <div class="p-2 my-3 flex flex-col gap-6 xl:flex-row">
 	<div

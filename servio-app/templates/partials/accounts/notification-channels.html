@@ -1,0 +1,122 @@
+<div class="space-y-5">
+    <div x-data="{ on: {{ user.notification_channels.email|yesno:'true,false' }} }">
+        <label class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-400">
+            <div class="relative">
+                <input
+                    type="checkbox"
+                    class="sr-only"
+                    :checked="on"
+                    @change="on = $event.target.checked"
+                    hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}"
+                    hx-trigger="change"
+                    hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'
+                    hx-vals="js:{
+                        channel: 'email',
+                        value: this.checked
+                    }"
+                    hx-swap="none"
+                />
+                <div
+                    class="block h-6 w-11 rounded-full"
+                    :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                ></div>
+
+                <div
+                    class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform"
+                    :class="on ? 'translate-x-full' : 'translate-x-0'"
+                ></div>
+            </div>
+            Email Notifications
+        </label>
+    </div>
+    <div x-data="{ on: {{ user.notification_channels.web_push|yesno:'true,false' }} }">
+        <label class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-400">
+            <div class="relative">
+                <input
+                    type="checkbox"
+                    class="sr-only"
+                    :checked="on"
+                    @change="on = $event.target.checked"
+                    hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}"
+                    hx-trigger="change"
+                    hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'
+                    hx-vals="js:{
+                        channel: 'web_push',
+                        value: this.checked
+                    }"
+                    hx-swap="none"
+                />
+                <div
+                    class="block h-6 w-11 rounded-full"
+                    :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                ></div>
+
+                <div
+                    class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform"
+                    :class="on ? 'translate-x-full' : 'translate-x-0'"
+                ></div>
+            </div>
+            Push/Web Notifications
+        </label>
+    </div>
+    <div x-data="{ on: {{ user.notification_channels.sms|yesno:'true,false' }} }">
+        <label class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-400">
+            <div class="relative">
+                <input
+                    type="checkbox"
+                    class="sr-only"
+                    :checked="on"
+                    @change="on = $event.target.checked"
+                    hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}"
+                    hx-trigger="change"
+                    hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'
+                    hx-vals="js:{
+                        channel: 'sms',
+                        value: this.checked
+                    }"
+                    hx-swap="none"
+                />
+                <div
+                    class="block h-6 w-11 rounded-full"
+                    :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                ></div>
+
+                <div
+                    class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform"
+                    :class="on ? 'translate-x-full' : 'translate-x-0'"
+                ></div>
+            </div>
+            SMS Notifications
+        </label>
+    </div>
+    <div x-data="{ on: {{ user.notification_channels.whatsapp|yesno:'true,false' }} }">
+        <label class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 dark:text-gray-400">
+            <div class="relative">
+                <input
+                    type="checkbox"
+                    class="sr-only"
+                    :checked="on"
+                    @change="on = $event.target.checked"
+                    hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}"
+                    hx-trigger="change"
+                    hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'
+                    hx-vals="js:{
+                        channel: 'whatsapp',
+                        value: this.checked
+                    }"
+                    hx-swap="none"
+                />
+                <div
+                    class="block h-6 w-11 rounded-full"
+                    :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                ></div>
+
+                <div
+                    class="absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white transition-transform"
+                    :class="on ? 'translate-x-full' : 'translate-x-0'"
+                ></div>
+            </div>
+            Whatsapp
+        </label>
+    </div>
+</div>

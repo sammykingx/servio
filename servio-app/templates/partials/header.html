@@ -729,10 +729,10 @@
 					href=""
 					@click.prevent="dropdownOpen = ! dropdownOpen"
 					>
-					{% if request.user.profile.avatar_url %}
+					{% if user.profile.avatar_url %}
 					<span class="w-16 h-16 md:w-11 md:h-11 rounded-full overflow-hidden">
 					<img 
-						src="{{ request.user.profile.avatar_url.url }}"
+						src="{{ user.profile.avatar_url.url }}"
 						alt="user profile picture"
 						class="profile-picture w-full h-full object-cover object-center"
 						/>
@@ -846,7 +846,7 @@
 							</li>
 						{% endif %}
 						<li
-							x-data="{ on: {{ request.user.profile.is_business_owner|yesno:'true,false' }} }"
+							x-data="{ on: {{ user.profile.is_business_owner|yesno:'true,false' }} }"
 							x-effect="$el.dataset.state = on ? 'on' : 'off'"
 						>
 							<button

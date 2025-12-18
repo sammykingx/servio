@@ -44,7 +44,6 @@ def business_settings_toggle(request) -> HttpResponse:
 
         new_value = (state == "on")
 
-        print("FURTHER PROCESSSS.......", new_value)
         profile = request.user.profile
         profile.is_business_owner = new_value
         profile.role = UserRole.PROVIDERS

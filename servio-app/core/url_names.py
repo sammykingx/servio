@@ -42,3 +42,6 @@ class AuthURLNames:
     UPDATE_ADDRESS_INFO = "update_address_info"
     UPLOAD_PROFILE_PICTURE = "upload_profile_picture"
     
+
+class NotificationsURLNames:
+    TOGGLE_NOTIFICATION_CHANNELS = "toggle_notification_channels"

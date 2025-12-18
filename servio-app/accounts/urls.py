@@ -1,5 +1,4 @@
-from django.urls import path
-from django.urls import path, include, reverse_lazy
+from django.urls import path, reverse_lazy
 from django.views.generic import RedirectView
 from django.views.generic.base import TemplateView
 from django.contrib.auth.views import LogoutView

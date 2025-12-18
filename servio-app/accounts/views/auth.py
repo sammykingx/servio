@@ -16,6 +16,8 @@ from typing import Union
 
 class CustomSignin(LoginView):
     template_name = Accounts.Auth.SIGNIN
+    redirect_authenticated_user = True
+    success_url = reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD)
 
     def form_invalid(self, form) -> HttpResponse:
         errors = form.errors.as_json()

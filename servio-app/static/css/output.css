@@ -2085,9 +2085,6 @@
   .text-\[22px\] {
     font-size: 22px;
   }
-  .text-\[24px\] {
-    font-size: 24px;
-  }
   .text-\[32px\] {
     font-size: 32px;
   }
@@ -2485,13 +2482,6 @@
       }
     }
   }
-  .group-hover\:text-gray-700 {
-    &:is(:where(.group):hover *) {
-      @media (hover: hover) {
-        color: var(--color-gray-700);
-      }
-    }
-  }
   .group-hover\:opacity-100 {
     &:is(:where(.group):hover *) {
       @media (hover: hover) {
@@ -2644,13 +2634,6 @@
     &:hover {
       @media (hover: hover) {
         fill: var(--color-error-500);
-      }
-    }
-  }
-  .hover\:fill-gray-700 {
-    &:hover {
-      @media (hover: hover) {
-        fill: var(--color-gray-700);
       }
     }
   }

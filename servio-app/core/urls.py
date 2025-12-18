@@ -18,10 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.views.generic import RedirectView
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView
 from template_map.accounts import Accounts
 from core.url_names import AuthURLNames
 import accounts.urls
+import notifications.urls
 
 urlpatterns = [
     path(
@@ -33,6 +34,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
+    path("notifications/", include(notifications.urls)),
     path(
         "client/",
         TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),

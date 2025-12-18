@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from allauth.account.signals import email_confirmed
 from django.dispatch import receiver
 from .models.profile import UserProfile
+from notifications.models.notification_channels import NotificationChannels
 from django.conf import settings
 
 
@@ -12,7 +13,9 @@ def create_profile(sender, instance, created, **kwargs):
         try:
             with transaction.atomic():
                 UserProfile.objects.create(user=instance)
+                NotificationChannels.objects.create(user=instance)
         except Exception as e:
+            # log for prod, print for dev or short term
             print(e)
             # raise
 
