@@ -1,4 +1,4 @@
-from django.urls import path, reverse_lazy
+from django.urls import include, path, reverse_lazy
 from django.views.generic import RedirectView
 from django.views.generic.base import TemplateView
 from django.contrib.auth.views import LogoutView
@@ -38,6 +38,7 @@ urlpatterns = [
         name=AuthURLNames.VERIFY_LOGIN_LINK,
     ),
     path("sign-out/", LogoutView.as_view(), name=AuthURLNames.LOGOUT),
+    
     # REGISTRATION
     path(
         "join/",
@@ -56,6 +57,7 @@ urlpatterns = [
         registration.EmailVerificationView.as_view(),
         name=AuthURLNames.EMAIL_CONFIRMATION,
     ),
+    
     # ACCOUNT RECOVERY
     path(
         "recovery-options/",
@@ -67,6 +69,7 @@ urlpatterns = [
         password.PasswordResetEmailView.as_view(),
         name=AuthURLNames.REQUEST_PASSWORD_RESET,
     ),
+    
     # PASSWORD RESET
     path(
         "password-reset/<token>/",
@@ -78,6 +81,7 @@ urlpatterns = [
         password.ChangePasswordView.as_view(),
         name=AuthURLNames.PASSWORD_CHANGE,
     ),
+    
     # DASHBOARD
     path(
         "dashboard/",
@@ -93,11 +97,6 @@ urlpatterns = [
         "settings/",
         settings.AccountSettingsView.as_view(),
         name=AuthURLNames.ACCOUNT_SETTINGS,
-    ),
-    path(
-        "settings/business",
-        settings.BusinessSettingsView.as_view(),
-        name=AuthURLNames.BUSINESS_SETTINGS,
     ),
     path(
         "update/social-links/",
@@ -123,12 +122,6 @@ urlpatterns = [
         "become-provider/",
         settings.business_settings_toggle,
         name=AuthURLNames.SWITCH_TO_BUSINESS,
-    ),
-    path(
-        "biz-profile/",
-        TemplateView.as_view(template_name=Accounts.BUSINESS_PROFILE),
-        name="biz-temp",
-        
     ),
     
 ]

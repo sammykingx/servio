@@ -827,24 +827,6 @@
 								Account settings
 							</a>
 						</li>
-						{% if user.profile.is_business_owner %}
-							<li>
-								<a
-									href="{% url AUTH_URLS.BUSINESS_SETTINGS %}"
-									class="group text-sm flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										class="w-6 h-6 fill-gray-500 group-hover:fill-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300"
-										viewBox="0 0 24 24"
-										fill="currentColor"
-									>
-										<path d="M20 7h-4V6c0-1.654-1.346-3-3-3h-2C9.346 3 8 4.346 8 6v1H4C2.897 7 2 7.897 2 9v10c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2zM9 6c0-.552.448-1 1-1h4c.552 0 1 .448 1 1v1H9V6zm11 13H4V9h16v10z"/>
-									</svg>
-									Business settings
-								</a>
-							</li>
-						{% endif %}
 						<li
 							x-data="{ on: {{ user.profile.is_business_owner|yesno:'true,false' }} }"
 							x-effect="$el.dataset.state = on ? 'on' : 'off'"

@@ -31,7 +31,6 @@ class AuthURLNames:
     ACCOUNT_DASHBOARD = "dashboard"
     ACCOUNT_PROFILE = "account_profile"
     ACCOUNT_SETTINGS = "account_settings"
-    BUSINESS_SETTINGS = "business_settings"
     SWITCH_TO_BUSINESS = "switch_to_business"
     # account_reauthenticate
     # account_inactive
@@ -45,3 +44,8 @@ class AuthURLNames:
 
 class NotificationsURLNames:
     TOGGLE_NOTIFICATION_CHANNELS = "toggle_notification_channels"
+    
+    
+class BusinessURLS:
+    BUSINESS_INFO = "business_info"
+    SERVICES = "business_services"

@@ -12,6 +12,8 @@ LOGIN_REDIRECT_URL = AuthURLNames.ACCOUNT_DASHBOARD
 LOCAL_APPS = [
     "accounts.apps.AccountsConfig",
     "notifications.apps.NotificationsConfig",
+    "business_accounts.apps.BusinessAccountsConfig",
+    "business_services.apps.BusinessServicesConfig",
 ]
 
 LOCAL_MIDDLEWARES = []

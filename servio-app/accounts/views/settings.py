@@ -26,14 +26,6 @@ class AccountSettingsView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class BusinessSettingsView(LoginRequiredMixin, TemplateView):
-    """
-    View to display the user's business settings page.
-    """
-
-    template_name = Accounts.BUSINESS_ACCOUNT_SETTINGS
-
-
 @login_required
 def business_settings_toggle(request) -> HttpResponse:
     if request.htmx:

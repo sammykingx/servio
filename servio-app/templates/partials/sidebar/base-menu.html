@@ -112,7 +112,13 @@
 			</div>
 
 			<!-- Dynamic navigation menu based on user role -->
-			 {% include "partials/sidebar/provider-menu.html" %}
+			 {% if user.profile.role == UserRole.PROVIDERS %}
+			 	{% include "partials/sidebar/business-owner-nav.html" %}
+			{% elif user.profile.role == UserRole.MEMBERS %}
+				{% include "partials/sidebar/client-menu.html" %}
+			{% else %}
+				<p>No role identified</p>
+			{% endif %}
 
 			<div>
 				<ul class="mb-6 flex flex-col gap-1">
