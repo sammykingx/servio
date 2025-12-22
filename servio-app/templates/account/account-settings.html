@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load django_htmx %}
+{% load custom_filters %}
 {% block browser_title %}Account Settings{% endblock %}
 {% htmx_script %}
 {% block content %}
@@ -72,7 +73,7 @@
 							</p>
 							<p class="text-sm md:text-base text-gray-600 dark:text-white/90 flex items-center gap-2">
 								<span class="font-medium">Phone:</span>
-								<span class="text-xs md:text-sm">{{ user.profile.mobile_num|default:"+1 345 654 123" }}</span>
+								<span class="text-xs md:text-sm">{{ user.profile.mobile_num|default:"+1 345 654 123"|format_mobile_number }}</span>
 								{% if user.profile.is_business_owner %}
 								<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
 									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

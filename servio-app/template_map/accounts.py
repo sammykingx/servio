@@ -65,8 +65,9 @@ class Accounts:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("business")
         
         BUSINESS_INFO = f"{__SUB_FOLDER}/business-info.html"
-        BUSINESS_PROFILE = f"{__SUB_FOLDER}/business-page.html"
+        BUSINESS_PAGE = f"{__SUB_FOLDER}/business-page.html"
         BUSINESS_SERVICES = F"{__SUB_FOLDER}/business-services.html"
+        BUSINESS_SCHEDULE = f"{__SUB_FOLDER}/availability.html"
         
 
     ACCOUNT_PROFILE = _BASE_FOLDER.base_folder_files("profile.html")

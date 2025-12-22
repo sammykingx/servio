@@ -1,0 +1,687 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block browser_title %}Servio - Availability & Schedule{% endblock %}
+{% block content %}
+{% include "components/breadcrumbs.html" with page_name="Business Schedule" %}
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-[63%_37%] mb-6 md:mr-6">
+    <div class="space-y-6">
+        <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="px-5 py-4 sm:px-6 sm:py-5 flex justify-between">
+                <h3 class="text-base font-medium text-gray-800 dark:text-white/90 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gray-500">tune</span>
+                    General Booking Rules
+                </h3>
+                <button
+                    class="group shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-xs md:text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]"
+                >
+                <span class="hidden group-hover:inline ml-1 text-gray-700 dark:text-gray-400">
+                    Save
+                </span>    
+                <span class="material-symbols-outlined">
+                        check_small
+                    </span>
+                </button>
+            </div>
+            <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
+                <form>
+                    <div class="-mx-2.5 flex flex-wrap gap-y-5">
+                        <div class="w-full px-2.5 xl:w-1/2">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Slot Duration
+                            </label>
+                            <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
+                                <select name="slot_duration" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" :class="isOptionSelected && 'text-gray-500 dark:text-gray-400'" @change="isOptionSelected = true">
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        -- Select --
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        15 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        30 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        45 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        60 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        75 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        90 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        105 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        120 Minutes
+                                    </option>
+                                </select>
+                                <span class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <p class="p-1.5 text-xs text-slate-500 dark:text-slate-400">The length of each bookable session.</p>
+                        </div>
+                        <div class="w-full px-2.5 xl:w-1/2 gap-2">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Buffer Time
+                            </label>
+                            <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
+                                <select name="buffer_time" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" :class="isOptionSelected && 'text-gray-500 dark:text-gray-400'" @change="isOptionSelected = true">
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        -- Choose Buffer --
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        15 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        30 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        45 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        60 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        75 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        90 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        105 Minutes
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        120 Minutes
+                                    </option>
+                                </select>
+                                <span class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <p class="p-1.5 text-xs text-slate-500 dark:text-slate-400">Time to rest between appointments.</p>
+                        </div>
+                        <div class="w-full px-2.5 xl:w-1/2">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Max Bookings per Day
+                            </label>
+                            <input type="number" name="max_daily_bookings" value="6" placeholder="" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                        </div>
+                        <div class="w-full px-2.5 xl:w-1/2">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Notice Period
+                            </label>
+                            <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
+                                <select class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" :class="isOptionSelected && 'text-gray-500 dark:text-gray-400'" @change="isOptionSelected = true">
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        Same Day
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        6 Hours
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        12 Hours
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        18 Hours
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        24 Hours
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        36 Hours
+                                    </option>
+                                    <option value="" class="text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                                        48 Hours
+                                    </option>
+                                </select>
+                                <span class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="px-5 py-4 sm:px-6 sm:py-5">
+                <h3 class="text-base font-medium text-gray-800 dark:text-white/90 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gray-500">schedule</span>
+                    Weekly Schedule
+                </h3>
+            </div>
+            <div class="space-y-6 border-t border-gray-100
+                    p-5 sm:p-6 dark:border-gray-800 flex flex-col gap-6">
+                <!-- Monday no breaks -->
+                <div x-data="{ activeOnMonday: true }" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center py-2 border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                    <div class="w-32 flex items-center gap-3">
+                        <label
+                          for="toggleMonday"
+                          class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
+                        >
+                          <div class="relative">
+                            <input
+                              type="checkbox"
+                              id="toggleMonday"
+                              class="sr-only"
+                              @change="activeOnMonday = !activeOnMonday"
+                            />
+                            <div
+                              class="block h-6 w-11 rounded-full"
+                              :class="activeOnMonday ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                            ></div>
+                            <div
+                              :class="activeOnMonday ? 'translate-x-full': 'translate-x-0'"
+                              class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
+                            ></div>
+                          </div>
+
+                          Monday
+                        </label>
+                    </div>
+
+                    <!-- Time Inputs / Closed Text -->
+                    <div class="flex-1 flex flex-col gap-2">
+
+                        <!-- Closed text when toggle is OFF -->
+                        <div x-show="!activeOnMonday" class="text-slate-400 text-sm py-2 px-3">
+                        Closed
+                        </div>
+
+                        <!-- Time Inputs + Buttons when toggle is ON -->
+                        <div x-show="activeOnMonday" class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center gap-2">
+                            <input 
+                            class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                bg-white dark:bg-gray-900
+                                text-sm text-slate-700 dark:text-slate-200
+                                py-2 px-3
+                                focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                focus:outline-none"
+                            type="time" value="09:00" />
+                            <span class="text-slate-400">-</span>
+                            <input 
+                            class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                bg-white dark:bg-gray-900
+                                text-sm text-slate-700 dark:text-slate-200
+                                py-2 px-3
+                                focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                focus:outline-none"
+                            type="time" value="17:00" />
+                            <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                            </button>
+                        </div>
+
+                        <button class="text-xs font-medium text-gray-500 hover:text-brand-600 dark:hover:text-brand-300 hover:cursor-pointer flex items-center gap-1 ml-2">
+                            <span class="material-symbols-outlined">add</span> Add Break
+                        </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Tuesday -->
+                <div x-data="{ activeOnTuesday: true }" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center py-2 border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                    <div class="w-32 flex items-center gap-3">
+                        <label
+                          for="toggleTuesday"
+                          class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
+                        >
+                          <div class="relative">
+                            <input
+                              type="checkbox"
+                              id="toggleTuesday"
+                              class="sr-only"
+                              @change="activeOnTuesday = !activeOnTuesday"
+                            />
+                            <div
+                              class="block h-6 w-11 rounded-full"
+                              :class="activeOnTuesday ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                            ></div>
+                            <div
+                              :class="activeOnTuesday ? 'translate-x-full': 'translate-x-0'"
+                              class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
+                            ></div>
+                          </div>
+
+                          Tuesday
+                        </label>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-2">
+                        <div x-show="!activeOnTuesday" class="text-slate-400 text-sm py-2 px-3">
+                            Closed
+                        </div>
+                        <div x-show="activeOnTuesday" class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="09:00" />
+                                <span class="text-slate-400">-</span>
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="17:00" />
+                                <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+
+                            <button class="text-xs font-medium text-gray-500 hover:text-brand-600 dark:hover:text-brand-300 hover:cursor-pointer flex items-center gap-1 ml-2">
+                                <span class="material-symbols-outlined">add</span> Add Break
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wednesday -->
+                <div x-data="{ activeOnWednesday: true }" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center py-2 border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                    <div class="w-32 flex items-center gap-3">
+                        <label
+                          for="toggleWednesday"
+                          class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
+                        >
+                          <div class="relative">
+                            <input
+                              type="checkbox"
+                              id="toggleWednesday"
+                              class="sr-only"
+                              @change="activeOnWednesday = !activeOnWednesday"
+                            />
+                            <div
+                              class="block h-6 w-11 rounded-full"
+                              :class="activeOnWednesday ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                            ></div>
+                            <div
+                              :class="activeOnWednesday ? 'translate-x-full': 'translate-x-0'"
+                              class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
+                            ></div>
+                          </div>
+
+                          Wednesday
+                        </label>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-2">
+                        <div x-show="!activeOnWednesday" class="text-slate-400 text-sm py-2 px-3">
+                            Closed
+                        </div>
+                        <div x-show="activeOnWednesday" class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="09:00" />
+                                <span class="text-slate-400">-</span>
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="17:00" />
+                                <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+
+                            <button class="text-xs font-medium text-gray-500 hover:text-brand-600 dark:hover:text-brand-300 hover:cursor-pointer flex items-center gap-1 ml-2">
+                                <span class="material-symbols-outlined">add</span> Add Break
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thursday -->
+                <div x-data="{ activeOnThursday: true }" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center py-2 border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                    <div class="w-32 flex items-center gap-3">
+                        <label
+                          for="toggleThursday"
+                          class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
+                        >
+                          <div class="relative">
+                            <input
+                              type="checkbox"
+                              id="toggleThursday"
+                              class="sr-only"
+                              @change="activeOnTuesday = !activeOnThursday"
+                            />
+                            <div
+                              class="block h-6 w-11 rounded-full"
+                              :class="activeOnThursday ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                            ></div>
+                            <div
+                              :class="activeOnThursday ? 'translate-x-full': 'translate-x-0'"
+                              class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
+                            ></div>
+                          </div>
+
+                          Thursday
+                        </label>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-2">
+                        <div x-show="!activeOnThursday" class="text-slate-400 text-sm py-2 px-3">
+                            Closed
+                        </div>
+                        <div x-show="activeOnThursday" class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="09:00" />
+                                <span class="text-slate-400">-</span>
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="17:00" />
+                                <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+
+                            <button class="text-xs font-medium text-gray-500 hover:text-brand-600 dark:hover:text-brand-300 hover:cursor-pointer flex items-center gap-1 ml-2">
+                                <span class="material-symbols-outlined">add</span> Add Break
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Friday -->
+                <div x-data="{ activeOnFriday: true }" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center py-2 border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                    <div class="w-32 flex items-center gap-3">
+                        <label
+                          for="toggleFriday"
+                          class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
+                        >
+                          <div class="relative">
+                            <input
+                              type="checkbox"
+                              id="toggleFriday"
+                              class="sr-only"
+                              @change="activeOnFriday = !activeOnFriday"
+                            />
+                            <div
+                              class="block h-6 w-11 rounded-full"
+                              :class="activeOnFriday ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                            ></div>
+                            <div
+                              :class="activeOnFriday ? 'translate-x-full': 'translate-x-0'"
+                              class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
+                            ></div>
+                          </div>
+
+                          Friday
+                        </label>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-2">
+                        <div x-show="!activeOnFriday" class="text-slate-400 text-sm py-2 px-3">
+                            Closed
+                        </div>
+                        <div x-show="activeOnFriday" class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="09:00" />
+                                <span class="text-slate-400">-</span>
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="17:00" />
+                                <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+
+                            <button class="text-xs font-medium text-gray-500 hover:text-brand-600 dark:hover:text-brand-300 hover:cursor-pointer flex items-center gap-1 ml-2">
+                                <span class="material-symbols-outlined">add</span> Add Break
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saturday with breaks -->
+                <div x-data="{ activeOnSaturday: false }" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center py-2 border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                    <div class="w-32 flex items-center gap-3">
+                        <label
+                              for="toggleSaturday"
+                              class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
+                            >
+                              <div class="relative">
+                                <input
+                                  type="checkbox"
+                                  id="toggleSaturday"
+                                  class="sr-only"
+                                  @change="activeOnSaturday = !activeOnSaturday"
+                                />
+                                <div
+                                  class="block h-6 w-11 rounded-full"
+                                  :class="activeOnSaturday ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                                ></div>
+                                <div
+                                  :class="activeOnSaturday ? 'translate-x-full': 'translate-x-0'"
+                                  class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
+                                ></div>
+                              </div>
+                            Saturday
+                        </label>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-2">
+                        <div x-show="!activeOnSaturday" class="text-slate-400 text-sm py-2 px-3">
+                            Closed
+                        </div>
+                        <!-- Working Block -->
+                        <div x-show="activeOnSaturday" class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <input 
+                                    class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                        bg-white dark:bg-gray-900
+                                        text-sm text-slate-700 dark:text-slate-200
+                                        py-2 px-3
+                                        focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                        focus:outline-none"
+                                    type="time" value="09:00"
+                                />
+                                <span class="text-slate-400">-</span>
+                                <input 
+                                    class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                        bg-white dark:bg-gray-900
+                                        text-sm text-slate-700 dark:text-slate-200
+                                        py-2 px-3
+                                        focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                        focus:outline-none"
+                                    type="time" value="12:00"
+                                />
+                                <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+                            
+                        </div>
+
+                        <!-- Break Indication / Second Block -->
+                        <div x-show="activeOnSaturday" class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <input 
+                                    class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                        bg-white dark:bg-gray-900
+                                        text-sm text-slate-700 dark:text-slate-200
+                                        py-2 px-3
+                                        focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                        focus:outline-none"
+                                    type="time" value="13:00"
+                                />
+                                <span class="text-slate-400">-</span>
+                                <input 
+                                    class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                        bg-white dark:bg-gray-900
+                                        text-sm text-slate-700 dark:text-slate-200
+                                        py-2 px-3
+                                        focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                        focus:outline-none"
+                                    type="time" value="17:00"
+                                />
+                                <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+                            <button class="text-xs font-medium text-gray-500 hover:text-brand-600 dark:hover:text-brand-300 hover:cursor-pointer flex items-center gap-1 ml-2">
+                                <span class="material-symbols-outlined">add</span> Add Break
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sunday -->
+                <div x-data="{ activeOnSunday: false }" class="flex flex-col sm:flex-row gap-4 items-start sm:items-center py-2 border-b border-slate-50 dark:border-slate-700/50 last:border-0">
+                    <!-- Day + Toggle -->
+                    <div class="w-32 flex items-center gap-3">
+                        <label
+                          for="toggleSunday"
+                          class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400"
+                        >
+                          <div class="relative">
+                            <input
+                              type="checkbox"
+                              id="toggleSunday"
+                              class="sr-only"
+                              @change="activeOnSunday = !activeOnSunday"
+                            />
+                            <div
+                              class="block h-6 w-11 rounded-full"
+                              :class="activeOnSunday ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"
+                            ></div>
+                            <div
+                              :class="activeOnSunday ? 'translate-x-full': 'translate-x-0'"
+                              class="shadow-theme-sm absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white duration-300 ease-linear"
+                            ></div>
+                          </div>
+
+                          Sunday
+                        </label>
+                    </div>
+
+                    <!-- Time Inputs / Closed Text -->
+                    <div class="flex-1 flex flex-col gap-2">
+
+                        <!-- Closed text when toggle is OFF -->
+                        <div x-show="!activeOnSunday" class="text-slate-400 text-sm py-2 px-3">
+                        Closed
+                        </div>
+
+                        <!-- Time Inputs + Buttons when toggle is ON -->
+                        <div x-show="activeOnSunday" class="flex flex-wrap items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="09:00" />
+                                <span class="text-slate-400">-</span>
+                                <input 
+                                class="w-[110px] rounded-lg border border-slate-300 dark:border-slate-600
+                                    bg-white dark:bg-gray-900
+                                    text-sm text-slate-700 dark:text-slate-200
+                                    py-2 px-3
+                                    focus:border-success-500 focus:ring-1 focus:ring-success-500/20
+                                    focus:outline-none"
+                                type="time" value="17:00" />
+                                <button class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                                </button>
+                            </div>
+                            <button class="text-xs font-medium text-gray-500 hover:text-brand-600 dark:hover:text-brand-300 hover:cursor-pointer flex items-center gap-1 ml-2">
+                                <span class="material-symbols-outlined">add</span> Add Break
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="space-y-6">
+        <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="px-5 py-4 sm:px-6 sm:py-5 flex justify-between items-center">
+                <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                    Client Preview
+                </h3>
+                <span class="px-2 py-0.5 rounded text-xs font-bold bg-success-100 text-success-500 dark:bg-success-800/30 dark:text-success-400 uppercase tracking-wide">Live</span>
+            </div>
+            <div class="p-6 flex flex-col gap-4 border-t border-gray-100">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                                            <img alt="User avatar" class="w-full h-full object-cover" data-alt="User profile picture" src="{% static 'images/user/user-05.jpg' %}" />
+                                        </div>
+                                        <div>
+                                            <p class="text-base font-bold text-gray-700 dark:text-white">{{ user.full_name|default:"alex Morgan"|title }}</p>
+                                            <p class="text-xs text-gray-500">Business Consultation</p>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 bg-brand-500/5 rounded-lg border border-brand-500/10">
+                                        <p class="text-xs font-semibold text-brand-500 mb-2">October 24, 2025</p>
+                                        <div class="flex flex-col gap-2">
+                                            <div class="flex gap-2">
+                                                <button class="flex-1 py-1.5 text-xs font-medium rounded border border-slate-200 bg-white text-slate-300 cursor-not-allowed">09:00</button>
+                                                <button class="flex-1 py-1.5 text-xs font-medium rounded border border-slate-200 bg-white text-slate-300 cursor-not-allowed">09:30</button>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <button class="flex-1 py-1.5 text-xs font-medium rounded border border-brand-400 bg-brand-500 text-white shadow-sm shadow-brand-600/30">10:00</button>
+                                                <button class="flex-1 py-1.5 text-xs font-medium rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary hover:text-primary transition-colors">10:30</button>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <button class="flex-1 py-1.5 text-xs font-medium rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary hover:text-primary transition-colors">11:00</button>
+                                                <button class="flex-1 py-1.5 text-xs font-medium rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-primary hover:text-primary transition-colors">11:30</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-xs text-slate-400">This is how availability appears to your clients.</p>
+                                    </div>
+                                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

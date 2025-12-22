@@ -47,5 +47,10 @@ class NotificationsURLNames:
     
     
 class BusinessURLS:
+    VIEW_BUSINESS_PAGE = "view_business_page"
     BUSINESS_INFO = "business_info"
     SERVICES = "business_services"
+    SCHEDULE = "business_schedule"
+    REVIEWS = "reviews"
+    
+# xl:sticky xl:top-6  

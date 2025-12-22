@@ -66,7 +66,7 @@
       
       <li>
          <a
-            href="#"
+            href="{% url BIZ_URLS.REVIEWS %}"
             @click="selected = (selected === 'favourites' ? '':'favourites')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'favourites') && (page === 'favourites') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -87,7 +87,7 @@
       </li>
       <li>
          <a
-            href="#"
+            href="{% url 'biz-marketing' %}"
             @click="selected = (selected === 'marketing' ? '':'marketing')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'marketing') && (page === 'marketing') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -107,7 +107,7 @@
       </li>
       <li>
          <a
-            href="#"
+            href="{% url 'biz-invoice' %}"
             @click="selected = (selected === 'invoice' ? '':'invoice')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'invoice') && (page === 'invoice') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -150,7 +150,7 @@
 
 <li>
 	<a
-		href="billing.html#"
+		href=""
 		@click.prevent="selected = (selected === 'biz-settings' ? '':'biz-settings')"
 		class="menu-item group"
 		:class=" 
@@ -165,7 +165,7 @@
 		page === 'biz-policies' || 
 		page === 'biz-integrations' || 
 		page === 'danger-zone') ? 'menu-item-active' : 'menu-item-inactive'"
-		>
+	>
 		<svg
 			class="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
 			width="24"
@@ -242,7 +242,7 @@
 			</li>
 			<li>
 				<a
-					href="#"
+					href="{% url BIZ_URLS.SCHEDULE %}"
 					class="menu-dropdown-item group text-gray-500"
 					:class="page === 'biz-schedule' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
 					>
@@ -300,7 +300,7 @@
 					:class="page === 'domain-and-branding' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
 					>
                <span class="material-symbols-outlined">
-                  http
+                  globe
                </span>
 				   Domain & Branding
 				</a>
