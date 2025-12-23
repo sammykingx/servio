@@ -5,6 +5,7 @@ from template_map.accounts import Accounts
 from template_map.reviews import Reviews
 from template_map.invoice import Invoices
 from template_map.marketing import Marketing
+from template_map.payments import Payments
 from . import views
 
 
@@ -42,14 +43,26 @@ urlpatterns = [
         TemplateView.as_view(template_name=Reviews.BUSINESS_REVIEWS),
         name=BusinessURLS.REVIEWS
     ),
+    # path(
+    #     "<slug:slug>/",
+    #     TemplateView.as_view(template_name=Accounts.Business.BUSINESS_PAGE),
+    #     name=BusinessURLS.VIEW_BUSINESS_PAGE,
+        
+    # ),
     path(
-        "marketing", TemplateView.as_view(template_name=Marketing.SUMMARY),
+        "marketing/", TemplateView.as_view(template_name=Marketing.SUMMARY),
         name="biz-marketing"
     ),
-    path("invoice", TemplateView.as_view(template_name=Invoices.SUMMARY),
+    path("invoice/", TemplateView.as_view(template_name=Invoices.SUMMARY),
          name="biz-invoice",
     ),
-    path("create-invoice", TemplateView.as_view(template_name=Invoices.CREATE_INVOICE),
+    path("create-invoice/", TemplateView.as_view(template_name=Invoices.CREATE_INVOICE),
          name="create-invoice",
+    ),
+    path("revenue/", TemplateView.as_view(template_name=Payments.SUMMARY),
+         name="revenue",
+    ),
+    path("booking-rules/", TemplateView.as_view(template_name=Accounts.Business.BUSINESS_BOOKING_RULE),
+         name="booking-rules",
     ),
 ]

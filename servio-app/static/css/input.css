@@ -192,7 +192,7 @@
 }
 
 @utility menu-dropdown-badge {
-  @apply text-brand-500 dark:text-brand-400 block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase;
+  @apply text-brand-500 dark:text-brand-200 block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase;
 }
 
 @utility menu-dropdown-badge-active {

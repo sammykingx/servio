@@ -44,7 +44,7 @@
       </li>
       <li>
          <a
-            href="#"
+            href="{% url 'revenue' %}"
             @click="selected = (selected === 'revenue' ? '':'revenue')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'revenue') && (page === 'revenue') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -255,15 +255,16 @@
 				   Availability Settings
 				</a>
 			</li>
-			<li>
+         <li>
 				<a
-					href="#"
+					href="{% url 'booking-rules' %}"
 					class="menu-dropdown-item group text-gray-500"
-               :class="(selected === 'biz-settings') && (page === 'biz-booking-rules') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
-				>
+					:class="page === 'biz-schedule' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+					>
                <span 
                   class="material-symbols-outlined"
-                  :class="(selected === 'biz-settings') && (page === 'biz-booking-rules') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'">
+                  :class="(selected === 'biz-settings') && (page === 'biz-booking-rules') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+               >
                   event_repeat
                </span>
 				   Booking Rules

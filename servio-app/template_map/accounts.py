@@ -68,6 +68,7 @@ class Accounts:
         BUSINESS_PAGE = f"{__SUB_FOLDER}/business-page.html"
         BUSINESS_SERVICES = F"{__SUB_FOLDER}/business-services.html"
         BUSINESS_SCHEDULE = f"{__SUB_FOLDER}/availability.html"
+        BUSINESS_BOOKING_RULE = f"{__SUB_FOLDER}/booking-rules.html"
         
 
     ACCOUNT_PROFILE = _BASE_FOLDER.base_folder_files("profile.html")
