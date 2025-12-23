@@ -6,6 +6,7 @@ from template_map.reviews import Reviews
 from template_map.invoice import Invoices
 from template_map.marketing import Marketing
 from template_map.payments import Payments
+from template_map.collaboration import Collabs
 from . import views
 
 
@@ -64,5 +65,14 @@ urlpatterns = [
     ),
     path("booking-rules/", TemplateView.as_view(template_name=Accounts.Business.BUSINESS_BOOKING_RULE),
          name="booking-rules",
+    ),
+    path("gigs/", TemplateView.as_view(template_name=Collabs.LIST),
+         name="gigs_and_project",
+    ),
+    path("gigs/info", TemplateView.as_view(template_name=Collabs.DETAILS),
+         name="gigs_and_project_info",
+    ),
+    path("create-gigs", TemplateView.as_view(template_name=Collabs.CREATE),
+         name="create-gigs",
     ),
 ]

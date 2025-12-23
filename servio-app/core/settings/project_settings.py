@@ -14,6 +14,7 @@ LOCAL_APPS = [
     "notifications.apps.NotificationsConfig",
     "business_accounts.apps.BusinessAccountsConfig",
     "business_services.apps.BusinessServicesConfig",
+    "collaboration.apps.CollaborationConfig",
 ]
 
 LOCAL_MIDDLEWARES = []

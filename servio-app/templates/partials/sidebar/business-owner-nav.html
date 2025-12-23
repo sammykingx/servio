@@ -44,6 +44,27 @@
       </li>
       <li>
          <a
+            href="{% url 'gigs_and_project' %}"
+            @click="selected = (selected === 'gig_and_project' ? '':'gig_and_project')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+            <span 
+               class="material-symbols-outlined"
+               :class="(selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+            >
+               partner_exchange
+            </span>
+            <span
+               class="menu-item-text"
+               :class="sidebarToggle ? 'xl:hidden' : ''"
+            >
+               Gigs & Project
+            </span>
+         </a>
+      </li>
+      <li>
+         <a
             href="{% url 'revenue' %}"
             @click="selected = (selected === 'revenue' ? '':'revenue')"
             class="menu-item group text-gray-500"
