@@ -36,7 +36,7 @@ class BusinessAccount(models.Model):
     tagline = models.CharField(max_length=255, blank=True)
     business_email = models.EmailField()
     business_phone = models.CharField(max_length=30)
-
+    industry = models.CharField(max_length=70, null=True)
     niche = models.CharField(blank=True, null=True)
     bio = models.TextField(blank=True)
 

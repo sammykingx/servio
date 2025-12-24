@@ -7,7 +7,7 @@ from template_map.invoice import Invoices
 from template_map.marketing import Marketing
 from template_map.payments import Payments
 from template_map.collaboration import Collabs
-from . import views
+from .views import register
 
 
 urlpatterns = [
@@ -19,9 +19,14 @@ urlpatterns = [
         )
     ),
     path(
-        "info",
-        views.BusinessInfoView.as_view(),
+        "info/",
+        register.BusinessInfoView.as_view(),
         name=BusinessURLS.BUSINESS_INFO,
+    ),
+    path(
+        "register-business/",
+        register.RegisterBusinessAccount.as_view(),
+        name=BusinessURLS.REGISTER_BUSINESS,
     ),
      path(
         "business-page-view/",

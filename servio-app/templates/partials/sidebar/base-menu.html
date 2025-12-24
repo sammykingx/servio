@@ -12,11 +12,11 @@
 		<a href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}">
 
 			<!-- FULL LOGO (show when sidebar is active on ALL screen sizes) -->
-			<span class="logo"
+			<span class="logo object-cover"
 				:class="sidebarToggle ? 'block' : 'hidden xl:block'">
 				<img class="dark:hidden"
 					src="{% static 'images/logo/sidebar-logo-light.png' %}" alt="Logo" />
-				<img class="hidden dark:block"
+				<img class="hidden dark:block object-center"
 					src="{% static 'images/logo/sidebar-logo-dark.png' %}" alt="Logo" />
 			</span>
 
