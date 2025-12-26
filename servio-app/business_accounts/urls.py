@@ -14,14 +14,14 @@ urlpatterns = [
     path(
         "",
         RedirectView.as_view(
-            url=reverse_lazy(BusinessURLS.BUSINESS_INFO),
+            url=reverse_lazy(BusinessURLS.BUSINESS_ONBOARDING),
             permanent=True,
         )
     ),
     path(
-        "info/",
-        register.BusinessInfoView.as_view(),
-        name=BusinessURLS.BUSINESS_INFO,
+        "business-onboarding/",
+        register.RenderBusinessRegistrationView.as_view(),
+        name=BusinessURLS.BUSINESS_ONBOARDING,
     ),
     path(
         "register-business/",

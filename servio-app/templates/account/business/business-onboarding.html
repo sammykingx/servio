@@ -38,7 +38,6 @@
 		</div>
 	</div>
 {% endif %}
-<p>{{ user.business_account.verified }}</p>
 <!-- Business Banner -->
 <!-- <div class="profiel-wrap flex px-[35px] pb-10 md:pt-[84px] pt-10 rounded-xl mb-6
 	bg-white ring-1 ring-slate-200/70 shadow-sm
@@ -121,11 +120,11 @@
 				</div>
 				<div class="flex-1">
 					<div class="pl-1.5 text-xs font-light text-gray-500">
-						ID: XXXXXXXXXXXXXXXX
+						ID: {{ user.business_account.business_id|default:'XXXXXXXXXXXXXXXX' }}
 					</div>
-					<div x-text="capitalizeWords(businessData.name || 'your business name')" class="text-2xl font-medium text-gray-900 dark:text-gray-300 mb-[3px]"></div>
+					<div x-text="capitalizeWords(businessData.name || '{{ user.business_account.business_name|default:'your business name' }}')" class="text-2xl font-medium text-gray-900 dark:text-gray-300 mb-[3px]"></div>
 					<div 
-						x-text="`${capitalizeWords(businessData.address.city || 'city')}, ${capitalizeWords(businessData.address.state || 'state')}`"
+						x-text="`${capitalizeWords(businessData.address.city || '{{ work_address.city|default:'city'}}')}, ${capitalizeWords(businessData.address.state || '{{ work_address.province|default:'state' }}')}`"
 						class="text-sm font-light text-gray-600 dark:text-slate-400"
 					></div>
 
@@ -157,15 +156,36 @@
 				>
 				<div class="px-5 py-4 sm:px-6 sm:py-5">
 					<h3
-						class="text-base font-medium text-gray-800 dark:text-gray-300"
+						class="text-base font-medium text-gray-800 dark:text-gray-300 mb-2"
 						>
 						Business Details
 					</h3>
+					{% if user.business_account %}
+						<p class="text-xs text-gray-400">
+							This business account is already registered and cannot be edited.
+						</p>
+					{% endif %}
 				</div>
 				<div
 					class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800"
 				>
-					<form>
+					<form
+						x-init="
+							{% if user.business_account %}
+								businessData.name = '{{ user.business_account.business_name|escapejs }}'
+								businessData.tagline = '{{ user.business_account.tagline|escapejs }}'
+								businessData.email = '{{ user.business_account.business_email|escapejs }}'
+								businessData.phone = '{{ user.business_account.business_phone|escapejs }}'
+								businessData.industry = '{{ user.business_account.industry|escapejs }}'
+								businessData.niche = '{{ user.business_account.niche|escapejs }}'
+								businessData.bio = '{{ user.business_account.bio|escapejs }}'
+							{% endif %}
+						"
+						class="
+							{% if user.business_account %}
+								pointer-events-none cursor-not-allowed opacity-60
+							{% endif %}"
+					>
 						{% csrf_token %}
 						<div class="-mx-2.5 flex flex-wrap gap-y-5">
 							<div class="w-full px-2.5 xl:w-1/2">
@@ -179,7 +199,7 @@
 									x-model="businessData.name"
 									placeholder="Registered Business Name"
 									class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-									/>
+								/>
 							</div>
 							<div class="w-full px-2.5 xl:w-1/2">
 								<label
@@ -220,101 +240,130 @@
 									class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 									/>
 							</div>
-							<div x-data="industrySelector(businessData)" class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-								<div class="w-full px-2.5">
+							{% if user.business_account %}
+								<div class="w-full px-2.5 xl:w-1/2">
 									<label
 										class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
 										>
 									Industry <span class="text-error-500">*</span>
 									</label>
-									<div
-										x-data="{ isOptionSelected: false }"
-										class="relative z-20 bg-transparent"
-									>
-										<select
-											name="industry"
-											x-model="businessData.industry"
-											class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-										>
-											<option value="">Choose Industry</option>
-	
-											<template x-for="industry in industries" :key="industry.name">
-												<option :value="industry.name" x-text="industry.name"></option>
-											</template>
-										</select>
-										<span
-											class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400"
-											>
-											<svg
-												class="stroke-current"
-												width="20"
-												height="20"
-												viewBox="0 0 20 20"
-												fill="none"
-												xmlns="http://www.w3.org/2000/svg"
-												>
-												<path
-													d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
-													stroke=""
-													stroke-width="1.5"
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													/>
-											</svg>
-										</span>
-									</div>
+									<input
+										type="email"
+										x-model="businessData.industry"
+										placeholder="Registered Business Name"
+										class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+										/>
 								</div>
-								<div class="w-full px-2.5">
+								<div class="w-full px-2.5 xl:w-1/2">
 									<label
 										class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
 										>
 									Niche <span class="text-error-500">*</span>
 									</label>
-									<div
-										x-data="{ isOptionSelected: false }"
-										class="relative z-20 bg-transparent"
-									>
-										<select
-											name="niche"
-											x-model="businessData.niche"
-											:disabled="!businessData.industry"
-											class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-											:class="isOptionSelected && 'text-gray-500 dark:text-gray-400'"
-											@change="isOptionSelected = true"
+									<input
+										type="text"
+										x-model="businessData.niche"
+										placeholder="+1 (431)-345-789"
+										class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+										/>
+								</div>
+							{% else %}
+								<div x-data="industrySelector(businessData)" class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+									<div class="w-full px-2.5">
+										<label
+											class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+											>
+										Industry <span class="text-error-500">*</span>
+										</label>
+										<div
+											x-data="{ isOptionSelected: false }"
+											class="relative z-20 bg-transparent"
 										>
-											<option
-												value=""
-												class="text-gray-400 dark:bg-gray-900 dark:text-gray-400"
+											<select
+												name="industry"
+												x-model="businessData.industry"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
 											>
-												Choose Niche
-											</option>
-											<template x-for="sub in subCategories" :key="sub">
-												<option :value="sub" x-text="sub"></option>
-											</template>
-										</select>
-										<span
-											class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400"
-											>
-											<svg
-												class="stroke-current"
-												width="20"
-												height="20"
-												viewBox="0 0 20 20"
-												fill="none"
-												xmlns="http://www.w3.org/2000/svg"
+												<option value="">Choose Industry</option>
+		
+												<template x-for="industry in industries" :key="industry.name">
+													<option :value="industry.name" x-text="industry.name"></option>
+												</template>
+											</select>
+											<span
+												class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400"
 												>
-												<path
-													d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
-													stroke=""
-													stroke-width="1.5"
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													/>
-											</svg>
-										</span>
+												<svg
+													class="stroke-current"
+													width="20"
+													height="20"
+													viewBox="0 0 20 20"
+													fill="none"
+													xmlns="http://www.w3.org/2000/svg"
+													>
+													<path
+														d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
+														stroke=""
+														stroke-width="1.5"
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														/>
+												</svg>
+											</span>
+										</div>
+									</div>
+									<div class="w-full px-2.5">
+										<label
+											class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+											>
+										Niche <span class="text-error-500">*</span>
+										</label>
+										<div
+											x-data="{ isOptionSelected: false }"
+											class="relative z-20 bg-transparent"
+										>
+											<select
+												name="niche"
+												x-model="businessData.niche"
+												:disabled="!businessData.industry"
+												class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300 dark:focus:border-warning-200 focus:ring-success-500/10 dark:focus:ring-warning-300/10 z-20 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+												:class="isOptionSelected && 'text-gray-500 dark:text-gray-400'"
+												@change="isOptionSelected = true"
+											>
+												<option
+													value=""
+													class="text-gray-400 dark:bg-gray-900 dark:text-gray-400"
+												>
+													Choose Niche
+												</option>
+												<template x-for="sub in subCategories" :key="sub">
+													<option :value="sub" x-text="sub"></option>
+												</template>
+											</select>
+											<span
+												class="absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400"
+												>
+												<svg
+													class="stroke-current"
+													width="20"
+													height="20"
+													viewBox="0 0 20 20"
+													fill="none"
+													xmlns="http://www.w3.org/2000/svg"
+													>
+													<path
+														d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
+														stroke=""
+														stroke-width="1.5"
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														/>
+												</svg>
+											</span>
+										</div>
 									</div>
 								</div>
-							</div>
+							{% endif %}
 							<div class="w-full px-2.5">
 								<label
 									class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
@@ -349,7 +398,22 @@
 				<div
 					class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800"
 					>
-					<form>
+					<form
+						x-init="
+							{% if user.business_account %}
+								businessData.address.street = '{{ work_address.street|title|escapejs }}'
+								businessData.address.streetTwo = '{{ work_address.street_line_2|default:'N/A'|title|escapejs }}'
+								businessData.address.city = '{{ work_address.city|title|escapejs }}'
+								businessData.address.state = '{{ work_address.province|title|escapejs }}'
+								businessData.address.postalCode = '{{ work_address.postal_code|upper|escapejs }}'
+								businessData.address.country = '{{ work_address.country|title|escapejs }}'
+							{% endif %}
+						"
+						class="
+							{% if user.business_account %}
+								pointer-events-none cursor-not-allowed opacity-60
+							{% endif %}"
+					>
 						<div class="-mx-2.5 flex flex-wrap gap-y-5">
 							<div class="w-full px-2.5">
 								<label
@@ -639,31 +703,54 @@
 					<h3 class="text-base font-medium text-gray-800 dark:text-gray-300">Verification</h3>
 					<p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Upload documents to get the "Verified Business" badge.</p>
 					<div class="flex flex-col gap-3">
-						<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-							<div class="flex items-center gap-3">
-								<span class="material-symbols-outlined text-slate-400">assignment_add</span>
-								<div class="flex flex-col">
-									<span class="text-sm font-medium text-slate-900 dark:text-white">Business Registered</span>
-									<span class="text-xs text-green-600 font-medium">Registered<span>
+						{% if user.business_account %}
+							<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+								<div class="flex items-center gap-3">
+									<span class="material-symbols-outlined text-slate-400">assignment_add</span>
+									<div class="flex flex-col">
+										<span class="text-sm font-medium text-slate-800 dark:text-white">Business Information</span>
+										<span class="text-xs text-green-600 font-medium">Completed<span>
+									</div>
 								</div>
+								<span class="material-symbols-outlined text-green-500">check_circle</span>
 							</div>
-							<span class="material-symbols-outlined text-green-500">check_circle</span>
-						</div>
-						<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-							<div class="flex items-center gap-3">
-								<span class="material-symbols-outlined text-slate-400">description</span>
-								<div class="flex flex-col">
-									<span class="text-sm font-medium text-slate-900 dark:text-white">Business License</span>
-									<span class="text-xs text-green-600 font-medium">Verified</span>
+							<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+								<div class="flex items-center gap-3">
+									<span class="material-symbols-outlined text-slate-400">description</span>
+									<div class="flex flex-col">
+										<span class="text-sm font-medium text-slate-800 dark:text-white">Business Address</span>
+										<span class="text-xs text-green-600 font-medium">Completed</span>
+									</div>
 								</div>
+								<span class="material-symbols-outlined text-green-500">check_circle</span>
 							</div>
-							<span class="material-symbols-outlined text-green-500">check_circle</span>
-						</div>
+						{% else %}
+							<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+								<div class="flex items-center gap-3">
+									<span class="material-symbols-outlined text-slate-400">assignment_add</span>
+									<div class="flex flex-col">
+										<span class="text-sm font-medium text-slate-700 dark:text-white">Business Information</span>
+										<span class="text-xs text-slate-400">Pending<span>
+									</div>
+								</div>
+								<span class="material-symbols-outlined text-slate-300">hourglass_pause</span>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+								<div class="flex items-center gap-3">
+									<span class="material-symbols-outlined text-slate-400">description</span>
+									<div class="flex flex-col">
+										<span class="text-sm font-medium text-slate-700 dark:text-white">Business Address</span>
+										<span class="text-xs text-slate-400">Pending</span>
+									</div>
+								</div>
+								<span class="material-symbols-outlined text-slate-300">hourglass_pause</span>
+							</div>
+						{% endif %}
 						<div class="flex items-center justify-between p-3 rounded-lg border border-dashed border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer group">
 							<div class="flex items-center gap-3">
 								<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">upload_file</span>
 								<div class="flex flex-col">
-									<span class="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-primary">Upload Insurance</span>
+									<span class="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-primary">Upload Registration Documents</span>
 									<span class="text-xs text-slate-400">PDF or JPG</span>
 								</div>
 							</div>

@@ -63,8 +63,8 @@ class Accounts:
         
     class Business:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("business")
-        
-        BUSINESS_INFO = f"{__SUB_FOLDER}/business-info.html"
+
+        BUSINESS_ONBOARDING = f"{__SUB_FOLDER}/business-onboarding.html"
         BUSINESS_PAGE = f"{__SUB_FOLDER}/business-page.html"
         BUSINESS_SERVICES = F"{__SUB_FOLDER}/business-services.html"
         BUSINESS_SCHEDULE = f"{__SUB_FOLDER}/availability.html"

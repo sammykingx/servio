@@ -49,7 +49,7 @@ class NotificationsURLNames:
 class BusinessURLS:
     VIEW_BUSINESS_PAGE = "view_business_page"
     REGISTER_BUSINESS = "register_business"
-    BUSINESS_INFO = "business_info"
+    BUSINESS_ONBOARDING = "business_onboarding"
     SERVICES = "business_services"
     SCHEDULE = "business_schedule"
     REVIEWS = "reviews"

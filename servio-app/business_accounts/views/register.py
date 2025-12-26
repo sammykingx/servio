@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.views.generic.base import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.repositories.social_links import SocialLinkRepository
@@ -9,7 +8,7 @@ from template_map.accounts import Accounts
 import json
 
 
-class BusinessInfoView(LoginRequiredMixin, TemplateView):
+class RenderBusinessRegistrationView(LoginRequiredMixin, TemplateView):
     """
     View to display the user's business settings page.
     """
@@ -17,11 +16,15 @@ class BusinessInfoView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         from constants import biz_categories
+        from accounts.models.address import AddressType
         context["industry_obj"] = biz_categories.get_industry_obj()
-        
+        context["work_address"] = self.request.user.addresses.filter(
+            label=AddressType.WORK,
+            is_business_address=True
+        ).first()
         return context
 
-    template_name = Accounts.Business.BUSINESS_INFO
+    template_name = Accounts.Business.BUSINESS_ONBOARDING
     
     
 class RegisterBusinessAccount(LoginRequiredMixin, View):
@@ -67,7 +70,6 @@ class RegisterBusinessAccount(LoginRequiredMixin, View):
         business_acct = BusinessAccountsRepository.create_business_account(
             user, address_obj, business_data
         )
-        print(type(business_acct))
         if socials_data:
             SocialLinkRepository.create_or_update_socials(
                 socials_data,
