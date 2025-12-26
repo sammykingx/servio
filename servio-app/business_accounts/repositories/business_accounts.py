@@ -1,11 +1,21 @@
 from django.core.exceptions import ValidationError
 from django.apps import apps
+from dataclasses import dataclass
+from typing import TypeVar
+
+BusinessAccount = TypeVar("BusinessAccount")
+
+
+@dataclass(frozen=True)
+class CreateResult:
+    instance: BusinessAccount
+    created: bool
 
 class BusinessAccountsRepository:
     BusinessAccounts = apps.get_model("business_accounts", "BusinessAccount")
     
     @classmethod
-    def create_business_account(cls, user, address_obj:object, business_data:dict) -> object:
+    def create_business_account(cls, user, address_obj:object, business_data:dict) -> CreateResult:
         allowed_keys = {
             "name", "email", "phone", "tagline",
             "industry", "niche", "bio",
@@ -13,7 +23,7 @@ class BusinessAccountsRepository:
         
         if not allowed_keys.issubset(business_data.keys()):
             raise ValidationError("Missing required fields for BusinessAccount Model")
-        
+
         business_acct, created = cls.BusinessAccounts.objects.get_or_create(
             owner=user,
             defaults={
@@ -27,5 +37,4 @@ class BusinessAccountsRepository:
                 "address": address_obj,
             },
         )
-
-        return business_acct, created
+        return CreateResult(instance=business_acct, created=created)

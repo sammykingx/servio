@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 
 class Platform(models.TextChoices):
@@ -23,6 +24,8 @@ class SocialLink(models.Model):
         to_field="email",
         on_delete=models.CASCADE,
         related_name="social_links",
+        blank=True,
+        null=True,
     )
     business = models.ForeignKey(
         "business_accounts.BusinessAccount",
@@ -54,3 +57,24 @@ class SocialLink(models.Model):
                 name="social_link_scope_check",
             ),
         ]
+        
+    def clean(self):
+        if not self.user and not self.business:
+            raise ValidationError(
+                "Either 'user' or 'business' must be set."
+            )
+
+        if self.user and self.business:
+            raise ValidationError(
+                "Only one of 'user' or 'business' may be set."
+            )
+
+        if not self.platform:
+            raise ValidationError("Platform is required.")
+
+        if not self.url:
+            raise ValidationError("URL is required.")
+    
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)

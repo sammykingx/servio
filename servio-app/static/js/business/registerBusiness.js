@@ -75,8 +75,13 @@ async function saveBusiness(businessState) {
         );
         return
     }
+    data = await response.json();
+    if (data.error) {
+        showToast(data.error, "error", "Registration Error");
+        return
+    }
 
-    showToast("Business account created successfully", "success", "Created Business Account");
+    showToast(data.message, "success", "Created Business Account");
 };
 
 function validateFormData(businessData) {

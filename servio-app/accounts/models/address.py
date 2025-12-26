@@ -20,7 +20,7 @@ class Address(models.Model):
         related_name="addresses",
     )
     street = models.CharField(max_length=60)
-    street_line_2 = models.CharField(max_length=60, blank=True)
+    street_line_2 = models.CharField(max_length=60, blank=True, null=True)
     city = models.CharField(max_length=20)
     province = models.CharField(max_length=20)
     country = models.CharField(max_length=70, blank=True)

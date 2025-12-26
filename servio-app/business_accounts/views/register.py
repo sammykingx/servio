@@ -42,7 +42,7 @@ class RegisterBusinessAccount(LoginRequiredMixin, View):
             return JsonResponse({"error": e.message}, status=400)
         except Exception:
             return JsonResponse(
-                {"error": "Something went wrong. Please contact support."},
+                {"error": "Something went wrong. Please contact support team for assistance."},
                 status=500
             )
 
@@ -67,11 +67,12 @@ class RegisterBusinessAccount(LoginRequiredMixin, View):
         business_acct = BusinessAccountsRepository.create_business_account(
             user, address_obj, business_data
         )
-        SocialLinkRepository.create_or_update_socials(
-            socials_data,
-            user=user,
-            business=business_acct
-        )
+        print(type(business_acct))
+        if socials_data:
+            SocialLinkRepository.create_or_update_socials(
+                socials_data,
+                business=business_acct.instance
+            )
 
         return business_acct
     
@@ -119,16 +120,20 @@ class RegisterBusinessAccount(LoginRequiredMixin, View):
 
         if existing_address:
             return existing_address
+        try:
+            address = user.addresses.create(
+                street=data.get("street"),
+                street_line_2=data.get("streetTwo"),
+                city=data.get("city"),
+                province=data.get("state"),
+                country=data.get("country"),
+                postal_code=data.get("postalCode"),
+                is_business_address=True,
+                label=AddressType.WORK
+            )
+        except Exception as e:
+            print(e)
+            import traceback
+            traceback.print_exc()
 
-        address = user.addresses.create(
-            street=data.get("street"),
-            street_line_2=data.get("streetTwo"),
-            city=data.get("city"),
-            province=data.get("state"),
-            country=data.get("country"),
-            postal_code=data.get("postalCode"),
-            is_business_address=True,
-            label=AddressType.WORK
-        )
-        
         return address

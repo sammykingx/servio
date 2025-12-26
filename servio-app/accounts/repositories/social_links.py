@@ -36,6 +36,8 @@ class SocialLinkRepository:
         """
         platform_map = dict(Platform.choices)        
         filters = cls.get_filters(user=user, business=business)
+        social_links = []
+        print("creating links")
         for platform_name in platform_map.keys():
             url = socials.get(platform_name, None)
             if url:
@@ -43,6 +45,15 @@ class SocialLinkRepository:
                     **{**filters, "platform": platform_name},
                     defaults={"url": url},
                 )
+                social_links.append(
+                    {
+                        "platform": platform_name,
+                        "url": url,
+                        "created": created
+                    }
+                )
+        print("Done: ", social_links)
+        return social_links
 
     @classmethod
     def delete_business_social(cls, platform, user=None, business=None):
