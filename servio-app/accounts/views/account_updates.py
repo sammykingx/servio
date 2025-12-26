@@ -23,6 +23,7 @@ class UpdateSocialLinksView(LoginRequiredMixin, View):
                     platform=platform_name,
                     defaults={"url": url},
                 )
+
         return JsonResponse(
             {
                 "status": "success",

@@ -1,7 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
 from uuid6 import uuid7
 from nanoid import generate
+from autoslug import AutoSlugField
 
 
 def generate_business_id():
@@ -24,6 +26,8 @@ class BusinessAccount(models.Model):
         max_length=120,
         unique=True,
         db_index=True,
+        null=True,
+        blank=True,
     )
 
     owner = models.OneToOneField(
