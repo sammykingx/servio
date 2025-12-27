@@ -1,3 +1,4 @@
+import profile
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views.generic.base import TemplateView, View
@@ -139,3 +140,43 @@ class RegisterBusinessAccount(LoginRequiredMixin, View):
             traceback.print_exc()
 
         return address
+    
+class UploadBusinessLogoView(LoginRequiredMixin, View):
+    http_method_names = ["post"]
+
+    def post(self, request, *args, **kwargs):
+        business_acct = request.user.business_account
+        uploaded_file = request.FILES.get("logo_image")
+
+        if not business_acct:
+            return JsonResponse({"error": "Business account not found"}, status=404)
+        
+        if not uploaded_file:
+            return JsonResponse({"error": "No file uploaded"}, status=400)
+
+        uploaded_file.name = self.build_filename(business_acct, uploaded_file.name)
+        self.save_logo_img(business_acct, uploaded_file)
+        
+
+        return JsonResponse(
+            {
+                "message": "Business logo updated successfully",
+                "logo_url": business_acct.logo_url.url,
+            }
+        )
+
+    def save_logo_img(self, business_acct, uploaded_file) -> None:
+        if business_acct.logo_url:
+            business_acct.logo_url.delete(save=False)
+
+        business_acct.logo_url = uploaded_file
+        business_acct.save()
+
+        return None
+    
+    def build_filename(self, profile, original_name):
+        import os, nanoid
+        seed = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        ext = os.path.splitext(original_name)[1].lower()
+        
+        return f"biz_img_{nanoid.generate(seed, 13)}{ext}"

@@ -38,7 +38,7 @@ def business_settings_toggle(request) -> HttpResponse:
 
         profile = request.user.profile
         profile.is_business_owner = new_value
-        profile.role = UserRole.PROVIDERS
+        profile.role = UserRole.PROVIDERS if new_value else UserRole.MEMBERS
         profile.save(update_fields=["is_business_owner", "role"])
 
     return HttpResponse(status=200)

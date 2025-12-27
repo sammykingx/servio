@@ -43,6 +43,9 @@ class BusinessAccount(models.Model):
     industry = models.CharField(max_length=70, null=True)
     niche = models.CharField(blank=True, null=True)
     bio = models.TextField(blank=True)
+    logo_url = models.ImageField(
+        upload_to="businesses/logos", null=True, blank=True
+    )
 
     address = models.ForeignKey(
         "accounts.Address",

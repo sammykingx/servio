@@ -37,13 +37,14 @@ class UpdateProfilePictureView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         profile = request.user.profile
-
         uploaded_file = request.FILES.get("profile_image")
 
         if not uploaded_file:
             return JsonResponse({"error": "No file uploaded"}, status=400)
 
+        uploaded_file.name = self.build_filename(profile, uploaded_file.name)
         self.save_profile_img(profile, uploaded_file)
+        
 
         return JsonResponse(
             {
@@ -60,6 +61,13 @@ class UpdateProfilePictureView(LoginRequiredMixin, View):
         profile.save()
 
         return None
+    
+    def build_filename(self, profile, original_name):
+        import os, nanoid
+        seed = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        ext = os.path.splitext(original_name)[1].lower()
+        
+        return f"prf-img_{nanoid.generate(seed, 13)}{ext}"
 
 
 class UpdateAddressView(LoginRequiredMixin, View):

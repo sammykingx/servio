@@ -134,5 +134,3 @@ function formatPhone(number) {
     // fallback: just show digits
     return "+" + digits;
 }
-
-

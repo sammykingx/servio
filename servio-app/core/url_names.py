@@ -50,6 +50,7 @@ class BusinessURLS:
     VIEW_BUSINESS_PAGE = "view_business_page"
     REGISTER_BUSINESS = "register_business"
     BUSINESS_ONBOARDING = "business_onboarding"
+    UPLOAD_BUSINESS_LOGO = "upload_business_logo"
     SERVICES = "business_services"
     SCHEDULE = "business_schedule"
     REVIEWS = "reviews"

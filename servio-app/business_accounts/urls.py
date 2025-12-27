@@ -29,6 +29,11 @@ urlpatterns = [
         name=BusinessURLS.REGISTER_BUSINESS,
     ),
      path(
+        "upload-business-logo/",
+        register.UploadBusinessLogoView.as_view(),
+        name=BusinessURLS.UPLOAD_BUSINESS_LOGO,
+    ),
+     path(
         "business-page-view/",
         TemplateView.as_view(template_name=Accounts.Business.BUSINESS_PAGE),
         name=BusinessURLS.VIEW_BUSINESS_PAGE,
