@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.db.models.signals import post_save
+from django.contrib.auth.models import Group
 from allauth.account.signals import email_confirmed
 from django.dispatch import receiver
 from .models.profile import UserProfile
@@ -18,6 +19,18 @@ def create_profile(sender, instance, created, **kwargs):
             # log for prod, print for dev or short term
             print(e)
             # raise
+            
+
+@receiver(post_save, sender=UserProfile)
+def assign_group_on_profile_save(sender, instance, **kwargs):
+    user = instance.user
+    user.groups.clear()
+
+    try:
+        group = Group.objects.get(name=instance.role)
+        user.groups.add(group)
+    except Group.DoesNotExist:
+        pass
 
 
 @receiver(email_confirmed)

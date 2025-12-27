@@ -7,7 +7,7 @@ from template_map.invoice import Invoices
 from template_map.marketing import Marketing
 from template_map.payments import Payments
 from template_map.collaboration import Collabs
-from .views import register
+from .views import register, business_page
 
 
 urlpatterns = [
@@ -34,8 +34,8 @@ urlpatterns = [
         name=BusinessURLS.UPLOAD_BUSINESS_LOGO,
     ),
      path(
-        "business-page-view/",
-        TemplateView.as_view(template_name=Accounts.Business.BUSINESS_PAGE),
+        "business-page/",
+        business_page.RenderBusinessPageView.as_view(),
         name=BusinessURLS.VIEW_BUSINESS_PAGE,
         
     ),

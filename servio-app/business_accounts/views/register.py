@@ -1,4 +1,3 @@
-import profile
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views.generic.base import TemplateView, View

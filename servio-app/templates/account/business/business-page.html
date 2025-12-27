@@ -88,14 +88,18 @@
 										border-4 border-white
 										shadow-md"
 										data-alt="Landscaping business logo"
-										style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBSf4-3GSgewF_FBWi75hrseUDLwVxLwx2I_QSOA2tK47mb1P68XjuRb1SXvgvfjdr2i7KKH1glkbCdER_5JKqPsTg80BSxmoyIPzNNDmUPcVOB0uSC-oPqIzZeUIoE-_Ydn8FeIOPRGo1-gjLheG4GNy57xCqYLGyRMkW-V6Q8U8dqkl3Oh6k5VQ_fUeQaR7rVz1uIjshxdlWEfB9CFMg1bAvJ35v_nrBe0jfrFocg9Ied_hK5eauca5NRBN5S-ihEOOTC_zSk2RY");'>
+										{% if user.business_account.logo_url %}
+											style='background-image: url("{{ user.business_account.logo_url.url }}");'
+										{% else %}
+											style='background-image: url("https://lh3.googleusercontent.com/a/AGNmyxY5jXKXJ4fKc1bX5lYk3rj3q1cXo3n8eE2Y5Q=s96-c");'
+										{% endif %}>
 									</div>
 								</div>
 								<!-- Text -->
 								<div class="flex flex-col gap-1 min-w-0">
 									<div class="flex items-center gap-2 flex-nowrap">
 										<h1 class="text-slate-900 text-lg md:text-2xl font-bold break-words">
-											Apex Landscaping
+											{{ user.business_account.business_name|default:"Apex Landscaping Solutions"|title }}
 										</h1>
 										<span class="material-symbols-outlined text-emerald-500 text-[20px]"
 											title="Verified Business">
@@ -103,11 +107,11 @@
 										</span>
 									</div>
 									<p class="text-slate-600 text-sm md:text-base break-words">
-										Landscaping &amp; Outdoor Design
+										{{ user.business_account.niche|default:"Landscaping &amp; Outdoor Design"|title}}
 									</p>
 									<p class="text-slate-500 text-xs md:text-sm flex items-center gap-1 break-words">
 										<span class="material-symbols-outlined text-[16px]">location_on</span>
-										San Francisco, CA
+										{{ work_address.city|default:"San Francisco"|title }}, {{ work_address.province|default:"CA"|title }}
 									</p>
 									<div class="flex items-center gap-2 mt-1 flex-wrap">
 										<div class="flex text-[#FFD700]">

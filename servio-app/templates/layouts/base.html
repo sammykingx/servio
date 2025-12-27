@@ -18,92 +18,224 @@
 		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 		<link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
 		{% block custom_page_css %}{% endblock %}
 		<link href="{% static 'css/output.css' %}" rel="stylesheet">
 		<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 		{% htmx_script minified=False %}
 	</head>
 	<body
-		
 		x-data="
-			{ 
-				page: 'base',
-				'loaded': true,
-				'darkMode': false, 
-				'stickyMenu': false, 
-				'sidebarToggle': false, 
-				'scrollTop': false 
-			}"
+		{ 
+		page: 'base',
+		'loaded': true,
+		'darkMode': false, 
+		'stickyMenu': false, 
+		'sidebarToggle': false, 
+		'scrollTop': false 
+		}"
 		x-init="
-			darkMode = JSON.parse(localStorage.getItem('darkMode'));
-			$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+		darkMode = JSON.parse(localStorage.getItem('darkMode'));
+		$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
 		:class="{'dark bg-gray-900': darkMode === true}"
-  	>
-    	<!-- ===== Preloader Start ===== -->
+		>
+		<!-- ===== Preloader Start ===== -->
 		{% include "components/preloader.html" %}
-		
-
-    	<!-- ===== Page Wrapper Start ===== -->
-    	<div class="flex h-screen overflow-hidden">
-      		{% include "partials/sidebar/base-menu.html" %}
-      		
-
-      		<!-- ===== Content Area Start ===== -->
-      		<div
-        		class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto"
-      		>
+		<!-- ===== Page Wrapper Start ===== -->
+		<div class="flex h-screen overflow-hidden">
+			{% include "partials/sidebar/base-menu.html" %}
+			<!-- ===== Content Area Start ===== -->
+			<div
+				class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto"
+				>
 				<!-- Small Device Overlay Start -->
 				{% include "components/overlay.html" %}
-
 				<!-- ===== Header Start ===== -->
 				{% include "partials/header.html" %}
-
 				<!-- ===== Main Content Start ===== -->
 				<main hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
 					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
 						<div 
 							id="center-alert-container" 
-			 				class="fixed top-4 left-1/2 -translate-x-1/2 z-999999
-								w-full max-w-md px-4 space-y-3 pointer-events-none">
+							class="fixed top-4 left-1/2 -translate-x-1/2 z-999999
+							w-full max-w-md px-4 space-y-3 pointer-events-none">
 						</div>
-						{% block content %}
-							{# include "components/breadcrumbs.html" #}
-
-							<div
-								class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
+						{% for message in messages %}
+						<div
+							x-data="{ isVisible: true }"
+							x-init="setTimeout(() => isVisible = false, 5000)"
+							x-show="isVisible"
+							x-transition.opacity.duration.500ms
+							class="rounded-xl border p-4 mb-6 z-999
+							{% if 'info' in message.tags %}
+							border-blue-100 bg-blue-50 dark:border-blue-light-500/30 dark:bg-blue-light-500/15
+							{% elif 'success' in message.tags %}
+							border-green-100 bg-green-50 dark:border-green-light-500/30 dark:bg-green-light-500/15
+							{% elif 'warning' in message.tags %}
+							border-yellow-100 bg-yellow-50 dark:border-yellow-light-500/30 dark:bg-yellow-light-500/15
+							{% elif 'error' in message.tags %}
+							border-red-100 bg-red-50 dark:border-red-light-500/30 dark:bg-red-light-500/15
+							{% else %}
+							border-gray-100 bg-gray-50 dark:border-gray-700/30 dark:bg-gray-800/15
+							{% endif %}"
 							>
-								<div class="mx-auto w-full max-w-[630px] text-center">
-									<h3
-										class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl"
+							<div class="flex items-start gap-3">
+								<div class="-mt-0.5 
+									{% if 'info' in message.tags %}
+									text-blue-600
+									{% elif 'success' in message.tags %}
+									text-green-600
+									{% elif 'warning' in message.tags %}
+									text-yellow-600
+									{% elif 'error' in message.tags %}
+									text-red-600
+									{% else %}
+									text-gray-600
+									{% endif %}
+									">
+									<!-- Info Icon -->
+									{% if 'info' in message.tags %}
+									<svg
+										class="fill-current"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
 										>
-										Card Title Here
-									</h3>
-									<p
-										class="text-sm text-gray-500 dark:text-gray-400 sm:text-base"
+										<path
+											fill-rule="evenodd"
+											clip-rule="evenodd"
+											d="M3.6501 11.9996C3.6501 7.38803 7.38852 3.64961 12.0001 3.64961C16.6117 3.64961 20.3501 7.38803 20.3501 11.9996C20.3501 16.6112 16.6117 20.3496 12.0001 20.3496C7.38852 20.3496 3.6501 16.6112 3.6501 11.9996ZM12.0001 1.84961C6.39441 1.84961 1.8501 6.39392 1.8501 11.9996C1.8501 17.6053 6.39441 22.1496 12.0001 22.1496C17.6058 22.1496 22.1501 17.6053 22.1501 11.9996C22.1501 6.39392 17.6058 1.84961 12.0001 1.84961ZM10.9992 7.52468C10.9992 8.07697 11.4469 8.52468 11.9992 8.52468H12.0002C12.5525 8.52468 13.0002 8.07697 13.0002 7.52468C13.0002 6.9724 12.5525 6.52468 12.0002 6.52468H11.9992C11.4469 6.52468 10.9992 6.9724 10.9992 7.52468ZM12.0002 17.371C11.586 17.371 11.2502 17.0352 11.2502 16.621V10.9445C11.2502 10.5303 11.586 10.1945 12.0002 10.1945C12.4144 10.1945 12.7502 10.5303 12.7502 10.9445V16.621C12.7502 17.0352 12.4144 17.371 12.0002 17.371Z"
+											fill=""
+											/>
+									</svg>
+									{% elif 'success' in message.tags %}
+									<!-- Success Icon -->
+									<svg
+										class="fill-current"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
 										>
-										Start putting content on grids or panels, you can also use
-										different combinations of grids.Please check out the dashboard
-										and other pages
+										<path
+											fill-rule="evenodd"
+											clip-rule="evenodd"
+											d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM15.6197 10.7395C15.9712 10.388 15.9712 9.81819 15.6197 9.46672C15.2683 9.11525 14.6984 9.11525 14.347 9.46672L11.1894 12.6243L9.6533 11.0883C9.30183 10.7368 8.73198 10.7368 8.38051 11.0883C8.02904 11.4397 8.02904 12.0096 8.38051 12.3611L10.553 14.5335C10.7217 14.7023 10.9507 14.7971 11.1894 14.7971C11.428 14.7971 11.657 14.7023 11.8257 14.5335L15.6197 10.7395Z"
+											fill=""
+											/>
+									</svg>
+									{% elif 'warning' in message.tags %}
+									<!-- Warning Icon -->
+									<svg
+										class="fill-current"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										xmlns="http://www.w3.org/2000/svg"
+										>
+										<path
+											fill-rule="evenodd"
+											clip-rule="evenodd"
+											d="M10.293 3.293c.78-1.39 2.634-1.39 3.414 0l8.47 15.11c.757 1.352-.21 3.037-1.707 3.037H3.53c-1.497 0-2.464-1.685-1.707-3.037l8.47-15.11zM12 9.25c.414 0 .75.336.75.75v4.5a.75.75 0 01-1.5 0V10c0-.414.336-.75.75-.75zm0 8a1 1 0 100-2 1 1 0 000 2z"
+											/>
+									</svg>
+									{% elif 'error' in message.tags %}
+									<!-- Error Icon -->
+									<svg
+										class="fill-current"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										xmlns="http://www.w3.org/2000/svg"
+										>
+										<path
+											fill-rule="evenodd"
+											clip-rule="evenodd"
+											d="M12 2.25C6.61522 2.25 2.25 6.61522 2.25 12C2.25 17.3848 6.61522 21.75 12 21.75C17.3848 21.75 21.75 17.3848 21.75 12C21.75 6.61522 17.3848 2.25 12 2.25ZM15.5303 8.46967C15.8232 8.76256 15.8232 9.23744 15.5303 9.53033L13.0607 12L15.5303 14.4697C15.8232 14.7626 15.8232 15.2374 15.5303 15.5303C15.2374 15.8232 14.7626 15.8232 14.4697 15.5303L12 13.0607L9.53033 15.5303C9.23744 15.8232 8.76256 15.8232 8.46967 15.5303C8.17678 15.2374 8.17678 14.7626 8.46967 14.4697L10.9393 12L8.46967 9.53033C8.17678 9.23744 8.17678 8.76256 8.46967 8.46967C8.76256 8.17678 9.23744 8.17678 9.53033 8.46967L12 10.9393L14.4697 8.46967C14.7626 8.17678 15.2374 8.17678 15.5303 8.46967Z"
+											/>
+									</svg>
+									{% else %}
+									<!-- Default Info Icon -->
+									<svg
+										class="fill-current"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+										>
+										<path
+											fill-rule="evenodd"
+											clip-rule="evenodd"
+											d="M3.6501 11.9996C3.6501 7.38803 7.38852 3.64961 12.0001 3.64961C16.6117 3.64961 20.3501 7.38803 20.3501 11.9996C20.3501 16.6112 16.6117 20.3496 12.0001 20.3496C7.38852 20.3496 3.6501 16.6112 3.6501 11.9996ZM12.0001 1.84961C6.39441 1.84961 1.8501 6.39392 1.8501 11.9996C1.8501 17.6053 6.39441 22.1496 12.0001 22.1496C17.6058 22.1496 22.1501 17.6053 22.1501 11.9996C22.1501 6.39392 17.6058 1.84961 12.0001 1.84961ZM10.9992 7.52468C10.9992 8.07697 11.4469 8.52468 11.9992 8.52468H12.0002C12.5525 8.52468 13.0002 8.07697 13.0002 7.52468C13.0002 6.9724 12.5525 6.52468 12.0002 6.52468H11.9992C11.4469 6.52468 10.9992 6.9724 10.9992 7.52468ZM12.0002 17.371C11.586 17.371 11.2502 17.0352 11.2502 16.621V10.9445C11.2502 10.5303 11.586 10.1945 12.0002 10.1945C12.4144 10.1945 12.7502 10.5303 12.7502 10.9445V16.621C12.7502 17.0352 12.4144 17.371 12.0002 17.371Z"
+											fill=""
+											/>
+									</svg>
+									{% endif %}
+								</div>
+								<div>
+									<h4 class="mb-1 text-sm font-semibold
+										{% if 'info' in message.tags %} text-blue-800
+										{% elif 'success' in message.tags %} text-green-800
+										{% elif 'warning' in message.tags %} text-yellow-800
+										{% elif 'error' in message.tags %} text-red-800
+										{% else %} text-gray-800
+										{% endif %}"
+										>
+										{{ message.tags|cut:"success"|cut:"warning"|cut:"error"|cut:"info" }}
+									</h4>
+									<p class="text-xs md:text-sm
+										{% if 'info' in message.tags %} text-blue-800
+										{% elif 'success' in message.tags %} text-green-800
+										{% elif 'warning' in message.tags %} text-yellow-800
+										{% elif 'error' in message.tags %} text-red-800
+										{% else %} text-gray-800
+										{% endif %}"
+										>
+										{{ message }}
 									</p>
 								</div>
 							</div>
+						</div>
+						{% endfor %}
+						{% block content %}
+						{# include "components/breadcrumbs.html" #}
+						<div
+							class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
+							>
+							<div class="mx-auto w-full max-w-[630px] text-center">
+								<h3
+									class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl"
+									>
+									Card Title Here
+								</h3>
+								<p
+									class="text-sm text-gray-500 dark:text-gray-400 sm:text-base"
+									>
+									Start putting content on grids or panels, you can also use
+									different combinations of grids.Please check out the dashboard
+									and other pages
+								</p>
+							</div>
+						</div>
 						{% endblock %}
 					</div>
 				</main>
-
-      		</div>
-      		<!-- ===== Content Area End ===== -->
-    	</div>
-    	<!-- ===== Page Wrapper End ===== -->
-		 <!-- <footer class="w-full border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+			</div>
+			<!-- ===== Content Area End ===== -->
+		</div>
+		<!-- ===== Page Wrapper End ===== -->
+		<!-- <footer class="w-full border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
 			<div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-gray-600 transition-all sm:flex-row dark:text-gray-400">
 				
 				<!-- Copyright 
 				<p class="text-center sm:text-left">
 				© <span id="year"></span> Servio. All rights reserved.
 				</p>
-
+			
 				<!-- Attribution 
 				<p class="text-center sm:text-right">
 				Built with ❤️ by 
@@ -116,7 +248,7 @@
 				</a>
 				</p>
 			</div>
-		</footer> -->
+			</footer> -->
 		<!-- <footer id="footer">
 			<div class="site-footer px-6 bg-white dark:bg-gray-900 text-slate-500 dark:text-slate-300 py-4 ltr:ml-[248px] rtl:mr-[248px]">
 				<div class="grid md:grid-cols-2 grid-cols-1 md:gap-5">
@@ -133,8 +265,8 @@
 					</div>
 				</div>
 			</div>
-      </footer> -->
-  	</body>
+			   </footer> -->
+	</body>
 	<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
 	<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
 	<script src="{% static 'js/center-alert.js' %}"></script>

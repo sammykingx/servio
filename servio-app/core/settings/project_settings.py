@@ -17,7 +17,9 @@ LOCAL_APPS = [
     "collaboration.apps.CollaborationConfig",
 ]
 
-LOCAL_MIDDLEWARES = []
+LOCAL_MIDDLEWARES = [
+    "middlewares.provider_only.ProviderOnlyMiddleware",
+]
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
