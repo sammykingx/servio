@@ -6,8 +6,10 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
+# Virtual environments and secrets
 .venv
+*.env
+*.secrets
 
 # js files
 node_modules/
@@ -15,6 +17,8 @@ node_modules/
 # backup files
 bkp*
 *.bkp
+profile.html
 
 # django files
 *.sqlite3
+servio-app/media/*

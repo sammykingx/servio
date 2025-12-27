@@ -1,0 +1,88 @@
+{% extends "layouts/auth-base.html" %}
+{% block browser_title %}Account Recovery Options- Servio{% endblock %}
+{% block content %}
+<div class="mb-5 sm:mb-8">
+	<h1
+		class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90"
+		>
+		Recovery Options
+	</h1>
+	<p class="text-xs m:text-sm text-gray-500 dark:text-gray-400">
+		Pick the option that works best for you. We’ll help you get
+		back into your account securely and quickly.
+	</p>
+</div>
+<div>
+	<div
+		class="border-t border-gray-200 pt-4 bg-gray-50 dark:bg-gray-800 rounded dark:border-gray-800 sm:p-6"
+	>
+		<ul class="flex flex-col space-y-2">
+			<li class="border-b border-gray-200 last:border-b-0 dark:border-gray-800">
+				<a href="{% url AUTH_URLS.LOGIN_LINK %}" class="hover:cursor-pointer">
+					<button
+						class="flex w-full items-center gap-3 px-3 py-3 text-sm font-medium text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-warning-50 dark:hover:text-gray-800"
+						>
+						<span>
+							<svg
+								class="fill-current"
+								width="20"
+								height="20"
+								viewBox="0 0 20 20"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M4.98433 2.44399C3.11285 1.57147 1.15276 3.46979 1.96494 5.36824L3.82037 9.70527C3.90097 9.89367 3.90097 10.1069 3.82037 10.2953L1.96494 14.6323C1.15277 16.5307 3.11284 18.4291 4.98432 17.5565L16.8179 12.0395C18.5503 11.2319 18.5503 8.76865 16.8179 7.961L4.98433 2.44399ZM3.34404 4.77824C3.07331 4.14543 3.72667 3.51266 4.3505 3.80349L16.1841 9.32051C16.7615 9.58973 16.7616 10.4108 16.1841 10.68L4.3505 16.197C3.72667 16.4879 3.07331 15.8551 3.34404 15.2223L5.19947 10.8853C5.21895 10.8397 5.23687 10.7937 5.25321 10.7473L9.11736 10.7473C9.53157 10.7473 9.86736 10.4115 9.86736 9.99726C9.86736 9.58304 9.53157 9.24726 9.11736 9.24726L5.25108 9.24726C5.23531 9.20287 5.21811 9.15885 5.19947 9.11528L3.34404 4.77824Z"
+								fill=""
+								/>
+							</svg>
+						</span>
+						<span> Instant Login </span>
+					</button>
+				</a>
+			</li>
+			<li class="border-b border-gray-200 last:border-b-0 dark:border-gray-800">
+				<a href="{% url AUTH_URLS.REQUEST_PASSWORD_RESET %}" class="hover:cursor-pointer">
+					<button
+						href="{% url AUTH_URLS.REQUEST_PASSWORD_RESET %}"
+						class="flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-warning-50 dark:hover:text-gray-800"
+						>
+						<span>
+							<svg
+								class="fill-current"
+								width="20"
+								height="20"
+								viewBox="0 0 20 20"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M3.04102 7.06206V14.375C3.04102 14.6511 3.26487 14.875 3.54102 14.875H16.4577C16.7338 14.875 16.9577 14.6511 16.9577 14.375V7.06245L11.1436 11.1168C10.4563 11.5961 9.543 11.5961 8.85565 11.1168L3.04102 7.06206ZM16.9577 5.19262C16.9577 5.19341 16.9577 5.1942 16.9577 5.19498V5.20026C16.9565 5.22216 16.9453 5.24239 16.9272 5.25501L10.2856 9.88638C10.1138 10.0062 9.88547 10.0062 9.71364 9.88638L3.07181 5.25485C3.05269 5.24151 3.04129 5.21967 3.04128 5.19636C3.04127 5.15695 3.07321 5.125 3.11262 5.125H16.8864C16.9245 5.125 16.9557 5.15494 16.9577 5.19262ZM18.4577 5.21428V14.375C18.4577 15.4796 17.5623 16.375 16.4577 16.375H3.54102C2.43645 16.375 1.54102 15.4796 1.54102 14.375V5.19498C1.54102 5.1852 1.5412 5.17546 1.54157 5.16577C1.55785 4.31209 2.25497 3.625 3.11262 3.625H16.8864C17.7542 3.625 18.4577 4.32843 18.4578 5.19622C18.4578 5.20225 18.4578 5.20826 18.4577 5.21428Z"
+								fill=""
+								/>
+							</svg>
+						</span>
+						<span> Reset Password </span>
+					</button>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="mt-7">
+		<p
+			class="text-center text-xs md:text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400"
+			>
+			Wait, I remember my password...
+			<a
+				href="{% url AUTH_URLS.LOGIN %}"
+				class="text-brand-500 hover:text-brand-600 dark:text-brand-300 dark:hover:text-warning-200"
+				>Click here</a
+				>
+		</p>
+	</div>
+</div>
+{% endblock %}

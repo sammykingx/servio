@@ -2,6 +2,8 @@
 
 > A modern platform that connects **local service providers** (e.g., tailors, event planners, makeup artists, laundry services) to **residents** who need their services — fast, easy, and in one place.
 
+![servio app](./docs/images/servio-app.jpg)
+
 Servio allows users to **plan events and projects** by selecting service categories they need, setting budgets, and receiving offers from relevant service providers.  
 Providers can **accept, decline, or renegotiate offers**, making it easy to collaborate without manual sourcing.
 
@@ -148,6 +150,14 @@ DEBUG=True
 SECRET_KEY=your-secret-key
 DATABASE_URL=postgres://username:password@localhost:5432/servio
 ALLOWED_HOSTS=127.0.0.1,localhost
+
+# EMAIL SETTINGS
+EMAIL_BACKEND=""
+EMAIL_HOST=""
+EMAIL_USERNAME=""
+EMAIL_PASSWORD=""
+EMAIL_PORT=""
+USE_SSL=""
 ```
 
 ### Database Migration

@@ -3,13 +3,15 @@ Django base settings for servio project.
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = "django-insecure-%cwmyad+l5!w$20n5pm6+x57_eyi0r0^oghznc@taf=ro5h0q-"
+DEFAULT_SECRET_KEY = "p93+y5z$6enmf4j51*7b=u@f*-idrmssw4-^j=oeugd4((9$o2myad+l5!w$20n5pm6+x57_eyi0r0^oghznc@taf=ro5h0q"
 
-# Application definition
+SECRET_KEY = config("SECRET_KEY", default=DEFAULT_SECRET_KEY)
+
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -86,11 +88,11 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
-# custom user model
-AUTH_USER_MODEL = "accounts.AuthUser"

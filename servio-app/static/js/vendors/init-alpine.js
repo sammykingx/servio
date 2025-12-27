@@ -7,6 +7,40 @@ document.addEventListener("alpine:init", () => {
     },
   }));
   
+// Modal management
+  Alpine.store("modals", {
+    profile: false,
+    address: false,
+    socials: false,
+
+    // optional: helper methods
+    open(modalName) {
+      this[modalName] = true;
+    },
+    close(modalName) {
+      this[modalName] = false;
+    },
+    toggle(modalName) {
+      this[modalName] = !this[modalName];
+    },
+    closeAll() {
+      this.profile = false;
+      this.address = false;
+      this.socials = false;
+    }
+  });
+  
+  Alpine.store("dropdown", {
+    openId: null,
+
+    toggle(id) {
+      this.openId = this.openId === id ? null : id;
+    },
+
+    close() {
+      this.openId = null;
+    }
+  });
 
   // Theme (dark/light mode)
   Alpine.data("themeHandler", () => ({
@@ -19,3 +53,4 @@ document.addEventListener("alpine:init", () => {
   }));
   
 });
+

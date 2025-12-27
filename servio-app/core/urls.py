@@ -16,18 +16,42 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
-from django.views.generic.base import TemplateView
+from django.urls import path, include, reverse_lazy
+from django.views.generic import TemplateView, RedirectView
 from template_map.accounts import Accounts
 from core.url_names import AuthURLNames
 import accounts.urls
+import notifications.urls
+import business_accounts.urls
 
 urlpatterns = [
+    path(
+        "",
+        RedirectView.as_view(
+            url=reverse_lazy(AuthURLNames.LOGIN), permanent=True
+        ),
+    ),
     path("admin/", admin.site.urls),
-    path("allauth/", include("allauth.urls")),
+    # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
-    path("", TemplateView.as_view(template_name="layouts/base.html"), name="test-page"),
-    path("dashboard/", TemplateView.as_view(template_name=Accounts.Dashboards.ADMIN), name="admin-dashboard"),
-    path("client/", TemplateView.as_view(template_name=Accounts.Dashboards.USERS), name="user-dashboard"),
-    path("provider/", TemplateView.as_view(template_name=Accounts.Dashboards.SERVICE_PROVIDER), name="provider-dashboard"),
+    path("business/", include(business_accounts.urls)),
+    path("notifications/", include(notifications.urls)),
+    path(
+        "client/",
+        TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
+        name="user-dashboard",
+    ),
+    path(
+        "provider/",
+        TemplateView.as_view(template_name=Accounts.Dashboards.PROVIDERS),
+        name="provider-dashboard",
+    ),
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )
