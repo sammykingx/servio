@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if not records %}
-    {% include "payments/no-payments.html" %}
+    {% include "components/empty-states/no-payments.html" %}
 {% else %}
     {% include "components/breadcrumbs.html" with page_name="Revenue" %}
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 mb-7">

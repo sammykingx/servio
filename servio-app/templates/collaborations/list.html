@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if not collaborations %}
-    {% include "collaborations/no-gigs.html" %}
+    {% include "components/empty-states/gigs-empty.html" %}
 {% else %}
 <div class="layout-content-container w-full max-w-[1280px] flex flex-col gap-6">
     <!-- Header Section -->

@@ -1,0 +1,45 @@
+<!-- Main Content Container -->
+<section class="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-[1200px] mx-auto mt-10">
+    <!-- Empty State Component -->
+    <div class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8 md:p-12 flex flex-col items-center text-center">
+        <!-- Illustration Area -->
+        <div class="relative w-48 h-48 mb-8 flex items-center justify-center">
+            <!-- Decorative circle backgrounds -->
+            <div class="absolute inset-0 bg-blue-50 dark:bg-blue-900/10 rounded-full scale-100 animate-pulse"></div>
+            <div class="absolute inset-4 bg-blue-100 dark:bg-blue-900/20 rounded-full scale-90"></div>
+            <!-- Icon Cluster -->
+            <div class="relative z-10 grid grid-cols-2 gap-2 transform rotate-3">
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-md border border-slate-100 dark:border-slate-700 flex items-center justify-center text-blue-500 my-2">
+                    <span class="material-symbols-outlined text-3xl">design_services</span>
+                </div>
+                <div class="bg-brand-500 p-3 rounded-xl shadow-md shadow-blue-200 dark:shadow-none flex items-center justify-center text-white mt-4">
+                    <span class="material-symbols-outlined text-3xl">add</span>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-md border border-slate-100 dark:border-slate-700 flex items-center justify-center text-success-500 -mt-2">
+                    <span class="material-symbols-outlined text-3xl">payments</span>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-md border border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-400">
+                    <span class="material-symbols-outlined text-3xl">calendar_today</span>
+                </div>
+            </div>
+        </div>
+        <!-- Typography -->
+        <div class="max-w-md mx-auto space-y-3">
+            <h2 class="text-xl md:text-2xl font-extrabold text-gray-800 dark:text-gray-300">No services listed yet.</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed">Create a service to let clients discover, book, and pay you seamlessly. It only takes a few minutes.</p>
+        </div>
+        <!-- Actions -->
+        <div class="mt-8 flex flex-col items-center gap-4 w-full">
+            <button class="group relative flex items-center justify-center gap-2 px-6 py-3 bg-brand-500 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg shadow-lg shadow-blue-500/30 transition-all duration-200 transform active:scale-95 w-full sm:w-auto min-w-[200px]">
+                <span class="material-symbols-outlined text-xl group-hover:rotate-90 transition-transform duration-300">add</span>
+                <span class="text-sm font-bold">Add a Service</span>
+            </button>
+            <a class="text-xs md:text-sm font-medium text-slate-500 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors flex items-center gap-1 group" href="#">
+                Learn more about services
+                <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+    <!-- Optional Subtle Background element for depth -->
+    <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-800 to-transparent my-12 opacity-50"></div>
+</section>
