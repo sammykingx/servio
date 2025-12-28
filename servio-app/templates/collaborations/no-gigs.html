@@ -1,0 +1,62 @@
+<main class="flex flex-1 flex-col items-center justify-center p-6 bg-background-light dark:bg-background-dark relative">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl opacity-50 dark:opacity-20"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl opacity-50 dark:opacity-20"></div>
+    </div>
+    <div class="relative z-10 flex flex-col items-center max-w-[600px] w-full text-center animate-fade-in-up">
+        <!-- Illustration / Icon Container -->
+        <div class="mb-5 p-6 bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 dark:from-purple-700 dark:via-pink-700 dark:to-red-700 rounded-2xl shadow-2xl relative overflow-hidden">
+            <!-- Background floating shapes -->
+            <div class="absolute -top-6 -left-6 w-24 h-24 bg-yellow-300/40 rounded-full animate-pulse"></div>
+            <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-300/40 rounded-full animate-pulse"></div>
+
+            <!-- Main icon -->
+            <div class="flex items-center justify-center relative z-10">
+                <div class="text-white text-[100px]">
+                <span class="material-symbols-outlined font-thin">grid_view</span>
+                </div>
+
+                <!-- Top-right badge -->
+                <div class="absolute -top-2 -right-2 w-8 h-8 bg-success-400 rounded-full flex items-center justify-center text-white shadow ring-2 ring-white dark:ring-gray-900">
+                <span class="material-symbols-outlined text-[16px]">add</span>
+                </div>
+
+                <!-- Bottom-left badge -->
+                <div class="absolute -bottom-2 -left-2 w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center text-white shadow ring-2 ring-white dark:ring-gray-900">
+                <span class="material-symbols-outlined text-[16px]">person</span>
+                </div>
+            </div>
+
+            <!-- Optional label -->
+            <div class="mt-4 text-center text-white font-semibold text-lg z-10 relative">
+                Collaboration Dashboard
+            </div>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-gray-700 dark:text-gray-200 text-2xl font-bold tracking-tight mb-4">
+            No gigs yet, let's fix that.
+        </h1>
+        <!-- Body Copy -->
+        <p class="text-gray-400 dark:text-gray-500 text-base md:text-lg font-medium leading-relaxed mb-8 max-w-[480px]">
+            Gigs are the heartbeat of collaboration here. Create a gig to broadcast your project needs, invite top-tier professionals, and start working together in minutes.
+        </p>
+        <!-- brand-500 Action -->
+        <div class="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+            <a 
+                href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}"
+                class="group relative flex min-w-[200px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-6 bg-brand-500 hover:bg-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em] shadow-lg shadow-brand-500/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                <span class="material-symbols-outlined text-[20px] transition-transform group-hover:rotate-90">add</span>
+                <span class="truncate">Create Your First Gig</span>
+            </a>
+        </div>
+        <!-- Secondary Action / Link -->
+        <div class="mt-6">
+            <a class="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-400 dark:text-gray-500 hover:text-brand-500 transition-colors py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2d3748]" href="#">
+                <span class="material-symbols-outlined text-[18px]">menu_book</span>
+                <span>Read the Quick Start Guide</span>
+            </a>
+        </div>
+    </div>
+</main>

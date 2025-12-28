@@ -2,6 +2,10 @@
 {% load static %}
 {% block browser_title %}Projects & Collaborations{% endblock %}
 {% block content %}
+
+{% if not collaborations %}
+    {% include "collaborations/no-gigs.html" %}
+{% else %}
 <div class="layout-content-container w-full max-w-[1280px] flex flex-col gap-6">
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -320,4 +324,5 @@
         </button>
     </div>
 </div>
+{% endif %}
 {% endblock %}
