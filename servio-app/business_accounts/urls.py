@@ -76,13 +76,4 @@ urlpatterns = [
     path("booking-rules/", TemplateView.as_view(template_name=Accounts.Business.BUSINESS_BOOKING_RULE),
          name="booking-rules",
     ),
-    path("gigs/", TemplateView.as_view(template_name=Collabs.LIST),
-         name="gigs_and_project",
-    ),
-    path("gigs/info", TemplateView.as_view(template_name=Collabs.DETAILS),
-         name="gigs_and_project_info",
-    ),
-    path("create-gigs", TemplateView.as_view(template_name=Collabs.CREATE),
-         name="create-gigs",
-    ),
 ]

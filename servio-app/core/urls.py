@@ -21,8 +21,9 @@ from django.views.generic import TemplateView, RedirectView
 from template_map.accounts import Accounts
 from core.url_names import AuthURLNames
 import accounts.urls
-import notifications.urls
 import business_accounts.urls
+import collaboration.urls
+import notifications.urls
 
 urlpatterns = [
     path(
@@ -35,6 +36,7 @@ urlpatterns = [
     # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
     path("business/", include(business_accounts.urls)),
+    path("collaboration/", include(collaboration.urls)),
     path("notifications/", include(notifications.urls)),
     path(
         "client/",

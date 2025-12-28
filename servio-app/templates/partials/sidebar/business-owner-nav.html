@@ -44,7 +44,7 @@
       </li> -->
       <li>
          <a
-            href="{% url 'gigs_and_project' %}"
+            href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}"
             @click="selected = (selected === 'gig_and_project' ? '':'gig_and_project')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -53,7 +53,7 @@
                class="material-symbols-outlined"
                :class="(selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
             >
-               partner_exchange
+               workspaces
             </span>
             <span
                class="menu-item-text"

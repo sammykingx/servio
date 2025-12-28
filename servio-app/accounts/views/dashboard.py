@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.profile import UserRole
 from accounts.models.address import AddressType
@@ -19,6 +20,12 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             UserRole.STAFF: Accounts.Dashboards.STAFFS,
         }
 
+        if user.is_verified is False:
+            messages.warning(
+                self.request,
+                "Please verify your email to access all features.",
+                extra_tags="Email Not Verified",
+            )
         # Return template based on role, fallback to default
         return [template_map.get(role, self.template_name)]
 

@@ -26,29 +26,22 @@
    <ul class="mb-6 flex flex-col gap-1">
       <li>
          <a
-            href="#"
-            @click="selected = (selected === 'discover-gigs' ? '':'discover-gigs')"
+            href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}"
+            @click="selected = (selected === 'gig_and_project' ? '':'gig_and_project')"
             class="menu-item group text-gray-500"
-            :class=" (selected === 'discover-gigs') && (page === 'discover-gigs') ? 'menu-item-active' : 'menu-item-inactive'"
+            :class=" (selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-active' : 'menu-item-inactive'"
             >
-            <svg
-               :class="(selected === 'discover-gigs') && (page === 'discover-gigs') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-               width="24"
-               height="24"
-               viewBox="0 0 24 24"
-               fill="none"
-               xmlns="http://www.w3.org/2000/svg"
-               >
-               <circle cx="6" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/>
-               <circle cx="18" cy="6" r="2" stroke="currentColor" stroke-width="1.5"/>
-               <circle cx="18" cy="18" r="2" stroke="currentColor" stroke-width="1.5"/>
-               <path d="M7.5 11L16.5 7.5M7.5 13L16.5 16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
+            <span 
+               class="material-symbols-outlined"
+               :class="(selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+            >
+               workspaces
+            </span>
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
-               >
-            Discover gigs
+            >
+               Gigs & Project
             </span>
          </a>
       </li>

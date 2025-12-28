@@ -55,4 +55,9 @@ class BusinessURLS:
     SCHEDULE = "business_schedule"
     REVIEWS = "reviews"
     
-# xl:sticky xl:top-6  
+class CollaborationURLS:
+    LIST_COLLABORATIONS = "list_collaborations"
+    CREATE_COLLABORATION = "create_collaboration"
+    DETAIL_COLLABORATION = "view_collaboration"
+    EDIT_COLLABORATION = "edit_collaboration"
+    DELETE_COLLABORATION = "delete_collaboration"

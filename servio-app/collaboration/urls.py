@@ -1,0 +1,26 @@
+from django.urls import path, include, reverse_lazy
+from django.views.generic import TemplateView, RedirectView
+from core.url_names import CollaborationURLS
+from .views.list import CollaborationListView
+from template_map.collaboration import Collabs
+
+
+urlpatterns = [
+    path(
+        "",
+        RedirectView.as_view(
+            url=reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS), permanent=True
+        ),
+    ),
+    path(
+        "all-collaborations/", 
+         CollaborationListView.as_view(), 
+         name=CollaborationURLS.LIST_COLLABORATIONS
+    ),
+    path("details", TemplateView.as_view(template_name=Collabs.DETAILS),
+         name=CollaborationURLS.DETAIL_COLLABORATION,
+    ),
+    path("new-collaborations", TemplateView.as_view(template_name=Collabs.CREATE),
+         name=CollaborationURLS.CREATE_COLLABORATION,
+    ),
+]
