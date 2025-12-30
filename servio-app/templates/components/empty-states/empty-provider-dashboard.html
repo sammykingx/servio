@@ -1,0 +1,99 @@
+<section class="flex-1 w-full flex justify-center py-6 md:py-10 px-4">
+    <div class="flex flex-col w-full max-w-[1024px] gap-10">
+        <!-- Hero Section (Welcome) -->
+        <div class="flex flex-col items-center gap-6 text-center animate-fade-in">
+            <div class="flex max-w-[600px] flex-col items-center gap-3">
+                <h1 class="text-gray-800 dark:text-gray-300 text-xl md:text-2xl font-bold leading-tight tracking-[-0.02em]">
+                    Welcome to your business dashboard.
+                </h1>
+                <p class="text-gray-600 text-base md:text-lg font-normal leading-relaxed">
+                    This is where you’ll manage your services, bookings, gigs, invoices, and payments, all in one place.
+                </p>
+            </div>
+        </div>
+        <!-- Setup Progress -->
+        <div class="flex flex-col gap-3 max-w-[800px] mx-auto w-full">
+            <div class="flex gap-6 justify-between items-end">
+                <p class="text-gray-700 dark:text-gray-400 text-sm font-bold uppercase tracking-wider">Setup Progress</p>
+                <p class="text-gray-600 dark:text-text-sub-dark text-sm font-medium">10% Complete</p>
+            </div>
+            <div class="rounded-full bg-border-light dark:bg-border-dark overflow-hidden">
+                <div class="h-2 rounded-full bg-brand-500 transition-all duration-500 ease-out" style="width: 10%;"></div>
+            </div>
+        </div>
+        <!-- Action Grid Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <!-- Card 1: brand-500 (Create Service) -->
+            <div class="relative flex flex-col gap-5 rounded-2xl bg-surface-light dark:bg-surface-dark p-6 border-2 border-brand-500/10 shadow-sm hover:shadow-lg hover:border-brand-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                <div class="size-12 rounded-xl bg-brand-500/10 flex items-center justify-center text-brand-500 mb-2">
+                    <span class="material-symbols-outlined text-[28px]">add_business</span>
+                </div>
+                <div class="flex flex-col gap-2 flex-1">
+                    <h3 class="text-lg font-bold text-gray-700 dark:text-gray-400">Register Business</h3>
+                    <p class="text-sm text-[#4c669a] dark:text-text-sub-dark leading-relaxed">
+                        Set up your business profile so clients can book your services instantly.
+                    </p>
+                </div>
+                <a href="{% url BIZ_URLS.BUSINESS_ONBOARDING %}" class="mt-2 flex w-full cursor-pointer items-center justify-center rounded-xl h-10 px-4 bg-brand-500 dark:bg-transparent border border-gray-300 dark:border-gray-700 hover:border-brand-500/50 dark:hover:border-gray-50 text-white dark:text-gray-400 dark:hover:text-gray-200 text-sm font-bold tracking-[0.015em] transition-all">
+                    Get Started
+                </a>
+                <!-- Featured Badge -->
+                <div class="absolute top-4 right-4 size-2 rounded-full bg-brand-500 animate-pulse"></div>
+            </div>
+            <!-- Card 2: Set up payments -->
+            <div class="flex flex-col gap-5 rounded-2xl text-gray-700 p-6 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-brand-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                <div class="size-12 rounded-xl flex items-center justify-center text-success-600 dark:text-success-400 hover:text-success-400 hover:bg-success-500/5 transition-colors mb-2">
+                    <span class="material-symbols-outlined text-[28px]">account_balance_wallet</span>
+                </div>
+                <div class="flex flex-col gap-2 flex-1">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-400">Set up payments</h3>
+                    <p class="text-sm text-[#4c669a] dark:text-text-sub-dark leading-relaxed">
+                        Connect your bank account securely to receive payouts from clients.
+                    </p>
+                </div>
+                <button class="cursor-not-allowed mt-2 flex w-full items-center justify-center rounded-xl h-10 px-4 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-700 hover:border-brand-500/50 dark:hover:border-gray-50 text-gray-700 dark:text-gray-400 hover:text-brand-500 dark:hover:text-gray-200 text-sm font-bold tracking-[0.015em] transition-all">
+                    Connect
+                </button>
+            </div>
+            <!-- Card 3: Create a gig -->
+            <div class="flex flex-col gap-5 rounded-2xl text-gray-700 p-6 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-brand-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                <div class="size-12 rounded-xl flex items-center justify-center text-blue-400 dark:text-blue-400 hover:text-blue-600 hover:bg-blue-500/5 transition-colors mb-2">
+                    <span class="material-symbols-outlined text-[28px]">work</span>
+                </div>
+                <div class="flex flex-col gap-2 flex-1">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-400">Create a service</h3>
+                    <p class="text-sm text-[#4c669a] dark:text-text-sub-dark leading-relaxed">
+                        Define what you offer to clients to start getting bookings immediately.
+                    </p>
+                </div>
+                <button class="cursor-not-allowed mt-2 flex w-full items-center justify-center rounded-xl h-10 px-4 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-700 hover:border-brand-500/50 dark:hover:border-gray-50 text-gray-700 dark:text-gray-400 hover:text-brand-500 dark:hover:text-gray-200 text-sm font-bold tracking-[0.015em] transition-all">
+                    Create Service
+                </button>
+            </div>
+            <!-- Card 4: Send Invoice -->
+            <div class="flex flex-col gap-5 rounded-2xl text-gray-700 p-6 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-brand-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                <div class="size-12 rounded-xl flex items-center justify-center text-yellow-400 hover:text-yellow-600 hover:bg-yellow-600/5 transition-colors mb-2">
+                    <span class="material-symbols-outlined text-[28px]">receipt_long</span>
+                </div>
+                <div class="flex flex-col gap-2 flex-1">
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-400">Send invoice</h3>
+                    <p class="text-sm text-[#4c669a] dark:text-text-sub-dark leading-relaxed">
+                        Bill a client directly for work completed off-platform.
+                    </p>
+                </div>
+                <button class="mt-2 flex w-full cursor-not-allowed items-center justify-center rounded-xl h-10 px-4 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-700 hover:border-brand-500/50 dark:hover:border-gray-50 text-gray-700 dark:text-gray-400 hover:text-brand-500 dark:hover:text-gray-200 text-sm font-bold tracking-[0.015em] transition-all">
+                    Create Invoice
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Floating Action Button (Help) -->
+<div class="fixed bottom-6 right-6 z-50">
+    <button class="flex items-center justify-center h-14 bg-brand-500 text-white rounded-full shadow-xl hover:shadow-2xl hover:bg-brand-500/90 transition-all pr-6 pl-4 gap-3 group">
+        <div class="bg-white/20 rounded-full p-1 hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-[24px]">support_agent</span>
+        </div>
+        <span class="font-bold text-sm whitespace-nowrap">Need help setting up?</span>
+    </button>
+</div>
