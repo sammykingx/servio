@@ -25,7 +25,7 @@
                         <div class="p-6 flex flex-col gap-6">
                             <div class="flex flex-col gap-2">
                                 <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Gig / Project Title</label>
-                                <input x-model="payload.title" class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300
+                                <input class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300
                                         dark:focus:border-warning-200 focus:ring-success-500/10
                                         dark:focus:ring-warning-300/10 h-11 w-full rounded-lg
                                         border border-gray-300 bg-transparent px-4 py-5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" type="text" />
@@ -40,7 +40,7 @@
                                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-semibold pointer-events-none">
                                             $
                                         </span>
-                                        <input x-model.number="payload.projectBudget" @input="validateBudget()" type="number" value="5000" placeholder="5,000" class="
+                                        <input type="number" value="5000" placeholder="5,000" class="
                                                 w-full rounded-md border border-[#cfd7e7] 
                                                 dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
                                                 text-gray-800 dark:text-gray-400
@@ -59,10 +59,10 @@
                                         </div>
 
                                         <!-- Buttons -->
-                                        <button @click="payload.visibility='public'" :class="payload.visibility === 'public' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
+                                        <button @click="visibility='public'" :class="visibility === 'public' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
                                             Public
                                         </button>
-                                        <button @click="payload.visibility = 'private'" :class="payload.visibility === 'private' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
+                                        <button @click="visibility = 'private'" :class="visibility === 'private' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
                                             Private
                                         </button>
                                     </div>
@@ -99,11 +99,8 @@
                                             <span class="material-symbols-outlined text-[20px]">link</span>
                                         </button>
                                     </div>
-                                    <textarea x-model="payload.description" class="
-                                            w-full
-                                            border-none
-                                            bg-transparent
-                                            p-4
+                                    <textarea class="w-full border-none
+                                            bg-transparent p-4
                                             min-h-[160px]
                                             text-gray-800 dark:text-gray-400
                                             placeholder:text-gray-500
@@ -235,7 +232,7 @@
                                             </template> </div>
                                         <!--Days of the month-->
                                         <div class="grid grid-cols-7 gap-1 mb-3">
-                                            <template x-for="day in daysInMonth(type)" :key="day.dateObj || Math.random()">
+                                            <template x-for="day in daysInMonth(type)" :key="day.dateObj ? day.dateObj.getTime() : 'empty-' + index">
                                                 <div> <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
                                             </template> </div>
                                     </div>
@@ -251,7 +248,7 @@
                                         </div>
                                         <!--Days of the month-->
                                         <div class="grid grid-cols-7 gap-1"> 
-                                            <template x-for="day in daysInMonth(type)" :key="day.dateObj || Math.random()">
+                                            <template x-for="day in daysInMonth(type)" :key="day.dateObj ? day.dateObj.getTime() : 'empty-' + index">
                                                 <div> <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
                                             </template>
                                         </div>
@@ -280,7 +277,7 @@
                         <div class="p-6">
                             <div class="flex flex-col gap-6">
                                 <div class="flex items-end gap-3">
-                                    <span x-text="totalBudgetDisplay" class="text-title-lg font-extrabold text-gray-700 dark:text-gray-300 tracking-tight">$9,500</span>
+                                    <span class="text-title-lg font-extrabold text-gray-700 dark:text-gray-300 tracking-tight">$9,500</span>
                                     <span class="text-sm text-gray-600 mb-1.5 font-medium">Total required Budget</span>
                                 </div>
                                 <div class="w-full h-4 rounded-full bg-[#f0f2f5] dark:bg-[#2d3748] flex overflow-hidden">
@@ -528,9 +525,12 @@
             },
 
             isSelected(date, type) {
-                const selected = type === 'start' ?
-                    this.selectedStart :
-                    this.selectedEnd;
+                if (!date) return false; 
+
+                const selected =
+                    type === 'start'
+                        ? this.selectedStart
+                        : this.selectedEnd;
 
                 return selected && selected.getTime() === date.getTime();
             },

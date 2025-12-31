@@ -1,64 +1,69 @@
+// function gigData() {
+//     return {
+//         payload: {
+//             title: '',
+//             description: '',
+//             projectBudget: 5000,
+//             visibility: 'public',
+//             roles: [],        // sync roles here
+//             startDate: null,  // sync calendar start
+//             endDate: null     // sync calendar end
+//         },
+
+//         attachRoles(rolesComponent) {
+//             // Watch for role changes and update payload
+//             this.payload.roles = rolesComponent.roles;
+
+//             // Use Alpine's reactive watcher
+//             this.$watch(
+//                 () => rolesComponent.roles,
+//                 (newRoles) => {
+//                     this.payload.roles = newRoles;
+//                 },
+//                 { deep: true }
+//             );
+//         },
+
+//         updateDates(calendar) {
+//             this.$watch(
+//                 () => calendar.selectedStart,
+//                 (start) => {
+//                     this.payload.startDate = start ? start.toISOString().split('T')[0] : null;
+//                 }
+//             );
+
+//             this.$watch(
+//                 () => calendar.selectedEnd,
+//                 (end) => {
+//                     this.payload.endDate = end ? end.toISOString().split('T')[0] : null;
+//                 }
+//             );
+//         },
+
+//         submit() {
+//             console.log('Submitting payload:', this.payload);
+//             // Add validations
+//             if (!this.payload.title) return alert('Title is required');
+//             if (!this.payload.startDate || !this.payload.endDate) return alert('Start and End dates are required');
+//             if (this.payload.roles.length === 0) return alert('Add at least one role');
+
+//             // Send payload to API
+//         }
+//     }
+// }
+
 function gigData() {
-  return {
-    payload: {
-      title: '',
-      description: '',
-      visibility: 'public',
-      startDate: null,
-      endDate: null,
-      projectBudget: 0,
-
-      // roles are injected / bound, not owned
-      roles: [],
-    },
-
-    // called once after gigRole initializes
-    attachRoles(roleStore) {
-      this.payload.roles = roleStore.roles;
-    },
-
-    syncDatesFromCalendar(calendarInstance) {
-      if (!calendarInstance) return;
-
-      this.payload.startDate = calendarInstance.selectedStart
-        ? calendarInstance.selectedStart.toISOString().split('T')[0]
-        : null;
-
-      this.payload.endDate = calendarInstance.selectedEnd
-        ? calendarInstance.selectedEnd.toISOString().split('T')[0]
-        : null;
-    },
-
-    buildPayload() {
-      return {
-        title: this.payload.title.trim(),
-        description: this.payload.description.trim(),
-        visibility: this.payload.visibility,
-        startDate: this.payload.startDate,
-        endDate: this.payload.endDate,
-        projectBudget: Number(this.payload.projectBudget),
-        roles: this.payload.roles.map(r => ({
-          nicheId: r.nicheId || null,
-          professionalId: r.professionalId || null,
-          budget: Number(r.budget),
-          description: r.description?.trim() || '',
-          workload: r.workload,
-        })),
-      };
-      },
-    submit() {
-      // 1️⃣ pull dates from calendar
-      this.syncDatesFromCalendar(
-        Alpine.$data(this.$refs.calendar)
-      );
-
-      // 2️⃣ build final payload
-      const payload = this.buildPayload();
-
-      console.log('SUBMIT PAYLOAD →', payload);
-
-      // 3️⃣ send / save / navigate
-      // fetch('/api/gigs', {...})
-    },
-  };
+    return {
+        payload: {
+            title: '',
+            description: '',
+            projectBudget: 5000,
+            visibility: 'public',
+            roles: [],  
+            startDate: null,
+            endDate: null,
+        },
+    }
 }
+
+
