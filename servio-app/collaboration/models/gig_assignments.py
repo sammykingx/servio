@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from .choices import AssignmentStatus
 from uuid6 import uuid7
 
+
 class GigAssignment(models.Model):
     """
     Represents the assignment of a professional to a specific GigRole.

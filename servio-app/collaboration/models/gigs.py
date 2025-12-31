@@ -121,7 +121,6 @@ class Gig(models.Model):
         )
         return result['total'] or 0
 
-
     def open_role_count(self):
         """
             Returns the number of roles that are currently open (not assigned or completed).

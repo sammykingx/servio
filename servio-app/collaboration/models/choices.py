@@ -5,7 +5,6 @@ class GigVisibility(models.TextChoices):
     PUBLIC = "public", "Public"
     PRIVATE = "private", "Private"
 
-
 class GigStatus(models.TextChoices):
     DRAFT = "draft", "Draft"
     PUBLISHED = "published", "Published"
@@ -13,17 +12,14 @@ class GigStatus(models.TextChoices):
     COMPLETED = "completed", "Completed"
     CANCELLED = "cancelled", "Cancelled"
 
-
 class WorkMode(models.TextChoices):
     FIXED_HOURS = "fixed_hours", "Fixed hours"
     FLEXIBLE = "flexible", "Flexible (result-based)"
-    
 
 class RoleStatus(models.TextChoices):
     ASSIGNED = "assigned", "Assigned"
     OPEN = "open", "Open"
     COMPLETED = "completed", "Completed"
-
 
 class ApplicationStatus(models.TextChoices):
     PENDING = "pending", "Pending"
