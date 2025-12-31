@@ -3,7 +3,7 @@
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 
-<div>
+<div data-gig-data x-data="gigData()">
     <div class="flex-1 w-full pb-32">
         <div class="mx-auto w-full max-w-[1600px] flex flex-col gap-8">
             <div class="flex flex-col gap-3">
@@ -25,7 +25,7 @@
                         <div class="p-6 flex flex-col gap-6">
                             <div class="flex flex-col gap-2">
                                 <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Gig / Project Title</label>
-                                <input class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300
+                                <input x-model="payload.title" class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300
                                         dark:focus:border-warning-200 focus:ring-success-500/10
                                         dark:focus:ring-warning-300/10 h-11 w-full rounded-lg
                                         border border-gray-300 bg-transparent px-4 py-5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" type="text" />
@@ -40,7 +40,7 @@
                                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-semibold pointer-events-none">
                                             $
                                         </span>
-                                        <input type="number" value="5000" placeholder="5,000" class="
+                                        <input x-model="payload.projectBudget" type="number" value="5000" placeholder="5,000" class="
                                                 w-full rounded-md border border-[#cfd7e7] 
                                                 dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
                                                 text-gray-800 dark:text-gray-400
@@ -51,18 +51,18 @@
                                             " />
                                     </div>
                                 </div>
-                                <div x-data="{ visibility: 'public' }" class="flex flex-col gap-2 w-fit">
+                                <div class="flex flex-col gap-2 w-fit">
                                     <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Visibility</label>
                                     <div class="relative flex bg-[#f8f9fc] dark:bg-[#2d3748] p-1 rounded-lg border border-[#cfd7e7] dark:border-[#4a5568] w-fit">
                                         <!-- Sliding background -->
-                                        <div class="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[47%] bg-white dark:bg-gray-100 rounded-lg shadow-sm transition-all duration-300" :class="visibility === 'private' ? 'translate-x-full' : 'translate-x-0'">
+                                        <div class="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[47%] bg-white dark:bg-gray-100 rounded-lg shadow-sm transition-all duration-300" :class="payload.visibility === 'private' ? 'translate-x-full' : 'translate-x-0'">
                                         </div>
 
                                         <!-- Buttons -->
-                                        <button @click="visibility='public'" :class="visibility === 'public' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
+                                        <button @click="payload.visibility='public'" :class="payload.visibility === 'public' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
                                             Public
                                         </button>
-                                        <button @click="visibility = 'private'" :class="visibility === 'private' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
+                                        <button @click="payload.visibility='private'" :class="payload.visibility === 'private' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
                                             Private
                                         </button>
                                     </div>
@@ -99,7 +99,7 @@
                                             <span class="material-symbols-outlined text-[20px]">link</span>
                                         </button>
                                     </div>
-                                    <textarea class="w-full border-none
+                                    <textarea x-model="payload.description" class="w-full border-none
                                             bg-transparent p-4
                                             min-h-[160px]
                                             text-gray-800 dark:text-gray-400
@@ -131,7 +131,7 @@
                         </div>
                     </div>
 
-                    <div x-data="gigRoles(JSON.parse($refs.taxonomy.textContent))" class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div x-data="gigRoles(JSON.parse($refs.taxonomy.textContent))" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600">
@@ -153,7 +153,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">Niche</label>
-                                            <select x-model="role.nicheId" @change="role.professionalId = ''" class="w-full rounded-md border border-[#cfd7e7]
+                                            <select x-model="role.nicheId" @change="role.professionalId = ''; emitRoles()" class="w-full rounded-md border border-[#cfd7e7]
                                                     dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
                                                     text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
                                                     focus:outline-none focus:ring-1 focus:ring-success-500/30
@@ -167,7 +167,7 @@
                                         </div>
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">professional</label>
-                                            <select x-model="role.professionalId" :disabled="!role.nicheId" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
+                                            <select x-model="role.professionalId" @change="emitRoles()" :disabled="!role.nicheId" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
                                                 <option>Select professional</option>
                                                 <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
                                                     <option :value="pro.id" x-text="pro.name"></option>
@@ -178,18 +178,18 @@
                                             <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Budget Allocation</label>
                                             <div class="relative">
                                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-semibold">$</span>
-                                                <input type="number" x-model="role.budget" placeholder="5000" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 pl-7 pr-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500" />
+                                                <input type="number" x-model="role.budget" @change="emitRoles()" placeholder="5000" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 pl-7 pr-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                                         <div class="md:col-span-2 flex flex-col gap-2">
                                             <label class="text-gray-800 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Role Description</label>
-                                            <input type="text" x-model="role.description" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition" />
+                                            <input type="text" x-model="role.description" @change="emitRoles()" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition" />
                                         </div>
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Workload</label>
-                                            <select x-model="role.workload" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
+                                            <select x-model="role.workload" @change="emitRoles()" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
                                                 <option>Full-time (40h/wk)</option>
                                                 <option>Part-time (20h/wk)</option>
                                                 <option>Hourly</option>
@@ -507,7 +507,6 @@
                 if (type === 'start') {
                     this.selectedStart = normalize(date);
                     this.selectedEnd = null;
-                    console.log(this.selectedStart);
 
                     // IMPORTANT: reassign, don't mutate
                     this.endView = new Date(
@@ -520,8 +519,7 @@
                 if (type === 'end') {
                     this.selectedEnd = normalize(date);
                 }
-                // Emit event so parent Alpine component can sync
-                this.$dispatch('calendar-updated', { start: this.selectedStart, end: this.selectedEnd });
+                this.emitDates();
             },
 
             isSelected(date, type) {
@@ -541,12 +539,23 @@
                     month: 'long',
                     year: 'numeric'
                 });
+            },
+
+            emitDates() {
+                const gig = Alpine.$data(
+                    this.$root.closest('[x-data="gigData()"]')
+                );
+
+                gig.payload.startDate = this.selectedStart
+                    ? this.selectedStart.toISOString().split('T')[0]
+                    : null;
+
+                gig.payload.endDate = this.selectedEnd
+                    ? this.selectedEnd.toISOString().split('T')[0]
+                    : null;
+
             }
         };
-    }
-
-    function submitBtn() {
-        showToast("Publish Button clicked", "success", "Button clicked");
     }
 </script>
 <script>
@@ -574,11 +583,39 @@
                     description: '',
                     workload: 'Full-time (40h/wk)'
                 });
+                this.emitRoles();
             },
 
             removeRole(index) {
                 this.roles.splice(index, 1);
-            }
+                this.emitRoles();
+            },
+
+            emitRoles() {
+                // Find the parent gigData component anywhere on the page
+                const gigEl = document.querySelector('[data-gig-data]');
+                if (!gigEl) {
+                    console.warn('Parent gigData not found');
+                    return;
+                }
+
+                const gig = Alpine.$data(gigEl);
+                if (!gig || typeof gig.setRoles !== 'function') {
+                    console.warn('gigData component does not have setRoles');
+                    return;
+                }
+
+                gig.setRoles(
+                    this.roles.map(role => ({
+                        nicheId: role.nicheId || null,
+                        professionalId: role.professionalId || null,
+                        budget: Number(role.budget) || 0,
+                        description: role.description?.trim() || '',
+                        workload: role.workload
+                    }))
+                );
+            },
+
         }
     }
 </script>

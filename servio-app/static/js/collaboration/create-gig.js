@@ -1,57 +1,3 @@
-// function gigData() {
-//     return {
-//         payload: {
-//             title: '',
-//             description: '',
-//             projectBudget: 5000,
-//             visibility: 'public',
-//             roles: [],        // sync roles here
-//             startDate: null,  // sync calendar start
-//             endDate: null     // sync calendar end
-//         },
-
-//         attachRoles(rolesComponent) {
-//             // Watch for role changes and update payload
-//             this.payload.roles = rolesComponent.roles;
-
-//             // Use Alpine's reactive watcher
-//             this.$watch(
-//                 () => rolesComponent.roles,
-//                 (newRoles) => {
-//                     this.payload.roles = newRoles;
-//                 },
-//                 { deep: true }
-//             );
-//         },
-
-//         updateDates(calendar) {
-//             this.$watch(
-//                 () => calendar.selectedStart,
-//                 (start) => {
-//                     this.payload.startDate = start ? start.toISOString().split('T')[0] : null;
-//                 }
-//             );
-
-//             this.$watch(
-//                 () => calendar.selectedEnd,
-//                 (end) => {
-//                     this.payload.endDate = end ? end.toISOString().split('T')[0] : null;
-//                 }
-//             );
-//         },
-
-//         submit() {
-//             console.log('Submitting payload:', this.payload);
-//             // Add validations
-//             if (!this.payload.title) return alert('Title is required');
-//             if (!this.payload.startDate || !this.payload.endDate) return alert('Start and End dates are required');
-//             if (this.payload.roles.length === 0) return alert('Add at least one role');
-
-//             // Send payload to API
-//         }
-//     }
-// }
-
 function gigData() {
     return {
         payload: {
@@ -59,11 +5,43 @@ function gigData() {
             description: '',
             projectBudget: 5000,
             visibility: 'public',
-            roles: [],  
+
+            // composed later
+            roles: [],
             startDate: null,
             endDate: null,
         },
-    }
+
+        buildBase() {
+            return {
+                title: this.payload.title.trim(),
+                description: this.payload.description.trim(),
+                projectBudget: Number(this.payload.projectBudget),
+                visibility: this.payload.visibility,
+            };
+        },
+
+        setRoles(roles) {
+            this.payload.roles = roles;
+        },
+    };
 }
 
+function submitBtn() {
+    // Get the gigData Alpine component from the DOM
+    const gigEl = document.querySelector('[data-gig-data]');
+    if (!gigEl) {
+        showToast("Gig data not found", "error", "Error");
+        return;
+    }
+
+    const gig = Alpine.$data(gigEl);
+    const payload = gig.payload;
+
+    // For now, just show it in console or for validation
+    console.log('Gig payload:', JSON.stringify(payload, null, 2));
+
+
+    showToast("Payload collected! Check console", "success", "Success");
+}
 
