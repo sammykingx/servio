@@ -3,21 +3,12 @@
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 
-<div x-data="gigData()">
+<div>
     <div class="flex-1 w-full pb-32">
         <div class="mx-auto w-full max-w-[1600px] flex flex-col gap-8">
-            <div class="flex flex-col gap-6">
-                <!-- <div class="flex flex-wrap gap-2 items-center">
-                    <a class="text-[#4c669a] text-sm font-medium leading-normal hover:text-brand-500 transition-colors" href="#">Dashboard</a>
-                    <span class="material-symbols-outlined text-[#9ca3af] text-sm">chevron_right</span>
-                    <a class="text-[#4c669a] text-sm font-medium leading-normal hover:text-brand-500 transition-colors" href="#">Gigs</a>
-                    <span class="material-symbols-outlined text-[#9ca3af] text-sm">chevron_right</span>
-                    <span class="text-gray-800 dark:text-gray-400 text-sm font-medium leading-normal">Create New</span>
-                </div> -->
-                <div class="flex flex-col gap-2">
-                    <h1 class="text-gray-800 dark:text-gray-300 text-title-sm md:text-title-md font-semibold leading-tight tracking-[-0.033em]">Create New Gig</h1>
-                    <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Broadcast your project to thousands of verified professionals.</p>
-                </div>
+            <div class="flex flex-col gap-3">
+                <h1 class="text-gray-800 dark:text-gray-300 text-title-sm md:text-title-md font-semibold leading-tight tracking-[-0.033em]">Create New Gig</h1>
+                <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Broadcast your project to thousands of verified professionals.</p>
             </div>
             <form action="#" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-8 flex flex-col gap-6">
@@ -34,9 +25,7 @@
                         <div class="p-6 flex flex-col gap-6">
                             <div class="flex flex-col gap-2">
                                 <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Gig / Project Title</label>
-                                <input 
-                                    x-model="payload.title"
-                                    class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300
+                                <input x-model="payload.title" class="dark:bg-dark-900 shadow-theme-xs focus:border-success-300
                                         dark:focus:border-warning-200 focus:ring-success-500/10
                                         dark:focus:ring-warning-300/10 h-11 w-full rounded-lg
                                         border border-gray-300 bg-transparent px-4 py-5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" type="text" />
@@ -51,13 +40,7 @@
                                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-semibold pointer-events-none">
                                             $
                                         </span>
-                                        <input 
-                                            x-model.number="payload.projectBudget"
-                                            @input="validateBudget()"
-                                            type="number" 
-                                            value="5000" 
-                                            placeholder="5,000" 
-                                            class="
+                                        <input x-model.number="payload.projectBudget" @input="validateBudget()" type="number" value="5000" placeholder="5,000" class="
                                                 w-full rounded-md border border-[#cfd7e7] 
                                                 dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
                                                 text-gray-800 dark:text-gray-400
@@ -74,7 +57,7 @@
                                         <!-- Sliding background -->
                                         <div class="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[47%] bg-white dark:bg-gray-100 rounded-lg shadow-sm transition-all duration-300" :class="visibility === 'private' ? 'translate-x-full' : 'translate-x-0'">
                                         </div>
-    
+
                                         <!-- Buttons -->
                                         <button @click="payload.visibility='public'" :class="payload.visibility === 'public' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
                                             Public
@@ -84,7 +67,7 @@
                                         </button>
                                     </div>
                                 </div>
-    
+
                             </div>
                             <div class="flex flex-col gap-2">
                                 <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Project Description</label>
@@ -116,9 +99,7 @@
                                             <span class="material-symbols-outlined text-[20px]">link</span>
                                         </button>
                                     </div>
-                                    <textarea 
-                                        x-model="payload.description"
-                                        class="
+                                    <textarea x-model="payload.description" class="
                                             w-full
                                             border-none
                                             bg-transparent
@@ -153,92 +134,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
-                        <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600">
-                                    <span class="material-symbols-outlined text-[20px]">group</span>
-                                </div>
-                                <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Required Professionals</h3>
-                            </div>
-                            <button @click="addRole()" class="text-gray-500 hover:text-brand-500 dark:text-gray-500 dark:hover:text-gray-200 text-sm font-semibold flex items-center gap-1" type="button">
-                                <span class="material-symbols-outlined text-[18px]">add</span>
-                                <span class="hidden sm:inline">Add Role</span>
-                            </button>
-                        </div>
-                        <div class="p-6 flex flex-col gap-6">
-                            <template x-for="(role, index) in payload.roles" :key="index">
-                                <div class="border border-[#cfd7e7] dark:border-[#4a5568] rounded-lg p-5 relative bg-[#fcfcfd] dark:bg-[#232a3b] group hover:border-brand-500/50 transition-colors">
-                                    <button @click="removeRole(index)" class="absolute top-2 right-2 mr-2 text-[#9ca3af] hover:text-red-500 transition-colors p-1">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
-                                    </button>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">Niche</label>
-                                            <select
-                                                x-model="role.nicheId"
-                                                @change="role.professionalId = ''"
-                                                class="w-full rounded-md border border-[#cfd7e7]
-                                                    dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
-                                                    text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                                    focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                                    focus:border-success-500 transition
-                                                "
-                                            >
-                                                <option>Select niche</option>
-                                                <template x-for="niche in taxonomy" :key="niche.id">
-                                                    <option :value="niche.id" x-text="niche.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">professional</label>
-                                            <select
-                                                x-model="role.professionalId"
-                                                :disabled="!role.nicheId"
-                                                class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
-                                                <option>Select professional</option>
-                                                <template
-                                                    x-for="pro in professionalsFor(role.nicheId)"
-                                                    :key="pro.id"
-                                                >
-                                                    <option :value="pro.id" x-text="pro.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Budget Allocation</label>
-                                            <div class="relative">
-                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-semibold">$</span>
-                                                <input type="number" x-model.number="role.budget" @input="updateBudget()" placeholder="5000" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 pl-7 pr-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                                        <div class="md:col-span-2 flex flex-col gap-2">
-                                            <label class="text-gray-800 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Role Description</label>
-                                            <input type="text" x-model="role.description" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition" />
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Workload</label>
-                                            <select x-model="role.workload" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
-                                                <option>Full-time (40h/wk)</option>
-                                                <option>Part-time (20h/wk)</option>
-                                                <option>Hourly</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-    
-                            <button @click="addRole()" class="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-500 rounded-lg text-gray-400 hover:text-brand-500 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors" type="button">
-                                <span class="material-symbols-outlined text-[20px]">add_circle</span>
-                                Add another role
-                            </button>
-                        </div>
-                    </div>
-    
-                    <!-- <div x-data="gigRoles(JSON.parse($refs.taxonomy.textContent))" class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div x-data="gigRoles(JSON.parse($refs.taxonomy.textContent))" class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600">
@@ -260,16 +156,12 @@
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">Niche</label>
-                                            <select
-                                                x-model="role.nicheId"
-                                                @change="role.professionalId = ''"
-                                                class="w-full rounded-md border border-[#cfd7e7]
+                                            <select x-model="role.nicheId" @change="role.professionalId = ''" class="w-full rounded-md border border-[#cfd7e7]
                                                     dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
                                                     text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
                                                     focus:outline-none focus:ring-1 focus:ring-success-500/30
                                                     focus:border-success-500 transition
-                                                "
-                                            >
+                                                ">
                                                 <option>Select niche</option>
                                                 <template x-for="niche in taxonomy" :key="niche.id">
                                                     <option :value="niche.id" x-text="niche.name"></option>
@@ -278,15 +170,9 @@
                                         </div>
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">professional</label>
-                                            <select
-                                                x-model="role.professionalId"
-                                                :disabled="!role.nicheId"
-                                                class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
+                                            <select x-model="role.professionalId" :disabled="!role.nicheId" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
                                                 <option>Select professional</option>
-                                                <template
-                                                    x-for="pro in professionalsFor(role.nicheId)"
-                                                    :key="pro.id"
-                                                >
+                                                <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
                                                     <option :value="pro.id" x-text="pro.name"></option>
                                                 </template>
                                             </select>
@@ -315,13 +201,13 @@
                                     </div>
                                 </div>
                             </template>
-    
+
                             <button @click="addRole()" class="flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-500 rounded-lg text-gray-400 hover:text-brand-500 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors" type="button">
                                 <span class="material-symbols-outlined text-[20px]">add_circle</span>
                                 Add another role
                             </button>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
                     <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
@@ -332,69 +218,41 @@
                             <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Project Timeline</h3>
                         </div>
                         <div class="p-6 grid grid-cols-1 gap-6">
-                            <div x-data="calendarEngine(payload)">
+                            <!--Working calendar engine -->
+                            <div 
+                                
+                                x-data="calendarEngine()"
+                                
+                            >
                                 <!--Start Date-->
-                                <div class="flex flex-col gap-3 space-y-3 mb-5">
-                                    <label class="text-center text-gray-800 dark:text-gray-800 text-sm font-semibold bg-slate-200 rounded-lg py-3 px-4 mb-3">Proposed Start Date</label>
+                                <div class="flex flex-col gap-3 space-y-3 mb-5"> <label class="text-center text-gray-800 dark:text-gray-800 text-sm font-semibold bg-slate-200 rounded-lg py-3 px-4 mb-3">Proposed Start Date</label>
                                     <div x-data="{ type: 'start' }">
                                         <!-- Header-->
-                                        <div class="flex items-center justify-between mb-2">
-                                            <button @click="prevMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200">
-                                                ‹
-                                            </button>
-                                            <span class="text-sm font-semibold text-gray-600 dark:text-gray-500" x-text="monthLabel(type)"></span>
-                                            <button @click="nextMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200">
-                                                ›
-                                            </button>
-                                        </div>
-                                        <!-- Days of the week-->
-                                         <div class="grid grid-cols-7 text-center text-xs font-semibold mb-1">
+                                        <div class="flex items-center justify-between mb-2"> <button @click="prevMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> ‹ </button> <span class="text-sm font-semibold text-gray-600 dark:text-gray-500" x-text="monthLabel(type)"></span> <button @click="nextMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> › </button> </div>
+                                        <div class="grid grid-cols-7 text-center text-xs font-semibold mb-1">
                                             <template x-for="day in weekDays" :key="day">
                                                 <div x-text="day" class="text-gray-600 dark:text-gray-500"></div>
-                                            </template>
-                                        </div>
+                                            </template> </div>
                                         <!--Days of the month-->
                                         <div class="grid grid-cols-7 gap-1 mb-3">
                                             <template x-for="day in daysInMonth(type)" :key="day.dateObj || Math.random()">
-                                                <div>
-                                                    <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{
-                                                            'bg-blue-500 text-white': isSelected(day.dateObj, type),
-                                                            'text-gray-400 cursor-not-allowed': day.disabled
-                                                        }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button>
-                                                </div>
-                                            </template>
-                                        </div>
+                                                <div> <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
+                                            </template> </div>
                                     </div>
-                                </div>
-                                <!-- End date -->
-                                <div class="flex flex-col gap-2">
-                                    <label class="text-center text-gray-800 dark:text-gray-800 text-sm font-semibold bg-slate-200 rounded-lg py-3 px-4 mb-3">Target Delivery / Go Live</label>
+                                </div> <!-- End date -->
+                                <div class="flex flex-col gap-2"> <label class="text-center text-gray-800 dark:text-gray-800 text-sm font-semibold bg-slate-200 rounded-lg py-3 px-4 mb-3">Target Delivery / Go Live</label>
                                     <div x-data="{ type: 'end' }">
                                         <!-- Header-->
-                                        <div class="flex items-center justify-between mb-2">
-                                            <button @click="prevMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200">
-                                                ‹
-                                            </button>
-                                            <span class="text-sm font-semibold text-gray-600 dark:text-gray-500" x-text="monthLabel(type)"></span>
-                                            <button @click="nextMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200">
-                                                ›
-                                            </button>
-                                        </div>
-                                        <!-- Days of the week-->
-                                         <div class="grid grid-cols-7 text-center text-xs font-semibold mb-1">
+                                        <div class="flex items-center justify-between mb-2"> <button @click="prevMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> ‹ </button> <span class="text-sm font-semibold text-gray-600 dark:text-gray-500" x-text="monthLabel(type)"></span> <button @click="nextMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> › </button> </div>
+                                        <div class="grid grid-cols-7 text-center text-xs font-semibold mb-1"> 
                                             <template x-for="day in weekDays" :key="day">
                                                 <div x-text="day" class="text-gray-600 dark:text-gray-500"></div>
                                             </template>
                                         </div>
                                         <!--Days of the month-->
-                                        <div class="grid grid-cols-7 gap-1">
+                                        <div class="grid grid-cols-7 gap-1"> 
                                             <template x-for="day in daysInMonth(type)" :key="day.dateObj || Math.random()">
-                                                <div>
-                                                    <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{
-                                                            'bg-blue-500 text-white': isSelected(day.dateObj, type),
-                                                            'text-gray-400 cursor-not-allowed': day.disabled
-                                                        }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button>
-                                                </div>
+                                                <div> <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
                                             </template>
                                         </div>
                                     </div>
@@ -515,8 +373,8 @@
                    transition">
                     Save as Draft
                 </button>
-    
-                <button type="button" class="flex items-center gap-2
+
+                <button @click="submitBtn()" type="button" class="flex items-center gap-2
                    px-5 py-2.5 rounded-lg
                    bg-brand-500 hover:bg-brand-600
                    text-white text-sm font-semibold
@@ -534,10 +392,11 @@
 {% endblock %}
 {% block custom_page_js %}
 <script id="gig-taxonomy-data" type="application/json" x-ref="taxonomy">
-    {{ gig_taxonomy|safe }}
+{{ gig_taxonomy|safe }}
 </script>
 <script>
-    function calendarEngine(payload) {
+// working calendar engine
+    function calendarEngine() {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -636,7 +495,7 @@
                 if (type === 'end') {
                     if (!this.selectedStart) return true;
 
-                    const minEnd = normalize(this.selectedStart);
+                    const minEnd = new Date(this.selectedStart);
                     minEnd.setDate(minEnd.getDate() + 1);
 
                     return date < minEnd;
@@ -650,8 +509,8 @@
 
                 if (type === 'start') {
                     this.selectedStart = normalize(date);
-                    this.payload.startDate = date.toISOString().split('T')[0];
                     this.selectedEnd = null;
+                    console.log(this.selectedStart);
 
                     // IMPORTANT: reassign, don't mutate
                     this.endView = new Date(
@@ -663,8 +522,9 @@
 
                 if (type === 'end') {
                     this.selectedEnd = normalize(date);
-                    this.payload.endDate = date.toISOString().split('T')[0];
                 }
+                // Emit event so parent Alpine component can sync
+                this.$dispatch('calendar-updated', { start: this.selectedStart, end: this.selectedEnd });
             },
 
             isSelected(date, type) {
@@ -684,42 +544,43 @@
             }
         };
     }
+
+    function submitBtn() {
+        showToast("Publish Button clicked", "success", "Button clicked");
+    }
 </script>
-
-
 <script>
-function gigRoles(taxonomy) {
-    return {
-        taxonomy,
-        roles: [
-            {
+    // working gig roles
+    function gigRoles(taxonomy) {
+        return {
+            taxonomy,
+            roles: [{
                 nicheId: '',
                 professionalId: '',
                 budget: 5000,
                 description: '',
                 workload: 'Full-time (40h/wk)'
+            }],
+
+            professionalsFor(nicheId) {
+                return this.taxonomy.find(n => n.id == nicheId)?.subcategories || [];
+            },
+
+            addRole() {
+                this.roles.push({
+                    nicheId: '',
+                    professionalId: '',
+                    budget: 0,
+                    description: '',
+                    workload: 'Full-time (40h/wk)'
+                });
+            },
+
+            removeRole(index) {
+                this.roles.splice(index, 1);
             }
-        ],
-
-        professionalsFor(nicheId) {
-            return this.taxonomy.find(n => n.id == nicheId)?.subcategories || [];
-        },
-
-        addRole() {
-            this.roles.push({
-                nicheId: '',
-                professionalId: '',
-                budget: 0,
-                description: '',
-                workload: 'Full-time (40h/wk)'
-            });
-        },
-
-        removeRole(index) {
-            this.roles.splice(index, 1);
         }
     }
-}
 </script>
 <script src="{% static 'js/collaboration/create-gig.js' %}"></script>
 {% endblock %}

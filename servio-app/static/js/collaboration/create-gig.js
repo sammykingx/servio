@@ -1,61 +1,64 @@
 function gigData() {
-    return {
-        payload: {
-            title: '',
-            description: '',
-            visibility: 'public',
-            startDate: null,
-            endDate: null,
-            projectBudget: 0,
-            roles: [
-                { nicheId: '', professionalId: '', budget: 0, description: '', workload: 'Full-time (40h/wk)' }
-            ]
-        },
+  return {
+    payload: {
+      title: '',
+      description: '',
+      visibility: 'public',
+      startDate: null,
+      endDate: null,
+      projectBudget: 0,
 
-        taxonomy: JSON.parse($refs.taxonomy.textContent),
+      // roles are injected / bound, not owned
+      roles: [],
+    },
 
-        professionalsFor(nicheId) {
-            return this.taxonomy.find(n => n.id == nicheId)?.subcategories || [];
-        },
+    // called once after gigRole initializes
+    attachRoles(roleStore) {
+      this.payload.roles = roleStore.roles;
+    },
 
-        totalBudgetDisplay: '$0',
+    syncDatesFromCalendar(calendarInstance) {
+      if (!calendarInstance) return;
 
-        updateBudget() {
-            const sum = this.payload.roles.reduce((acc, r) => acc + (r.budget || 0), 0);
-            if (sum <= this.payload.projectBudget) {
-                this.totalBudgetDisplay = `$${sum.toLocaleString()}`;
-            } else {
-                // exceed project budget -> alert & update display to sum
-                this.totalBudgetDisplay = `$${sum.toLocaleString()}`;
-                showToast(
-                    'The sum of all roles budgets exceeds the project budget. Adjust roles budgets.',
-                    'warning',
-                    'Budget Mismatch'
-                );
-            }
-        },
+      this.payload.startDate = calendarInstance.selectedStart
+        ? calendarInstance.selectedStart.toISOString().split('T')[0]
+        : null;
 
-        validateBudget() {
-            // Ensure projectBudget >= sum of roles budgets
-            const sum = this.payload.roles.reduce((acc,r) => acc + (r.budget||0), 0);
-            if(this.payload.projectBudget < sum) {
-                this.payload.projectBudget = sum;
-                showToast(
-                    'Project budget adjusted to match sum of roles budgets.',
-                    'info',
-                    'Budget Updated',
-                );
-            }
-            this.updateBudget();
-        },
+      this.payload.endDate = calendarInstance.selectedEnd
+        ? calendarInstance.selectedEnd.toISOString().split('T')[0]
+        : null;
+    },
 
-        addRole() {
-            this.payload.roles.push({ nicheId:'', professionalId:'', budget:0, description:'', workload:'Full-time (40h/wk)' });
-        },
+    buildPayload() {
+      return {
+        title: this.payload.title.trim(),
+        description: this.payload.description.trim(),
+        visibility: this.payload.visibility,
+        startDate: this.payload.startDate,
+        endDate: this.payload.endDate,
+        projectBudget: Number(this.payload.projectBudget),
+        roles: this.payload.roles.map(r => ({
+          nicheId: r.nicheId || null,
+          professionalId: r.professionalId || null,
+          budget: Number(r.budget),
+          description: r.description?.trim() || '',
+          workload: r.workload,
+        })),
+      };
+      },
+    submit() {
+      // 1️⃣ pull dates from calendar
+      this.syncDatesFromCalendar(
+        Alpine.$data(this.$refs.calendar)
+      );
 
-        removeRole(index) {
-            this.payload.roles.splice(index,1);
-            this.updateBudget();
-        }
-    }
+      // 2️⃣ build final payload
+      const payload = this.buildPayload();
+
+      console.log('SUBMIT PAYLOAD →', payload);
+
+      // 3️⃣ send / save / navigate
+      // fetch('/api/gigs', {...})
+    },
+  };
 }
