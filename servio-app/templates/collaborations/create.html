@@ -7,7 +7,7 @@
     <div class="flex-1 w-full pb-32">
         <div class="mx-auto w-full max-w-[1600px] flex flex-col gap-8">
             <div class="flex flex-col gap-3">
-                <h1 class="text-gray-800 dark:text-gray-300 text-title-sm md:text-title-md font-semibold leading-tight tracking-[-0.033em]">Create New Gig</h1>
+                <h1 class="text-gray-800 dark:text-gray-300 text-title-sm md:text-title-md font-semibold leading-tight tracking-[-0.033em]">Create New Gig/Project</h1>
                 <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Broadcast your project to thousands of verified professionals.</p>
             </div>
             <form action="#" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -40,7 +40,16 @@
                                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-semibold pointer-events-none">
                                             $
                                         </span>
-                                        <input x-model="payload.projectBudget" type="number" value="5000" placeholder="5,000" class="
+                                        <input 
+                                            x-model="payload.projectBudget"
+                                            :disabled="budgetLocked"
+                                            :class="budgetLocked
+                                                ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800'
+                                                : ''"
+                                            type="number"
+                                            value=""
+                                            placeholder="5,000"
+                                            class="
                                                 w-full rounded-md border border-[#cfd7e7] 
                                                 dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
                                                 text-gray-800 dark:text-gray-400
@@ -276,9 +285,62 @@
                         </div>
                         <div class="p-6">
                             <div class="flex flex-col gap-6">
+                                <!-- Total Budget -->
                                 <div class="flex items-end gap-3">
-                                    <span class="text-title-lg font-extrabold text-gray-700 dark:text-gray-300 tracking-tight">$9,500</span>
-                                    <span class="text-sm text-gray-600 mb-1.5 font-medium">Total required Budget</span>
+                                    <span
+                                        class="text-title-lg font-extrabold text-gray-700 dark:text-gray-300 tracking-tight"
+                                        x-text="`$${Number(payload.projectBudget).toLocaleString()}`"
+                                    ></span>
+                                    <span class="text-[12px] text-gray-600 mb-1.5 font-medium">
+                                        Project/Gig Budget
+                                    </span>
+                                </div>
+
+                                <!-- Budget Distribution Bar -->
+                                <div class="w-full h-4 rounded-full bg-[#f0f2f5] dark:bg-[#2d3748] flex overflow-hidden">
+                                    <template
+                                        x-for="(role, index) in payload.roles.filter(r => r.professional && r.budget > 0)"
+                                        :key="index"
+                                    >
+                                        <div
+                                            class="h-full"
+                                            :class="roleColors[index % roleColors.length]"
+                                            :style="`width: ${(role.budget / payload.projectBudget) * 100}%`"
+                                        ></div>
+                                    </template>
+                                </div>
+
+                                <!-- Role Breakdown -->
+                                <div class="flex flex-col gap-3">
+                                    <template
+                                        x-for="(role, index) in payload.roles.filter(r => r.professional && r.budget > 0)"
+                                        :key="index"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="size-3 rounded-full"
+                                                :class="roleColors[index % roleColors.length]"
+                                            ></div>
+
+                                            <span class="text-sm text-gray-800 dark:text-gray-400">
+                                                <span x-text="role.professional"></span>
+                                                <span
+                                                    class="text-[#4c669a] ml-1"
+                                                    x-text="`($${Number(role.budget).toLocaleString()})`"
+                                                ></span>
+                                            </span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- <div class="flex flex-col gap-6">
+                                <div class="flex items-end gap-3">
+                                    <span
+                                        class="text-title-lg font-extrabold text-gray-700 dark:text-gray-300 tracking-tight"
+                                        x-text="`$${Number(payload.projectBudget).toLocaleString()}`"
+                                    >$9,500</span>
+                                    <span class="text-xs lg:text-sm text-gray-600 mb-1.5 font-medium">Total required Budget</span>
                                 </div>
                                 <div class="w-full h-4 rounded-full bg-[#f0f2f5] dark:bg-[#2d3748] flex overflow-hidden">
                                     <div class="h-full bg-success-400" style="width: 52%"></div>
@@ -294,7 +356,7 @@
                                         <span class="text-sm text-gray-800 dark:text-gray-400">Frontend Dev <span class="text-[#4c669a] ml-1">($4,500)</span></span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
@@ -354,7 +416,9 @@
                 <span class="text-xs font-semibold text-[#4c669a] uppercase tracking-wider">
                     Estimated Total
                 </span>
-                <span class="text-lg font-semibold text-gray-800 dark:text-gray-400">
+                <span 
+                    x-text="`$${Number(budgetLocked ? rolesTotalAmount : payload.projectBudget).toLocaleString()}`"
+                    class="text-lg font-semibold text-gray-800 dark:text-gray-400">
                     $9,500
                     <span class="text-xs font-normal text-[#4c669a]">USD</span>
                 </span>
@@ -582,7 +646,7 @@
                 nicheName: '',
                 professionalId: '',
                 professionalName: '',
-                budget: 5000,
+                budget: 0,
                 description: '',
                 workload: 'Full-time (40h/wk)'
             }],
@@ -653,8 +717,6 @@
                     };
                 });
 
-                
-
                 gig.setRoles(payload);
             },
 
@@ -665,14 +727,6 @@
                 );
             },
 
-            roleColors: [
-                'bg-success-400',
-                'bg-blue-500',
-                'bg-purple-500',
-                'bg-orange-500',
-                'bg-pink-500',
-                'bg-teal-500',
-            ],
             
         }
     }

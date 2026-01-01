@@ -10,15 +10,62 @@ function gigData() {
             roles: [],
             startDate: null,
             endDate: null,
+            isNegotiable: false,
         },
+        budgetLocked: false,
+        rolesTotalAmount: 0,
 
         setRoles(roles) {
             this.payload.roles = roles;
+            
+            const rolesTotal = roles.reduce(
+                (sum, r) => sum + (Number(r.budget) || 0), 0
+            );
+
+            this.rolesTotalAmount = rolesTotal;
+
+             const shouldLock = rolesTotal > this.payload.projectBudget;
+
+            // Only reacting on state change
+            if (shouldLock !== this.budgetLocked) {
+                this.budgetLocked = shouldLock;
+
+                if (shouldLock) {
+                    this.payload.projectBudget = rolesTotal;
+
+                    showToast(
+                        'Project budget locked to match the total cost of required roles.',
+                        'warning',
+                        'Project Budget Locked'
+                    );
+                } else {
+                    showToast(
+                        'Project Budget is now unlocked for user interaction.',
+                        'success',
+                        'Project budget unlocked',
+                    );
+                }
+            }
+
+            // console.log(`Total budget: $${this.payload.projectBudget}, roles total: $${rolesTotal}`);
         },
 
         setProjectBudget(amount) {
             this.payload.projectBudget = Number(amount) || 0;
         },
+
+        roleColors: [
+            'bg-success-400',
+            'bg-blue-500',
+            'bg-purple-500',
+            'bg-orange-500',
+            'bg-pink-500',
+            'bg-teal-500',
+            'bg-indigo-500',
+            'bg-emerald-500',
+            'bg-rose-500',
+            'bg-cyan-500',
+        ],
     };
 }
 
@@ -109,11 +156,9 @@ function validatePayload(gigPayload) {
 
                 const descriptionCount = role.description.trim().match(/\b\w+\b/g)?.length || 0;
             
-                if (descriptionCount < 15) {
+                if (descriptionCount < 10) {
                     errors.push(`Please provide a meaningful description for "${role.professional || role.niche}" to understand.`);
                 }
-                console.log("done");
-
             }
         });
     }
