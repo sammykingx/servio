@@ -543,18 +543,32 @@
 
             emitDates() {
                 const gig = Alpine.$data(
-                    this.$root.closest('[x-data="gigData()"]')
+                    document.querySelector('[data-gig-data]')
                 );
 
+                if (!gig) {
+                    showToast('Incomplete initialization of gig data', 'warning', 'Initialization Error');
+                    return;
+                }
+
+                const formatDate = (date) => {
+                    if (!date) return null;
+
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    return `${y}-${m}-${d}`;
+                };
+
                 gig.payload.startDate = this.selectedStart
-                    ? this.selectedStart.toISOString().split('T')[0]
+                    ? formatDate(this.selectedStart)
                     : null;
 
                 gig.payload.endDate = this.selectedEnd
-                    ? this.selectedEnd.toISOString().split('T')[0]
+                    ? formatDate(this.selectedEnd)
                     : null;
 
-            }
+            },
         };
     }
 </script>
@@ -565,7 +579,9 @@
             taxonomy,
             roles: [{
                 nicheId: '',
+                nicheName: '',
                 professionalId: '',
+                professionalName: '',
                 budget: 5000,
                 description: '',
                 workload: 'Full-time (40h/wk)'
@@ -578,7 +594,9 @@
             addRole() {
                 this.roles.push({
                     nicheId: '',
+                    nicheName: '',
                     professionalId: '',
+                    professionalName: '',
                     budget: 0,
                     description: '',
                     workload: 'Full-time (40h/wk)'
@@ -591,31 +609,71 @@
                 this.emitRoles();
             },
 
+            getNicheById(id) {
+                return this.taxonomy.find(n => n.id == id);
+            },
+
+            getProfessionalById(nicheId, proId) {
+                const niche = this.getNicheById(nicheId);
+                return niche?.subcategories?.find(p => p.id == proId);
+            },
+
             emitRoles() {
                 // Find the parent gigData component anywhere on the page
                 const gigEl = document.querySelector('[data-gig-data]');
                 if (!gigEl) {
-                    console.warn('Parent gigData not found');
+                    showToast(
+                        "We couldn’t prepare your gig details. Please refresh the page and try again.",
+                        "info",
+                        "Page Error"
+                    )
                     return;
                 }
 
                 const gig = Alpine.$data(gigEl);
                 if (!gig || typeof gig.setRoles !== 'function') {
-                    console.warn('gigData component does not have setRoles');
+                    showToast(
+                        "This page is missing required gig data. Please reload or contact support if the issue persists.",
+                        "info",
+                        "Configuration Error"
+                    )
                     return;
                 }
 
-                gig.setRoles(
-                    this.roles.map(role => ({
-                        nicheId: role.nicheId || null,
-                        professionalId: role.professionalId || null,
+                const payload = this.roles.map(role => {
+                    const niche = this.getNicheById(role.nicheId);
+                    const professional = this.getProfessionalById(role.nicheId, role.professionalId);
+
+                    return {
+                        niche: niche?.name || null,
+                        professional: professional?.name || null,
                         budget: Number(role.budget) || 0,
                         description: role.description?.trim() || '',
                         workload: role.workload
-                    }))
+                    };
+                });
+
+                
+
+                gig.setRoles(payload);
+            },
+
+            totalRolesBudget() {
+                return this.roles.reduce(
+                    (sum, r) => sum + (Number(r.budget) || 0),
+                    0
                 );
             },
 
+            roleColors: [
+                'bg-success-400',
+                'bg-blue-500',
+                'bg-purple-500',
+                'bg-orange-500',
+                'bg-pink-500',
+                'bg-teal-500',
+            ],
+            
         }
     }
 </script>
