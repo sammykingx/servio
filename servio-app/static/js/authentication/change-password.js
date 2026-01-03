@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const res = await fetch(form.action, { method: form.method, body: new FormData(form) });
-            console.log("RESPONSE:", res);
             if (res.ok) {
                 showToast("Your password has been updated.", "success", "Update Successful");
                 updateButton("success");

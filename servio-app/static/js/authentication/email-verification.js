@@ -20,8 +20,6 @@ async function verifyEmail() {
             },
             body: null,
         });
-
-        console.log(response);
         if (response.ok) {
             // console.log("Email successfully verified! Redirecting...", "success", "Account Activated");
             toggleContentModal();

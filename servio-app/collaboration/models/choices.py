@@ -7,6 +7,7 @@ class GigVisibility(models.TextChoices):
 
 class GigStatus(models.TextChoices):
     DRAFT = "draft", "Draft"
+    PENDING = "pending", "Pending"
     PUBLISHED = "published", "Published"
     IN_PROGRESS = "in_progress", "In Progress"
     COMPLETED = "completed", "Completed"

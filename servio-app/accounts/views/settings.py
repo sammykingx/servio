@@ -2,6 +2,7 @@ from django.views.generic.base import TemplateView
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from template_map.accounts import Accounts
 from accounts.models.profile import UserRole
 from accounts.models.address import AddressType
@@ -40,5 +41,15 @@ def business_settings_toggle(request) -> HttpResponse:
         profile.is_business_owner = new_value
         profile.role = UserRole.PROVIDERS if new_value else UserRole.MEMBERS
         profile.save(update_fields=["is_business_owner", "role"])
+        
+        provider_group = Group.objects.get(name=UserRole.PROVIDERS)
+        member_group = Group.objects.get(name=UserRole.MEMBERS)
+        
+        if new_value:
+            request.user.groups.remove(member_group)
+            request.user.groups.add(provider_group)
+        else:
+            request.user.groups.remove(provider_group)
+            request.user.groups.add(member_group)
 
     return HttpResponse(status=200)

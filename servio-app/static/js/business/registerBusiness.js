@@ -29,32 +29,6 @@ function businessState() {
     }
 };
 
-// function industrySelector(businessData) {
-//     return {
-//         industries: [],
-//         subCategories: [],
-
-//         init() {
-//             this.industries = window.INDUSTRIES_DATA || [];
-
-//             if (businessData.industry) {
-//                 this.updateSubCategories();
-//             }
-
-//             this.$watch('businessData.industry', () => {
-//                 this.updateSubCategories();
-//             });
-//         },
-
-//         updateSubCategories() {
-//             const selected = this.industries.find(
-//                 i => i.name === businessData.industry
-//             );
-//             this.subCategories = selected ? selected.subcategories : [];
-//         }
-//     };
-// }
-
 
 function industrySelector(businessData) {
     return {

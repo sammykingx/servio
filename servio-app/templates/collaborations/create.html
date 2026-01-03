@@ -3,7 +3,7 @@
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 
-<div data-gig-data x-data="gigData()">
+<div data-gig-data x-data="gigData()" data-endpoint="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" data-csrf-token="{{ csrf_token }}">
     <div class="flex-1 w-full pb-32">
         <div class="mx-auto w-full max-w-[1600px] flex flex-col gap-8">
             <div class="flex flex-col gap-3">
@@ -20,7 +20,7 @@
                                 </div>
                                 <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Project Information</h3>
                             </div>
-                            <span class="text-xs font-medium text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-full">Auto-saved</span>
+                            <span class="text-xs font-medium text-purple-600 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded-full">not saved</span>
                         </div>
                         <div class="p-6 flex flex-col gap-6">
                             <div class="flex flex-col gap-2">
@@ -108,7 +108,10 @@
                                             <span class="material-symbols-outlined text-[20px]">link</span>
                                         </button>
                                     </div>
-                                    <textarea x-model="payload.description" class="w-full border-none
+                                    <textarea
+                                        x-model="payload.description" 
+                                        @input="enforceDescriptionLimit()"
+                                        class="w-full border-none
                                             bg-transparent p-4
                                             min-h-[160px]
                                             text-gray-800 dark:text-gray-400
@@ -119,28 +122,87 @@
                                             focus:border-transparent
                                         " placeholder="Describe the project goals, deliverables, and any specific requirements..."></textarea>
                                 </div>
-                                <p class="text-xs text-[#4c669a] text-right">0/2000 characters</p>
+                                <p
+                                    class="text-xs text-right"
+                                    :class="descriptionCount() >= maxDescriptionLength
+                                        ? 'text-red-500'
+                                        : 'text-[#4c669a]'"
+                                >
+                                    <span x-text="descriptionCount()"></span>/<span x-text="maxDescriptionLength"></span>
+                                    characters
+                                </p>
                             </div>
-                            <div class="flex items-center gap-3 pl-3" x-data="{ isChecked: '' }">
+                            <div class="flex items-center gap-3 pl-3">
                                 <label class="text-sm font-medium text-gray-800 dark:text-gray-400">
-                                    Enable Roles:
+                                    Allow Negotiation
                                 </label>
-                                <div class="flex flex-wrap items-center gap-4">
-                                    <div>
-                                        <label :class="isChecked === 'yes' ? 'text-gray-700 dark:text-gray-400' : 'text-gray-500 dark:text-gray-400'" class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none">
-                                            <input class="sr-only" type="radio" name="roleSelect" id="yes" @change="isChecked = 'yes'" />
-                                            <span :class="isChecked === 'yes' ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'" class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]">
-                                                <span :class="isChecked === 'yes' ? 'block' : 'hidden'" class="h-2 w-2 rounded-full bg-white"></span>
-                                            </span>
-                                            Yes
-                                        </label>
-                                    </div>
+
+                                <div class="flex items-center gap-4">
+                                    <!-- YES -->
+                                    <label
+                                        class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none"
+                                        :class="payload.isNegotiable
+                                            ? 'text-gray-700 dark:text-gray-300'
+                                            : 'text-gray-500 dark:text-gray-400'"
+                                    >
+                                        <input
+                                            type="radio"
+                                            class="sr-only"
+                                            name="roleSelect"
+                                            :checked="payload.isNegotiable === true"
+                                            @change="payload.isNegotiable = true"
+                                        />
+
+                                        <span
+                                            class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]"
+                                            :class="payload.isNegotiable
+                                                ? 'border-brand-500 bg-brand-500'
+                                                : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                                        >
+                                            <span
+                                                class="h-2 w-2 rounded-full bg-white"
+                                                x-show="payload.isNegotiable"
+                                            ></span>
+                                        </span>
+
+                                        Yes
+                                    </label>
+
+                                    <!-- NO -->
+                                    <label
+                                        class="relative flex cursor-pointer items-center gap-3 text-sm font-medium select-none"
+                                        :class="!payload.isNegotiable
+                                            ? 'text-gray-700 dark:text-gray-300'
+                                            : 'text-gray-500 dark:text-gray-400'"
+                                    >
+                                        <input
+                                            type="radio"
+                                            class="sr-only"
+                                            name="roleSelect"
+                                            :checked="payload.isNegotiable === false"
+                                            @change="payload.isNegotiable = false"
+                                        />
+
+                                        <span
+                                            class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]"
+                                            :class="!payload.isNegotiable
+                                                ? 'border-brand-500 bg-brand-500'
+                                                : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                                        >
+                                            <span
+                                                class="h-2 w-2 rounded-full bg-white"
+                                                x-show="!payload.isNegotiable"
+                                            ></span>
+                                        </span>
+
+                                        No
+                                    </label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div x-data="gigRoles(JSON.parse($refs.taxonomy.textContent))" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div x-data="gigRoles($refs.taxonomy, $refs.workmodeData)" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600">
@@ -199,9 +261,10 @@
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Workload</label>
                                             <select x-model="role.workload" @change="emitRoles()" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
-                                                <option>Full-time (40h/wk)</option>
-                                                <option>Part-time (20h/wk)</option>
-                                                <option>Hourly</option>
+                                                <option>Choose Workload</option>
+                                                <template x-for="option in workmodeOptions" :key="option.value">
+                                                    <option :value="option.value" x-text="option.label"></option>
+                                                </template>
                                             </select>
                                         </div>
                                     </div>
@@ -238,11 +301,12 @@
                                         <div class="grid grid-cols-7 text-center text-xs font-semibold mb-1">
                                             <template x-for="day in weekDays" :key="day">
                                                 <div x-text="day" class="text-gray-600 dark:text-gray-500"></div>
-                                            </template> </div>
+                                            </template>
+                                        </div>
                                         <!--Days of the month-->
                                         <div class="grid grid-cols-7 gap-1 mb-3">
                                             <template x-for="day in daysInMonth(type)" :key="day.dateObj ? day.dateObj.getTime() : 'empty-' + index">
-                                                <div> <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
+                                                <div> <button type="button" x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-brand-300 transition"></button> </div>
                                             </template> </div>
                                     </div>
                                 </div> <!-- End date -->
@@ -258,7 +322,7 @@
                                         <!--Days of the month-->
                                         <div class="grid grid-cols-7 gap-1"> 
                                             <template x-for="day in daysInMonth(type)" :key="day.dateObj ? day.dateObj.getTime() : 'empty-' + index">
-                                                <div> <button x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
+                                                <div> <button type="button" x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
                                             </template>
                                         </div>
                                     </div>
@@ -424,28 +488,57 @@
                 </span>
             </div>
             <!-- Actions -->
-            <div class="flex items-center gap-3 ml-auto">
-                <button type="button" class="px-5 py-2.5 rounded-lg
-                   border border-[#cfd7e7] dark:border-[#4a5568]
-                   bg-white dark:bg-[#2d3748]
-                   text-gray-800 dark:text-gray-400
-                   text-sm font-semibold
-                   hover:bg-[#f8f9fc] dark:hover:bg-[#4a5568]
-                   transition">
+            <div
+                class="flex items-center gap-3 ml-auto"
+                x-data="{ busyPublish: false, busyDraft: false }"
+            >
+                <!-- Save Draft -->
+                <button
+                    type="button"
+                    @click="
+                        if (busyDraft) return;
+                        busyDraft = true;
+                        submitBtn('draft').finally(() => busyDraft = false)
+                    "
+                    :disabled="busyDraft || busyPublish"
+                    class="px-5 py-2.5 rounded-lg
+                        border border-[#cfd7e7] dark:border-[#4a5568]
+                        bg-white dark:bg-[#2d3748]
+                        text-gray-800 dark:text-gray-400
+                        text-sm font-semibold
+                        hover:bg-[#f8f9fc] dark:hover:bg-[#4a5568]
+                        transition
+                        disabled:opacity-60 disabled:cursor-not-allowed"
+                >
                     Save as Draft
                 </button>
 
-                <button @click="submitBtn()" type="button" class="flex items-center gap-2
-                   px-5 py-2.5 rounded-lg
-                   bg-brand-500 hover:bg-brand-600
-                   text-white text-sm font-semibold
-                   shadow-md transition">
-                    <span class="material-symbols-outlined text-[18px]">
-                        send
-                    </span>
-                    Publish Gig
+                <!-- Publish Gig -->
+                <button
+                    @click="
+                        if (busyPublish) return;
+                        busyPublish = true;
+                        submitBtn('publish').finally(() => busyPublish = false)
+                    "
+                    :disabled="busyDraft || busyPublish"
+                    type="button"
+                    class="flex items-center gap-2
+                        px-5 py-2.5 rounded-lg
+                        text-white text-sm font-semibold
+                        shadow-md transition
+                        disabled:opacity-60 disabled:cursor-not-allowed
+                        bg-brand-500 hover:bg-brand-600"
+                >
+                    <span
+                        class="material-symbols-outlined text-[18px]"
+                        :class="{ 'animate-spin': busyPublish }"
+                        x-text="busyPublish ? 'autorenew' : 'send'"
+                    ></span>
+
+                    <span x-text="busyPublish ? 'Publishing…' : 'Publish Gig'"></span>
                 </button>
             </div>
+
         </div>
     </div>
 </div>
@@ -454,6 +547,9 @@
 {% block custom_page_js %}
 <script id="gig-taxonomy-data" type="application/json" x-ref="taxonomy">
 {{ gig_taxonomy|safe }}
+</script>
+<script id="workmode-data" type="application/json" x-ref="workmodeData">
+  {{ workmode_labels|safe }}
 </script>
 <script>
 // working calendar engine
@@ -638,9 +734,10 @@
 </script>
 <script>
     // working gig roles
-    function gigRoles(taxonomy) {
+    function gigRoles(taxonomyEl, workmodeEl) {
         return {
-            taxonomy,
+            taxonomy: JSON.parse(taxonomyEl.textContent),
+            workmodeOptions: JSON.parse(workmodeEl.textContent),
             roles: [{
                 nicheId: '',
                 nicheName: '',
@@ -648,7 +745,7 @@
                 professionalName: '',
                 budget: 0,
                 description: '',
-                workload: 'Full-time (40h/wk)'
+                workload: ''
             }],
 
             professionalsFor(nicheId) {
@@ -663,7 +760,7 @@
                     professionalName: '',
                     budget: 0,
                     description: '',
-                    workload: 'Full-time (40h/wk)'
+                    workload: 'flexible'
                 });
                 this.emitRoles();
             },
@@ -709,7 +806,9 @@
                     const professional = this.getProfessionalById(role.nicheId, role.professionalId);
 
                     return {
+                        nicheId: niche?.id || null,
                         niche: niche?.name || null,
+                        professionalId: professional?.id || null,
                         professional: professional?.name || null,
                         budget: Number(role.budget) || 0,
                         description: role.description?.trim() || '',

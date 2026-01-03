@@ -22,10 +22,18 @@ class GigRole(models.Model):
         on_delete=models.PROTECT,
         related_name="roles"
     )
-    role_title = models.CharField(
+    niche_name = models.CharField(
         max_length=100,
         blank=True,
+        help_text="Optional specific role title (e.g. Senior Frontend Engineer)"
+    )
+    role_id = models.PositiveIntegerField(
         null=True,
+        help_text="Identifier for the subcategory under the main category"
+    )
+    role_name = models.CharField(
+        max_length=100,
+        blank=True,
         help_text="Optional specific role title (e.g. Senior Frontend Engineer)"
     )
     budget = models.DecimalField(max_digits=10, decimal_places=2)
@@ -34,6 +42,7 @@ class GigRole(models.Model):
         choices=WorkMode.choices,
         default=WorkMode.FIXED_HOURS,
     )
+    description = models.TextField(blank=True)
     slots = models.PositiveIntegerField(default=1)
     status = models.CharField(
         max_length=40,
@@ -81,6 +90,6 @@ class GigRole(models.Model):
         """
             Returns a human-readable description combining role title, niche, and status.
         """
-        title = self.role_title or self.niche.name
-        return f"{title} - {self.status} - Qty: {self.quantity}"
+        title = self.role_name or self.niche_name
+        return f"{title} - {self.status} - Qty: {self.slots}"
     

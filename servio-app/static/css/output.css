@@ -3281,9 +3281,6 @@
   .text-indigo-900 {
     color: var(--color-indigo-900);
   }
-  .text-orange-300 {
-    color: var(--color-orange-300);
-  }
   .text-orange-600 {
     color: var(--color-orange-600);
   }
@@ -4291,6 +4288,13 @@
       }
     }
   }
+  .hover\:bg-brand-300 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-brand-300);
+      }
+    }
+  }
   .hover\:bg-brand-500 {
     &:hover {
       @media (hover: hover) {
@@ -4830,6 +4834,11 @@
   .disabled\:opacity-50 {
     &:disabled {
       opacity: 50%;
+    }
+  }
+  .disabled\:opacity-60 {
+    &:disabled {
+      opacity: 60%;
     }
   }
   .has-\[\:checked\]\:justify-end {

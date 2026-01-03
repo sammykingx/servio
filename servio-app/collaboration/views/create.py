@@ -1,37 +1,33 @@
 from django.apps import apps
+from django.db import transaction, IntegrityError, OperationalError
 from django.urls import reverse_lazy
-from django.db import transaction
-from django.shortcuts import render
-from django.http.response import HttpResponse
+from django.shortcuts import render, redirect
+from django.http.response import HttpResponse, JsonResponse
 from django.db.models import Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.base import TemplateView, View
-from django.views.generic import CreateView
+from django.views.generic.base import View
+from django.utils.safestring import mark_safe
 from template_map.collaboration import Collabs
 from core.url_names import CollaborationURLS
-from ..forms import GigCreateForm, GigRoleFormSet
+from ..schemas import CreateGigRequest, CreateGigStates,  get_response_msg
+from ..schemas.gig import GigPayload
+from ..schemas.gig_role import WORKMODE_OPTIONS
+from pydantic import ValidationError
+from typing import Dict, List
 import json
 
 
 GigCategory = apps.get_model("collaboration", "GigCategory")
 
-class CreateCollaborationView(LoginRequiredMixin, CreateView):
+
+class CreateCollaborationView(LoginRequiredMixin, View):
     """
     Docstring for CreateCollaborationView
     """
-    model = apps.get_model("collaboration","Gig")
+    http_method_names = ["get", "post"]
     
-    form_class = GigCreateForm
-    template_name = Collabs.CREATE
-    success_url = reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS)
-    
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context["role_formset"] = GigRoleFormSet(self.request.POST)
-        else:
-            context["role_formset"] = GigRoleFormSet()
+            
+    def create_taxonomy_context(self) -> List[Dict[str, str|List]]:
         niches = (
             GigCategory.objects
             .filter(parent__isnull=True, is_active=True)
@@ -59,22 +55,111 @@ class CreateCollaborationView(LoginRequiredMixin, CreateView):
             for niche in niches
         ]
 
-        context["gig_taxonomy"] = json.dumps(taxonomy)
+        return json.dumps(taxonomy)
+
+    def get(self, request) -> HttpResponse:
+        context = { 
+                   "gig_taxonomy" : self.create_taxonomy_context(),
+                   "workmode_labels": json.dumps(WORKMODE_OPTIONS),
+                }
+        return render(request, Collabs.CREATE, context)
+    
+    def post(self, request) -> JsonResponse:
+        try:
+            payload = json.loads(request.body)
+            gig_data = CreateGigRequest(**payload)
+            self.save_gig_data(gig_data.payload, gig_data.action)
+
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {
+                    "error": "Invalid JSON payload",
+                    "message": "Request body should be a valid JSON data, check and try again.",
+                },
+                status=400
+            )
+            
+        except ValidationError as e:
+            from formatters.pydantic_formatter import format_pydantic_errors
+            return JsonResponse(
+                {
+                    "error": "Validation error",
+                    "message": "Some required information is missing or invalid.",
+                    "fields": format_pydantic_errors(e),
+                },
+                status=400
+            )
+        except IntegrityError as err:
+            return JsonResponse(
+                {
+                    "error": "Data Conflict Error",
+                    "message": err,
+                    "fields": format_pydantic_errors(e),
+                },
+                status=400
+            )
+            
+        except OperationalError as err:
+            return JsonResponse(
+                {
+                    "error": "Data Conflict Error",
+                    "message": err,
+                    "fields": format_pydantic_errors(e),
+                },
+                status=400
+            )
         
-        return context
+        response = get_response_msg(gig_data.action)
+        return JsonResponse(response.model_dump())
+    
+    def save_gig_data(self, payload:GigPayload, action:CreateGigStates) -> None:
+        from collaboration.models.choices import GigStatus
+        
+        GigModel = apps.get_model("collaboration","Gig")
+        GigRoleModel = apps.get_model("collaboration", "GigRole")
+        
+        try:
+            with transaction.atomic():
+                gig = GigModel.objects.create(
+                    creator=self.request.user,
+                    title=payload.title,
+                    visibility=payload.visibility,
+                    description=payload.description,
+                    total_budget=payload.projectBudget,
+                    start_date=payload.startDate,
+                    end_date=payload.endDate,
+                    is_negotiable=payload.isNegotiable,
+                    has_gig_roles = True if payload.roles else False,
+                    status=GigStatus.PENDING if action == CreateGigStates.PUBLISH else GigStatus.DRAFT,
+                )
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        role_formset = context["role_formset"]
+                if payload.roles:
+                    niche_ids = {role.nicheId for role in payload.roles}
+                    categories = GigCategory.objects.in_bulk(niche_ids)
+                    missing_ids = niche_ids - categories.keys()
+                    if missing_ids:
+                        raise IntegrityError(
+                            "One or more selected categories are invalid or no longer available."
+                        )
+                    roles = [
+                        GigRoleModel(
+                            gig=gig,
+                            niche=categories[role.nicheId],
+                            niche_name=role.niche,
+                            role_name=role.professional,
+                            role_id=role.professionalId,
+                            budget=role.budget,
+                            workload=role.workload,
+                            description=role.description,
+                            is_negotiable=payload.isNegotiable,
+                        )
+                        for role in payload.roles
+                    ]
 
-        if not role_formset.is_valid():
-            return self.form_invalid(form)
+                    GigRoleModel.objects.bulk_create(roles)
 
-        with transaction.atomic():
-            form.instance.creator = self.request.user
-            gig = form.save()
+        except IntegrityError as e:
+            raise IntegrityError("This gig/project could not be saved due to a data conflict. try again shortly.")
+        except OperationalError as e:
+            raise OperationalError("We’re having trouble saving your gig right now. Please try again shortly.")
 
-            role_formset.instance = gig
-            role_formset.save()
-
-        return super().form_valid(form)
