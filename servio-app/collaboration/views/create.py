@@ -1,11 +1,12 @@
 from django.apps import apps
+from django.http import Http404
 from django.db import transaction, IntegrityError, OperationalError
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse, JsonResponse
 from django.db.models import Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.base import View
+from django.views.generic import TemplateView, UpdateView, View
 from django.utils.safestring import mark_safe
 from template_map.collaboration import Collabs
 from core.url_names import CollaborationURLS
@@ -18,6 +19,9 @@ import json
 
 
 GigCategory = apps.get_model("collaboration", "GigCategory")
+GigModel = apps.get_model("collaboration","Gig")
+GigRoleModel = apps.get_model("collaboration", "GigRole")
+GigApplicationModel = apps.get_model("collaboration", "GigApplication")
 
 
 class CreateCollaborationView(LoginRequiredMixin, View):
@@ -115,9 +119,6 @@ class CreateCollaborationView(LoginRequiredMixin, View):
     def save_gig_data(self, payload:GigPayload, action:CreateGigStates) -> None:
         from collaboration.models.choices import GigStatus
         
-        GigModel = apps.get_model("collaboration","Gig")
-        GigRoleModel = apps.get_model("collaboration", "GigRole")
-        
         try:
             with transaction.atomic():
                 gig = GigModel.objects.create(
@@ -163,3 +164,73 @@ class CreateCollaborationView(LoginRequiredMixin, View):
         except OperationalError as e:
             raise OperationalError("We’re having trouble saving your gig right now. Please try again shortly.")
 
+
+class EditGigView(LoginRequiredMixin, View):
+    allowed_http_methods = ["GET", "POST"]
+    template_name = Collabs.EDIT
+    # model = GigModel
+    # context_object_name = "gig"
+    # slug_field = "id"
+    # slug_url_kwarg = "gig_id"
+    # success_url = reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS)
+    # fields = [
+    #     "title",
+    #     "description",
+    #     "visibility",
+    #     "status",
+    #     "start_date",
+    #     "end_date",
+    #     "total_budget",
+    #     "is_negotiable",
+    # ]
+
+    # def get_queryset(self):
+    #     return (
+    #         GigModel.objects
+    #         .filter(creator=self.request.user)
+    #     )
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     try:
+    #         return super().dispatch(request, *args, **kwargs)
+    #     except Http404:
+    #         return redirect(self.get_success_url())
+    
+    def get_queryset(self):
+        return (
+            GigModel.objects
+            .filter(creator=self.request.user)
+            .select_related("creator")
+            .prefetch_related(
+                Prefetch(
+                    "required_roles",
+                    queryset=GigRoleModel.objects
+                    .select_related("niche")
+                    .prefetch_related(
+                        Prefetch(
+                            "applications",
+                            queryset=GigApplicationModel.objects.select_related("user"),
+                        )
+                    )
+                )
+            )
+        )
+        
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except Http404:
+            return redirect(CollaborationURLS.LIST_COLLABORATIONS)
+    
+    def get(self, request, gig_id) ->HttpResponse:
+        try:
+            gig = self.get_queryset().get(id=gig_id)
+        except GigModel.DoesNotExist:
+            return redirect(CollaborationURLS.LIST_COLLABORATIONS)
+
+        context = {
+            "gig": gig,
+            "editable_statuses": ["pending", "draft"],
+        }
+
+        return render(request, self.template_name, context)

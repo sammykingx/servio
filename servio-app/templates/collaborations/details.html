@@ -1,14 +1,15 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+{% load humanize %}
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 <section class="flex-1 w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-8">
     <div class="flex-1 flex flex-col gap-8 min-w-0">
         <!-- Breadcrumbs -->
         <div class="flex items-center gap-2 text-sm">
-            <a class="text-gray-500 dark:text-gray-400 hover:text-brand-500" href="#">Projects</a>
+            <a class="text-gray-500 dark:text-gray-400 hover:text-brand-500" href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}">Gigs</a>
             <span class="text-gray-300 dark:text-gray-600">/</span>
-            <span class="text-gray-500 dark:text-gray-500 font-medium">Q3 Marketing Campaign Revamp</span>
+            <span class="text-gray-500 dark:text-gray-500 font-medium">{{ gig.title|striptags|truncatewords:6|title }}</span>
         </div>
         
         <!-- Project Hero Card -->
@@ -18,51 +19,113 @@
             <div class="flex flex-col md:flex-row justify-between items-start gap-6 relative z-10">
                 <div class="flex-1 space-y-4">
                     <div class="flex flex-wrap items-center gap-3">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400 text-xs font-semibold uppercase tracking-wider">
-                            <span class="size-2 rounded-full bg-success-500 animate-pulse"></span>
-                            Live - In Progress
-                        </span>
-                        <span class="text-xs text-gray-400 font-medium">ID: #4492</span>
+                        {% if gig.status == 'draft' %}
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                                <span class="size-2 rounded-full bg-gray-500 animate-pulse"></span>
+                                {{ gig.status|title }}
+                            </span>
+
+                        {% elif gig.status == 'pending' %}
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
+                                <span class="size-2 rounded-full bg-blue-600 animate-pulse"></span>
+                                {{ gig.status|title }}
+                            </span>
+                        {% elif gig.status == 'in_progress' %}
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400 text-xs font-semibold uppercase tracking-wider">
+                                <span class="size-2 rounded-full bg-success-500 animate-pulse"></span>
+                                Live - In Progress
+                            </span>
+                        {% elif gig.status == 'completed' %}
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400 text-xs font-semibold uppercase tracking-wider">
+                                <span class="size-2 rounded-full bg-success-500 animate-pulse"></span>
+                                {{ gig.status|title }}
+                            </span>
+                        {% elif gig.status == 'cancelled' %}
+                            <span 
+                                class="inline-flex items-center gap-1.5 px-3 py-1 
+                                    rounded-full bg-error-100 dark:bg-error-900/30 
+                                    text-error-700 dark:text-error-400 text-xs 
+                                    font-semibold uppercase tracking-wider"
+                            >
+                                <span class="size-2 rounded-full bg-error-500 animate-pulse"></span>
+                                {{ gig.status|title }}
+                            </span>
+                        {% endif %}
+                        <span class="text-xs text-gray-400 font-medium">ID: {{ gig.id.int|truncatechars:12 }}</span>
                     </div>
                     <div>
-                        <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-300 tracking-tight leading-tight">Q3 Marketing Campaign Revamp</h1>
+                        <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-300 tracking-tight leading-tight">{{ gig.title|title }}</h1>
                         <p class="mt-2 text-gray-500 dark:text-gray-400 max-w-2xl">
-                            Comprehensive overhaul of Q3 digital assets including SEO optimization, social media graphics, and landing page redesign.
+                            {{ gig.description|striptags|truncatewords:17 }}
                         </p>
                     </div>
                     <!-- Stats Row -->
                     <div class="flex flex-wrap items-center gap-8 pt-4">
                         <div class="flex flex-col gap-1">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Budget</span>
-                            <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">$12,500.00</span>
+                            <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">${{ gig.total_budget|intcomma }}</span>
                         </div>
                         <div class="w-px h-8 bg-gray-200 dark:bg-[#3d1f1f]"></div>
                         <div class="flex flex-col gap-1">
-                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Timeline</span>
-                            <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">Oct 24 - Dec 15</span>
+                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Timeline ({{ gig.start_date|date:'Y' }})</span>
+                            <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">{{ gig.start_date|date:"M. j" }} - {{ gig.end_date|date:"M. j" }}</span>
                         </div>
                         <div class="w-px h-8 bg-gray-200 dark:bg-[#3d1f1f]"></div>
-                        <div class="flex flex-col gap-1 w-32">
+                        <!-- <div class="flex flex-col gap-1 w-32">
                             <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider flex justify-between">Progress <span>45%</span></span>
                             <div class="h-2 w-full bg-gray-100 dark:bg-[#3d1f1f] rounded-full mt-1 overflow-hidden">
                                 <div class="h-full bg-success-500 rounded-full w-[45%]"></div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <!-- Actions -->
                 <div class="flex flex-col sm:flex-row gap-3 min-w-max">
-                    <button class="flex items-center gap-2 px-3 py-2.5 rounded-full bg-white dark:bg-[#3d1f1f] border border-gray-200 dark:border-transparent text-gray-700 dark:text-gray-200 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-[#4a2626] transition-all shadow-sm">
+                    <a
+                        href="{% url COLLABORATION_URLS.EDIT_COLLABORATION gig_id=gig.id %}"
+                        title="Modify gig/project details"
+                        class="flex items-center gap-2 px-3 py-2.5
+                            rounded-full bg-white dark:bg-[#3d1f1f] 
+                            border border-gray-200 dark:border-transparent 
+                            text-gray-700 dark:text-gray-200 font-semibold text-sm 
+                            hover:bg-gray-50 dark:hover:bg-[#4a2626] transition-all 
+                            shadow-sm hover:cursor-pointer
+                        "
+                    >
                         <span class="material-symbols-outlined text-gray-500">edit</span>
                         Edit
-                    </button>
-                    <button class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-[#3d1f1f] border border-gray-200 dark:border-transparent text-gray-700 dark:text-gray-200 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-[#4a2626] transition-all shadow-sm">
-                        <span class="material-symbols-outlined">check_circle</span>
-                        Close Gig
-                    </button>
-                    <button class="flex items-center justify-center p-2.5 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all" title="Cancel Project">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
+                    </a>
+                    {% if gig.status in editable_statuses %}
+                        <a
+                            href="{% url PAYMENT_URLS.GIG_PAYMENT_SUMMARY  gig_id=gig.id%}"
+                            title="Make payments to activat gig"
+                            class="flex items-center gap-2 px-4 py-2.5 
+                                rounded-full bg-success-400 dark:bg-success-50
+                                border border-success-200 dark:border-transparent 
+                                text-white dark:text-success-500 font-semibold 
+                                text-sm hover:bg-success-500 dark:hover:bg-success-100 
+                                transition-all shadow-sm hover:cursor-pointer"
+                        >
+                            <span class="material-symbols-outlined">check_circle</span>
+                            publish
+                        </a>
+                    {% else %}
+                        <button 
+                            class="flex items-center gap-2 px-4 py-2.5 
+                                rounded-full bg-white dark:bg-[#3d1f1f] border 
+                                border-gray-200 dark:border-transparent text-gray-700 
+                                dark:text-gray-200 font-semibold text-sm hover:bg-gray-50 
+                                dark:hover:bg-[#4a2626] transition-all shadow-sm hover:cursor-pointer
+                            "
+                        >
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Close Gig
+                        </button>
+                        <button 
+                            class="flex items-center justify-center p-2.5 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all hover:cursor-pointer" title="Cancel Project/Gig">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -76,8 +139,8 @@
                 </h3>
                 <div class="flex p-1 bg-gray-100 dark:bg-[#2f1616] rounded-full">
                     <button class="px-4 py-1.5 text-sm font-semibold rounded-full bg-white dark:bg-[#3d1f1f] text-gray-700 dark:text-gray-300 shadow-sm transition-all">All</button>
-                    <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Active</button>
-                    <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Pending</button>
+                    <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Accepted</button>
+                    <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Negotiating</button>
                 </div>
             </div>
             <!-- Grid -->
@@ -272,9 +335,9 @@
                 <div class="relative pl-10">
                     <div class="absolute left-3 top-0 size-4 bg-gray-300 rounded-full border-4 border-white dark:border-[#2f1616]"></div>
                     <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-                        Project created.
+                        Project/Gig created by {{ gig.creator.first_name|title }}.
                     </p>
-                    <span class="text-xs text-gray-400 font-medium mt-1 block">Oct 24, 2023</span>
+                    <span class="text-xs text-gray-400 font-medium mt-1 block">{{ gig.created_at|date:"M j, Y" }}</span>
                 </div>
             </div>
         </div>

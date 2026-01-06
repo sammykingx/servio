@@ -1,0 +1,328 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Modify Gig/Project{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="lg:col-span-8 flex flex-col gap-6">
+        <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
+                 <span class="p-2 bg-brand-50 dark:bg-gray-600 dark:brand-600/30 rounded-lg material-symbols-outlined text-[20px] text-brand-500 dark:text-gray-400">article</span>
+                 <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Basic Gig Information</h3>
+            </div>
+            <div class="grid gap-6">
+                <div class="space-y-3">
+                    <label class="block ml-1.5 text-gray-700 dark:text-gray-400 text-sm font-semibold">Gig Title</label>
+                    <input 
+                        value="{{ gig.title|title }}"
+                        class="w-full rounded-lg border-slate-300 dark:border-slate-600 
+                            dark:bg-slate-900 text-slate-900 dark:text-white px-4 py-3 
+                            text-sm focus:outline-none focus:ring-1 pr-10 shadow-sm
+                                focus:ring-success-500/30 dark:focus:ring-warning-200/70
+                                focus:border-success-500 dark:focus:border-warning-200" 
+                        placeholder="e.g., Enterprise SaaS Redesign for Fintech App"
+                        type="text" 
+                    />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="block ml-1.5 text-gray-700 dark:text-gray-400 text-sm font-semibold">Visibility</label>
+                        <div class="relative">
+                            <select 
+                                class="w-full appearance-none rounded-lg border-[#cfd7e7]
+                                dark:border-[#4a5568] dark:bg-slate-900 
+                                text-slate-900 dark:text-white px-4 py-3 text-sm 
+                                 focus:outline-none focus:ring-1 pr-10
+                                focus:ring-success-500/30 dark:focus:ring-warning-200/70
+                                focus:border-success-500 dark:focus:border-warning-200 shadow-sm"
+                            >
+                                <option selected="" value="public">Public (Visible to everyone)</option>
+                                <option value="private">Private (Invite only)</option>
+                                <option value="internal">Internal Team Only</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                                <span class="material-symbols-outlined">expand_more</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Budget -->
+                    <div class="">
+                        <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Total Project Budget</label>
+                        <div class="relative rounded-lg shadow-sm space-y-2">
+                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                 <span class="text-slate-500 sm:text-sm">$</span>
+                             </div>
+                             <input 
+                                class="block w-full rounded-lg border-slate-300 
+                                    dark:border-slate-600 dark:bg-slate-900 py-3 
+                                    pl-7 pr-10 text-slate-900 dark:text-white 
+                                    focus:outline-none focus:ring-1 focus:ring-success-500/30 
+                                    dark:focus:ring-warning-200/70 focus:border-success-500 
+                                    dark:focus:border-warning-200 shadow-smtext-sm"
+                                name="budget" placeholder="0.00" type="text" value="{{ gig.total_budget|intcomma }}" />
+                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                 <span class="text-slate-500 sm:text-sm">USD</span>
+                             </div>
+                        </div>
+                        <p class="text-xs text-slate-500">Includes platform fees.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Description Card -->
+        <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="material-symbols-outlined text-brand-500">description</span>
+                <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Gig Description</h3>
+            </div>
+            <div 
+                class="border border-slate-300 dark:border-slate-600 
+                    rounded-lg overflow-hidden bg-slate-50 dark:bg-slate-900 
+                    focus-within:border-success-300 dark:focus-within:border-warning-200 
+                    focus-within:ring-success-500/10 transition-all">
+                <!-- Toolbar -->
+                <div class="flex items-center gap-1 p-2 border-b border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
+                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-[20px]">format_bold</span>
+                    </button>
+                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-[20px]">format_italic</span>
+                    </button>
+                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-[20px]">format_underlined</span>
+                    </button>
+                    <div class="w-px h-5 bg-slate-300 dark:bg-slate-600 mx-1"></div>
+                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+                    </button>
+                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-[20px]">link</span>
+                    </button>
+                </div>
+                <!-- Text Area -->
+                <textarea 
+                    class="w-full border-none bg-transparent p-4 min-h-[160px]
+                        text-gray-800 dark:text-gray-400
+                        placeholder:text-gray-500
+    
+                        focus:outline-none focus:ring-0 focus:border-transparent"
+                    placeholder="Describe the project details, goals, and expectations..."
+                >{{ gig.description|title }}</textarea>
+            </div>
+            <div class="flex justify-end mt-2">
+                <span class="text-xs text-slate-500 font-medium">245 / 3000 characters</span>
+            </div>
+        </section>
+        <!-- Roles Section -->
+        <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2">
+                     <span class="material-symbols-outlined text-brand-500 dark:text-gray-400">group</span>
+                     <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Required Roles</h3>
+                </div>
+                <button class="text-brand-500 text-sm font-bold hover:underline flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[18px]">add</span> Add new role
+                </button>
+            </div>
+            <div class="space-y-4">
+                <!-- Role Card 1 (Filled/Lockedish) -->
+                <div class="border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/50 p-5 relative group transition-all hover:border-brand-500/50">
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                            Filled
+                        </span>
+                        <button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                        </button>
+                    </div>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-4">Role #1</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Category</label>
+                            <select class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 px-3 bg-white dark:bg-slate-800">
+                                <option>Design &amp; Creative</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Specialization</label>
+                            <select class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 px-3 bg-white dark:bg-slate-800">
+                                <option>Senior UX/UI Designer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="col-span-2">
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Role Description</label>
+                            <input class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 px-3 bg-white dark:bg-slate-800" type="text" value="Lead the visual design system updates." />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Allocated Budget</label>
+                            <div class="relative">
+                                 <span class="absolute left-3 top-2 text-slate-400 text-sm">$</span>
+                                 <input class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 pl-6 px-3 bg-white dark:bg-slate-800 font-medium" type="text" value="8,000" />
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- Role Card 2 (Open) -->
+                 <div class="border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 p-5 relative shadow-sm hover:shadow-md transition-shadow">
+                     <div class="absolute top-4 right-4 flex gap-2">
+                         <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-brand-500/10 text-brand-500 border border-brand-500/20">
+                             Open
+                         </span>
+                         <button class="text-slate-400 hover:text-red-500 transition-colors">
+                             <span class="material-symbols-outlined text-[20px]">delete</span>
+                         </button>
+                     </div>
+                     <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-4">Role #2</h4>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                         <div>
+                             <label class="block text-xs font-bold text-slate-500 mb-1">Category</label>
+                             <select class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 px-3 bg-slate-50 dark:bg-slate-900">
+                                 <option>Engineering</option>
+                             </select>
+                         </div>
+                         <div>
+                             <label class="block text-xs font-bold text-slate-500 mb-1">Specialization</label>
+                             <select class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 px-3 bg-slate-50 dark:bg-slate-900">
+                                 <option>React Frontend Developer</option>
+                             </select>
+                         </div>
+                     </div>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         <div class="col-span-2">
+                             <label class="block text-xs font-bold text-slate-500 mb-1">Role Description</label>
+                             <input class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 px-3 bg-slate-50 dark:bg-slate-900" placeholder="e.g. Implement Figma designs..." type="text" />
+                         </div>
+                         <div>
+                             <label class="block text-xs font-bold text-slate-500 mb-1">Allocated Budget</label>
+                             <div class="relative">
+                                 <span class="absolute left-3 top-2 text-slate-400 text-sm">$</span>
+                                 <input class="w-full rounded-md border-slate-300 dark:border-slate-600 text-sm py-2 pl-6 px-3 bg-slate-50 dark:bg-slate-900 font-medium" placeholder="0" type="text" />
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- Add Role Placeholder -->
+                 <button class="w-full py-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg text-slate-500 hover:border-brand-500 hover:text-brand-500 hover:bg-brand-500/5 transition-all flex flex-col items-center justify-center gap-2 group">
+                     <div class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-brand-500/10 transition-colors">
+                         <span class="material-symbols-outlined group-hover:text-brand-500 transition-colors">add</span>
+                     </div>
+                     <span class="text-sm font-bold">Add another role</span>
+                 </button>
+             </div>
+         </section>
+         <!-- Timeline Section -->
+         <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 relative overflow-hidden">
+             <!-- Locked Overlay for In Progress -->
+             <div class="absolute top-4 right-4 z-10">
+                 <div class="group relative flex items-center">
+                     <span class="material-symbols-outlined text-slate-400 cursor-help">lock</span>
+                     <span class="absolute right-full mr-2 w-48 p-2 bg-slate-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                         Dates cannot be changed while gig is In Progress.
+                     </span>
+                 </div>
+             </div>
+             <div class="flex items-center gap-2 mb-6">
+                 <span class="material-symbols-outlined text-brand-500">calendar_today</span>
+                 <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Timeline &amp; Milestones</h3>
+             </div>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-70">
+                 <div class="space-y-2">
+                     <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Start Date</label>
+                     <input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 text-slate-500 cursor-not-allowed px-4 py-3 text-sm" disabled="" type="date" value="2023-10-01" />
+                 </div>
+                 <div class="space-y-2">
+                     <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Estimated End Date</label>
+                     <input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 text-slate-500 cursor-not-allowed px-4 py-3 text-sm" disabled="" type="date" value="2024-01-15" />
+                 </div>
+             </div>
+         </section>
+     </div>
+     <!-- Right Column: Sidebar -->
+     <div class="lg:col-span-4 space-y-6">
+         <!-- Status Widget -->
+         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Gig Status</h3>
+             <div class="flex items-start gap-3 mb-4">
+                 <div class="mt-1 size-3 rounded-full bg-amber-500 animate-pulse"></div>
+                 <div>
+                     <p class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Active &amp; In Progress</p>
+                     <p class="text-sm text-slate-500 mt-1">This gig is currently live. Roles are being filled and work has started.</p>
+                 </div>
+             </div>
+             <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-2">
+                 <div class="bg-brand-500 h-2 rounded-full" style="width: 35%"></div>
+             </div>
+             <p class="text-xs text-right text-slate-500">35% Budget Utilized</p>
+         </div>
+         <!-- Quick Actions -->
+         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Quick Actions</h3>
+             <div class="flex flex-col gap-2">
+                 <button class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors text-left">
+                     <div class="flex items-center gap-3">
+                         <div class="size-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+                             <span class="material-symbols-outlined text-[18px]">handshake</span>
+                         </div>
+                         <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-brand-500">View Negotiations</span>
+                     </div>
+                     <span class="material-symbols-outlined text-slate-400 text-[16px]">arrow_forward</span>
+                 </button>
+                 <button class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors text-left">
+                     <div class="flex items-center gap-3">
+                         <div class="size-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                             <span class="material-symbols-outlined text-[18px]">payments</span>
+                         </div>
+                         <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-brand-500">View Payments</span>
+                     </div>
+                     <span class="material-symbols-outlined text-slate-400 text-[16px]">arrow_forward</span>
+                 </button>
+                 <button class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors text-left">
+                     <div class="flex items-center gap-3">
+                         <div class="size-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                             <span class="material-symbols-outlined text-[18px]">chat</span>
+                         </div>
+                         <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-brand-500">Team Chat</span>
+                     </div>
+                     <div class="flex items-center gap-2">
+                         <span class="bg-red-500 text-white text-[10px] px-1.5 rounded-full font-bold">2</span>
+                         <span class="material-symbols-outlined text-slate-400 text-[16px]">arrow_forward</span>
+                     </div>
+                 </button>
+             </div>
+         </div>
+         <!-- Activity & Metadata -->
+         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+             <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Activity &amp; Metadata</h3>
+             <div class="space-y-4">
+                 <div class="flex items-start gap-3">
+                     <span class="material-symbols-outlined text-slate-400 mt-0.5 text-[18px]">history</span>
+                     <div>
+                         <p class="text-xs text-slate-500">Last updated</p>
+                         <p class="text-sm font-medium text-slate-900 dark:text-white">2 hours ago</p>
+                     </div>
+                 </div>
+                 <div class="flex items-start gap-3">
+                     <span class="material-symbols-outlined text-slate-400 mt-0.5 text-[18px]">calendar_add_on</span>
+                     <div>
+                         <p class="text-xs text-slate-500">Created on</p>
+                         <p class="text-sm font-medium text-slate-900 dark:text-white">Sep 15, 2023</p>
+                     </div>
+                 </div>
+                 <div class="pt-4 border-t border-slate-100 dark:border-slate-700">
+                     <p class="text-xs text-slate-500 mb-2">Active Collaborators</p>
+                     <div class="flex -space-x-2 overflow-hidden">
+                         <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-cover bg-center" data-alt="Collaborator avatar 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDnCAqFrdn3NgVKhMUjCJaB6DBul74VR6PZb0kVtN1svpXx826GtCs5WYmIX3wd5ZqvdW5e6D1-A0X0sBhy-9n7gwt1eSpkwh65QhhIS6eJoPT5IA2SSzSXYOSrH9tKTTwffixb4x8XuKNf9UbbVaRyC6oZAP0DXaQoVbkOYWL8eQ1Uao9w1vRaD8DRZkYcYfSP4eGAS3TEbZn58K0XaRn7OXkhT9gqgBDBQxTNkD8VkhEugU9ZJIQ4GKLunG9ZtYe4syQEkSvT2uk");'></div>
+                         <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-cover bg-center" data-alt="Collaborator avatar 2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAuN_2OxPFKVmdEvk-yTJSzHZKfjh-To4o8TBpjkKtqUlHSl-vMbpK7iblKywyBccQag6zHpC90ytm0DkFKBH-UqdFF06E-kSVIciQnvtLqLYQEj9W5gJZ_89i7jzvv5ts1Bl_6tpN56Hx-utlcHHlYkyVBu75OcoWuq5z4aVBShrgnUm3ejjjEfL-lbrN_MNhSDKMsvps0qZ2hFrmjjYYQM2C8ByEviCbGlowE7GgIfC4vbK1oObju_SEzteVl3A1B9nqZMlE4754");'></div>
+                         <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-500">
+                             +3
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div>
+</div>
+{% endblock %}

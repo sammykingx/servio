@@ -65,7 +65,7 @@
       </li>
       <li>
          <a
-            href="{% url 'revenue' %}"
+            href="{% url PAYMENT_URLS.USER_PAYMENT_SUMMARY %}"
             @click="selected = (selected === 'revenue' ? '':'revenue')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'revenue') && (page === 'revenue') ? 'menu-item-active' : 'menu-item-inactive'"

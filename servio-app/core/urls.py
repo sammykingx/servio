@@ -24,6 +24,8 @@ import accounts.urls
 import business_accounts.urls
 import collaboration.urls
 import notifications.urls
+import payments.urls
+
 
 urlpatterns = [
     path(
@@ -38,6 +40,7 @@ urlpatterns = [
     path("business/", include(business_accounts.urls)),
     path("collaboration/", include(collaboration.urls)),
     path("notifications/", include(notifications.urls)),
+    path("payments/", include(payments.urls)),
     path(
         "client/",
         TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),

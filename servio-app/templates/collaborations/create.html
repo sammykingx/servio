@@ -224,7 +224,10 @@
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">Niche</label>
-                                            <select x-model="role.nicheId" @change="role.professionalId = ''; emitRoles()" class="w-full rounded-md border border-[#cfd7e7]
+                                            <select 
+                                                x-model="role.nicheId" 
+                                                @change="role.professionalId = ''; emitRoles()" 
+                                                class="w-full rounded-md border border-[#cfd7e7]
                                                     dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
                                                     text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
                                                     focus:outline-none focus:ring-1 focus:ring-success-500/30

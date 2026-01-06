@@ -1,0 +1,142 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Gig/Project Payment Overview{% endblock %}
+{% block content %}
+
+<div class="min-h-screen w-full px-4 py-8">
+    <div class="w-full max-w-[90%] flex flex-col gap-8">
+        <!-- Progress Stepper -->
+        <div class="w-full">
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between text-sm font-medium">
+                    <span class="text-brand-500 dark:text-gray-300">Step 1: Overview</span>
+                    <span class="text-gray-600 dark:text-gray-600">Step 3: Confirmation</span>
+                </div>
+                <div class="h-2 w-full rounded-full bg-gray-50 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-brand-500 w-1/3 rounded-full relative">
+                        <div class="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-r from-transparent to-white/30"></div>
+                    </div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600 dark:text-gray-500 font-medium mt-1">
+                    <span class="text-brand-500 dark:text-gray-300 font-medium">Payment Overview</span>
+                    <span>Select Method</span>
+                    <span>Complete</span>
+                </div>
+            </div>
+        </div>
+        <!-- Page Header -->
+        <div class="flex flex-col gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div class="space-y-2">
+                    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-text-gray-800 dark:text-gray-300">Complete payment to activate gig/project</h1>
+                    <p class="text-gray-600 dark:text-gray-500 text-lg max-w-2xl">
+                        This gig will go live once payment is successfully completed. Funds are held securely until you approve the work.
+                    </p>
+                </div>
+                <!-- Status Chip -->
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full border border-amber-200 dark:border-amber-800/50 self-start shrink-0">
+                    <span class="material-symbols-outlined text-[18px] filled">pending</span>
+                    <span class="text-sm font-bold">Pending Payment</span>
+                </div>
+            </div>
+        </div>
+        <!-- Gig Meta Card (Hero) -->
+        <div class="rounded-xl shadow-soft border border-gray-200 dark:border-gray-600 dark:border-border-dark overflow-hidden">
+            <!-- Card Header -->
+            <div class="p-6 md:p-8 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-background-light/50 to-transparent dark:from-background-dark/50">
+                <div class="flex flex-col md:flex-row justify-between gap-6">
+                    <div class="space-y-4 flex-1">
+                        <div>
+                            <p class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Gig Details</p>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-800 dark:text-white">{{ gig.title|striptags|truncatewords:10|title }}</h3>
+                            <p
+                                class="
+                                    text-gray-400 dark:text-gray-500 font-base mt-1
+                                    w-full
+                                    max-w-none
+                                    sm:max-w-[480px]
+                                    md:max-w-[540px]
+                                    lg:max-w-[500px]
+                                "
+                                >
+                                    {{ gig.description|striptags|truncatewords:15|title }}
+                                </p>
+
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600">
+                                <span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                                {{ gig.start_date|date:"M, j"}} - {{ gig.end_date|date:"M, j"}} 
+                            </div>
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600">
+                                <span class="material-symbols-outlined text-[18px]">handshake</span>
+                                Budget is negotiable
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Amount Section -->
+                    <div class="flex flex-col justify-center items-start md:items-end min-w-[180px]">
+                        <p class="text-sm font-medium text-gray-600dark:text-gray-300 mb-1">Amount</p>
+                        <div class="text-4xl font-extrabold text-gray-800 dark:text-gray-300 tabular-nums tracking-tight">${{ gig.total_budget|intcomma }}</div>
+                        <div class="flex items-center gap-1.5 mt-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded">
+                            <span class="material-symbols-outlined text-[14px] filled">verified_user</span>
+                            Escrow Protected
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Participants & Breakdown -->
+            <div class="p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <!-- <div class="flex -space-x-3">
+                        <div class="size-10 rounded-full ring-2 ring-white dark:ring-card-dark bg-cover bg-center" data-alt="Client avatar smiling woman" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC2BUzw2vUKTVIQbAPfPoX4wZKpUh66ijPEsVNuC7Dz1V0Pibnd7VKhxLOlPU9ZHfyrKos2IOHkw8j06dzlnZcmD-_iGNXflMFlThJ8OJ8Kn1HR4r9l8N1vcpyFbLE3jWosCoKqTydxNMS2eeiYDwGTRjik2DsC5sySCAF5ki3vmfrmDcvy6xnH0bQgfDXrRLSuxsqe7YMY8GiFGyMzdaX9Cr5mlNkuEAsR-bvbHE4ToYvSIE0X1VuSKPwAQpxg8bUvmsvLIyhLE-o");'></div>
+                        <div class="size-10 rounded-full ring-2 ring-white dark:ring-card-dark bg-cover bg-center" data-alt="Freelancer avatar man with glasses" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC1imzOS5KPCCPHR5j6xx_VmLzTbCugphuU2DQ8dObKYakpSqSfixxUjXW-gC6y24RnYtWSGnzZLlHi3tkJZKHO-JJOa2NBpk2x-vOvwoSt8eBQoXseXi6dCEw6nmqdEx3ZWaZj-CpdzQjoHhrNfAnz5bQyU3hAsafj1xO30PwSt9HiDtaV670Hl-X2PqO2SgQcD1BiZnNaEDQ5yAVYv_P-8xeOx4gag3P2Oxvp3S43dET1IHefgSZPV3PqRZ2QwW9u09PptI-7EtQ");'></div>
+                    </div> -->
+                    <!-- <div class="flex flex-col">
+                        <span class="text-sm font-bold text-800 dark:text-gray-400">Active Participants</span>
+                        <span class="text-xs text-gray-600dark:text-gray-300">Sarah J. (Client) &amp; You</span>
+                    </div> -->
+                </div>
+                <div class="w-full md:w-auto flex flex-col items-end gap-1">
+                    <div class="w-full flex justify-between md:justify-end gap-8 text-sm text-gray-600 dark:text-gray-500">
+                        <span>Subtotal</span>
+                        <span class="font-medium text-800 dark:text-gray-400 tabular-nums">$4,500.00</span>
+                    </div>
+                    <div class="w-full flex justify-between md:justify-end gap-8 text-sm text-gray-600 dark:text-gray-500">
+                        <span>Service Fee (3%)</span>
+                        <span class="font-medium text-800 dark:text-gray-400 tabular-nums">$135.00</span>
+                    </div>
+                    <div class="w-full h-[1px] bg-border-light dark:bg-border-dark my-2"></div>
+                    <div class="w-full flex justify-between md:justify-end gap-8 text-lg font-bold text-800 dark:text-gray-400">
+                        <span>Total Due</span>
+                        <span class="tabular-nums text-brand-500 dark:text-emerald-500">$4,635.00</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Action Area -->
+            <div class="p-4 /50 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2 text-xs 
+                    text-emerald-600 dark:text-success-500 
+                    rounded-2xl bg-success-50 dark:bg-transparent 
+                    px-2.5 py-1.5 dark:border-success-200">
+                    <span class="material-symbols-outlined text-[16px]">lock</span>
+                    Payments are SSL encrypted and 100% secure.
+                </div>
+                <button class="w-full sm:w-auto bg-brand-500 hover:bg-brand-500-hover text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-brand-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
+                    Proceed to Payment
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+        <!-- Footer Links -->
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-600 dark:text-gray-500">
+            <a class="dark:hover:text-gray-200 hover:underline" href="#">Gig Agreement Terms</a>
+            <span>•</span>
+            <a class="dark:hover:text-gray-200 hover:underline" href="#">Escrow Policy</a>
+            <span>•</span>
+            <a class="dark:hover:text-gray-200 hover:underline" href="#">Cancellation &amp; Refunds</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

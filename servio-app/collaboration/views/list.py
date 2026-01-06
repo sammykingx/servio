@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.db.models import Count, Sum, F
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
@@ -20,7 +19,7 @@ class CollaborationListView(LoginRequiredMixin, TemplateView):
             )
         )
         context["gigs"] = gigs
-        print(gigs)
         return context
 
     template_name = Collabs.LIST_COLLABORATIONS
+    

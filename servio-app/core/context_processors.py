@@ -1,4 +1,4 @@
-from core.url_names import AuthURLNames, BusinessURLS, CollaborationURLS, NotificationsURLNames
+from core.url_names import AuthURLNames, BusinessURLS, CollaborationURLS, NotificationsURLNames, PaymentURLS
 from notifications.models.notification_channels import NotificationChannels
 from accounts.models.profile import UserRole
 
@@ -23,5 +23,6 @@ def app_urlnames(request):
         "BIZ_URLS": BusinessURLS,
         "COLLABORATION_URLS": CollaborationURLS,
         "NOTIFICATION_URLS": NotificationsURLNames,
+        "PAYMENT_URLS": PaymentURLS,
         "UserRole": UserRole,
     }

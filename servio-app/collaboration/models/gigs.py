@@ -26,6 +26,7 @@ Ordering:
 
 
 from django.db import models
+from django.utils.text import slugify
 from django.conf import settings
 from uuid6 import uuid7
 from .choices import GigVisibility, GigStatus
@@ -36,7 +37,12 @@ class Gig(models.Model):
         Represents a project or gig listing within the marketplace.
     """
     id = models.UUIDField(primary_key=True, editable=False, default=uuid7)
-
+    # slug = models.SlugField(
+    #     max_length=380,
+    #     unique=True,
+    #     editable=False,
+    #     db_index=True
+    # )
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
@@ -87,6 +93,12 @@ class Gig(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.creator.email}, {self.status})"
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title)[:250]
+            self.slug = f"{base}-{uuid7().hex[:12]}"
+        super().save(*args, **kwargs)
     
     def is_active(self):
         """

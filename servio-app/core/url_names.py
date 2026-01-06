@@ -60,4 +60,9 @@ class CollaborationURLS:
     CREATE_COLLABORATION = "create_collaboration"
     DETAIL_COLLABORATION = "view_collaboration"
     EDIT_COLLABORATION = "edit_collaboration"
+    COLLABORATION_PAYMENTS = "collaboration_payment"
     DELETE_COLLABORATION = "delete_collaboration"
+    
+class PaymentURLS:
+    USER_PAYMENT_SUMMARY = "payment_summary"
+    GIG_PAYMENT_SUMMARY = "gig_payment_summary"

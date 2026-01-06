@@ -8,7 +8,7 @@ class CreateGigStates(str, Enum):
     DRAFT = "draft"
     
 class CreateGigRequest(BaseModel):
-    action: CreateGigStates #Literal["publish", "draft"]
+    action: CreateGigStates
     payload: GigPayload
     
 class CreateGigResponse(BaseModel):
@@ -19,11 +19,12 @@ class CreateGigResponse(BaseModel):
 
 def get_response_msg(action: CreateGigStates) -> CreateGigResponse:
     from core.url_names import CollaborationURLS
+    from core.url_names import PaymentURLS
     
     responses = {
         CreateGigStates.PUBLISH: CreateGigResponse(
             message="All set! Your gig/project is published 🎉, next step is payment.",
-            url=str(reverse_lazy(CollaborationURLS.CREATE_COLLABORATION)),
+            url=str(reverse_lazy(PaymentURLS.GIG_PAYMENT_SUMMARY)),
         ),
         CreateGigStates.DRAFT: CreateGigResponse(
             message="Your gig has been saved as a draft 📝, you can publish it later.",
