@@ -129,138 +129,168 @@
                 </div>
             </div>
         </div>
+
         <!-- Collaborators Section -->
-        <div class="flex flex-col gap-6">
-            <!-- Section Header with Filters -->
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    Collaborators
-                    <span class="bg-gray-100 dark:bg-[#3d1f1f] text-gray-600 dark:text-gray-400 text-xs px-2 py-0.5 rounded-full">4</span>
-                </h3>
-                <div class="flex p-1 bg-gray-100 dark:bg-[#2f1616] rounded-full">
-                    <button class="px-4 py-1.5 text-sm font-semibold rounded-full bg-white dark:bg-[#3d1f1f] text-gray-700 dark:text-gray-300 shadow-sm transition-all">All</button>
-                    <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Accepted</button>
-                    <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Negotiating</button>
+        {% if gig.status not in editable_statuses %}
+            <div class="flex flex-col gap-6">
+                <!-- Section Header with Filters -->
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                        Collaborators
+                        <span class="bg-gray-100 dark:bg-[#3d1f1f] text-gray-600 dark:text-gray-400 text-xs px-2 py-0.5 rounded-full">4</span>
+                    </h3>
+                    <div class="flex p-1 bg-gray-100 dark:bg-[#2f1616] rounded-full">
+                        <button class="px-4 py-1.5 text-sm font-semibold rounded-full bg-white dark:bg-[#3d1f1f] text-gray-700 dark:text-gray-300 shadow-sm transition-all">All</button>
+                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Accepted</button>
+                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Negotiating</button>
+                    </div>
+                </div>
+                <!-- Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
+                    <!-- Collaborator Card 1 (Active) -->
+                    <div class="group bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer relative">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex gap-4">
+                                <div class="size-12 rounded-full bg-gray-200 overflow-hidden" data-alt="Headshot of Sarah Jenkins, copywriter">
+                                    <img class="w-full h-full object-cover" src="{% static 'images/user/user-07.jpg' %}" />
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Sarah Jenkins</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Senior Copywriter</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success-50 dark:bg-success-800/20 text-success-700 dark:text-success-300 text-xs font-semibold">
+                                Accepted
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Budget</p>
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">$1,200</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Due Date</p>
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nov 12, 2023</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex -space-x-2">
+                                <div class="size-6 rounded-full bg-gray-100 dark:bg-transparent flex items-center justify-center text-[10px] text-gray-500 border border-white dark:border-[#2f1616]" title="3 attachments">
+                                    <span class="material-symbols-outlined text-[14px]">attach_file</span>
+                                </div>
+                            </div>
+                            <button class="text-sm font-semibold text-gray-600 dark:text-gray-500 hover:text-brand-500 dark:hover:text-gray-300 flex items-center gap-1">
+                                Message <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Collaborator Card 2 (Negotiating) -->
+                    <div class="group bg-gray-50 dark:bg-gray-800 border-l-4 border-l-amber-400 dark:border-l-amber-600 border-y border-r border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex gap-4">
+                                <div class="size-12 rounded-full bg-gray-200 overflow-hidden" data-alt="Headshot of Marcus Chen, SEO specialist">
+                                    <img class="w-full h-full object-cover" src="{% static 'images/user/user-08.jpg' %}" />
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Marcus Chen</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">SEO Specialist</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-semibold">
+                                Negotiating
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Quote</p>
+                                <p class="text-sm font-semibold text-amber-600 dark:text-amber-400">$2,450</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Response</p>
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Action Required</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-end gap-2">
+                            <button class="px-3 py-1.5 rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-xs font-semibold hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors">
+                                Review Offer
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Collaborator Card 3 (Active) -->
+                    <div class="group bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex gap-4">
+                                <div class="size-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden" data-alt="Headshot of Elena Rodriguez, Graphic Designer">
+                                    <img class="w-full h-full object-cover" src="{% static 'images/user/user-04.jpg' %}" />
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Elena Rodriguez</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Graphic Designer</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success-50 dark:bg-success-800/20 text-success-700 dark:text-success-300 text-xs font-semibold">
+                                Accepted
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Budget</p>
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">$850</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Due Date</p>
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nov 15, 2023</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex -space-x-2">
+                                <div class="size-6 rounded-full p-1 bg-gray-100 dark:bg-transparent flex items-center justify-center text-[10px] text-gray-500 border border-white dark:border-[#2f1616]" title="1 attachment">
+                                    <span class="material-symbols-outlined text-[14px]">image</span>
+                                </div>
+                            </div>
+                            <button class="text-sm font-semibold text-gray-600 dark:text-gray-500 hover:text-brand-500 dark:hover:text-gray-300 flex items-center gap-1">
+                                Message <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Add New Card -->
+                    <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-500 rounded-xl p-5 hover:border-brand-500 dark:hover:border-gray-300 hover:bg-brand-500/5 transition-all cursor-pointer group h-full min-h-[180px]">
+                        <div class="size-12 rounded-full bg-gray-100 dark:bg-[#3d1f1f] flex items-center justify-center mb-3 group-hover:bg-brand-500 dark:group-hover:bg-gray-500 group-hover:text-white transition-colors text-gray-400">
+                            <span class="material-symbols-outlined">person_add</span>
+                        </div>
+                        <p class="font-semibold text-gray-700 dark:text-gray-300 text-sm">Invite Talent</p>
+                        <p class="text-xs text-gray-400 text-center mt-1">Search the marketplace for more pros</p>
+                    </div>
                 </div>
             </div>
-            <!-- Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
-                <!-- Collaborator Card 1 (Active) -->
-                <div class="group bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer relative">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex gap-4">
-                            <div class="size-12 rounded-full bg-gray-200 overflow-hidden" data-alt="Headshot of Sarah Jenkins, copywriter">
-                                <img class="w-full h-full object-cover" src="{% static 'images/user/user-07.jpg' %}" />
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Sarah Jenkins</h4>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Senior Copywriter</p>
-                            </div>
-                        </div>
-                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success-50 dark:bg-success-800/20 text-success-700 dark:text-success-300 text-xs font-semibold">
-                            Accepted
-                        </span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Budget</p>
-                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">$1,200</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Due Date</p>
-                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nov 12, 2023</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex -space-x-2">
-                            <div class="size-6 rounded-full bg-gray-100 dark:bg-transparent flex items-center justify-center text-[10px] text-gray-500 border border-white dark:border-[#2f1616]" title="3 attachments">
-                                <span class="material-symbols-outlined text-[14px]">attach_file</span>
-                            </div>
-                        </div>
-                        <button class="text-sm font-semibold text-gray-600 dark:text-gray-500 hover:text-brand-500 dark:hover:text-gray-300 flex items-center gap-1">
-                            Message <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
-                        </button>
+        {% else %}
+            <div class="flex flex-col gap-6">
+                <!-- Section Header with Filters -->
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                        Collaborators
+                        <span class="bg-gray-100 dark:bg-[#3d1f1f] text-gray-600 dark:text-gray-400 text-xs px-2 py-0.5 rounded-full">4</span>
+                    </h3>
+                    <div class="flex p-1 bg-gray-100 dark:bg-[#2f1616] rounded-full">
+                        <button class="px-4 py-1.5 text-sm font-semibold rounded-full bg-white dark:bg-[#3d1f1f] text-gray-700 dark:text-gray-300 shadow-sm transition-all">All</button>
+                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Accepted</button>
+                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Negotiating</button>
                     </div>
                 </div>
-                <!-- Collaborator Card 2 (Negotiating) -->
-                <div class="group bg-gray-50 dark:bg-gray-800 border-l-4 border-l-amber-400 dark:border-l-amber-600 border-y border-r border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex gap-4">
-                            <div class="size-12 rounded-full bg-gray-200 overflow-hidden" data-alt="Headshot of Marcus Chen, SEO specialist">
-                                <img class="w-full h-full object-cover" src="{% static 'images/user/user-08.jpg' %}" />
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Marcus Chen</h4>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">SEO Specialist</p>
-                            </div>
+                <!-- Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
+                    
+                    <!-- Add New Card -->
+                    <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-500 rounded-xl p-5 hover:border-brand-500 dark:hover:border-gray-300 hover:bg-brand-500/5 transition-all cursor-pointer group h-full min-h-[180px]">
+                        <div class="size-12 rounded-full bg-gray-100 dark:bg-[#3d1f1f] flex items-center justify-center mb-3 group-hover:bg-brand-500 dark:group-hover:bg-gray-500 group-hover:text-white transition-colors text-gray-400">
+                            <span class="material-symbols-outlined">person_add</span>
                         </div>
-                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-semibold">
-                            Negotiating
-                        </span>
+                        <p class="font-semibold text-gray-700 dark:text-gray-300 text-sm">No Collaborators</p>
+                        <p class="text-xs text-gray-400 text-center mt-1">Complete your gig to proceed</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Quote</p>
-                            <p class="text-sm font-semibold text-amber-600 dark:text-amber-400">$2,450</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Response</p>
-                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Action Required</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-end gap-2">
-                        <button class="px-3 py-1.5 rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-xs font-semibold hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors">
-                            Review Offer
-                        </button>
-                    </div>
-                </div>
-                <!-- Collaborator Card 3 (Active) -->
-                <div class="group bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex gap-4">
-                            <div class="size-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden" data-alt="Headshot of Elena Rodriguez, Graphic Designer">
-                                <img class="w-full h-full object-cover" src="{% static 'images/user/user-04.jpg' %}" />
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Elena Rodriguez</h4>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Graphic Designer</p>
-                            </div>
-                        </div>
-                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success-50 dark:bg-success-800/20 text-success-700 dark:text-success-300 text-xs font-semibold">
-                            Accepted
-                        </span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Budget</p>
-                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">$850</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Due Date</p>
-                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nov 15, 2023</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex -space-x-2">
-                            <div class="size-6 rounded-full p-1 bg-gray-100 dark:bg-transparent flex items-center justify-center text-[10px] text-gray-500 border border-white dark:border-[#2f1616]" title="1 attachment">
-                                <span class="material-symbols-outlined text-[14px]">image</span>
-                            </div>
-                        </div>
-                        <button class="text-sm font-semibold text-gray-600 dark:text-gray-500 hover:text-brand-500 dark:hover:text-gray-300 flex items-center gap-1">
-                            Message <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
-                        </button>
-                    </div>
-                </div>
-                <!-- Add New Card -->
-                <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-500 rounded-xl p-5 hover:border-brand-500 dark:hover:border-gray-300 hover:bg-brand-500/5 transition-all cursor-pointer group h-full min-h-[180px]">
-                    <div class="size-12 rounded-full bg-gray-100 dark:bg-[#3d1f1f] flex items-center justify-center mb-3 group-hover:bg-brand-500 dark:group-hover:bg-gray-500 group-hover:text-white transition-colors text-gray-400">
-                        <span class="material-symbols-outlined">person_add</span>
-                    </div>
-                    <p class="font-semibold text-gray-700 dark:text-gray-300 text-sm">Invite Talent</p>
-                    <p class="text-xs text-gray-400 text-center mt-1">Search the marketplace for more pros</p>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
     <!-- Right Column: Sidebar -->
     <aside class="w-full lg:w-80 xl:w-96 flex flex-col gap-6 shrink-0">

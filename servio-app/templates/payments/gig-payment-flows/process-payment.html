@@ -4,7 +4,7 @@
 {% block browser_title %}Gig Payment Checkout{% endblock %}
 {% block content %}
 
-<div class="grid grid-cols-1 gap-6 md:grid-cols-[65%_35%] py-6 md:mr-6">
+<div class="grid-cols-1 sm:grid-cols-[1.2fr_0.8fr] py-6 md:mr-6">
     <!-- Left Column: Main Payment Flow -->
     <div class="flex-1 flex flex-col gap-8">
         <!-- Progress & Title -->
@@ -37,7 +37,7 @@
             <!-- Cards Carousel -->
             <div class="flex overflow-x-auto no-scrollbar gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0">
                 <!-- Card 1 (Visa) -->
-                <div class="relative group min-w-[350px] h-[200px] rounded-xl 
+                <div class="relative group min-w-[300px] md:min-w-[350px] h-[200px] rounded-xl 
                     p-6 flex flex-col justify-between text-white shadow-lg 
                     transition-transform hover:-translate-y-1 cursor-pointer 
                     bg-gradient-to-br from-[#1a1f71] to-[#2b3595] border 
@@ -57,7 +57,7 @@
 
                     <!-- Card details -->
                     <div>
-                        <div class="text-2xl font-mono tracking-widest mb-4">
+                        <div class="text-xl font-mono tracking-widest mb-4">
                             •••• •••• •••• 8842
                         </div>
 
@@ -84,7 +84,7 @@
                 </div>
 
                 <!-- Card 2 (Mastercard) -->
-                <div class="relative group min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-gray-800 to-black border border-gray-700 my-1">
+                <div class="relative group min-w-[300px] md:min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-gray-800 to-black border border-gray-700 my-1">
 
                     <!-- Header row -->
                     <div class="flex items-start justify-end">
@@ -97,7 +97,7 @@
 
                     <!-- Card body -->
                     <div>
-                        <div class="text-2xl font-mono tracking-widest mb-4 text-gray-300">
+                        <div class="text-xl font-mono tracking-widest mb-4 text-gray-300">
                             •••• •••• •••• 1234
                         </div>
 
@@ -124,7 +124,7 @@
                 </div>
 
                 <!-- AMEX Cards -->
-                <div class="relative group min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-[#1f72b8] to-[#0a3d62] border border-white/10 my-1">
+                <div class="relative group min-w-[300px] md:min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-[#1f72b8] to-[#0a3d62] border border-white/10 my-1">
                     <!-- Header -->
                     <div class="flex justify-end items-center">
                         <span class="font-extrabold tracking-widest text-lg">
@@ -134,7 +134,7 @@
 
                     <!-- Card body -->
                     <div>
-                        <div class="text-2xl font-mono tracking-wider mb-4">
+                        <div class="text-xl font-mono tracking-wider mb-4">
                             •••• •••••• •••••
                         </div>
 
@@ -161,7 +161,7 @@
                 </div>
 
                 <!--Discover Cards-->
-                <div class="relative group min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-gray-900 to-black border border-gray-700 my-1">
+                <div class="relative group min-w-[300px] md:min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-gray-900 to-black border border-gray-700 my-1">
                     <!-- Header -->
                     <div class="flex justify-end items-center">
                         <span class="font-bold tracking-wide text-sm">
@@ -171,7 +171,7 @@
 
                     <!-- Card body -->
                     <div>
-                        <div class="text-2xl font-mono tracking-widest mb-4 text-gray-300">
+                        <div class="text-xl font-mono tracking-widest mb-4 text-gray-300">
                             •••• •••• •••• 5678
                         </div>
 
@@ -275,18 +275,19 @@
             </div>
         </div>
     </div>
+    
     <!-- Right Column: Order Summary -->
-    <div class="w-full lg:w-[400px] flex-shrink-0 flex flex-col gap-6">
+    <div class="w-full gap-6 mt-5">
         <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-24">
-            <h3 class="text-xl font-semibold text-[#0d121b] dark:text-gray-400 mb-8">Gig/Project Summary</h3>
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-400 mb-8">Gig/Project Summary</h3>
             <div class="flex flex-col gap-4 border-b border-gray-100 
                 dark:border-gray-700 pb-6 mb-6">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="font-semibold text-[#0d121b] dark:text-gray-400">{{ gig.title|striptags|truncatewords:5|title }}</p>
+                        <p class="font-semibold text-gray-600 dark:text-gray-400">{{ gig.title|striptags|truncatewords:5|title }}</p>
                         <p class="text-xs text-gray-500 dark:text-gray-400">{{ gig.start_date }} - {{ gig.end_date }}</p>
                     </div>
-                    <p class="font-semibold text-[#0d121b] dark:text-gray-400">${{ gig.total_budget|intcomma }}</p>
+                    <p class="font-semibold text-gray-800 dark:text-gray-400">${{ gig.total_budget|intcomma }}</p>
                 </div>
                 <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
                     <p>Service Fee (5%)</p>
@@ -298,7 +299,7 @@
                 </div>
             </div>
             <div class="flex justify-between items-center mb-8">
-                <p class="text-lg font-semibold text-[#0d121b] dark:text-gray-400">Total to Pay</p>
+                <p class="text-lg font-semibold text-gray-800 dark:text-gray-400">Total to Pay</p>
                 <p class="text-2xl font-bold text-success-500 dark:text-emerald-600">${{ gig.total_amount_payable|intcomma }}</p>
             </div>
             <a 
@@ -335,7 +336,7 @@
         <!-- <div class="bg-success-50 dark:bg-success-800/10 rounded-xl p-4 border border-success-100 dark:border-bsuccess-800/20 flex gap-3 items-start">
             <span class="material-symbols-outlined text-success-500 mt-0.5">verified_user</span>
             <div>
-                <h4 class="font-semibold text-sm text-[#0d121b] dark:text-gray-400">Buyer Protection Guarantee</h4>
+                <h4 class="font-semibold text-sm text-gray-800 dark:text-gray-400">Buyer Protection Guarantee</h4>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your payment is held securely until the work is approved. Full refund if requirements aren't met.</p>
             </div>
         </div> -->

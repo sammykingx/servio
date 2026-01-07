@@ -1,0 +1,21 @@
+sudo apt install libnss3-tools mkcert -y
+
+mkcert -install
+# mkcert created a local Certificate Authority (CA) and trusted it system-wide.
+# Location of the CA files (Linux / Ubuntu)
+# Run this to see it:
+# mkcert -CAROOT
+
+mkcert localhost 127.0.0.1
+
+# This generates:
+#	localhost.pem
+# 	localhost-key.pem
+
+# Also install Werkzeug, pyOpenSSL if not installed
+# run
+# python manage.py runserver_plus \
+#  --cert-file localhost.pem \
+#  --key-file localhost-key.pem
+
+# 
