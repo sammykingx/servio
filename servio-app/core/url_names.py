@@ -66,3 +66,5 @@ class CollaborationURLS:
 class PaymentURLS:
     USER_PAYMENT_SUMMARY = "payment_summary"
     GIG_PAYMENT_SUMMARY = "gig_payment_summary"
+    PROCESS_GIG_PAYMENT = "process_gig_payment"
+    GIG_CARD_PAYMENT = "gig_card_payment"

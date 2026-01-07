@@ -30,6 +30,7 @@ from django.utils.text import slugify
 from django.conf import settings
 from uuid6 import uuid7
 from .choices import GigVisibility, GigStatus
+from decimal import Decimal, ROUND_HALF_UP
 
 
 class Gig(models.Model):
@@ -162,4 +163,22 @@ class Gig(models.Model):
         return self.required_roles.filter(
             niche__parent__isnull=False
         ).values_list('niche__parent__name', flat=True).distinct()
+        
+    @property
+    def service_fee(self):
+        return (
+            self.total_budget * Decimal("0.05")
+        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    
+    @property   
+    def tax(self):
+        return (
+            self.total_budget * Decimal("0.07")
+        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    @property
+    def total_amount_payable(self):
+        return (
+            self.total_budget + self.service_fee + self.tax
+        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     

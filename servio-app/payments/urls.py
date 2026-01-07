@@ -2,8 +2,7 @@ from django.urls import path, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
 from core.url_names import PaymentURLS
 from template_map.payments import Payments
-from template_map.collaboration import Collabs
-from .views.gig_payments import GigPaymentView
+from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, GigCardPayments
 
 
 urlpatterns = [
@@ -20,7 +19,17 @@ urlpatterns = [
     ),
     path(
         "gig-payments/<uuid:gig_id>", 
-        GigPaymentView.as_view(),
+        GigPaymentSummaryView.as_view(),
         name=PaymentURLS.GIG_PAYMENT_SUMMARY
+    ),
+    path(
+        "gig-payments/<uuid:gig_id>/pay", 
+        ProcessGigPaymentView.as_view(),
+        name=PaymentURLS.PROCESS_GIG_PAYMENT
+    ),
+    path(
+        "gig-payments/<uuid:gig_id>/pay/card", 
+        GigCardPayments.as_view(),
+        name=PaymentURLS.GIG_CARD_PAYMENT
     )
 ]

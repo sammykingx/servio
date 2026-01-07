@@ -1,0 +1,344 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Gig Payment Checkout{% endblock %}
+{% block content %}
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-[65%_35%] py-6 md:mr-6">
+    <!-- Left Column: Main Payment Flow -->
+    <div class="flex-1 flex flex-col gap-8">
+        <!-- Progress & Title -->
+        <div class="flex flex-col gap-4 space-y-3">
+            <!-- Progress Bar -->
+            <div class="flex flex-col gap-2">
+                <div class="flex justify-between items-end">
+                    <p class="text-brand-500 dark:text-brand-500/80 font-semibold text-sm uppercase tracking-wider">Step 2 of 3</p>
+                    <p class="text-gray-400 text-sm">Next: Confirmation</p>
+                </div>
+                <div class="h-1.5 w-full bg-slate-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-brand-500 w-2/3 rounded-full"></div>
+                </div>
+            </div>
+            <!-- Page Heading -->
+            <div>
+                <h1 class="text-2xl md:text-3xl font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2">Select Payment Method</h1>
+                <p class="text-[#4c669a] dark:text-gray-400 text-lg">Choose your preferred checkout option for your Gig/Project.</p>
+            </div>
+        </div>
+        <!-- Saved Cards Section -->
+        <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-400 flex items-center gap-2">
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    Saved Cards
+                </h3>
+                <button class="text-brand-500 dark:text-gray-500 text-sm font-semibold hover:underline">Manage</button>
+            </div>
+            <!-- Cards Carousel -->
+            <div class="flex overflow-x-auto no-scrollbar gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0">
+                <!-- Card 1 (Visa) -->
+                <div class="relative group min-w-[350px] h-[200px] rounded-xl 
+                    p-6 flex flex-col justify-between text-white shadow-lg 
+                    transition-transform hover:-translate-y-1 cursor-pointer 
+                    bg-gradient-to-br from-[#1a1f71] to-[#2b3595] border 
+                    border-[#2b3595] my-1">
+                    <!-- Header row -->
+                    <div class="flex justify-between items-center">
+                        <!-- Default badge (left) -->
+                        <div class="bg-white/20 backdrop-blur-md px-2 py-1 rounded text-xs font-medium border border-white/10">
+                            Default
+                        </div>
+
+                        <!-- Card type (right) -->
+                        <span class="font-bold italic text-xl tracking-wider opacity-90">
+                            VISA
+                        </span>
+                    </div>
+
+                    <!-- Card details -->
+                    <div>
+                        <div class="text-2xl font-mono tracking-widest mb-4">
+                            •••• •••• •••• 8842
+                        </div>
+
+                        <div class="flex justify-between items-end">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Card Holder
+                                </span>
+                                <span class="text-sm font-medium">
+                                    {{ user.full_name|title }}
+                                </span>
+                            </div>
+
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Expires
+                                </span>
+                                <span class="text-sm font-medium">
+                                    12/25
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 (Mastercard) -->
+                <div class="relative group min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-gray-800 to-black border border-gray-700 my-1">
+
+                    <!-- Header row -->
+                    <div class="flex items-start justify-end">
+                        <!-- Mastercard logo (far right) -->
+                        <div class="flex -space-x-2 opacity-90">
+                            <div class="size-6 rounded-full bg-red-500/80"></div>
+                            <div class="size-6 rounded-full bg-yellow-500/80"></div>
+                        </div>
+                    </div>
+
+                    <!-- Card body -->
+                    <div>
+                        <div class="text-2xl font-mono tracking-widest mb-4 text-gray-300">
+                            •••• •••• •••• 1234
+                        </div>
+
+                        <div class="flex justify-between items-end">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Card Holder
+                                </span>
+                                <span class="text-sm font-medium text-gray-300">
+                                    {{ user.full_name|title }}
+                                </span>
+                            </div>
+
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Expires
+                                </span>
+                                <span class="text-sm font-medium text-gray-300">
+                                    01/26
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AMEX Cards -->
+                <div class="relative group min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-[#1f72b8] to-[#0a3d62] border border-white/10 my-1">
+                    <!-- Header -->
+                    <div class="flex justify-end items-center">
+                        <span class="font-extrabold tracking-widest text-lg">
+                            AMEX
+                        </span>
+                    </div>
+
+                    <!-- Card body -->
+                    <div>
+                        <div class="text-2xl font-mono tracking-wider mb-4">
+                            •••• •••••• •••••
+                        </div>
+
+                        <div class="flex justify-between items-end">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Card Holder
+                                </span>
+                                <span class="text-sm font-medium">
+                                    {{ user.full_name|title }}
+                                </span>
+                            </div>
+
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Expires
+                                </span>
+                                <span class="text-sm font-medium">
+                                    08/26
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Discover Cards-->
+                <div class="relative group min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-gray-900 to-black border border-gray-700 my-1">
+                    <!-- Header -->
+                    <div class="flex justify-end items-center">
+                        <span class="font-bold tracking-wide text-sm">
+                            DISC<span class="text-orange-500">OVER</span>
+                        </span>
+                    </div>
+
+                    <!-- Card body -->
+                    <div>
+                        <div class="text-2xl font-mono tracking-widest mb-4 text-gray-300">
+                            •••• •••• •••• 5678
+                        </div>
+
+                        <div class="flex justify-between items-end">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Card Holder
+                                </span>
+                                <span class="text-sm font-medium text-gray-300">
+                                    {{ user.full_name|title }}
+                                </span>
+                            </div>
+
+                            <div class="flex flex-col">
+                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                    Expires
+                                </span>
+                                <span class="text-sm font-medium text-gray-300">
+                                    03/27
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Card Placeholder -->
+                <div class="min-w-[150px] h-[200px] rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center gap-2 text-gray-400 hover:text-brand-500 dark:hover:text-gray-500 hover:border-brand-500 dark:hover:border-gray-500 hover:bg-brand-500/5 transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-3xl">add_circle</span>
+                    <span class="text-sm font-semibold">New</span>
+                </div>
+            </div>
+        </div>
+        <!-- Other Payment Methods -->
+        <div class="flex flex-col gap-4">
+            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-400 flex items-center gap-2">
+                <span class="material-symbols-outlined">payments</span>
+                Other Payment Methods
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Option 1: Credit Card (New) -->
+                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                    <input checked="" class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="p-1.5 bg-blue-100 dark:bg-blue-900/40 rounded text-brand-500">
+                                <span class="material-symbols-outlined text-xl leading-none">credit_card</span>
+                            </div>
+                            <span class="font-bold text-base dark:text-gray-400">Credit/Debit Card</span>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Pay securely with Visa, Mastercard, or Amex.</p>
+                    </div>
+                </label>
+                <!-- Option 2: Wallet -->
+                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                    <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="p-1.5 bg-purple-100 dark:bg-purple-900/40 rounded text-purple-600 dark:text-purple-400">
+                                <span class="material-symbols-outlined text-xl leading-none">account_balance_wallet</span>
+                            </div>
+                            <span class="font-bold text-base dark:text-gray-400">Servio Wallet</span>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Balance: <span class="font-semibold text-slate-700 dark:text-slate-200">$450.00</span></p>
+                    </div>
+                </label>
+                <!-- Option 3: Apple Pay -->
+                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                    <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="p-1.5 bg-gray-100 dark:bg-gray-700/50 rounded flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 60" class="h-6 w-auto fill-current text-gray-900 dark:text-gray-100" aria-label="Apple Pay" role="img">
+                                    <!-- Apple logo -->
+                                    <path d="M23.7 17.5c1.4-1.7 2.4-4.1 2.1-6.5-2.1.1-4.6 1.4-6.1 3.1-1.3 1.5-2.5 4-2.2 6.3 2.3.2 4.8-1.2 6.2-2.9zm6.5 32.1c-1.4 2.1-2.8 4.1-5.1 4.1-2.2 0-2.9-1.3-5.4-1.3-2.5 0-3.3 1.3-5.4 1.3-2.2 0-3.8-2.2-5.3-4.3-2.9-4.2-5.1-11.9-2.1-17.1 1.5-2.6 4.2-4.3 7.1-4.3 2.2 0 4.3 1.5 5.4 1.5 1.1 0 3.7-1.9 6.2-1.6 1 .1 3.9.4 5.7 3.1-.1.1-3.4 2-3.3 6 0 4.8 4.2 6.4 4.3 6.4-.1.2-.7 2.5-2.1 5.2z" />
+
+                                    <!-- Pay text -->
+                                    <text x="44" y="40" font-size="26" font-weight="700" font-family="Arial, Helvetica, sans-serif">
+                                        Pay
+                                    </text>
+                                </svg>
+                            </div>
+
+                            <span class="font-semibold text-base dark:text-gray-400">Apple Pay</span>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Fast checkout with Face ID.</p>
+                    </div>
+                </label>
+                <!-- Option 4: Bank Transfer -->
+                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                    <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="p-1.5 bg-orange-100 dark:bg-orange-900/40 rounded text-orange-600 dark:text-orange-400">
+                                <span class="material-symbols-outlined text-xl leading-none">account_balance</span>
+                            </div>
+                            <span class="font-semibold text-base dark:text-gray-400">Bank Transfer</span>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">2-3 Business Days processing.</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <!-- Right Column: Order Summary -->
+    <div class="w-full lg:w-[400px] flex-shrink-0 flex flex-col gap-6">
+        <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-24">
+            <h3 class="text-xl font-semibold text-[#0d121b] dark:text-gray-400 mb-8">Gig/Project Summary</h3>
+            <div class="flex flex-col gap-4 border-b border-gray-100 
+                dark:border-gray-700 pb-6 mb-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="font-semibold text-[#0d121b] dark:text-gray-400">{{ gig.title|striptags|truncatewords:5|title }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ gig.start_date }} - {{ gig.end_date }}</p>
+                    </div>
+                    <p class="font-semibold text-[#0d121b] dark:text-gray-400">${{ gig.total_budget|intcomma }}</p>
+                </div>
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                    <p>Service Fee (5%)</p>
+                    <p>${{ gig.service_fee|intcomma }}</p>
+                </div>
+                <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+                    <p>Tax (7% VAT)</p>
+                    <p>${{ gig.tax|intcomma }}</p>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-8">
+                <p class="text-lg font-semibold text-[#0d121b] dark:text-gray-400">Total to Pay</p>
+                <p class="text-2xl font-bold text-success-500 dark:text-emerald-600">${{ gig.total_amount_payable|intcomma }}</p>
+            </div>
+            <a 
+                href="{% url PAYMENT_URLS.GIG_CARD_PAYMENT gig_id=gig.id %}"
+                class="w-full bg-brand-500 hover:bg-blue-700 text-white font-bold text-lg py-4 rounded-lg shadow-lg shadow-brand-500/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
+                <span class="material-symbols-outlined group-hover:animate-pulse">lock</span>
+                Pay ${{ gig.total_amount_payable|intcomma }}
+            </a>
+            <div class="mt-6 flex flex-col gap-2 text-center">
+                <p class="text-xs text-gray-400 dark:text-gray-500">
+                    By clicking Pay, you agree to our <a class="underline hover:text-brand-500" href="#">Terms of Service</a>.
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    <!-- Secure checkout -->
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined">lock</span>
+                        <span>Secure checkout</span>
+                    </div>
+
+                    <!-- SSL encrypted -->
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined">verified_user</span>
+                        <span>SSL encrypted</span>
+                    </div>
+
+                    <!-- Payment processor -->
+                    <div class="flex items-center gap-1">
+                        <span class="font-semibold tracking-wide">Powered by Stripe</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Extra Trust Box -->
+        <!-- <div class="bg-success-50 dark:bg-success-800/10 rounded-xl p-4 border border-success-100 dark:border-bsuccess-800/20 flex gap-3 items-start">
+            <span class="material-symbols-outlined text-success-500 mt-0.5">verified_user</span>
+            <div>
+                <h4 class="font-semibold text-sm text-[#0d121b] dark:text-gray-400">Buyer Protection Guarantee</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your payment is held securely until the work is approved. Full refund if requirements aren't met.</p>
+            </div>
+        </div> -->
+    </div>
+</div>
+{% endblock %}

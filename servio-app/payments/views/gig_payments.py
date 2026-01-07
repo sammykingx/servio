@@ -8,48 +8,57 @@ from django.urls import reverse
 from django.core.exceptions import PermissionDenied
 from template_map.payments import Payments
 from collaboration.models.choices import GigStatus
+from ..mixins import GigPaymentMixin
 
 
 GigModel = apps.get_model("collaboration","Gig")
 
 
-class GigPaymentView(LoginRequiredMixin, TemplateView):
+class GigPaymentSummaryView(
+    LoginRequiredMixin,
+    GigPaymentMixin,
+    TemplateView
+):
     template_name = Payments.GigPayments.GIG_OVERVIEW
 
-    def dispatch(self, request, *args, **kwargs):
-        self.gig = (
-            GigModel.objects
-            .select_related("creator")
-            .prefetch_related("required_roles")
-            .filter(
-                id=kwargs["gig_id"],
-                creator=request.user,
-                status=GigStatus.PENDING
-            )
-            .first()
-        )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_gig_context())
+        return context
 
-        if not self.gig:
-            return redirect(reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS))
 
-        return super().dispatch(request, *args, **kwargs)
+class GigCardPayments(LoginRequiredMixin, GigPaymentMixin, TemplateView):
+    template_name = Payments.GigPayments.CARD_PAYMENTS
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["gig"] = self.gig
-        # context["payment_summary"] = {
-        #     "title": self.gig.title,
-        #     "budget": self.gig.budget,
-        #     "currency": self.gig.currency,
-        #     "roles": [
-        #         {
-        #             "niche": role.niche.name,
-        #             "professional": role.professional.name,
-        #             "budget": role.budget,
-        #         }
-        #         for role in self.gig.roles.all()
-        #     ]
-        # }
-
+        context.update(self.get_gig_context())
         return context
+    
+class ProcessGigPaymentView(
+    LoginRequiredMixin,
+    GigPaymentMixin,
+    TemplateView
+):
+    template_name = Payments.GigPayments.PROCESS_PAYMENT
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_gig_context())
+        return context
+
+    def post(self, request, *args, **kwargs):
+        """
+        Receives gig payment payload (HTMX / JSON / form)
+        """
+        payload = request.POST  # or request.body for JSON
+
+        # ⚠️ Do NOT trust payload amounts here
+        # You will validate against server-side gig data
+
+        # Example stub
+        # payment_intent = create_or_update_intent(self.gig, payload)
+
+        return self.render_to_response(
+            self.get_context_data()
+        )
