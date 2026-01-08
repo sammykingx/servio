@@ -2,7 +2,7 @@ from django.urls import path, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
 from core.url_names import PaymentURLS
 from template_map.payments import Payments
-from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, GigCardPayments
+from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, SelectGigPaymentMethodView, GigCardInfoView, GigPaymentComplete
 
 
 urlpatterns = [
@@ -23,13 +23,23 @@ urlpatterns = [
         name=PaymentURLS.GIG_PAYMENT_SUMMARY
     ),
     path(
-        "gig-payments/<uuid:gig_id>/pay", 
-        ProcessGigPaymentView.as_view(),
-        name=PaymentURLS.PROCESS_GIG_PAYMENT
+        "gig-payments/<uuid:gig_id>/options", 
+        SelectGigPaymentMethodView.as_view(),
+        name=PaymentURLS.SELECT_GIG_PAYMENT_METHOD
     ),
     path(
-        "gig-payments/<uuid:gig_id>/pay/card", 
-        GigCardPayments.as_view(),
+        "gig-payments/<uuid:gig_id>/card", 
+        GigCardInfoView.as_view(),
         name=PaymentURLS.GIG_CARD_PAYMENT
+    ),
+    path(
+        "gig-payments/<uuid:gig_id>/checkout", 
+        ProcessGigPaymentView.as_view(),
+        name=PaymentURLS.GIG_PAYMENT_RESPONSE
+    ),
+    path(
+        "gig-payments/<uuid:gig_id>/complete", 
+        GigPaymentComplete.as_view(),
+        name=PaymentURLS.GIG_PAYMENT_RESPONSE
     )
 ]

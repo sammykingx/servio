@@ -4,7 +4,7 @@ from django.db import transaction, IntegrityError, OperationalError
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse, JsonResponse
-from django.db.models import Prefetch
+from django.db.models import Model, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, UpdateView, View
 from django.utils.safestring import mark_safe
@@ -72,7 +72,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
         try:
             payload = json.loads(request.body)
             gig_data = CreateGigRequest(**payload)
-            self.save_gig_data(gig_data.payload, gig_data.action)
+            gig = self.save_gig_data(gig_data.payload, gig_data.action)
 
         except json.JSONDecodeError:
             return JsonResponse(
@@ -113,10 +113,10 @@ class CreateCollaborationView(LoginRequiredMixin, View):
                 status=400
             )
         
-        response = get_response_msg(gig_data.action)
+        response = get_response_msg(gig_data.action, gig)
         return JsonResponse(response.model_dump())
     
-    def save_gig_data(self, payload:GigPayload, action:CreateGigStates) -> None:
+    def save_gig_data(self, payload:GigPayload, action:CreateGigStates) -> Model:
         from collaboration.models.choices import GigStatus
         
         try:
@@ -163,6 +163,8 @@ class CreateCollaborationView(LoginRequiredMixin, View):
             raise IntegrityError("This gig/project could not be saved due to a data conflict. try again shortly.")
         except OperationalError as e:
             raise OperationalError("We’re having trouble saving your gig right now. Please try again shortly.")
+        
+        return gig
 
 
 class EditGigView(LoginRequiredMixin, View):

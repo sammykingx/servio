@@ -212,8 +212,9 @@
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Option 1: Credit Card (New) -->
-                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
-                    <input checked="" class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                <a  
+                    href="{% url PAYMENT_URLS.GIG_CARD_PAYMENT gig_id=gig.id %}" 
+                    class="cursor-pointer relative flex items-start gap-4 p-5 md:p-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1.5">
                             <div class="p-1.5 bg-blue-100 dark:bg-blue-900/40 rounded text-brand-500">
@@ -223,10 +224,9 @@
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">Pay securely with Visa, Mastercard, or Amex.</p>
                     </div>
-                </label>
+                </a>
                 <!-- Option 2: Wallet -->
-                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
-                    <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                <a class="cursor-pointer relative flex items-start gap-4 p-5 md:p-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1.5">
                             <div class="p-1.5 bg-purple-100 dark:bg-purple-900/40 rounded text-purple-600 dark:text-purple-400">
@@ -236,9 +236,9 @@
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">Balance: <span class="font-semibold text-slate-700 dark:text-slate-200">$450.00</span></p>
                     </div>
-                </label>
+                </a>
                 <!-- Option 3: Apple Pay -->
-                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                <a class="cursor-pointer relative flex items-start gap-4 p-5 md:-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
                     <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1.5">
@@ -258,10 +258,9 @@
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">Fast checkout with Face ID.</p>
                     </div>
-                </label>
+                </a>
                 <!-- Option 4: Bank Transfer -->
-                <label class="cursor-pointer relative flex items-start gap-4 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
-                    <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                <a class="cursor-pointer relative flex items-start gap-4 p-5 md:p-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1.5">
                             <div class="p-1.5 bg-orange-100 dark:bg-orange-900/40 rounded text-orange-600 dark:text-orange-400">
@@ -271,13 +270,13 @@
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">2-3 Business Days processing.</p>
                     </div>
-                </label>
+                </a>
             </div>
         </div>
     </div>
     
     <!-- Right Column: Order Summary -->
-    <div class="w-full gap-6 mt-5">
+    <div class="w-full gap-6 mt-5 block md:hidden">
         <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-24">
             <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-400 mb-8">Gig/Project Summary</h3>
             <div class="flex flex-col gap-4 border-b border-gray-100 

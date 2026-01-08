@@ -1,0 +1,76 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Gig Payment Complete{% endblock %}
+{% block content %}
+
+<!-- section Content -->
+<section class="flex-1 flex justify-center py-10 px-4 md:px-8">
+    <div class="flex flex-col w-full max-w-[560px] gap-8">
+        <!-- Progress Indicator -->
+        <div class="flex flex-col gap-2">
+            <div class="flex justify-between items-end">
+                <p class="text-[#0d121b] dark:text-white text-sm font-semibold leading-normal">Step 5 of 5: Payment Complete</p>
+            </div>
+            <div class="h-1.5 w-full bg-[#cfd7e7] dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-brand-500 rounded-full w-full"></div>
+            </div>
+        </div>
+        <!-- Success Card -->
+        <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-[0_2px_12px_-2px_rgba(0,0,0,0.08)] border border-gray-100 dark:border-gray-800 p-6 md:p-10 flex flex-col items-center text-center">
+            <!-- Hero Icon -->
+            <div class="size-24 rounded-full bg-brand-500/10 flex items-center justify-center mb-6 text-brand-500">
+                <span class="material-symbols-outlined !text-[48px] font-bold">check_circle</span>
+            </div>
+            <!-- Text Content -->
+            <h1 class="text-[#0d121b] dark:text-white text-[28px] md:text-[32px] font-bold leading-tight mb-3">Payment successful 🎉</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-relaxed max-w-sm mb-8">Your gig is now live and visible to collaborators. You can track progress in your dashboard.</p>
+            <!-- Transaction Summary Card -->
+            <div class="w-full bg-background-light dark:bg-gray-800/50 rounded-lg border border-slate-100 dark:border-gray-700 p-6 mb-8 text-left">
+                <div class="flex flex-col gap-1 mb-5">
+                    <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Paid</span>
+                    <span class="text-3xl font-bold text-[#0d121b] dark:text-white tracking-tight">$500.00 <span class="text-base font-medium text-slate-400">USD</span></span>
+                </div>
+                <div class="h-px w-full bg-slate-200 dark:bg-gray-700 mb-5"></div>
+                <div class="flex flex-col gap-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">Payment Method</span>
+                        <div class="flex items-center gap-2 text-[#0d121b] dark:text-gray-200 font-semibold">
+                            <span class="material-symbols-outlined text-lg">credit_card</span>
+                            Visa ending in 4242
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">Transaction ID</span>
+                        <span class="text-[#0d121b] dark:text-gray-200 font-mono font-medium">#SRV-892301</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">Date &amp; Time</span>
+                        <span class="text-[#0d121b] dark:text-gray-200 font-medium">Oct 24, 2023, 10:30 AM</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 w-full">
+                <button class="flex-1 h-12 inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-brand-500 px-6 text-base font-bold text-white shadow-sm hover:bg-blue-700 hover:shadow-md transition-all focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-brand-500">
+                    View Gig
+                </button>
+                <button class="flex-1 h-12 inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-transparent px-6 text-base font-bold text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                    <span class="material-symbols-outlined text-[20px] mr-2">download</span>
+                    Download receipt
+                </button>
+            </div>
+            <!-- Support Link -->
+            <a class="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-brand-500 hover:text-blue-700 transition-colors" href="#">
+                <span class="material-symbols-outlined text-[18px]">help_outline</span>
+                Need help with this payment?
+            </a>
+        </div>
+        <!-- Trust Badge (Optional Detail for "Premium/Secure" feel) -->
+        <div class="flex justify-center items-center gap-2 text-slate-400 dark:text-slate-600 text-xs font-medium">
+            <span class="material-symbols-outlined text-[14px]">lock</span>
+            Secure 256-bit SSL Encrypted Transaction
+        </div>
+    </div>
+</section>
+{% endblock %}

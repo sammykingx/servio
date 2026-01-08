@@ -128,7 +128,7 @@
                     <span class="material-symbols-outlined text-[16px]">lock</span>
                     Payments are SSL encrypted and 100% secure.
                 </div>
-                <a href="{% url PAYMENT_URLS.PROCESS_GIG_PAYMENT gig_id=gig.id %}" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-500-hover text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-brand-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
+                <a href="{% url PAYMENT_URLS.SELECT_GIG_PAYMENT_METHOD gig_id=gig.id %}" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-500-hover text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-brand-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
                     Proceed to Payment
                     <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </a>
