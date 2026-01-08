@@ -5,7 +5,8 @@
 {% block content %}
 
 <!-- section Content -->
-<section class="flex-1 flex justify-center py-10 px-4 md:px-8">
+{% if status %}
+<section class="flex-1 flex justify-center py-8 px-4 md:px-6">
     <div class="flex flex-col w-full max-w-[560px] gap-8">
         <!-- Progress Indicator -->
         <div class="flex flex-col gap-2">
@@ -29,7 +30,7 @@
             <div class="w-full bg-background-light dark:bg-gray-800/50 rounded-lg border border-slate-100 dark:border-gray-700 p-6 mb-8 text-left">
                 <div class="flex flex-col gap-1 mb-5">
                     <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Paid</span>
-                    <span class="text-3xl font-bold text-[#0d121b] dark:text-white tracking-tight">$500.00 <span class="text-base font-medium text-slate-400">USD</span></span>
+                    <span class="text-3xl font-bold text-[#0d121b] dark:text-white tracking-tight">${{ gig.total_amount_payable|intcomma }} <span class="text-base font-medium text-slate-400">USD</span></span>
                 </div>
                 <div class="h-px w-full bg-slate-200 dark:bg-gray-700 mb-5"></div>
                 <div class="flex flex-col gap-4">
@@ -52,9 +53,9 @@
             </div>
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 w-full">
-                <button class="flex-1 h-12 inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-brand-500 px-6 text-base font-bold text-white shadow-sm hover:bg-blue-700 hover:shadow-md transition-all focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-brand-500">
+                <a href="{% url COLLABORATION_URLS.DETAIL_COLLABORATION gig_id=gig.id %}" class="flex-1 h-12 inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-brand-500 px-6 text-base font-bold text-white shadow-sm hover:bg-blue-700 hover:shadow-md transition-all focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-brand-500">
                     View Gig
-                </button>
+                </a>
                 <button class="flex-1 h-12 inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-transparent px-6 text-base font-bold text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
                     <span class="material-symbols-outlined text-[20px] mr-2">download</span>
                     Download receipt
@@ -73,4 +74,115 @@
         </div>
     </div>
 </section>
+{% else %}
+<section class="flex-1 flex justify-center py-6 px-4">
+    <div class="flex flex-col w-full max-w-[560px] gap-8">
+        <!-- Progress Indicator -->
+        <div class="flex flex-col gap-2">
+            <div class="flex justify-between items-end">
+                <p class="text-[#0d121b] dark:text-white text-sm font-semibold leading-normal">Step 5 of 5: Payment Failed</p>
+            </div>
+            <div class="h-1.5 w-full bg-[#cfd7e7] dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-error-500 rounded-full w-full"></div>
+            </div>
+        </div>
+        <!-- Failed Card -->
+        <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-[0_2px_12px_-2px_rgba(0,0,0,0.08)] border border-gray-100 dark:border-gray-800 p-3 md:p-10 flex flex-col items-center text-center">
+            <!-- Hero Icon -->
+            <div class="size-24 rounded-full bg-red-100 dark:bg-red-500/10 flex items-center justify-center mb-6">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background Glow -->
+                    <circle cx="24" cy="24" r="22" fill="url(#failGradient)" opacity="0.15" />
+                    <!-- Outer Ring -->
+                    <circle cx="24" cy="24" r="18" stroke="#EF4444" stroke-width="2" />
+                    <!-- X Mark -->
+                    <path d="M18 18L30 30M30 18L18 30" stroke="#EF4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="failGradient" x1="0" y1="0" x2="48" y2="48">
+                            <stop offset="0%" stop-color="#FCA5A5" />
+                            <stop offset="100%" stop-color="#EF4444" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- Text Content
+            <h1 class="text-[#0d121b] dark:text-white text-[28px] md:text-[32px] font-bold leading-tight mb-3">Payment successful 🎉</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-relaxed max-w-sm mb-8">Your gig is now live and visible to collaborators. You can track progress in your dashboard.</p> -->
+            <!-- Transaction Summary Card -->
+            <div class="p-6 text-center max-w-lg mx-auto">
+                <h1 class="text-[#0d171b] dark:text-white text-2xl md:text-3xl font-bold mb-3 tracking-tight">We couldn’t process your payment</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8">
+                    This might be due to a bank decline, incorrect details, or insufficient funds. Don't worry, you haven't been charged for this transaction.
+                </p>
+                <!-- Error Details Box -->
+                <div class="bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/50 rounded-lg p-4 mb-8 flex items-start gap-3 text-left">
+                    <span class="material-symbols-outlined text-red-600 dark:text-red-400 mt-0.5 shrink-0">error</span>
+                    <div>
+                        <h4 class="text-sm font-bold text-red-800 dark:text-red-300">Transaction Failed</h4>
+                        <p class="text-xs text-red-700 dark:text-red-400 mt-1">Gateway response: Do not honor. Please contact your card issuer.</p>
+                    </div>
+                </div>
+                <!-- Action Buttons -->
+                <div class="flex flex-col gap-3 w-full max-w-sm mx-auto">
+                    <a
+                        href="{% url PAYMENT_URLS.GIG_PAYMENT_RESPONSE gig_id=gig.id %}"
+                        class="w-full flex items-center justify-center gap-2
+                            bg-brand-500 hover:bg-brand-600 text-white 
+                            font-bold py-3.5 px-6 rounded-lg transition-all 
+                            shadow-lg shadow-sky-500/20 active:scale-[0.98]
+                            text-sm md:text-base
+                        "
+                    >
+                        <span class="material-symbols-outlined text-xl">refresh</span>
+                        <span>Retry Payment</span>
+                    </a>
+                    <a
+                        href="{% url PAYMENT_URLS.SELECT_GIG_PAYMENT_METHOD gig_id=gig.id %}"
+                        class="w-full flex items-center justify-center gap-2 
+                            bg-white dark:bg-transparent border 
+                            border-slate-200 dark:border-slate-600 
+                            hover:bg-slate-50 dark:hover:bg-slate-800 
+                            text-slate-700 dark:text-slate-200 font-bold 
+                            py-3.5 px-6 rounded-lg transition-all active:scale-[0.98]
+                            text-sm md:text-base
+                        "
+                    >
+                        <span>Change Payment Method</span>
+                    </a>
+                </div>
+                <div class="mt-5 flex items-center justify-center gap-6">
+                    <a 
+                        href="mailto:support@divgm.com"
+                        class="text-sm font-medium text-slate-500 
+                            hover:text-brand-500 dark:hover:text-gray-400
+                            transition-colors flex items-center gap-1.5"
+                    >
+                        <span class="material-symbols-outlined text-lg">headset_mic</span>
+                        Contact Support
+                    </a>
+                    <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+                    <a class="text-sm font-medium text-slate-500 hover:text-brand-500 dark:hover:text-gray-400 transition-colors" href="#">Cancel Payment</a>
+                </div>
+            </div>
+            <!-- Support Link -->
+            <a 
+                class="mt-4 py-3 inline-flex items-center gap-1.5 
+                    text-sm font-medium text-brand-500 dark:text-gray-600 
+                    hover:text-blue-700 dark:hover:text-gray-400
+                    transition-colors" 
+                href="#"
+            >
+                <span class="material-symbols-outlined text-[18px]">help_outline</span>
+                Need help with this payment?
+            </a>
+        </div>
+        <!-- Trust Badge (Optional Detail for "Premium/Secure" feel) -->
+        <div class="flex justify-center items-center gap-2 text-slate-400 dark:text-slate-600 text-xs font-medium">
+            <span class="material-symbols-outlined text-[14px]">lock</span>
+            Secure 256-bit SSL Encrypted Transaction
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}

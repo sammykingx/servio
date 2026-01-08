@@ -40,6 +40,6 @@ urlpatterns = [
     path(
         "gig-payments/<uuid:gig_id>/complete", 
         GigPaymentComplete.as_view(),
-        name=PaymentURLS.GIG_PAYMENT_RESPONSE
+        name=PaymentURLS.GIG_PAYMENT_COMPLETE
     )
 ]

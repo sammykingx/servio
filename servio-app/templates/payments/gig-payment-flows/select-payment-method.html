@@ -12,7 +12,7 @@
             <!-- Progress Bar -->
             <div class="flex flex-col gap-2">
                 <div class="flex justify-between items-end">
-                    <p class="text-brand-500 dark:text-brand-500/80 font-semibold text-sm uppercase tracking-wider">Step 2 of 3</p>
+                    <p class="text-brand-500 dark:text-gray-600 font-semibold text-sm uppercase tracking-wider">Step 2 of 3</p>
                     <p class="text-gray-400 text-sm">Next: Confirmation</p>
                 </div>
                 <div class="h-1.5 w-full bg-slate-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -36,52 +36,50 @@
             </div>
             <!-- Cards Carousel -->
             <div class="flex overflow-x-auto no-scrollbar gap-4 pb-4 -mx-4 px-4 md:mx-0 md:px-0">
-                <!-- Card 1 (Visa) -->
-                <div class="relative group min-w-[300px] md:min-w-[350px] h-[200px] rounded-xl 
-                    p-6 flex flex-col justify-between text-white shadow-lg 
-                    transition-transform hover:-translate-y-1 cursor-pointer 
-                    bg-gradient-to-br from-[#1a1f71] to-[#2b3595] border 
-                    border-[#2b3595] my-1">
-                    <!-- Header row -->
-                    <div class="flex justify-between items-center">
-                        <!-- Default badge (left) -->
-                        <div class="bg-white/20 backdrop-blur-md px-2 py-1 rounded text-xs font-medium border border-white/10">
-                            Default
-                        </div>
-
-                        <!-- Card type (right) -->
-                        <span class="font-bold italic text-xl tracking-wider opacity-90">
-                            VISA
-                        </span>
-                    </div>
-
-                    <!-- Card details -->
-                    <div>
-                        <div class="text-xl font-mono tracking-widest mb-4">
-                            •••• •••• •••• 8842
-                        </div>
-
-                        <div class="flex justify-between items-end">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Card Holder
-                                </span>
-                                <span class="text-sm font-medium">
-                                    {{ user.full_name|title }}
-                                </span>
+                <a href="{% url PAYMENT_URLS.GIG_PAYMENT_RESPONSE gig_id=gig.id %}">
+                    <!-- Card 1 (Visa) -->
+                    <div class="relative group min-w-[300px] md:min-w-[350px] h-[200px] rounded-xl
+                        p-6 flex flex-col justify-between text-white shadow-lg
+                        transition-transform hover:-translate-y-1 cursor-pointer
+                        bg-gradient-to-br from-[#1a1f71] to-[#2b3595] border
+                        border-[#2b3595] my-1">
+                        <!-- Header row -->
+                        <div class="flex justify-between items-center">
+                            <!-- Default badge (left) -->
+                            <div class="bg-white/20 backdrop-blur-md px-2 py-1 rounded text-xs font-medium border border-white/10">
+                                Default
                             </div>
-
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Expires
-                                </span>
-                                <span class="text-sm font-medium">
-                                    12/25
-                                </span>
+                            <!-- Card type (right) -->
+                            <span class="font-bold italic text-xl tracking-wider opacity-90">
+                                VISA
+                            </span>
+                        </div>
+                        <!-- Card details -->
+                        <div>
+                            <div class="text-xl font-mono tracking-widest mb-4">
+                                •••• •••• •••• 8842
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Card Holder
+                                    </span>
+                                    <span class="text-sm font-medium">
+                                        {{ user.full_name|title }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Expires
+                                    </span>
+                                    <span class="text-sm font-medium">
+                                        12/25
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Card 2 (Mastercard) -->
                 <div class="relative group min-w-[300px] md:min-w-[350px] h-[200px] rounded-xl p-6 flex flex-col justify-between text-white shadow-md transition-transform hover:-translate-y-1 cursor-pointer bg-gradient-to-br from-gray-800 to-black border border-gray-700 my-1">
@@ -95,32 +93,32 @@
                         </div>
                     </div>
 
-                    <!-- Card body -->
-                    <div>
-                        <div class="text-xl font-mono tracking-widest mb-4 text-gray-300">
-                            •••• •••• •••• 1234
-                        </div>
-
-                        <div class="flex justify-between items-end">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Card Holder
-                                </span>
-                                <span class="text-sm font-medium text-gray-300">
-                                    {{ user.full_name|title }}
-                                </span>
+                    <a href="{% url PAYMENT_URLS.GIG_PAYMENT_RESPONSE gig_id=gig.id %}">
+                        <!-- Card body -->
+                        <div>
+                            <div class="text-xl font-mono tracking-widest mb-4 text-gray-300">
+                                •••• •••• •••• 1234
                             </div>
-
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Expires
-                                </span>
-                                <span class="text-sm font-medium text-gray-300">
-                                    01/26
-                                </span>
+                            <div class="flex justify-between items-end">
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Card Holder
+                                    </span>
+                                    <span class="text-sm font-medium text-gray-300">
+                                        {{ user.full_name|title }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Expires
+                                    </span>
+                                    <span class="text-sm font-medium text-gray-300">
+                                        01/26
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- AMEX Cards -->
@@ -132,32 +130,32 @@
                         </span>
                     </div>
 
-                    <!-- Card body -->
-                    <div>
-                        <div class="text-xl font-mono tracking-wider mb-4">
-                            •••• •••••• •••••
-                        </div>
-
-                        <div class="flex justify-between items-end">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Card Holder
-                                </span>
-                                <span class="text-sm font-medium">
-                                    {{ user.full_name|title }}
-                                </span>
+                    <a href="{% url PAYMENT_URLS.GIG_PAYMENT_RESPONSE gig_id=gig.id %}">
+                        <!-- Card body -->
+                        <div>
+                            <div class="text-xl font-mono tracking-wider mb-4">
+                                •••• •••••• •••••
                             </div>
-
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Expires
-                                </span>
-                                <span class="text-sm font-medium">
-                                    08/26
-                                </span>
+                            <div class="flex justify-between items-end">
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Card Holder
+                                    </span>
+                                    <span class="text-sm font-medium">
+                                        {{ user.full_name|title }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Expires
+                                    </span>
+                                    <span class="text-sm font-medium">
+                                        08/26
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!--Discover Cards-->
@@ -169,32 +167,32 @@
                         </span>
                     </div>
 
-                    <!-- Card body -->
-                    <div>
-                        <div class="text-xl font-mono tracking-widest mb-4 text-gray-300">
-                            •••• •••• •••• 5678
-                        </div>
-
-                        <div class="flex justify-between items-end">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Card Holder
-                                </span>
-                                <span class="text-sm font-medium text-gray-300">
-                                    {{ user.full_name|title }}
-                                </span>
+                    <a href="{% url PAYMENT_URLS.GIG_PAYMENT_RESPONSE gig_id=gig.id %}">
+                        <!-- Card body -->
+                        <div>
+                            <div class="text-xl font-mono tracking-widest mb-4 text-gray-300">
+                                •••• •••• •••• 5678
                             </div>
-
-                            <div class="flex flex-col">
-                                <span class="text-[10px] opacity-70 uppercase tracking-widest">
-                                    Expires
-                                </span>
-                                <span class="text-sm font-medium text-gray-300">
-                                    03/27
-                                </span>
+                            <div class="flex justify-between items-end">
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Card Holder
+                                    </span>
+                                    <span class="text-sm font-medium text-gray-300">
+                                        {{ user.full_name|title }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] opacity-70 uppercase tracking-widest">
+                                        Expires
+                                    </span>
+                                    <span class="text-sm font-medium text-gray-300">
+                                        03/27
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Add New Card Placeholder -->

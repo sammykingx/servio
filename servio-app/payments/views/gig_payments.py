@@ -4,10 +4,7 @@ from core.url_names import CollaborationURLS
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
-from django.core.exceptions import PermissionDenied
 from template_map.payments import Payments
-from collaboration.models.choices import GigStatus
 from ..mixins import GigPaymentMixin
 
 
@@ -26,16 +23,7 @@ class GigPaymentSummaryView(
         context.update(self.get_gig_context())
         return context
 
-
-class GigCardInfoView(LoginRequiredMixin, GigPaymentMixin, TemplateView):
-    template_name = Payments.GigPayments.CARD_DETAILS
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update(self.get_gig_context())
-        return context
-
-  
+ 
 class SelectGigPaymentMethodView(
     LoginRequiredMixin,
     GigPaymentMixin,
@@ -43,6 +31,15 @@ class SelectGigPaymentMethodView(
 ):
     template_name = Payments.GigPayments.SELECT_PAYMENT_METHOD
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_gig_context())
+        return context
+
+
+class GigCardInfoView(LoginRequiredMixin, GigPaymentMixin, TemplateView):
+    template_name = Payments.GigPayments.CARD_DETAILS
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_gig_context())
@@ -83,5 +80,6 @@ class GigPaymentComplete(LoginRequiredMixin, GigPaymentMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["status"] = False
         context.update(self.get_gig_context())
         return context
