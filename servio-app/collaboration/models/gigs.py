@@ -38,12 +38,12 @@ class Gig(models.Model):
         Represents a project or gig listing within the marketplace.
     """
     id = models.UUIDField(primary_key=True, editable=False, default=uuid7)
-    # slug = models.SlugField(
-    #     max_length=380,
-    #     unique=True,
-    #     editable=False,
-    #     db_index=True
-    # )
+    slug = models.SlugField(
+        max_length=580,
+        unique=True,
+        editable=False,
+        db_index=True
+    )
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,

@@ -1,5 +1,3 @@
-# myapp/templatetags/custom_filters.py
-
 from django import template
 import re
 

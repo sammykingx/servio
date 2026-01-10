@@ -17,6 +17,7 @@ class CollaborationListView(LoginRequiredMixin, TemplateView):
                     F("required_roles__budget") * F("required_roles__slots")
                 ),
             )
+            .order_by("-created_at")
         )
         context["gigs"] = gigs
         return context

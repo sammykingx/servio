@@ -1,6 +1,7 @@
 from collaboration.models.choices import WorkMode
 from pydantic import BaseModel, Field
 from decimal import Decimal
+from typing import Optional
 from enum import Enum
 
 
@@ -16,10 +17,12 @@ class WorkModeEnum(str, Enum):
 
 
 class GigRolePayload(BaseModel):
-    nicheId: int = Field(..., gt=1)
+    nicheId: int = Field(..., gt=0)
     niche: str
-    professionalId: int = Field(..., gt=1)
+    professionalId: int = Field(..., gt=0)
     professional: str = Field(..., max_length=90)
     budget: Decimal = Field(..., gt=30)
     workload: WorkModeEnum = WorkMode.FLEXIBLE
-    description: str = Field(..., max_length=330)
+    description: str = Field(..., max_length=730)
+    slots: Optional[int] = Field(1, gt=0)
+

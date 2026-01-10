@@ -66,6 +66,12 @@ class GigRole(models.Model):
             models.Index(fields=["status"]),
             models.Index(fields=["niche"]),
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["gig", "niche", "role_id"],
+                name="unique_gig_role_per_niche_professional"
+            )
+        ]
         
         
     def is_open(self):

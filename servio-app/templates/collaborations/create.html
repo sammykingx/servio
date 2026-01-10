@@ -126,7 +126,7 @@
                                     class="text-xs text-right"
                                     :class="descriptionCount() >= maxDescriptionLength
                                         ? 'text-red-500'
-                                        : 'text-[#4c669a]'"
+                                        : 'text-slate-500'"
                                 >
                                     <span x-text="descriptionCount()"></span>/<span x-text="maxDescriptionLength"></span>
                                     characters
@@ -242,7 +242,7 @@
                                         <div class="flex flex-col gap-2">
                                             <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">professional</label>
                                             <select x-model="role.professionalId" @change="emitRoles()" :disabled="!role.nicheId" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
-                                                <option>Select professional</option>
+                                                <option>Select Specialization</option>
                                                 <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
                                                     <option :value="pro.id" x-text="pro.name"></option>
                                                 </template>

@@ -227,6 +227,27 @@
   }
 }
 
+@layer components {
+  .custom-form-input {
+    @apply w-full rounded-lg
+    border border-[#cfd7e7] dark:border-[#4a5568]
+    bg-white dark:bg-slate-900
+    text-gray-800 dark:text-white/90
+    px-4 py-2.5 text-sm
+    shadow-sm
+
+    focus:outline-none
+    focus:ring-1
+    focus:ring-success-400/15
+    focus:border-success-400
+
+    dark:focus:ring-warning-300/20
+    dark:focus:border-warning-300
+
+    transition duration-200 ease-out;
+  }
+}
+
 /* Global Custom CSS */
 .sidebar:hover {
   width: 290px;
