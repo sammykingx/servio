@@ -113,13 +113,22 @@ async function saveChanges() {
             // Server returned a non-2xx response
             const data = await response.json().catch(() => ({}));
             const msg = data.message || "Server rejected the request. Please check your input.";
-            showToast(msg, "error", "Unable to Save gig/project data");
+            showToast(
+                msg,
+                data.status || "error",
+                data.error || "Unable to Save gig/project data"
+            );
             return;
         }
 
         const result = await response.json();
 
-        showToast(result.message || "Gig successfully Updated!", "success", "Action Successfull");
+        showToast(
+            result.message || "Gig successfully Updated!",
+            result.staus || "success",
+            "Action Successfull"
+        );
+
         if (result?.url) {
             setTimeout(() => {
                 window.location.assign(result.url);

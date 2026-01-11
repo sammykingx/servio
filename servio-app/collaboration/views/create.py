@@ -13,6 +13,7 @@ from template_map.collaboration import Collabs
 from core.url_names import CollaborationURLS
 from formatters.pydantic_formatter import format_pydantic_errors
 from ..schemas import CreateGigRequest, CreateGigStates, get_response_msg
+from ..exceptions import GigError
 from ..schemas.gig import GigPayload
 from ..schemas.gig_role import WORKMODE_OPTIONS
 from pydantic import ValidationError
@@ -257,6 +258,7 @@ class EditGigView(LoginRequiredMixin, View):
             gig = self.get_queryset().get(id=gig_id)
             payload = json.loads(request.body)
             gig_data = GigPayload(**payload)
+            self.update_gig_data(gig_id, gig_data)
             
         except GigModel.DoesNotExist:
             return redirect(CollaborationURLS.LIST_COLLABORATIONS)
@@ -281,11 +283,20 @@ class EditGigView(LoginRequiredMixin, View):
                 status=400,
             )
         
+        except GigError as err:
+            return JsonResponse(
+        {
+            "error": err.error,
+            "message": err.message,
+            "status": err.type,
+        },
+        status=err.status_code,
+    )
         return JsonResponse(
             {
                 "status": "success",
                 "message": "Gig updated successfully.",
-                "url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
+                # "url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
             },
             status=200,
         )
@@ -301,6 +312,16 @@ class EditGigView(LoginRequiredMixin, View):
                     .select_for_update()
                     .get(id=gig_id, creator=self.request.user)
                 )
+                
+                # if gig.status not in (GigStatus.DRAFT, GigStatus.PENDING):
+                #     raise GigError(
+                #         message=(
+                #             "You can’t edit a live gig using this editor. "
+                #             "Once a gig is published, it must be modified using the live update workflow."
+                #         ),
+                #         status_code=403,
+                #         code="GIG_EDIT_NOT_ALLOWED"
+                #     )
 
                 # ---------------------------------
                 # Update gig fields
@@ -397,8 +418,6 @@ class EditGigView(LoginRequiredMixin, View):
                         role.slots = slots
 
                         updated_roles.append(role)
-                        # role.full_clean()
-                        # role.save()
 
                     else:
                         # Create new role
@@ -415,7 +434,7 @@ class EditGigView(LoginRequiredMixin, View):
                                 slots=slots,
                             )
                         )
-                        
+
                 if new_roles:
                     GigRoleModel.objects.bulk_create(new_roles)
                     

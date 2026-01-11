@@ -1,6 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
+{% load pretify_status %}
 {% block browser_title %}Projects & Collaborations{% endblock %}
 {% block content %}
 
@@ -102,19 +103,21 @@
                             {% if gig.status == 'completed' %}
                                 bg-success-500 text-white shadow-sm
                             {% elif gig.status == 'cancelled' %}
-                                 text-error-500 dark:text-red-400
-                            {% elif gig.status == 'in-progress' %}
-                                 text-purple-500 dark:text-purple-400
+                                text-error-500 dark:text-red-
+                            {% elif gig.status == 'published' %}
+                                 bg-emerald-50 text-emerald-500 dark:text-emerald-400
+                            {% elif gig.status == 'in_progress' %}
+                                bg-purple-50 text-purple-500 dark:text-purple-400
                             {% elif gig.status == 'pending' %}
                                 bg-blue-600 text-white dark:text-gray-300
                             {% elif gig.status == 'draft' %}
-                                 text-gray-500 dark:text-gray-400
+                                bg-gray-50 text-gray-500 dark:text-gray-400
                             {% else %}
-                                 text-orange-500 dark:text-orange-400
+                                bg-orange-50 text-orange-500 dark:text-orange-400
                             {% endif %}
                         "
                     >
-                        {{ gig.status|title }}
+                        {{ gig.status|prettify_status|title }}
                     </span>
                     <button class="relative z-30 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <span class="material-symbols-outlined text-[20px]">more_vert</span>
