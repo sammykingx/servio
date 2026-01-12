@@ -4,6 +4,7 @@ from core.url_names import CollaborationURLS
 from .views.list import CollaborationListView
 from .views.create import CreateCollaborationView, EditGigView
 from .views.detail import GigDetailView
+from .views.delete import DeleteGigView
 from template_map.collaboration import Collabs
 
 
@@ -19,13 +20,18 @@ urlpatterns = [
          CollaborationListView.as_view(), 
          name=CollaborationURLS.LIST_COLLABORATIONS
     ),
-    path("details/<uuid:gig_id>/", GigDetailView.as_view(),
+    path("details/<slug:slug>/", GigDetailView.as_view(),
          name=CollaborationURLS.DETAIL_COLLABORATION,
     ),
-    path("modify/<uuid:gig_id>/", EditGigView.as_view(),
+    path("modify/<slug:slug>/", EditGigView.as_view(),
          name=CollaborationURLS.EDIT_COLLABORATION,
     ),
     path("new-collaborations", CreateCollaborationView.as_view(),
          name=CollaborationURLS.CREATE_COLLABORATION,
     ),
+    path("delete/<slug:slug>", DeleteGigView.as_view(),
+         name=CollaborationURLS.DELETE_COLLABORATION,
+    ),
 ]
+
+# "{% url COLLABORATION_URLS.DELETE_COLLABORATIONS slug=gig.id}"

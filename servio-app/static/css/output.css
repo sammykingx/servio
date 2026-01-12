@@ -2690,9 +2690,6 @@
   .bg-success-100 {
     background-color: var(--color-success-100);
   }
-  .bg-success-200 {
-    background-color: var(--color-success-200);
-  }
   .bg-success-400 {
     background-color: var(--color-success-400);
   }
@@ -6954,11 +6951,6 @@
       background-color: #3d1f1f;
     }
   }
-  .dark\:bg-\[\#4a2626\] {
-    &:where(.dark, .dark *) {
-      background-color: #4a2626;
-    }
-  }
   .dark\:bg-\[\#151c2a\] {
     &:where(.dark, .dark *) {
       background-color: #151c2a;
@@ -7404,11 +7396,6 @@
   .dark\:bg-success-50 {
     &:where(.dark, .dark *) {
       background-color: var(--color-success-50);
-    }
-  }
-  .dark\:bg-success-100 {
-    &:where(.dark, .dark *) {
-      background-color: var(--color-success-100);
     }
   }
   .dark\:bg-success-500\/15 {

@@ -91,7 +91,7 @@
         {% for gig in gigs %}
             <article class="relative group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-4 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer">
                 <a
-                    href="{% url COLLABORATION_URLS.DETAIL_COLLABORATION gig_id=gig.id %}"
+                    href="{% url COLLABORATION_URLS.DETAIL_COLLABORATION slug=gig.slug %}"
                     class="absolute inset-0 z-10"
                     aria-label="View project: Website Redesign for FinTech Startup">
                 </a>
@@ -103,11 +103,11 @@
                             {% if gig.status == 'completed' %}
                                 bg-success-500 text-white shadow-sm
                             {% elif gig.status == 'cancelled' %}
-                                text-error-500 dark:text-red-
+                                text-error-500 dark:text-red-400
                             {% elif gig.status == 'published' %}
                                  bg-emerald-50 text-emerald-500 dark:text-emerald-400
                             {% elif gig.status == 'in_progress' %}
-                                bg-purple-50 text-purple-500 dark:text-purple-400
+                                bg-success-100 text-success-500 dark:text-success-400
                             {% elif gig.status == 'pending' %}
                                 bg-blue-600 text-white dark:text-gray-300
                             {% elif gig.status == 'draft' %}
@@ -176,7 +176,7 @@
         <!-- Card 1: In Progress -->
         <article class="relative group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col gap-4 shadow-soft hover:shadow-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer">
             <a
-                href="3"
+                href="#"
                 class="absolute inset-0 z-10"
                 aria-label="View project: Website Redesign for FinTech Startup">
             </a>
@@ -410,6 +410,28 @@
             <span class="material-symbols-outlined text-[16px]">expand_more</span>
         </button>
     </div>
+<!--     
+    {% if is_paginated %}
+        <nav class="flex items-center justify-center gap-3 mt-6">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                class="px-3 py-1 rounded border">
+                    ← Prev
+                </a>
+            {% endif %}
+
+            <span class="text-sm text-gray-500">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                class="px-3 py-1 rounded border">
+                    Next →
+                </a>
+            {% endif %}
+        </nav>
+    {% endif %} -->
 </div>
 {% endif %}
 {% endblock %}

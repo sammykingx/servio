@@ -18,8 +18,8 @@ class GigDetailView(LoginRequiredMixin, DetailView):
     model = GigModel
     template_name = Collabs.DETAILS
     context_object_name = "gig"
-    slug_field = "id"
-    slug_url_kwarg = "gig_id"
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,12 +59,3 @@ class GigPublicDetailView(LoginRequiredMixin, DetailView):
     "for public users interfacing"
     pass
 
-
-class GigOwnerDetailView(LoginRequiredMixin,DetailView):
-    "Creator (see all applications)"
-    pass
-
-
-class GigRoleDetailView(LoginRequiredMixin, DetailView):
-    "Role-specific management"
-    pass

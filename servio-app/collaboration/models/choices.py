@@ -6,6 +6,7 @@ class GigVisibility(models.TextChoices):
     PRIVATE = "private", "Private"
 
 class GigStatus(models.TextChoices):
+    ARCHIVED = "archived", "Archived"
     DRAFT = "draft", "Draft"
     PENDING = "pending", "Pending"
     PUBLISHED = "published", "Published"

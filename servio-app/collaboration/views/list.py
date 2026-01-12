@@ -1,14 +1,16 @@
 from django.db.models import Count, Sum, F
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.base import TemplateView
+from django.views.generic import ListView
 from template_map.collaboration import Collabs
 
-# Create your views here.
-class CollaborationListView(LoginRequiredMixin, TemplateView):
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        gigs= (
+
+class CollaborationListView(LoginRequiredMixin, ListView):
+    template_name = Collabs.LIST_COLLABORATIONS
+    context_object_name = "gigs"
+    paginate_by = 12
+
+    def get_queryset(self):
+        return (
             self.request.user.gigs
             .prefetch_related("required_roles")
             .annotate(
@@ -19,8 +21,4 @@ class CollaborationListView(LoginRequiredMixin, TemplateView):
             )
             .order_by("-created_at")
         )
-        context["gigs"] = gigs
-        return context
 
-    template_name = Collabs.LIST_COLLABORATIONS
-    

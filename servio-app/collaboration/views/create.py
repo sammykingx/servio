@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.http.response import HttpResponse, JsonResponse
 from django.db.models import Model, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, UpdateView, View
+from django.views.generic import View
 from django.utils.safestring import mark_safe
 from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
@@ -217,9 +217,9 @@ class EditGigView(LoginRequiredMixin, View):
         except Http404:
             return redirect(CollaborationURLS.LIST_COLLABORATIONS)
 
-    def get(self, request, gig_id) -> HttpResponse:
+    def get(self, request, slug) -> HttpResponse:
         try:
-            gig = self.get_queryset().get(id=gig_id)
+            gig = self.get_queryset().get(slug=slug)
             roles = gig.required_roles.all().order_by("-created_at")
             
         except GigModel.DoesNotExist:
@@ -273,7 +273,6 @@ class EditGigView(LoginRequiredMixin, View):
             )
         
         except ValidationError as e:
-            print(format_pydantic_errors(e))
             return JsonResponse(
                 {
                     "error": "Validation error",
@@ -313,15 +312,12 @@ class EditGigView(LoginRequiredMixin, View):
                     .get(id=gig_id, creator=self.request.user)
                 )
                 
-                # if gig.status not in (GigStatus.DRAFT, GigStatus.PENDING):
-                #     raise GigError(
-                #         message=(
-                #             "You can’t edit a live gig using this editor. "
-                #             "Once a gig is published, it must be modified using the live update workflow."
-                #         ),
-                #         status_code=403,
-                #         code="GIG_EDIT_NOT_ALLOWED"
-                #     )
+                if gig.status not in (GigStatus.DRAFT, GigStatus.PENDING):
+                    raise GigError(
+                        message="Live gigs can only be edited using the live update workflow.",
+                        status_code=403,
+                        code="GIG_EDIT_NOT_ALLOWED"
+                    )
 
                 # ---------------------------------
                 # Update gig fields
@@ -341,7 +337,7 @@ class EditGigView(LoginRequiredMixin, View):
                 roles_payload = payload.roles or []
 
                 # ---------------------------------
-                # If no roles → delete all roles
+                # If no roles -> delete all roles
                 # ---------------------------------
                 if not roles_payload:
                     roles_with_applicants = GigRoleModel.objects.filter(gig=gig, applications__isnull=False)

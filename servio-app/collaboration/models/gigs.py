@@ -28,6 +28,8 @@ Ordering:
 from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
+from django.utils import timezone
+from django.utils.formats import date_format
 from uuid6 import uuid7
 from .choices import GigVisibility, GigStatus
 from decimal import Decimal, ROUND_HALF_UP
@@ -80,6 +82,7 @@ class Gig(models.Model):
         help_text="Indicates if the total budget is negotiable"
     )
     has_gig_roles = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -164,6 +167,32 @@ class Gig(models.Model):
             niche__parent__isnull=False
         ).values_list('niche__parent__name', flat=True).distinct()
         
+    @property
+    def updated_display(self):
+        now = timezone.now()
+        delta = now - self.updated_at
+
+        if delta.total_seconds() < 3600:
+            minutes = int(delta.total_seconds() // 60)
+            return f"{minutes} minute{'s' if minutes != 1 else ''} ago"
+
+        if delta.total_seconds() < 86400:
+            hours = int(delta.total_seconds() // 3600)
+            return f"{hours} hour{'s' if hours != 1 else ''} ago"
+
+        if delta.days == 1:
+            return f"yesterday {date_format(self.updated_at, 'P')}"
+
+        return date_format(self.updated_at, "M j, Y")
+    
+    @property
+    def all_applications(self):
+        return [
+            application
+            for role in self.required_roles.all()
+            for application in role.applications.all()
+        ]
+    
     @property
     def service_fee(self):
         return (

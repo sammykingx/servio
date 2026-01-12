@@ -102,9 +102,6 @@ async function saveChanges() {
         );
         return;
     }
-
-    console.log("Payload Info: ", JSON.stringify(gigPayload, null, 2));
-
     
     try {
         const response = await updateGig(gigPayload, endpoint, csrf_token);
