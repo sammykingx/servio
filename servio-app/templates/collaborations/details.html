@@ -1,384 +1,406 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
+{% load pretify_status %}
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
-<section class="flex-1 w-full max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-8">
-    <div class="flex-1 flex flex-col gap-8 min-w-0">
-        <!-- Breadcrumbs -->
-        <div class="flex items-center gap-2 text-sm">
-            <a class="text-gray-500 dark:text-gray-400 hover:text-brand-500" href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}">Gigs</a>
-            <span class="text-gray-300 dark:text-gray-600">/</span>
-            <span class="text-gray-500 dark:text-gray-500 font-medium">{{ gig.title|striptags|truncatewords:6|title }}</span>
-        </div>
-        
-        <!-- Project Hero Card -->
-        <div class="rounded-xl p-6 lg:p-8 shadow-sm border border-gray-100 dark:border-[#3d1f1f] relative overflow-hidden group">
-            <!-- Decorative background accent -->
-            <div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-            <div class="flex flex-col md:flex-row justify-between items-start gap-6 relative z-10">
-                <div class="flex-1 space-y-4">
-                    <div class="flex flex-wrap items-center gap-3">
-                        {% if gig.status == 'draft' %}
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-900/30 text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider">
-                                <span class="size-2 rounded-full bg-gray-500 animate-pulse"></span>
-                                {{ gig.status|title }}
-                            </span>
 
+<!-- section Content Layout -->
+<section class="w-full max-w-[1440px] mx-auto px-3 py-4">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+    <!-- Breadcrumbs & Heading -->
+    <div class="mb-8">
+        <div class="flex flex-wrap justify-between items-end gap-6">
+            <div class="flex flex-col gap-2">
+                <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-300 tracking-tight leading-tight">{{ gig.title|truncatewords:5|title }}</h1>
+                <div class="flex items-center gap-3">
+                    {% if gig.visibility == 'public' %}
+                    <span class="px-2.5 py-1 rounded-full bg-blue-500/10 dark:bg-sky-500/10 text-blue-500 dark:text-sky-600 text-xs font-normal">{{ gig.visibility|title }}</span>
+                    {% else %}
+                    <span class="px-2.5 py-1 rounded-full bg-purple-500/10 dark:bg-purple-500/10 text-purple-500 dark:text-violet-500 text-xs font-normal">{{ gig.visibility|title }}</span>
+                    {% endif %}
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1
+                        {% if gig.status == 'draft' %}
+                            bg-gray-50 dark:bg-gray-100/10 text-gray-800 dark:text-gray-200 border border-gray-200
                         {% elif gig.status == 'pending' %}
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold uppercase tracking-wider">
-                                <span class="size-2 rounded-full bg-blue-600 animate-pulse"></span>
-                                {{ gig.status|title }}
-                            </span>
+                            bg-amber-50 dark:bg-amber-100/10 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-100
+                        {% elif gig.status == 'published' %}
+                            bg-success-100 text-success-800 dark:bg-success-50/10 dark:text-success-200 border border-success-200
                         {% elif gig.status == 'in_progress' %}
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400 text-xs font-semibold uppercase tracking-wider">
-                                <span class="size-2 rounded-full bg-success-500 animate-pulse"></span>
-                                Live - In Progress
-                            </span>
+                            bg-emerald-50 text-emerald-600 dark:bg-emerald-100/10 dark:text-emerald-200 border border-emerald-200
                         {% elif gig.status == 'completed' %}
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-400 text-xs font-semibold uppercase tracking-wider">
-                                <span class="size-2 rounded-full bg-success-500 animate-pulse"></span>
-                                {{ gig.status|title }}
-                            </span>
-                        {% elif gig.status == 'cancelled' %}
-                            <span 
-                                class="inline-flex items-center gap-1.5 px-3 py-1 
-                                    rounded-full bg-error-100 dark:bg-error-900/30 
-                                    text-error-700 dark:text-error-400 text-xs 
-                                    font-semibold uppercase tracking-wider"
-                            >
-                                <span class="size-2 rounded-full bg-error-500 animate-pulse"></span>
-                                {{ gig.status|title }}
-                            </span>
-                        {% endif %}
-                        <span class="text-xs text-gray-400 font-medium">ID: {{ gig.id.int|truncatechars:15 }}</span>
+                            bg-green-600 dark:bg-green-800 text-white border border-green-200
+                        {% else %}
+                            bg-error-100 dark:bg-error-100/10 text-error-600 dark:text-error-200 border border-error-200
+                        {% endif %}">
+                        <span class="size-2 rounded-full
+                            {% if gig.status == 'draft' %}
+                                bg-gray-700 dark:bg-gray-900
+                            {% elif gig.status == 'pending' %}
+                                bg-amber-800 dark:bg-amber-500
+                            {% elif gig.status == 'published' %}
+                                bg-success-700 dark:bg-success-400
+                            {% elif gig.status == 'in_progress' %}
+                                bg-emerald-500 dark:bg-emerald400 animate-pulse
+                            {% elif gig.status == 'completed' %}
+                                bg-white
+                            {% else %}
+                                bg-error-700 dark:bg-error-00
+                            {% endif %}"></span>
+                        {{ gig.status|prettify_status }}
+                    </span>
+                    <span class="text-gray-500 text-sm font-medium ml-2">{{ gig.created_at|naturaltime }}</span>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-brand-500 text-white text-sm font-medium tracking-wide shadow-lg shadow-brand-500/20 hover:bg-brand-500/90 transition-all">
+                    <span class="material-symbols-outlined mr-2">payments</span> Pay/Activate
+                </button>
+                {% if gig.status in editable_statuses %}
+                <a href="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                    <span class="material-symbols-outlined mr-2">edit</span> Edit Gig
+                </a>
+                {% endif %}
+                <button class="flex cursor-pointer items-center justify-center rounded-xl h-11 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 transition-all">
+                    <span class="material-symbols-outlined">share</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Left Column: brand-500 Information -->
+        <div class="lg:col-span-8 flex flex-col gap-8">
+            <!-- Overview Card -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="flex flex-col gap-1">
+                    <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Gig/Project Budget</p>
+                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">${{ gig.total_budget|intcomma }}</p>
+                    <p class="text-gray-500 text-xs">Total project value</p>
+                </div>
+                <div class="flex flex-col gap-1 border-l border-slate-100 dark:border-slate-800 sm:pl-6">
+                    <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Timeline</p>
+                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">{{ gig.gig_duration }}</p>
+                    <p class="text-gray-500 text-xs">Expected completion</p>
+                </div>
+                <div class="flex flex-col gap-1 border-l border-slate-100 dark:border-slate-800 sm:pl-6">
+                    <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Payment Type</p>
+                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">Milestones</p>
+                    <p class="text-gray-500 text-xs">4 scheduled payments</p>
+                </div>
+            </div>
+            <!-- Gig Description Section -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-8 border border-slate-100 dark:border-slate-800 shadow-sm">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-400">
+                    <span class="material-symbols-outlined text-orange-500 dark:text-gray-500 bg-orange-100 dark:bg-gray-200 p-2 rounded-md">description</span>
+                    Gig Description
+                </h3>
+                <div class="prose dark:prose-invert max-w-none text-gray-500 dark:text-gray-4=600 space-y-4 leading-relaxed">
+                    <p>{{ gig.description|striptags }}</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Define and maintain a scalable design system in Figma.</li>
+                        <li>Collaborate with product managers to translate complex requirements into intuitive workflows.</li>
+                        <li>Conduct user testing and iterate based on feedback.</li>
+                        <li>Oversee design-to-development handoffs.</li>
+                    </ul>
+                </div>
+                <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-3">
+                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 transition-colors">
+                        <span class="material-symbols-outlined text-brand-500 dark:text-gray-500 dark:hover:text-gray-800">attach_file</span>
+                        <span class="text-sm font-medium dark:text-gray-500 dark:hover:text-gray-800">Product_Requirements.pdf</span>
                     </div>
-                    <div>
-                        <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-300 tracking-tight leading-tight">{{ gig.title|title }}</h1>
-                        <p class="mt-2 text-gray-500 dark:text-gray-400 max-w-2xl">
-                            {{ gig.description|striptags|truncatewords:25 }}
-                        </p>
-                    </div>
-                    <!-- Stats Row -->
-                    <div class="flex flex-wrap items-center gap-8 pt-4">
-                        <div class="flex flex-col gap-1">
-                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Budget</span>
-                            <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">${{ gig.total_budget|intcomma }}</span>
-                        </div>
-                        <div class="w-px h-8 bg-gray-200 dark:bg-[#3d1f1f]"></div>
-                        <div class="flex flex-col gap-1">
-                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Timeline ({{ gig.start_date|date:'Y' }})</span>
-                            <span class="text-xl font-semibold text-gray-700 dark:text-gray-300">{{ gig.start_date|date:"M. j" }} - {{ gig.end_date|date:"M. j" }}</span>
-                        </div>
-                        <div class="w-px h-8 bg-gray-200 dark:bg-[#3d1f1f]"></div>
-                        <!-- <div class="flex flex-col gap-1 w-32">
-                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider flex justify-between">Progress <span>45%</span></span>
-                            <div class="h-2 w-full bg-gray-100 dark:bg-[#3d1f1f] rounded-full mt-1 overflow-hidden">
-                                <div class="h-full bg-success-500 rounded-full w-[45%]"></div>
-                            </div>
-                        </div> -->
+                    <div class="flex items-center gap-2 bg-slate-50 
+                        dark:bg-slate-800 px-3 py-2 rounded-lg border 
+                        border-slate-200 dark:border-slate-700 cursor-pointer 
+                        hover:bg-slate-100 transition-colors">
+                        <span class="material-symbols-outlined text-brand-500 dark:text-gray-500 dark:hover:text-gray-800">attach_file</span>
+                        <span class="text-sm font-medium dark:text-gray-500 dark:hover:text-gray-800">Design_Brief_v2.docx</span>
                     </div>
                 </div>
-                <!-- Actions -->
-                <div
-                    x-data="gigActions($el)"
-                    data-endpoint="{% url COLLABORATION_URLS.DELETE_COLLABORATION slug=gig.slug %}"
-                    data-csrf-token="{{ csrf_token }}"
-                    class="flex flex-col sm:flex-row gap-3 min-w-max"
-                >
-                    <a
-                        href="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}"
-                        title="Modify gig/project details"
-                        class="flex items-center gap-2 px-3 py-2.5
-                            rounded-full bg-white dark:bg-[#3d1f1f] 
-                            border border-gray-200 dark:border-transparent 
-                            text-gray-700 dark:text-gray-200 font-semibold text-sm 
-                            hover:bg-gray-50 dark:hover:bg-[#4a2626] transition-all 
-                            shadow-sm hover:cursor-pointer
-                        "
-                    >
-                        <span class="material-symbols-outlined text-gray-500">edit</span>
-                        Edit
-                    </a>
-                    {% if gig.status in editable_statuses %}
-                        <a
-                            href="{% url PAYMENT_URLS.GIG_PAYMENT_SUMMARY  gig_id=gig.id%}"
-                            title="Make payments to activat gig"
-                            class="flex items-center gap-2 px-4 py-2.5 
-                                rounded-full bg-success-400 dark:bg-success-50
-                                border border-success-200 dark:border-transparent 
-                                text-white dark:text-success-500 font-semibold 
-                                text-sm hover:bg-success-500 dark:hover:bg-success-100 
-                                transition-all shadow-sm hover:cursor-pointer"
-                        >
-                            <span class="material-symbols-outlined">check_circle</span>
-                            publish
-                        </a>
-                    {% else %}
-                        <button 
-                            class="flex items-center gap-2 px-4 py-2.5 
-                                rounded-full bg-success-400 dark:bg-[#3d1f1f] border 
-                                border-gray-200 dark:border-transparent text-white 
-                                dark:text-gray-200 font-semibold text-sm hover:bg-success-500
-                                dark:hover:bg-[#4a2626] transition-all shadow-sm hover:cursor-pointer
-                            "
-                        >
-                            <span class="material-symbols-outlined">check_circle</span>
-                            Close Gig
+            </div>
+            <!-- Required Roles Section -->
+            {% if gig.required_roles.all %}
+            <div>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-400">
+                        <span class="material-symbols-outlined text-pink-500 bg-pink-50 dark:text-gray-500 dark:bg-gray-300 p-2 rounded-md ">groups</span>
+                        Required Roles
+                    </h3>
+                    <!-- <button class="text-brand-500 hover:text-brand-400 dark:text-gray-500 dark:hover:text-white text-sm font-medium flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">add_circle</span> Add Role
+                        </button> -->
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Role Card 1 -->
+                    {% for role in gig.required_roles.all %}
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 text-gray-800 dark:text-gray-400">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-medium text-lg">{{ role.niche_name }}</h4>
+                                <p class="text-sm text-gray-500">{{ role.role_name }}</p>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-success-900/30 dark:text-success-400 text-[10px] font-medium uppercase">Slots: {{ role.slots }}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex-1">
+                                <p class="text-sm font-semibold">Workload</p>
+                                <p class="text-[11px] text-gray-500">{{ role.workload|prettify_status }}</p>
+                            </div>
+                            <button class="text-brand-500 dark:text-gray-400 text-sm font-medium">${{ role.budget|intcomma }}</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <!-- Role Card 2 -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 py-10 opacity-70">
+                        <span class="material-symbols-outlined text-3xl text-slate-300">person_search</span>
+                        <div class="text-center">
+                            <h4 class="font-medium text-slate-400">Invite Professional</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!-- Tabbed Applications Interface -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+
+                <!-- Tabs -->
+                <div class="border-b border-slate-100 dark:border-slate-800 px-4 overflow-x-auto">
+                    <div class="flex gap-8 whitespace-nowrap">
+                        <button class="shrink-0 py-4 border-b-2 border-brand-500 dark:border-gray-200 text-brand-500 dark:text-gray-300 text-sm font-medium">
+                            Applications (2)
                         </button>
-                        
-                    {% endif %}
-                    <button 
-                        @click="deleteGig()"
-                        class="flex items-center justify-center p-2.5 rounded-full text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all hover:cursor-pointer" title="Cancel Project/Gig">
-                        <span class="material-symbols-outlined">delete</span>
+                        <button class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
+                            Shortlisted (3)
+                        </button>
+                        <button class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
+                            Negotiating (1)
+                        </button>
+                        <button class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
+                            Collaborators (1)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Applications -->
+                <div class="p-2 overflow-x-auto">
+                    <div class="flex flex-col gap-2 min-w-max">
+
+                        <!-- Application Row 1 -->
+                        <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
+
+                            <div class="size-12 shrink-0 rounded-xl bg-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJ-wkCVj52QOBKT4BqUsbyxKGXEyunLG2sBRpOgqVAvr9xoJ048bxIqUAs2roGdHAJwHYr9iG48rR4XygCndR5hXRf8Jop0Wt-ePjruFUIaKUeD5J9ZnqIxm8DFHcyWeOuEAfuwCY3j53M1rSO2GA8g3qz2HuFx8I7A79Lo85B0HteK7s64Mm4pb475F9RLMQxDv2bow6TbmDj9XSqtVdIhtIIKtqqH48-D0QJV7Y3ODlorlrXC5bz7oByPqPlr21cTQQGhcv04Xk');">
+                            </div>
+
+                            <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
+                                <div class="flex items-center gap-2">
+                                    <h5 class="font-medium">Alex Morgan</h5>
+                                    <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
+                                        98% MATCH
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-500">Product Designer • 6 yrs • San Francisco, CA</p>
+                            </div>
+
+                            <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button class="p-2 text-slate-400 hover:text-green-500">
+                                    <span class="material-symbols-outlined">check_circle</span>
+                                </button>
+                                <button class="p-2 text-slate-400 hover:text-red-500">
+                                    <span class="material-symbols-outlined">cancel</span>
+                                </button>
+                            </div>
+
+                            <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
+                                View Application
+                            </button>
+                        </div>
+
+                        <!-- Application Row 2 -->
+                        <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
+
+                            <div class="size-12 shrink-0 rounded-xl bg-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNZLtQH6jGOTo2bNDbGfAcY0eW4ugCtWosZNURYirLJBhD3D5w2ugXUQGzRXREgn5d0OPdR3IQ8yJqugo6OuT_6CPzP3wLaF9fFYvudp9rKh4ltdxR7wK9GhBB6L1LziLzb72Ws_qyvtg38WWgelLIOMLLCuKqd6YbbUWSoRMZgP1vXs2pq5S5RZBNhxh9e32FqCEz6z3G1USG0v1N9pCvD95g4aRGgmCtL5z6s9wAFwO9pSGmILptgixzGlamFfjAZblN-ySglbY');">
+                            </div>
+
+                            <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
+                                <div class="flex items-center gap-2">
+                                    <h5 class="font-medium">Sarah Reed</h5>
+                                    <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
+                                        92% MATCH
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-500">Senior UI Expert • 9 yrs • London, UK</p>
+                            </div>
+
+                            <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button class="p-2 text-slate-400 hover:text-green-500">
+                                    <span class="material-symbols-outlined">check_circle</span>
+                                </button>
+                                <button class="p-2 text-slate-400 hover:text-red-500">
+                                    <span class="material-symbols-outlined">cancel</span>
+                                </button>
+                            </div>
+
+                            <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
+                                View Application
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Timeline & Milestones Section -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-8 border border-slate-100 dark:border-slate-800 shadow-sm">
+                <h3 class="mb-8 text-xl font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-400">
+                    <span class="material-symbols-outlined text-emerald-500 bg-emerald-50 dark:text-gray-500 dark:bg-gray-300 p-2 rounded-md">event_upcoming</span>
+                    Timeline &amp; Milestones
+                </h3>
+                <div class="space-y-6 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
+                    <!-- Milestone 1 -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 size-8 rounded-full bg-green-500 text-white flex items-center justify-center z-10 border-4 border-white dark:border-slate-900">
+                            <span class="material-symbols-outlined text-sm">check</span>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-[#0d171b] dark:text-white">Project Discovery &amp; Audit</h5>
+                            <p class="text-xs text-green-600 font-medium mb-1">COMPLETED</p>
+                            <p class="text-sm text-gray-500">Due: Oct 15 • $1,200 payment released</p>
+                        </div>
+                    </div>
+                    <!-- Milestone 2 -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 size-8 rounded-full bg-brand-500 text-white flex items-center justify-center z-10 border-4 border-white dark:border-slate-900 animate-pulse">
+                            <span class="material-symbols-outlined text-sm">trending_up</span>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-[#0d171b] dark:text-white">Core UI Design System</h5>
+                            <p class="text-xs text-brand-500 font-medium mb-1">IN PROGRESS</p>
+                            <p class="text-sm text-gray-500">Due: Nov 10 • $2,500 pending release</p>
+                        </div>
+                    </div>
+                    <!-- Milestone 3 -->
+                    <div class="relative pl-12">
+                        <div class="absolute left-0 size-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center z-10 border-4 border-white dark:border-slate-900">
+                            <span class="material-symbols-outlined text-sm">lock</span>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-slate-400">High-Fidelity Wireframing</h5>
+                            <p class="text-xs text-slate-400 font-medium mb-1">LOCKED</p>
+                            <p class="text-sm text-slate-400">Due: Dec 05 • $2,000 to be escrowed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Right Column: Sidebar Panels -->
+        <div class="lg:col-span-4 flex flex-col gap-6">
+            <!-- Status Card -->
+             {% if gig.status == "pending" %}
+                <div class="bg-brand-500/5 dark:bg-brand-500/10 border border-brand-500/20 rounded-xl p-6">
+                    <h4 class="font-medium text-brand-500 dark:text-gray-300 mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined">info</span>
+                        Gig Status: pending
+                    </h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Professionals can't see your gig. To begin receiving applications and start collaborating, activate it by funding the project.
+                    </p>
+                    <a 
+                        class="block w-full mt-4 text-center bg-brand-500 text-white font-medium py-3 rounded-xl hover:bg-brand-500/90 transition-all shadow-md"
+                        href="{% url PAYMENT_URLS.GIG_PAYMENT_SUMMARY  gig_id=gig.id%}">
+                        Activate Project
+                    </a>
+                </div>
+            {% endif %}
+            <!-- Budget Summary Card -->
+            <div class="bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-300 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+                <h4 class="font-medium text-lg mb-4">Budget Summary</h4>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-500">Total Contract Value</span>
+                        <span class="font-medium">${{ gig.total_budget|intcomma }}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-500">Amount Paid</span>
+                        <span class="font-medium text-green-600">$1,200.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-500">In Escrow</span>
+                        <span class="font-medium text-brand-500">$2,500.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-500">Balance</span>
+                        <span class="font-medium text-blue-500">$2,500.00</span>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Escrow Coverage</span>
+                            <span class="text-xs font-medium text-brand-500">49%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                            <div class="bg-brand-500 h-full" style="width: 49%"></div>
+                        </div>
+                        <p class="text-[10px] text-gray-500 mt-2">Fund the next milestone to maintain designer momentum.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Action Panel -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+                <h4 class="font-medium text-lg mb-4 text-gray-800 dark:text-gray-300">Active Negotiations</h4>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700">
+                        <div class="size-8 rounded-full bg-slate-300" data-alt="Negotiator avatar 1">
+                            <img alt="EB" class="rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVsbgsKj35U6PMwgQmtJ1BkXRe4_OQ6LhcHyfRzzq_7rkIGBXSElr6BbWxauMXTT7Am_nk6xxLaSErvCPxvvgKGRNB2Js3U14kNNcoH_JayYTaM69I-2rRG-0_BLm_Ypfx9NkeQ5MISh2a8r09W_GwgRTDe9jXZW_UTcemtLSy_7aLXX5v2WajzdhksJty40g4GyRMJAbH8WS_YQ1xQmfH7ji2_eAGdA2URm8h7e7GwTnjXjK16C4dWzVY_BxbXnxYXtH_rTemOH0" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-medium truncate text-gray-700 dark:text-gray-400">Lead Product Designer</p>
+                            <p class="text-[10px] text-amber-600 font-medium uppercase">Counter-offer received</p>
+                        </div>
+                        <button class="text-brand-500 dark:text-gray-500 text-xs font-semibold">VIEW</button>
+                    </div>
+                    <button class="w-full py-2.5 text-sm font-medium border-2 border-brand-500 dark:border-gray-600 hover:border-brand-500/10 text-brand-500 dark:text-gray-400 rounded-xl hover:bg-brand-500 hover:text-white transition-all">
+                        View All Negotiations (1)
                     </button>
                 </div>
             </div>
+            <!-- Participants List -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="font-medium text-gray-800 dark:text-gray-300">Project Team</h4>
+                    <span class="text-xs text-gray-500">3/5 Slots</span>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" data-alt="Team Member 1">
+                            <img alt="YOU" class="rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMi7cmUdVq-16ntfylnH3NLyBzbhNYYPurYlwKw8biTujckLIXjLGd85f8kVYEBdpAyOJ25A1gQF9JqKU16xTQjZlUgintQZqUdRrdu0toK96_APJ9ZGb3rLvV6DqIABYhx3jz10R6rK3UHmGp8XU30R6Qxw3E97iSKksastaXfjGv4n_tD8pbHYX5z2ip9oueTaJdGoVC7hcHH0j45CEnxn2pG5YqbnX0T28KefOGSirPWlMouZJEzjeetMECiPIpez_6zd-qbng" />
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium leading-none text-gray-700 dark:text-gray-400">You (Owner)</p>
+                            <p class="text-[11px] text-gray-500">Hiring Manager</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" data-alt="Team Member 2">
+                            <img alt="EB" class="rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWvJ9-VDZhe2C1TEfH0qN6hfpy5-bk57-5A-51Aa94LeO7CgEdWsvoqny2OztAtsIb3wgQzbTMwQ7yW4w8eCzH2QCXCrjA1bQKoYcpgoCHi__Odk3fx1-yQwTL5v254i7FueQDCo1iR5-U12TzBoDNXybf7c2yS1YWOHCnpTnr0dtHFI-bcjcEh1ejCg0S9khy3K7aRUzp3U0HoVOcPeEAeP3Mep3jhRP5hvbgVhEqpg2ducHQUMR3l1LbUXm4PzPeFJKz_2DW_qE" />
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium leading-none text-gray-700 dark:text-gray-400">Elena Belova</p>
+                            <p class="text-[11px] text-gray-500">Contractor • Lead Designer</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 opacity-50">
+                        <div class="size-10 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-sm text-slate-400">person_add</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium leading-none italic text-gray-700 dark:text-gray-400">Open Role</p>
+                            <p class="text-[11px] text-gray-500">no professional</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- Collaborators Section -->
-        {% if gig.status not in editable_statuses %}
-            <div class="flex flex-col gap-6">
-                <!-- Section Header with Filters -->
-                <div class="flex flex-wrap items-center justify-between gap-4">
-                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                        Collaborators
-                        <span class="bg-gray-100 dark:bg-[#3d1f1f] text-gray-600 dark:text-gray-400 text-xs px-2 py-0.5 rounded-full">4</span>
-                    </h3>
-                    <div class="flex p-1 bg-gray-100 dark:bg-[#2f1616] rounded-full">
-                        <button class="px-4 py-1.5 text-sm font-semibold rounded-full bg-white dark:bg-[#3d1f1f] text-gray-700 dark:text-gray-300 shadow-sm transition-all">All</button>
-                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Accepted</button>
-                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Negotiating</button>
-                    </div>
-                </div>
-                <!-- Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
-                    <!-- Collaborator Card 1 (Active) -->
-                    <div class="group bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer relative">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex gap-4">
-                                <div class="size-12 rounded-full bg-gray-200 overflow-hidden" data-alt="Headshot of Sarah Jenkins, copywriter">
-                                    <img class="w-full h-full object-cover" src="{% static 'images/user/user-07.jpg' %}" />
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Sarah Jenkins</h4>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Senior Copywriter</p>
-                                </div>
-                            </div>
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success-50 dark:bg-success-800/20 text-success-700 dark:text-success-300 text-xs font-semibold">
-                                Accepted
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
-                            <div>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Budget</p>
-                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">$1,200</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Due Date</p>
-                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nov 12, 2023</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex -space-x-2">
-                                <div class="size-6 rounded-full bg-gray-100 dark:bg-transparent flex items-center justify-center text-[10px] text-gray-500 border border-white dark:border-[#2f1616]" title="3 attachments">
-                                    <span class="material-symbols-outlined text-[14px]">attach_file</span>
-                                </div>
-                            </div>
-                            <button class="text-sm font-semibold text-gray-600 dark:text-gray-500 hover:text-brand-500 dark:hover:text-gray-300 flex items-center gap-1">
-                                Message <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Collaborator Card 2 (Negotiating) -->
-                    <div class="group bg-gray-50 dark:bg-gray-800 border-l-4 border-l-amber-400 dark:border-l-amber-600 border-y border-r border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex gap-4">
-                                <div class="size-12 rounded-full bg-gray-200 overflow-hidden" data-alt="Headshot of Marcus Chen, SEO specialist">
-                                    <img class="w-full h-full object-cover" src="{% static 'images/user/user-08.jpg' %}" />
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Marcus Chen</h4>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">SEO Specialist</p>
-                                </div>
-                            </div>
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 text-xs font-semibold">
-                                Negotiating
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
-                            <div>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Quote</p>
-                                <p class="text-sm font-semibold text-amber-600 dark:text-amber-400">$2,450</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Response</p>
-                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Action Required</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-end gap-2">
-                            <button class="px-3 py-1.5 rounded-md bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 text-xs font-semibold hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors">
-                                Review Offer
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Collaborator Card 3 (Active) -->
-                    <div class="group bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-[#3d1f1f] rounded-xl p-5 hover:shadow-md transition-all cursor-pointer">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex gap-4">
-                                <div class="size-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden" data-alt="Headshot of Elena Rodriguez, Graphic Designer">
-                                    <img class="w-full h-full object-cover" src="{% static 'images/user/user-04.jpg' %}" />
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 transition-colors">Elena Rodriguez</h4>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Graphic Designer</p>
-                                </div>
-                            </div>
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success-50 dark:bg-success-800/20 text-success-700 dark:text-success-300 text-xs font-semibold">
-                                Accepted
-                            </span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-4 py-3 border-y border-dashed border-gray-100 dark:border-[#3d1f1f]">
-                            <div>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Budget</p>
-                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">$850</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Due Date</p>
-                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Nov 15, 2023</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex -space-x-2">
-                                <div class="size-6 rounded-full p-1 bg-gray-100 dark:bg-transparent flex items-center justify-center text-[10px] text-gray-500 border border-white dark:border-[#2f1616]" title="1 attachment">
-                                    <span class="material-symbols-outlined text-[14px]">image</span>
-                                </div>
-                            </div>
-                            <button class="text-sm font-semibold text-gray-600 dark:text-gray-500 hover:text-brand-500 dark:hover:text-gray-300 flex items-center gap-1">
-                                Message <span class="material-symbols-outlined text-[16px]">chat_bubble</span>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Add New Card -->
-                    <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-500 rounded-xl p-5 hover:border-brand-500 dark:hover:border-gray-300 hover:bg-brand-500/5 transition-all cursor-pointer group h-full min-h-[180px]">
-                        <div class="size-12 rounded-full bg-gray-100 dark:bg-[#3d1f1f] flex items-center justify-center mb-3 group-hover:bg-brand-500 dark:group-hover:bg-gray-500 group-hover:text-white transition-colors text-gray-400">
-                            <span class="material-symbols-outlined">person_add</span>
-                        </div>
-                        <p class="font-semibold text-gray-700 dark:text-gray-300 text-sm">Invite Talent</p>
-                        <p class="text-xs text-gray-400 text-center mt-1">Search the marketplace for more pros</p>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            <div class="flex flex-col gap-6">
-                <!-- Section Header with Filters -->
-                <div class="flex flex-wrap items-center justify-between gap-4">
-                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                        Collaborators
-                        <!-- <span class="bg-gray-100 dark:bg-[#3d1f1f] text-gray-600 dark:text-gray-400 text-xs px-2 py-0.5 rounded-full">4</span> -->
-                    </h3>
-                    <div class="flex p-1 bg-gray-100 dark:bg-[#2f1616] rounded-full">
-                        <button class="px-4 py-1.5 text-sm font-semibold rounded-full bg-white dark:bg-[#3d1f1f] text-gray-700 dark:text-gray-300 shadow-sm transition-all">All</button>
-                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Accepted</button>
-                        <button class="px-4 py-1.5 text-sm font-medium rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-all">Negotiating</button>
-                    </div>
-                </div>
-                <!-- Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
-                    
-                    <!-- Add New Card -->
-                    <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-500 rounded-xl p-5 hover:border-brand-500 dark:hover:border-gray-300 hover:bg-brand-500/5 transition-all cursor-pointer group h-full min-h-[180px]">
-                        <div class="size-12 rounded-full bg-gray-100 dark:bg-[#3d1f1f] flex items-center justify-center mb-3 group-hover:bg-brand-500 dark:group-hover:bg-gray-500 group-hover:text-white transition-colors text-gray-400">
-                            <span class="material-symbols-outlined">person_add</span>
-                        </div>
-                        <p class="font-semibold text-gray-700 dark:text-gray-300 text-sm">No Collaborators</p>
-                        <p class="text-xs text-gray-400 text-center mt-1">Complete your gig to proceed</p>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
     </div>
-    <!-- Right Column: Sidebar -->
-    <aside class="w-full lg:w-80 xl:w-96 flex flex-col gap-6 shrink-0">
-        <!-- Budget Widget -->
-        <!-- <div class="rounded-xl p-6 shadow-sm border border-gray-100 dark:border-[#3d1f1f]">
-            <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-300 uppercase tracking-wider mb-4 flex items-center gap-2">
-                <span class="material-symbols-outlined text-gray-500 text-[18px]">pie_chart</span> Budget Utilization
-            </h3>
-            <div class="relative size-40 mx-auto mb-4 flex items-center justify-center">
-                
-                <div class="absolute inset-0 rounded-full" style="background: conic-gradient(#10ea9e 36%, #f3f4f6 0);"></div>
-                
-                <div class="absolute inset-3 bg-white dark:bg-[#2f1616] rounded-full flex flex-col items-center justify-center">
-                    <span class="text-2xl font-black text-gray-700 dark:text-gray-300">36%</span>
-                    <span class="text-[10px] font-semibold text-gray-400 uppercase">Used</span>
-                </div>
-            </div>
-            <div class="space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-                        <span class="size-2 rounded-full bg-success-500"></span> Allocated
-                    </span>
-                    <span class="font-semibold text-gray-700 dark:text-gray-300">$4,500</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-                        <span class="size-2 rounded-full bg-gray-200 dark:bg-[#3d1f1f]"></span> Remaining
-                    </span>
-                    <span class="font-semibold text-gray-700 dark:text-gray-300">$8,000</span>
-                </div>
-            </div>
-        </div> -->
-        <!-- Activity Feed -->
-        <div class="rounded-xl p-6 shadow-sm border border-gray-100 dark:border-[#3d1f1f] flex-1">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-300 uppercase tracking-wider flex items-center gap-2">
-                    <span class="material-symbols-outlined text-gray-400 text-[18px]">history</span> Activity
-                </h3>
-                <!-- <button class="text-xs font-semibold text-gray-500 hover:text-brand-500">View All</button> -->
-            </div>
-            <div class="space-y-6 relative">
-                <!-- Vertical Line -->
-                <div class="absolute left-[19px] top-2 bottom-2 w-0.5 bg-gray-100 dark:bg-[#3d1f1f]"></div>
-                <!-- Item 1 --
-                <div class="relative pl-10">
-                    <div class="absolute left-3 top-0 size-4 bg-success-500 rounded-full border-4 border-white dark:border-[#2f1616]"></div>
-                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-                        <span class="font-semibold">Sarah Jenkins</span> accepted the offer for Copywriting.
-                    </p>
-                    <span class="text-xs text-gray-400 font-medium mt-1 block">2 mins ago</span>
-                </div>-->
-                <!-- Item 2 --
-                <div class="relative pl-10">
-                    <div class="absolute left-3 top-0 size-4 bg-amber-400 rounded-full border-4 border-white dark:border-[#2f1616]"></div>
-                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-                        <span class="font-semibold">Marcus Chen</span> requested a budget increase to $2,450.
-                    </p>
-                    <span class="text-xs text-gray-400 font-medium mt-1 block">1 hour ago</span>
-                    <div class="mt-2 p-2 bg-gray-50 dark:bg-[#3d1f1f] rounded text-xs text-gray-600 dark:text-gray-300 italic border-l-2 border-amber-400">
-                        "Scope seems larger than initial brief..."
-                    </div>
-                </div> -->
-                <!-- Item 3 
-                <div class="relative pl-10">
-                    <div class="absolute left-3 top-0 size-4 bg-blue-400 rounded-full border-4 border-white dark:border-[#2f1616]"></div>
-                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-                        <span class="font-semibold">You</span> updated the project timeline.
-                    </p>
-                    <span class="text-xs text-gray-400 font-medium mt-1 block">Yesterday, 4:30 PM</span>
-                </div> -->
-                <!-- Item 4 -->
-                <div class="relative pl-10">
-                    <div class="absolute left-3 top-0 size-4 bg-gray-300 rounded-full border-4 border-white dark:border-[#2f1616]"></div>
-                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-                        Project/Gig created by {{ gig.creator.first_name|title }}.
-                    </p>
-                    <span class="text-xs text-gray-400 font-medium mt-1 block">{{ gig.created_at|date:"M j, Y" }}</span>
-                </div>
-            </div>
-        </div>
-    </aside>
 </section>
 {% endblock %}
 {% block custom_page_js %}

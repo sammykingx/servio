@@ -253,12 +253,12 @@ class EditGigView(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        gig_id = kwargs.get("gig_id")
+        gig_slug = kwargs.get("slug")
         try:
-            gig = self.get_queryset().get(id=gig_id)
+            gig = self.get_queryset().get(slug=gig_slug)
             payload = json.loads(request.body)
             gig_data = GigPayload(**payload)
-            self.update_gig_data(gig_id, gig_data)
+            self.update_gig_data(gig_slug, gig_data)
             
         except GigModel.DoesNotExist:
             return redirect(CollaborationURLS.LIST_COLLABORATIONS)
@@ -300,7 +300,7 @@ class EditGigView(LoginRequiredMixin, View):
             status=200,
         )
     
-    def update_gig_data(self, gig_id, payload: GigPayload) -> Model:
+    def update_gig_data(self, gig_slug, payload: GigPayload) -> Model:
         try:
             with transaction.atomic():
                 # ---------------------------------
@@ -309,7 +309,7 @@ class EditGigView(LoginRequiredMixin, View):
                 gig = (
                     GigModel.objects
                     .select_for_update()
-                    .get(id=gig_id, creator=self.request.user)
+                    .get(slug=gig_slug, creator=self.request.user)
                 )
                 
                 if gig.status not in (GigStatus.DRAFT, GigStatus.PENDING):

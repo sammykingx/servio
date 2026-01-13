@@ -33,6 +33,7 @@ from django.utils.formats import date_format
 from uuid6 import uuid7
 from .choices import GigVisibility, GigStatus
 from decimal import Decimal, ROUND_HALF_UP
+from dateutil.relativedelta import relativedelta
 
 
 class Gig(models.Model):
@@ -111,10 +112,7 @@ class Gig(models.Model):
         return self.status == GigStatus.PUBLISHED
 
     def duration(self):
-        """
-            Returns the duration of the gig in days, if both start_date and end_date are set.
-            Returns None if dates are not fully specified.
-        """
+        
         if self.start_date and self.end_date:
             return (self.end_date - self.start_date).days
         return None
@@ -184,6 +182,24 @@ class Gig(models.Model):
             return f"yesterday {date_format(self.updated_at, 'P')}"
 
         return date_format(self.updated_at, "M j, Y")
+    
+    @property
+    def gig_duration(self):
+        """
+            Returns the duration of the gig in days, if both start_date and end_date are set.
+        """
+        if not self.start_date or not self.end_date:
+            return None
+
+        delta = relativedelta(self.end_date, self.start_date)
+        parts = []
+
+        if delta.months:
+            parts.append(f"{delta.months} months")
+        if delta.days:
+            parts.append(f"{delta.days} days")
+
+        return ", ".join(parts)
     
     @property
     def all_applications(self):

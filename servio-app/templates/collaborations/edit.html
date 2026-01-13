@@ -620,82 +620,82 @@
 </script>
 <script>
     function gigRoles(taxonomyEl, workmodeEl, rolesEl, locked) {
-    return {
-        locked,
-        taxonomy: JSON.parse(taxonomyEl.textContent),
-        workmodeOptions: JSON.parse(workmodeEl.textContent),
+        return {
+            locked,
+            taxonomy: JSON.parse(taxonomyEl.textContent),
+            workmodeOptions: JSON.parse(workmodeEl.textContent),
 
-        roles: JSON.parse(rolesEl.textContent || "[]"),
+            roles: JSON.parse(rolesEl.textContent || "[]"),
 
-        init() {
-            this.roles = this.roles.map(role => ({
-                ...role,
-                isNew: false
-            }));
-            this.emitRoles();
-        },
+            init() {
+                this.roles = this.roles.map(role => ({
+                    ...role,
+                    isNew: false
+                }));
+                this.emitRoles();
+            },
 
-        professionalsFor(nicheId) {
-            return this.taxonomy.find(n => n.id == nicheId)?.subcategories || [];
-        },
+            professionalsFor(nicheId) {
+                return this.taxonomy.find(n => n.id == nicheId)?.subcategories || [];
+            },
 
-        addRole() {
-            if (this.locked) return;
+            addRole() {
+                if (this.locked) return;
 
-            this.roles.push({ 
-                nicheId: '',
-                nicheName: '',
-                professionalId: '',
-                professionalName: '',
-                budget: 0,
-                description: '',
-                workload: 'flexible',
-                isNew: true,
-            });
+                this.roles.push({ 
+                    nicheId: '',
+                    nicheName: '',
+                    professionalId: '',
+                    professionalName: '',
+                    budget: 0,
+                    description: '',
+                    workload: 'flexible',
+                    isNew: true,
+                });
 
-            this.emitRoles();
-        },
+                this.emitRoles();
+            },
 
-        removeRole(index) {
-            if (this.locked) return;
+            removeRole(index) {
+                if (this.locked) return;
 
-            this.roles.splice(index, 1);
-            this.emitRoles();
-        },
+                this.roles.splice(index, 1);
+                this.emitRoles();
+            },
 
-        emitRoles() {
-            const gigEl = document.querySelector('[data-gig-data]');
-            if (!gigEl) return;
+            emitRoles() {
+                const gigEl = document.querySelector('[data-gig-data]');
+                if (!gigEl) return;
 
-            const gig = Alpine.$data(gigEl);
-            if (!gig?.setRoles) return;
+                const gig = Alpine.$data(gigEl);
+                if (!gig?.setRoles) return;
 
-            const payload = this.roles.map(role => {
-                const niche = this.taxonomy.find(n => n.id == role.nicheId);
-                const professional = niche?.subcategories?.find(p => p.id == role.professionalId);
+                const payload = this.roles.map(role => {
+                    const niche = this.taxonomy.find(n => n.id == role.nicheId);
+                    const professional = niche?.subcategories?.find(p => p.id == role.professionalId);
 
-                return {
-                    nicheId: role.nicheId,
-                    niche: niche?.name || role.nicheName,
-                    professionalId: role.professionalId,
-                    professional: professional?.name || role.professionalName,
-                    budget: Number(role.budget) || 0,
-                    description: role.description?.trim() || '',
-                    workload: role.workload
-                };
-            });
+                    return {
+                        nicheId: role.nicheId,
+                        niche: niche?.name || role.nicheName,
+                        professionalId: role.professionalId,
+                        professional: professional?.name || role.professionalName,
+                        budget: Number(role.budget) || 0,
+                        description: role.description?.trim() || '',
+                        workload: role.workload
+                    };
+                });
 
-            gig.setRoles(payload);
-        },
+                gig.setRoles(payload);
+            },
 
-        totalRolesBudget() {
-            return this.roles.reduce(
-                (sum, r) => sum + (Number(r.budget) || 0),
-                0
-            );
-        },
+            totalRolesBudget() {
+                return this.roles.reduce(
+                    (sum, r) => sum + (Number(r.budget) || 0),
+                    0
+                );
+            },
+        }
     }
-}
 </script>
 <script src="{% static 'js/collaboration/update-gig.js' %}"></script>
 {% endblock %}
