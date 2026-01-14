@@ -44,7 +44,7 @@ class AuthURLNames:
 class OnboardingURLS:
     class Users:
         WELCOME = "start_onboarding"
-        PERSONAL_INFO = "onborading_profile_info"
+        PROFILE_SETUP = "onborading_profile_setup"
         
     class Providers:
         pass

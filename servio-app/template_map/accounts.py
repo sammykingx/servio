@@ -52,7 +52,7 @@ class Accounts:
         __PROVIDERS = f"{__SUB_FOLDER}/providers"
 
         START_FLOW = f"{__USERS}/start-flow.html"
-        PERSONAL_INFO = f"{__USERS}/personal-info.html"
+        PERSONAL_INFO = f"{__USERS}/profile-info.html"
         ADDRESS_INFO = f"{__USERS}/address-info.html"
         
 

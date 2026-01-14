@@ -8,11 +8,11 @@ from core.url_names import OnboardingURLS
 
 urlpatterns = [
     path(
-        "welcome/", step_one.StartOnboardingView.as_view(),
+        "welcome/", TemplateView.as_view(template_name=Accounts.Onboarding.START_FLOW),
         name = OnboardingURLS.Users.WELCOME   
     ),
     path(
-        "users/personal-info/", step_one.PersonalInfoView.as_view(),
-        name = OnboardingURLS.Users.PERSONAL_INFO   
+        "users/profile-setup/", step_one.PersonalInfoView.as_view(),
+        name = OnboardingURLS.Users.PROFILE_SETUP   
     ),
 ]

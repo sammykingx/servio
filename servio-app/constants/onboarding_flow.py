@@ -4,7 +4,7 @@ from accounts.models.profile import UserRole
 ONBOARDING_FLOWS = {
     UserRole.MEMBERS: [
             OnboardingURLS.Users.WELCOME,
-            OnboardingURLS.Users.PERSONAL_INFO,
+            OnboardingURLS.Users.PROFILE_SETUP,
         ],
     UserRole.PROVIDERS: [],
 }
