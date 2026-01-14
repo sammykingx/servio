@@ -45,6 +45,16 @@ class Accounts:
             f"{__SUB_FOLDER}/request-password-reset.html"
         )
         PASSWORD_RESET = f"{__SUB_FOLDER}/password-reset.html"
+        
+    class Onboarding:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("onboarding")
+        __USERS = f"{__SUB_FOLDER}/users"
+        __PROVIDERS = f"{__SUB_FOLDER}/providers"
+
+        START_FLOW = f"{__USERS}/start-flow.html"
+        PERSONAL_INFO = f"{__USERS}/personal-info.html"
+        ADDRESS_INFO = f"{__USERS}/address-info.html"
+        
 
     class Dashboards:
         """

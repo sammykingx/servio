@@ -5,8 +5,8 @@ from django.conf import settings
 class UserRole(models.TextChoices):
     MEMBERS = "member", "Members"
     PROVIDERS = "provider", "Providers"
-    ADMIN = "admin", "Admin"
-    STAFF = "staff", "Staff"
+    ADMIN = "admin", "Admin" # not used
+    STAFF = "staff", "Staff" # not used
 
 
 class UserProfile(models.Model):

@@ -41,7 +41,14 @@ class AuthURLNames:
     UPDATE_ADDRESS_INFO = "update_address_info"
     UPLOAD_PROFILE_PICTURE = "upload_profile_picture"
     
-
+class OnboardingURLS:
+    class Users:
+        WELCOME = "start_onboarding"
+        PERSONAL_INFO = "onborading_profile_info"
+        
+    class Providers:
+        pass
+    
 class NotificationsURLNames:
     TOGGLE_NOTIFICATION_CHANNELS = "toggle_notification_channels"
     

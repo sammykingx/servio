@@ -10,12 +10,17 @@ from .views import (
     settings,
     account_updates,
 )
+from .onboarding import urls as onboarding_urls
 from core.url_names import AuthURLNames
 from template_map.accounts import Accounts
 
 
 urlpatterns = [
     # LOGIN AND LOGOUT
+    
+    path(
+        "onboarding/", include(onboarding_urls),
+    ),
     path(
         "",
         RedirectView.as_view(

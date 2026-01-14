@@ -21,14 +21,21 @@ class AuthUser(AbstractUser):
     email = models.EmailField(unique=True)
     is_verified = models.BooleanField(default=False)
     last_password_reset = models.DateTimeField(blank=True, null=True)
+    onboarding_step = models.PositiveSmallIntegerField(default=0)
+    onboarding_completed = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     @property
-    def full_name(self):
+    def full_name(self) -> str:
         "Returns the person's full name."
         return f"{self.first_name} {self.last_name}"
+    
+    @property
+    def completed_onboarding(self) -> bool:
+        "Returns the user onboarding screen"
+        return self.onboarding_completed
 
     def verify_account(self) -> bool:
         if not self.is_verified:

@@ -33,5 +33,3 @@ urlpatterns = [
          name=CollaborationURLS.DELETE_COLLABORATION,
     ),
 ]
-
-# "{% url COLLABORATION_URLS.DELETE_COLLABORATIONS slug=gig.id}"
