@@ -1,0 +1,176 @@
+{% extends "layouts/base-onboarding.html" %}
+{% block browser_title %}Account Ready{% endblock %}
+{% block content %}
+<!-- Progress Bar -->
+<div class="flex flex-col mb-4">
+	<!-- Title + step -->
+	<div class="flex items-center justify-between px-0.5">
+		<div>
+			<p class="text-gray-700 dark:text-white text-base font-semibold">
+				Profile setup
+			</p>
+			<p class="text-gray-500 dark:text-gray-400 text-xs font-medium pb-1.5">
+				Personal &amp; Address details
+			</p>
+		</div>
+		<span class="text-[11px] font-semibold text-brand-500
+			bg-brand-500/10 px-2.5 py-1 rounded-full">
+		4 of 4
+		</span>
+	</div>
+	<!-- Progress bar -->
+	<div class="relative h-[2px] rounded-full bg-slate-200/70 dark:bg-slate-700/60 overflow-hidden">
+		<div id="progress-bar" class="absolute inset-y-0 left-0
+			bg-brand-500 rounded-full
+			transition-all duration-700 ease-out"></div>
+	</div>
+	<p id="progress-text" class="mt-1 text-xs font-medium text-gray-500 dark:text-gray-400">0% Complete</p>
+</div>
+<div class="relative mb-5 w-full bg-white dark:bg-[#1c2433] rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] border border-[#e7ebf3] dark:border-gray-800 overflow-hidden">    
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="pointer-events-none absolute inset-0 z-50 overflow-hidden"></div>
+    <div class="flex flex-col md:flex-row h-full relative">
+        <div
+            aria-hidden="true"
+            class="absolute -top-32 -right-32 w-76 h-86
+                bg-gradient-to-br from-brand-500/15 via-purple-500/10 to-pink-500/10
+                blur-3xl rounded-full"
+        ></div>
+		<!-- Illustration Area -->
+		<div class="md:w-5/12 bg-slate-50 dark:bg-[#151b28] relative flex flex-col items-center justify-center p-10 min-h-[300px] border-b md:border-b-0 md:border-r border-[#e7ebf3] dark:border-gray-800">
+			<!-- Ambient glowing circles -->
+			<div aria-hidden="true" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+				<div class="w-[280px] h-[280px] rounded-full bg-gradient-to-tr from-purple-300/30 via-indigo-300/20 to-transparent blur-3xl animate-pulse-slow transform translate-y-8"></div>
+				<div class="w-[200px] h-[200px] rounded-full bg-gradient-to-bl from-pink-300/20 via-blue-300/10 to-transparent blur-2xl animate-pulse-slow -translate-y-4 -translate-x-6"></div>
+			</div>
+			<!-- Main Icon -->
+			<div class="relative z-10 bg-white dark:bg-[#1c2433] p-6 rounded-3xl shadow-lg shadow-brand-500/10 mb-6">
+				<span class="material-symbols-outlined text-[64px] text-brand-500 drop-shadow-lg animate-bounce-slow">verified</span>
+			</div>
+			<!-- Workspace Text -->
+			<div class="text-center relative z-10">
+				<p class="text-sm text-slate-500 dark:text-slate-400 font-light uppercase tracking-widest mb-1">Workspace Ready</p>
+				<h3 class="text-xl font-mono text-gray-700 dark:text-white">Servio by Divgm.</h3>
+			</div>
+		</div>
+		<!-- Content Area -->
+		<div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative">
+			<!-- Success Badge -->
+			<div class="flex items-center gap-2 mb-4">
+				<span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-500 dark:bg-success-700/30 dark:text-success-400">
+				    Success
+				</span>
+			</div>
+			<!-- Heading -->
+			<h1 class="text-3xl md:text-4xl font-semibold text-gray-700 dark:text-white mb-4 leading-tight tracking-tight">
+				You’re all set <span class="inline-block animate-bounce-slow">🎉</span>
+			</h1>
+			<!-- Description -->
+			<p class="text-lg text-slate-500 dark:text-slate-300 mb-8 leading-relaxed">
+				Thanks for joining Servio. Your workspace is ready, preferences are set, and everything is configured. Let's get started!
+			</p>
+			<!-- Call-to-action Buttons -->
+			<div class="flex flex-col sm:flex-row gap-4">
+				<a 
+                    href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}" 
+                    class="flex-1 min-w-[140px] cursor-pointer items-center justify-center 
+                        bg-brand-500 rounded-full h-12 px-5 py-3
+                        text-white text-base font-bold shadow-lg shadow-purple-400/30
+                        transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.97]
+                        relative overflow-hidden text-center"
+                    >
+					    Go to dashboard
+					<!-- Ambient Glow Behind Button -->
+					<div aria-hidden="true" class="absolute inset-0 rounded-full bg-white/10 blur-xl animate-pulse-slow pointer-events-none"></div>
+                </a>
+                
+				<a 
+                    href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}"
+                    class="flex-1 min-w-[140px] cursor-pointer items-center justify-center rounded-full h-12 px-5 py-3
+                        bg-white dark:bg-transparent border-2 border-[#e7ebf3] dark:border-gray-600 
+                        hover:border-brand-500/50 text-gray-700 dark:text-white 
+                        hover:text-brand-500 dark:hover:text-brand-400 font-semibold
+                        transition-all duration-300 text-center"
+                >
+				    Create Gig/Project
+                </a>
+			</div>
+			<!-- Features List -->
+			<div class="mt-8 pt-6 border-t border-slate-100 dark:border-gray-800">
+				<div class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+					<span class="material-symbols-outlined text-[20px] text-green-500">check_circle</span>
+					<span>Profile completed</span>
+					<span class="mx-1">•</span>
+					<span>Billing set up</span>
+				</div>
+			</div>
+			<!-- Subtle confetti effect (decorative) -->
+			<div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+				<div class="absolute top-0 left-1/4 w-2 h-2 bg-purple-300 rounded-full animate-bounce-slow opacity-70"></div>
+				<div class="absolute top-1/3 right-1/3 w-2 h-2 bg-pink-300 rounded-full animate-bounce-slow opacity-70"></div>
+				<div class="absolute bottom-0 left-1/2 w-2 h-2 bg-blue-300 rounded-full animate-bounce-slow opacity-70"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+{% block custom_page_js %}
+<script defer>
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const targetPercentage = 100;
+
+    // Animate width using setTimeout for smooth effect
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= targetPercentage) {
+            clearInterval(interval);
+        } else {
+            width++;
+            progressBar.style.width = width + '%';
+            progressText.textContent = width + '% Complete';
+        }
+    }, 7); // adjust speed
+</script>
+<script>
+    (function() {
+        const confettiContainer = document.getElementById('confetti-container');
+        const colors = ['#A78BFA', '#F472B6', '#60A5FA', '#34D399', '#FBBF24'];
+
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            const size = Math.random() * 6 + 4; // 4-10px
+            confetti.style.width = `${size}px`;
+            confetti.style.height = `${size}px`;
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.position = 'absolute';
+            confetti.style.top = '-10px';
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.borderRadius = '50%';
+            confetti.style.opacity = Math.random() * 0.7 + 0.3;
+            confetti.style.pointerEvents = 'none';
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+            confetti.style.transition = `transform 3s linear, top 3s linear, opacity 3s linear`;
+
+            confettiContainer.appendChild(confetti);
+
+            // Animate confetti down
+            requestAnimationFrame(() => {
+                confetti.style.top = '110%';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.opacity = 0;
+            });
+
+            // Remove after animation
+            setTimeout(() => confetti.remove(), 3000);
+        }
+
+        // Generate multiple confetti pieces
+        const confettiInterval = setInterval(createConfetti, 150); // every 150ms
+        // Stop after 5 seconds
+        setTimeout(() => clearInterval(confettiInterval), 5000);
+    })();
+</script>
+{% endblock %}

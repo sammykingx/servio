@@ -1,0 +1,454 @@
+{% extends "layouts/base-onboarding.html" %}
+{% block browser_title %}Expertise & Niche{% endblock %}
+{% block content %}
+<div class="flex flex-col mb-4">
+	<!-- Title + step -->
+	<div class="flex items-center justify-between px-0.5">
+		<div>
+			<p class="text-gray-700 dark:text-white text-base font-semibold">
+				Expertise &amp; Niche
+			</p>
+			<p class="text-gray-500 dark:text-gray-400 text-xs font-medium pb-1.5">
+				Professional Experience
+			</p>
+		</div>
+		<span
+			class="text-[11px] font-semibold text-brand-500
+			bg-brand-500/10 px-2.5 py-1 rounded-full"
+			>
+		2 of 4
+		</span>
+	</div>
+	<!-- Progress bar -->
+	<div class="relative h-[2px] rounded-full bg-slate-200/70 dark:bg-slate-700/60 overflow-hidden">
+        <div
+			id="progress-bar"
+            class="absolute inset-y-0 left-0
+                bg-brand-500 rounded-full
+                transition-all duration-700 ease-out"
+        ></div>
+    </div>
+	<p id="progress-text" class="mt-1 text-xs font-medium text-gray-500 dark:text-gray-400">0% Complete</p>
+</div>
+
+<div class="rounded-xl shadow-lg border border-[#e7ebf3] dark:border-gray-800 p-6 md:p-10">
+    <div
+        aria-hidden="true"
+        class="absolute top-32 -left-32 w-86 h-136
+            bg-gradient-to-br from-brand-500/15 via-purple-500/10 to-pink-500/10
+            blur-3xl rounded-full"
+    ></div>
+
+	<div class="relative text-center mb-12">
+        <!-- Icon Badge -->
+        <div
+            class="inline-flex items-center justify-center
+                size-14 rounded-2xl
+                bg-gradient-to-br from-brand-500/15 via-purple-500/10 to-indigo-500/15
+                text-brand-500 mb-4
+                shadow-sm shadow-brand-500/10"
+        >
+            <span class="material-symbols-outlined text-2xl">
+                workspace_premium
+            </span>
+        </div>
+
+        <!-- Heading -->
+        <h1
+            class="text-gray-800 dark:text-white
+                text-2xl md:text-3xl font-bold tracking-tight mb-3"
+        >
+            Tell us about your expertise
+        </h1>
+
+        <!-- Subtext -->
+        <p
+            class="text-gray-600 dark:text-gray-400
+                text-base max-w-lg mx-auto leading-relaxed"
+        >
+            Define your core industry and specialties so we can connect you with
+            clients who truly value your skills.
+        </p>
+    </div>
+	<form class="space-y-8">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Primary Industry -->
+            <div class="space-y-1">
+                <label
+                    for="industry"
+                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5"
+                >
+                    Primary Industry
+                </label>
+
+                <div class="relative group">
+                    <select
+                        id="industry"
+                        name="industry"
+                        required
+                        class="
+                            h-12 w-full
+                            rounded-xl
+                            border border-gray-300 dark:border-gray-700
+                            bg-white dark:bg-gray-900
+                            pl-4 pr-12
+                            text-sm text-gray-800 dark:text-white/90
+                            shadow-sm
+                            transition-all duration-200
+                            appearance-none cursor-pointer
+
+                            focus:outline-none
+                            focus:border-brand-500
+                            focus:ring-1 focus:ring-brand-500/30
+                        "
+                    >
+                        <option value="tech" selected>Technology &amp; IT</option>
+                        <option value="creative">Creative &amp; Design</option>
+                        <option value="legal">Legal Services</option>
+                        <option value="marketing">Marketing &amp; Sales</option>
+                        <option value="finance">Finance &amp; Accounting</option>
+                    </select>
+
+                    <span
+                        class="
+                            pointer-events-none
+                            absolute right-4 top-1/2 -translate-y-1/2
+                            text-gray-500 dark:text-gray-400
+                            transition-transform duration-200
+                            group-focus-within:rotate-180
+                        "
+                    >
+                        <span class="material-symbols-outlined text-[20px]">
+                            expand_more
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Years of Experience -->
+            <div class="space-y-1">
+                <label
+                    for="experience"
+                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5"
+                >
+                    Years of Experience
+                </label>
+
+                <div class="relative group">
+                    <select
+                        id="experience"
+                        name="experience"
+                        class="
+                            h-12 w-full
+                            rounded-xl
+                            border border-gray-300 dark:border-gray-700
+                            bg-white dark:bg-gray-900
+                            pl-4 pr-12
+                            text-sm text-gray-800 dark:text-white/90
+                            shadow-sm
+                            transition-all duration-200
+                            appearance-none cursor-pointer
+
+                            focus:outline-none
+                            focus:border-brand-500
+                            focus:ring-1 focus:ring-brand-500/30
+                        "
+                    >
+                        <option value="0-2">0 – 2 years</option>
+                        <option value="3-5">3 – 5 years</option>
+                        <option value="5-10" selected>5 – 10 years</option>
+                        <option value="10+">10+ years</option>
+                    </select>
+
+                    <span
+                        class="
+                            pointer-events-none
+                            absolute right-4 top-1/2 -translate-y-1/2
+                            text-gray-500 dark:text-gray-400
+                            transition-transform duration-200
+                            group-focus-within:rotate-180
+                        "
+                    >
+                        <span class="material-symbols-outlined text-[20px]">
+                            expand_more
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+		<div class="space-y-3">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Select your Niche(s)
+            </label>
+
+            <div class="flex flex-wrap gap-3">
+                <!-- Selected -->
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center gap-1.5
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-brand-500 text-white
+                        shadow-sm shadow-brand-500/20
+                        transition-all duration-200
+
+                        hover:bg-brand-500-hover
+                        hover:shadow-md hover:shadow-brand-500/30
+                        active:scale-95
+                    "
+                >
+                    UI Design
+                    <span
+                        class="material-symbols-outlined text-[16px] opacity-80 hover:opacity-100"
+                    >
+                        close
+                    </span>
+                </button>
+
+                <!-- Selected -->
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center gap-1.5
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-brand-500 text-white
+                        shadow-sm shadow-brand-500/20
+                        transition-all duration-200
+
+                        hover:bg-brand-500-hover
+                        hover:shadow-md hover:shadow-brand-500/30
+                        active:scale-95
+                    "
+                >
+                    Backend Dev
+                    <span class="material-symbols-outlined text-[16px]">close</span>
+                </button>
+
+                <!-- Unselected -->
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-gray-100 dark:bg-gray-800
+                        text-gray-700 dark:text-gray-300
+                        border border-gray-200 dark:border-gray-700
+                        transition-all duration-200
+
+                        hover:bg-brand-500/10
+                        hover:text-brand-500
+                        hover:border-brand-500/30
+                        hover:-translate-y-[1px]
+                        active:scale-95
+                    "
+                >
+                    Frontend Dev
+                </button>
+
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-gray-100 dark:bg-gray-800
+                        text-gray-700 dark:text-gray-300
+                        border border-gray-200 dark:border-gray-700
+                        transition-all duration-200
+
+                        hover:bg-brand-500/10
+                        hover:text-brand-500
+                        hover:border-brand-500/30
+                        hover:-translate-y-[1px]
+                        active:scale-95
+                    "
+                >
+                    Cyber Secuirity
+                </button>
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-gray-100 dark:bg-gray-800
+                        text-gray-700 dark:text-gray-300
+                        border border-gray-200 dark:border-gray-700
+                        transition-all duration-200
+
+                        hover:bg-brand-500/10
+                        hover:text-brand-500
+                        hover:border-brand-500/30
+                        hover:-translate-y-[1px]
+                        active:scale-95
+                    "
+                >
+                    Cloud Architect
+                </button>
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-gray-100 dark:bg-gray-800
+                        text-gray-700 dark:text-gray-300
+                        border border-gray-200 dark:border-gray-700
+                        transition-all duration-200
+
+                        hover:bg-brand-500/10
+                        hover:text-brand-500
+                        hover:border-brand-500/30
+                        hover:-translate-y-[1px]
+                        active:scale-95
+                    "
+                >
+                    Mobile Development
+                </button>
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-gray-100 dark:bg-gray-800
+                        text-gray-700 dark:text-gray-300
+                        border border-gray-200 dark:border-gray-700
+                        transition-all duration-200
+
+                        hover:bg-brand-500/10
+                        hover:text-brand-500
+                        hover:border-brand-500/30
+                        hover:-translate-y-[1px]
+                        active:scale-95
+                    "
+                >
+                    Data Science
+                </button>
+                <button
+                    type="button"
+                    class="
+                        inline-flex items-center
+                        rounded-full px-4 py-2
+                        text-sm font-medium
+                        bg-gray-100 dark:bg-gray-800
+                        text-gray-700 dark:text-gray-300
+                        border border-gray-200 dark:border-gray-700
+                        transition-all duration-200
+
+                        hover:bg-brand-500/10
+                        hover:text-brand-500
+                        hover:border-brand-500/30
+                        hover:-translate-y-[1px]
+                        active:scale-95
+                    "
+                >
+                    DevOps
+                </button>
+            </div>
+        </div>
+
+		<div class="space-y-2">
+            <div class="flex justify-between items-center">
+                <label
+                    for="bio"
+                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                >
+                    Professional Bio
+                </label>
+
+                <span
+                    class="text-xs font-medium text-gray-500 dark:text-gray-400"
+                >
+                    142 / 500
+                </span>
+            </div>
+
+            <div class="relative group">
+                <textarea
+                    id="bio"
+                    name="bio"
+                    rows="10"
+                    placeholder="Briefly describe your professional background and what you offer to clients…"
+                    class="
+                        w-full min-h-[160px]
+                        rounded-2xl
+                        border border-gray-300 dark:border-gray-700
+                        bg-white dark:bg-gray-900
+                        px-5 py-4
+                        text-sm text-gray-800 dark:text-white/90
+                        placeholder:text-gray-400 dark:placeholder:text-white/30
+                        shadow-sm
+                        resize-none
+                        transition-all duration-200
+
+                        focus:outline-none
+                        focus:border-brand-500
+                        focus:ring-1 focus:ring-brand-500/30
+
+                        hover:border-gray-400 dark:hover:border-gray-600
+                    "
+                >I am a seasoned professional with over 8 years of experience in building scalable technology solutions. I specialize in UI/UX and backend systems...</textarea>
+
+                <!-- Soft focus glow -->
+                <div
+                    aria-hidden="true"
+                    class="
+                        pointer-events-none
+                        absolute inset-0
+                        rounded-2xl
+                        ring-0
+                        group-focus-within:ring-2
+                        ring-brand-500/10
+                        transition-all
+                    "
+                ></div>
+            </div>
+
+            <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                This will appear on your public profile and help clients understand your expertise.
+            </p>
+        </div>
+
+		<div class="pt-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-4 border-t border-[#e7ebf3] dark:border-gray-800 mt-8">
+			<a 
+                href="{% url ONBOARDING_URLS.Users.PROFILE_SETUP %}" 
+                class="flex items-center gap-1 text-gray-400 
+                    dark:text-gray-400 font-medium text-sm 
+                    hover:text-text-main dark:hover:text-white 
+                    transition-colors hover:bg-gray-50 px-4 py-3
+                    hover:rounded-xl hover:text-gray-600" 
+                type="button">
+			    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+			    Back to Profile
+            </a>
+			<a href="{% url ONBOARDING_URLS.Users.OBJECTIVES %}" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-500-hover text-white rounded-xl px-10 py-3.5 text-sm font-bold shadow-md hover:shadow-lg hover:shadow-brand-500/20 transition-all duration-200" type="submit">
+			    Next Step
+			<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </a>
+		</div>
+	</form>
+</div>
+{% endblock %}
+{% block custom_page_js %}
+<script>
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const targetPercentage = 50;
+
+  // Animate width using setTimeout for smooth effect
+  let width = 0;
+  const interval = setInterval(() => {
+      if (width >= targetPercentage) {
+          clearInterval(interval);
+      } else {
+          width++;
+          progressBar.style.width = width + '%';
+          progressText.textContent = width + '% Complete';
+      }
+  }, 10); // adjust speed
+</script>
+{% endblock %}

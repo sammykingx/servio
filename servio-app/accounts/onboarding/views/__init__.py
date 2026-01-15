@@ -2,7 +2,6 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.profile import UserRole
 from constants.onboarding_flow import ONBOARDING_FLOWS
-from core.url_names import AuthURLNames
 from typing import Union
 
 

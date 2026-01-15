@@ -53,7 +53,9 @@ class Accounts:
 
         START_FLOW = f"{__USERS}/start-flow.html"
         PERSONAL_INFO = f"{__USERS}/profile-info.html"
-        ADDRESS_INFO = f"{__USERS}/address-info.html"
+        EXPERTISE = f"{__USERS}/expertise-niche.html"
+        OBJECTIVES = f"{__USERS}/objectives.html"
+        COMPLETE = f"{__USERS}/complete.html"
         
 
     class Dashboards:

@@ -25,12 +25,14 @@
     <!-- Progress bar -->
     <div class="relative h-[2px] rounded-full bg-slate-200/70 dark:bg-slate-700/60 overflow-hidden">
         <div
+			id="progress-bar"
             class="absolute inset-y-0 left-0
                    bg-brand-500 rounded-full
-                   transition-[width] duration-500 ease-out"
-            style="width: 25%;"
+                   transition-all duration-700 ease-out"
+            
         ></div>
     </div>
+	<p id="progress-text" class="mt-1 text-xs font-medium text-gray-500 dark:text-gray-400">0% Complete</p>
 </div>
 <div
     class="relative
@@ -375,7 +377,7 @@
 						Physical Address
 					</p>
 					<span class="text-xs text-gray-600 dark:text-gray-400">
-						Tell us a bit about yourself
+						Residential location information
 					</span>
 				</div>
 			</div>
@@ -560,7 +562,8 @@
                 Go back
             </a>
 
-            <button
+            <a
+				href="{% url ONBOARDING_URLS.Users.EXPERTISE_AND_NICHE %}"
                 type="submit"
                 class="w-full sm:w-auto
                        flex items-center justify-center gap-2
@@ -575,10 +578,30 @@
                 <span class="material-symbols-outlined text-[18px]">
                     arrow_forward
                 </span>
-            </button>
+            </a>
         </div>
 
     </form>
 </div>
 
+{% endblock %}
+{% block custom_page_js %}
+<script>
+  // Example: animate to 65%
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const targetPercentage = 25;
+
+  // Animate width using setTimeout for smooth effect
+  let width = 0;
+  const interval = setInterval(() => {
+      if (width >= targetPercentage) {
+          clearInterval(interval);
+      } else {
+          width++;
+          progressBar.style.width = width + '%';
+          progressText.textContent = width + '% Complete';
+      }
+  }, 7); // adjust speed
+</script>
 {% endblock %}

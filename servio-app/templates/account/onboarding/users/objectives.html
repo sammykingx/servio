@@ -1,0 +1,197 @@
+{% extends "layouts/base-onboarding.html" %}
+{% block browser_title %}Objectives{% endblock %}
+{% block content %}
+<!-- Progress Bar -->
+<div class="flex flex-col mb-4">
+    <!-- Title + step -->
+    <div class="flex items-center justify-between px-0.5">
+        <div>
+            <p class="text-gray-700 dark:text-white text-base font-semibold">
+                Profile setup
+            </p>
+            <p class="text-gray-500 dark:text-gray-400 text-xs font-medium pb-1.5">
+                Personal &amp; Address details
+            </p>
+        </div>
+
+        <span class="text-[11px] font-semibold text-brand-500
+                   bg-brand-500/10 px-2.5 py-1 rounded-full">
+            3 of 4
+        </span>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="relative h-[2px] rounded-full bg-slate-200/70 dark:bg-slate-700/60 overflow-hidden">
+        <div id="progress-bar" class="absolute inset-y-0 left-0
+                   bg-brand-500 rounded-full
+                   transition-all duration-700 ease-out" style="width: 50%;"></div>
+    </div>
+    <p id="progress-text" class="mt-1 text-xs font-medium text-gray-500 dark:text-gray-400">0% Complete</p>
+</div>
+<div class="text-center max-w-lg mx-auto mb-10">
+    <div
+        aria-hidden="true"
+        class="absolute top-32 -right-32 w-86 h-136
+            bg-gradient-to-br from-brand-500/15 via-purple-500/10 to-pink-500/10
+            blur-3xl rounded-full"
+    ></div>
+    <h1 class="text-gray-800 dark:text-white tracking-tight text-3xl md:text-[32px] font-semibold leading-tight mb-3">
+        Tell us what you’re here for
+    </h1>
+    <p class="text-[#4e5661] dark:text-gray-400 text-base font-normal leading-relaxed">
+        Select all that apply. This helps us customize your dashboard experience specifically for your needs.
+    </p>
+
+</div>
+
+<div class="flex justify-center w-full mb-3">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl relative z-10">
+
+        <!-- Option 1 -->
+        <label class="group relative cursor-pointer rounded-2xl">
+            <input checked class="peer sr-only" type="checkbox" />
+            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
+                  bg-white dark:bg-[#1A2332] border border-transparent 
+                  shadow-sm hover:shadow-md transition-all duration-300
+                  peer-checked:border-brand-500 peer-checked:border-[1.5px]
+                  relative overflow-hidden hover:scale-[1.02]">
+                <!-- Icon badge -->
+                <div class="p-3 rounded-full bg-gradient-to-br from-purple-400/50 via-indigo-400/50 to-blue-400/50 shadow-lg shadow-purple-300/40">
+                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">person_search</span>
+                </div>
+                <div>
+                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                        Book professional services
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Find experts for your needs.</p>
+                </div>
+                <div class="absolute top-4 right-4 text-brand-500 opacity-100 transition-opacity">
+                    <span class="material-symbols-outlined fill-1">check_circle</span>
+                </div>
+            </div>
+        </label>
+
+        <!-- Option 2 -->
+        <label class="group relative cursor-pointer rounded-2xl">
+            <input class="peer sr-only" type="checkbox" />
+            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
+                  bg-white dark:bg-[#1A2332] border border-transparent 
+                  shadow-sm hover:shadow-md transition-all duration-300
+                  peer-checked:border-purple-400 peer-checked:border-[1.5px]
+                  relative overflow-hidden hover:scale-[1.02]">
+                <div class="p-3 rounded-full bg-gradient-to-br from-pink-400/50 via-red-400/50 to-orange-400/50 shadow-lg shadow-pink-300/40">
+                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">add_circle</span>
+                </div>
+                <div>
+                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                        Create gigs/projects
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Post jobs and receive proposals.</p>
+                </div>
+                <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                    <span class="material-symbols-outlined fill-1">check_circle</span>
+                </div>
+            </div>
+        </label>
+
+        <!-- Option 3 -->
+        <label class="group relative cursor-pointer rounded-2xl">
+            <input class="peer sr-only" type="checkbox" />
+            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
+                  bg-white dark:bg-[#1A2332] border border-transparent 
+                  shadow-sm hover:shadow-md transition-all duration-300
+                  peer-checked:border-teal-400 peer-checked:border-[1.5px]
+                  relative overflow-hidden hover:scale-[1.02]">
+                <div class="p-3 rounded-full bg-gradient-to-br from-teal-400/50 via-green-400/50 to-lime-400/50 shadow-lg shadow-teal-300/40">
+                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">handshake</span>
+                </div>
+                <div>
+                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                        Collaborate
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Join teams and manage projects.</p>
+                </div>
+                <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                    <span class="material-symbols-outlined fill-1">check_circle</span>
+                </div>
+            </div>
+        </label>
+
+        <!-- Option 4 -->
+        <label class="group relative cursor-pointer rounded-2xl">
+            <input class="peer sr-only" type="checkbox" />
+            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
+                  bg-white dark:bg-[#1A2332] border border-transparent 
+                  shadow-sm hover:shadow-md transition-all duration-300
+                  peer-checked:border-indigo-400 peer-checked:border-[1.5px]
+                  relative overflow-hidden hover:scale-[1.02]">
+                <div class="p-3 rounded-full bg-gradient-to-br from-indigo-400/50 via-blue-400/50 to-sky-400/50 shadow-lg shadow-indigo-300/40">
+                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">hub</span>
+                </div>
+                <div>
+                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                        Both
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">I want to do it all.</p>
+                </div>
+                <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                    <span class="material-symbols-outlined fill-1">check_circle</span>
+                </div>
+            </div>
+        </label>
+    </div>
+    
+</div>
+<div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 w-full mt-4 sm:my-5">
+    <!-- Skip button -->
+    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white 
+        text-sm font-semibold py-3 px-6 rounded-xl 
+        border border-gray-200 dark:border-gray-700 
+        hover:bg-gray-100 dark:hover:bg-gray-800
+        transition-all duration-300 ease-in-out"
+    >
+        Skip for now
+    </button>
+
+    <!-- Continue button -->
+    <a
+        href="{% url ONBOARDING_URLS.Users.COMPLETE %}"
+        class="flex items-center justify-center gap-2
+            bg-brand-500 hover:bg-brand-400
+            text-white text-base font-semibold h-12 px-8 rounded-xl
+            shadow-lg shadow-purple-400/30
+            transition-all transform duration-300
+            hover:scale-[1.03] active:scale-[0.97]
+            relative overflow-hidden"
+        >
+        <span>Continue</span>
+        <span class="material-symbols-outlined text-sm font-semibold transition-transform duration-300 group-hover:translate-x-1">
+            arrow_forward
+        </span>
+
+        <!-- Subtle ambient glow pulse -->
+        <div aria-hidden="true" class="absolute inset-0 rounded-full bg-white/10 blur-xl animate-pulse-slow pointer-events-none"></div>
+    </a>
+</div>
+
+
+{% endblock %}
+{% block custom_page_js %}
+<script>
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const targetPercentage = 75;
+
+    // Animate width using setTimeout for smooth effect
+    let width = 0;
+    const interval = setInterval(() => {
+        if (width >= targetPercentage) {
+            clearInterval(interval);
+        } else {
+            width++;
+            progressBar.style.width = width + '%';
+            progressText.textContent = width + '% Complete';
+        }
+    }, 7); // adjust speed
+</script>
+{% endblock %}
