@@ -6,20 +6,37 @@ from notifications.models.notification_channels import NotificationChannels
 from accounts.models.profile import UserRole
 
 
-def app_urlnames(request):
-    # lazily creating notifications with defaults
-    # if not present in model
-    if request.user.is_authenticated:
-        channels, created = NotificationChannels.objects.get_or_create(
-                user=request.user,
-                defaults={
-                    "in_app": True,
-                    "email": True,
-                    "web_push": False,
-                    "sms": False,
-                    "whatsapp": False,
-                }
-            )
+class NamespacedURLs:
+    """
+    Static helper to transform local URL names into namespaced ones.
+    """
+
+    @staticmethod
+    def transform(app_name, urls_dict):
+        """
+        Returns an object with attributes for each URL, fully namespaced.
+        """
+        class URLContainer:
+            pass
+
+        container = URLContainer()
+        for key, value in urls_dict.items():
+            setattr(container, key, f"{app_name}:{value}")
+
+        return container
+
+
+def app_urlnames(request): 
+    users_onboarding_urls = NamespacedURLs.transform(
+        OnboardingURLS.Users.APP_NAME,
+        {
+            "WELCOME": OnboardingURLS.Users.WELCOME,
+            "PROFILE_SETUP": OnboardingURLS.Users.PROFILE_SETUP,
+            "EXPERTISE_AND_NICHE": OnboardingURLS.Users.EXPERTISE_AND_NICHE,
+            "OBJECTIVES": OnboardingURLS.Users.OBJECTIVES,
+            "COMPLETE": OnboardingURLS.Users.COMPLETE,
+        }
+    )
     
     return {
         "AUTH_URLS": AuthURLNames,
@@ -27,6 +44,6 @@ def app_urlnames(request):
         "COLLABORATION_URLS": CollaborationURLS,
         "NOTIFICATION_URLS": NotificationsURLNames,
         "PAYMENT_URLS": PaymentURLS,
-        "ONBOARDING_URLS": OnboardingURLS,
+        "USER_ONBOARDING_URLS": users_onboarding_urls,
         "UserRole": UserRole,
     }

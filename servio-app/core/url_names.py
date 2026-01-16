@@ -43,6 +43,8 @@ class AuthURLNames:
     
 class OnboardingURLS:
     class Users:
+        APP_NAME = "onboarding_users"
+        
         WELCOME = "start_onboarding"
         PROFILE_SETUP = "onborading_step_one"
         EXPERTISE_AND_NICHE = "onborading_step_two"
@@ -50,7 +52,7 @@ class OnboardingURLS:
         COMPLETE = "onboarding_complete"
         
     class Providers:
-        pass
+        APP_NAME = "onboarding_providers"
     
 class NotificationsURLNames:
     TOGGLE_NOTIFICATION_CHANNELS = "toggle_notification_channels"

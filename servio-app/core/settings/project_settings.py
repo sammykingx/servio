@@ -18,7 +18,7 @@ LOCAL_APPS = [
 ]
 
 LOCAL_MIDDLEWARES = [
-    # "middlewares.onboarding.OnboardingMiddleware",
+    "middlewares.onboarding.OnboardingMiddleware",
     "middlewares.provider_only.ProviderOnlyMiddleware",
 ]
 
