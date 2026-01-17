@@ -1,6 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import step_one, step_two
+from .views import step_one, step_two, step_three_and_four
 from template_map.accounts import Accounts
 from core.url_names import OnboardingURLS
 
@@ -20,11 +20,11 @@ urlpatterns = [
         name = OnboardingURLS.Users.EXPERTISE_AND_NICHE 
     ),
     path(
-        "objectives/", TemplateView.as_view(template_name=Accounts.Onboarding.OBJECTIVES),
+        "objectives/", step_three_and_four.ObjectivesView.as_view(),
         name = OnboardingURLS.Users.OBJECTIVES
     ),
      path(
-        "complete/", TemplateView.as_view(template_name=Accounts.Onboarding.COMPLETE),
+        "complete/", step_three_and_four.CompleteOnboardingView.as_view(),
         name = OnboardingURLS.Users.COMPLETE
     ),
 ]

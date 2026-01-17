@@ -1,5 +1,8 @@
+# schemas used for onboarding flows
+
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
+from enum import Enum
 import html, re
 
 
@@ -44,7 +47,21 @@ class NumberPayload(BaseModel):
     phoneNumber: str = Field(..., max_length=12)
     altNumber: Optional[str] = Field(..., max_length=16)
     
-    
 class ProfilePayLoad(BaseModel):
     profile: NumberPayload
     address: AddressPayload
+    
+class ExperienceLevel(str, Enum):
+    ZERO_TO_TWO = "0-2"
+    THREE_TO_FIVE = "3-5"
+    FIVE_TO_TEN = "5-10"
+    TEN_PLUS = "10+"
+    
+class IndustryPayload(BaseModel):
+    id: int
+    name: str
+    ecperience_level: str
+    bio: str = Field(..., max_length=400)
+    
+class NichePayload(BaseModel):
+    i

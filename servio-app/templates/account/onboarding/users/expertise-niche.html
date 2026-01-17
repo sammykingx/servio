@@ -1,4 +1,5 @@
 {% extends "layouts/base-onboarding.html" %}
+{% load static %}
 {% block browser_title %}Expertise & Niche{% endblock %}
 {% block content %}
 <div class="flex flex-col mb-4">
@@ -70,8 +71,9 @@
             clients who truly value your skills.
         </p>
     </div>
-	<form class="space-y-8">
-		<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+	<form id="expertise" x-data="expertiseForm()" x-init="init()" class="space-y-8">
+		{% csrf_token %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Primary Industry -->
             <div class="space-y-1">
                 <label
@@ -79,10 +81,35 @@
                     class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5"
                 >
                     Primary Industry
+                    <span class="text-error-500"> *</span>
                 </label>
 
                 <div class="relative group">
                     <select
+                        id="industry"
+                        x-model.number="industryId"
+                        required
+                        class="
+                            h-12 w-full
+                            rounded-xl
+                            border border-gray-300 dark:border-gray-700
+                            bg-white dark:bg-gray-900
+                            pl-4 pr-12
+                            text-sm text-gray-800 dark:text-white/90
+                            shadow-sm
+                            transition-all duration-200
+                            appearance-none cursor-pointer
+
+                            focus:outline-none
+                            focus:border-brand-500
+                            focus:ring-1 focus:ring-brand-500/30
+                        ">
+                        <template x-for="industry in taxonomy" :key="industry.id">
+                            <option :value="industry.id" x-text="industry.name"></option>
+                        </template>
+                    </select>
+
+                    <!-- <select
                         id="industry"
                         name="industry"
                         required
@@ -107,7 +134,7 @@
                         <option value="legal">Legal Services</option>
                         <option value="marketing">Marketing &amp; Sales</option>
                         <option value="finance">Finance &amp; Accounting</option>
-                    </select>
+                    </select> -->
 
                     <span
                         class="
@@ -132,10 +159,12 @@
                     class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5"
                 >
                     Years of Experience
+                    <span class="text-error-500"> *</span>
                 </label>
 
                 <div class="relative group">
                     <select
+                        x-model="experience"
                         id="experience"
                         name="experience"
                         class="
@@ -156,7 +185,7 @@
                     >
                         <option value="0-2">0 – 2 years</option>
                         <option value="3-5">3 – 5 years</option>
-                        <option value="5-10" selected>5 – 10 years</option>
+                        <option value="5-10">5 – 10 years</option>
                         <option value="10+">10+ years</option>
                     </select>
 
@@ -179,175 +208,22 @@
 		<div class="space-y-3">
             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Select your Niche(s)
+                <span class="text-error-500"> *</span>
             </label>
 
             <div class="flex flex-wrap gap-3">
-                <!-- Selected -->
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center gap-1.5
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-brand-500 text-white
-                        shadow-sm shadow-brand-500/20
-                        transition-all duration-200
-
-                        hover:bg-brand-500-hover
-                        hover:shadow-md hover:shadow-brand-500/30
-                        active:scale-95
-                    "
-                >
-                    UI Design
-                    <span
-                        class="material-symbols-outlined text-[16px] opacity-80 hover:opacity-100"
+                <template x-for="niche in niches" :key="niche.id">
+                    <button
+                        type="button"
+                        @click="toggleNiche(niche)"
+                        :class="isSelected(niche.id)
+                            ? 'bg-brand-500 text-white'
+                            : 'bg-gray-50 text-gray-700'"
+                        class="rounded-full px-4 py-2 text-sm cursor-pointer"
                     >
-                        close
-                    </span>
-                </button>
-
-                <!-- Selected -->
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center gap-1.5
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-brand-500 text-white
-                        shadow-sm shadow-brand-500/20
-                        transition-all duration-200
-
-                        hover:bg-brand-500-hover
-                        hover:shadow-md hover:shadow-brand-500/30
-                        active:scale-95
-                    "
-                >
-                    Backend Dev
-                    <span class="material-symbols-outlined text-[16px]">close</span>
-                </button>
-
-                <!-- Unselected -->
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-gray-100 dark:bg-gray-800
-                        text-gray-700 dark:text-gray-300
-                        border border-gray-200 dark:border-gray-700
-                        transition-all duration-200
-
-                        hover:bg-brand-500/10
-                        hover:text-brand-500
-                        hover:border-brand-500/30
-                        hover:-translate-y-[1px]
-                        active:scale-95
-                    "
-                >
-                    Frontend Dev
-                </button>
-
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-gray-100 dark:bg-gray-800
-                        text-gray-700 dark:text-gray-300
-                        border border-gray-200 dark:border-gray-700
-                        transition-all duration-200
-
-                        hover:bg-brand-500/10
-                        hover:text-brand-500
-                        hover:border-brand-500/30
-                        hover:-translate-y-[1px]
-                        active:scale-95
-                    "
-                >
-                    Cyber Secuirity
-                </button>
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-gray-100 dark:bg-gray-800
-                        text-gray-700 dark:text-gray-300
-                        border border-gray-200 dark:border-gray-700
-                        transition-all duration-200
-
-                        hover:bg-brand-500/10
-                        hover:text-brand-500
-                        hover:border-brand-500/30
-                        hover:-translate-y-[1px]
-                        active:scale-95
-                    "
-                >
-                    Cloud Architect
-                </button>
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-gray-100 dark:bg-gray-800
-                        text-gray-700 dark:text-gray-300
-                        border border-gray-200 dark:border-gray-700
-                        transition-all duration-200
-
-                        hover:bg-brand-500/10
-                        hover:text-brand-500
-                        hover:border-brand-500/30
-                        hover:-translate-y-[1px]
-                        active:scale-95
-                    "
-                >
-                    Mobile Development
-                </button>
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-gray-100 dark:bg-gray-800
-                        text-gray-700 dark:text-gray-300
-                        border border-gray-200 dark:border-gray-700
-                        transition-all duration-200
-
-                        hover:bg-brand-500/10
-                        hover:text-brand-500
-                        hover:border-brand-500/30
-                        hover:-translate-y-[1px]
-                        active:scale-95
-                    "
-                >
-                    Data Science
-                </button>
-                <button
-                    type="button"
-                    class="
-                        inline-flex items-center
-                        rounded-full px-4 py-2
-                        text-sm font-medium
-                        bg-gray-100 dark:bg-gray-800
-                        text-gray-700 dark:text-gray-300
-                        border border-gray-200 dark:border-gray-700
-                        transition-all duration-200
-
-                        hover:bg-brand-500/10
-                        hover:text-brand-500
-                        hover:border-brand-500/30
-                        hover:-translate-y-[1px]
-                        active:scale-95
-                    "
-                >
-                    DevOps
-                </button>
+                        <span x-text="niche.name"></span>
+                    </button>
+                </template>
             </div>
         </div>
 
@@ -358,12 +234,13 @@
                     class="block text-sm font-semibold text-gray-700 dark:text-gray-300"
                 >
                     Professional Bio
+                    <span class="text-error-500"> *</span>
                 </label>
 
                 <span
                     class="text-xs font-medium text-gray-500 dark:text-gray-400"
                 >
-                    142 / 500
+                    <span x-text="bioWordCount"></span> / <span x-text="maxBioWords"></span> words
                 </span>
             </div>
 
@@ -371,6 +248,8 @@
                 <textarea
                     id="bio"
                     name="bio"
+                    x-model="bio"
+                    @input="enforceBioLimit"
                     rows="10"
                     placeholder="Briefly describe your professional background and what you offer to clients…"
                     class="
@@ -391,7 +270,7 @@
 
                         hover:border-gray-400 dark:hover:border-gray-600
                     "
-                >I am a seasoned professional with over 8 years of experience in building scalable technology solutions. I specialize in UI/UX and backend systems...</textarea>
+                ></textarea>
 
                 <!-- Soft focus glow -->
                 <div
@@ -425,15 +304,48 @@
 			    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
 			    Back to Profile
             </a>
-			<a href="{% url USER_ONBOARDING_URLS.OBJECTIVES %}" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-500-hover text-white rounded-xl px-10 py-3.5 text-sm font-bold shadow-md hover:shadow-lg hover:shadow-brand-500/20 transition-all duration-200" type="submit">
+            <button
+                type="button"
+                @click="submit"
+                :disabled="submitting"
+                :class="submitting ? 'opacity-50 cursor-not-allowed' : ''"
+                class="w-full sm:w-auto inline-flex items-center justify-center
+                    bg-brand-500 hover:bg-brand-500-hover
+                    text-white rounded-xl px-10 py-3.5 text-sm
+                    font-bold shadow-md hover:shadow-lg
+                    hover:shadow-brand-500/20 transition-all
+                    duration-200
+                "
+            >
+                <span
+                    x-show="!submitting"
+                    class="flex items-center gap-2"
+                >
+                    <span>Next Step</span>
+                    <span class="material-symbols-outlined leading-none text-[18px]">
+                        arrow_forward
+                    </span>
+                </span>
+
+                <span
+                    x-show="submitting"
+                    class="leading-none"
+                >
+                    Saving…
+                </span>
+            </button>
+
+
+			<!-- <a href="{% url USER_ONBOARDING_URLS.OBJECTIVES %}" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-500-hover text-white rounded-xl px-10 py-3.5 text-sm font-bold shadow-md hover:shadow-lg hover:shadow-brand-500/20 transition-all duration-200" type="submit">
 			    Next Step
 			<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </a>
+            </a> -->
 		</div>
 	</form>
 </div>
 {% endblock %}
 {% block custom_page_js %}
+{{ taxonomy|json_script:"taxonomy" }}
 <script>
   const progressBar = document.getElementById('progress-bar');
   const progressText = document.getElementById('progress-text');
@@ -451,4 +363,5 @@
       }
   }, 10); // adjust speed
 </script>
+<script src="{% static 'js/accounts/onboarding/expertise.js' %}"></script>
 {% endblock %}

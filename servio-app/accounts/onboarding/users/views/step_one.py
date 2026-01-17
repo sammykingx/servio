@@ -1,19 +1,20 @@
 from django.http import JsonResponse
 from django.db import transaction, IntegrityError
 from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from pydantic import ValidationError
-from core.url_names import OnboardingURLS
 from template_map.accounts import Accounts
 from accounts.models.address import AddressType
+from accounts.onboarding.users.mixins import OnboardingStepMixin
 from accounts.onboarding.manager import UserOnboardingManager
 from accounts.onboarding.schemas import AddressPayload, ProfilePayLoad, NumberPayload
 from formatters.pydantic_formatter import format_pydantic_errors
 import json
 
 
-class StartOnboardingView(TemplateView):
+class StartOnboardingView(LoginRequiredMixin, OnboardingStepMixin, TemplateView):
     template_name = Accounts.Onboarding.START_FLOW
-    current_step = 0
+    view_step = 0
     
     def post(self, request, *args, **kwargs):
         manager = UserOnboardingManager(self.request.user)
@@ -22,8 +23,9 @@ class StartOnboardingView(TemplateView):
             status=200
         )
 
-class PersonalInfoView(TemplateView):
+class PersonalInfoView(LoginRequiredMixin, OnboardingStepMixin, TemplateView):
     template_name = Accounts.Onboarding.PERSONAL_INFO
+    view_step = 1
     
     def post(self, request, *args, **kwargs):
         try:
@@ -70,9 +72,7 @@ class PersonalInfoView(TemplateView):
                 },
                 status=400,
             )
-            
-        # import time
-        # time.sleep(4)
+
         return JsonResponse(
             {"redirect_url": manager.advance_user()}, 
             status=200

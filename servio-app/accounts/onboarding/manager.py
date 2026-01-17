@@ -28,6 +28,10 @@ class UserOnboardingManager:
         
     def __init__(self, user):
         self.user = user
+    
+    @property    
+    def user_step(self) -> int:
+        return self.user.onboarding_step
         
     def is_complete(self) -> bool:
         return self.user.completed_onboarding
