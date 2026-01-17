@@ -8,7 +8,7 @@ app_name = OnboardingURLS.Users.APP_NAME
 
 urlpatterns = [
     path(
-        "welcome/", TemplateView.as_view(template_name=Accounts.Onboarding.START_FLOW),
+        "welcome/", step_one.StartOnboardingView.as_view(),
         name = OnboardingURLS.Users.WELCOME   
     ),
     path(

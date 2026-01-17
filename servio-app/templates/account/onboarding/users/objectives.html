@@ -1,6 +1,7 @@
 {% extends "layouts/base-onboarding.html" %}
 {% block browser_title %}Objectives{% endblock %}
 {% block content %}
+
 <!-- Progress Bar -->
 <div class="flex flex-col mb-4">
     <!-- Title + step -->
@@ -29,12 +30,6 @@
     <p id="progress-text" class="mt-1 text-xs font-medium text-gray-500 dark:text-gray-400">0% Complete</p>
 </div>
 <div class="text-center max-w-lg mx-auto mb-10">
-    <div
-        aria-hidden="true"
-        class="absolute top-32 -right-32 w-86 h-136
-            bg-gradient-to-br from-brand-500/15 via-purple-500/10 to-pink-500/10
-            blur-3xl rounded-full"
-    ></div>
     <h1 class="text-gray-800 dark:text-white tracking-tight text-3xl md:text-[32px] font-semibold leading-tight mb-3">
         Tell us what you’re here for
     </h1>
@@ -45,102 +40,101 @@
 </div>
 
 <div class="flex justify-center w-full mb-3">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl relative z-10">
-
-        <!-- Option 1 -->
-        <label class="group relative cursor-pointer rounded-2xl">
-            <input checked class="peer sr-only" type="checkbox" />
-            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
-                  bg-white dark:bg-[#1A2332] border border-transparent 
-                  shadow-sm hover:shadow-md transition-all duration-300
-                  peer-checked:border-brand-500 peer-checked:border-[1.5px]
-                  relative overflow-hidden hover:scale-[1.02]">
-                <!-- Icon badge -->
-                <div class="p-3 rounded-full bg-gradient-to-br from-purple-400/50 via-indigo-400/50 to-blue-400/50 shadow-lg shadow-purple-300/40">
-                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">person_search</span>
+    <div class="relative backdrop-blur-xl bg-white/70 dark:bg-[#0f172a]/70 
+            border border-white/30 dark:border-slate-700/40
+            rounded-3xl p-8 shadow-2xl shadow-brand-500/10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl relative z-10">
+            <!-- Option 1 -->
+            <label class="group relative cursor-pointer rounded-2xl">
+                <input checked class="peer sr-only" type="checkbox" />
+                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                      bg-white dark:bg-[#1A2332] border border-transparent
+                      shadow-sm hover:shadow-md transition-all duration-300
+                      peer-checked:border-brand-500 peer-checked:border-[1.5px]
+                      relative overflow-hidden hover:scale-[1.02]">
+                    <!-- Icon badge -->
+                    <div class="p-3 rounded-full bg-gradient-to-br from-purple-400/50 via-indigo-400/50 to-blue-400/50 shadow-lg shadow-purple-300/40">
+                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">person_search</span>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                            Book professional services
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Find experts for your needs.</p>
+                    </div>
+                    <div class="absolute top-4 right-4 text-brand-500 opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined fill-1">check_circle</span>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                        Book professional services
-                    </h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Find experts for your needs.</p>
+            </label>
+            <!-- Option 2 -->
+            <label class="group relative cursor-pointer rounded-2xl">
+                <input class="peer sr-only" type="checkbox" />
+                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                      bg-white dark:bg-[#1A2332] border border-transparent
+                      shadow-sm hover:shadow-md transition-all duration-300
+                      peer-checked:border-purple-400 peer-checked:border-[1.5px]
+                      relative overflow-hidden hover:scale-[1.02]">
+                    <div class="p-3 rounded-full bg-gradient-to-br from-pink-400/50 via-red-400/50 to-orange-400/50 shadow-lg shadow-pink-300/40">
+                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">add_circle</span>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                            Create gigs/projects
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Post jobs and receive proposals.</p>
+                    </div>
+                    <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined fill-1">check_circle</span>
+                    </div>
                 </div>
-                <div class="absolute top-4 right-4 text-brand-500 opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined fill-1">check_circle</span>
+            </label>
+            <!-- Option 3 -->
+            <label class="group relative cursor-pointer rounded-2xl">
+                <input class="peer sr-only" type="checkbox" />
+                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                      bg-white dark:bg-[#1A2332] border border-transparent
+                      shadow-sm hover:shadow-md transition-all duration-300
+                      peer-checked:border-teal-400 peer-checked:border-[1.5px]
+                      relative overflow-hidden hover:scale-[1.02]">
+                    <div class="p-3 rounded-full bg-gradient-to-br from-teal-400/50 via-green-400/50 to-lime-400/50 shadow-lg shadow-teal-300/40">
+                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">handshake</span>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                            Collaborate
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Join teams and manage projects.</p>
+                    </div>
+                    <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined fill-1">check_circle</span>
+                    </div>
                 </div>
-            </div>
-        </label>
-
-        <!-- Option 2 -->
-        <label class="group relative cursor-pointer rounded-2xl">
-            <input class="peer sr-only" type="checkbox" />
-            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
-                  bg-white dark:bg-[#1A2332] border border-transparent 
-                  shadow-sm hover:shadow-md transition-all duration-300
-                  peer-checked:border-purple-400 peer-checked:border-[1.5px]
-                  relative overflow-hidden hover:scale-[1.02]">
-                <div class="p-3 rounded-full bg-gradient-to-br from-pink-400/50 via-red-400/50 to-orange-400/50 shadow-lg shadow-pink-300/40">
-                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">add_circle</span>
+            </label>
+            <!-- Option 4 -->
+            <label class="group relative cursor-pointer rounded-2xl">
+                <input class="peer sr-only" type="checkbox" />
+                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                      bg-white dark:bg-[#1A2332] border border-transparent
+                      shadow-sm hover:shadow-md transition-all duration-300
+                      peer-checked:border-indigo-400 peer-checked:border-[1.5px]
+                      relative overflow-hidden hover:scale-[1.02]">
+                    <div class="p-3 rounded-full bg-gradient-to-br from-indigo-400/50 via-blue-400/50 to-sky-400/50 shadow-lg shadow-indigo-300/40">
+                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">hub</span>
+                    </div>
+                    <div>
+                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                            Both
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">I want to do it all.</p>
+                    </div>
+                    <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined fill-1">check_circle</span>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                        Create gigs/projects
-                    </h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Post jobs and receive proposals.</p>
-                </div>
-                <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined fill-1">check_circle</span>
-                </div>
-            </div>
-        </label>
-
-        <!-- Option 3 -->
-        <label class="group relative cursor-pointer rounded-2xl">
-            <input class="peer sr-only" type="checkbox" />
-            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
-                  bg-white dark:bg-[#1A2332] border border-transparent 
-                  shadow-sm hover:shadow-md transition-all duration-300
-                  peer-checked:border-teal-400 peer-checked:border-[1.5px]
-                  relative overflow-hidden hover:scale-[1.02]">
-                <div class="p-3 rounded-full bg-gradient-to-br from-teal-400/50 via-green-400/50 to-lime-400/50 shadow-lg shadow-teal-300/40">
-                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">handshake</span>
-                </div>
-                <div>
-                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                        Collaborate
-                    </h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Join teams and manage projects.</p>
-                </div>
-                <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined fill-1">check_circle</span>
-                </div>
-            </div>
-        </label>
-
-        <!-- Option 4 -->
-        <label class="group relative cursor-pointer rounded-2xl">
-            <input class="peer sr-only" type="checkbox" />
-            <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl 
-                  bg-white dark:bg-[#1A2332] border border-transparent 
-                  shadow-sm hover:shadow-md transition-all duration-300
-                  peer-checked:border-indigo-400 peer-checked:border-[1.5px]
-                  relative overflow-hidden hover:scale-[1.02]">
-                <div class="p-3 rounded-full bg-gradient-to-br from-indigo-400/50 via-blue-400/50 to-sky-400/50 shadow-lg shadow-indigo-300/40">
-                    <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">hub</span>
-                </div>
-                <div>
-                    <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                        Both
-                    </h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">I want to do it all.</p>
-                </div>
-                <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined fill-1">check_circle</span>
-                </div>
-            </div>
-        </label>
-    </div>
-    
+            </label>
+        </div>
+    </div> 
 </div>
 <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 w-full mt-4 sm:my-5">
     <!-- Skip button -->

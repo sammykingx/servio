@@ -1,13 +1,11 @@
 from django.apps import apps
 from django.http import Http404
 from django.db import transaction, IntegrityError, OperationalError
-from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse, JsonResponse
 from django.db.models import Model, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
-from django.utils.safestring import mark_safe
 from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
 from core.url_names import CollaborationURLS

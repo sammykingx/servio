@@ -1,7 +1,8 @@
 {% extends "layouts/base-onboarding.html" %}
 {% block browser_title %}Account Setup{% endblock %}
 {% block content %}
-<div class="bg-card-light dark:bg-card-dark rounded-xl shadow-xl border border-[#e7ebf3] dark:border-gray-800 overflow-hidden">
+
+<div class="rounded-xl shadow-xl border border-[#e7ebf3] dark:border-gray-800 overflow-hidden">
 	<div class="relative p-8 md:p-12 text-center
 		border-b border-slate-200/70 dark:border-slate-800
 		bg-white/60 dark:bg-slate-900/50
@@ -143,18 +144,20 @@
 		bg-white/40 dark:bg-slate-900/40
 		backdrop-blur-sm">
 		<!-- Primary Action -->
-		<a href="{% url USER_ONBOARDING_URLS.PROFILE_SETUP %}" class="w-full sm:w-60
-			flex items-center justify-center gap-2.5
-			rounded-xl px-6 py-3.5
-			bg-brand-500 text-white
-			text-sm font-semibold
-			shadow-md shadow-brand-500/20
-			transition-all duration-200 ease-out
-			hover:bg-brand-500-hover
-			hover:shadow-lg hover:-translate-y-[1px]
-			active:translate-y-0 active:shadow-sm
-			focus:outline-none focus-visible:ring-2
-			focus-visible:ring-brand-500/40"
+		<button 
+			id="get-started-btn"
+			class="w-full sm:w-60
+				flex items-center justify-center gap-2.5
+				rounded-xl px-6 py-3.5
+				bg-brand-500 text-white
+				text-sm font-semibold
+				shadow-md shadow-brand-500/20
+				transition-all duration-200 ease-out
+				hover:bg-brand-500-hover
+				hover:shadow-lg hover:-translate-y-[1px]
+				active:translate-y-0 active:shadow-sm
+				focus:outline-none focus-visible:ring-2
+				focus-visible:ring-brand-500/40"
         >
             <span>Get started</span>
             <span class="material-symbols-outlined text-[18px]
@@ -162,15 +165,36 @@
                 group-hover:translate-x-0.5">
             arrow_forward
             </span>
-		</a>
+		</button>
 		<!-- Supporting Meta -->
 		<div class="flex items-center gap-2 text-xs
 			text-slate-500 dark:text-slate-400">
-			<span class="material-symbols-outlined text-[16px] opacity-80">
+			<span class="material-symbols-outlined text-[13px] opacity-80">
 			timer
 			</span>
 			<span>About 2 minutes to complete</span>
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block custom_page_js %}
+<script>
+	document.getElementById("get-started-btn").addEventListener("click", async () => {
+		const response = await fetch("", {
+			method: "POST",
+			headers: {
+				"X-CSRFToken": "{{ csrf_token }}",
+				"Accept": "application/json",
+			},
+		});
+
+		if (!response.ok) return;
+
+		const data = await response.json();
+
+		if (data.redirect_url) {
+			window.location.href = data.redirect_url;
+		}
+	});
+</script>
 {% endblock %}

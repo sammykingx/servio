@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.apps import apps
 from django.urls import reverse_lazy
 from accounts.models.profile import UserRole
-from core.url_names import OnboardingURLS
+from core.url_names import AuthURLNames, OnboardingURLS
 
 
 def resolve_onboarding_manager(user):
@@ -30,16 +30,33 @@ class UserOnboardingManager:
         self.user = user
         
     def is_complete(self) -> bool:
-        if not self.user.onboarding_completed:
-            return False
-            
-        # self.user.completed_onboarding = True
-        # self.user.save(update_fields=["onboarding_completed"])
-        
-        return True
+        return self.user.completed_onboarding
     
-    def next_step(self) -> str:
+    def next_step_url(self) -> str:
+        if self.user.completed_onboarding:
+            return reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD)
+        
         return reverse_lazy(self.steps.get(self.user.onboarding_step, 0))
+    
+    def should_advance(self) -> bool:
+        if self.user.onboarding_step < len(self.steps):
+            return True
+        return False
+    
+    def advance_user(self) -> None:
+        if self.should_advance:
+            self.user.onboarding_step +=1
+            self.user.save(update_fields=["onboarding_step"])
+            
+        else:
+            if self.user.completed_onboarding:
+                return reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD)
+                
+            self.user.onboarding_completed = True
+            self.user.save(update_fields=["onboarding_completed"])
+            
+        
+        return self.next_step_url()
     
     
 class ProviderOnboardingManager:

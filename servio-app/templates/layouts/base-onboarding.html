@@ -20,7 +20,7 @@
 	</head>
 	<body class="px-2 md:px-4 py-5 mb-3 bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col antialiased selection:bg-brand-500/20 selection:text-brand-500">
 		<header class="sticky top-0 z-50 backdrop-blur-md
-			bg-white/70 dark:bg-slate-900/70
+			bg-transparent dark:bg-slate-900/70
 			border-b border-slate-200/70 dark:border-slate-800
 			transition-all duration-300">
 			<div class="flex h-14 items-center justify-between px-6">
@@ -51,7 +51,30 @@
 			</div>
 		</header>
 		<main class="flex-grow flex flex-col items-center justify-center py-8 px-3 sm:px-5">
+			<div 
+				id="center-alert-container" 
+				class="fixed top-4 left-1/2 -translate-x-1/2 z-999999
+					w-full max-w-md px-4 space-y-3 pointer-events-none">
+			</div>
 			<div class="w-full max-w-[900px] flex flex-col gap-4">
+				<!-- Ambient Gradient Background -->
+				<div class="fixed inset-0 -z-10 overflow-hidden">
+					<!-- Blob 1 -->
+					<div class="absolute -top-40 -left-40 w-[500px] h-[500px] 
+							bg-gradient-to-br from-purple-500/30 via-indigo-400/20 to-blue-400/20
+							rounded-full blur-3xl animate-float-slow"></div>
+
+					<!-- Blob 2 -->
+					<div class="absolute top-1/3 -right-40 w-[500px] h-[500px] 
+							bg-gradient-to-br from-pink-400/25 via-red-400/20 to-orange-300/20
+							rounded-full blur-3xl animate-float"></div>
+
+					<!-- Blob 3 -->
+					<div class="absolute bottom-0 left-1/3 w-[450px] h-[450px] 
+							bg-gradient-to-br from-teal-400/25 via-green-400/20 to-lime-300/20
+							rounded-full blur-3xl animate-float-reverse"></div>
+				</div>
+
 				{% block content %}{% endblock %}
 				<div class="mt-4 px-6 py-6 rounded-xl
 					bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50
@@ -61,7 +84,7 @@
 					border-t border-slate-200/50 dark:border-slate-700/50">
 					<!-- Support / Info -->
 					<p class="text-xs text-slate-600 dark:text-slate-400 text-center sm:text-left">
-						Need help? Reach out anytime for support or tips on getting started.
+						Need help? Reach out anytime for support.
 					</p>
 					<!-- Links -->
 					<div class="flex items-center gap-4">
@@ -86,5 +109,8 @@
 			</div>
 		</main>
 	</body>
+	<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
+	<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
+	<script src="{% static 'js/center-alert.js' %}"></script>
     {% block custom_page_js %}{% endblock %}
 </html>
