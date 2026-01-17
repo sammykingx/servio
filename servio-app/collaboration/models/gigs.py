@@ -88,7 +88,7 @@ class Gig(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "collaboration_gigs"
+        db_table = "gigs_and_projects"
         verbose_name = "Collaboration/Gigs"
         ordering = ["-created_at"]
         indexes = [

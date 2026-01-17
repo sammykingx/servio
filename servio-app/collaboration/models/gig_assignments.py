@@ -66,7 +66,7 @@ class GigAssignment(models.Model):
     )
 
     class Meta:
-        db_table = "collaboration_gig_assignments"
+        db_table = "gig_assignments"
         verbose_name = "Gig Assignment"
         verbose_name_plural = "Gig Assignments"
         ordering = ["-created_at"]

@@ -58,7 +58,7 @@ class GigRole(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
-        db_table = "collaboration_gig_roles"
+        db_table = "gig_roles"
         verbose_name = "Gig Role"
         verbose_name_plural = "Gig Roles"
         indexes = [

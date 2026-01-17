@@ -63,7 +63,7 @@ class GigApplication(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "collaboration_gig_applications"
+        db_table = "gig_applications"
         verbose_name = "Gig Application"
         verbose_name_plural = "Gig Applications"
         ordering = ["-created_at"]

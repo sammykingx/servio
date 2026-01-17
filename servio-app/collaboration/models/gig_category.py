@@ -49,6 +49,7 @@ class GigCategory(models.Model):
         indexes = [
             models.Index(fields=["slug"]),
             models.Index(fields=["is_active"]),
+            models.Index(fields=["parent"]),
         ]
 
     def __str__(self):
