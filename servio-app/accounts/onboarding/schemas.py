@@ -1,7 +1,7 @@
 # schemas used for onboarding flows
 
 from pydantic import BaseModel, Field, field_validator
-from typing import Optional
+from typing import Optional, List
 from enum import Enum
 import html, re
 
@@ -56,12 +56,21 @@ class ExperienceLevel(str, Enum):
     THREE_TO_FIVE = "3-5"
     FIVE_TO_TEN = "5-10"
     TEN_PLUS = "10+"
-    
-class IndustryPayload(BaseModel):
+ 
+class IdName(BaseModel):
     id: int
     name: str
-    ecperience_level: str
+
+class OnboardingStepTwoPayload(BaseModel):
+    industry: IdName
+    experience_level: ExperienceLevel
     bio: str = Field(..., max_length=400)
-    
-class NichePayload(BaseModel):
-    i
+    niches: List[IdName]
+
+    @field_validator("bio", mode="after")
+    @classmethod
+    def validate_bio(cls, value:str):
+        value = sanitize_text(value).strip()
+        if len(value.split()) > 30:
+            raise ValueError("Bio should not be more than 30 words")
+        return value

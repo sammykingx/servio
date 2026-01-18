@@ -43,10 +43,13 @@
     <div class="relative backdrop-blur-xl bg-white/70 dark:bg-[#0f172a]/70 
             border border-white/30 dark:border-slate-700/40
             rounded-3xl p-8 shadow-2xl shadow-brand-500/10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl relative z-10">
+        <div x-data="intentForm()" class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl relative z-10">
             <!-- Option 1 -->
             <label class="group relative cursor-pointer rounded-2xl">
-                <input checked class="peer sr-only" type="checkbox" />
+                <input
+                    @change="toggleIntent('book-services')"
+                    :checked="isSelected('book-services')"
+                    checked class="peer sr-only" type="checkbox" />
                 <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
                       bg-white dark:bg-[#1A2332] border border-transparent
                       shadow-sm hover:shadow-md transition-all duration-300
@@ -69,7 +72,12 @@
             </label>
             <!-- Option 2 -->
             <label class="group relative cursor-pointer rounded-2xl">
-                <input class="peer sr-only" type="checkbox" />
+                <input 
+                    class="peer sr-only" 
+                    type="checkbox"
+                    @change="toggleIntent('create-gigs')"
+                    :checked="isSelected('create-gigs')"
+                />
                 <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
                       bg-white dark:bg-[#1A2332] border border-transparent
                       shadow-sm hover:shadow-md transition-all duration-300
@@ -91,7 +99,12 @@
             </label>
             <!-- Option 3 -->
             <label class="group relative cursor-pointer rounded-2xl">
-                <input class="peer sr-only" type="checkbox" />
+                <input 
+                    class="peer sr-only" 
+                    type="checkbox"
+                    @change="toggleIntent('collaborate')"
+                    :checked="isSelected('collaborate')"
+                />
                 <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
                       bg-white dark:bg-[#1A2332] border border-transparent
                       shadow-sm hover:shadow-md transition-all duration-300
@@ -113,7 +126,12 @@
             </label>
             <!-- Option 4 -->
             <label class="group relative cursor-pointer rounded-2xl">
-                <input class="peer sr-only" type="checkbox" />
+                <input 
+                    class="peer sr-only" 
+                    type="checkbox"
+                    @change="toggleAll()"
+                    :checked="selectedIntents.length === intents.length"
+                />
                 <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
                       bg-white dark:bg-[#1A2332] border border-transparent
                       shadow-sm hover:shadow-md transition-all duration-300
@@ -187,5 +205,56 @@
             progressText.textContent = width + '% Complete';
         }
     }, 7); // adjust speed
+</script>
+<script>
+    function intentForm() {
+    return {
+        intents: [
+            {
+                key: "book-services",
+                label: "Book professional services"
+            },
+            {
+                key: "create-gigs",
+                label: "Create gigs/projects"
+            },
+            {
+                key: "collaborate",
+                label: "Collaborate"
+            }
+        ],
+
+        selectedIntents: [],
+
+        toggleIntent(key) {
+            if (this.selectedIntents.includes(key)) {
+                this.selectedIntents =
+                    this.selectedIntents.filter(i => i !== key);
+                return;
+            }
+
+            this.selectedIntents.push(key);
+        },
+
+        toggleAll() {
+            if (this.selectedIntents.length === this.intents.length) {
+                this.selectedIntents = [];
+            } else {
+                this.selectedIntents =
+                    this.intents.map(i => i.key);
+            }
+        },
+
+        isSelected(key) {
+            return this.selectedIntents.includes(key);
+        },
+
+        buildPayload() {
+            return {
+                intents: this.selectedIntents
+            };
+        }
+    }
+}
 </script>
 {% endblock %}

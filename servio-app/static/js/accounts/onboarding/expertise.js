@@ -76,7 +76,6 @@ function expertiseForm() {
 
         async submit() {
             const payload = this.buildPayload();
-            console.log(JSON.stringify(payload, null, 2));
 
             if (!payload.industry.id) {
                 showToast("Please select an industry", "error");
@@ -112,7 +111,8 @@ function expertiseForm() {
                 if (!response.ok) {
                     showToast(
                         data.message || "Unable to save expertise",
-                        "error"
+                        "error",
+                        data.error || "Operation Error"
                     );
                     return;
                 }
