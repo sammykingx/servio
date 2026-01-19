@@ -1,20 +1,24 @@
 {% load static %}
 <header
 	x-data="{menuToggle: false}"
-	class="sticky top-0 z-99 flex w-full border-gray-200 bg-white xl:border-b dark:border-gray-800 dark:bg-gray-900"
-	>
+	class="sticky top-0 z-99 w-full backdrop-blur-2xl
+		bg-gradient-to-br from-white/70 via-brand-50/60 to-brand-50/40
+		dark:from-gray-900/70 dark:via-gray-900/60 dark:to-brand-950/40
+		
+		shadow-xl shadow-black/5"
+>
 	<div
-		class="flex grow flex-col items-center justify-between xl:flex-row xl:px-6"
-		>
+		class="flex grow flex-col items-center justify-between xl:flex-row xl:px-6 px-2 sm:px-4"
+	>
 		<div
 			class="flex w-full items-center justify-between gap-2 border-b border-gray-200 px-3 py-3 sm:gap-4 lg:py-4 xl:justify-normal xl:border-b-0 xl:px-0 dark:border-gray-800"
-			>
+		>
 			<!-- Hamburger Toggle BTN -->
 			<button
 				:class="sidebarToggle ? 'xl:bg-transparent dark:xl:bg-transparent bg-gray-100 dark:bg-gray-800' : ''"
-				class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg border-gray-200 text-gray-500 xl:h-11 xl:w-11 xl:border dark:border-gray-800 dark:text-gray-400"
+				class="flex h-10 w-10 items-center justify-center rounded-lg border-gray-200 text-gray-500 xl:h-11 xl:w-11 xl:border dark:border-gray-800 dark:text-gray-400"
 				@click.stop="sidebarToggle = !sidebarToggle"
-				>
+			>
 				<svg
 					class="hidden fill-current xl:block"
 					width="16"
@@ -78,7 +82,7 @@
 				<div x-data="{isModalOpen: false}">
 					<!-- Create Button -->
 					<button
-						class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-800"
+						class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 dark:text-gray-500 bg-gray-white dark:bg-gray-800 z-0"
 						aria-pressed="false"
 						title="Create Gig"
 						@click="isModalOpen = !isModalOpen"
@@ -105,7 +109,7 @@
 					</button>
 					<div
 						x-show="isModalOpen"
-						class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999"
+						class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-999"
 						>
 						<div
 							class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"

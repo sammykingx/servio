@@ -1,24 +1,21 @@
 <section class="flex-grow flex flex-col items-center justify-center p-3 relative">
     <!-- Background Decor -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-brand-500/5 rounded-full blur-3xl opacity-50"></div>
-        <div class="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-purple-500/5 rounded-full blur-3xl opacity-50"></div>
-    </div>
-    <div class="w-full max-w-4xl flex flex-col items-center z-10 animate-fade-in-up">
+    
+    <div class="w-full max-w-4xl flex flex-col items-center animate-fade-in-up">
         <!-- Hero Illustration -->
         <div class="mb-8 relative group">
             <div class="w-64 h-48 md:w-80 md:h-56 bg-gradient-to-tr from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-soft border border-white/50 dark:border-slate-700">
                 <!-- Abstract geometric pattern representing collaboration -->
                 <div class="absolute inset-0 opacity-20 dark:opacity-10" style="background-image: radial-gradient(#135bec 1px, transparent 1px); background-size: 16px 16px;"></div>
-                <div class="relative z-10 flex flex-col items-center gap-3">
+                <div class="relative flex flex-col items-center gap-3">
                     <div class="flex -space-x-4">
-                        <div class="size-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm z-20">
+                        <div class="size-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm">
                             <span class="material-symbols-outlined text-brand-500 text-sm">person</span>
                         </div>
-                        <div class="size-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm z-10">
+                        <div class="size-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm">
                             <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-sm">handshake</span>
                         </div>
-                        <div class="size-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm z-0">
+                        <div class="size-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm">
                             <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-sm">check</span>
                         </div>
                     </div>
@@ -80,13 +77,22 @@
         <div class="mt-12 flex items-center gap-2">
             <a class="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
                 <span class="material-symbols-outlined text-[20px]">help</span>
-                How Servio works
+                How it works
             </a>
             <span class="text-slate-300 dark:text-slate-700">•</span>
-            <a class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
-                <span class="material-symbols-outlined text-[20px]">person_outline</span>
-                Complete Profile (20%)
-            </a>
+            {% if user.completed_onboarding %}
+                <a class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+                    <span class="material-symbols-outlined text-[20px]">person_outline</span>
+                    Completed (100%)
+                </a>
+            {% else %}
+                <a 
+                    href="{% url USER_ONBOARDING_URLS.WELCOME %}"
+                    class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+                    <span class="material-symbols-outlined text-[20px]">person_outline</span>
+                    Complete Profile <span>{% widthratio user.onboarding_step 4 100 %}%</span>
+                </a>
+            {% endif %}
         </div>
     </div>
 </section>

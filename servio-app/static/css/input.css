@@ -718,6 +718,25 @@ span.flatpickr-weekday,
   50% { transform: translateY(-25px) translateX(20px); }
 }
 
+@keyframes pulseSlow {
+  0%, 100% { opacity: .5; transform: scale(1); }
+  50% { opacity: .8; transform: scale(1.05); }
+}
+
+@keyframes pulseSlower {
+  0%, 100% { opacity: .4; transform: scale(1); }
+  50% { opacity: .7; transform: scale(1.08); }
+}
+
+@keyframes pulseSlowest {
+  0%, 100% { opacity: .3; transform: scale(1); }
+  50% { opacity: .6; transform: scale(1.1); }
+}
+
+.animate-pulse-slow { animation: pulseSlow 14s ease-in-out infinite; }
+.animate-pulse-slower { animation: pulseSlower 18s ease-in-out infinite; }
+.animate-pulse-slowest { animation: pulseSlowest 22s ease-in-out infinite; }
+
 .animate-float {
   animation: float 18s ease-in-out infinite;
 }

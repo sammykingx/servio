@@ -24,6 +24,10 @@ function expertiseForm() {
             }
             this.experience = "0-2";
             this.bioWordCount = this.countWords(this.bio || "")
+
+            this.$watch("industryId", () => {
+            this.selectedNiches = [];
+    });
         },
 
         get industry() {
@@ -78,17 +82,17 @@ function expertiseForm() {
             const payload = this.buildPayload();
 
             if (!payload.industry.id) {
-                showToast("Please select an industry", "error");
+                showToast("Please select an industry from the dropdown", "warning", "Industry Required");
                 return;
             }
 
             if (!payload.niches.length) {
-                showToast("Select at least one niche", "error");
+                showToast("Select at least one niche to proceed", "warning", "Niche Required");
                 return;
             }
 
             if (!payload.bio) {
-                showToast("Professional bio is required", "error");
+                showToast("Professional bio is required to procee", "warning", "Bio required");
                 return;
             }
 

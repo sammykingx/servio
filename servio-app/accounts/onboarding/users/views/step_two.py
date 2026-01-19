@@ -9,7 +9,6 @@ from accounts.onboarding.exception import OnboardingError
 from accounts.onboarding.manager import UserOnboardingManager
 from accounts.onboarding.schemas import OnboardingStepTwoPayload
 from accounts.onboarding.users.mixins import OnboardingStepMixin
-from formatters.pydantic_formatter import format_pydantic_errors
 from template_map.accounts import Accounts
 import json
 

@@ -12,5 +12,5 @@ EMAIL_HOST_USER = config("EMAIL_USERNAME")
 EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
 
 DEFAULT_FROM_EMAIL = config(
-    "EMAIL_USERNAME", default="noreply@servio.com"
+    "EMAIL_USERNAME", default="no-reply@servio.com"
 )

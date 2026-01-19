@@ -37,22 +37,40 @@
 		darkMode = JSON.parse(localStorage.getItem('darkMode'));
 		$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
 		:class="{'dark bg-gray-900': darkMode === true}"
-		>
+	>
+		<!-- Ambient Background -->
+		<div class="fixed inset-0 -z-10 overflow-hidden">
+			<div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full 
+				bg-brand-500/20 blur-3xl animate-pulse-slow"></div>
+
+			<div class="absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full 
+				bg-indigo-500/10 blur-3xl animate-pulse-slower"></div>
+
+			<div class="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full 
+				bg-purple-500/10 blur-3xl animate-pulse-slowest"></div>
+		</div>
+
 		<!-- ===== Preloader Start ===== -->
 		{% include "components/preloader.html" %}
 		<!-- ===== Page Wrapper Start ===== -->
-		<div class="flex h-screen overflow-hidden">
+		<!-- <div class="flex h-screen overflow-hidden"> -->
+		<div class="flex h-screen overflow-hidden shadow-2xl shadow-black/5">
+
 			{% include "partials/sidebar/base-menu.html" %}
 			<!-- ===== Content Area Start ===== -->
-			<div
+			<!-- <div
 				class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto"
-				>
+			> -->
+			<div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto
+    			backdrop-blur-xl bg-white/70 dark:bg-gray-900/70"
+			>
+
 				<!-- Small Device Overlay Start -->
 				{% include "components/overlay.html" %}
 				<!-- ===== Header Start ===== -->
 				{% include "partials/header.html" %}
 				<!-- ===== Main Content Start ===== -->
-				<main hx-headers='{"x-csrftoken": "{{ csrf_token }}"}'>
+				<main hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' x-transition.opacity.duration.400ms>
 					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
 						<div 
 							id="center-alert-container" 
