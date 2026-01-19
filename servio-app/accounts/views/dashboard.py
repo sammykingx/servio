@@ -20,14 +20,29 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             UserRole.STAFF: Accounts.Dashboards.STAFFS,
         }
 
-        if user.is_verified is False:
-            messages.warning(
-                self.request,
-                "Please verify your email to access all features.",
-                extra_tags="Email Not Verified",
-            )
+        # if user.is_verified is False:
+        #     messages.warning(
+        #         self.request,
+        #         "Please verify your email to access all features.",
+        #         extra_tags="Email Not Verified",
+        #     )
         # Return template based on role, fallback to default
         return [template_map.get(role, self.template_name)]
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["dashboard"] = True
+
+        user = self.request.user
+
+        if not user.is_verified:
+            context["toast"] = {
+                "message": "Please verify your email to access all features.",
+                "type": "warning",
+                "title": "Email Not Verified",
+            }
+
+        return context
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):

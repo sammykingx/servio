@@ -287,10 +287,22 @@
 	<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
 	<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
 	<script src="{% static 'js/center-alert.js' %}"></script>
+	{% if toast %}
+		{{ toast|json_script:"toast-data" }}
+	{% endif %}
+
 	<script>
 		// Auto-update year dynamically
 		// document.getElementById("year").textContent = new Date().getFullYear();
+		document.addEventListener("DOMContentLoaded", () => {
+			const el = document.getElementById("toast-data");
+			if (!el) return;
+
+			const toast = JSON.parse(el.textContent);
+			showToast(toast.message, toast.type, toast.title);
+		})
 	</script>
+
 	{% block custom_page_js %}{% endblock %}
 	<!-- <script defer src="{% static 'js/vendors/alpine-persist.min.js' %}"></script> -->
 </html>
