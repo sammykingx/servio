@@ -1,36 +1,51 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 
-class OnboardingIntent(models.Model):
+ONBOARDING_INTENT_CHOICES = {
+    "book_services",
+    "create_gigs",
+    "collaborate",
+}
+
+def validate_onboarding_intents(value):
     """
-    Canonical list of onboarding intents.
+    Ensures:
+    - value is a list
+    - values are strings
+    - values are allowed
     """
-    key = models.SlugField(unique=True)
-    label = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
+    if not isinstance(value, list):
+        raise ValidationError("Intent must be a list.")
 
-    class Meta:
-        db_table = "onboarding_intents"
+    invalid = [
+        v for v in value
+        if not isinstance(v, str) or v not in ONBOARDING_INTENT_CHOICES
+    ]
 
-    def __str__(self):
-        return self.label
-
-
+    if invalid:
+        raise ValidationError(
+            f"Invalid onboarding intents: {invalid}"
+        )
+        
 class UserOnboardingIntent(models.Model):
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
+        to_field="email",
         on_delete=models.CASCADE,
         related_name="onboarding_intents"
     )
-    intent = models.ForeignKey(
-        OnboardingIntent,
-        on_delete=models.CASCADE
+    intents = models.JSONField(
+        validators=[validate_onboarding_intents],
+        help_text="Validated onboarding intent payload"
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("user", "intent")
         db_table = "user_onboarding_intents"
+    
+    def save(self, *args, **kwargs):
+        self.full_clean()  # ALWAYS validate
+        super().save(*args, **kwargs)
 

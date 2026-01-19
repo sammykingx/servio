@@ -121,6 +121,7 @@ function expertiseForm() {
                     window.location.assign(data.redirect_url);
                 }
             } catch (err) {
+                console.log(err);
                 showToast("Network error, try again", "error");
             } finally {
                 this.submitting = false;

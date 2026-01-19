@@ -74,7 +74,6 @@ class ExpertiseView(LoginRequiredMixin, OnboardingStepMixin, TemplateView):
                 {
                     "error": "Validation error",
                     "message": "Some required information is missing or invalid.",
-                    "fields": format_pydantic_errors(e),
                 },
                 status=400,
             )

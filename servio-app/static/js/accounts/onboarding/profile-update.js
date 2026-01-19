@@ -34,7 +34,6 @@ function onboardingProfile() {
             try {
                 this.submitting = true;
                 const response = await sendProfileData(normalizedData);
-                console.log(response);
                 if (!response.ok) {
                     // Server returned a non-2xx response
                     const data = await response.json().catch(() => ({}));
@@ -47,7 +46,6 @@ function onboardingProfile() {
                     return;
                 }
                 const data = await response.json();
-                console.log(data);
                 if (data.redirect_url) {
                     window.location.assign(data.redirect_url);
                 }

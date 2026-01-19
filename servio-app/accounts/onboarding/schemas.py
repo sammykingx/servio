@@ -17,10 +17,10 @@ def sanitize_text(value: str) -> str:
 class AddressPayload(BaseModel):
     street: str = Field(..., min_length=5, max_length=120)
     street_line_two: Optional[str] = Field(default=None, max_length=100)
-    city: str = Field(..., min_length=3, max_length=80)
-    state: str = Field(..., min_length=3, max_length=80)
-    postal_code: str
-    country: str
+    city: str = Field(..., min_length=3, max_length=18)
+    state: str = Field(..., min_length=3, max_length=18)
+    postal_code: str = Field(..., min_length=3, max_length=7)
+    country: str = Field(..., min_length=3, max_length=25)
     
     @field_validator(
         "street",
@@ -74,3 +74,12 @@ class OnboardingStepTwoPayload(BaseModel):
         if len(value.split()) > 30:
             raise ValueError("Bio should not be more than 30 words")
         return value
+
+
+class OnboardingIntentOptions(str, Enum):
+    BOOK_SERVICES = "book_services"
+    CREATE_GIGS = "create_gigs"
+    COLLABORATE = "collaborate"
+    
+class OnboardingIntents(BaseModel):
+    intents: List[OnboardingIntentOptions]

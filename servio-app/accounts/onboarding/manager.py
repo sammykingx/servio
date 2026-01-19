@@ -17,13 +17,13 @@ def resolve_onboarding_manager(user):
 
 class UserOnboardingManager:
     model = get_user_model()
-    total_steps = 4
+    total_steps = 3
+    success_url = reverse_lazy("".join([OnboardingURLS.Users.APP_NAME, ":", OnboardingURLS.Users.COMPLETE]))
     steps = {
         0: "".join([OnboardingURLS.Users.APP_NAME, ":", OnboardingURLS.Users.WELCOME]),
         1: "".join([OnboardingURLS.Users.APP_NAME, ":", OnboardingURLS.Users.PROFILE_SETUP]),
         2: "".join([OnboardingURLS.Users.APP_NAME, ":", OnboardingURLS.Users.EXPERTISE_AND_NICHE]),
-        3: "".join([OnboardingURLS.Users.APP_NAME, ":",OnboardingURLS.Users.OBJECTIVES]),
-        4: "".join([OnboardingURLS.Users.APP_NAME, ":",OnboardingURLS.Users.COMPLETE]),
+        3: "".join([OnboardingURLS.Users.APP_NAME, ":", OnboardingURLS.Users.OBJECTIVES]),
     }
         
     def __init__(self, user):
@@ -39,25 +39,26 @@ class UserOnboardingManager:
     def next_step_url(self) -> str:
         if self.user.completed_onboarding:
             return reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD)
-        
-        return reverse_lazy(self.steps.get(self.user.onboarding_step, 0))
+        url = reverse_lazy(self.steps.get(self.user.onboarding_step, self.steps[0]))
+        return url
     
     def should_advance(self) -> bool:
-        if self.user.onboarding_step < len(self.steps):
+        if self.user.onboarding_step < self.total_steps:
             return True
         return False
     
     def advance_user(self) -> None:
-        if self.should_advance:
+        if self.should_advance():
             self.user.onboarding_step +=1
             self.user.save(update_fields=["onboarding_step"])
             
         else:
             if self.user.completed_onboarding:
                 return reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD)
-                
+            
             self.user.onboarding_completed = True
             self.user.save(update_fields=["onboarding_completed"])
+            return self.success_url
             
         
         return self.next_step_url()

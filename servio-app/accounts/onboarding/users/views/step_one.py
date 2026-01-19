@@ -48,7 +48,6 @@ class PersonalInfoView(LoginRequiredMixin, OnboardingStepMixin, TemplateView):
                 {
                     "error": "Validation error",
                     "message": "Some required information is missing or invalid.",
-                    "fields": format_pydantic_errors(e),
                 },
                 status=400,
             )
@@ -57,7 +56,7 @@ class PersonalInfoView(LoginRequiredMixin, OnboardingStepMixin, TemplateView):
             return JsonResponse(
                 {
                     "error": "Operation error",
-                    "message": "Action already in progress, please try again in a moment.",
+                    "message": "Check your data and try again",
                 },
                 status=400,
             )

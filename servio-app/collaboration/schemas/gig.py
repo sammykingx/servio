@@ -10,7 +10,6 @@ class VisibilityEnum(str, Enum):
     public = "public"
     private = "private"
 
-
 class GigPayload(BaseModel):
     title: str = Field(..., max_length=320)
     description: str = Field(..., max_length=3000)

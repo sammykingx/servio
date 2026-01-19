@@ -1,4 +1,5 @@
 {% extends "layouts/base-onboarding.html" %}
+{% load static %}
 {% block browser_title %}Objectives{% endblock %}
 {% block content %}
 
@@ -39,154 +40,164 @@
 
 </div>
 
-<div class="flex justify-center w-full mb-3">
-    <div class="relative backdrop-blur-xl bg-white/70 dark:bg-[#0f172a]/70 
-            border border-white/30 dark:border-slate-700/40
-            rounded-3xl p-8 shadow-2xl shadow-brand-500/10">
-        <div x-data="intentForm()" class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl relative z-10">
-            <!-- Option 1 -->
-            <label class="group relative cursor-pointer rounded-2xl">
-                <input
-                    @change="toggleIntent('book-services')"
-                    :checked="isSelected('book-services')"
-                    checked class="peer sr-only" type="checkbox" />
-                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
-                      bg-white dark:bg-[#1A2332] border border-transparent
-                      shadow-sm hover:shadow-md transition-all duration-300
-                      peer-checked:border-brand-500 peer-checked:border-[1.5px]
-                      relative overflow-hidden hover:scale-[1.02]">
-                    <!-- Icon badge -->
-                    <div class="p-3 rounded-full bg-gradient-to-br from-purple-400/50 via-indigo-400/50 to-blue-400/50 shadow-lg shadow-purple-300/40">
-                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">person_search</span>
-                    </div>
-                    <div>
-                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                            Book professional services
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Find experts for your needs.</p>
-                    </div>
-                    <div class="absolute top-4 right-4 text-brand-500 opacity-100 transition-opacity">
-                        <span class="material-symbols-outlined fill-1">check_circle</span>
-                    </div>
-                </div>
-            </label>
-            <!-- Option 2 -->
-            <label class="group relative cursor-pointer rounded-2xl">
-                <input 
-                    class="peer sr-only" 
-                    type="checkbox"
-                    @change="toggleIntent('create-gigs')"
-                    :checked="isSelected('create-gigs')"
-                />
-                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
-                      bg-white dark:bg-[#1A2332] border border-transparent
-                      shadow-sm hover:shadow-md transition-all duration-300
-                      peer-checked:border-purple-400 peer-checked:border-[1.5px]
-                      relative overflow-hidden hover:scale-[1.02]">
-                    <div class="p-3 rounded-full bg-gradient-to-br from-pink-400/50 via-red-400/50 to-orange-400/50 shadow-lg shadow-pink-300/40">
-                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">add_circle</span>
-                    </div>
-                    <div>
-                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                            Create gigs/projects
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Post jobs and receive proposals.</p>
-                    </div>
-                    <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
-                        <span class="material-symbols-outlined fill-1">check_circle</span>
-                    </div>
-                </div>
-            </label>
-            <!-- Option 3 -->
-            <label class="group relative cursor-pointer rounded-2xl">
-                <input 
-                    class="peer sr-only" 
-                    type="checkbox"
-                    @change="toggleIntent('collaborate')"
-                    :checked="isSelected('collaborate')"
-                />
-                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
-                      bg-white dark:bg-[#1A2332] border border-transparent
-                      shadow-sm hover:shadow-md transition-all duration-300
-                      peer-checked:border-teal-400 peer-checked:border-[1.5px]
-                      relative overflow-hidden hover:scale-[1.02]">
-                    <div class="p-3 rounded-full bg-gradient-to-br from-teal-400/50 via-green-400/50 to-lime-400/50 shadow-lg shadow-teal-300/40">
-                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">handshake</span>
-                    </div>
-                    <div>
-                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                            Collaborate
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Join teams and manage projects.</p>
-                    </div>
-                    <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
-                        <span class="material-symbols-outlined fill-1">check_circle</span>
-                    </div>
-                </div>
-            </label>
-            <!-- Option 4 -->
-            <label class="group relative cursor-pointer rounded-2xl">
-                <input 
-                    class="peer sr-only" 
-                    type="checkbox"
-                    @change="toggleAll()"
-                    :checked="selectedIntents.length === intents.length"
-                />
-                <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
-                      bg-white dark:bg-[#1A2332] border border-transparent
-                      shadow-sm hover:shadow-md transition-all duration-300
-                      peer-checked:border-indigo-400 peer-checked:border-[1.5px]
-                      relative overflow-hidden hover:scale-[1.02]">
-                    <div class="p-3 rounded-full bg-gradient-to-br from-indigo-400/50 via-blue-400/50 to-sky-400/50 shadow-lg shadow-indigo-300/40">
-                        <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">hub</span>
-                    </div>
-                    <div>
-                        <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
-                            Both
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">I want to do it all.</p>
-                    </div>
-                    <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
-                        <span class="material-symbols-outlined fill-1">check_circle</span>
-                    </div>
-                </div>
-            </label>
-        </div>
-    </div> 
-</div>
-<div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 w-full mt-4 sm:my-5">
-    <!-- Skip button -->
-    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white 
-        text-sm font-semibold py-3 px-6 rounded-xl 
-        border border-gray-200 dark:border-gray-700 
-        hover:bg-gray-100 dark:hover:bg-gray-800
-        transition-all duration-300 ease-in-out"
-    >
-        Skip for now
-    </button>
-
-    <!-- Continue button -->
-    <a
-        href="{% url USER_ONBOARDING_URLS.COMPLETE %}"
-        class="flex items-center justify-center gap-2
-            bg-brand-500 hover:bg-brand-400
-            text-white text-base font-semibold h-12 px-8 rounded-xl
-            shadow-lg shadow-purple-400/30
-            transition-all transform duration-300
-            hover:scale-[1.03] active:scale-[0.97]
-            relative overflow-hidden"
+<div x-data="intentForm()" data-complete-url="{% url USER_ONBOARDING_URLS.COMPLETE %}">
+    <div class="flex justify-center w-full mb-3">
+        <div class="relative backdrop-blur-xl bg-white/70 dark:bg-[#0f172a]/70
+                border border-white/30 dark:border-slate-700/40
+                rounded-3xl p-8 shadow-2xl shadow-brand-500/10"
         >
-        <span>Continue</span>
-        <span class="material-symbols-outlined text-sm font-semibold transition-transform duration-300 group-hover:translate-x-1">
-            arrow_forward
-        </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl relative z-10">
+                {% csrf_token %}
+                <!-- Option 1 -->
+                <label class="group relative cursor-pointer rounded-2xl">
+                    <input
+                        @change="toggleIntent('book_services')"
+                        :checked="isSelected('book_services')"
+                        checked class="peer sr-only" type="checkbox" />
+                    <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                          bg-white dark:bg-[#1A2332] border border-transparent
+                          shadow-sm hover:shadow-md transition-all duration-300
+                          peer-checked:border-brand-500 peer-checked:border-[1.5px]
+                          relative overflow-hidden hover:scale-[1.02]">
+                        <!-- Icon badge -->
+                        <div class="p-3 rounded-full bg-gradient-to-br from-purple-400/50 via-indigo-400/50 to-blue-400/50 shadow-lg shadow-purple-300/40">
+                            <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">person_search</span>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                                Book professional services
+                            </h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Find experts for your needs.</p>
+                        </div>
+                        <div class="absolute top-4 right-4 text-brand-500 opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined fill-1">check_circle</span>
+                        </div>
+                    </div>
+                </label>
+                <!-- Option 2 -->
+                <label class="group relative cursor-pointer rounded-2xl">
+                    <input
+                        class="peer sr-only"
+                        type="checkbox"
+                        @change="toggleIntent('create_gigs')"
+                        :checked="isSelected('create_gigs')"
+                    />
+                    <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                          bg-white dark:bg-[#1A2332] border border-transparent
+                          shadow-sm hover:shadow-md transition-all duration-300
+                          peer-checked:border-purple-400 peer-checked:border-[1.5px]
+                          relative overflow-hidden hover:scale-[1.02]">
+                        <div class="p-3 rounded-full bg-gradient-to-br from-pink-400/50 via-red-400/50 to-orange-400/50 shadow-lg shadow-pink-300/40">
+                            <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">add_circle</span>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                                Create gigs/projects
+                            </h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Post jobs and receive proposals.</p>
+                        </div>
+                        <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined fill-1">check_circle</span>
+                        </div>
+                    </div>
+                </label>
+                <!-- Option 3 -->
+                <label class="group relative cursor-pointer rounded-2xl">
+                    <input
+                        class="peer sr-only"
+                        type="checkbox"
+                        @change="toggleIntent('collaborate')"
+                        :checked="isSelected('collaborate')"
+                    />
+                    <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                          bg-white dark:bg-[#1A2332] border border-transparent
+                          shadow-sm hover:shadow-md transition-all duration-300
+                          peer-checked:border-teal-400 peer-checked:border-[1.5px]
+                          relative overflow-hidden hover:scale-[1.02]">
+                        <div class="p-3 rounded-full bg-gradient-to-br from-teal-400/50 via-green-400/50 to-lime-400/50 shadow-lg shadow-teal-300/40">
+                            <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">handshake</span>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                                Collaborate
+                            </h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Join teams and manage projects.</p>
+                        </div>
+                        <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined fill-1">check_circle</span>
+                        </div>
+                    </div>
+                </label>
+                <!-- Option 4 -->
+                <label class="group relative cursor-pointer rounded-2xl">
+                    <input
+                        class="peer sr-only"
+                        type="checkbox"
+                        @change="toggleAll()"
+                        :checked="selectedIntents.length === intents.length"
+                    />
+                    <div class="h-full flex flex-col items-start gap-4 p-6 rounded-2xl
+                          bg-white dark:bg-[#1A2332] border border-transparent
+                          shadow-sm hover:shadow-md transition-all duration-300
+                          peer-checked:border-indigo-400 peer-checked:border-[1.5px]
+                          relative overflow-hidden hover:scale-[1.02]">
+                        <div class="p-3 rounded-full bg-gradient-to-br from-indigo-400/50 via-blue-400/50 to-sky-400/50 shadow-lg shadow-indigo-300/40">
+                            <span class="material-symbols-outlined text-2xl text-white drop-shadow-md">hub</span>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-800 dark:text-white text-lg font-semibold leading-tight mb-1">
+                                Both
+                            </h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">I want to do it all.</p>
+                        </div>
+                        <div class="absolute top-4 right-4 text-brand-500 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <span class="material-symbols-outlined fill-1">check_circle</span>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 w-full mt-4 sm:my-5">
+        <!-- Skip button -->
+        <button
+            type="button"
+            @click="skipStep()"
+            :disabled="submitting"
+            class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white
+                text-sm font-semibold py-3 px-6 rounded-xl
+                border border-gray-200 dark:border-gray-700
+                hover:bg-gray-100 dark:hover:bg-gray-800
+                transition-all duration-300 ease-in-out"
+        >
+            Skip for now
+        </button>
+    
+        <!-- Continue button -->
+        <button
+            @click="saveIntent()"
+            :disabled="submitting"
+            :class="{
+                'bg-brand-300 cursor-not-allowed': submitting,
+                'bg-brand-500 hover:bg-brand-400': !submitting
+            }"
+            class="flex items-center justify-center gap-2
+                text-white text-base font-semibold h-12 px-8 rounded-xl
+                shadow-lg shadow-purple-400/30
+                transition-all transform duration-300
+                hover:scale-[1.03] active:scale-[0.97]
+                relative overflow-hidden"
+        >
+            <span x-text="showProcessing ? 'Processing...' : 'Continue'"></span>
+            <span class="material-symbols-outlined text-sm font-semibold transition-transform duration-300 group-hover:translate-x-1">
+                arrow_forward
+            </span>
 
-        <!-- Subtle ambient glow pulse -->
-        <div aria-hidden="true" class="absolute inset-0 rounded-full bg-white/10 blur-xl animate-pulse-slow pointer-events-none"></div>
-    </a>
+            <!-- Subtle ambient glow pulse -->
+            <div aria-hidden="true" class="absolute inset-0 rounded-full bg-white/10 blur-xl animate-pulse-slow pointer-events-none"></div>
+        </button>
+    </div>
 </div>
-
-
 {% endblock %}
 {% block custom_page_js %}
 <script>
@@ -206,55 +217,5 @@
         }
     }, 7); // adjust speed
 </script>
-<script>
-    function intentForm() {
-    return {
-        intents: [
-            {
-                key: "book-services",
-                label: "Book professional services"
-            },
-            {
-                key: "create-gigs",
-                label: "Create gigs/projects"
-            },
-            {
-                key: "collaborate",
-                label: "Collaborate"
-            }
-        ],
-
-        selectedIntents: [],
-
-        toggleIntent(key) {
-            if (this.selectedIntents.includes(key)) {
-                this.selectedIntents =
-                    this.selectedIntents.filter(i => i !== key);
-                return;
-            }
-
-            this.selectedIntents.push(key);
-        },
-
-        toggleAll() {
-            if (this.selectedIntents.length === this.intents.length) {
-                this.selectedIntents = [];
-            } else {
-                this.selectedIntents =
-                    this.intents.map(i => i.key);
-            }
-        },
-
-        isSelected(key) {
-            return this.selectedIntents.includes(key);
-        },
-
-        buildPayload() {
-            return {
-                intents: this.selectedIntents
-            };
-        }
-    }
-}
-</script>
+<script src="{% static 'js/accounts/onboarding/onboarding-intent.js' %}"></script>
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.http import JsonResponse
 from ..manager import resolve_onboarding_manager
 
 class OnboardingStepMixin:
@@ -6,10 +7,11 @@ class OnboardingStepMixin:
 
     def dispatch(self, request, *args, **kwargs):
         manager = resolve_onboarding_manager(request.user)
+            
         if self.view_step > manager.user_step:
             return redirect(manager.next_step_url())
         
         if request.method == "POST" and self.view_step < manager.user_step:
-            return redirect(manager.next_step_url())
+            return JsonResponse({"redirect_url": manager.next_step_url()})
 
         return super().dispatch(request, *args, **kwargs)
