@@ -36,6 +36,26 @@ class AuthUser(AbstractUser):
     def completed_onboarding(self) -> bool:
         "Returns the user onboarding screen"
         return self.onboarding_completed
+    
+    @property
+    def greeting(self) -> str:
+        """
+        Returns a time-aware greeting like:
+        'Good Morning, Sarah'
+        """
+        now = timezone.localtime()
+        hour = now.hour
+
+        if 5 <= hour < 12:
+            message = "Good Morning"
+        elif 12 <= hour < 17:
+            message = "Good Afternoon"
+        elif 17 <= hour < 21:
+            message = "Good Evening"
+        else:
+            message = "It's Night time"
+            
+        return f"{message}, {self.first_name.title()}"
 
     def verify_account(self) -> bool:
         if not self.is_verified:

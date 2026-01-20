@@ -426,7 +426,7 @@
                             </div> -->
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <!-- <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center gap-2">
                             <div class="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
                                 <span class="material-symbols-outlined text-[20px]">settings</span>
@@ -467,18 +467,104 @@
                                 </div>
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </form>
         </div>
     </div>
-    <div class="fixed inset-x-0 bottom-0 z-[60]
+
+    <!--Bottom navifation-->
+    <!-- Bottom Action Bar -->
+    <div class="w-full inset-x-0 bottom-0 z-60
+        backdrop-blur-xl rounded-xl
+        bg-white/80 dark:bg-[#0f172a]/80
+        border-t border-white/10
+        shadow-[0_-10px_30px_rgba(59,130,246,0.08)]
+        px-4 sm:px-6 py-4
+        pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+
+        <div class="max-w-[1600px] mx-auto flex items-center gap-4">
+            
+            <!-- Estimated total -->
+            <div class="hidden sm:flex flex-col">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    Estimated Total
+                </span>
+
+                <span 
+                    x-text="`$${Number(budgetLocked ? rolesTotalAmount : payload.projectBudget).toLocaleString()}`"
+                    class="text-lg font-semibold text-slate-900 dark:text-slate-200"
+                >
+                    $9,500
+                    <span class="text-xs font-normal text-slate-500">USD</span>
+                </span>
+            </div>
+
+            <!-- Actions -->
+            <div
+                class="flex items-center gap-3 ml-auto"
+                x-data="{ busyPublish: false, busyDraft: false }"
+            >
+
+                <!-- Save Draft -->
+                <button
+                    type="button"
+                    @click="
+                        if (busyDraft) return;
+                        busyDraft = true;
+                        submitBtn('draft').finally(() => busyDraft = false)
+                    "
+                    :disabled="busyDraft || busyPublish"
+                    class="px-5 py-2.5 rounded-lg
+                        border border-slate-200 dark:border-slate-700
+                        bg-white dark:bg-slate-800
+                        text-slate-800 dark:text-slate-300
+                        text-sm font-semibold
+                        hover:bg-slate-50 dark:hover:bg-slate-700
+                        transition
+                        disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                    Save as Draft
+                </button>
+
+                <!-- Publish Gig -->
+                <button
+                    @click="
+                        if (busyPublish) return;
+                        busyPublish = true;
+                        submitBtn('publish').finally(() => busyPublish = false)
+                    "
+                    :disabled="busyDraft || busyPublish"
+                    type="button"
+                    class="flex items-center gap-2
+                        px-6 py-2.5 rounded-lg
+                        text-white text-sm font-semibold
+                        shadow-lg shadow-brand-500/30
+                        transition
+                        disabled:opacity-60 disabled:cursor-not-allowed
+                        bg-brand-500 hover:bg-brand-600"
+                >
+                    <span
+                        class="material-symbols-outlined text-[18px]"
+                        :class="{ 'animate-spin': busyPublish }"
+                        x-text="busyPublish ? 'autorenew' : 'send'"
+                    ></span>
+
+                    <span x-text="busyPublish ? 'Publishing…' : 'Publish Gig'"></span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="fixed inset-x-0 bottom-0 z-[60]
              bg-white dark:bg-[#1a202c]
              border-t border-[#e7ebf3] dark:border-[#2d3748]
              shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]
-             px-4 sm:px-6 py-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+             px-4 sm:px-6 py-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]"
+        >
         <div class="max-w-[1600px] mx-auto flex items-center gap-4">
-            <!-- Estimated total -->
+            <!-- Estimated total --
             <div class="hidden sm:flex flex-col">
                 <span class="text-xs font-semibold text-[#4c669a] uppercase tracking-wider">
                     Estimated Total
@@ -490,12 +576,12 @@
                     <span class="text-xs font-normal text-[#4c669a]">USD</span>
                 </span>
             </div>
-            <!-- Actions -->
+            <!-- Actions --
             <div
                 class="flex items-center gap-3 ml-auto"
                 x-data="{ busyPublish: false, busyDraft: false }"
             >
-                <!-- Save Draft -->
+                <!-- Save Draft -
                 <button
                     type="button"
                     @click="
@@ -516,7 +602,7 @@
                     Save as Draft
                 </button>
 
-                <!-- Publish Gig -->
+                <!-- Publish Gig -
                 <button
                     @click="
                         if (busyPublish) return;
@@ -541,9 +627,8 @@
                     <span x-text="busyPublish ? 'Publishing…' : 'Publish Gig'"></span>
                 </button>
             </div>
-
         </div>
-    </div>
+    </div> -->
 </div>
 
 {% endblock %}

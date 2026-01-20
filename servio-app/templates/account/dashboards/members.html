@@ -2,43 +2,36 @@
 {% load static %}
 
 {% block content %}
-{% if not dashboard %}
+{% if not gigs %}
    {% include "components/empty-states/empty-member-data.html" %}
 {% else %}
 <section class="flex-1 flex flex-col h-full overflow-hidden relative">
-    <!-- Mobile Header (Visible only on small screens) -->
-    <div class="lg:hidden flex items-center justify-between p-4 bg-card-light dark:bg-card-dark border-b border-gray-100 dark:border-gray-800">
-        <div class="flex items-center gap-2">
-            <div class="size-8 rounded-lg bg-brand-500 flex items-center justify-center text-white font-semibold">S</div>
-            <span class="font-semibold">Servio</span>
-        </div>
-        <button class="text-text-main dark:text-white">
-            <span class="material-symbols-outlined">menu</span>
-        </button>
-    </div>
-    <div class="flex-1 overflow-y-auto p-3 md:p-6">
+    <div class="flex-1 overflow-y-auto p-2 md:p-4">
         <div class="max-w-[1400px] mx-auto flex flex-col gap-8">
             <!-- Header Section: Greeting, Search, Actions -->
             <div class="flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
                 <div class="flex flex-col gap-1">
-                    <h2 class="text-2xl md:text-3xl font-semibold text-text-main dark:text-white tracking-tight">Good Morning, Sarah 👋</h2>
-                    <p class="text-text-secondary dark:text-gray-400 text-sm">Here is what's happening with your projects today.</p>
+                    <h2 class="text-2xl md:text-3xl font-semibold  dark:text-white tracking-tight">{{ user.greeting }} 👋</h2>
+                    <p class=" dark:text-gray-400 text-sm">Here is what's happening with your projects today.</p>
                 </div>
                 <div class="flex w-full xl:w-auto flex-col md:flex-row gap-4 items-stretch md:items-center">
                     <!-- SearchBar -->
                     <!-- <div class="relative w-full md:w-96 group">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <span class="material-symbols-outlined text-text-secondary group-focus-within:text-brand-500 transition-colors">search</span>
+                            <span class="material-symbols-outlined  group-focus-within:text-brand-500 transition-colors">search</span>
                         </div>
-                        <input class="block w-full pl-10 pr-3 py-3 rounded-xl border-none ring-1 ring-gray-200 dark:ring-gray-700 bg-white dark:bg-card-dark text-text-main dark:text-white placeholder-text-secondary focus:ring-2 focus:ring-brand-500 focus:outline-none transition-shadow text-sm" placeholder="Search projects, transactions..." type="text" />
+                        <input class="block w-full pl-10 pr-3 py-3 rounded-xl border-none ring-1 ring-gray-200 dark:ring-gray-700 bg-white dark:bg-card-dark  dark:text-white placeholder-text-secondary focus:ring-2 focus:ring-brand-500 focus:outline-none transition-shadow text-sm" placeholder="Search projects, transactions..." type="text" />
                     </div> -->
                     <!-- SingleButton (Post Request) -->
-                    <button class="flex items-center justify-center gap-2 bg-brand-500 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all transform active:scale-95 whitespace-nowrap">
+                    <a 
+                        href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}"
+                        class="flex items-center justify-center gap-2 bg-brand-500 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all transform active:scale-95 whitespace-nowrap"
+                    >
                         <span class="material-symbols-outlined text-[20px]">add</span>
-                        <span>Post a New Request</span>
-                    </button>
+                        <span>Create a gig/project</span>
+                    </a>
                     <!-- Notifications -->
-                    <!-- <button class="hidden md:flex items-center justify-center size-11 rounded-xl bg-white dark:bg-card-dark ring-1 ring-gray-200 dark:ring-gray-700 text-text-secondary hover:text-brand-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors relative">
+                    <!-- <button class="hidden md:flex items-center justify-center size-11 rounded-xl bg-white dark:bg-card-dark ring-1 ring-gray-200 dark:ring-gray-700  hover:text-brand-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors relative">
                         <span class="material-symbols-outlined">notifications</span>
                         <span class="absolute top-3 right-3 size-2 bg-red-500 rounded-full"></span>
                     </button> -->
@@ -51,44 +44,54 @@
                     <!-- Active Gigs & Projects Card -->
                     <div class="bg-card-light dark:bg-card-dark rounded-2xl p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800">
                         <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-text-main dark:text-white flex items-center gap-2">
+                            <h3 class="text-lg font-semibold  dark:text-white flex items-center gap-2">
                                 <span class="material-symbols-outlined text-brand-500">rocket_launch</span>
                                 Active Projects
                             </h3>
-                            <a class="text-brand-500 text-sm font-semibold hover:underline" href="#">View All</a>
+                            <a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="text-brand-500 text-sm font-semibold hover:underline" href="#">View All</a>
                         </div>
-                        <div class="flex flex-col gap-4">
+                        <div class="flex flex-col divide-y divide-gray-200/60 dark:divide-gray-800/60">
                             <!-- Project Item 1 -->
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-background-light dark:bg-background-dark/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-5 px-4
+                                    rounded-xl
+                                    bg-background-light dark:bg-background-dark/50
+                                    hover:bg-gray-100 dark:hover:bg-gray-800
+                                    transition-all duration-300
+                                    border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
                                 <div class="flex items-center gap-4">
                                     <div class="size-12 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                                         <span class="material-symbols-outlined">web</span>
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-text-main dark:text-white text-base">E-commerce Website Redesign</h4>
-                                        <p class="text-xs text-text-secondary mt-0.5">Dev Team Alpha • Due Oct 24</p>
+                                        <h4 class="font-semibold dark:text-white text-base">E-commerce Website Redesign</h4>
+                                        <p class="text-xs  mt-0.5">Dev Team Alpha • Due Oct 24</p>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-end gap-2 min-w-[140px]">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs font-semibold text-brand-500">In Progress</span>
+                                        <span class="text-xs font-medium text-brand-500">In Progress</span>
                                         <span class="size-2 rounded-full bg-brand-500 animate-pulse"></span>
                                     </div>
                                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                                         <div class="bg-brand-500 h-1.5 rounded-full" style="width: 75%"></div>
                                     </div>
-                                    <span class="text-xs text-text-secondary">75% Complete</span>
+                                    <span class="text-xs ">75% Complete</span>
                                 </div>
                             </div>
                             <!-- Project Item 2 -->
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-background-light dark:bg-background-dark/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-5 px-4
+                                    rounded-xl
+                                    bg-background-light dark:bg-background-dark/50
+                                    hover:bg-gray-100 dark:hover:bg-gray-800
+                                    transition-all duration-300
+                                    border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
                                 <div class="flex items-center gap-4">
                                     <div class="size-12 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
                                         <span class="material-symbols-outlined">design_services</span>
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-text-main dark:text-white text-base">Brand Identity Refresh</h4>
-                                        <p class="text-xs text-text-secondary mt-0.5">Creative Studio • Waiting for Offer</p>
+                                        <h4 class="font-semibold  dark:text-white text-base">Brand Identity Refresh</h4>
+                                        <p class="text-xs  mt-0.5">Creative Studio • Waiting for Offer</p>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-end gap-2 min-w-[140px]">
@@ -102,8 +105,8 @@
                                         <span class="material-symbols-outlined">business</span>
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-text-main dark:text-white text-base">SEO Audit Q4</h4>
-                                        <p class="text-xs text-text-secondary mt-0.5">MarketPro • Completed</p>
+                                        <h4 class="font-semibold  dark:text-white text-base">SEO Audit Q4</h4>
+                                        <p class="text-xs  mt-0.5">MarketPro • Completed</p>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-end gap-2 min-w-[140px]">
@@ -117,8 +120,8 @@
                         <!-- Chats & Negotiations -->
                         <div class="bg-card-light dark:bg-card-dark rounded-2xl p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-semibold text-text-main dark:text-white">Messages</h3>
-                                <button class="text-text-secondary hover:text-brand-500 transition-colors">
+                                <h3 class="text-lg font-semibold  dark:text-white">Negotiations</h3>
+                                <button class="text-orange-300 dark:text-orange-200 hover:text-brand-500 transition-colors">
                                     <span class="material-symbols-outlined">edit_square</span>
                                 </button>
                             </div>
@@ -131,10 +134,10 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex justify-between items-baseline mb-0.5">
-                                            <h5 class="text-sm font-semibold text-text-main dark:text-white group-hover:text-brand-500 transition-colors">John Doe</h5>
-                                            <span class="text-[10px] text-text-secondary font-medium">2m ago</span>
+                                            <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">John Doe</h5>
+                                            <span class="text-[10px]  font-medium">2m ago</span>
                                         </div>
-                                        <p class="text-sm text-text-secondary truncate">Can you approve the latest mockup?</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Can you approve the latest mockup?</p>
                                     </div>
                                 </div>
                                 <!-- Message 2 -->
@@ -144,10 +147,10 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex justify-between items-baseline mb-0.5">
-                                            <h5 class="text-sm font-semibold text-text-main dark:text-white group-hover:text-brand-500 transition-colors">Alice Smith</h5>
-                                            <span class="text-[10px] text-text-secondary font-medium">1h ago</span>
+                                            <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Alice Smith</h5>
+                                            <span class="text-[10px]  font-medium">1h ago</span>
                                         </div>
-                                        <p class="text-sm text-text-main dark:text-white font-medium truncate">I've sent the invoice for the logo.</p>
+                                        <p class="text-sm  dark:text-white font-medium truncate">I've sent the invoice for the logo.</p>
                                     </div>
                                     <div class="size-2 rounded-full bg-brand-500 mt-2"></div>
                                 </div>
@@ -158,10 +161,10 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex justify-between items-baseline mb-0.5">
-                                            <h5 class="text-sm font-semibold text-text-main dark:text-white group-hover:text-brand-500 transition-colors">Support Team</h5>
-                                            <span class="text-[10px] text-text-secondary font-medium">1d ago</span>
+                                            <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Support Team</h5>
+                                            <span class="text-[10px]  font-medium">1d ago</span>
                                         </div>
-                                        <p class="text-sm text-text-secondary truncate">Your ticket #9201 has been resolved.</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Your ticket #9201 has been resolved.</p>
                                     </div>
                                 </div>
                             </div>
@@ -169,9 +172,9 @@
                         <!-- Bookings & Appointments -->
                         <div class="bg-card-light dark:bg-card-dark rounded-2xl p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-semibold text-text-main dark:text-white">Upcoming</h3>
+                                <h3 class="text-lg font-semibold  dark:text-white">Upcoming Bookings</h3>
                                 <button class="size-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                    <span class="material-symbols-outlined text-text-secondary">calendar_month</span>
+                                    <span class="material-symbols-outlined text-emerald-300 dark:text-emerald-200">calendar_month</span>
                                 </button>
                             </div>
                             <div class="flex flex-col gap-3">
@@ -179,26 +182,26 @@
                                 <div class="p-3 rounded-xl bg-brand-500/5 border border-brand-500/10 flex gap-3 items-center">
                                     <div class="flex flex-col items-center justify-center bg-white dark:bg-card-dark rounded-lg p-2 min-w-[50px] shadow-sm">
                                         <span class="text-xs font-semibold text-brand-500 uppercase">Oct</span>
-                                        <span class="text-lg font-semibold text-text-main dark:text-white">24</span>
+                                        <span class="text-lg font-semibold  dark:text-white">24</span>
                                     </div>
                                     <div>
                                         <p class="text-xs font-semibold text-brand-500 mb-0.5">Today, 2:00 PM</p>
-                                        <h4 class="text-sm font-semibold text-text-main dark:text-white leading-tight">Sync with Dev Team</h4>
+                                        <h4 class="text-sm font-semibold  dark:text-white leading-tight">Sync with Dev Team</h4>
                                         <div class="flex items-center gap-1 mt-1">
-                                            <span class="material-symbols-outlined text-[14px] text-text-secondary">videocam</span>
-                                            <span class="text-xs text-text-secondary">Zoom Meeting</span>
+                                            <span class="material-symbols-outlined text-xs text-blue-600">videocam</span>
+                                            <span class="text-xs ">Zoom Meeting</span>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Event 2 (Next) -->
                                 <div class="flex gap-3 items-center px-2 opacity-70">
                                     <div class="flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg p-2 min-w-[50px]">
-                                        <span class="text-xs font-semibold text-text-secondary uppercase">Oct</span>
-                                        <span class="text-lg font-semibold text-text-secondary">26</span>
+                                        <span class="text-xs font-semibold  uppercase">Oct</span>
+                                        <span class="text-lg font-semibold ">26</span>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-medium text-text-secondary mb-0.5">Friday, 10:00 AM</p>
-                                        <h4 class="text-sm font-semibold text-text-main dark:text-white leading-tight">Design Review</h4>
+                                        <p class="text-xs font-medium  mb-0.5">Friday, 10:00 AM</p>
+                                        <h4 class="text-sm font-semibold  dark:text-white leading-tight">Design Review</h4>
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +228,7 @@
                     </div>
                     <!-- Transactions List -->
                     <div class="bg-card-light dark:bg-card-dark rounded-2xl p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800">
-                        <h3 class="text-lg font-semibold text-text-main dark:text-white mb-4">Recent Transactions</h3>
+                        <h3 class="text-lg font-semibold  dark:text-white mb-4">Recent Transactions</h3>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
@@ -233,11 +236,11 @@
                                         <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
                                     </div>
                                     <div>
-                                        <p class="text-sm font-semibold text-text-main dark:text-white">Payment Sent</p>
-                                        <p class="text-xs text-text-secondary">Web Design Gig</p>
+                                        <p class="text-sm font-semibold  dark:text-white">Payment Sent</p>
+                                        <p class="text-xs ">Web Design Gig</p>
                                     </div>
                                 </div>
-                                <span class="text-sm font-semibold text-text-main dark:text-white">-$850.00</span>
+                                <span class="text-sm font-semibold  dark:text-white">-$850.00</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-3">
@@ -245,8 +248,8 @@
                                         <span class="material-symbols-outlined text-[20px]">arrow_downward</span>
                                     </div>
                                     <div>
-                                        <p class="text-sm font-semibold text-text-main dark:text-white">Refund</p>
-                                        <p class="text-xs text-text-secondary">Project Cancelled</p>
+                                        <p class="text-sm font-semibold  dark:text-white">Refund</p>
+                                        <p class="text-xs ">Project Cancelled</p>
                                     </div>
                                 </div>
                                 <span class="text-sm font-semibold text-green-600">+$200.00</span>
@@ -256,11 +259,11 @@
                     <!-- Reviews & Reputation -->
                     <div class="bg-card-light dark:bg-card-dark rounded-2xl p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col gap-4">
                         <div>
-                            <h3 class="text-lg font-semibold text-text-main dark:text-white mb-1">Your Reputation</h3>
-                            <p class="text-xs text-text-secondary">Based on 12 completed projects</p>
+                            <h3 class="text-lg font-semibold  dark:text-white mb-1">Your Reputation</h3>
+                            <p class="text-xs ">Based on 12 completed projects</p>
                         </div>
                         <div class="flex items-end gap-2">
-                            <span class="text-4xl font-semibold text-text-main dark:text-white">4.9</span>
+                            <span class="text-4xl font-semibold  dark:text-white">4.9</span>
                             <div class="flex text-yellow-400 mb-1.5">
                                 <span class="material-symbols-outlined text-[20px] font-fill">star</span>
                                 <span class="material-symbols-outlined text-[20px] font-fill">star</span>
@@ -271,10 +274,10 @@
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl relative">
                             <span class="material-symbols-outlined absolute top-3 left-3 text-gray-300 dark:text-gray-600 text-[24px]">format_quote</span>
-                            <p class="text-sm text-text-main dark:text-gray-300 italic pl-6 relative z-10">
+                            <p class="text-sm  dark:text-gray-300 italic pl-6 relative z-10">
                                 "Sarah was fantastic to work with. Clear requirements and prompt payment. Highly recommended!"
                             </p>
-                            <p class="text-xs font-semibold text-text-secondary text-right mt-2">- Alex D.</p>
+                            <p class="text-xs font-semibold  text-right mt-2">- Alex D.</p>
                         </div>
                     </div>
                     <!-- Help / Support Mini Card -->
@@ -283,8 +286,8 @@
                             <span class="material-symbols-outlined text-[18px]">help</span>
                         </div>
                         <div class="flex-1">
-                            <p class="text-xs font-semibold text-indigo-900 dark:text-indigo-200">Need help with an order?</p>
-                            <a class="text-xs text-indigo-600 dark:text-indigo-400 font-medium hover:underline" href="#">Contact Support</a>
+                            <p class="text-xs font-semibold text-indigo-900 dark:text-indigo-200">Need technical help?</p>
+                            <a class="text-xs text-indigo-600 dark:text-indigo-400 font-medium hover:underline" href="mailto:support@divgm.com">Contact Support</a>
                         </div>
                     </div>
                 </div>

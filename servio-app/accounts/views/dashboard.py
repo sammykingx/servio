@@ -1,6 +1,7 @@
-from django.views.generic import TemplateView
+from django.db.models import Count, Sum, F
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 from accounts.models.profile import UserRole
 from accounts.models.address import AddressType
 from template_map.accounts import Accounts
@@ -31,7 +32,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["dashboard"] = True
+        context["gigs"] = self.fetch_gig_info()
 
         user = self.request.user
 
@@ -43,6 +44,19 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             }
 
         return context
+    
+    def fetch_gig_info(self):
+        return (
+            self.request.user.gigs
+            .prefetch_related("required_roles")
+            .annotate(
+                role_count_db=Count("required_roles"),
+                total_role_budget_db=Sum(
+                    F("required_roles__budget") * F("required_roles__slots")
+                ),
+            )
+            .order_by("-created_at")
+        )
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):

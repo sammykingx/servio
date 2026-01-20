@@ -32,7 +32,7 @@
             :class=" (selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-active' : 'menu-item-inactive'"
             >
             <span 
-               class="material-symbols-outlined"
+               class="material-symbols-outlined icon-gigs"
                :class="(selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
             >
                workspaces
@@ -45,7 +45,7 @@
             </span>
          </a>
       </li>
-      <li>
+      <!-- <li>
          <a
             href="#"
             @click="selected = (selected === 'bookings' ? '':'bookings')"
@@ -60,7 +60,7 @@
                Bookings
             </span>
          </a>
-      </li>
+      </li> -->
       <li>
          <a
             href="{% url PAYMENT_URLS.USER_PAYMENT_SUMMARY %}"
@@ -68,7 +68,7 @@
             class="menu-item group text-gray-500"
             :class=" (selected === 'payments') && (page === 'payments') ? 'menu-item-active' : 'menu-item-inactive'"
             >
-           <span class="material-symbols-outlined">local_atm</span>
+           <span class="material-symbols-outlined icon-payments">local_atm</span>
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
@@ -80,13 +80,13 @@
       <li>
          <a
             href="#"
-            @click="selected = (selected === 'revenue' ? '':'revenue')"
+            @click="selected = (selected === 'escrow' ? '':'escrow')"
             class="menu-item group text-gray-500"
-            :class=" (selected === 'revenue') && (page === 'revenue') ? 'menu-item-active' : 'menu-item-inactive'"
+            :class=" (selected === 'escrow') && (page === 'escrow') ? 'menu-item-active' : 'menu-item-inactive'"
             >
             <span 
-               class="material-symbols-outlined"
-               :class="(selected === 'revenue') && (page === 'revenue') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+               class="material-symbols-outlined icon-escrow"
+               :class="(selected === 'escrow') && (page === 'escrow') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
             >
                money_bag
             </span>
@@ -94,37 +94,23 @@
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
             >
-               Revenue
+               Escrow
             </span>
          </a>
       </li>
       <li>
          <a
             href="#"
-            @click="selected = (selected === 'favourites' ? '':'favourites')"
+            @click="selected = (selected === 'negotiations' ? '':'negotiations')"
             class="menu-item group text-gray-500"
-            :class=" (selected === 'favourites') && (page === 'favourites') ? 'menu-item-active' : 'menu-item-inactive'"
+            :class=" (selected === 'negotiations') && (page === 'negotiations') ? 'menu-item-active' : 'menu-item-inactive'"
             >
-            <svg
-               :class="(selected === 'favourites') && (page === 'favourites') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
-               width="24"
-               height="24"
-               viewBox="0 0 24 24"
-               fill="none"
-               xmlns="http://www.w3.org/2000/svg"
-               >
-               <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M4.00002 12.0957C4.00002 7.67742 7.58174 4.0957 12 4.0957C16.4183 4.0957 20 7.67742 20 12.0957C20 16.514 16.4183 20.0957 12 20.0957H5.06068L6.34317 18.8132C6.48382 18.6726 6.56284 18.4818 6.56284 18.2829C6.56284 18.084 6.48382 17.8932 6.34317 17.7526C4.89463 16.304 4.00002 14.305 4.00002 12.0957ZM12 2.5957C6.75332 2.5957 2.50002 6.849 2.50002 12.0957C2.50002 14.4488 3.35633 16.603 4.77303 18.262L2.71969 20.3154C2.50519 20.5299 2.44103 20.8525 2.55711 21.1327C2.6732 21.413 2.94668 21.5957 3.25002 21.5957H12C17.2467 21.5957 21.5 17.3424 21.5 12.0957C21.5 6.849 17.2467 2.5957 12 2.5957ZM7.62502 10.8467C6.93467 10.8467 6.37502 11.4063 6.37502 12.0967C6.37502 12.787 6.93467 13.3467 7.62502 13.3467H7.62512C8.31548 13.3467 8.87512 12.787 8.87512 12.0967C8.87512 11.4063 8.31548 10.8467 7.62512 10.8467H7.62502ZM10.75 12.0967C10.75 11.4063 11.3097 10.8467 12 10.8467H12.0001C12.6905 10.8467 13.2501 11.4063 13.2501 12.0967C13.2501 12.787 12.6905 13.3467 12.0001 13.3467H12C11.3097 13.3467 10.75 12.787 10.75 12.0967ZM16.375 10.8467C15.6847 10.8467 15.125 11.4063 15.125 12.0967C15.125 12.787 15.6847 13.3467 16.375 13.3467H16.3751C17.0655 13.3467 17.6251 12.787 17.6251 12.0967C17.6251 11.4063 17.0655 10.8467 16.3751 10.8467H16.375Z"
-                  fill="currentColor"
-                  />
-            </svg>
+            <span class="material-symbols-outlined icon-negotiations">contract</span>
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
                >
-            Favourites
+            Negotiations
             </span>
          </a>
       </li>
@@ -136,21 +122,7 @@
             class="menu-item group text-gray-500"
             :class=" (selected === 'Rewards') && (page === 'Rewards') ? 'menu-item-active' : 'menu-item-inactive'"
             >
-            <svg
-               :class="(selected === 'Rewards') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-               width="24"
-               height="24"
-               viewBox="0 0 24 24"
-               fill="none"
-               xmlns="http://www.w3.org/2000/svg"
-            >
-               <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M12 2C12.4142 2 12.75 2.33579 12.75 2.75V4H18C18.4142 4 18.75 4.33579 18.75 4.75V9C18.75 11.3284 17.0784 13.2975 14.8984 13.8675C14.4937 15.6618 13.4478 17.1995 12 18.1839C10.5522 17.1995 9.50628 15.6618 9.10159 13.8675C6.92156 13.2975 5.25 11.3284 5.25 9V4.75C5.25 4.33579 5.58579 4 6 4H11.25V2.75C11.25 2.33579 11.5858 2 12 2ZM12 5.5H6.75V9C6.75 10.7949 8.20507 12.25 10 12.25H14C15.7949 12.25 17.25 10.7949 17.25 9V5.5H12ZM9 20.25C9 19.8358 9.33579 19.5 9.75 19.5H14.25C14.6642 19.5 15 19.8358 15 20.25C15 21.2165 14.2165 22 13.25 22H10.75C9.7835 22 9 21.2165 9 20.25Z"
-                  fill="currentColor"
-               />
-            </svg>
+            <span class="material-symbols-outlined text-fuchsia-400">reviews</span>
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
@@ -161,7 +133,7 @@
       </li>
    </ul>
 </div>
-<div>
+<!-- <div>
    <h3 class="mb-4 text-xs leading-[20px] text-gray-400 uppercase">
       <span
          class="menu-group-title"
@@ -282,4 +254,4 @@
          </a>
       </li>
    </ul>
-</div>
+</div> -->
