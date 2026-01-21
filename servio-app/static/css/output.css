@@ -1344,6 +1344,9 @@
   .min-h-\[160px\] {
     min-height: 160px;
   }
+  .min-h-\[200px\] {
+    min-height: 200px;
+  }
   .min-h-\[300px\] {
     min-height: 300px;
   }
@@ -2264,6 +2267,9 @@
   }
   .border-blue-700 {
     border-color: var(--color-blue-700);
+  }
+  .border-brand-100 {
+    border-color: var(--color-brand-100);
   }
   .border-brand-400 {
     border-color: var(--color-brand-400);
@@ -4314,6 +4320,9 @@
   }
   .text-teal-500 {
     color: var(--color-teal-500);
+  }
+  .text-warning-500 {
+    color: var(--color-warning-500);
   }
   .text-warning-600 {
     color: var(--color-warning-600);
@@ -8706,6 +8715,14 @@
       }
     }
   }
+  .dark\:bg-warning-400\/30 {
+    &:where(.dark, .dark *) {
+      background-color: color-mix(in srgb, #fdb022 30%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-warning-400) 30%, transparent);
+      }
+    }
+  }
   .dark\:bg-warning-500\/15 {
     &:where(.dark, .dark *) {
       background-color: color-mix(in srgb, #f79009 15%, transparent);
@@ -11073,35 +11090,6 @@ span.flatpickr-weekday, .flatpickr-months .flatpickr-month {
 }
 .icon-gigs {
   color: #8b5cf6;
-}
-.quill-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  display: inline-block;
-  height: 36px;
-  padding: 0 32px 0 12px;
-  border-radius: 8px;
-  border: 1px solid rgb(203 213 225);
-  background-color: rgb(241 245 249);
-  font-size: 14px;
-  vertical-align: middle;
-  line-height: 36px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7' /%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 18px;
-  cursor: pointer;
-}
-.quill-select option {
-  padding: 4px 12px;
-  font-size: 14px;
-}
-.dark .quill-select {
-  background-color: rgb(30 41 59);
-  border-color: rgb(71 85 105);
-  color: rgb(226 232 240);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23cbd5f5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7' /%3E%3C/svg%3E");
 }
 @property --tw-translate-x {
   syntax: "*";

@@ -12,7 +12,9 @@ function gigData() {
             endDate: null,
             isNegotiable: false,
         },
+
         budgetLocked: false,
+        descriptionLength: 0,
         rolesTotalAmount: 0,
         maxDescriptionLength: 2000,
         roleColors: [
@@ -27,6 +29,52 @@ function gigData() {
             'bg-rose-500',
             'bg-cyan-500',
         ],
+
+        initQuill() {
+            this.editor = new Quill('#quill-editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: '#quill-toolbar'
+                },
+                formats: [
+                    'bold', 'italic', 'underline',
+                    'list', 'header', 'font', 'align',
+                ],
+            });
+           
+            // this.editor.setSelection(0, 0);
+
+            // this.editor.root.innerHTML = this.payload.description || '';
+
+            this.editor.on('text-change', (delta, oldDelta, source) => {
+                if (source !== 'user') return;
+
+                const text = this.editor.getText().replace(/\n$/, '');
+                const length = text.length;
+
+                // Always update reactive counter
+                this.descriptionLength = length;
+
+                // If user exceeded limit, remove only the extra input
+                if (length > this.maxDescriptionLength) {
+                    const excess = length - this.maxDescriptionLength;
+
+                    const range = this.editor.getSelection();
+                    if (!range) return;
+
+                    // Remove only the extra characters typed
+                    this.editor.deleteText(range.index - excess, excess, 'silent');
+                    this.editor.setSelection(this.maxDescriptionLength, 0, 'silent');
+
+                    this.descriptionLength = this.maxDescriptionLength;
+                    return;
+                }
+
+                // Normal update
+                this.payload.description = this.editor.root.innerHTML;
+            });
+
+        },
 
         setRoles(roles) {
             this.payload.roles = roles;
@@ -75,9 +123,7 @@ function gigData() {
         },
 
         descriptionCount() {
-            return this.payload.description
-                ? this.payload.description.length
-                : 0;
+            return this.descriptionLength;
         },
     };
 }
@@ -109,6 +155,7 @@ async function submitBtn(action="publish") {
     }
 
     const body = { action, payload: gigPayload };
+    console.log(JSON.stringify(body, null, 2));
     
     try {
         const response = await publishGig(body, endpoint, csrf_token);
@@ -191,6 +238,10 @@ function validatePayload(gigPayload) {
 
     if (wordCount < 6) {
         errors.push("Project description must be descriptive enough for professionals to understand");
+    }
+
+    if (description.length > 2000) {
+        errors.push("Project description is too long. Maximum allowed length is 2000 characters.");
     }
 
     if (!startDate || !endDate) {

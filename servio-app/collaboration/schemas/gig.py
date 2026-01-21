@@ -4,7 +4,27 @@ from typing import List
 from decimal import Decimal
 from enum import Enum
 from .gig_role import GigRolePayload
+import bleach
 
+ALLOWED_TAGS = [
+    "p", "br", "strong", "b", "em", "i", "u",
+    "ul", "ol", "li",
+    "h1", "h2", "h3", "h4",
+    "blockquote",
+    "span",
+    "div"
+]
+
+ALLOWED_ATTRIBUTES = {
+    "*": ["class", "style"],
+}
+
+ALLOWED_STYLES = [
+    "text-align",
+    "font-weight",
+    "font-style",
+    "text-decoration",
+]
 
 class VisibilityEnum(str, Enum):
     public = "public"
@@ -21,6 +41,18 @@ class GigPayload(BaseModel):
     roles: List[GigRolePayload] = Field(default_factory=list)
     
 
+    @field_validator("description", mode="before")
+    @classmethod
+    def clean_description(cls, value: str):
+        value = bleach.clean(
+            value,
+            tags=ALLOWED_TAGS,
+            attributes=ALLOWED_ATTRIBUTES,
+            strip=True
+        )
+        print("DESCRIPTION CLEANING:\n", value, "\n")
+        return value
+    
     @field_validator("startDate", mode="after")
     @classmethod
     def validate_start_date(cls, value: date):

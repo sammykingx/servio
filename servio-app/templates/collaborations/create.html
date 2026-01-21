@@ -1,5 +1,8 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+{% block custom_page_css %}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+{% endblock %}
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 
@@ -20,7 +23,7 @@
                                 </div>
                                 <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Project Information</h3>
                             </div>
-                            <span class="text-xs font-medium text-purple-600 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded-full">not saved</span>
+                            <span class="text-xs font-medium text-warning-500 bg-warning-50 dark:bg-warning-400/30 px-2 py-1 rounded-full">not saved</span>
                         </div>
                         <div class="p-6 flex flex-col gap-6">
                             <div class="flex flex-col gap-2">
@@ -78,37 +81,59 @@
                                 </div>
 
                             </div>
-                            <div class="flex flex-col gap-2">
+                            <div x-init="initQuill()" class="flex flex-col gap-2">
                                 <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Project Description</label>
                                 <div class="
-                                        rounded-lg
-                                        border border-gray-300 dark:border-gray-700
-                                        bg-[#f8f9fc] dark:bg-gray-900
-                                        shadow-theme-xs
-                                        transition-all
+                                    rounded-lg border border-gray-300 dark:border-gray-700
+                                    bg-[#f8f9fc] dark:bg-gray-900 shadow-theme-xs transition-all
     
-                                        focus-within:border-success-500
-                                        focus-within:ring-3
+                                    focus-within:border-success-500 focus-within:ring-3
                                         focus-within:ring-success-400/20
     
                                         dark:focus-within:border-warning-200
                                         dark:focus-within:ring-warning-200/25
-                                    ">
-                                    <div class="flex items-center gap-1 p-2 rounded-lg border-b border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748]">
-                                        <button class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-[#4c669a]" type="button">
-                                            <span class="material-symbols-outlined text-[20px]">format_bold</span>
+                                    "
+                                >
+                                    <!-- Toolbar -->
+                                    <div id="quill-toolbar" class="flex flex-wrap items-center gap-x-2 gap-y-2 p-2 border-b 
+                                        border-slate-200 dark:border-slate-700 
+                                        bg-slate-100 dark:bg-slate-800">
+                                        <!-- Header -->
+                                        <div class="relative">
+                                            <select class="ql-header">
+                                                <option selected value="">Small</option>
+                                                <option value="2">Big</option>
+                                                <option value="3">Medium</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Buttons -->
+                                        <button class="ql-bold quill-btn"><span class="material-symbols-outlined">format_bold</span></button>
+                                        <button class="ql-italic quill-btn"><span class="material-symbols-outlined">format_italic</span></button>
+                                        <button class="ql-underline quill-btn"><span class="material-symbols-outlined">format_underlined</span></button>
+
+                                        <!-- Alignment -->
+                                        <button class="ql-align quill-btn" value="">
+                                            <span class="material-symbols-outlined">format_align_left</span>
                                         </button>
-                                        <button class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-[#4c669a]" type="button">
-                                            <span class="material-symbols-outlined text-[20px]">format_italic</span>
+                                        <button class="ql-align quill-btn" value="center">
+                                            <span class="material-symbols-outlined">format_align_center</span>
                                         </button>
-                                        <button class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-[#4c669a]" type="button">
-                                            <span class="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+                                        <button class="ql-align quill-btn" value="right">
+                                            <span class="material-symbols-outlined">format_align_right</span>
                                         </button>
-                                        <button class="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-[#4c669a]" type="button">
-                                            <span class="material-symbols-outlined text-[20px]">link</span>
+                                        <button class="ql-align quill-btn" value="justify">
+                                            <span class="material-symbols-outlined">format_align_justify</span>
                                         </button>
+
+                                        <!-- Bullet list-->
+                                        <button class="ql-list quill-btn" value="bullet">
+                                            <span class="material-symbols-outlined">format_list_bulleted</span>
+                                        </button>
+
                                     </div>
-                                    <textarea
+                                    <div id="quill-editor" class="w-full min-h-[200px] p-4 bg-transparent text-gray-800 dark:text-gray-400"></div>
+                                    <!-- <textarea
                                         x-model="payload.description" 
                                         @input="enforceDescriptionLimit()"
                                         class="w-full border-none
@@ -120,7 +145,7 @@
                                             focus:outline-none
                                             focus:ring-0
                                             focus:border-transparent
-                                        " placeholder="Describe the project goals, deliverables, and any specific requirements..."></textarea>
+                                        " placeholder="Describe the project goals, deliverables, and any specific requirements..."></textarea> -->
                                 </div>
                                 <p
                                     class="text-xs text-right"
@@ -130,6 +155,7 @@
                                 >
                                     <span x-text="descriptionCount()"></span>/<span x-text="maxDescriptionLength"></span>
                                     characters
+                                    <!-- <span x-text="maxDescriptionLength - descriptionCount()"></span> remaining -->
                                 </p>
                             </div>
                             <div class="flex items-center gap-3 pl-3">
@@ -666,6 +692,7 @@
 
 {% endblock %}
 {% block custom_page_js %}
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script id="gig-taxonomy-data" type="application/json" x-ref="taxonomy">
 {{ gig_taxonomy|safe }}
 </script>
