@@ -3835,9 +3835,6 @@
   .pl-4 {
     padding-left: calc(var(--spacing) * 4);
   }
-  .pl-5 {
-    padding-left: calc(var(--spacing) * 5);
-  }
   .pl-6 {
     padding-left: calc(var(--spacing) * 6);
   }
@@ -7887,6 +7884,16 @@
       }
     }
   }
+  .dark\:border-black {
+    &:where(.dark, .dark *) {
+      border-color: var(--color-black);
+    }
+  }
+  .dark\:border-brand-50 {
+    &:where(.dark, .dark *) {
+      border-color: var(--color-brand-50);
+    }
+  }
   .dark\:border-brand-500 {
     &:where(.dark, .dark *) {
       border-color: var(--color-brand-500);
@@ -8014,6 +8021,11 @@
       @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-success-800) 30%, transparent);
       }
+    }
+  }
+  .dark\:border-transparent {
+    &:where(.dark, .dark *) {
+      border-color: transparent;
     }
   }
   .dark\:border-warning-200 {
@@ -8173,6 +8185,11 @@
       @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-blue-900) 40%, transparent);
       }
+    }
+  }
+  .dark\:bg-brand-400 {
+    &:where(.dark, .dark *) {
+      background-color: var(--color-brand-400);
     }
   }
   .dark\:bg-brand-400\/20 {
@@ -11090,6 +11107,60 @@ span.flatpickr-weekday, .flatpickr-months .flatpickr-month {
 }
 .icon-gigs {
   color: #8b5cf6;
+}
+.quill-content {
+  font-size: 16px;
+  line-height: 1.9;
+  color: #4b5563;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.dark .quill-content {
+  color: #d1d5db;
+}
+.quill-content h1, .quill-content h2, .quill-content h3, .quill-content h4, .quill-content h5 {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0.7em 0;
+  line-height: 1.7;
+}
+.quill-content h2::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: linear-gradient(to right, #e5e7eb, transparent);
+  margin: 2em 0 1em;
+}
+.dark .quill-content h2::before {
+  background: linear-gradient(to right, #334155, transparent);
+}
+.quill-content p {
+  margin: 0.7em 0;
+  font-weight: 400;
+}
+.quill-content p:empty {
+  display: none;
+}
+.quill-content p > br:only-child {
+  display: none;
+}
+.quill-content ol, .quill-content ul {
+  padding-left: 1.5rem;
+  margin: 1em 0;
+}
+.quill-content li {
+  margin: 0.4em 0;
+}
+.quill-content ol li[data-list="bullet"] {
+  list-style-type: disc;
+}
+.quill-content .ql-align-center {
+  text-align: center;
+}
+.quill-content .ql-align-right {
+  text-align: right;
+}
+.quill-content .ql-align-justify {
+  text-align: justify;
 }
 @property --tw-translate-x {
   syntax: "*";

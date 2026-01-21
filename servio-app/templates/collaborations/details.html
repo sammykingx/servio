@@ -2,6 +2,9 @@
 {% load static %}
 {% load humanize %}
 {% load pretify_status %}
+{% block custom_page_css %}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+{% endblock %}
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 
@@ -94,14 +97,8 @@
                     <span class="material-symbols-outlined text-orange-500 dark:text-gray-500 bg-orange-100 dark:bg-gray-200 p-2 rounded-md">description</span>
                     Gig Description
                 </h3>
-                <div class="prose dark:prose-invert max-w-none text-gray-500 dark:text-gray-4=600 space-y-4 leading-relaxed">
-                    <p>{{ gig.description|striptags }}</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>Define and maintain a scalable design system in Figma.</li>
-                        <li>Collaborate with product managers to translate complex requirements into intuitive workflows.</li>
-                        <li>Conduct user testing and iterate based on feedback.</li>
-                        <li>Oversee design-to-development handoffs.</li>
-                    </ul>
+                <div class="quill-content max-w-none text-gray-500 dark:text-gray-4=600 space-y-4 leading-relaxed">
+                    {{ gig.description|safe }}
                 </div>
                 <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-wrap gap-3">
                     <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 transition-colors">
@@ -404,6 +401,7 @@
 </section>
 {% endblock %}
 {% block custom_page_js %}
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
     function gigActions(el) {
         return {

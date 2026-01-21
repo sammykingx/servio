@@ -44,13 +44,12 @@ class GigPayload(BaseModel):
     @field_validator("description", mode="before")
     @classmethod
     def clean_description(cls, value: str):
-        value = bleach.clean(
-            value,
-            tags=ALLOWED_TAGS,
-            attributes=ALLOWED_ATTRIBUTES,
-            strip=True
-        )
-        print("DESCRIPTION CLEANING:\n", value, "\n")
+        # value = bleach.clean(
+        #     value,
+        #     tags=ALLOWED_TAGS,
+        #     attributes=ALLOWED_ATTRIBUTES,
+        #     strip=True
+        # )
         return value
     
     @field_validator("startDate", mode="after")

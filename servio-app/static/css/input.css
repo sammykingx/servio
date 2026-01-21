@@ -756,3 +756,78 @@ span.flatpickr-weekday,
 .icon-rewards { color: #ec4899; }       /* Pink */
 .icon-gigs { color: #8b5cf6; }          /* Violet */
 
+/* Quiil JS Related Styles */
+/* Base content */
+.quill-content {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #4b5563;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.dark .quill-content {
+    color: #d1d5db;
+}
+
+/* Headings rendered like paragraphs */
+.quill-content h1,
+.quill-content h2,
+.quill-content h3,
+.quill-content h4,
+.quill-content h5 {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0.7em 0;
+    line-height: 1.7;
+}
+
+/* Add subtle divider */
+.quill-content h2::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, #e5e7eb, transparent);
+    margin: 2em 0 1em;
+}
+
+.dark .quill-content h2::before {
+    background: linear-gradient(to right, #334155, transparent);
+}
+
+
+/* Normal paragraphs */
+.quill-content p {
+    margin: 0.7em 0;
+    font-weight: 400;
+}
+
+/* Remove Quill empty paragraphs */
+.quill-content p:empty {
+    display: none;
+}
+
+.quill-content p > br:only-child {
+    display: none;
+}
+
+/* Lists */
+.quill-content ol,
+.quill-content ul {
+    padding-left: 1.5rem;
+    margin: 1em 0;
+}
+
+.quill-content li {
+    margin: 0.4em 0;
+}
+
+.quill-content ol li[data-list="bullet"] {
+    list-style-type: disc;
+}
+
+/* Alignment */
+.quill-content .ql-align-center { text-align: center; }
+.quill-content .ql-align-right { text-align: right; }
+.quill-content .ql-align-justify { text-align: justify; }
+
+
