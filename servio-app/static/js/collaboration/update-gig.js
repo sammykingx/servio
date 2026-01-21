@@ -34,6 +34,36 @@ function updateGigData(el) {
             this.locked = this.status === 'in_progress';
         },
 
+        initQuill() {
+            this.editor = new Quill('#quill-editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: '#quill-toolbar'
+                },
+                formats: [
+                    'bold', 'italic', 'underline',
+                    'list', 'header', 'font', 'align',
+                ],
+            });
+           
+            // Set initial content from payload
+            this.editor.root.innerHTML = this.payload.description || '';
+
+            // Listen for changes
+            this.editor.on('text-change', (delta, oldDelta, source) => {
+                if (source !== 'user') return; // only block user typing
+
+                const plainText = this.editor.getText(); // includes trailing newline
+                if (plainText.length > this.maxDescriptionLength) {
+                    // Reject this input by undoing it
+                    this.editor.updateContents(oldDelta.diff(this.editor.getContents()));
+                } else {
+                    // Normal update
+                    this.payload.description = this.editor.root.innerHTML;
+                }
+            });
+        },
+
         setRoles(roles) {
             this.payload.roles = roles;
             

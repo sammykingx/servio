@@ -2,6 +2,9 @@
 {% load static %}
 {% load pretify_status %}
 {% load humanize %}
+{% block custom_page_css %}
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+{% endblock %}
 {% block browser_title %}Modify Gig/Project{% endblock %}
 {% block content %}
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-7 md:mb-0">
@@ -159,30 +162,52 @@
                 <span class="bg-fuchsia-50 dark:bg-gray-600 rounded-lg p-2 material-symbols-outlined text-fuchsia-500 dark:text-gray-400">description</span>
                 <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Gig Description</h3>
             </div>
-            <div class="border border-slate-300 dark:border-slate-600 
+            <div x-init="initQuill()" class="border border-slate-300 dark:border-slate-600 
                     rounded-lg overflow-hidden bg-slate-50 dark:bg-slate-900 
                     focus-within:border-success-300 dark:focus-within:border-warning-200 
                     focus-within:ring-success-500/10 transition-all">
                 <!-- Toolbar -->
-                <div class="flex items-center gap-1 p-2 border-b border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
-                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
-                        <span class="material-symbols-outlined text-[20px]">format_bold</span>
+                <div id="quill-toolbar" class="flex flex-wrap items-center gap-x-2 gap-y-2 p-2 border-b 
+                    border-slate-200 dark:border-slate-700 
+                    bg-slate-100 dark:bg-slate-800">
+                    <!-- Header -->
+                    <div class="relative">
+                        <select class="ql-header quill-select">
+                            <option selected value="">Paragraph</option>
+                            <option value="2">H2</option>
+                            <option value="3">H3</option>
+                            <option value="4">H4</option>
+                            <option value="5">H5</option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <button class="ql-bold quill-btn"><span class="material-symbols-outlined">format_bold</span></button>
+                    <button class="ql-italic quill-btn"><span class="material-symbols-outlined">format_italic</span></button>
+                    <button class="ql-underline quill-btn"><span class="material-symbols-outlined">format_underlined</span></button>
+
+                    <!-- Alignment -->
+                    <button class="ql-align quill-btn" value="">
+                        <span class="material-symbols-outlined">format_align_left</span>
                     </button>
-                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
-                        <span class="material-symbols-outlined text-[20px]">format_italic</span>
+                    <button class="ql-align quill-btn" value="center">
+                        <span class="material-symbols-outlined">format_align_center</span>
                     </button>
-                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
-                        <span class="material-symbols-outlined text-[20px]">format_underlined</span>
+                    <button class="ql-align quill-btn" value="right">
+                        <span class="material-symbols-outlined">format_align_right</span>
                     </button>
-                    <div class="w-px h-5 bg-slate-300 dark:bg-slate-600 mx-1"></div>
-                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
-                        <span class="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+                    <button class="ql-align quill-btn" value="justify">
+                        <span class="material-symbols-outlined">format_align_justify</span>
                     </button>
-                    <button class="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400">
-                        <span class="material-symbols-outlined text-[20px]">link</span>
+
+                    <!-- Bullet list-->
+                    <button class="ql-list quill-btn" value="bullet">
+                        <span class="material-symbols-outlined">format_list_bulleted</span>
                     </button>
+
                 </div>
-                <!-- Text Area -->
+                <div id="quill-editor" class="w-full min-h-[160px] p-4 bg-transparent text-gray-800 dark:text-gray-400"></div>
+                <!-- Text Area --
                 <textarea 
                     x-model="payload.description" 
                     @input="enforceDescriptionLimit()" 
@@ -193,12 +218,12 @@
                         placeholder:text-gray-500
                         focus:outline-none focus:ring-0 
                         focus:border-transparent"
-                ></textarea>
+                ></textarea> -->
             </div>
             <div class="flex justify-end mt-2 text-xs" :class="descriptionCount() >= maxDescriptionLength
                     ? 'text-red-500'
                     : 'text-slate-500'">
-                <span x-text="descriptionCount()"></span>/<span x-text="maxDescriptionLength"></span>
+                <span x-text="descriptionCount()"></span> /<span x-text="` ${maxDescriptionLength}`"></span>
                 characters
             </div>
         </section>
@@ -609,6 +634,7 @@
 </div>
 {% endblock %}
 {% block custom_page_js %}
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script id="gig-taxonomy-data" type="application/json" x-ref="taxonomy">
     {{ gig_taxonomy|safe }}
 </script>

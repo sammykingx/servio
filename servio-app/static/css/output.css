@@ -5439,11 +5439,6 @@
       border-color: var(--color-brand-300);
     }
   }
-  .focus-within\:border-brand-500 {
-    &:focus-within {
-      border-color: var(--color-brand-500);
-    }
-  }
   .focus-within\:border-success-300 {
     &:focus-within {
       border-color: var(--color-success-300);
@@ -5471,14 +5466,6 @@
       --tw-ring-color: color-mix(in srgb, #4c3aff 10%, transparent);
       @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-brand-500) 10%, transparent);
-      }
-    }
-  }
-  .focus-within\:ring-brand-500\/20 {
-    &:focus-within {
-      --tw-ring-color: color-mix(in srgb, #4c3aff 20%, transparent);
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--color-brand-500) 20%, transparent);
       }
     }
   }
@@ -5853,13 +5840,6 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-slate-100);
-      }
-    }
-  }
-  .hover\:bg-slate-200 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-slate-200);
       }
     }
   }
@@ -8582,11 +8562,6 @@
       }
     }
   }
-  .dark\:bg-slate-600 {
-    &:where(.dark, .dark *) {
-      background-color: var(--color-slate-600);
-    }
-  }
   .dark\:bg-slate-700 {
     &:where(.dark, .dark *) {
       background-color: var(--color-slate-700);
@@ -11098,6 +11073,35 @@ span.flatpickr-weekday, .flatpickr-months .flatpickr-month {
 }
 .icon-gigs {
   color: #8b5cf6;
+}
+.quill-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: inline-block;
+  height: 36px;
+  padding: 0 32px 0 12px;
+  border-radius: 8px;
+  border: 1px solid rgb(203 213 225);
+  background-color: rgb(241 245 249);
+  font-size: 14px;
+  vertical-align: middle;
+  line-height: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 18px;
+  cursor: pointer;
+}
+.quill-select option {
+  padding: 4px 12px;
+  font-size: 14px;
+}
+.dark .quill-select {
+  background-color: rgb(30 41 59);
+  border-color: rgb(71 85 105);
+  color: rgb(226 232 240);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23cbd5f5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7' /%3E%3C/svg%3E");
 }
 @property --tw-translate-x {
   syntax: "*";
