@@ -1,0 +1,14 @@
+<div class="flex justify-center my-4">
+    {% if page_obj.has_next %}
+    <button
+        hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}?page={{ page_obj.next_page_number }}"
+        hx-target="#gig-list"
+        hx-swap="outerHTML"
+        class="text-sm font-semibold text-gray-500 hover:text-brand-500 
+            transition-colors flex items-center gap-1"
+    >
+        <span>Show more gigs</span>
+        <span class="material-symbols-outlined text-[16px]">expand_more</span>
+    </button>
+    {% endif %}
+</div>

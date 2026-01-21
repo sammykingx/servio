@@ -189,7 +189,7 @@ function validatePayload(gigPayload) {
 
     const wordCount = description.trim().match(/\b\w+\b/g)?.length || 0;
 
-    if (wordCount < 10) {
+    if (wordCount < 6) {
         errors.push("Project description must be descriptive enough for professionals to understand");
     }
 

@@ -48,7 +48,7 @@ function showToast(message, type = "success", title) {
 
   const toast = document.createElement("div");
   toast.className = `
-      rounded-xl border ${t.border} ${t.bg} p-4 shadow-lg w-auto max-w-sm
+      rounded-xl border ${t.border} ${t.bg} p-4 shadow-lg w-auto max-w-sm z-999
       opacity-0 transform -translate-y-4 transition-all duration-500 ease-in-out
     `;
 

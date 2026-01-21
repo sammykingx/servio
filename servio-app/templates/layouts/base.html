@@ -38,6 +38,13 @@
 		$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
 		:class="{'dark bg-gray-900': darkMode === true}"
 	>
+		<!-- Global toast notification -->
+		<div 
+			id="center-alert-container" 
+			class="fixed top-5 left-1/2 -translate-x-1/2 z-99999
+				w-full max-w-md px-4 space-y-3 pointer-events-none">
+		</div>
+		
 		<!-- Ambient Background -->
 		<div class="fixed inset-0 -z-10 overflow-hidden">
 			<div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full 
@@ -72,11 +79,7 @@
 				<!-- ===== Main Content Start ===== -->
 				<main hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' x-transition.opacity.duration.400ms>
 					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 bg-[#faf9ff] dark:bg-black">
-						<div 
-							id="center-alert-container" 
-							class="fixed top-4 left-1/2 -translate-x-1/2 z-999999
-							w-full max-w-md px-4 space-y-3 pointer-events-none">
-						</div>
+						
 						{% for message in messages %}
 						<div
 							x-data="{ isVisible: true }"

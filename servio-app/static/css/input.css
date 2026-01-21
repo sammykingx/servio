@@ -749,7 +749,7 @@ span.flatpickr-weekday,
   animation: float-slow 28s ease-in-out infinite;
 }
 
-/* Icon color system */
+/* Brand Icon color system */
 .icon-payments { color: #6366f1; }      /* Indigo */
 .icon-escrow { color: #22c55e; }        /* Emerald */
 .icon-negotiations { color: #f59e0b; }  /* Amber */

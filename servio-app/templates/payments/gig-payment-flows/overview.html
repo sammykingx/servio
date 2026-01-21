@@ -44,12 +44,28 @@
         <!-- Gig Meta Card (Hero) -->
         <div class="rounded-xl shadow-soft border border-gray-200 dark:border-gray-600 dark:border-border-dark overflow-hidden">
             <!-- Card Header -->
-            <div class="p-6 md:p-8 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-background-light/50 to-transparent dark:from-background-dark/50">
-                <div class="flex flex-col md:flex-row justify-between gap-6">
+            <div class="relative overflow-hidden
+                    p-6 md:p-8
+                    bg-gradient-to-br from-white via-brand-50/40 to-transparent
+                    dark:from-[#0b1220] dark:via-brand-900/20 dark:to-transparent
+                    border-b border-white/10 dark:border-white/5"
+            >
+                <!-- Ambient glow -->
+                <div class="absolute inset-0 pointer-events-none
+                    bg-[linear-gradient(90deg,rgba(99,102,241,0.04),transparent_35%,transparent_65%,rgba(59,130,246,0.04))]
+                    dark:bg-[linear-gradient(90deg,rgba(99,102,241,0.06),transparent_35%,transparent_65%,rgba(59,130,246,0.06))]">
+                </div>
+
+                <!-- soft top highlight -->
+                <div class="absolute inset-x-0 top-0 h-px
+                    bg-gradient-to-r from-transparent via-gray-300/40 to-transparent
+                    dark:via-white/10">
+                </div>
+                <div class="relative flex flex-col md:flex-row justify-between gap-6">
                     <div class="space-y-4 flex-1">
                         <div>
-                            <p class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Gig Details</p>
-                            <h3 class="text-xl sm:text-2xl font-extrabold text-800 dark:text-gray-300">{{ gig.title|striptags|truncatewords:10|title }}</h3>
+                            <p class="text-sm font-light text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Gig Details</p>
+                            <h3 class="text-xl sm:text-2xl font-medium text-800 dark:text-gray-300">{{ gig.title|striptags|truncatewords:10|title }}</h3>
                             <p
                                 class="
                                     text-gray-400 dark:text-gray-500 font-base mt-1

@@ -3,7 +3,7 @@
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 
-<div data-gig-data x-data="gigData()" data-endpoint="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" data-csrf-token="{{ csrf_token }}">
+<div data-gig-data x-data="gigData()" data-endpoint="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" data-csrf-token="{{ csrf_token }}" class="py-3">
     <div class="flex-1 w-full pb-32">
         <div class="mx-auto w-full max-w-[1600px] flex flex-col gap-8">
             <div class="flex flex-col gap-3">
@@ -68,10 +68,10 @@
                                         </div>
 
                                         <!-- Buttons -->
-                                        <button @click="payload.visibility='public'" :class="payload.visibility === 'public' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
+                                        <button @click="payload.visibility='public'" :class="payload.visibility === 'public' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative px-4 py-2 rounded-md text-sm transition-colors" type="button">
                                             Public
                                         </button>
-                                        <button @click="payload.visibility='private'" :class="payload.visibility === 'private' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative z-10 px-4 py-2 rounded-md text-sm transition-colors" type="button">
+                                        <button @click="payload.visibility='private'" :class="payload.visibility === 'private' ? 'text-gray-800 dark:text-gray-700 font-semibold' : 'text-gray-600 dark:text-gray-400 font-medium'" class="relative px-4 py-2 rounded-md text-sm transition-colors" type="button">
                                             Private
                                         </button>
                                     </div>
@@ -148,7 +148,7 @@
                                         <input
                                             type="radio"
                                             class="sr-only"
-                                            name="roleSelect"
+                                            name="isNegotiable"
                                             :checked="payload.isNegotiable === true"
                                             @change="payload.isNegotiable = true"
                                         />
@@ -300,7 +300,22 @@
                                 <div class="flex flex-col gap-3 space-y-3 mb-5"> <label class="text-center text-gray-800 dark:text-gray-800 text-sm font-semibold bg-slate-200 rounded-lg py-3 px-4 mb-3">Proposed Start Date</label>
                                     <div x-data="{ type: 'start' }">
                                         <!-- Header-->
-                                        <div class="flex items-center justify-between mb-2"> <button @click="prevMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> ‹ </button> <span class="text-sm font-semibold text-gray-600 dark:text-gray-500" x-text="monthLabel(type)"></span> <button @click="nextMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> › </button> </div>
+                                        <div class="flex items-center justify-between mb-2"> 
+                                            <button 
+                                                type="button" 
+                                                @click="prevMonth(type)" 
+                                                class="text-gray-600 dark:text-gray-400 
+                                                    text-sm px-2 py-1 rounded hover:bg-gray-200"
+                                            > ‹ </button>
+                                            <span 
+                                                class="text-sm font-semibold text-gray-600 
+                                                    dark:text-gray-500" 
+                                                x-text="monthLabel(type)"></span>
+                                            <button type="button" 
+                                                @click="nextMonth(type)" 
+                                                class="text-gray-600 dark:text-gray-400 
+                                                    text-sm px-2 py-1 rounded hover:bg-gray-200"> › </button>
+                                        </div>
                                         <div class="grid grid-cols-7 text-center text-xs font-semibold mb-1">
                                             <template x-for="day in weekDays" :key="day">
                                                 <div x-text="day" class="text-gray-600 dark:text-gray-500"></div>
@@ -316,7 +331,25 @@
                                 <div class="flex flex-col gap-2"> <label class="text-center text-gray-800 dark:text-gray-800 text-sm font-semibold bg-slate-200 rounded-lg py-3 px-4 mb-3">Target Delivery / Go Live</label>
                                     <div x-data="{ type: 'end' }">
                                         <!-- Header-->
-                                        <div class="flex items-center justify-between mb-2"> <button @click="prevMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> ‹ </button> <span class="text-sm font-semibold text-gray-600 dark:text-gray-500" x-text="monthLabel(type)"></span> <button @click="nextMonth(type)" class="text-gray-600 dark:text-gray-400 text-sm px-2 py-1 rounded hover:bg-gray-200"> › </button> </div>
+                                        <div class="flex items-center justify-between mb-2">
+                                            <button 
+                                                type="button"
+                                                @click="prevMonth(type)" 
+                                                class="text-gray-600 dark:text-gray-400 text-sm px-2 
+                                                py-1 rounded hover:bg-gray-200"
+                                            > ‹ </button>
+                                            <span 
+                                                class="text-sm font-semibold text-gray-600 
+                                                    dark:text-gray-500" 
+                                                x-text="monthLabel(type)"
+                                            ></span> 
+                                            <button 
+                                                type="button" 
+                                                @click="nextMonth(type)" 
+                                                class="text-gray-600 dark:text-gray-400 
+                                                    text-sm px-2 py-1 rounded hover:bg-gray-200"
+                                            > › </button>
+                                        </div>
                                         <div class="grid grid-cols-7 text-center text-xs font-semibold mb-1"> 
                                             <template x-for="day in weekDays" :key="day">
                                                 <div x-text="day" class="text-gray-600 dark:text-gray-500"></div>
