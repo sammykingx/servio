@@ -1,11 +1,13 @@
-from django.urls import path, reverse_lazy
+from django.urls import include, path, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
 from core.url_names import PaymentURLS
 from template_map.payments import Payments
+from .escrow import urls as escrow_urls
 from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, SelectGigPaymentMethodView, GigCardInfoView, GigPaymentComplete
 
 
 urlpatterns = [
+    path("escrow/", include(escrow_urls)),
     path(
         "",
         RedirectView.as_view(

@@ -50,17 +50,6 @@ urlpatterns = [
         name=BusinessURLS.SCHEDULE,
     ),
     path(
-        "reviews/",
-        TemplateView.as_view(template_name=Reviews.BUSINESS_REVIEWS),
-        name=BusinessURLS.REVIEWS
-    ),
-    # path(
-    #     "<slug:slug>/",
-    #     TemplateView.as_view(template_name=Accounts.Business.BUSINESS_PAGE),
-    #     name=BusinessURLS.VIEW_BUSINESS_PAGE,
-        
-    # ),
-    path(
         "marketing/", TemplateView.as_view(template_name=Marketing.SUMMARY),
         name="biz-marketing"
     ),

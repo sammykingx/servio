@@ -1,36 +1,75 @@
-<section class="flex-grow flex items-center justify-center py-12">
-    <div class="w-full max-w-2xl flex flex-col items-center text-center p-8 md:p-12 rounded-2xl bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 shadow-sm">
-        <!-- Hero Illustration -->
-        <div class="relative w-64 h-64 mb-8">
-            <!-- Decorative Background Blob -->
-            <div class="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-purple-500/10 rounded-full blur-2xl animate-pulse"></div>
-            <!-- Main Illustration Image -->
-            <div class="relative w-full h-full bg-contain bg-center bg-no-repeat rounded-2xl" data-alt="Abstract 3D illustration of floating folders and geometric shapes representing project collaboration" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBlJJRvJgxzKmJ6jSsSiUwXmtjd0bf2qadCIIZ9YwS5NAzJkfOsce3YxLv6r8SkJX2pGAdXafAYIsfkC-ZaZSn_5JFMw9ykMWZ2RjEj4Q5E10_Yig6F_IV7HVShfAXKbX79v81bFQjBJlVPwW8jXT2UpUQQZfMm1JWPsYcqzpIxeIjNebnk1k4latBuMcM8oxAsXezreko6VgqbG2ogAlRbxnRYXVmXATZER-6gOIq3277DMU8oA4Hx2evYi8UtXKOOXa_MIQdxtUY");'>
-            </div>
-        </div>
-        <!-- Content -->
-        <div class="max-w-md mx-auto space-y-4">
-            <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-gray-300 tracking-tight">
-                Your first gig starts here.
-            </h2>
-            <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm leading-relaxed">
-                Create a gig to broadcast your project, invite professionals, and collaborate effortlessly.
-            </p>
-            <!-- brand-500 Action -->
-            <div class="pt-6 flex flex-col items-center gap-4">
-                <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="group relative flex items-center justify-center gap-2 h-12 px-8 bg-brand-500 hover:bg-blue-600 text-white text-sm md:text-base font-semibold rounded-lg shadow-lg shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
-                    <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
-                    Create Gig / Publish a Project
-                </a>
-                <!-- Secondary Link -->
-                <a class="flex items-center gap-1 text-sm font-medium text-slate-400 hover:text-brand-500 dark:hover:text-white transition-colors group" href="#">
-                    <span class="material-symbols-outlined text-[18px]">menu_book</span>
-                    <span>Learn how to manage gigs</span>
-                    <span class="material-symbols-outlined text-[16px] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">arrow_forward</span>
-                </a>
-            </div>
-        </div>
+<div class="min-h-screen flex items-center justify-center p-8 bg-slate-50 dark:bg-[#121620]">
+
+  <div class="flex flex-col items-center justify-center max-w-2xl w-full">
+
+    <!-- Icon Cluster -->
+    <div class="relative flex items-center justify-center size-48 mb-8">
+
+      <!-- Background Blobs -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="size-40 bg-purple-100 dark:bg-purple-900/30 rounded-full blur-2xl opacity-70"></div>
+        <div class="absolute size-32 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-xl opacity-60 animate-pulse"></div>
+      </div>
+
+      <!-- Main Project Card -->
+      <div class="relative z-20 flex items-center justify-center size-24
+                  bg-white dark:bg-[#1a202c] rounded-2xl
+                  shadow-xl shadow-purple-900/5
+                  border border-slate-100 dark:border-slate-700">
+        <span class="text-4xl text-purple-500 dark:text-white">💼</span>
+      </div>
+
+      <!-- Floating Lightbulb (Idea / Inspiration) -->
+      <div class="absolute top-2 -right-2 z-10 flex items-center justify-center size-12
+                  bg-white dark:bg-[#232936] rounded-xl
+                  shadow-lg border border-slate-50 dark:border-slate-700
+                  -rotate-12">
+        <span class="material-symbols-outlined text-xl text-indigo-500">
+          lightbulb
+        </span>
+      </div>
+
+      <!-- Floating Checklist (Tasks / Milestones) -->
+      <div class="absolute bottom-1 -left-3 z-10 flex items-center justify-center size-14
+                  bg-white dark:bg-[#232936] rounded-xl
+                  shadow-lg border border-slate-50 dark:border-slate-700
+                  rotate-12">
+        <span class="material-symbols-outlined text-2xl text-purple-400">
+          checklist_rtl
+        </span>
+      </div>
+
     </div>
-</section>
 
+    <!-- Text Content -->
+    <div class="text-center max-w-md space-y-3 mb-8">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
+        No projects yet
+      </h2>
+      <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed">
+        Start creating your first project or explore available gigs to kick things off.
+        Projects help you organize tasks, milestones, and collaborations.
+      </p>
+    </div>
 
+    <!-- Primary CTA -->
+    <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="group flex items-center justify-center gap-2
+                   bg-purple-500 hover:bg-purple-600
+                   text-white font-semibold py-3 px-6 rounded-lg
+                   transition-all duration-200
+                   shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40
+                   transform hover:-translate-y-0.5">
+      <span class="material-symbols-outlined text-[20px]">add_box</span>
+      <span>Create a Project</span>
+    </a>
+
+    <!-- Secondary Action -->
+    <a href="#"
+       class="mt-6 text-sm font-medium text-slate-500 hover:text-purple-500
+              dark:text-slate-400 dark:hover:text-purple-300
+              transition-colors flex items-center gap-1">
+      Explore available gigs
+      <span class="material-symbols-outlined text-base">arrow_forward</span>
+    </a>
+  </div>
+</div>

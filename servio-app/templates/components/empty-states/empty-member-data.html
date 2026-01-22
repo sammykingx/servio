@@ -3,24 +3,40 @@
         <!-- Background Decor -->
         <div class="w-full max-w-4xl flex flex-col items-center animate-fade-in-up">
             <!-- Hero Illustration -->
-            <div class="mb-8 relative group">
-                <div class="w-64 h-48 md:w-80 md:h-56 bg-gradient-to-tr from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl flex items-center justify-center relative overflow-hidden shadow-soft border border-white/50 dark:border-slate-700">
-                    <!-- Abstract geometric pattern representing collaboration -->
-                    <div class="absolute inset-0 opacity-20 dark:opacity-10" style="background-image: radial-gradient(#135bec 1px, transparent 1px); background-size: 16px 16px;"></div>
-                    <div class="relative flex flex-col items-center gap-3">
-                        <div class="flex -space-x-4">
-                            <div class="size-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm">
-                                <span class="material-symbols-outlined text-brand-500 text-sm">person</span>
-                            </div>
-                            <div class="size-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm">
-                                <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-sm">handshake</span>
-                            </div>
-                            <div class="size-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm">
-                                <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-sm">check</span>
-                            </div>
-                        </div>
-                        <div class="h-1.5 w-24 bg-slate-200 dark:bg-slate-700 rounded-full mt-2"></div>
-                        <div class="h-1.5 w-16 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+            <div class="mb-8 relative flex items-center justify-center">
+                <!-- Icon Cluster -->
+                <div class="relative flex items-center justify-center size-48">
+                    <!-- Background Blobs -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="size-40 bg-indigo-100 dark:bg-indigo-900/30 rounded-full blur-2xl opacity-70"></div>
+                        <div class="absolute size-32 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-xl opacity-60 animate-pulse"></div>
+                    </div>
+                    <!-- Main Dashboard Card -->
+                    <div class="relative z-20 flex items-center justify-center size-24
+                        bg-white dark:bg-[#1a202c] rounded-2xl
+                        shadow-xl shadow-indigo-900/5
+                        border border-slate-100 dark:border-slate-700">
+                        <span class="material-symbols-outlined text-4xl text-brand-500 dark:text-white">
+                        dashboard
+                        </span>
+                    </div>
+                    <!-- Floating Collaboration -->
+                    <div class="absolute top-2 -right-2 z-10 flex items-center justify-center size-12
+                        bg-white dark:bg-[#232936] rounded-xl
+                        shadow-lg border border-slate-50 dark:border-slate-700
+                        -rotate-12">
+                        <span class="text-xl">
+                        ✨
+                        </span>
+                    </div>
+                    <!-- Floating Progress / Tasks -->
+                    <div class="absolute bottom-1 -left-3 z-10 flex items-center justify-center size-14
+                        bg-white dark:bg-[#232936] rounded-xl
+                        shadow-lg border border-slate-50 dark:border-slate-700
+                        rotate-12">
+                        <span class="material-symbols-outlined text-2xl text-emerald-500">
+                        checklist
+                        </span>
                     </div>
                 </div>
             </div>
@@ -28,94 +44,141 @@
             <div class="text-center max-w-2xl mb-10">
                 <h2 class="text-2xl md:text-3xl font-semibold text-[#0d121b] dark:text-white mb-3 tracking-tight">Ready to get started?</h2>
                 <p class="text-slate-500 dark:text-slate-400 text-lg leading-relaxed tex-xs md:text-sm">
-                    Create a gig, book a service, or collaborate with professionals.<br class="hidden sm:block text-xs md:text-sm" /> Everything you need to succeed starts here.
+                    Start a project, book a service, or collaborate with professionals.<br class="hidden sm:block text-xs md:text-sm" /> Everything you need to succeed starts here.
                 </p>
             </div>
             <!-- Action Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
-                <!-- Card 1 -->
-                <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}"class="group relative flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#151c2a] p-6 shadow-sm hover:shadow-lg hover:border-brand-500/50 dark:hover:border-brand-500/50 transition-all duration-300" href="#">
-                    <div class="size-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-brand-500 flex items-center justify-center group-hover:bg-brand-500 group-hover:text-white transition-colors duration-300">
-                        <span class="material-symbols-outlined text-2xl">post_add</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-1 group-hover:text-brand-500 transition-colors">Create a gig</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-snug">Post a new job opportunity and hire top talent.</p>
-                    </div>
-                    <div class="mt-auto pt-2 flex items-center text-sm font-semibold text-brand-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                        Get Started <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full perspective-[1200px]">
+                <!-- ===== Card 1: Create a Gig ===== -->
+                <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}"
+                    class="group relative">
+                    <!-- Base Plate -->
+                    <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-200 to-slate-100
+                        dark:from-slate-800 dark:to-slate-900
+                        translate-y-2 blur-sm opacity-70"></div>
+                    <!-- Floating Card -->
+                    <div class="relative z-10 h-full rounded-2xl p-6
+                        bg-white dark:bg-[#151c2a]
+                        border border-slate-200/70 dark:border-slate-700/70
+                        shadow-[0_20px_40px_-20px_rgba(15,23,42,0.25)]
+                        transition-all duration-500 ease-out
+                        group-hover:-translate-y-2
+                        group-hover:rotate-x-[6deg]
+                        group-hover:shadow-[0_35px_60px_-25px_rgba(79,70,229,0.35)]">
+                        <!-- Icon -->
+                        <div class="relative mb-6">
+                            <div class="size-14 rounded-xl
+                                bg-gradient-to-br from-brand-500 to-indigo-500
+                                text-white flex items-center justify-center
+                                shadow-lg shadow-indigo-500/30">
+                                <span class="material-symbols-outlined text-2xl">post_add</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-2">
+                            Start a project
+                        </h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Start a project, define deliverables, and collaborate with verified professionals.
+                        </p>
+                        <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-500">
+                            Get Started
+                            <span class="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">
+                            arrow_forward
+                            </span>
+                        </div>
                     </div>
                 </a>
-                <!-- Card 2 -->
-                <a 
-                    @click="showToast('Service booking will be available in version 2 of Servio.', 'success', 'Coming in v2 🚀')"
-                    class="group relative flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#151c2a] p-6 shadow-sm hover:shadow-lg hover:border-purple-500/50 dark:hover:border-purple-500/50 transition-all duration-300" href="#">
-                    <div class="size-12 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
-                        <span class="material-symbols-outlined text-2xl">calendar_month</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Book a service</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-snug">Find a professional and schedule an appointment.</p>
-                    </div>
-                    <div class="mt-auto pt-2 flex items-center text-sm font-semibold text-purple-600 dark:text-purple-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                        Book Now <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+                <!-- ===== Card 2: Book a Service ===== -->
+                <a @click="showToast('Service booking will be available in version 2 of Servio.', 'success', 'Coming in v2 🚀')"
+                    class="group relative cursor-pointer">
+                    <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-100 to-fuchsia-50
+                        dark:from-purple-900/30 dark:to-slate-900
+                        translate-y-2 blur-sm opacity-70"></div>
+                    <div class="relative z-10 h-full rounded-2xl p-6
+                        bg-white dark:bg-[#151c2a]
+                        border border-slate-200/70 dark:border-slate-700/70
+                        shadow-[0_20px_40px_-20px_rgba(15,23,42,0.25)]
+                        transition-all duration-500 ease-out
+                        group-hover:-translate-y-2
+                        group-hover:rotate-x-[6deg]
+                        group-hover:shadow-[0_35px_60px_-25px_rgba(147,51,234,0.35)]">
+                        <div class="relative mb-6">
+                            <div class="size-14 rounded-xl
+                                bg-gradient-to-br from-purple-500 to-fuchsia-500
+                                text-white flex items-center justify-center
+                                shadow-lg shadow-purple-500/30">
+                                <span class="material-symbols-outlined text-2xl">calendar_month</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-2">
+                            Book a service
+                        </h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Discover experts, schedule sessions, and manage appointments effortlessly.
+                        </p>
+                        <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-purple-600 dark:text-purple-400">
+                            Coming Soon
+                            <span class="material-symbols-outlined text-sm">rocket_launch</span>
+                        </div>
                     </div>
                 </a>
-                <!-- Card 3 -->
-                <a 
-                    @click="showToast('Invoices, receipts, contracts and business tools will launched in Servio v2.', 'success', 'Coming in v2 🚀')"
-                    class="group relative flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#151c2a] p-6 shadow-sm hover:shadow-lg hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-all duration-300" href="#">
-                    <div class="size-12 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
-                        <span class="material-symbols-outlined text-2xl">receipt_long</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Invoices & Business Tools</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-snug">Create invoices, manage contracts, track payments and run your business.</p>
-                    </div>
-                    <div class="mt-auto pt-2 flex items-center text-sm font-semibold text-emerald-600 dark:text-emerald-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                        Explore <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+                <!-- ===== Card 3: Business Tools ===== -->
+                <a @click="showToast('Invoices, receipts, contracts and business tools will launch in Servio v2.', 'success', 'Coming in v2 🚀')"
+                    class="group relative cursor-pointer">
+                    <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-50
+                        dark:from-emerald-900/30 dark:to-slate-900
+                        translate-y-2 blur-sm opacity-70"></div>
+                    <div class="relative z-10 h-full rounded-2xl p-6
+                        bg-white dark:bg-[#151c2a]
+                        border border-slate-200/70 dark:border-slate-700/70
+                        shadow-[0_20px_40px_-20px_rgba(15,23,42,0.25)]
+                        transition-all duration-500 ease-out
+                        group-hover:-translate-y-2
+                        group-hover:rotate-x-[6deg]
+                        group-hover:shadow-[0_35px_60px_-25px_rgba(16,185,129,0.35)]">
+                        <div class="relative mb-6">
+                            <div class="size-14 rounded-xl
+                                bg-gradient-to-br from-emerald-500 to-teal-500
+                                text-white flex items-center justify-center
+                                shadow-lg shadow-emerald-500/30">
+                                <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-2">
+                            Business tools
+                        </h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Invoices, contracts, receipts, and payment tracking—built for real businesses.
+                        </p>
+                        <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                            Explore
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </div>
                     </div>
                 </a>
             </div>
             <!-- Secondary Links -->
             <div class="mt-12 flex items-center gap-2">
                 <a class="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
-                    <span class="material-symbols-outlined text-[20px]">help</span>
-                    How it works
+                <span class="material-symbols-outlined text-[20px]">help</span>
+                How it works
                 </a>
                 <span class="text-slate-300 dark:text-slate-700">•</span>
                 {% if user.completed_onboarding %}
-                    <a class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
-                        <span class="material-symbols-outlined text-[20px]">person_outline</span>
-                        Completed (100%)
-                    </a>
+                <a class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+                <span class="material-symbols-outlined text-[20px]">person_outline</span>
+                Completed (100%)
+                </a>
                 {% else %}
-                    <a
-                        href="{% url USER_ONBOARDING_URLS.WELCOME %}"
-                        class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
-                        <span class="material-symbols-outlined text-[20px]">person_outline</span>
-                        Complete Profile <span>{% widthratio user.onboarding_step 4 100 %}%</span>
-                    </a>
+                <a
+                    href="{% url USER_ONBOARDING_URLS.WELCOME %}"
+                    class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+                <span class="material-symbols-outlined text-[20px]">person_outline</span>
+                Complete Profile <span>{% widthratio user.onboarding_step 4 100 %}%</span>
+                </a>
                 {% endif %}
             </div>
         </div>
     </section>
     <!-- Inline Style for Animation -->
-    <style>
-        @keyframes fade-in-up {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-    
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    
-        .animate-fade-in-up {
-            animation: fade-in-up 0.6s ease-out forwards;
-        }
-    </style>
 </div>

@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
 from template_map.accounts import Accounts
-from core.url_names import AuthURLNames
+from template_map.reviews import Reviews
+from core.url_names import AuthURLNames, ReviewURLS
 import accounts.urls
 import business_accounts.urls
 import collaboration.urls
@@ -34,7 +35,7 @@ urlpatterns = [
             url=reverse_lazy(AuthURLNames.LOGIN), permanent=True
         ),
     ),
-    path("admin/", admin.site.urls),
+    # path("admin/", admin.site.urls),
     # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
     path("business/", include(business_accounts.urls)),
@@ -47,10 +48,15 @@ urlpatterns = [
         name="user-dashboard",
     ),
     path(
-        "provider/",
-        TemplateView.as_view(template_name=Accounts.Dashboards.PROVIDERS),
-        name="provider-dashboard",
+        "reviews/",
+        TemplateView.as_view(template_name=Reviews.BUSINESS_REVIEWS),
+        name=ReviewURLS.OVERVIEW
     ),
+    path("kyc", TemplateView.as_view(template_name="account/kyc.html"), name="kyc-view"),
+    path("kyc-1", TemplateView.as_view(template_name="account/biz-kyc.html"), name="biz-director-view"),
+    path("kyc-2", TemplateView.as_view(template_name="account/kyc-2.html"), name="biz-doc-view"),
+    path("kyc-3", TemplateView.as_view(template_name="account/kyc-3.html"), name="kyc-3-view"),
+    path("kyc-4", TemplateView.as_view(template_name="account/kyc-4.html"), name="kyc-4-view"),
 ]
 
 from django.conf import settings

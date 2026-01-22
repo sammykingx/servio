@@ -1,0 +1,11 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block browser_title %}Negotiation Center{% endblock %}
+{% block content %}
+
+{% if not negotiations %}
+    {% include "components/empty-states/no-negotiations.html" %}
+{% else %}
+<p> Negotiatiosn available</p>
+{% endif %}
+{% endblock %}

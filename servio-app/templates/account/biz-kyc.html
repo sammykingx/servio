@@ -1,0 +1,237 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block browser_title %}User Business KYC REG{% endblock %}
+{% block custom_page_css %}
+{% endblock %}
+{% block content %}
+<!-- Business Details Header -->
+<section class="mb-8 max-w-3xl">
+  <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+    Business information
+  </h3>
+  <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+    We use this information to verify your business and enable higher transaction limits.
+    Details are checked securely and are never shown publicly.
+  </p>
+</section>
+<section class="relative max-w-3xl">
+
+  <div class="rounded-3xl bg-white dark:bg-[#151c2a]
+              border border-slate-200 dark:border-slate-700
+              shadow-lg p-6 lg:p-8">
+
+    <!-- Section title -->
+    <div class="flex items-center gap-3 mb-6">
+      <div class="size-10 rounded-xl bg-purple-100 dark:bg-purple-900/30
+                  text-purple-600 flex items-center justify-center">
+        <span class="material-symbols-outlined">apartment</span>
+      </div>
+      <h4 class="text-lg font-semibold text-slate-900 dark:text-white">
+        Registered business details
+      </h4>
+    </div>
+
+    <!-- FORM START -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+      <!-- Business name -->
+      <div class="sm:col-span-2">
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Legal business name
+        </label>
+        <input
+          type="text"
+          placeholder="e.g. Servio Technologies Ltd"
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm text-slate-900 dark:text-white
+                 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/10"
+        />
+      </div>
+
+      <!-- Registration number -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Registration number
+        </label>
+        <input
+          type="text"
+          placeholder="Company registration number"
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm text-slate-900 dark:text-white
+                 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/10"
+        />
+      </div>
+
+      <!-- Country of registration -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Country of registration
+        </label>
+        <select
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm text-slate-900 dark:text-white">
+          <option>Select country</option>
+          <option>Nigeria</option>
+          <option>Canada</option>
+          <option>United States</option>
+        </select>
+      </div>
+
+      <!-- Business type -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Business type
+        </label>
+        <select class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                       bg-transparent px-4 text-sm">
+          <option>Select type</option>
+          <option>Limited liability company</option>
+          <option>Sole proprietorship</option>
+          <option>Partnership</option>
+          <option>Non-profit</option>
+        </select>
+      </div>
+
+      <!-- Date of incorporation -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Date of incorporation
+        </label>
+        <input
+          type="date"
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm"
+        />
+      </div>
+
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+      <!-- Business name -->
+      <div class="sm:col-span-2">
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Legal business name
+        </label>
+        <input
+          type="text"
+          placeholder="e.g. Servio Technologies Ltd"
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm text-slate-900 dark:text-white
+                 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/10"
+        />
+      </div>
+
+      <!-- Registration number -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Registration number
+        </label>
+        <input
+          type="text"
+          placeholder="Company registration number"
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm text-slate-900 dark:text-white
+                 focus:border-brand-500 focus:ring-3 focus:ring-brand-500/10"
+        />
+      </div>
+
+      <!-- Country of registration -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Country of registration
+        </label>
+        <select
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm text-slate-900 dark:text-white">
+          <option>Select country</option>
+          <option>Nigeria</option>
+          <option>Canada</option>
+          <option>United States</option>
+        </select>
+      </div>
+
+      <!-- Business type -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Business type
+        </label>
+        <select class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                       bg-transparent px-4 text-sm">
+          <option>Select type</option>
+          <option>Limited liability company</option>
+          <option>Sole proprietorship</option>
+          <option>Partnership</option>
+          <option>Non-profit</option>
+        </select>
+      </div>
+
+      <!-- Date of incorporation -->
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Date of incorporation
+        </label>
+        <input
+          type="date"
+          class="h-11 w-full rounded-lg border border-slate-300 dark:border-slate-700
+                 bg-transparent px-4 text-sm"
+        />
+      </div>
+
+    </div>
+    <!-- Divider -->
+    <div class="my-8 border-t border-slate-200 dark:border-slate-700"></div>
+
+    <h5 class="text-sm font-semibold text-slate-900 dark:text-white mb-4">
+      Registered business address
+    </h5>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+      <div class="sm:col-span-2">
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Street address
+        </label>
+        <input type="text" class="h-11 w-full rounded-lg border px-4 text-sm" />
+      </div>
+
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          City
+        </label>
+        <input type="text" class="h-11 w-full rounded-lg border px-4 text-sm" />
+      </div>
+
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          State / Province
+        </label>
+        <input type="text" class="h-11 w-full rounded-lg border px-4 text-sm" />
+      </div>
+
+      <div>
+        <label class="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Postal code
+        </label>
+        <input type="text" class="h-11 w-full rounded-lg border px-4 text-sm" />
+      </div>
+
+    </div>
+    <!-- Actions -->
+    <div class="mt-10 flex items-center justify-between">
+
+      <button class="text-sm text-slate-500 hover:text-slate-700">
+        ← Back
+      </button>
+
+      <button class="px-6 py-3 rounded-lg bg-brand-500 hover:bg-brand-600
+                     text-white font-semibold transition">
+        Continue to documents
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

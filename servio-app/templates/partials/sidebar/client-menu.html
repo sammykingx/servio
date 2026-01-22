@@ -79,7 +79,7 @@
       </li>
       <li>
          <a
-            href="#"
+            href="{% url ESCROW.OVERVIEW %}"
             @click="selected = (selected === 'escrow' ? '':'escrow')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'escrow') && (page === 'escrow') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -100,7 +100,7 @@
       </li>
       <li>
          <a
-            href="#"
+            href="{% url PROPOSALS.LIST %}"
             @click="selected = (selected === 'negotiations' ? '':'negotiations')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'negotiations') && (page === 'negotiations') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -109,15 +109,15 @@
             <span
                class="menu-item-text"
                :class="sidebarToggle ? 'xl:hidden' : ''"
-               >
-            Negotiations
+            >
+               Proposals
             </span>
          </a>
       </li>
       
       <li>
          <a
-            href="#"
+            href="{% url REVIEWS.OVERVIEW %}"
             @click="selected = (selected === 'Rewards' ? '':'Rewards')"
             class="menu-item group text-gray-500"
             :class=" (selected === 'Rewards') && (page === 'Rewards') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -255,3 +255,6 @@
       </li>
    </ul>
 </div> -->
+
+
+

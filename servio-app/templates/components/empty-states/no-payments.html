@@ -3,21 +3,43 @@
         <div class="flex flex-col items-center justify-center max-w-2xl w-full">
             <!-- Decorative Icon Cluster / Illustration -->
             <div class="relative flex items-center justify-center size-48 mb-8">
+
                 <!-- Background Blobs -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-40 bg-blue-100 dark:bg-blue-900/30 rounded-full blur-2xl opacity-70"></div>
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-32 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-xl opacity-60 animate-pulse"></div>
-                <!-- Main Icon Card -->
-                <div class="relative z-10 flex flex-col items-center justify-center size-24 bg-white dark:bg-[#1a202c] rounded-2xl shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-100 dark:border-slate-700">
-                    <span class="material-symbols-outlined text-4xl text-brand-500 dark:text-white mb-1">monitoring</span>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="size-40 bg-blue-100 dark:bg-blue-900/30 rounded-full blur-2xl opacity-70"></div>
+                    <div class="absolute size-32 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-xl opacity-60 animate-pulse"></div>
                 </div>
-                <!-- Floating Elements (Simulating a cluster) -->
-                <div class="absolute top-6 right-8 z-0 flex items-center justify-center size-12 bg-white dark:bg-[#232936] rounded-xl shadow-lg border border-slate-50 dark:border-slate-700 -rotate-12">
-                    <span class="material-symbols-outlined text-xl text-green-500">attach_money</span>
+
+                <!-- Main Icon Card (💰) -->
+                <div class="relative z-20 flex items-center justify-center size-24
+                            bg-white dark:bg-[#1a202c] rounded-2xl
+                            shadow-xl shadow-blue-900/5 dark:shadow-none
+                            border border-slate-100 dark:border-slate-700">
+                    <span class="text-4xl text-brand-500 dark:text-white mb-1">💰</span>
                 </div>
-                <div class="absolute bottom-6 left-8 z-0 flex items-center justify-center size-14 bg-white dark:bg-[#232936] rounded-xl shadow-lg border border-slate-50 dark:border-slate-700 rotate-12">
-                    <span class="material-symbols-outlined text-2xl text-blue-400">pie_chart</span>
+
+                <!-- Floating Money Icon (Top Right) -->
+                <div class="absolute top-2 -right-2 z-10 flex items-center justify-center size-12
+                            bg-white dark:bg-[#232936] rounded-xl
+                            shadow-lg border border-slate-50 dark:border-slate-700
+                            -rotate-12">
+                    <span class="material-symbols-outlined text-xl text-green-500">
+                    attach_money
+                    </span>
                 </div>
-            </div>
+
+                <!-- Floating Chart Icon (Bottom Left) -->
+                <div class="absolute bottom-1 -left-3 z-10 flex items-center justify-center size-14
+                            bg-white dark:bg-[#232936] rounded-xl
+                            shadow-lg border border-slate-50 dark:border-slate-700
+                            rotate-12">
+                    <span class="material-symbols-outlined text-2xl text-blue-400">
+                    atm
+                    </span>
+                </div>
+
+                </div>
+
             <!-- Text Content -->
             <div class="text-center max-w-md space-y-3 mb-8">
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Your revenue will show up here.</h2>

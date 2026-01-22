@@ -13,3 +13,10 @@ class Payments:
         CARD_DETAILS = f"{__SUB_FOLDER}/card-details.html"
         GIG_CHECKOUT_RESPONSE = f"{__SUB_FOLDER}/gig-checkout-response.html"
         GIG_PAYMENT_COMPLETE = F"{__SUB_FOLDER}/gig-payment-successfull.html"
+        
+    class Escrow:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("escrow")
+        
+        OVERVIEW = f"{__SUB_FOLDER}/overview.html"
+        DETAILS = f"{__SUB_FOLDER}/details.html"
+        

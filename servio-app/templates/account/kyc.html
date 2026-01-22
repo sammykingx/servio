@@ -1,0 +1,190 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block browser_title %}User KYC{% endblock %}
+{% block custom_page_css %}
+{% endblock %}
+{% block content %}
+<!-- KYC Header -->
+<section class="mb-10">
+  <div class="max-w-3xl">
+    <h1 class="text-2xl md:text-3xl font-semibold text-slate-900 dark:text-white mb-3 tracking-tight">
+      Identity verification
+    </h1>
+    <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed">
+      To keep payments secure and comply with financial regulations, we need to verify
+      your identity. This process is encrypted, confidential, and only takes a few minutes.
+    </p>
+  </div>
+</section>
+<!-- Verification Level -->
+<section class="relative mb-12">
+  <div class="absolute -inset-1 rounded-3xl
+              bg-gradient-to-r from-emerald-200/30 via-emerald-100/10 to-emerald-200/30
+              dark:from-emerald-900/20 dark:to-emerald-900/5
+              blur-xl"></div>
+
+  <div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
+              border border-slate-200 dark:border-slate-700
+              shadow-lg p-6 lg:p-8">
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+      <div class="flex items-start gap-4">
+        <div class="size-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30
+                    text-emerald-600 flex items-center justify-center">
+          <span class="material-symbols-outlined text-[24px]">verified_user</span>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+            Verification required
+          </h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md">
+            Verified accounts can accept higher payment volumes, use escrow,
+            and access business features.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col items-start sm:items-end gap-1">
+        <span class="text-xs font-medium text-slate-500">Current status</span>
+        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
+                     bg-yellow-100 text-yellow-700 text-xs font-semibold">
+          <span class="material-symbols-outlined text-[14px]">hourglass_top</span>
+          Not verified
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- KYC Stepper -->
+<section class="mb-10">
+  <div class="flex items-center gap-4 overflow-x-auto">
+
+    <!-- Step -->
+    <div class="flex items-center gap-2">
+      <div class="size-8 rounded-full bg-brand-500 text-white
+                  flex items-center justify-center text-sm font-semibold">
+        1
+      </div>
+      <span class="text-sm font-medium text-slate-900 dark:text-white">
+        Account type
+      </span>
+    </div>
+
+    <div class="h-px w-10 bg-slate-200 dark:bg-slate-700"></div>
+
+    <div class="flex items-center gap-2 opacity-50">
+      <div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700
+                  text-slate-500 flex items-center justify-center text-sm font-semibold">
+        2
+      </div>
+      <span class="text-sm font-medium text-slate-500">
+        Details
+      </span>
+    </div>
+
+    <div class="h-px w-10 bg-slate-200 dark:bg-slate-700"></div>
+
+    <div class="flex items-center gap-2 opacity-50">
+      <div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700
+                  text-slate-500 flex items-center justify-center text-sm font-semibold">
+        3
+      </div>
+      <span class="text-sm font-medium text-slate-500">
+        Documents
+      </span>
+    </div>
+
+    <div class="h-px w-10 bg-slate-200 dark:bg-slate-700"></div>
+
+    <div class="flex items-center gap-2 opacity-50">
+      <div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700
+                  text-slate-500 flex items-center justify-center text-sm font-semibold">
+        4
+      </div>
+      <span class="text-sm font-medium text-slate-500">
+        Review
+      </span>
+    </div>
+
+  </div>
+</section>
+<!-- Step 1: Account Type -->
+<section class="relative">
+  <div class="rounded-3xl bg-white dark:bg-[#151c2a]
+              border border-slate-200 dark:border-slate-700
+              shadow-lg p-6 lg:p-8 max-w-3xl">
+
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+      What type of account are you verifying?
+    </h3>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+      Choose the option that best describes how you’ll receive payments.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      <!-- Individual -->
+      <button class="group text-left rounded-2xl border border-slate-200 dark:border-slate-700
+                     p-5 hover:border-brand-500 hover:shadow-md transition">
+        <div class="flex items-start gap-4">
+          <div class="size-10 rounded-xl bg-blue-100 dark:bg-blue-900/30
+                      text-blue-600 flex items-center justify-center">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div>
+            <p class="font-semibold text-slate-900 dark:text-white">
+              Individual
+            </p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+              Freelancers, contractors, and sole professionals
+            </p>
+          </div>
+        </div>
+      </button>
+
+      <!-- Business -->
+      <button class="group text-left rounded-2xl border border-slate-200 dark:border-slate-700
+                     p-5 hover:border-brand-500 hover:shadow-md transition">
+        <div class="flex items-start gap-4">
+          <div class="size-10 rounded-xl bg-purple-100 dark:bg-purple-900/30
+                      text-purple-600 flex items-center justify-center">
+            <span class="material-symbols-outlined">business</span>
+          </div>
+          <div>
+            <p class="font-semibold text-slate-900 dark:text-white">
+              Business
+            </p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+              Registered companies, agencies, and teams
+            </p>
+          </div>
+        </div>
+      </button>
+
+    </div>
+
+    <!-- Footer CTA -->
+    <div class="mt-8 flex justify-end">
+      <button class="px-6 py-3 rounded-lg bg-brand-500 hover:bg-blue-700
+                     text-white font-semibold transition">
+        Continue
+      </button>
+    </div>
+
+  </div>
+</section>
+<!-- Compliance Note -->
+<div class="mt-10 flex items-start gap-3 text-sm text-slate-500 dark:text-slate-400 max-w-3xl">
+  <span class="material-symbols-outlined text-[20px] text-emerald-500">
+    lock
+  </span>
+  <p>
+    Your information is encrypted and handled in accordance with financial
+    regulations (KYC/AML). We never sell or share your data.
+  </p>
+</div>
+
+{% endblock %}

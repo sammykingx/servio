@@ -1,0 +1,79 @@
+<div class="min-h-screen flex flex-col">
+  <div class="flex-1 flex items-center justify-center p-8 pb-20">
+    <div class="flex flex-col items-center justify-center max-w-2xl w-full">
+
+      <!-- Icon Cluster -->
+      <div class="relative flex items-center justify-center size-48 mb-8">
+
+        <!-- Background Blobs -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="size-40 bg-emerald-100 dark:bg-emerald-900/30 rounded-full blur-2xl opacity-70"></div>
+          <div class="absolute size-32 bg-teal-50 dark:bg-teal-900/20 rounded-full blur-xl opacity-60 animate-pulse"></div>
+        </div>
+
+        <!-- Main Escrow Card (Protected Funds) -->
+        <div class="relative z-20 flex items-center justify-center size-24
+                    bg-white dark:bg-[#1a202c] rounded-2xl
+                    shadow-xl shadow-emerald-900/5
+                    border border-slate-100 dark:border-slate-700">
+          <span class="text-4xl text-emerald-500 dark:text-white">
+            🏦
+          </span>
+        </div>
+
+        <!-- Floating Shield (Security / Protection) -->
+        <div class="absolute top-4 right-4 z-10 flex items-center justify-center size-12
+                    bg-white dark:bg-[#232936] rounded-xl
+                    shadow-lg border border-slate-50 dark:border-slate-700
+                    -rotate-12">
+          <span class="material-symbols-outlined text-xl text-emerald-600">
+            shield
+          </span>
+        </div>
+
+        <!-- Floating Trust / Completion -->
+        <div class="absolute bottom-1 -left-3 z-10 flex items-center justify-center size-14
+                    bg-white dark:bg-[#232936] rounded-xl
+                    shadow-lg border border-slate-50 dark:border-slate-700
+                    rotate-12">
+          <span class="material-symbols-outlined text-2xl text-teal-500">
+            account_balance_wallet
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Text Content -->
+      <div class="text-center max-w-md space-y-3 mb-8">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
+          No funds in escrow yet.
+        </h2>
+        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed">
+          Secure payments will appear here once a proposal is accepted and funds are
+          safely held until milestones are completed.
+        </p>
+      </div>
+
+      <!-- Primary CTA -->
+      <button class="group flex items-center justify-center gap-2
+                     bg-emerald-500 hover:bg-emerald-600
+                     text-white font-semibold py-3 px-6 rounded-lg
+                     transition-all duration-200
+                     shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40
+                     transform hover:-translate-y-0.5">
+        <span class="material-symbols-outlined text-[20px]">lock</span>
+        <span>Set Up Escrow</span>
+      </button>
+
+      <!-- Secondary Action -->
+      <a href="#"
+         class="mt-6 text-sm font-medium text-slate-500 hover:text-emerald-500
+                dark:text-slate-400 dark:hover:text-emerald-300
+                transition-colors flex items-center gap-1">
+        Learn how escrow protects both sides
+        <span class="material-symbols-outlined text-base">arrow_forward</span>
+      </a>
+
+    </div>
+  </div>
+</div>

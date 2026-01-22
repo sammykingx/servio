@@ -1,0 +1,11 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block browser_title %}Escrow Management{% endblock %}
+{% block content %}
+
+{% if not escrow %}
+    {% include "components/empty-states/escrow-empty.html" %}
+{% else %}
+<p> escrow available</p>
+{% endif %}
+{% endblock %}

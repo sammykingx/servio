@@ -65,7 +65,7 @@ class BusinessURLS:
     UPLOAD_BUSINESS_LOGO = "upload_business_logo"
     SERVICES = "business_services"
     SCHEDULE = "business_schedule"
-    REVIEWS = "reviews"
+
     
 class CollaborationURLS:
     LIST_COLLABORATIONS = "list_collaborations"
@@ -75,6 +75,11 @@ class CollaborationURLS:
     COLLABORATION_PAYMENTS = "collaboration_payment"
     DELETE_COLLABORATION = "delete_collaboration"
     
+class ProposalURLS:
+    LIST = "negotiation_listings"
+    DETAILS = "negotiation_details"
+    GIG_NEGOTIATIONS = "gig_negotiations"
+    
 class PaymentURLS:
     USER_PAYMENT_SUMMARY = "payment_summary"
     GIG_PAYMENT_SUMMARY = "gig_payment_summary"
@@ -82,3 +87,10 @@ class PaymentURLS:
     GIG_CARD_PAYMENT = "gig_card_payment"
     GIG_PAYMENT_RESPONSE = "gig_payment_response"
     GIG_PAYMENT_COMPLETE = "gig_payment_complete"
+    
+class EscrowURLS:
+    OVERVIEW = "escrow_overview"
+    DETAILS = "escrow_details"
+    
+class ReviewURLS:
+    OVERVIEW = "account_reviews"

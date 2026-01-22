@@ -7,3 +7,10 @@ class Collabs:
     DETAILS = _BASE_FOLDER.base_folder_files("details.html")
     CREATE = _BASE_FOLDER.base_folder_files("create.html")
     EDIT =  _BASE_FOLDER.base_folder_files("edit.html")
+    
+    class Proposals:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("negotiations")
+        
+        LIST = f"{__SUB_FOLDER}/list.html"
+        DETAILS = f"{__SUB_FOLDER}/detail.html"
+        

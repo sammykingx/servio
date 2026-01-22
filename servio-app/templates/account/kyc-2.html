@@ -1,0 +1,156 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block browser_title %}User Business KYC - 2{% endblock %}
+{% block custom_page_css %}
+{% endblock %}
+{% block content %}
+<section class="max-w-3xl mb-8">
+  <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+    Upload verification documents
+  </h3>
+  <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+    Upload official documents to verify your business. Files are encrypted and reviewed securely.
+  </p>
+</section>
+<section class="relative max-w-3xl group">
+
+  <!-- Ambient Glow Layer -->
+  <div class="pointer-events-none absolute -inset-6
+              bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))]
+              from-indigo-200/40 via-transparent to-transparent
+              dark:from-indigo-500/20 blur-3xl opacity-60">
+  </div>
+
+  <!-- Card -->
+  <div class="relative z-10 rounded-3xl
+              bg-white dark:bg-[#121826]
+              border border-slate-200/80 dark:border-slate-700/70
+              shadow-[0_10px_40px_-15px_rgba(79,70,229,0.25)]
+              dark:shadow-none
+              p-6 lg:p-8">
+    <!-- Upload Dropzone -->
+    <div class="relative group/upload">
+
+      <!-- Glow on hover -->
+      <div class="pointer-events-none absolute inset-0 rounded-2xl
+                  bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))]
+                  from-brand-400/20 via-transparent to-transparent
+                  opacity-0 group-hover/upload:opacity-100
+                  transition duration-500 blur-xl">
+      </div>
+
+      <label class="relative z-10 block cursor-pointer">
+
+        <input type="file" class="hidden" multiple />
+
+        <div class="rounded-2xl border border-dashed
+                    border-slate-300 dark:border-slate-700
+                    bg-slate-50/70 dark:bg-white/5
+                    px-6 py-10 text-center
+                    transition
+                    hover:border-brand-400
+                    hover:bg-brand-50/50
+                    dark:hover:bg-brand-500/10">
+
+          <!-- Icon -->
+          <div class="mx-auto mb-4 size-12 rounded-xl
+                      bg-brand-100 dark:bg-brand-500/20
+                      flex items-center justify-center
+                      shadow-sm">
+            <span class="material-symbols-outlined text-brand-600 dark:text-brand-400 text-2xl">
+              cloud_upload
+            </span>
+          </div>
+
+          <p class="text-sm font-medium text-slate-900 dark:text-white">
+            Drag & drop files here
+          </p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            or click to upload (PDF, JPG, PNG — max 10MB)
+          </p>
+
+        </div>
+      </label>
+    </div>
+    <!-- Documents List -->
+    <div class="mt-8 space-y-4">
+
+      <!-- Document Item -->
+      <div class="relative flex items-center justify-between
+                  rounded-xl border border-slate-200 dark:border-slate-700
+                  bg-white dark:bg-white/5 px-5 py-4">
+
+        <div class="flex items-center gap-4">
+          <div class="size-10 rounded-lg bg-indigo-100 dark:bg-indigo-500/20
+                      flex items-center justify-center">
+            <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400">
+              description
+            </span>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">
+              Certificate of incorporation
+            </p>
+            <p class="text-xs text-slate-500">
+              Government-issued business document
+            </p>
+          </div>
+        </div>
+
+        <span class="text-xs px-2 py-1 rounded-full
+                     bg-yellow-100 text-yellow-700
+                     dark:bg-yellow-500/20 dark:text-yellow-300">
+          Required
+        </span>
+      </div>
+
+      <!-- Repeat for ID, proof of address, etc -->
+
+    </div>
+    <!-- Upload Progress -->
+    <div class="mt-6">
+      <div class="flex items-center justify-between text-xs mb-2">
+        <span class="text-slate-500">Uploading documents</span>
+        <span class="text-slate-500">45%</span>
+      </div>
+
+      <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+        <div class="h-full w-[45%]
+                    bg-gradient-to-r from-brand-500 to-indigo-500
+                    rounded-full transition-all">
+        </div>
+      </div>
+    </div>
+    <!-- Security Notice -->
+    <div class="mt-8 flex items-center gap-3
+                rounded-xl bg-slate-50 dark:bg-white/5
+                px-4 py-3">
+
+      <span class="material-symbols-outlined text-brand-500">
+        lock
+      </span>
+
+      <p class="text-xs text-slate-600 dark:text-slate-400">
+        Files are encrypted at rest and in transit. Access is restricted to authorized reviewers only.
+      </p>
+    </div>
+    <div class="mt-10 flex items-center justify-between">
+
+      <button class="text-sm text-slate-500 hover:text-slate-700">
+        ← Back
+      </button>
+
+      <button class="px-6 py-3 rounded-lg
+                     bg-brand-500 hover:bg-brand-600
+                     text-white font-semibold shadow-md shadow-brand-500/20">
+        Submit documents
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

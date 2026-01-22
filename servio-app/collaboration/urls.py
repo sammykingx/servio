@@ -5,11 +5,12 @@ from .views.list import CollaborationListView
 from .views.create import CreateCollaborationView, EditGigView
 from .views.detail import GigDetailView
 from .views.delete import DeleteGigView
-from template_map.collaboration import Collabs
+from .proposals import urls as proposal_urls
 
 
 urlpatterns = [
-    path(
+     path("proposals/", include(proposal_urls)),
+     path(
         "",
         RedirectView.as_view(
             url=reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS), permanent=True
