@@ -6,10 +6,12 @@ from .views.create import CreateCollaborationView, EditGigView
 from .views.detail import GigDetailView
 from .views.delete import DeleteGigView
 from .proposals import urls as proposal_urls
+from .oppurtunities import urls as oppurtunity_urls
 
 
 urlpatterns = [
      path("proposals/", include(proposal_urls)),
+     path("oppurtunities/", include(oppurtunity_urls)),
      path(
         "",
         RedirectView.as_view(

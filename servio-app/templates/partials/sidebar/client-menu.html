@@ -45,6 +45,27 @@
             </span>
          </a>
       </li>
+      <li>
+         <a
+            href="{% url OPPURTUNITIES.ALL %}"
+            @click="selected = (selected === 'gig_and_project' ? '':'gig_and_project')"
+            class="menu-item group text-gray-500"
+            :class=" (selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+            <span 
+               class="material-symbols-outlined icon-opportunities"
+               :class="(selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+            >
+               manage_search
+            </span>
+            <span
+               class="menu-item-text"
+               :class="sidebarToggle ? 'xl:hidden' : ''"
+            >
+               Oppurtunities
+            </span>
+         </a>
+      </li>
       <!-- <li>
          <a
             href="#"

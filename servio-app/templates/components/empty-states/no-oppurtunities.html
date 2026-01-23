@@ -1,0 +1,79 @@
+<div class="min-h-screen flex items-center justify-center p-8 bg-[#faf9ff] dark:bg-black">
+
+  <div class="flex flex-col items-center justify-center max-w-2xl w-full">
+
+    <!-- Icon Cluster -->
+    <div class="relative flex items-center justify-center size-48 mb-8">
+
+      <!-- Background Blobs -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="size-40 bg-sky-100 dark:bg-sky-900/30 rounded-full blur-2xl opacity-70"></div>
+        <div class="absolute size-32 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-xl opacity-60 animate-pulse"></div>
+      </div>
+
+      <!-- Main Opportunities Card -->
+      <div class="relative z-20 flex items-center justify-center size-24
+                  bg-white dark:bg-[#1a202c] rounded-2xl
+                  shadow-xl shadow-sky-900/5
+                  border border-slate-100 dark:border-slate-700">
+        <span class="material-symbols-outlined text-4xl text-sky-500 dark:text-white">
+          work_outline
+        </span>
+      </div>
+
+      <!-- Floating Search -->
+      <div class="absolute top-2 -right-2 z-10 flex items-center justify-center size-12
+                  bg-white dark:bg-[#232936] rounded-xl
+                  shadow-lg border border-slate-50 dark:border-slate-700
+                  -rotate-12">
+        <span class="material-symbols-outlined text-xl">
+          ⏰
+        </span>
+      </div>
+
+      <!-- Floating Offer / Contract -->
+      <div class="absolute bottom-1 -left-3 z-10 flex items-center justify-center size-14
+                  bg-white dark:bg-[#232936] rounded-xl
+                  shadow-lg border border-slate-50 dark:border-slate-700
+                  rotate-12">
+        <span class="material-symbols-outlined text-2xl text-sky-400">
+          description
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Text Content -->
+    <div class="text-center max-w-md space-y-3 mb-8">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
+        No opportunities available yet
+      </h2>
+      <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed">
+        When new gigs match your profile and skills, they’ll appear here.
+        Stay visible by completing your profile or browse upcoming projects.
+      </p>
+    </div>
+
+    <!-- Primary CTA -->
+    <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}"
+       class="group flex items-center justify-center gap-2
+              bg-sky-500 hover:bg-sky-600
+              text-white font-semibold py-3 px-6 rounded-lg
+              transition-all duration-200
+              shadow-lg shadow-sky-500/20 hover:shadow-sky-500/40
+              transform hover:-translate-y-0.5">
+      <span class="material-symbols-outlined text-[20px]">add</span>
+      <span>Create Projects</span>
+    </a>
+
+    <!-- Secondary Action -->
+    <a href="{% url AUTH_URLS.ACCOUNT_PROFILE %}"
+       class="mt-6 text-sm font-medium text-slate-500 hover:text-sky-500
+              dark:text-slate-400 dark:hover:text-sky-300
+              transition-colors flex items-center gap-1">
+      Learn More
+      <span class="material-symbols-outlined text-base">arrow_forward</span>
+    </a>
+
+  </div>
+</div>

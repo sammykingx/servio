@@ -74,11 +74,13 @@ class CollaborationURLS:
     EDIT_COLLABORATION = "edit_collaboration"
     COLLABORATION_PAYMENTS = "collaboration_payment"
     DELETE_COLLABORATION = "delete_collaboration"
+  
     
 class ProposalURLS:
     LIST = "negotiation_listings"
     DETAILS = "negotiation_details"
     GIG_NEGOTIATIONS = "gig_negotiations"
+    
     
 class PaymentURLS:
     USER_PAYMENT_SUMMARY = "payment_summary"
@@ -88,9 +90,15 @@ class PaymentURLS:
     GIG_PAYMENT_RESPONSE = "gig_payment_response"
     GIG_PAYMENT_COMPLETE = "gig_payment_complete"
     
+    
 class EscrowURLS:
     OVERVIEW = "escrow_overview"
     DETAILS = "escrow_details"
     
+    
 class ReviewURLS:
     OVERVIEW = "account_reviews"
+    
+    
+class OppurtunitiesURLS:
+    ALL = "all_oppurtunities"

@@ -9,8 +9,13 @@ class Collabs:
     EDIT =  _BASE_FOLDER.base_folder_files("edit.html")
     
     class Proposals:
-        __SUB_FOLDER = _BASE_FOLDER.subfolder("negotiations")
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("proposals")
         
         LIST = f"{__SUB_FOLDER}/list.html"
         DETAILS = f"{__SUB_FOLDER}/detail.html"
+        
+    class Oppurtunities:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("oppurtunities")
+        
+        LIST = f"{__SUB_FOLDER}/list.html"
         

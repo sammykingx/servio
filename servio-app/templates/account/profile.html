@@ -8,878 +8,1001 @@
 {% endblock %}
 {% block content %}
 {% include "components/breadcrumbs.html" with page_name="Profile" %}
-<div
-    class="rounded-2xl border border-gray-200 bg-white p-5 lg:p-6 dark:border-gray-800 dark:bg-white/[0.03]"
->
-    <div class="relative mb-8">
-        <!-- Glow backdrop -->
-        <div class="absolute -inset-2 rounded-3xl bg-gradient-to-r from-brand-500/10 via-indigo-500/10 to-purple-500/10 blur-2xl"></div>
-        <!-- Profile Card -->
-        <div class="relative rounded-3xl border border-slate-200 dark:border-slate-700 
-            bg-white dark:bg-[#151c2a] p-6 lg:p-8 shadow-xl">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <!-- Left: Avatar + Identity -->
-                <div class="flex items-center gap-5">
-                    <!-- Avatar -->
-                    <div class="relative">
-                        <div class="size-20 rounded-full bg-gradient-to-tr from-brand-500 to-indigo-500 p-[2px]">
-                            <div class="size-full rounded-full bg-white dark:bg-[#1a202c] overflow-hidden">
-                                {% if user.profile.avatar_url %}
-                                <img src="{{ user.profile.avatar_url.url }}"
-                                    class="w-full h-full object-cover" />
-                                {% else %}
-                                <span class="flex h-full w-full items-center justify-center text-2xl font-semibold text-brand-500">
-                                {{ user.first_name|slice:":1" }}
-                                </span>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Identity -->
-                    <div>
-                        <h2 class="text-xl font-semibold text-slate-900 dark:text-white">
-                            {{ user.full_name|title }}
-                        </h2>
-                        <div class="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mt-1">
-                            <span class="inline-flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">badge</span>
-                            {{ user.profile.role|default:"Servio member"|title }}
-                            </span>
-                            <span class="opacity-40">•</span>
-                            <span class="inline-flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">location_on</span>
-                            {{ user.addresses.city|default:"—"|title }},
-                            {{ user.addresses.province|default:"—"|title }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <!-- Right: Actions -->
-                <div class="flex items-center gap-3">
-                    <button
-                        @click="$store.modals.open('socials')"
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full
-                        border border-slate-200 dark:border-slate-700
-                        bg-slate-50 dark:bg-[#1a202c]
-                        text-sm font-medium text-slate-700 dark:text-slate-300
-                        hover:bg-white dark:hover:bg-[#232936] transition">
-                    <span class="material-symbols-outlined text-[18px]">share</span>
-                    Socials
-                    </button>
-                    <button
-                        @click="$store.modals.open('profile')"
-                        class="inline-flex items-center gap-2 px-5 py-2 rounded-full
-                        bg-brand-500 text-white font-medium shadow-lg
-                        hover:bg-brand-600 transition">
-                    <span class="material-symbols-outlined text-[18px]">edit</span>
-                    Edit Profile
-                    </button>
-                </div>
+<section class="relative mb-10">
+
+  <!-- Ambient Glow (tuned for light & dark) -->
+  <div
+    class="pointer-events-none absolute -inset-3 rounded-[32px]
+           bg-gradient-to-r
+           from-brand-500/5 via-indigo-500/5 to-purple-500/5
+           dark:from-brand-500/15 dark:via-indigo-500/15 dark:to-purple-500/15
+           blur-3xl">
+  </div>
+
+  <!-- Profile Card -->
+  <div
+    class="relative rounded-[28px]
+           border border-slate-200/70 dark:border-slate-700/60
+           bg-gray-25 dark:bg-[#151c2a]
+           p-6 lg:p-8
+
+           shadow-[0_6px_28px_rgba(99,102,241,0.08)]
+           dark:shadow-[0_12px_40px_rgba(99,102,241,0.25)]">
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+      <!-- Left: Avatar + Identity -->
+      <div class="flex items-center gap-5">
+
+        <!-- Avatar -->
+        <div class="relative">
+          <div
+            class="size-20 rounded-full
+                   bg-gradient-to-tr from-brand-500 to-indigo-500
+                   p-[2px]">
+
+            <div class="size-full rounded-full bg-white dark:bg-[#1a202c] overflow-hidden">
+              {% if user.profile.avatar_url %}
+                <img src="{{ user.profile.avatar_url.url }}"
+                     class="w-full h-full object-cover" />
+              {% else %}
+                <span
+                  class="flex h-full w-full items-center justify-center
+                         text-2xl font-semibold text-brand-500">
+                  {{ user.first_name|slice:":1" }}
+                </span>
+              {% endif %}
             </div>
+          </div>
         </div>
+
+        <!-- Identity -->
+        <div>
+          <h2 class="text-xl font-semibold text-slate-900 dark:text-white">
+            {{ user.full_name|title }}
+          </h2>
+
+          <div
+            class="flex flex-wrap items-center gap-3
+                   text-sm text-slate-500 dark:text-slate-400 mt-1">
+
+            <span class="inline-flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">
+                location_on
+              </span>
+              {{ home.city|default:"—"|title }},
+              {{ home.province|default:"—"|title }}
+            </span>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Actions -->
+      <div class="flex items-center gap-3">
+
+        <!-- <button
+          @click="$store.modals.open('socials')"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+                 border border-slate-200/80 dark:border-slate-700
+                 bg-white/70 dark:bg-[#1a202c]
+                 backdrop-blur
+                 text-sm font-medium text-slate-700 dark:text-slate-300
+                 hover:bg-white dark:hover:bg-[#232936]
+                 transition-all">
+
+          <span class="material-symbols-outlined text-[18px]">
+            share
+          </span>
+          Socials
+        </button> -->
+        <button
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+                 border border-slate-200/80 dark:border-slate-700
+                 bg-white/70 dark:bg-[#1a202c]
+                 backdrop-blur
+                 text-sm font-medium text-slate-700 dark:text-slate-300
+                 hover:bg-white dark:hover:bg-[#232936]
+                 transition-all">
+
+          <span class="material-symbols-outlined text-[18px]">
+            share
+          </span>
+          Socials
+        </button>
+
+        <!-- <button
+          @click="$store.modals.open('profile')"
+          class="inline-flex items-center gap-2 px-5 py-2 rounded-full
+                 bg-brand-500 text-white font-medium
+                 shadow-[0_8px_24px_rgba(79,70,229,0.35)]
+                 hover:bg-brand-600
+                 hover:shadow-[0_12px_32px_rgba(79,70,229,0.45)]
+                 transition-all">
+
+          <span class="material-symbols-outlined text-[18px]">
+            edit
+          </span>
+          Edit Profile
+        </button> -->
+        <button
+          class="inline-flex items-center gap-2 px-5 py-2 rounded-full
+                 bg-brand-500 text-white font-medium
+                 shadow-[0_8px_24px_rgba(79,70,229,0.35)]
+                 hover:bg-brand-600
+                 hover:shadow-[0_12px_32px_rgba(79,70,229,0.45)]
+                 transition-all">
+
+          <span class="material-symbols-outlined text-[18px]">
+            edit
+          </span>
+          Edit Profile
+        </button>
+
+      </div>
+
     </div>
 
-    <!-- User Personal Information -->
-    <section class="relative mb-10">
-        <!-- Glow -->
-        <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-slate-200/40 via-slate-100/20 to-slate-200/40 dark:from-slate-800/40 dark:to-slate-800/10 blur-xl"></div>
-        <!-- Card -->
-        <div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
-            border border-slate-200 dark:border-slate-700
-            shadow-lg p-6 lg:p-8">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
-                        Personal information
-                    </h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">
-                        Basic details used across your profile and collaborations
-                    </p>
-                </div>
-                <button
-                    @click="$store.modals.open('personal-info')"
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full
-                    text-sm font-medium text-brand-500
-                    hover:bg-brand-50 dark:hover:bg-brand-500/10 transition">
-                <span class="material-symbols-outlined text-[18px]">edit</span>
-                Edit
-                </button>
-            </div>
-            <!-- Info Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Full Name -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
-                        <span class="material-symbols-outlined text-[16px]">person</span>
-                        Full name
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.full_name|default:"—" }}
-                    </p>
-                </div>
-                <!-- Email -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
-                        <span class="material-symbols-outlined text-[16px]">mail</span>
-                        Email address
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white break-all">
-                        {{ user.email|default:"—" }}
-                    </p>
-                </div>
-                <!-- Phone -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
-                        <span class="material-symbols-outlined text-[16px]">call</span>
-                        Phone number
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.profile.phone|default:"Not added" }}
-                    </p>
-                </div>
-                <!-- Role -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
-                        <span class="material-symbols-outlined text-[16px]">work</span>
-                        Role
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.profile.role|default:"—" }}
-                    </p>
-                </div>
-                <!-- Account Type -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
-                        <span class="material-symbols-outlined text-[16px]">account_circle</span>
-                        Account type
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white capitalize">
-                        {{ user.account_type|default:"standard" }}
-                    </p>
-                </div>
-                <!-- Joined -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
-                        <span class="material-symbols-outlined text-[16px]">event</span>
-                        Member since
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.date_joined|date:"F Y" }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+  </div>
+</section>
 
-    <!-- User Address Information -->
-    <section class="relative mb-10">
-        <!-- Soft Glow -->
-        <div class="absolute -inset-1 rounded-3xl
-            bg-gradient-to-r from-slate-200/30 via-slate-100/10 to-slate-200/30
-            dark:from-slate-800/40 dark:to-slate-800/10
-            blur-xl"></div>
-        <!-- Container -->
-        <div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
-            border border-slate-200 dark:border-slate-700
-            shadow-lg p-6 lg:p-8">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
-                        Address
-                    </h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">
-                        Used for invoices, contracts, and identity verification
-                    </p>
-                </div>
-                <button
-                    @click="$store.modals.open('address-info')"
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full
-                    text-sm font-medium text-brand-500
-                    hover:bg-brand-50 dark:hover:bg-brand-500/10 transition">
-                <span class="material-symbols-outlined text-[18px]">edit</span>
-                Edit
-                </button>
-            </div>
-            <!-- Address Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Country -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-md">
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                        <span class="material-symbols-outlined text-[16px]">public</span>
-                        Country
+<!-- User Personal Information -->
+<section class="relative mb-10">
+	<!-- Glow -->
+	<div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-orange-200/40 via-orange-100/20 to-orange-200/40 dark:from-slate-800/40 dark:to-slate-800/10 blur-xl"></div>
+	<!-- Card -->
+	<div class="relative rounded-3xl bg-gray-25 dark:bg-[#151c2a]
+		border border-slate-200 dark:border-slate-700
+		shadow-lg p-6 lg:p-8">
+		<!-- Header -->
+		<div class="flex items-center justify-between mb-6">
+			<div>
+				<h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+					Personal information
+				</h3>
+				<p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+					Basic details used across your profile and collaborations
+				</p>
+			</div>
+			<button
+				@click="$store.modals.open('personal-info')"
+				class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+				text-sm font-medium text-brand-500 dark:text-brand-400
+				hover:bg-brand-50 dark:hover:bg-brand-500/10 transition">
+			<span class="material-symbols-outlined text-[18px]">edit</span>
+			Edit
+			</button>
+		</div>
+		<!-- Info Grid -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+			<!-- Full Name -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
+					<div class="size-9 rounded-xl bg-brand-100/80 dark:bg-brand-900/30
+                        text-brand-500 dark:text-brand-400
+                        flex items-center justify-center ring-1 ring-brand-200/60 dark:ring-brand-800/40">
+                        <span class="material-symbols-outlined text-[20px]">person</span>
                     </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.profile.country|default:"Not set" }}
-                    </p>
-                </div>
-                <!-- State -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-md">
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                        <span class="material-symbols-outlined text-[16px]">location_city</span>
-                        State / Province
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.profile.state|default:"—" }}
-                    </p>
-                </div>
-                <!-- City -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-md">
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                        <span class="material-symbols-outlined text-[16px]">apartment</span>
-                        City
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.profile.city|default:"—" }}
-                    </p>
-                </div>
-                <!-- Street Address -->
-                <div class="sm:col-span-2 rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-md">
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                        <span class="material-symbols-outlined text-[16px]">home</span>
-                        Street address
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white leading-relaxed">
-                        {{ user.profile.address|default:"Not provided" }}
-                    </p>
-                </div>
-                <!-- Postal Code -->
-                <div class="rounded-2xl bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-md">
-                    <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                        <span class="material-symbols-outlined text-[16px]">markunread_mailbox</span>
-                        Postal code
-                    </div>
-                    <p class="font-medium text-slate-900 dark:text-white">
-                        {{ user.profile.postal_code|default:"—" }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Security & Trust -->
-    <section class="relative mb-12">
-        <!-- Soft Glow -->
-        <div class="absolute -inset-1 rounded-3xl
-            bg-gradient-to-r from-emerald-200/30 via-emerald-100/10 to-emerald-200/30
-            dark:from-emerald-900/20 dark:to-emerald-900/5
-            blur-xl"></div>
-        <!-- Container -->
-        <div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
-            border border-slate-200 dark:border-slate-700
-            shadow-lg p-6 lg:p-8">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
-                        Security & Trust
-                    </h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">
-                        Your account protection and verification status
-                    </p>
-                </div>
-            </div>
-            <!-- Status Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Email Verification -->
-                <div class="flex items-center justify-between rounded-2xl
-                    bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30
-                            text-emerald-600 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[20px]">mail</span>
-                        </div>
-                        <div>
-                            <p class="font-medium text-slate-900 dark:text-white">
-                                Email address
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                {{ user.email }}
-                            </p>
-                        </div>
+					Full name
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ user.full_name|default:"—" }}
+				</p>
+			</div>
+			<!-- Email -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
+					<div class="size-9 rounded-xl bg-sky-100/80 dark:bg-sky-900/30
+                        text-sky-500 dark:text-sky-400
+                        flex items-center justify-center ring-1 ring-sky-200/60 dark:ring-sky-800/40">
+                        <span class="material-symbols-outlined text-[20px]">mail</span>
                     </div>
-                    {% if user.email_verified %}
-                    <span class="inline-flex items-center gap-1 text-xs font-medium
-                        text-emerald-600 bg-emerald-100/60 px-3 py-1 rounded-full">
-                    <span class="material-symbols-outlined text-[14px]">check_circle</span>
-                    Verified
-                    </span>
-                    {% else %}
-                    <a href="#"
-                        class="text-xs font-medium text-brand-500 hover:underline">
-                    Verify
-                    </a>
-                    {% endif %}
-                </div>
-                <!-- Phone Verification -->
-                <div class="flex items-center justify-between rounded-2xl
-                    bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl bg-blue-100 dark:bg-blue-900/30
-                            text-blue-600 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[20px]">call</span>
-                        </div>
-                        <div>
-                            <p class="font-medium text-slate-900 dark:text-white">
-                                Phone number
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                {{ user.profile.phone|default:"Not added" }}
-                            </p>
-                        </div>
-                    </div>
-                    {% if user.phone_verified %}
-                    <span class="inline-flex items-center gap-1 text-xs font-medium
-                        text-emerald-600 bg-emerald-100/60 px-3 py-1 rounded-full">
-                    <span class="material-symbols-outlined text-[14px]">check_circle</span>
-                    Verified
-                    </span>
-                    {% else %}
-                    <a href="#"
-                        class="text-xs font-medium text-brand-500 hover:underline">
-                    Add
-                    </a>
-                    {% endif %}
-                </div>
-                <!-- Password -->
-                <div class="flex items-center justify-between rounded-2xl
-                    bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl bg-purple-100 dark:bg-purple-900/30
-                            text-purple-600 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[20px]">lock</span>
-                        </div>
-                        <div>
-                            <p class="font-medium text-slate-900 dark:text-white">
-                                Password
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                Last updated {{ user.password_updated|default:"—" }}
-                            </p>
-                        </div>
-                    </div>
-                    <a href="#"
-                        class="text-xs font-medium text-brand-500 hover:underline">
-                    Change
-                    </a>
-                </div>
-                <!-- Two Factor Authentication -->
-                <div class="flex items-center justify-between rounded-2xl
-                    bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 hover:shadow-md transition opacity-60">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl bg-slate-200 dark:bg-slate-700
-                            text-slate-500 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[20px]">verified_user</span>
-                        </div>
-                        <div>
-                            <p class="font-medium text-slate-900 dark:text-white">
-                                Two-factor authentication
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                Coming soon
-                            </p>
-                        </div>
-                    </div>
-                    <span class="text-xs font-medium text-slate-400">
-                    v2
-                    </span>
-                </div>
-            </div>
-            <!-- Trust Note -->
-            <div class="mt-6 flex items-start gap-3 text-sm text-slate-500 dark:text-slate-400">
-                <span class="material-symbols-outlined text-[20px] text-emerald-500">
-                shield
-                </span>
-                <p>
-                    Verified accounts are more trusted by clients and receive faster payouts.
-                </p>
-            </div>
-        </div>
-    </section>
 
-    <!-- Profile Completeness -->
-    <section class="relative mb-12">
-        <!-- Soft Background Glow -->
-        <div class="absolute -inset-1 rounded-3xl
-            bg-gradient-to-r from-blue-200/30 via-indigo-100/10 to-blue-200/30
-            dark:from-blue-900/20 dark:to-blue-900/5
-            blur-xl"></div>
-        <!-- Container -->
-        <div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
-            border border-slate-200 dark:border-slate-700
-            shadow-lg p-6 lg:p-8">
-            <!-- Header -->
-            <div class="flex items-start justify-between gap-4 mb-6">
-                <div>
-                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
-                        Profile completeness
-                    </h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md">
-                        Completing your profile helps clients trust you faster and improves
-                        your chances of getting hired.
-                    </p>
-                </div>
-                <!-- Completion Badge -->
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full
-                    bg-blue-100/60 dark:bg-blue-900/30
-                    text-blue-600 dark:text-blue-400
-                    text-xs font-semibold">
-                    <span class="material-symbols-outlined text-[16px]">task_alt</span>
-                    {{ profile_completion }}% complete
-                </div>
-            </div>
-            <!-- Checklist -->
-            <div class="space-y-3">
-                <!-- Personal Info -->
-                <div class="flex items-center justify-between rounded-2xl
-                    bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl
-                            {% if user.completed_onboarding %}
-                            bg-emerald-100 text-emerald-600
-                            {% else %}
-                            bg-slate-200 dark:bg-slate-700 text-slate-500
-                            {% endif %}
-                            flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[20px]">
-                            person
-                            </span>
-                        </div>
-                        <div>
-                            <p class="font-medium text-slate-900 dark:text-white">
-                                Personal information
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                Name, photo, bio
-                            </p>
-                        </div>
+					Email address
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white break-all">
+					{{ user.email|default:"—" }}
+				</p>
+			</div>
+			<!-- Phone -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
+					<div class="size-9 rounded-xl bg-emerald-100/80 dark:bg-emerald-900/30
+                        text-emerald-500 dark:text-emerald-400
+                        flex items-center justify-center ring-1 ring-emerald-200/60 dark:ring-emerald-800/40">
+                        <span class="material-symbols-outlined text-[20px]">call</span>
                     </div>
-                    {% if user.completed_onboarding %}
-                    <span class="text-xs font-medium text-emerald-600">
-                    Completed
-                    </span>
-                    {% else %}
-                    <a href="{% url USER_ONBOARDING_URLS.WELCOME %}"
-                        class="text-xs font-medium text-brand-500 hover:underline">
-                    Complete
-                    </a>
-                    {% endif %}
-                </div>
-                <!-- Address -->
-                <div class="flex items-center justify-between rounded-2xl
-                    bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl
-                            {% if user.profile.address %}
-                            bg-emerald-100 text-emerald-600
-                            {% else %}
-                            bg-slate-200 dark:bg-slate-700 text-slate-500
-                            {% endif %}
-                            flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[20px]">
-                            location_on
-                            </span>
-                        </div>
-                        <div>
-                            <p class="font-medium text-slate-900 dark:text-white">
-                                Address
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                Location for services & billing
-                            </p>
-                        </div>
+
+					Phone number
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ user.profile.mobile_num|default:"N/A"|format_mobile_number }}
+				</p>
+			</div>
+			<!-- Role -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
+					<div class="size-9 rounded-xl bg-violet-100/80 dark:bg-violet-900/30
+                        text-violet-500 dark:text-violet-400
+                        flex items-center justify-center ring-1 ring-violet-200/60 dark:ring-violet-800/40">
+                        <span class="material-symbols-outlined text-[20px]">work</span>
                     </div>
-                    {% if user.profile.address %}
-                    <span class="text-xs font-medium text-emerald-600">
-                    Added
-                    </span>
-                    {% else %}
-                    <a href="#"
-                        class="text-xs font-medium text-brand-500 hover:underline">
-                    Add
-                    </a>
-                    {% endif %}
-                </div>
-                <!-- Payment Setup -->
-                <div class="flex items-center justify-between rounded-2xl
-                    bg-slate-50 dark:bg-[#1a202c]
-                    border border-slate-100 dark:border-slate-700
-                    p-4 transition hover:shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl
-                            {% if user.payment_ready %}
-                            bg-emerald-100 text-emerald-600
-                            {% else %}
-                            bg-slate-200 dark:bg-slate-700 text-slate-500
-                            {% endif %}
-                            flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[20px]">
-                            payments
-                            </span>
-                        </div>
-                        <div>
-                            <p class="font-medium text-slate-900 dark:text-white">
-                                Payment setup
-                            </p>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                Get paid securely
-                            </p>
-                        </div>
+					Role
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ user.profile.role|default:"—"|title }}
+				</p>
+			</div>
+			<!-- Account Type -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
+					<div class="size-9 rounded-xl bg-amber-100/80 dark:bg-amber-900/30
+                        text-amber-500 dark:text-amber-400
+                        flex items-center justify-center ring-1 ring-amber-200/60 dark:ring-amber-800/40">
+                        <span class="material-symbols-outlined text-[20px]">account_circle</span>
                     </div>
-                    {% if user.payment_ready %}
-                    <span class="text-xs font-medium text-emerald-600">
-                    Ready
-                    </span>
-                    {% else %}
-                    <a href="#"
-                        class="text-xs font-medium text-brand-500 hover:underline">
-                    Set up
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-            <!-- Subtle Trust Footer -->
-            <div class="mt-6 flex items-start gap-3 text-sm text-slate-500 dark:text-slate-400">
-                <span class="material-symbols-outlined text-[20px] text-blue-500">
-                info
-                </span>
-                <p>
-                    Fully completed profiles appear more credible and are prioritized
-                    in search and recommendations.
-                </p>
-            </div>
-        </div>
-    </section>
-</div>
+
+					Account type
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white capitalize">
+					{{ user.account_type|default:"standard" }}
+				</p>
+			</div>
+			<!-- Joined -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-1">
+					<div class="size-9 rounded-xl bg-cyan-100/80 dark:bg-cyan-900/30
+                        text-cyan-500 dark:text-cyan-400
+                        flex items-center justify-center ring-1 ring-cyan-200/60 dark:ring-cyan-800/40">
+                        <span class="material-symbols-outlined text-[20px]">event</span>
+                    </div>
+
+					Member since
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ user.date_joined|date:"F Y" }}
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- User Address Information -->
+<section class="relative mb-10">
+	<!-- Soft Glow -->
+	<div class="absolute -inset-1 rounded-3xl
+		bg-gradient-to-r from-blue-200/30 via-blue-100/10 to-blue-200/30
+		dark:from-rose-800/40 dark:to-rose-800/10
+		blur-xl"></div>
+	<!-- Container -->
+	<div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
+		border border-slate-200 dark:border-slate-700
+		shadow-lg p-6 lg:p-8">
+		<!-- Header -->
+		<div class="flex items-center justify-between mb-6">
+			<div>
+				<h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+					Address
+				</h3>
+				<p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+					Used for invoices, contracts, and identity verification
+				</p>
+			</div>
+			<button
+				@click="showToast('update address information from account seetings', 'info', 'Account Settings')"
+				class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+				text-sm font-medium text-brand-500 dark:text-brand-400
+				hover:bg-brand-50 dark:hover:bg-brand-500/10 transition">
+			<span class="material-symbols-outlined text-[18px]">edit</span>
+			Edit
+			</button>
+		</div>
+		<!-- Address Grid -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+			<!-- Country -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
+					<div class="size-9 rounded-xl bg-emerald-100/80 dark:bg-emerald-900/30
+                        text-emerald-500 dark:text-emerald-400
+                        flex items-center justify-center ring-1 ring-emerald-200/60 dark:ring-emerald-800/40">
+                        <span class="material-symbols-outlined text-[20px]">public</span>
+                    </div>
+					Country
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ home.country|default:"Not set" }}
+				</p>
+			</div>
+			<!-- State -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
+					<div class="size-9 rounded-xl bg-indigo-100/80 dark:bg-indigo-900/30
+                        text-indigo-500 dark:text-indigo-400
+                        flex items-center justify-center ring-1 ring-indigo-200/60 dark:ring-indigo-800/40">
+                        <span class="material-symbols-outlined text-[20px]">location_city</span>
+                    </div>
+
+					State / Province
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ home.province|default:"—" }}
+				</p>
+			</div>
+			<!-- City -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 transition hover:shadow-md">
+				<div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
+					<div class="size-9 rounded-xl bg-sky-100/80 dark:bg-sky-900/30
+                        text-sky-500 dark:text-sky-400
+                        flex items-center justify-center ring-1 ring-sky-200/60 dark:ring-sky-800/40">
+                        <span class="material-symbols-outlined text-[20px]">apartment</span>
+                    </div>
+
+					City
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ home.city|default:"—" }}
+				</p>
+			</div>
+			<!-- Street Address -->
+			<div class="sm:col-span-2 rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 transition hover:shadow-md">
+				<div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
+					<div class="size-9 rounded-xl bg-amber-100/80 dark:bg-amber-900/30
+                        text-amber-500 dark:text-amber-400
+                        flex items-center justify-center ring-1 ring-amber-200/60 dark:ring-amber-800/40">
+                        <span class="material-symbols-outlined text-[20px]">home</span>
+                    </div>
+
+					Street address
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white leading-relaxed">
+					{{ home.street|default:"Not provided" }}
+				</p>
+			</div>
+			<!-- Postal Code -->
+			<div class="rounded-2xl dark:bg-[#1a202c]
+				border border-brand-50 dark:border-slate-700
+				p-4 transition hover:shadow-md">
+				<div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
+					<div class="size-9 rounded-xl bg-rose-100/80 dark:bg-rose-900/30
+                        text-rose-500 dark:text-rose-400
+                        flex items-center justify-center ring-1 ring-rose-200/60 dark:ring-rose-800/40">
+                        <span class="material-symbols-outlined text-[20px]">markunread_mailbox</span>
+                    </div>
+
+					Postal code
+				</div>
+				<p class="font-medium text-slate-900 dark:text-white">
+					{{ home.postal_code|default:"—" }}
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Security & Trust -->
+<section class="relative mb-12">
+	<!-- Soft Glow -->
+	<div class="absolute -inset-1 rounded-3xl
+		bg-gradient-to-r from-emerald-200/30 via-emerald-100/10 to-emerald-200/30
+		dark:from-emerald-900/20 dark:to-emerald-900/5
+		blur-xl"></div>
+	<!-- Container -->
+	<div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
+		border border-slate-200 dark:border-slate-700
+		shadow-lg p-6 lg:p-8">
+		<!-- Header -->
+		<div class="flex items-center justify-between mb-6">
+			<div>
+				<h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+					Security & Trust
+				</h3>
+				<p class="text-sm text-slate-500 dark:text-slate-400">
+					Your account protection and verification status
+				</p>
+			</div>
+		</div>
+		<!-- Status Grid -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+			<!-- Email Verification -->
+			<div class="flex items-center justify-between rounded-2xl
+				bg-slate-50 dark:bg-[#1a202c]
+				border border-slate-100 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-3">
+					<div class="size-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30
+						text-emerald-600 flex items-center justify-center">
+						<span class="material-symbols-outlined text-[20px]">mail</span>
+					</div>
+					<div>
+						<p class="font-medium text-slate-900 dark:text-white">
+							Email address
+						</p>
+						<p class="text-xs text-slate-500 dark:text-slate-400">
+							{{ user.email }}
+						</p>
+					</div>
+				</div>
+				{% if user.is_verified %}
+				<span class="inline-flex items-center gap-1 text-xs font-medium
+					text-emerald-500 px-3 py-1">
+				<span class="material-symbols-outlined text-[14px]">check_circle</span>
+				</span>
+				{% else %}
+				<a href="#"
+					class="text-xs font-medium text-brand-500 dark:text-brand-400 hover:underline">
+				Verify
+				</a>
+				{% endif %}
+			</div>
+			<!-- Phone Verification -->
+			<div class="flex items-center justify-between rounded-2xl
+				bg-slate-50 dark:bg-[#1a202c]
+				border border-slate-100 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-3">
+					<div class="size-10 rounded-xl bg-blue-100 dark:bg-blue-900/30
+						text-blue-600 flex items-center justify-center">
+						<span class="material-symbols-outlined text-[20px]">call</span>
+					</div>
+					<div>
+						<p class="font-medium text-slate-900 dark:text-white">
+							Phone number
+						</p>
+						<p class="text-xs text-slate-500 dark:text-slate-400">
+							{{ user.profile.mobile_num|default:"Not added"|format_mobile_number }}
+						</p>
+					</div>
+				</div>
+				{% if user.phone_verified %}
+				<span class="inline-flex items-center gap-1 text-xs font-medium
+					text-emerald-500 px-3 py-1">
+				<span class="material-symbols-outlined text-xs">check_circle</span>
+				</span>
+				{% else %}
+				<a 
+					@click="showToast('phone number verification will launch in Servio v2.', 'success', 'Coming in v2 🚀')"
+					href="#"
+					class="text-xs font-medium text-brand-500 dark:text-brand-400 hover:underline">
+				verify
+				</a>
+				{% endif %}
+			</div>
+			<!-- Password -->
+			<div class="flex items-center justify-between rounded-2xl
+				bg-slate-50 dark:bg-[#1a202c]
+				border border-slate-100 dark:border-slate-700
+				p-4 hover:shadow-md transition">
+				<div class="flex items-center gap-3">
+					<div class="size-10 rounded-xl bg-purple-100 dark:bg-purple-900/30
+						text-purple-600 flex items-center justify-center">
+						<span class="material-symbols-outlined text-[20px]">lock</span>
+					</div>
+					<div>
+						<p class="font-medium text-slate-900 dark:text-white">
+							Password
+						</p>
+						<p class="text-xs text-slate-500 dark:text-slate-400">
+							Last updated: {{ user.last_password_reset|default:"Not Changed" }}
+						</p>
+					</div>
+				</div>
+				<a href="#"
+					class="text-xs font-medium text-brand-500 dark:text-brand-400 hover:underline">
+				Change
+				</a>
+			</div>
+			<!-- Two Factor Authentication -->
+			<div class="flex items-center justify-between rounded-2xl
+				bg-slate-50 dark:bg-[#1a202c]
+				border border-slate-100 dark:border-slate-700
+				p-4 hover:shadow-md transition opacity-60">
+				<div class="flex items-center gap-3">
+					<div class="size-10 rounded-xl bg-slate-200 dark:bg-slate-700
+						text-slate-500 flex items-center justify-center">
+						<span class="material-symbols-outlined text-[20px]">verified_user</span>
+					</div>
+					<div>
+						<p class="font-medium text-slate-900 dark:text-white">
+							Two-factor authentication
+						</p>
+						<p class="text-xs text-slate-500 dark:text-slate-400">
+							Coming soon
+						</p>
+					</div>
+				</div>
+				<span class="text-xs font-medium text-slate-400">
+				v2
+				</span>
+			</div>
+		</div>
+		<!-- Trust Note -->
+		<div class="mt-6 flex items-start gap-3 text-sm text-slate-500 dark:text-slate-400">
+			<span class="material-symbols-outlined text-[20px] text-emerald-500">
+			shield
+			</span>
+			<p>
+				Verified accounts are more trusted by clients and receive faster payouts.
+			</p>
+		</div>
+	</div>
+</section>
+
+<!-- Profile Completeness -->
+<section class="relative mb-12">
+	<!-- Soft Background Glow -->
+	<div class="absolute -inset-1 rounded-3xl
+		bg-gradient-to-r from-blue-200/30 via-indigo-100/10 to-blue-200/30
+		dark:from-blue-900/20 dark:to-blue-900/5
+		blur-xl"></div>
+	<!-- Container -->
+	<div class="relative rounded-3xl bg-white dark:bg-[#151c2a]
+		border border-slate-200 dark:border-slate-700
+		shadow-lg p-6 lg:p-8">
+		<!-- Header -->
+		<div class="flex items-start justify-between gap-4 mb-6">
+			<div>
+				<h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+					Profile completeness
+				</h3>
+				<p class="text-xs md:text-sm text-slate-500 dark:text-slate-400 max-w-md">
+					Completing your profile helps clients trust you faster and improves
+					your chances of getting hired.
+				</p>
+			</div>
+			<!-- Completion Badge -->
+			<div class="flex items-center gap-2 px-3 py-1.5 rounded-full
+				bg-blue-100/60 dark:bg-blue-900/30
+				text-blue-600 dark:text-blue-400
+				text-xs font-semibold">
+				<span class="material-symbols-outlined text-xs">task_alt</span>
+				{% widthratio user.onboarding_step 4 100 %}% complete
+			</div>
+		</div>
+		<!-- Checklist -->
+		<div class="space-y-3">
+			<!-- Personal Info -->
+			<div class="flex items-center justify-between rounded-2xl
+				bg-slate-50 dark:bg-[#1a202c]
+				border border-slate-100 dark:border-slate-700
+				p-4 transition hover:shadow-sm">
+				<div class="flex items-center gap-3">
+					<div class="size-10 rounded-xl
+						{% if user.completed_onboarding %}
+						bg-emerald-100 text-emerald-600
+						{% else %}
+						bg-slate-200 dark:bg-slate-700 text-slate-500
+						{% endif %}
+						flex items-center justify-center">
+						<span class="material-symbols-outlined text-[20px]">
+						person
+						</span>
+					</div>
+					<div>
+						<p class="font-medium text-slate-900 dark:text-white">
+							Personal information
+						</p>
+						<p class="text-xs text-slate-500 dark:text-slate-400">
+							Name, photo, bio
+						</p>
+					</div>
+				</div>
+				{% if user.completed_onboarding %}
+				<span class="text-xs font-medium text-emerald-600">
+				Completed
+				</span>
+				{% else %}
+				<a href="{% url USER_ONBOARDING_URLS.WELCOME %}"
+					class="text-xs font-medium text-brand-500 hover:underline">
+				Complete
+				</a>
+				{% endif %}
+			</div>
+			
+            <!-- Address -->
+			<div class="flex items-center justify-between rounded-2xl
+				bg-slate-50 dark:bg-[#1a202c]
+				border border-slate-100 dark:border-slate-700
+				p-4 transition hover:shadow-sm">
+				<div class="flex items-center gap-3">
+					<div class="size-10 rounded-xl
+						{% if home %}
+						bg-emerald-100 text-emerald-600
+						{% else %}
+						bg-slate-200 dark:bg-slate-700 text-slate-500
+						{% endif %}
+						flex items-center justify-center">
+						<span class="material-symbols-outlined text-[20px]">
+						location_on
+						</span>
+					</div>
+					<div>
+						<p class="font-medium text-slate-900 dark:text-white">
+							Address
+						</p>
+						<p class="text-xs text-slate-500 dark:text-slate-400">
+							Location for services & billing
+						</p>
+					</div>
+				</div>
+				{% if home %}
+				<span class="text-xs font-medium text-emerald-600">
+				Added
+				</span>
+				{% else %}
+				<a href="#"
+					class="text-xs font-medium text-brand-500 dark:text-brand-400 hover:underline">
+				Add
+				</a>
+				{% endif %}
+			</div>
+			<!-- Payment Setup -->
+			<div class="flex items-center justify-between rounded-2xl
+				bg-slate-50 dark:bg-[#1a202c]
+				border border-slate-100 dark:border-slate-700
+				p-4 transition hover:shadow-sm">
+				<div class="flex items-center gap-3">
+					<div class="size-10 rounded-xl
+						{% if user.payment_ready %}
+						bg-emerald-100 text-emerald-600
+						{% else %}
+						bg-slate-200 dark:bg-slate-700 text-slate-500
+						{% endif %}
+						flex items-center justify-center">
+						<span class="material-symbols-outlined text-[20px]">
+						payments
+						</span>
+					</div>
+					<div>
+						<p class="font-medium text-slate-900 dark:text-white">
+							Payment setup
+						</p>
+						<p class="text-xs text-slate-500 dark:text-slate-400">
+							Get paid securely
+						</p>
+					</div>
+				</div>
+				{% if user.payment_ready %}
+				<span class="text-xs font-medium text-emerald-600">
+				Ready
+				</span>
+				{% else %}
+				<a 
+					@click="showToast('Payment processor not connected', 'info', 'Payments Not Configured')"
+					href="#"
+					class="text-xs font-medium text-brand-500 dark:text-brand-400 hover:underline">
+				Set up
+				</a>
+				{% endif %}
+			</div>
+		</div>
+		<!-- Subtle Trust Footer -->
+		<div class="mt-6 flex items-start gap-3 text-sm text-slate-500 dark:text-slate-400">
+			<span class="material-symbols-outlined text-[20px] text-blue-500">
+			info
+			</span>
+			<p>
+				Fully completed profiles appear more credible and are prioritized
+				in search and recommendations.
+			</p>
+		</div>
+	</div>
+</section>
 <!-- Edit socials modal-->
 <div
-    x-show="$store.modals.socials"
-    class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-9999"
-    >
-    <div
-        class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
-        ></div>
-    <div
-        class="relative w-full max-w-[584px] rounded-3xl 
-        bg-white p-6 dark:bg-gray-900 lg:p-10"
-        >
-        <!-- close btn -->
-        <button
-            @click="$store.modals.close('socials')"
-            class="group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
-            >
-            <svg
-                class="transition-colors fill-current group-hover:text-gray-600 dark:group-hover:text-gray-200"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                >
-                <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
-                    fill=""
-                    />
-            </svg>
-        </button>
-        <form method="POST" action="{% url AUTH_URLS.UPDATE_SOCIAL_LINKS %}" enctype="multipart/form-data" class="" autocomplete="off" id="socialLinks">
-            {% csrf_token %}
-            <h4 class="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-                Social Links
-            </h4>
-            <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 mb-10">
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Facebook
-                    </label>
-                    <input
-                        type="url"
-                        name="facebook"
-                        value="{{ social_links.facebook|default:'' }}"
-                        placeholder="{{ social_links.facebook|default:'https://facebook.com/username' }}"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
-                        />
-                </div>
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Twitter
-                    </label>
-                    <input
-                        type="url"
-                        name="twitter"
-                        value="{{ social_links.twitter|default:'' }}"
-                        placeholder="{{ social_links.twitter|default:'https://twitter.com/username' }}"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
-                        />
-                </div>
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Linkedin
-                    </label>
-                    <input
-                        type="url"
-                        name="linkedin"
-                        value="{{ social_links.linkedin|default:'' }}"
-                        placeholder="{{ social_links.linkedin|default:'https://linkedin.com/username' }}"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
-                        />
-                </div>
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Instagram
-                    </label>
-                    <input
-                        type="url"
-                        name="instagram"
-                        value="{{ social_links.instagram|default:'' }}"
-                        placeholder="{{ social_links.instagram|default:'https://instagram.com/username' }}"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
-                        />
-                </div>
-            </div>
-            <!-- profile picture upload-->
-            <div
-                class="hover:border-brand-500 dark:hover:border-warning-300
-                rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 lg:p-10
-                dark:border-gray-700 dark:bg-gray-900 text-center"
-                id="profile-picture-dropzone"
-                >
-                <div class="dz-message m-0">
-                    <div class="mb-[22px] flex justify-center">
-                        <div
-                            class="flex h-[68px] w-[68px] items-center justify-center rounded-full mb-4
-                            bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400 p-4"
-                            >
-                            <svg class="fill-current" width="29" height="28" viewBox="0 0 29 28">
-                                <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M14.5019 3.91699C14.2852 3.91699 14.0899 4.00891 13.953 4.15589L8.57363 9.53186C8.28065 9.82466 8.2805 10.2995 8.5733 10.5925C8.8661 10.8855 9.34097 10.8857 9.63396 10.5929L13.7519 6.47752V18.667C13.7519 19.0812 14.0877 19.417 14.5019 19.417C14.9161 19.417 15.2519 19.0812 15.2519 18.667V6.48234L19.3653 10.5929C19.6583 10.8857 20.1332 10.8855 20.426 10.5925C20.7188 10.2995 20.7186 9.82463 20.4256 9.53184L15.0838 4.19378C14.9463 4.02488 14.7367 3.91699 14.5019 3.91699ZM5.91626 18.667C5.91626 18.2528 5.58047 17.917 5.16626 17.917C4.75205 17.917 4.41626 18.2528 4.41626 18.667V21.8337C4.41626 23.0763 5.42362 24.0837 6.66626 24.0837H22.3339C23.5766 24.0837 24.5839 23.0763 24.5839 21.8337V18.667C24.5839 18.2528 24.2482 17.917 23.8339 17.917C23.4197 17.917 23.0839 18.2528 23.0839 18.667V21.8337C23.0839 22.2479 22.7482 22.5837 22.3339 22.5837H6.66626C6.25205 22.5837 5.91626 22.2479 5.91626 21.8337V18.667Z"
-                                    />
-                            </svg>
-                        </div>
-                    </div>
-                    <h4 class="text-theme-sm lg:text-theme-lg mb-3 font-semibold text-gray-800 dark:text-white/90">
-                        Drag & Drop Profile Image
-                    </h4>
-                    <span class="mx-auto mb-5 block w-full max-w-[290px] text-xs lg:text-sm text-gray-700 dark:text-gray-400">
-                    Drop your PNG, JPG, WebP image here or click to upload.
-                    </span>
-                    <span class="text-theme-sm text-brand-500 dark:text-warning-300 font-medium underline">
-                    Browse File
-                    </span>
-                    <input 
-                        type="file" 
-                        name="profile_image" 
-                        id="profile-image-input"
-                        accept="image/png, image/jpeg, image/webp"
-                        class="hidden"
-                        />
-                </div>
-            </div>
-            <!-- Profile Image Preview container -->
-            <div id="preview-container" class="mt-4"></div>
-            <div class="flex items-center justify-end w-full gap-3 mt-6">
-                <button
-                    @click="$store.modals.close('socials')"
-                    type="button"
-                    class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 sm:w-auto"
-                    >
-                Close
-                </button>
-                <button
-                    id="saveChangesBtn"
-                    type="submit"
-                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto"
-                    >
-                Save Changes
-                </button>
-            </div>
-        </form>
-    </div>
+	x-show="$store.modals.socials"
+	class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-999999"
+	>
+	<div
+		class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
+		></div>
+	<div
+		class="relative w-full max-w-[584px] rounded-3xl 
+		bg-white p-6 dark:bg-gray-900 lg:p-10"
+		>
+		<!-- close btn -->
+		<button
+			@click="$store.modals.close('socials')"
+			class="group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
+			>
+			<svg
+				class="transition-colors fill-current group-hover:text-gray-600 dark:group-hover:text-gray-200"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				>
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
+					fill=""
+					/>
+			</svg>
+		</button>
+		<form method="POST" action="{% url AUTH_URLS.UPDATE_SOCIAL_LINKS %}" enctype="multipart/form-data" class="" autocomplete="off" id="socialLinks">
+			{% csrf_token %}
+			<h4 class="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
+				Social Links
+			</h4>
+			<div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 mb-10">
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Facebook
+					</label>
+					<input
+						type="url"
+						name="facebook"
+						value="{{ social_links.facebook|default:'' }}"
+						placeholder="{{ social_links.facebook|default:'https://facebook.com/username' }}"
+						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
+						/>
+				</div>
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Twitter
+					</label>
+					<input
+						type="url"
+						name="twitter"
+						value="{{ social_links.twitter|default:'' }}"
+						placeholder="{{ social_links.twitter|default:'https://twitter.com/username' }}"
+						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
+						/>
+				</div>
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Linkedin
+					</label>
+					<input
+						type="url"
+						name="linkedin"
+						value="{{ social_links.linkedin|default:'' }}"
+						placeholder="{{ social_links.linkedin|default:'https://linkedin.com/username' }}"
+						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
+						/>
+				</div>
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Instagram
+					</label>
+					<input
+						type="url"
+						name="instagram"
+						value="{{ social_links.instagram|default:'' }}"
+						placeholder="{{ social_links.instagram|default:'https://instagram.com/username' }}"
+						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
+						/>
+				</div>
+			</div>
+			<!-- profile picture upload-->
+			<div
+				class="hover:border-brand-500 dark:hover:border-warning-300
+				rounded-xl border border-dashed border-gray-300 bg-gray-50 p-5 lg:p-10
+				dark:border-gray-700 dark:bg-gray-900 text-center"
+				id="profile-picture-dropzone"
+				>
+				<div class="dz-message m-0">
+					<div class="mb-[22px] flex justify-center">
+						<div
+							class="flex h-[68px] w-[68px] items-center justify-center rounded-full mb-4
+							bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400 p-4"
+							>
+							<svg class="fill-current" width="29" height="28" viewBox="0 0 29 28">
+								<path
+									fill-rule="evenodd"
+									clip-rule="evenodd"
+									d="M14.5019 3.91699C14.2852 3.91699 14.0899 4.00891 13.953 4.15589L8.57363 9.53186C8.28065 9.82466 8.2805 10.2995 8.5733 10.5925C8.8661 10.8855 9.34097 10.8857 9.63396 10.5929L13.7519 6.47752V18.667C13.7519 19.0812 14.0877 19.417 14.5019 19.417C14.9161 19.417 15.2519 19.0812 15.2519 18.667V6.48234L19.3653 10.5929C19.6583 10.8857 20.1332 10.8855 20.426 10.5925C20.7188 10.2995 20.7186 9.82463 20.4256 9.53184L15.0838 4.19378C14.9463 4.02488 14.7367 3.91699 14.5019 3.91699ZM5.91626 18.667C5.91626 18.2528 5.58047 17.917 5.16626 17.917C4.75205 17.917 4.41626 18.2528 4.41626 18.667V21.8337C4.41626 23.0763 5.42362 24.0837 6.66626 24.0837H22.3339C23.5766 24.0837 24.5839 23.0763 24.5839 21.8337V18.667C24.5839 18.2528 24.2482 17.917 23.8339 17.917C23.4197 17.917 23.0839 18.2528 23.0839 18.667V21.8337C23.0839 22.2479 22.7482 22.5837 22.3339 22.5837H6.66626C6.25205 22.5837 5.91626 22.2479 5.91626 21.8337V18.667Z"
+									/>
+							</svg>
+						</div>
+					</div>
+					<h4 class="text-theme-sm lg:text-theme-lg mb-3 font-semibold text-gray-800 dark:text-white/90">
+						Drag & Drop Profile Image
+					</h4>
+					<span class="mx-auto mb-5 block w-full max-w-[290px] text-xs lg:text-sm text-gray-700 dark:text-gray-400">
+					Drop your PNG, JPG, WebP image here or click to upload.
+					</span>
+					<span class="text-theme-sm text-brand-500 dark:text-warning-300 font-medium underline">
+					Browse File
+					</span>
+					<input 
+						type="file" 
+						name="profile_image" 
+						id="profile-image-input"
+						accept="image/png, image/jpeg, image/webp"
+						class="hidden"
+						/>
+				</div>
+			</div>
+			<!-- Profile Image Preview container -->
+			<div id="preview-container" class="mt-4"></div>
+			<div class="flex items-center justify-end w-full gap-3 mt-6">
+				<button
+					@click="$store.modals.close('socials')"
+					type="button"
+					class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 sm:w-auto"
+					>
+				Close
+				</button>
+				<button
+					id="saveChangesBtn"
+					type="submit"
+					class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto"
+					>
+				Save Changes
+				</button>
+			</div>
+		</form>
+	</div>
 </div>
 <!-- Profile Edit Modal -->
 <div
-    x-show="$store.modals.profile"
-    class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999"
-    >
-    <div
-        class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
-        ></div>
-    <div
-        @click.outside="$store.modals.close('profile')"
-        class="relative w-full max-w-[584px] rounded-3xl 
-        bg-white p-6 dark:bg-gray-900 lg:p-10"
-        >
-        <!-- close btn -->
-        <button
-            @click="$store.modals.close('profile')"
-            class="group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
-            >
-            <svg
-                class="transition-colors fill-current group-hover:text-gray-600 dark:group-hover:text-gray-200"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                >
-                <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
-                    fill=""
-                    />
-            </svg>
-        </button>
-        <form id="updateProfile" action="{% url AUTH_URLS.UPDATE_PROFILE_INFO %}" method="POST" class="" autocomplete="off">
-            {% csrf_token %}
-            <h4 class="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-                Personal Information
-            </h4>
-            <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 mb-10">
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    First Name
-                    </label>
-                    <input
-                        type="text"
-                        name="first_name"
-                        value="{{ user.first_name|title }}"
-                        disabled
-                        class="h-11 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 
-                        px-4 py-2.5 text-sm shadow-theme-xs cursor-not-allowed
-                        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500
-                        placeholder:text-gray-400"
-                        />
-                </div>
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Last Name
-                    </label>
-                    <input
-                        type="text"
-                        name="last_name"
-                        value="{{ user.last_name|title }}"
-                        disabled
-                        class="h-11 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 
-                        px-4 py-2.5 text-sm shadow-theme-xs cursor-not-allowed
-                        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500
-                        placeholder:text-gray-400"
-                        />
-                </div>
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Email Address
-                    </label>
-                    <input
-                        type="text"
-                        value="{{ user.email}}"
-                        disabled
-                        class="h-11 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 
-                        px-4 py-2.5 text-sm shadow-theme-xs cursor-not-allowed
-                        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500
-                        placeholder:text-gray-400"
-                        />
-                </div>
-                <div class="col-span-1">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Mobile Number
-                    </label>
-                    <input
-                        type="text"
-                        name="mobile_num"
-                        value="{{ user.profile.mobile_num|format_mobile_number }}"
-                        placeholder="{{ user.profile.mobile_num|default:'+09 363 398 46'}}"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
-                        />
-                </div>
-                <div class="col-span-1 sm:col-span-2">
-                    <label
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                        >
-                    Alternate Number
-                    </label>
-                    <input
-                        type="text"
-                        name="alt_mobile_num"
-                        placeholder="{{ user.profile.alt_mobile_num|format_mobile_number|default:'+09 363 398 46' }}"
-                        value="{{ user.profile.alt_mobile_num|format_mobile_number|default:'' }}"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                        />
-                </div>
-            </div>
-            <div class="flex items-center justify-end w-full gap-3 mt-6">
-                <button
-                    @click="$store.modals.close('profile')"
-                    type="button"
-                    class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 sm:w-auto"
-                    >
-                Close
-                </button>
-                <button
-                    id="saveBtn"
-                    type="submit"
-                    class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 dark:bg-warning-200 shadow-theme-xs hover:bg-brand-600 dark:hover:bg-warning-300 sm:w-auto"
-                    >
-                Save Changes
-                </button>
-            </div>
-        </form>
-    </div>
+	x-show="$store.modals.profile"
+	class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999"
+	>
+	<div
+		class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
+		></div>
+	<div
+		@click.outside="$store.modals.close('profile')"
+		class="relative w-full max-w-[584px] rounded-3xl 
+		bg-white p-6 dark:bg-gray-900 lg:p-10"
+		>
+		<!-- close btn -->
+		<button
+			@click="$store.modals.close('profile')"
+			class="group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 sm:right-6 sm:top-6 sm:h-11 sm:w-11"
+			>
+			<svg
+				class="transition-colors fill-current group-hover:text-gray-600 dark:group-hover:text-gray-200"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				>
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
+					fill=""
+					/>
+			</svg>
+		</button>
+		<form id="updateProfile" action="{% url AUTH_URLS.UPDATE_PROFILE_INFO %}" method="POST" class="" autocomplete="off">
+			{% csrf_token %}
+			<h4 class="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
+				Personal Information
+			</h4>
+			<div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 mb-10">
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					First Name
+					</label>
+					<input
+						type="text"
+						name="first_name"
+						value="{{ user.first_name|title }}"
+						disabled
+						class="h-11 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 
+						px-4 py-2.5 text-sm shadow-theme-xs cursor-not-allowed
+						dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500
+						placeholder:text-gray-400"
+						/>
+				</div>
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Last Name
+					</label>
+					<input
+						type="text"
+						name="last_name"
+						value="{{ user.last_name|title }}"
+						disabled
+						class="h-11 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 
+						px-4 py-2.5 text-sm shadow-theme-xs cursor-not-allowed
+						dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500
+						placeholder:text-gray-400"
+						/>
+				</div>
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Email Address
+					</label>
+					<input
+						type="text"
+						value="{{ user.email}}"
+						disabled
+						class="h-11 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 
+						px-4 py-2.5 text-sm shadow-theme-xs cursor-not-allowed
+						dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500
+						placeholder:text-gray-400"
+						/>
+				</div>
+				<div class="col-span-1">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Mobile Number
+					</label>
+					<input
+						type="text"
+						name="mobile_num"
+						value="{{ user.profile.mobile_num|format_mobile_number }}"
+						placeholder="{{ user.profile.mobile_num|default:'+09 363 398 46'}}"
+						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-warning-200"
+						/>
+				</div>
+				<div class="col-span-1 sm:col-span-2">
+					<label
+						class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+						>
+					Alternate Number
+					</label>
+					<input
+						type="text"
+						name="alt_mobile_num"
+						placeholder="{{ user.profile.alt_mobile_num|format_mobile_number|default:'+09 363 398 46' }}"
+						value="{{ user.profile.alt_mobile_num|format_mobile_number|default:'' }}"
+						class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+						/>
+				</div>
+			</div>
+			<div class="flex items-center justify-end w-full gap-3 mt-6">
+				<button
+					@click="$store.modals.close('profile')"
+					type="button"
+					class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 sm:w-auto"
+					>
+				Close
+				</button>
+				<button
+					id="saveBtn"
+					type="submit"
+					class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 dark:bg-warning-200 shadow-theme-xs hover:bg-brand-600 dark:hover:bg-warning-300 sm:w-auto"
+					>
+				Save Changes
+				</button>
+			</div>
+		</form>
+	</div>
 </div>
 {% endblock %}
 {% block custom_page_js %}
@@ -889,87 +1012,87 @@
 <script defer src="{% static 'js/accounts/update-socials.js' %}"></script>
 <script defer src="{% static 'js/accounts/update-profile-info.js' %}"></script>
 <script>
-    Dropzone.autoDiscover = false;
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    
-    const profileDropzone = new Dropzone("#profile-picture-dropzone", {
-       url: "/accounts/upload/profile-picture/",
-       headers: { "X-CSRFToken": csrftoken },
-       paramName: "profile_image",
-       maxFiles: 1,
-       maxFilesize: 5, // MB
-       autoProcessQueue: false,
-       acceptedFiles: "image/*",
-       clickable: "#profile-picture-dropzone",
-       addRemoveLinks: true,
-       previewTemplate: `
-           <div class="dz-preview dz-file-preview mt-4">
-               <img data-dz-thumbnail class="h-32 w-32 rounded-full object-cover mx-auto" />
-               <div class="dz-details mt-2 text-center">
-                   <div class="dz-filename">
-                       <span data-dz-name class="text-sm font-medium text-gray-800 dark:text-white/90"></span>
-                   </div>
-                   <div class="dz-size">
-                       <span data-dz-size class="text-xs text-gray-500 dark:text-gray-400"></span>
-                   </div>
-               </div>
-               <div class="dz-progress mt-2 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                   <div class="dz-upload h-full bg-brand-500 dark:bg-warning-300" data-dz-uploadprogress style="width:0%;"></div>
-               </div>
-               <div class="dz-error-message mt-2 text-sm text-red-500" data-dz-errormessage></div>
-           </div>
-       `,
-       createImageThumbnails: true,
-    renameFile: function (file) {
-    	const ext = file.name.split('.').pop();
-    	const newName = "profile_" + Date.now() + "." + ext;
-    	return newName;
-    },
-    });
-    
-    // Hide placeholder on added file
-    profileDropzone.on("addedfile", function(file) {
-       if (this.files.length > 1) this.removeFile(this.files[0]);
-       const dzMessage = document.querySelector("#profile-picture-dropzone .dz-message");
-       if (dzMessage) dzMessage.style.display = "none";
-    });
-    
-    // Restore placeholder if file removed
-    profileDropzone.on("removedfile", function(file) {
-       const dzMessage = document.querySelector("#profile-picture-dropzone .dz-message");
-       if (dzMessage) dzMessage.style.display = "block";
-    });
-    
-    // Progress bar updates automatically
-    profileDropzone.on("uploadprogress", function(file, progress) {
-       const progressElement = file.previewElement.querySelector(".dz-upload");
-       progressElement.style.width = progress + "%";  // Fill the bar
-    });
-    
-    // Trigger upload on Save Changes
-    document.getElementById("saveChangesBtn").addEventListener("click", function(e) {
-       e.preventDefault();
-       if (profileDropzone.files.length > 0) {
-           profileDropzone.processQueue();
-       } else {
-           console.log("No file to upload");
-       }
-    });
-    
-    // Upload success
-    profileDropzone.on("success", function(file, response) {
-    const newImageUrl = response.avatar_url;
-    
-       document.querySelectorAll(".profile-picture").forEach(img => {
-           img.src = newImageUrl + "?t=" + new Date().getTime(); 
-       });
-    console.log("Response url: ", response);
-       showToast("Profile picture updated successfully!", "success", "Upload Complete");
-    });
-    
-    // Upload error
-    profileDropzone.on("error", function(file, errorMessage) {
-       showToast("There was an error uploading the profile picture.", "error", "Upload Failed");
-    });
+	Dropzone.autoDiscover = false;
+	const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+	
+	const profileDropzone = new Dropzone("#profile-picture-dropzone", {
+	   url: "/accounts/upload/profile-picture/",
+	   headers: { "X-CSRFToken": csrftoken },
+	   paramName: "profile_image",
+	   maxFiles: 1,
+	   maxFilesize: 5, // MB
+	   autoProcessQueue: false,
+	   acceptedFiles: "image/*",
+	   clickable: "#profile-picture-dropzone",
+	   addRemoveLinks: true,
+	   previewTemplate: `
+	       <div class="dz-preview dz-file-preview mt-4">
+	           <img data-dz-thumbnail class="h-32 w-32 rounded-full object-cover mx-auto" />
+	           <div class="dz-details mt-2 text-center">
+	               <div class="dz-filename">
+	                   <span data-dz-name class="text-sm font-medium text-gray-800 dark:text-white/90"></span>
+	               </div>
+	               <div class="dz-size">
+	                   <span data-dz-size class="text-xs text-gray-500 dark:text-gray-400"></span>
+	               </div>
+	           </div>
+	           <div class="dz-progress mt-2 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+	               <div class="dz-upload h-full bg-brand-500 dark:bg-warning-300" data-dz-uploadprogress style="width:0%;"></div>
+	           </div>
+	           <div class="dz-error-message mt-2 text-sm text-red-500" data-dz-errormessage></div>
+	       </div>
+	   `,
+	   createImageThumbnails: true,
+	renameFile: function (file) {
+		const ext = file.name.split('.').pop();
+		const newName = "profile_" + Date.now() + "." + ext;
+		return newName;
+	},
+	});
+	
+	// Hide placeholder on added file
+	profileDropzone.on("addedfile", function(file) {
+	   if (this.files.length > 1) this.removeFile(this.files[0]);
+	   const dzMessage = document.querySelector("#profile-picture-dropzone .dz-message");
+	   if (dzMessage) dzMessage.style.display = "none";
+	});
+	
+	// Restore placeholder if file removed
+	profileDropzone.on("removedfile", function(file) {
+	   const dzMessage = document.querySelector("#profile-picture-dropzone .dz-message");
+	   if (dzMessage) dzMessage.style.display = "block";
+	});
+	
+	// Progress bar updates automatically
+	profileDropzone.on("uploadprogress", function(file, progress) {
+	   const progressElement = file.previewElement.querySelector(".dz-upload");
+	   progressElement.style.width = progress + "%";  // Fill the bar
+	});
+	
+	// Trigger upload on Save Changes
+	document.getElementById("saveChangesBtn").addEventListener("click", function(e) {
+	   e.preventDefault();
+	   if (profileDropzone.files.length > 0) {
+	       profileDropzone.processQueue();
+	   } else {
+	       console.log("No file to upload");
+	   }
+	});
+	
+	// Upload success
+	profileDropzone.on("success", function(file, response) {
+	const newImageUrl = response.avatar_url;
+	
+	   document.querySelectorAll(".profile-picture").forEach(img => {
+	       img.src = newImageUrl + "?t=" + new Date().getTime(); 
+	   });
+	console.log("Response url: ", response);
+	   showToast("Profile picture updated successfully!", "success", "Upload Complete");
+	});
+	
+	// Upload error
+	profileDropzone.on("error", function(file, errorMessage) {
+	   showToast("There was an error uploading the profile picture.", "error", "Upload Failed");
+	});
 </script>
 {% endblock %}

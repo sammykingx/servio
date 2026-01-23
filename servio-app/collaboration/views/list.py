@@ -8,10 +8,10 @@ from template_map.collaboration import Collabs
 class CollaborationListView(LoginRequiredMixin, ListView):
     template_name = Collabs.LIST_COLLABORATIONS
     context_object_name = "gigs"
-    paginate_by = 8
+    paginate_by = 4
 
     def get_queryset(self):
-        return (
+        queryset =  (
             self.request.user.gigs
             .prefetch_related("required_roles")
             .annotate(
@@ -22,6 +22,13 @@ class CollaborationListView(LoginRequiredMixin, ListView):
             )
             .order_by("-created_at")
         )
+        
+        project_status = self.request.GET.get("project_status")
+        if project_status:
+            print("Project status received")
+            queryset = queryset.filter(status=project_status)
+            
+        return queryset
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -41,11 +48,19 @@ class CollaborationListView(LoginRequiredMixin, ListView):
     
     def render_to_response(self, context, **response_kwargs):
         if self.request.headers.get("HX-Request"):
-            return render(
-                self.request,
-                "collaborations/partials/_gig-cards.html",
-                context,
+            status = self.request.GET.get("project_status")
+            print(status)
+            htmx_response = (
+                "collaborations/partials/_project-list-wrapper.html"
+                if status else
+                "collaborations/partials/_gig-cards.html"
             )
+            print(htmx_response)
+            # print(context.get("page_obj").next_page_number)
+            # htmx_response = "collaborations/partials/_project-list-wrapper.html"
+            
+            return render(self.request, htmx_response, context)
+        
         return super().render_to_response(context, **response_kwargs)
 
 

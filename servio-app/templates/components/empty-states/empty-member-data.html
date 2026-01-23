@@ -43,7 +43,7 @@
             <!-- Headlines -->
             <div class="text-center max-w-2xl mb-10">
                 <h2 class="text-2xl md:text-3xl font-semibold text-[#0d121b] dark:text-white mb-3 tracking-tight">Ready to get started?</h2>
-                <p class="text-slate-500 dark:text-slate-400 text-lg leading-relaxed tex-xs md:text-sm">
+                <p class="text-slate-500 dark:text-slate-400 leading-relaxed text-xs md:text-sm">
                     Start a project, book a service, or collaborate with professionals.<br class="hidden sm:block text-xs md:text-sm" /> Everything you need to succeed starts here.
                 </p>
             </div>
@@ -77,7 +77,7 @@
                         <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-2">
                             Start a project
                         </h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                             Start a project, define deliverables, and collaborate with verified professionals.
                         </p>
                         <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-500">
@@ -113,7 +113,7 @@
                         <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-2">
                             Book a service
                         </h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                             Discover experts, schedule sessions, and manage appointments effortlessly.
                         </p>
                         <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-purple-600 dark:text-purple-400">
@@ -147,7 +147,7 @@
                         <h3 class="text-lg font-semibold text-[#0d121b] dark:text-white mb-2">
                             Business tools
                         </h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                             Invoices, contracts, receipts, and payment tracking—built for real businesses.
                         </p>
                         <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
@@ -159,15 +159,15 @@
             </div>
             <!-- Secondary Links -->
             <div class="mt-12 flex items-center gap-2">
-                <a class="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
-                <span class="material-symbols-outlined text-[20px]">help</span>
-                How it works
+                <a class="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs md:text-sm font-medium text-brand-500 hover:text-brand-300 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+                    <span class="material-symbols-outlined text-[20px]">help</span>
+                    How it works
                 </a>
                 <span class="text-slate-300 dark:text-slate-700">•</span>
                 {% if user.completed_onboarding %}
-                <a class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-slate-600 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
-                <span class="material-symbols-outlined text-[20px]">person_outline</span>
-                Completed (100%)
+                <a class="inline-flex items-center justify-center leading-relaxed gap-2 px-4 py-2 text-xs md:text-sm font-medium text-success-500 hover:text-brand-500 dark:text-slate-400 dark:hover:text-white transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+                    <span class="material-symbols-outlined text-[20px]">person_outline</span>
+                    Profile (100%)
                 </a>
                 {% else %}
                 <a

@@ -24,13 +24,18 @@
     <!-- Controls: Search, Tabs & Filters -->
     <div class="flex flex-col gap-4 space-y-2">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-700 pb-1">
-            <!-- Tabs -->
+            
+            <!-- Project Status Tabs -->
             <div class="flex overflow-x-auto pb-2 lg:pb-0 gap-6 no-scrollbar">
                 <a class="group flex items-center gap-2 border-b-2 border-brand-500 dark:border-gray-100 pb-3 px-1 cursor-pointer" href="#">
                     <span class="text-brand-500  dark:text-gray-200 text-sm font-semibold whitespace-nowrap">All Gigs</span>
                     <span class="flex items-center justify-center bg-brand-500/10 dark:bg-gray-600 text-brand-500 dark:text-gray-300 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.total }}</span>
                 </a>
-                <a class="group flex items-center gap-2 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 pb-3 px-1 cursor-pointer transition-colors" href="#">
+                <a class="group flex items-center gap-2 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 pb-3 px-1 cursor-pointer transition-colors" 
+                    hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}?project_status=pending"
+                    hx-target="#project-list-wrapper"
+                    hx-swap="outerHTML"
+                >
                     <span class="text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 text-sm font-semibold whitespace-nowrap">Pending</span>
                     <span class="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.pending }}</span>
                 </a>
@@ -43,11 +48,12 @@
                     <span class="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.completed }}</span>
                 </a>
             </div>
-            <!-- Filters -->
+
+            <!-- Project Filters -->
             <div class="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-3 no-scrollbar">
                 <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="hidden sm:flex h-8 shrink-0 items-center justify-center gap-x-2
                             rounded-md bg-transparent dark:bg-gray-800
-                            border border-gray-400 dark:border-gray-700
+                            border border-brand-200 dark:border-gray-700
                             hover:bg-gray-50 dark:hover:bg-gray-700
                             pl-3 pr-2 transition-colors shadow-sm">
                     <span class="text-gray-700 dark:text-gray-400 text-xs font-semibold">add new</span>
@@ -74,32 +80,37 @@
             </div>
         </div>
     </div>
-    <!-- Grid Layout -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-4">
-        {% include "collaborations/partials/_gig-cards.html" %}
-    </div>
 
-    <!-- HTMX gig listing -->
-    <div id="gig-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-    <div 
-        id="load-more-container"
-        data-current-page="{{ page_obj.number }}"
-        data-total-pages="{{ paginator.num_pages }}"
-        class="flex justify-center my-4"
-    >
+    <div id="project-list-wrapper">
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-4">
+            {% include "collaborations/partials/_gig-cards.html" %}
+        </div>
+
+        <!-- HTMX gig listing -->
+        <div id="gig-list" class="my-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <div
+            id="load-more-container"
+            data-current-page="{{ page_obj.number }}"
+            data-total-pages="{{ paginator.num_pages }}"
+            data-status="{{ request.GET.project_status|default:'' }}"
+            class="flex justify-center my-4"
+        >
         
-        <button 
-            id="load-more-btn"
-            hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" 
-            hx-vals='{"page": {{ page_obj.next_page_number }}}'
-            hx-target="#gig-list" 
-            hx-swap="beforeend" 
-            class="text-sm font-semibold text-gray-500 hover:text-brand-500 
-                    transition-colors flex items-center gap-1">
-            <span>Show more gigs</span>
-            <span class="material-symbols-outlined text-[16px]">expand_more</span>
-        </button>
+            <button
+                id="load-more-btn"
+                hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}"
+                hx-vals='{"page": {{ page_obj.next_page_number }}, "project_status": "{{ request.GET.project_status|default:"" }}"}'
+                hx-target="#gig-list"
+                hx-swap="beforeend"
+                class="text-sm font-semibold text-gray-500 hover:text-brand-500
+                        transition-colors flex items-center gap-1">
+                <span>Show more gigs</span>
+                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+            </button>
         
+        </div>
     </div>
 </div>
 {% endif %}
@@ -109,18 +120,35 @@
     document.body.addEventListener('htmx:afterSwap', () => {
         const button = document.getElementById('load-more-btn');
         const container = document.getElementById('load-more-container');
+
+        if (!button || !container) return;
+
         let currentPage = parseInt(container.dataset.currentPage);
         const totalPages = parseInt(container.dataset.totalPages);
+        const status = container.dataset.status || "";
+
+        console.log(`BEFORE INCREASE: Currentpage Number: ${currentPage}, Staus: ${status}`);
 
         currentPage += 1;
-        container.dataset.currentPage = currentPage;
-        button.setAttribute('hx-vals', JSON.stringify({ page: currentPage + 1 }));
 
+        console.log(`AFTER INCREASE: Currentpage Number: ${currentPage}, Staus: ${status}`);
+
+        container.dataset.currentPage = currentPage;
+        
         if (currentPage >= totalPages) {
-            // hide button and show "No more gigs"
             button.style.display = 'none';
             showToast("No more data to render", "warning", "Rendering complete")
-        } /*else {
+        }
+
+        button.setAttribute(
+            'hx-vals', 
+            JSON.stringify({ 
+                page: currentPage + 1, 
+                project_status: status,
+            })
+        );
+
+         /*else {
             button.setAttribute('hx-get', `?page=${currentPage + 1}`);
         }*/
 

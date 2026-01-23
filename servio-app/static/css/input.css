@@ -750,11 +750,13 @@ span.flatpickr-weekday,
 }
 
 /* Brand Icon color system */
-.icon-payments { color: #6366f1; }      /* Indigo */
-.icon-escrow { color: #22c55e; }        /* Emerald */
-.icon-negotiations { color: #f59e0b; }  /* Amber */
-.icon-rewards { color: #ec4899; }       /* Pink */
-.icon-gigs { color: #8b5cf6; }          /* Violet */
+.icon-payments { color: #6366f1; }        /* Indigo */
+.icon-escrow { color: #22c55e; }          /* Emerald */
+.icon-negotiations { color: #f59e0b; }    /* Amber */
+.icon-rewards { color: #ec4899; }         /* Pink */
+.icon-gigs { color: #8b5cf6; }            /* Violet */
+.icon-opportunities { color: #0ea5e9; }   /* Sky Blue */
+
 
 /* Quiil JS Related Styles */
 /* Base content */

@@ -83,7 +83,7 @@ class Gig(models.Model):
         help_text="Indicates if the total budget is negotiable"
     )
     has_gig_roles = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
+    is_gig_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
