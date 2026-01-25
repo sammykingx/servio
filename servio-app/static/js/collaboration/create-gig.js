@@ -155,11 +155,9 @@ async function submitBtn(action="publish") {
     }
 
     const body = { action, payload: gigPayload };
-    console.log(JSON.stringify(body, null, 2));
     
     try {
         const response = await publishGig(body, endpoint, csrf_token);
-        // console.log(response);
 
         if (!response.ok) {
             // Server returned a non-2xx response
@@ -277,8 +275,8 @@ function validatePayload(gigPayload) {
                     errors.push(`Please provide a meaningful description for "${role.professional || role.niche}" to understand.`);
                 }
 
-                if (!role.workload) {
-                    errors.push("Please select the workload");
+                if (!role.paymentOption) {
+                    errors.push("Please select a payment option");
                 }
 
             }

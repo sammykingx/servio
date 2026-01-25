@@ -13,7 +13,7 @@ from formatters.pydantic_formatter import format_pydantic_errors
 from ..schemas import CreateGigRequest, CreateGigStates, get_response_msg
 from ..exceptions import GigError
 from ..schemas.gig import GigPayload
-from ..schemas.gig_role import WORKMODE_OPTIONS
+from ..schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
 from typing import Dict, List
 import json
@@ -65,7 +65,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
     def get(self, request) -> HttpResponse:
         context = {
             "gig_taxonomy": create_taxonomy_context(),
-            "workmode_labels": json.dumps(WORKMODE_OPTIONS),
+            "payment_options": json.dumps(PAYMENT_OPTIONS),
         }
         return render(request, Collabs.CREATE, context)
 
@@ -85,11 +85,11 @@ class CreateCollaborationView(LoginRequiredMixin, View):
             )
 
         except ValidationError as e:
+            fields = format_pydantic_errors(e),
             return JsonResponse(
                 {
                     "error": "Validation error",
                     "message": "Some required information is missing or invalid.",
-                    "fields": format_pydantic_errors(e),
                 },
                 status=400,
             )
@@ -113,6 +113,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
 
         response = get_response_msg(gig_data.action, gig)
         return JsonResponse(response.model_dump())
+        # return JsonResponse({"message": "all good"})
 
     def save_gig_data(self, payload: GigPayload, action: CreateGigStates) -> Model:
         try:
@@ -157,20 +158,20 @@ class CreateCollaborationView(LoginRequiredMixin, View):
                             aggregated_roles[key]["slots"] += role.slots or 1
                         
                     roles = [
-                        GigRoleModel(
-                        gig=gig,
-                        niche=categories[niche_id],
-                        niche_name=data["role"].niche,
-                        role_name=data["role"].professional,
-                        role_id=professional_id,
-                        budget=data["role"].budget,
-                        workload=data["role"].workload,
-                        description=data["role"].description,
-                        slots=data["slots"],
-                        is_negotiable=payload.isNegotiable,
-                    )
-                    for (niche_id, professional_id), data in aggregated_roles.items()
-                ]
+                            GigRoleModel(
+                            gig=gig,
+                            niche=categories[niche_id],
+                            niche_name=data["role"].niche,
+                            role_name=data["role"].professional,
+                            role_id=professional_id,
+                            budget=data["role"].budget,
+                            payment_option=data["role"].paymentOption,
+                            description=data["role"].description,
+                            slots=data["slots"],
+                            is_negotiable=payload.isNegotiable,
+                        )
+                        for (niche_id, professional_id), data in aggregated_roles.items()
+                    ]
 
                     GigRoleModel.objects.bulk_create(roles)
 
@@ -231,7 +232,7 @@ class EditGigView(LoginRequiredMixin, View):
                 "professionalName": role.role_name,
                 "budget": float(role.budget),
                 "description": role.description,
-                "workload": role.workload,
+                "workload": role.payment_option,
                 "slots": role.slots,
             }
             for role in roles
@@ -244,7 +245,7 @@ class EditGigView(LoginRequiredMixin, View):
             "gig": gig,
             "gig_roles_json": json.dumps(roles_payload),
             "gig_taxonomy": create_taxonomy_context(),
-            "workmode_labels": json.dumps(WORKMODE_OPTIONS),
+            "payment_labels": json.dumps(PAYMENT_OPTIONS),
             "editable_statuses": ["pending", "draft"],
         }
 
@@ -407,7 +408,7 @@ class EditGigView(LoginRequiredMixin, View):
                         role.role_id = role_id
                         role.role_name = role_data.professional
                         role.budget = role_data.budget
-                        role.workload = role_data.workload
+                        role.payment_option = role_data.paymentOption
                         role.description = role_data.description
                         role.slots = slots
 

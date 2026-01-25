@@ -275,8 +275,8 @@ function validatePayload(gigPayload) {
                     errors.push(`Please provide a meaningful description for "${role.professional || role.niche}" to understand.`);
                 }
 
-                if (!role.workload) {
-                    errors.push("Please select the workload");
+                if (!role.paymentOption) {
+                    errors.push("Please select a preferred payment plan to proceed");
                 }
 
             }

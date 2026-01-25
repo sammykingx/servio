@@ -49,7 +49,7 @@
                 <span
                   class="flex h-full w-full items-center justify-center
                          text-2xl font-semibold text-brand-500">
-                  {{ user.first_name|slice:":1"|upper }}
+                  {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
                 </span>
               {% endif %}
             </div>

@@ -228,7 +228,7 @@
                         </div>
                     </div>
 
-                    <div x-data="gigRoles($refs.taxonomy, $refs.workmodeData)" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div x-data="gigRoles($refs.taxonomy, $refs.paymentSplitData)" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600">
@@ -288,10 +288,10 @@
                                             <input type="text" x-model="role.description" @change="emitRoles()" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition" />
                                         </div>
                                         <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Workload</label>
-                                            <select x-model="role.workload" @change="emitRoles()" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
-                                                <option>Choose Workload</option>
-                                                <template x-for="option in workmodeOptions" :key="option.value">
+                                            <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Payment Option</label>
+                                            <select x-model="role.paymentOption" @change="emitRoles()" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
+                                                <option>Choose payment Option</option>
+                                                <template x-for="option in paymentOptions" :key="option.value">
                                                     <option :value="option.value" x-text="option.label"></option>
                                                 </template>
                                             </select>
@@ -696,8 +696,8 @@
 <script id="gig-taxonomy-data" type="application/json" x-ref="taxonomy">
 {{ gig_taxonomy|safe }}
 </script>
-<script id="workmode-data" type="application/json" x-ref="workmodeData">
-  {{ workmode_labels|safe }}
+<script id="payment-options-data" type="application/json" x-ref="paymentSplitData">
+  {{ payment_options|safe }}
 </script>
 <script>
 // working calendar engine
@@ -882,10 +882,10 @@
 </script>
 <script>
     // working gig roles
-    function gigRoles(taxonomyEl, workmodeEl) {
+    function gigRoles(taxonomyEl, paymentOptionsEl) {
         return {
             taxonomy: JSON.parse(taxonomyEl.textContent),
-            workmodeOptions: JSON.parse(workmodeEl.textContent),
+            paymentOptions: JSON.parse(paymentOptionsEl.textContent),
             roles: [{
                 nicheId: '',
                 nicheName: '',
@@ -893,7 +893,7 @@
                 professionalName: '',
                 budget: 0,
                 description: '',
-                workload: ''
+                paymentOption: ''
             }],
 
             professionalsFor(nicheId) {
@@ -908,7 +908,7 @@
                     professionalName: '',
                     budget: 0,
                     description: '',
-                    workload: 'flexible'
+                    paymentOption: 'flexible'
                 });
                 this.emitRoles();
             },
@@ -960,7 +960,7 @@
                         professional: professional?.name || null,
                         budget: Number(role.budget) || 0,
                         description: role.description?.trim() || '',
-                        workload: role.workload
+                        paymentOption: role.paymentOption
                     };
                 });
 

@@ -6,6 +6,7 @@ from django.db.models import Prefetch
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.url_names import CollaborationURLS
+from collaboration.models.choices import PaymentOption
 from template_map.collaboration import Collabs
 
 
@@ -25,6 +26,26 @@ class GigDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         context["editable_statuses"] = ["pending", "draft"]
+        gig = self.object
+        payment_value = PaymentOption.SPLIT_50_50
+
+        if payment_value:
+            is_split = PaymentOption.is_split(payment_value)
+
+            context["payment_meta"] = {
+                "type": "Percentage Split" if is_split else "Full Upfront",
+                "installments": (
+                    PaymentOption.installments_count(payment_value)
+                    if is_split
+                    else 1
+                ),
+                "split": (
+                    PaymentOption.percentages(payment_value)
+                    if is_split
+                    else [100]
+                ),
+                "label": PaymentOption(payment_value).label,
+            }
 
         return context
 

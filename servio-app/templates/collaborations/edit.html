@@ -226,7 +226,7 @@
             </div>
         </section>
         <!-- Roles Section -->
-        <section x-data="gigRoles($refs.taxonomy, $refs.workmodeData, $refs.rolesData, locked)" data-gig-roles class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+        <section x-data="gigRoles($refs.taxonomy, $refs.paymentOptionsData, $refs.rolesData, locked)" data-gig-roles class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2">
                     <span class="bg-amber-50 dark:bg-gray-600 rounded-lg p-2 material-symbols-outlined text-amber-500 dark:text-gray-400">group</span>
@@ -350,11 +350,11 @@
                             <!-- Workload -->
                             <div>
                                 <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Workload
+                                    Payment Options
                                 </label>
 
                                 <select
-                                    x-model="role.workload"
+                                    x-model="role.paymentOption"
                                     @change="emitRoles()"
                                     :disabled="locked"
                                     :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
@@ -364,8 +364,8 @@
                                         focus:outline-none focus:ring-1 focus:ring-success-500/30
                                         focus:border-success-500 transition"
                                 >
-                                    <option value="">modify workload</option>
-                                    <template x-for="mode in workmodeOptions" :key="mode.value">
+                                    <option value="">modify options</option>
+                                    <template x-for="mode in paymentOptions" :key="mode.value">
                                         <option :value="mode.value" x-text="mode.label"></option>
                                     </template>
                                 </select>
@@ -636,18 +636,18 @@
 <script id="gig-taxonomy-data" type="application/json" x-ref="taxonomy">
     {{ gig_taxonomy|safe }}
 </script>
-<script id="workmode-data" type="application/json" x-ref="workmodeData">
-    {{ workmode_labels|safe }}
+<script id="payment-options-data" type="application/json" x-ref="paymentOptionsData">
+    {{ payment_labels|safe }}
 </script>
 <script id="gig-roles-data" type="application/json" x-ref="rolesData">
     {{ gig_roles_json|safe }}
 </script>
 <script>
-    function gigRoles(taxonomyEl, workmodeEl, rolesEl, locked) {
+    function gigRoles(taxonomyEl, paymentOptionEl, rolesEl, locked) {
         return {
             locked,
             taxonomy: JSON.parse(taxonomyEl.textContent),
-            workmodeOptions: JSON.parse(workmodeEl.textContent),
+            paymentOptions: JSON.parse(paymentOptionEl.textContent),
 
             roles: JSON.parse(rolesEl.textContent || "[]"),
 
@@ -705,7 +705,7 @@
                         professional: professional?.name || role.professionalName,
                         budget: Number(role.budget) || 0,
                         description: role.description?.trim() || '',
-                        workload: role.workload
+                        paymentOption: role.paymentOption
                     };
                 });
 

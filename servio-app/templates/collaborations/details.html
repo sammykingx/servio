@@ -15,7 +15,7 @@
     <div class="mb-8">
         <div class="flex flex-wrap justify-between items-end gap-6">
             <div class="flex flex-col gap-2">
-                <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-300 tracking-tight leading-tight">{{ gig.title|truncatewords:5|title }}</h1>
+                <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-300 tracking-tight leading-tight mb-2">{{ gig.title|truncatewords:7|title }}</h1>
                 <div class="flex items-center gap-3">
                     {% if gig.visibility == 'public' %}
                     <span class="px-2.5 py-1 rounded-full bg-blue-500/10 dark:bg-sky-500/10 text-blue-500 dark:text-sky-600 text-xs font-normal">{{ gig.visibility|title }}</span>
@@ -87,8 +87,15 @@
                 </div>
                 <div class="flex flex-col gap-1 border-l border-slate-100 dark:border-slate-800 sm:pl-6">
                     <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Payment Type</p>
-                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">Milestones</p>
-                    <p class="text-gray-500 text-xs">4 scheduled payments</p>
+                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">{{ payment_meta.type }}</p>
+                    <p class="text-gray-500 text-xs">
+                        {{ payment_meta.installments }} scheduled payment{{ payment_meta.installments|pluralize }}
+                    </p>
+                    <p class="text-gray-500 text-xs">
+                        {% for pct in payment_meta.split %}
+                            {{ pct }}%{% if not forloop.last %} / {% endif %}
+                        {% endfor %}
+                    </p>
                 </div>
             </div>
             <!-- Gig Description Section -->
@@ -369,11 +376,19 @@
                 <div class="flex flex-col gap-4">
                     <div class="flex items-center gap-3">
                         <div class="size-10 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" data-alt="Team Member 1">
-                            <img alt="YOU" class="rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMi7cmUdVq-16ntfylnH3NLyBzbhNYYPurYlwKw8biTujckLIXjLGd85f8kVYEBdpAyOJ25A1gQF9JqKU16xTQjZlUgintQZqUdRrdu0toK96_APJ9ZGb3rLvV6DqIABYhx3jz10R6rK3UHmGp8XU30R6Qxw3E97iSKksastaXfjGv4n_tD8pbHYX5z2ip9oueTaJdGoVC7hcHH0j45CEnxn2pG5YqbnX0T28KefOGSirPWlMouZJEzjeetMECiPIpez_6zd-qbng" />
+                            {% if user.profile.avatar_url %}
+                                <img alt="YOU" class="rounded-full w-full h-full object-cover" src="{{ user.profile.avatar_url.url }}" />
+                            {% else %}
+                                <span alt="YOU" 
+                                    class="flex rounded-full bg-white dark:bg-[#1a202c] overflow-hidden
+                                        text-2xl font-semibold text-brand-500 justify-center">
+                                    {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+                                </span>
+                            {% endif %}
                         </div>
                         <div>
                             <p class="text-sm font-medium leading-none text-gray-700 dark:text-gray-400">You (Owner)</p>
-                            <p class="text-[11px] text-gray-500">Hiring Manager</p>
+                            <p class="text-[11px] text-gray-500">Creator</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">

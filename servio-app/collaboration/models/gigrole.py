@@ -1,5 +1,5 @@
 from django.db import models
-from .choices import WorkMode, RoleStatus
+from .choices import PaymentOption, RoleStatus
 from uuid6 import uuid7
 
 
@@ -37,10 +37,10 @@ class GigRole(models.Model):
         help_text="Optional specific role title (e.g. Senior Frontend Engineer)"
     )
     budget = models.DecimalField(max_digits=10, decimal_places=2)
-    workload = models.CharField(
+    payment_option = models.CharField(
         max_length=40,
-        choices=WorkMode.choices,
-        default=WorkMode.FIXED_HOURS,
+        choices=PaymentOption.choices,
+        default=PaymentOption.SPLIT_50_50,
     )
     description = models.TextField(blank=True)
     slots = models.PositiveIntegerField(default=1)
