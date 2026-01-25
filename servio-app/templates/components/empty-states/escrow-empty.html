@@ -55,7 +55,10 @@
       </div>
 
       <!-- Primary CTA -->
-      <button class="group flex items-center justify-center gap-2
+      <button 
+          type="button"
+          @click="showToast('Escrow service needs to communicate with payment processor, connect payment gateway', 'info', 'Escrow Manager')"
+          class="group flex items-center justify-center gap-2
                      bg-emerald-500 hover:bg-emerald-600
                      text-white font-semibold py-3 px-6 rounded-lg
                      transition-all duration-200

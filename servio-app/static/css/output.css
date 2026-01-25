@@ -2057,9 +2057,6 @@
   .gap-x-3 {
     column-gap: calc(var(--spacing) * 3);
   }
-  .gap-x-4 {
-    column-gap: calc(var(--spacing) * 4);
-  }
   .gap-x-6 {
     column-gap: calc(var(--spacing) * 6);
   }
@@ -2076,9 +2073,6 @@
       margin-inline-start: calc(calc(var(--spacing) * -3) * var(--tw-space-x-reverse));
       margin-inline-end: calc(calc(var(--spacing) * -3) * calc(1 - var(--tw-space-x-reverse)));
     }
-  }
-  .gap-y-1 {
-    row-gap: calc(var(--spacing) * 1);
   }
   .gap-y-2 {
     row-gap: calc(var(--spacing) * 2);
@@ -3044,12 +3038,6 @@
   .bg-slate-300 {
     background-color: var(--color-slate-300);
   }
-  .bg-slate-300\/60 {
-    background-color: color-mix(in srgb, oklch(86.9% 0.022 252.894) 60%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-slate-300) 60%, transparent);
-    }
-  }
   .bg-slate-800 {
     background-color: var(--color-slate-800);
   }
@@ -3262,13 +3250,6 @@
     --tw-gradient-from: color-mix(in srgb, #4c3aff 15%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       --tw-gradient-from: color-mix(in oklab, var(--color-brand-500) 15%, transparent);
-    }
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .from-brand-500\/40 {
-    --tw-gradient-from: color-mix(in srgb, #4c3aff 40%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      --tw-gradient-from: color-mix(in oklab, var(--color-brand-500) 40%, transparent);
     }
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
@@ -3663,13 +3644,6 @@
   }
   .to-brand-500 {
     --tw-gradient-to: var(--color-brand-500);
-    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
-  }
-  .to-brand-700\/40 {
-    --tw-gradient-to: color-mix(in srgb, #1713d6 40%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      --tw-gradient-to: color-mix(in oklab, var(--color-brand-700) 40%, transparent);
-    }
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .to-emerald-200\/30 {
@@ -7118,11 +7092,6 @@
   .sm\:inline {
     @media (width >= 40rem) {
       display: inline;
-    }
-  }
-  .sm\:inline-block {
-    @media (width >= 40rem) {
-      display: inline-block;
     }
   }
   .sm\:h-11 {

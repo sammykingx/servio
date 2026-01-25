@@ -48,7 +48,7 @@
                                 <span class="material-symbols-outlined text-brand-500">rocket_launch</span>
                                 Active Projects
                             </h3>
-                            <a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="text-brand-500 text-sm font-semibold hover:underline" href="#">View All</a>
+                            <a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="text-brand-500 dark:text-gray-500 text-sm font-normal hover:underline dark:hover:text-brand-300" href="#">View All</a>
                         </div>
                         <div class="flex flex-col divide-y divide-gray-200/60 dark:divide-gray-800/60">
                             <!-- Project Item 1 -->
@@ -78,7 +78,7 @@
                                     <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                                         <div class="bg-brand-500 h-1.5 rounded-full" style="width: 75%"></div>
                                     </div>
-                                    <span class="text-xs ">75% Complete</span>
+                                    <span class="text-xs dark:text-brand-300">75% Complete</span>
                                 </div>
                             </div>
                             <!-- Project Item 2 -->
@@ -185,26 +185,26 @@
                                 <div class="p-3 rounded-xl bg-brand-500/5 border border-brand-500/10 flex gap-3 items-center">
                                     <div class="flex flex-col items-center justify-center bg-white rounded-lg p-2 min-w-[50px] shadow-sm">
                                         <span class="text-xs font-semibold text-brand-500 uppercase">Oct</span>
-                                        <span class="text-lg font-semibold  dark:text-white">24</span>
+                                        <span class="text-lg font-semibold">24</span>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-semibold text-brand-500 mb-0.5">Today, 2:00 PM</p>
+                                        <p class="text-xs font-semibold text-brand-400 mb-0.5">Today, 2:00 PM</p>
                                         <h4 class="text-sm font-semibold  dark:text-white leading-tight">Sync with Dev Team</h4>
                                         <div class="flex items-center gap-1 mt-1">
                                             <span class="material-symbols-outlined text-xs text-blue-600">videocam</span>
-                                            <span class="text-xs ">Zoom Meeting</span>
+                                            <span class="text-xs dark:text-blue-400">Zoom Meeting</span>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Event 2 (Next) -->
                                 <div class="flex gap-3 items-center px-2 opacity-70">
                                     <div class="flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg p-2 min-w-[50px]">
-                                        <span class="text-xs font-semibold  uppercase">Oct</span>
-                                        <span class="text-lg font-semibold ">26</span>
+                                        <span class="text-xs font-semibold dark:text-gray-300 uppercase">Oct</span>
+                                        <span class="text-lg font-semibold dark:text-gray-500">26</span>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-medium  mb-0.5">Friday, 10:00 AM</p>
-                                        <h4 class="text-sm font-semibold  dark:text-white leading-tight">Design Review</h4>
+                                        <p class="text-xs font-medium dark:text-gray-300 mb-0.5">Friday, 10:00 AM</p>
+                                        <h4 class="text-sm font-normal dark:text-gray-500 leading-tight">Design Review</h4>
                                     </div>
                                 </div>
                             </div>
@@ -221,10 +221,14 @@
                         <p class="text-blue-100 text-sm font-medium mb-1">Total Balance in Escrow</p>
                         <h2 class="text-4xl font-semibold tracking-tight mb-6">$4,250.00</h2>
                         <div class="flex gap-3">
-                            <button class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
+                            <button 
+                                @click="showToast('Could not connect to a payment processor', 'info', 'Servio Wallet Mannager')"
+                                class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
                                 <span class="material-symbols-outlined text-[18px]">add</span> Top Up
                             </button>
-                            <button class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
+                            <button
+                                @click="showToast('Wallet history will be available once gateway is connected', 'info', 'Servio Wallet Mannager')"
+                                class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
                                 <span class="material-symbols-outlined text-[18px]">history</span> History
                             </button>
                         </div>

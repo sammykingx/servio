@@ -48,7 +48,9 @@
                 </p>
             </div>
             <!-- brand-500 CTA -->
-            <button class="group flex items-center justify-center gap-2 bg-brand-500 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 transform hover:-translate-y-0.5">
+            <button 
+                @click="showToast('Payment Processor not configured on servio infrastructure', 'info', 'Servio Payment Service')"
+                class="group flex items-center justify-center gap-2 bg-brand-500 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 transform hover:-translate-y-0.5">
                 <span class="material-symbols-outlined text-[20px]">add_card</span>
                 <span>Set Up Payments</span>
             </button>
