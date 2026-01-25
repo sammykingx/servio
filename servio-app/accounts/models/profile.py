@@ -69,32 +69,3 @@ class UserProfile(models.Model):
 
     class Meta:
         db_table = "user_profiles"
-
-# @transaction.atomic
-# def update_expertise(profile, payload):
-#     GigCategory = apps.get_model("collaboration", "GigCategory")
-#     industry = GigCategory.objects.get(
-#         slug=payload.industry,
-#         parent__isnull=True,
-#         is_active=True,
-#     )
-
-#     niches = list(
-#         GigCategory.objects.filter(
-#             id__in=payload.niches,
-#             parent=industry,
-#             is_active=True,
-#         )
-#     )
-
-#     if len(niches) != len(payload.niches):
-#         raise ValidationError("Invalid niche selection")
-
-#     if len(niches) > 3:
-#         raise ValidationError("You can select at most 3 niches")
-
-#     profile.industry = industry
-#     profile.bio = payload.bio
-#     profile.save(update_fields=["industry", "bio"])
-
-#     profile.niches.set(niches)

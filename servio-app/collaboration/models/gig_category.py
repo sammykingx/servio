@@ -61,20 +61,17 @@ class GigCategory(models.Model):
         """
         return self.parent is None
 
-
     def has_subcategories(self):
         """
         Returns True if this category has one or more subcategories.
         """
         return self.subcategories.exists()
 
-
     def active_subcategories(self):
         """
         Returns a queryset of active subcategories for this category.
         """
         return self.subcategories.filter(is_active=True)
-
 
     def all_descendants(self):
         """
@@ -86,7 +83,6 @@ class GigCategory(models.Model):
             descendants |= subcat.all_descendants()
         return descendants
 
-
     def gigs_count(self):
         """
         Returns the number of gigs directly associated with this category
@@ -94,7 +90,6 @@ class GigCategory(models.Model):
         """
         GigRole = apps.get_model("collaboration", "GigRole")
         return GigRole.objects.filter(niche=self).count()
-
 
     def gigs(self):
         """
@@ -107,14 +102,12 @@ class GigCategory(models.Model):
 
         return Gig.objects.filter(id__in=gig_ids).distinct()
 
-
     def roles(self):
         """
         Returns a queryset of all GigRoles associated with this category.
         """
         GigRole = apps.get_model("collaboration", "GigRole")
         return GigRole.objects.filter(niche=self)
-
 
     def top_level_category(self):
         """

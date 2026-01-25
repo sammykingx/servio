@@ -105,6 +105,7 @@ class Gig(models.Model):
             self.slug = f"{base}-{uuid7().hex[:12]}"
         super().save(*args, **kwargs)
     
+    # not used yet
     def is_active(self):
         """
             Returns True if the gig is published and still ongoing.
@@ -112,11 +113,11 @@ class Gig(models.Model):
         return self.status == GigStatus.PUBLISHED
 
     def duration(self):
-        
         if self.start_date and self.end_date:
             return (self.end_date - self.start_date).days
         return None
-
+    
+    # not used yet
     def role_count(self):
         """
             Returns the number of roles associated with this gig.
@@ -124,6 +125,7 @@ class Gig(models.Model):
         """
         return getattr(self, 'roles', self.required_roles).count()
     
+    # not used yet
     def total_role_budget(self):
         """
             Returns the total budget allocated to all roles in this gig.
@@ -135,18 +137,21 @@ class Gig(models.Model):
         )
         return result['total'] or 0
 
+    # not used yet
     def open_role_count(self):
         """
             Returns the number of roles that are currently open (not assigned or completed).
         """
         return self.required_roles.filter(status='open').count()
 
+    # not used yet
     def assigned_role_count(self):
         """
             Returns the number of roles that have been assigned.
         """
         return self.required_roles.filter(status='assigned').count()
 
+    # not used yet
     def total_workload_summary(self):
         """
             Returns a summary of roles by workload type as a dictionary.
@@ -156,6 +161,7 @@ class Gig(models.Model):
         qs = self.required_roles.values('workload').annotate(count=Count('id'))
         return {item['workload']: item['count'] for item in qs}
 
+    # not used yet
     def top_level_categories(self):
         """
         Returns a list of unique top-level categories (parents) for all roles in this gig.

@@ -32,9 +32,7 @@
                     <span class="flex items-center justify-center bg-brand-500/10 dark:bg-gray-600 text-brand-500 dark:text-gray-300 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.total }}</span>
                 </a>
                 <a class="group flex items-center gap-2 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 pb-3 px-1 cursor-pointer transition-colors" 
-                    hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}?project_status=pending"
-                    hx-target="#project-list-wrapper"
-                    hx-swap="outerHTML"
+                    href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}?project_status=pending"
                 >
                     <span class="text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 text-sm font-semibold whitespace-nowrap">Pending</span>
                     <span class="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.pending }}</span>

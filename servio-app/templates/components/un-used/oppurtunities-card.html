@@ -1,0 +1,221 @@
+{% for gig in gigs %}
+<div class="flex flex-col bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all group">
+	<div class="p-6 flex flex-col gap-4">
+		<div class="flex justify-between items-start">
+			{% if gig.priority_score == 3 %}
+			<span class="flex items-center gap-1 px-3 py-1 
+				bg-purple-100 dark:bg-purple-900/30 
+				text-purple-700 dark:text-purple-400 
+				text-xs font-semibold rounded-full
+				uppercase tracking-wide"
+				>🤖 AI Match · High Priority</span>
+			{% elif gig.priority_score == 2 %}
+			<span class="flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900/30
+				text-blue-700 dark:text-blue-400 text-xs font-semibold
+				rounded-full"
+				>🤖 AI Match · {{ gig.match_percentage }}%</span>
+			{% else %}
+			<span class="px-3 py-1 bg-emerald-100 dark:bg-green-900/30 text-emerald-500 dark:text-emerald-400 text-xs font-medium rounded-full uppercase tracking-wider">Open for Collaboration</span>
+			{% endif %}
+			<button class="text-slate-400 hover:text-brand-500 transition-colors">
+			<span class="material-symbols-outlined">bookmark</span>
+			</button>
+		</div>
+		<div>
+			<h3 class="text-slate-900 dark:text-white text-lg font-semibold group-hover:text-brand-500 transition-colors">{{ gig.title|truncatewords:6|title }}</h3>
+			<div class="flex items-center gap-2 mt-2">
+				<div class="size-6 rounded-full bg-cover bg-center" data-alt="Sarah Jenkins profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAXKHnzoNeDTtVTPflRyCG2FSEgPCmJQH8bqoRehtq5GfBzT-sUIJ_xjXk6Nsz_ieUGaDbmRSwFaxArsFSyMhpcishF-hjgUOPygsmS5Z69bnQ_fQE3oEIuv_VEEj5jyx-UNNHa87hVyw0C9yfr6L-UNoTlkvw9Xr4l78_bQg7j5IrGjE1vTz10msKkrG8zu4H-OVcyb-b6AnogoqEbMNBddPfb6Lir9mREXQgf5A2SiT3Mn-u9FX8CRokd-0awOAeA6_3OxLvFeLw");'></div>
+				<p class="text-slate-500 dark:text-slate-400 text-sm">{{ gig.creator.full_name|title }} <span class="text-amber-500 font-semibold ml-1">4.9★</span></p>
+			</div>
+		</div>
+		{% if gig.match_count > 0 %}
+		<div class="flex flex-wrap gap-2">
+			{% for role in gig.matched_roles %}
+			<span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800
+				text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg">
+			{{ role.role_name|default:role.niche.name }}
+			</span>
+			{% endfor %}
+		</div>
+		{% endif %}
+		<div class="flex flex-col gap-2 pt-2">
+			<div class="flex items-center gap-2 text-brand-500 dark:text-brand-400">
+				<span class="material-symbols-outlined text-lg">payments</span>
+				{% if gig.match_count > 1 %}
+				<span class="text-base font-semibold">
+				${{ gig.min_budget|intcomma }} – ${{ gig.max_budget|intcomma }}
+				</span>
+				{% elif gig.match_count == 1 %}
+				<span class="text-base font-semibold">
+				${{ gig.display_budget|intcomma }}
+				</span>
+				{% else %}
+				<span class="text-base font-semibold">
+				${{ gig.total_budget|intcomma }}
+				</span>
+				{% endif %}
+			</div>
+			<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+				<span class="material-symbols-outlined text-lg">calendar_today</span>
+				<span class="text-sm">{{ gig.start_date|date:"M d" }} — {{ gig.end_date|date:"M d" }}</span>
+			</div>
+		</div>
+		<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2">
+			{{ gig.display_description|striptags|truncatewords:25 }}
+		</p>
+	</div>
+	<div class="mt-auto p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-3">
+		<button class="flex h-10 items-center justify-center rounded-lg bg-brand-500 text-white text-sm font-semibold hover:bg-brand-500/90 transition-colors">Accept Offer</button>
+		<button class="flex h-10 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Counteroffer</button>
+	</div>
+</div>
+{% endfor %}{% for gig in gigs %}
+<div class="flex flex-col bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all group">
+	<div class="p-6 flex flex-col gap-4">
+		<div class="flex justify-between items-start">
+			{% if gig.priority_score == 3 %}
+			<span class="flex items-center gap-1 px-3 py-1 
+				bg-purple-100 dark:bg-purple-900/30 
+				text-purple-700 dark:text-purple-400 
+				text-xs font-semibold rounded-full
+				uppercase tracking-wide"
+				>🤖 AI Match · High Priority</span>
+			{% elif gig.priority_score == 2 %}
+			<span class="flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900/30
+				text-blue-700 dark:text-blue-400 text-xs font-semibold
+				rounded-full"
+				>🤖 AI Match · {{ gig.match_percentage }}%</span>
+			{% else %}
+			<span class="px-3 py-1 bg-emerald-100 dark:bg-green-900/30 text-emerald-500 dark:text-emerald-400 text-xs font-medium rounded-full uppercase tracking-wider">Open for Collaboration</span>
+			{% endif %}
+			<button class="text-slate-400 hover:text-brand-500 transition-colors">
+			<span class="material-symbols-outlined">bookmark</span>
+			</button>
+		</div>
+		<div>
+			<h3 class="text-slate-900 dark:text-white text-lg font-semibold group-hover:text-brand-500 transition-colors">{{ gig.title|truncatewords:6|title }}</h3>
+			<div class="flex items-center gap-2 mt-2">
+				<div class="size-6 rounded-full bg-cover bg-center" data-alt="Sarah Jenkins profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAXKHnzoNeDTtVTPflRyCG2FSEgPCmJQH8bqoRehtq5GfBzT-sUIJ_xjXk6Nsz_ieUGaDbmRSwFaxArsFSyMhpcishF-hjgUOPygsmS5Z69bnQ_fQE3oEIuv_VEEj5jyx-UNNHa87hVyw0C9yfr6L-UNoTlkvw9Xr4l78_bQg7j5IrGjE1vTz10msKkrG8zu4H-OVcyb-b6AnogoqEbMNBddPfb6Lir9mREXQgf5A2SiT3Mn-u9FX8CRokd-0awOAeA6_3OxLvFeLw");'></div>
+				<p class="text-slate-500 dark:text-slate-400 text-sm">{{ gig.creator.full_name|title }} <span class="text-amber-500 font-semibold ml-1">4.9★</span></p>
+			</div>
+		</div>
+		{% if gig.match_count > 0 %}
+		<div class="flex flex-wrap gap-2">
+			{% for role in gig.matched_roles %}
+			<span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800
+				text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg">
+			{{ role.role_name|default:role.niche.name }}
+			</span>
+			{% endfor %}
+		</div>
+		{% endif %}
+		<div class="flex flex-col gap-2 pt-2">
+			<div class="flex items-center gap-2 text-brand-500 dark:text-brand-400">
+				<span class="material-symbols-outlined text-lg">payments</span>
+				{% if gig.match_count > 1 %}
+				<span class="text-base font-semibold">
+				${{ gig.min_budget|intcomma }} – ${{ gig.max_budget|intcomma }}
+				</span>
+				{% elif gig.match_count == 1 %}
+				<span class="text-base font-semibold">
+				${{ gig.display_budget|intcomma }}
+				</span>
+				{% else %}
+				<span class="text-base font-semibold">
+				${{ gig.total_budget|intcomma }}
+				</span>
+				{% endif %}
+			</div>
+			<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+				<span class="material-symbols-outlined text-lg">calendar_today</span>
+				<span class="text-sm">{{ gig.start_date|date:"M d" }} — {{ gig.end_date|date:"M d" }}</span>
+			</div>
+		</div>
+		<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2">
+			{{ gig.display_description|striptags|truncatewords:25 }}
+		</p>
+	</div>
+	<div class="mt-auto p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-3">
+		<button class="flex h-10 items-center justify-center rounded-lg bg-brand-500 text-white text-sm font-semibold hover:bg-brand-500/90 transition-colors">Accept Offer</button>
+		<button class="flex h-10 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Counteroffer</button>
+	</div>
+</div>
+{% endfor %}
+<!-- Opportunity Card 2 -->
+<div class="flex flex-col bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all group">
+	<div class="p-6 flex flex-col gap-4">
+		<div class="flex justify-between items-start">
+			<span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold rounded-full uppercase tracking-wider">Reviewing Proposals</span>
+			<button class="text-slate-400 hover:text-brand-500 transition-colors">
+			<span class="material-symbols-outlined">bookmark</span>
+			</button>
+		</div>
+		<div>
+			<h3 class="text-slate-900 dark:text-white text-lg font-semibold group-hover:text-brand-500 transition-colors">Cloud Infrastructure Migration</h3>
+			<div class="flex items-center gap-2 mt-2">
+				<div class="size-6 rounded-full bg-cover bg-center" data-alt="Michael Chen profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDeye4gEcQEKUhCEQb8dD2dlaDYQ4H-yn8dz3ICQ4LsqGhAj9Xa9UXCUkyxBJ4hMvONYMGeRw882wNltZ6a1LDHuo5AISMki412Q51MwaSqo4UHUVorneKbysdhAZPy49ChuwXmN-dzPemtBHOwwc8R18_ks65gmASiBWSXnIqqozze05W2f4LfwXNkzITt11BjTFbYwB9Y0goI_wB3_dWO-9fV0O8XqqwlvmpfE0X6advc2OgBQhRHoqurKsgC_NwY_zvj_EFrG8s");'></div>
+				<p class="text-slate-500 dark:text-slate-400 text-sm">Michael Chen, DevOps <span class="text-amber-500 font-semibold ml-1">4.8★</span></p>
+			</div>
+		</div>
+		<div class="flex flex-wrap gap-2">
+			<span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg">Cloud Ops</span>
+			<span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg">AWS</span>
+		</div>
+		<div class="flex flex-col gap-2 pt-2">
+			<div class="flex items-center gap-2 text-brand-500">
+				<span class="material-symbols-outlined text-lg">payments</span>
+				<span class="text-base font-semibold">$8,000 - $12,000</span>
+			</div>
+			<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+				<span class="material-symbols-outlined text-lg">calendar_today</span>
+				<span class="text-sm">Nov 1 — Jan 15</span>
+			</div>
+		</div>
+		<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2">
+			Migration of on-premise Kubernetes clusters to AWS EKS with focus on high availability and automated scaling procedures.
+		</p>
+	</div>
+	<div class="mt-auto p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-3">
+		<button class="flex h-10 items-center justify-center rounded-lg bg-brand-500 text-white text-sm font-semibold hover:bg-brand-500/90 transition-colors">Accept Offer</button>
+		<button class="flex h-10 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Counteroffer</button>
+	</div>
+</div>
+<!-- Opportunity Card 3 -->
+<div class="flex flex-col bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all group">
+	<div class="p-6 flex flex-col gap-4">
+		<div class="flex justify-between items-start">
+			<span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold rounded-full uppercase tracking-wider">Open for Collaboration</span>
+			<button class="text-slate-400 hover:text-brand-500 transition-colors">
+			<span class="material-symbols-outlined">bookmark</span>
+			</button>
+		</div>
+		<div>
+			<h3 class="text-slate-900 dark:text-white text-lg font-semibold group-hover:text-brand-500 transition-colors">SaaS UX Audit &amp; Design System</h3>
+			<div class="flex items-center gap-2 mt-2">
+				<div class="size-6 rounded-full bg-cover bg-center" data-alt="Elena Rodriguez profile" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCUnhG56MKEyG_h_CVlyvj6zTEZAKqMaTiSqG3oUVqfhXmMuaY0HKMvabMvcqUo529fkmssnJZcWY5BWRVOEI3S2oUvVypirt17G4R7Ukz_xYNCy6x76iZSpjR9B15CGWwJHsNlvMVcnezl3g9GV8qp69FKfF9NBdg6LjeFrkBm4Jr_qkJ6M27mR-od87ieYEuCp5wYAHk7r3gM0sFtzn7bpZN6sp8M_sTiNAd-oMuANcEJLbkGz3vPGeFFUPABXVATa2_nNADRmV4");'></div>
+				<p class="text-slate-500 dark:text-slate-400 text-sm">Elena Rodriguez, Head <span class="text-amber-500 font-semibold ml-1">5.0★</span></p>
+			</div>
+		</div>
+		<div class="flex flex-wrap gap-2">
+			<span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg">UI/UX Design</span>
+			<span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg">Figma</span>
+		</div>
+		<div class="flex flex-col gap-2 pt-2">
+			<div class="flex items-center gap-2 text-brand-500">
+				<span class="material-symbols-outlined text-lg">payments</span>
+				<span class="text-base font-semibold">$5,000 - $7,000</span>
+			</div>
+			<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+				<span class="material-symbols-outlined text-lg">calendar_today</span>
+				<span class="text-sm">Oct 20 — Nov 30</span>
+			</div>
+		</div>
+		<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2">
+			Full audit of our B2B fintech dashboard and creation of a scalable React-compatible design system in Figma.
+		</p>
+	</div>
+	<div class="mt-auto p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-3">
+		<button class="flex h-10 items-center justify-center rounded-lg bg-brand-500 text-white text-sm font-semibold hover:bg-brand-500/90 transition-colors">Accept Offer</button>
+		<button class="flex h-10 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Counteroffer</button>
+	</div>
+</div>

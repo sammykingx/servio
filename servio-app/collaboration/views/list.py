@@ -8,7 +8,7 @@ from template_map.collaboration import Collabs
 class CollaborationListView(LoginRequiredMixin, ListView):
     template_name = Collabs.LIST_COLLABORATIONS
     context_object_name = "gigs"
-    paginate_by = 4
+    paginate_by = 8
 
     def get_queryset(self):
         queryset =  (

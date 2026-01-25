@@ -49,7 +49,7 @@
                 <span
                   class="flex h-full w-full items-center justify-center
                          text-2xl font-semibold text-brand-500">
-                  {{ user.first_name|slice:":1" }}
+                  {{ user.first_name|slice:":1"|upper }}
                 </span>
               {% endif %}
             </div>
@@ -61,7 +61,6 @@
           <h2 class="text-xl font-semibold text-slate-900 dark:text-white">
             {{ user.full_name|title }}
           </h2>
-
           <div
             class="flex flex-wrap items-center gap-3
                    text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -190,7 +189,7 @@
 					Full name
 				</div>
 				<p class="font-medium text-slate-900 dark:text-white">
-					{{ user.full_name|default:"—" }}
+					{{ user.full_name|default:"—"|title }}
 				</p>
 			</div>
 			<!-- Email -->
@@ -237,10 +236,10 @@
                         flex items-center justify-center ring-1 ring-violet-200/60 dark:ring-violet-800/40">
                         <span class="material-symbols-outlined text-[20px]">work</span>
                     </div>
-					Role
+					Industry
 				</div>
 				<p class="font-medium text-slate-900 dark:text-white">
-					{{ user.profile.role|default:"—"|title }}
+					{{ user.profile.industry.name|default:"—"|title }}
 				</p>
 			</div>
 			<!-- Account Type -->
@@ -326,7 +325,7 @@
 					Country
 				</div>
 				<p class="font-medium text-slate-900 dark:text-white">
-					{{ home.country|default:"Not set" }}
+					{{ home.country|default:"Not set"|title }}
 				</p>
 			</div>
 			<!-- State -->
@@ -343,7 +342,7 @@
 					State / Province
 				</div>
 				<p class="font-medium text-slate-900 dark:text-white">
-					{{ home.province|default:"—" }}
+					{{ home.province|default:"—"|title }}
 				</p>
 			</div>
 			<!-- City -->
@@ -360,7 +359,7 @@
 					City
 				</div>
 				<p class="font-medium text-slate-900 dark:text-white">
-					{{ home.city|default:"—" }}
+					{{ home.city|default:"—"|title }}
 				</p>
 			</div>
 			<!-- Street Address -->
@@ -377,7 +376,7 @@
 					Street address
 				</div>
 				<p class="font-medium text-slate-900 dark:text-white leading-relaxed">
-					{{ home.street|default:"Not provided" }}
+					{{ home.street|default:"Not provided"|title }}
 				</p>
 			</div>
 			<!-- Postal Code -->
@@ -394,7 +393,7 @@
 					Postal code
 				</div>
 				<p class="font-medium text-slate-900 dark:text-white">
-					{{ home.postal_code|default:"—" }}
+					{{ home.postal_code|default:"—"|upper }}
 				</p>
 			</div>
 		</div>

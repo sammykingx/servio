@@ -1,0 +1,11 @@
+Setting up test data...
+Traceback (most recent call last):
+  File "/home/sammykingx/projects/servio/servio-app/reproduce_gigs_query.py", line 140, in <module>
+    run()
+  File "/home/sammykingx/projects/servio/servio-app/reproduce_gigs_query.py", line 27, in run
+    Gig.objects.all().delete()
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 1198, in delete
+    collector.collect(del_query)
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/deletion.py", line 350, in collect
+    raise ProtectedError(
+django.db.models.deletion.ProtectedError: ("Cannot delete some instances of model 'Gig' because they are referenced through protected foreign keys: 'GigRole.gig'.", {<GigRole: GigRole object (019beda9-a498-751d-a39a-9350223f8498)>, <GigRole: GigRole object (019b9e82-7b04-7cfb-921a-159473c558cb)>, <GigRole: GigRole object (019bdc11-e035-7cca-9110-a51b7cc68933)>, <GigRole: GigRole object (019bdc14-f35e-74ba-857d-2e11c5f00894)>, <GigRole: GigRole object (019bb4d8-985e-7848-994b-dbfd9a6d3685)>, <GigRole: GigRole object (019bed4a-9c52-72c0-9330-3e69adf48725)>, <GigRole: GigRole object (019bed4a-9c53-7c73-9731-be6d87510810)>, <GigRole: GigRole object (019bb01e-f092-7cfe-8099-685994757b4a)>, <GigRole: GigRole object (019bdc11-e034-743f-9fdc-4ba9438d9541)>, <GigRole: GigRole object (019bdc14-f35d-7b02-9c23-e6e6f422421b)>, <GigRole: GigRole object (019bdce5-6f1a-7607-9ddc-35de46b5ff73)>, <GigRole: GigRole object (019b9e82-7b02-78cd-b1dd-6b7dc7247a88)>, <GigRole: GigRole object (019bdce2-ea7d-7dfa-9fd7-931eba2bcb00)>, <GigRole: GigRole object (019bdce5-6f1b-7e5c-9c8c-79c1782148d2)>, <GigRole: GigRole object (019bed4a-9c54-7c16-9433-fd15e5750349)>, <GigRole: GigRole object (019b9e82-7b03-774d-a2ad-31eb66c6462d)>, <GigRole: GigRole object (019bb01e-f093-74fd-840e-e32802e1d2b2)>})
