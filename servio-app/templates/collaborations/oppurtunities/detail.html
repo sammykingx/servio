@@ -133,65 +133,59 @@
 					</div>
 					<div class="pt-4 border-t border-slate-100 dark:border-slate-800">
 						<a class="inline-flex items-center gap-2 text-brand-500/80 dark:text-gray-500 dark:hover:text-white font-medium text-sm" href="#">
-                            <span class="material-symbols-outlined text-xl">attachment</span>
-                                Download Project Brief.pdf
-                            <span class="text-slate-400 font-normal text-xs">(2.4 MB)</span>
+						<span class="material-symbols-outlined text-xl">attachment</span>
+						Download Project Brief.pdf
+						<span class="text-slate-400 font-normal text-xs">(2.4 MB)</span>
 						</a>
 					</div>
 				</div>
 			</div>
-			
-            <!-- Required Roles Section -->
-            {% if gig.required_roles.all %}
-            <div class="my-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-400 mb-3">
-                        <span class="material-symbols-outlined text-pink-500 bg-pink-50 dark:text-gray-500 dark:bg-transparent p-2 rounded-md ">groups</span>
-                        Required Roles
-                    </h3>
-
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Role Card 1 -->
-                    {% for role in gig.required_roles.all %}
-                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 text-gray-800 dark:text-gray-400">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-medium text-lg">{{ role.niche_name|truncatechars:24 }}</h4>
-                                <p class="text-sm text-gray-500">{{ role.role_name|truncatechars:24 }}</p>
-                            </div>
-                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-success-900/30 dark:text-success-400 text-[10px] font-medium uppercase">Slots: {{ role.slots }}</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex-1">
-                                <p class="text-sm font-semibold">Payment Plan</p>
-
-                                {% with meta=role_payment_meta|get_item:role.id %}
-                                    {% if meta %}
-                                        <p class="text-[11px] text-gray-500">
-                                            {{ meta.type }}
-                                        </p>
-
-                                        <p class="text-[11px] text-gray-500">
-                                            {{ meta.installments }} payments —
-                                            {% for pct in meta.split %}
-                                                {{ pct }}%{% if not forloop.last %} / {% endif %}
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
-                                {% endwith %}
-                            </div>
-
-                            <button class="text-brand-500 dark:text-gray-400 text-sm font-medium">
-                                ${{ role.budget|intcomma }}
-                            </button>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-
+			<!-- Required Roles Section -->
+			{% if gig.required_roles.all %}
+			<div class="my-4">
+				<div class="flex justify-between items-center mb-4">
+					<h3 class="text-xl font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-400 mb-3">
+						<span class="material-symbols-outlined text-pink-500 bg-pink-50 dark:text-gray-500 dark:bg-transparent p-2 rounded-md ">groups</span>
+						Required Roles
+					</h3>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<!-- Role Card 1 -->
+					{% for role in gig.required_roles.all %}
+					<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 text-gray-800 dark:text-gray-400">
+						<div class="flex justify-between items-start">
+							<div>
+								<h4 class="font-medium text-lg">{{ role.niche_name|truncatechars:24 }}</h4>
+								<p class="text-sm text-gray-500">{{ role.role_name|truncatechars:24 }}</p>
+							</div>
+							<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-success-900/30 dark:text-success-400 text-[10px] font-medium uppercase">Slots: {{ role.slots }}</span>
+						</div>
+						<div class="flex items-center gap-3">
+							<div class="flex-1">
+								<p class="text-sm font-semibold">Payment Plan</p>
+								{% with meta=role_payment_meta|get_item:role.id %}
+								{% if meta %}
+								<p class="text-[11px] text-gray-500">
+									{{ meta.type }}
+								</p>
+								<p class="text-[11px] text-gray-500">
+									{{ meta.installments }} payments —
+									{% for pct in meta.split %}
+									{{ pct }}%{% if not forloop.last %} / {% endif %}
+									{% endfor %}
+								</p>
+								{% endif %}
+								{% endwith %}
+							</div>
+							<button class="text-brand-500 dark:text-gray-400 text-sm font-medium">
+							${{ role.budget|intcomma }}
+							</button>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+			{% endif %}
 			<!-- <div class="flex flex-col gap-6">
 				<div class="flex items-center justify-between">
 					<h3 class="text-lg font-semibold">Timeline &amp; Milestones</h3>
@@ -260,7 +254,53 @@
 						</div>
 					</div>
 				</div>
-			</div> -->
+				</div> -->
+			<div class="rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur 
+				border border-slate-200/60 dark:border-slate-800/60 shadow-sm">
+				<div class="p-8 flex flex-col items-center text-center gap-6">
+					<!-- Icon Stack -->
+					<div class="relative">
+						<div class="absolute inset-0 rounded-full bg-brand-500/20 blur-xl"></div>
+						<div class="relative size-16 rounded-2xl bg-white dark:bg-slate-950 
+							border border-slate-200 dark:border-slate-800 
+							flex items-center justify-center shadow-md">
+							<span class="material-symbols-outlined text-3xl text-brand-500">
+							timeline
+							</span>
+						</div>
+					</div>
+					<!-- Copy -->
+					<div class="space-y-2 max-w-sm">
+						<h4 class="font-semibold text-lg tracking-tight text-slate-900 dark:text-white">
+							Deliverables not finalized yet
+						</h4>
+						<p class="text-sm text-slate-500 leading-relaxed">
+							This project is still in negotiation. Once milestones and release
+							schedules are agreed, they’ll appear here.
+						</p>
+					</div>
+					<!-- Divider -->
+					<div class="w-full max-w-xs h-px bg-gradient-to-r 
+						from-transparent via-slate-200 dark:via-slate-800 
+						to-transparent"></div>
+					<!-- CTA -->
+					{% if can_negotiate %}
+					<a href="#deal-room"
+						class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl 
+						bg-brand-500 text-white text-sm font-semibold
+						hover:bg-brand-500/90 transition shadow-lg shadow-brand-500/20">
+					Propose Milestones
+					<span class="material-symbols-outlined text-base">
+					handshake
+					</span>
+					</a>
+					{% else %}
+					<span class="text-xs text-slate-400">
+					Waiting for the project owner to define deliverables
+					</span>
+					{% endif %}
+				</div>
+			</div>
 		</div>
 		<div class="flex flex-col gap-6">
 			<div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-md p-6">
@@ -316,17 +356,17 @@
 							</div>
 						</div>
 					</div>
-                    {% if gig.creator.profile.is_business_owner %}
-                        <div class="flex items-center gap-4 py-4 border-y border-slate-100 dark:border-slate-800">
-                            <div class="size-10 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700">
-                                <span class="material-symbols-outlined text-slate-400">corporate_fare</span>
-                            </div>
-                            <div class="flex flex-col">
-                                <p class="text-xs font-semibold text-slate-400 uppercase">Company</p>
-                                <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ gig.creator.business_account.business_name|truncatewords:4 }}.</p>
-                            </div>
-                        </div>
-                    {% endif %}
+					{% if gig.creator.profile.is_business_owner %}
+					<div class="flex items-center gap-4 py-4 border-y border-slate-100 dark:border-slate-800">
+						<div class="size-10 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700">
+							<span class="material-symbols-outlined text-slate-400">corporate_fare</span>
+						</div>
+						<div class="flex flex-col">
+							<p class="text-xs font-semibold text-slate-400 uppercase">Company</p>
+							<p class="text-sm font-semibold text-slate-700 dark:text-slate-300">{{ gig.creator.business_account.business_name|truncatewords:4 }}.</p>
+						</div>
+					</div>
+					{% endif %}
 					<div class="flex flex-col gap-2">
 						<div class="flex justify-between text-sm">
 							<span class="text-slate-500">Member since</span>
@@ -335,15 +375,15 @@
 						<!-- <div class="flex justify-between text-sm">
 							<span class="text-slate-500">Total Spent</span>
 							<span class="text-slate-900 dark:text-white font-medium">$120k+</span>
-						</div> -->
+							</div> -->
 						<div class="flex justify-between text-sm">
 							<span class="text-slate-500">Location</span>
 							<span class="text-slate-900 dark:text-white font-medium">{{ creator_location.city }}, {{ creator_location.province }}</span>
 						</div>
 					</div>
 					<!-- <button class="w-full text-center py-2 text-brand-500 font-semibold text-sm hover:bg-brand-500/5 rounded-lg transition-colors">
-					View Full Profile
-					</button> -->
+						View Full Profile
+						</button> -->
 				</div>
 			</div>
 			<div class="p-6 bg-slate-100 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-300 dark:border-slate-700">
