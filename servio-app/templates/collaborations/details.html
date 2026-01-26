@@ -2,10 +2,11 @@
 {% load static %}
 {% load humanize %}
 {% load pretify_status %}
+{% load dict_extras %}
 {% block custom_page_css %}
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 {% endblock %}
-{% block browser_title %}Project Info{% endblock %}
+{% block browser_title %}Project Information{% endblock %}
 {% block content %}
 
 <!-- section Content Layout -->
@@ -87,14 +88,9 @@
                 </div>
                 <div class="flex flex-col gap-1 border-l border-slate-100 dark:border-slate-800 sm:pl-6">
                     <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Payment Type</p>
-                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">{{ payment_meta.type }}</p>
+                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">Split Payments</p>
                     <p class="text-gray-500 text-xs">
-                        {{ payment_meta.installments }} scheduled payment{{ payment_meta.installments|pluralize }}
-                    </p>
-                    <p class="text-gray-500 text-xs">
-                        {% for pct in payment_meta.split %}
-                            {{ pct }}%{% if not forloop.last %} / {% endif %}
-                        {% endfor %}
+                        Payments are released in agreed stages.
                     </p>
                 </div>
             </div>
@@ -129,9 +125,7 @@
                         <span class="material-symbols-outlined text-pink-500 bg-pink-50 dark:text-gray-500 dark:bg-gray-300 p-2 rounded-md ">groups</span>
                         Required Roles
                     </h3>
-                    <!-- <button class="text-brand-500 hover:text-brand-400 dark:text-gray-500 dark:hover:text-white text-sm font-medium flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm">add_circle</span> Add Role
-                        </button> -->
+
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Role Card 1 -->
@@ -139,22 +133,39 @@
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4 text-gray-800 dark:text-gray-400">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="font-medium text-lg">{{ role.niche_name }}</h4>
-                                <p class="text-sm text-gray-500">{{ role.role_name }}</p>
+                                <h4 class="font-medium text-lg">{{ role.niche_name|truncatechars:24 }}</h4>
+                                <p class="text-sm text-gray-500">{{ role.role_name|truncatechars:24 }}</p>
                             </div>
                             <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-success-900/30 dark:text-success-400 text-[10px] font-medium uppercase">Slots: {{ role.slots }}</span>
                         </div>
                         <div class="flex items-center gap-3">
                             <div class="flex-1">
-                                <p class="text-sm font-semibold">Workload</p>
-                                <p class="text-[11px] text-gray-500">{{ role.workload|prettify_status }}</p>
+                                <p class="text-sm font-semibold">Payment Plan</p>
+
+                                {% with meta=role_payment_meta|get_item:role.id %}
+                                    {% if meta %}
+                                        <p class="text-[11px] text-gray-500">
+                                            {{ meta.type }}
+                                        </p>
+
+                                        <p class="text-[11px] text-gray-500">
+                                            {{ meta.installments }} payments —
+                                            {% for pct in meta.split %}
+                                                {{ pct }}%{% if not forloop.last %} / {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+                                {% endwith %}
                             </div>
-                            <button class="text-brand-500 dark:text-gray-400 text-sm font-medium">${{ role.budget|intcomma }}</button>
+
+                            <button class="text-brand-500 dark:text-gray-400 text-sm font-medium">
+                                ${{ role.budget|intcomma }}
+                            </button>
                         </div>
                     </div>
                     {% endfor %}
 
-                    <!-- Role Card 2 -->
+                    <!-- Invite Professional -->
                     <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 py-10 opacity-70">
                         <span class="material-symbols-outlined text-3xl text-slate-300">person_search</span>
                         <div class="text-center">

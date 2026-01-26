@@ -10,23 +10,59 @@ GigsModel = apps.get_model("collaboration", "Gig")
 GigRole = apps.get_model("collaboration", "GigRole")
 
 class OppurtunityListView(LoginRequiredMixin, ListView):
+    """
+        Displays a curated list of publicly available collaboration opportunities
+        tailored to the authenticated user's industry and niche skill set.
+
+        The view prioritizes gigs that:
+        - Are published, active, and publicly visible
+        - Were not created by the current user
+        - Either require no specific roles or contain roles that match the user's niches
+
+        Each gig is enriched with matching metadata (match count, percentage, budget
+        range, priority label) to improve relevance ranking and presentation.
+    """
+    model = GigsModel
     template_name = Collabs.Oppurtunities.LIST
     context_object_name = "gigs"
     paginate_by = 18
 
     def get_queryset(self):
+        """
+            Builds and returns a ranked list of gigs based on how well they match
+            the user's industry and niche skills.
+
+            Matching logic:
+                - Gigs without required roles are included as open opportunities
+                - Gigs with required roles are included only if at least one role
+            matches the user's niches within their industry
+
+            For each gig, the method calculates:
+                - Number of matched roles
+                - Match percentage against user's niches
+                - Budget range derived from matched roles
+                - Display-friendly description and budget
+                - Priority score and label used for sorting
+
+            Returns:
+                list: A sorted list of gig objects ordered by priority and match strength.
+        """
         user = self.request.user
         profile = user.profile
         user_industry_id = profile.industry_id
         user_niches = profile.niches.values_list("id", flat=True)
         user_niche_count = len(user_niches)
         
-        base_qs = GigsModel.objects.filter(
-            status=GigStatus.PENDING,
-            visibility=GigVisibility.PUBLIC,
-            is_gig_active=True
-        ).exclude(creator=user)
-        
+        base_qs = (
+            super().get_queryset()
+            .filter(
+                status=GigStatus.PUBLISHED,
+                visibility=GigVisibility.PUBLIC,
+                is_gig_active=True
+            )
+            .exclude(creator=user)
+        )
+
         matched_roles = GigRole.objects.filter(
             status=RoleStatus.OPEN,
             niche_id=user_industry_id,
@@ -123,98 +159,25 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
         )
 
         return gigs
-
-        # Build role relevance
-        role_match_q = Q(has_gig_roles=False)  # Include general gigs
-        # print(f"\nHas gig roles FALSE: {role_match_q}\n")
-        # print(base_qs.filter(role_match_q).count())
-        
-        # if niches.exists():
-        #     role_match_q |= Q(
-        #         has_gig_roles=True,
-        #         required_roles__status=RoleStatus.OPEN,
-        #         required_roles__niche__in=niches
-        #     )
-            
-        #     a= Q(
-        #         has_gig_roles=True,
-        #         required_roles__status=RoleStatus.OPEN,
-        #         required_roles__niche__in=niches
-        #     )
-        #     print(f"\n A => {a}\n")
-        #     print(base_qs.filter(a).count())
-        
-        # # Apply filter
-        # gigs = base_qs.filter(role_match_q).distinct()
-        # print("gigs: ", gigs.count())
-
-        # # Prefetch only matching roles
-        # matching_roles_qs = GigRole.objects.filter(
-        #     status=RoleStatus.OPEN,
-        #     niche__in=niches
-        # ).select_related("niche")
-
-        # gigs = gigs.prefetch_related(
-        #     Prefetch(
-        #         "required_roles",
-        #         queryset=matching_roles_qs,
-        #         to_attr="matched_roles"
-        #     )
-        # )
-
-        return gigs
-        # -------------------------------------------
-        # Shared role relevance for gigs and roles
-        # -------------------------------------------
-        # role_match = Q(status=RoleStatus.OPEN)
-
-        # niche_or_industry = Q()
-        # if niches.exists():
-        #     niche_or_industry |= Q(niche__in=niches)
-
-        # if industry:
-        #     niche_or_industry |= Q(niche__parent=industry)
-
-        # role_match &= niche_or_industry
-
-        # print(niche_or_industry)
-        # print(role_match)
-        # # -------------------------------
-        # # Filter gigs via matching roles
-        # # -------------------------------
-        # gigs = (
-        #     base_qs
-        #     .filter(required_roles__in=GigRole.objects.filter(role_match))
-        #     .distinct()
-        # )
-        
-        # print("Filtered out gigs: ", gigs)
-
-        # # -------------------------------
-        # # Prefetch ONLY relevant roles
-        # # -------------------------------
-        # matching_roles_qs = (
-        #     GigRole.objects
-        #     .filter(role_match)
-        #     .select_related("niche")
-        # )
-
-        # gigs = gigs.prefetch_related(
-        #     Prefetch(
-        #         "required_roles",
-        #         queryset=matching_roles_qs,
-        #         to_attr="matched_roles",
-        #     )
-        # )
-
-        # return gigs
         
     def get_context_data(self, **kwargs):
+        """
+        Extends the default context for the opportunity list view.
+
+        Currently relies on the base implementation, but exists as an extension
+        point for future context enrichment.
+        """
         context = super().get_context_data(**kwargs)
 
         return context
     
     def render_to_response(self, context, **response_kwargs):
+        """
+        Renders the response differently for HTMX requests.
+
+        - HTMX requests return a partial template for dynamic page updates
+        - Standard requests fall back to the default ListView rendering
+        """
         if self.request.headers.get("HX-Request"):
             htmx_response = None
             return render(self.request, htmx_response, context)

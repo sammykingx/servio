@@ -102,3 +102,4 @@ class ReviewURLS:
     
 class OppurtunitiesURLS:
     ALL = "all_oppurtunities"
+    DETAIL = "oppurtunity_detail"

@@ -18,4 +18,5 @@ class Collabs:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("oppurtunities")
         
         LIST = f"{__SUB_FOLDER}/list.html"
+        DETAIL = f"{__SUB_FOLDER}/detail.html"
         

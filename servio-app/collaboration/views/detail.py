@@ -16,6 +16,14 @@ GigApplicationModel = apps.get_model("collaboration", "GigApplication")
 
 
 class GigDetailView(LoginRequiredMixin, DetailView):
+    """
+    Displays detailed information for a single gig/project owned by the authenticated user.
+
+    This view enforces ownership access, ensuring users can only view gigs
+    they created. In addition to core gig data, it enriches the context with
+    role-level payment metadata and prefetches related role applications for
+    efficient rendering.
+    """
     model = GigModel
     template_name = Collabs.DETAILS
     context_object_name = "gig"
@@ -23,35 +31,63 @@ class GigDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "slug"
     
     def get_context_data(self, **kwargs):
+        """
+        Extends the context with editable state rules and role payment metadata.
+
+        Adds:
+        - A list of gig statuses that allow editing
+        - Computed payment details for each required role, including:
+            - Payment type (full upfront or percentage split)
+            - Number of installments
+            - Split percentages per installment
+            - Human-readable payment option label
+
+        This metadata is structured for direct consumption by the UI layer.
+        """
         context = super().get_context_data(**kwargs)
 
         context["editable_statuses"] = ["pending", "draft"]
-        gig = self.object
-        payment_value = PaymentOption.SPLIT_50_50
+        roles = self.object.required_roles.all()
+        role_payment_meta = {}
+        if roles:
+            for role in roles:
+                payment_value = role.payment_option
 
-        if payment_value:
-            is_split = PaymentOption.is_split(payment_value)
+                is_split = PaymentOption.is_split(payment_value)
 
-            context["payment_meta"] = {
-                "type": "Percentage Split" if is_split else "Full Upfront",
-                "installments": (
-                    PaymentOption.installments_count(payment_value)
-                    if is_split
-                    else 1
-                ),
-                "split": (
-                    PaymentOption.percentages(payment_value)
-                    if is_split
-                    else [100]
-                ),
-                "label": PaymentOption(payment_value).label,
-            }
-
+                role_payment_meta[role.id] = {
+                    "type": "Percentage Split" if is_split else "Full Upfront",
+                    "installments": (
+                        PaymentOption.installments_count(payment_value)
+                        if is_split
+                        else 1
+                    ),
+                    "split": (
+                        PaymentOption.percentages(payment_value)
+                        if is_split
+                        else [100]
+                    ),
+                    "label": PaymentOption(payment_value).label,
+                }
+                
+            context["role_payment_meta"] = role_payment_meta
         return context
 
     def get_queryset(self):
+        """
+        Restricts gig access to user-owned records and optimizes related queries.
+
+        The queryset:
+        - Limits access to gigs created by the current user
+        - Eager-loads the gig creator
+        - Prefetches required roles, their associated niches, and role applications
+          along with applicant user data to minimize database queries
+
+        Returns:
+            QuerySet: An optimized queryset scoped to the authenticated user.
+        """
         return (
-            GigModel.objects
+            super().get_queryset()
             .filter(creator=self.request.user)
             .select_related("creator")
             .prefetch_related(
@@ -70,13 +106,15 @@ class GigDetailView(LoginRequiredMixin, DetailView):
         )
     
     def dispatch(self, request, *args, **kwargs):
+        """
+        Handles invalid or unauthorized access gracefully.
+
+        If the requested gig/project does not exist or does not belong to the user,
+        the request is redirected to the collaboration list view instead of
+        raising a 404 error.
+        """
         try:
             return super().dispatch(request, *args, **kwargs)
         except Http404:
             return redirect(reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS))
-        
-
-class GigPublicDetailView(LoginRequiredMixin, DetailView):
-    "for public users interfacing"
-    pass
 
