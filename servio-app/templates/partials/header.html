@@ -597,9 +597,13 @@
 						/>
 					</span>
 					{%else %}
-					<span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
-					<img src="{% static 'images/user/owner.png' %}" alt="User" />
+					<span class="size-8 rounded-full bg-brand-500 flex items-center justify-center
+							text-white text-medium font-semibold shadow-sm">
+						{{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
 					</span>
+					<!-- <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
+					<img src="{% static 'images/user/owner.png' %}" alt="User" />
+					</span> -->
 					{% endif %}
 					<span class="pl-3 text-sm mr-1 block font-medium"> {{ user.first_name|capfirst }} </span>
 					<svg
@@ -686,6 +690,7 @@
 								Account settings
 							</a>
 						</li>
+						{% if user.is_business_owner %}
 						<li
 							x-data="{ on: {{ user.profile.is_business_owner|yesno:'true,false' }} }"
 							x-effect="$el.dataset.state = on ? 'on' : 'off'"
@@ -711,6 +716,7 @@
 								<span class="flex-1 text-gray-600">Business Mode</span>
 							</button>
 						</li>
+						{% endif %}
 					</ul>
 					<form method="POST" action="{% url AUTH_URLS.LOGOUT %}">
 						{% csrf_token %}

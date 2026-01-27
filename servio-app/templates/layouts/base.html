@@ -59,15 +59,12 @@
 
 		<!-- ===== Preloader Start ===== -->
 		{% include "components/preloader.html" %}
+		
 		<!-- ===== Page Wrapper Start ===== -->
-		<!-- <div class="flex h-screen overflow-hidden"> -->
 		<div class="flex h-screen overflow-hidden shadow-2xl shadow-black/5">
 
 			{% include "partials/sidebar/base-menu.html" %}
 			<!-- ===== Content Area Start ===== -->
-			<!-- <div
-				class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto"
-			> -->
 			<div class="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto
     			backdrop-blur-xl bg-white/70 dark:bg-gray-900/70"
 			>
@@ -77,8 +74,8 @@
 				<!-- ===== Header Start ===== -->
 				{% include "partials/header.html" %}
 				<!-- ===== Main Content Start ===== -->
-				<main hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' x-transition.opacity.duration.400ms>
-					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 bg-[#faf9ff] dark:bg-black">
+				<main class="bg-[#faf9ff] dark:bg-black" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' x-transition.opacity.duration.400ms>
+					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
 						
 						{% for message in messages %}
 						<div
@@ -223,24 +220,6 @@
 						{% endfor %}
 						{% block content %}
 						{# include "components/breadcrumbs.html" #}
-						<div
-							class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12"
-							>
-							<div class="mx-auto w-full max-w-[630px] text-center">
-								<h3
-									class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl"
-									>
-									Card Title Here
-								</h3>
-								<p
-									class="text-sm text-gray-500 dark:text-gray-400 sm:text-base"
-									>
-									Start putting content on grids or panels, you can also use
-									different combinations of grids.Please check out the dashboard
-									and other pages
-								</p>
-							</div>
-						</div>
 						{% endblock %}
 					</div>
 				</main>
@@ -248,44 +227,6 @@
 			<!-- ===== Content Area End ===== -->
 		</div>
 		<!-- ===== Page Wrapper End ===== -->
-		<!-- <footer class="w-full border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
-			<div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-gray-600 transition-all sm:flex-row dark:text-gray-400">
-				
-				<!-- Copyright 
-				<p class="text-center sm:text-left">
-				© <span id="year"></span> Servio. All rights reserved.
-				</p>
-			
-				<!-- Attribution 
-				<p class="text-center sm:text-right">
-				Built with ❤️ by 
-				<a 
-					href="mailto:sammy.sammykingx.com.ng" 
-					target="_blank" 
-					class="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-				>
-					Divgm Technologies
-				</a>
-				</p>
-			</div>
-			</footer> -->
-		<!-- <footer id="footer">
-			<div class="site-footer px-6 bg-white dark:bg-gray-900 text-slate-500 dark:text-slate-300 py-4 ltr:ml-[248px] rtl:mr-[248px]">
-				<div class="grid md:grid-cols-2 grid-cols-1 md:gap-5">
-					<div class="text-center ltr:md:text-start rtl:md:text-right text-sm">
-						COPYRIGHT ©
-						<span id="year"></span>
-						Servio, All rights Reserved
-					</div>
-					<div class="ltr:md:text-right rtl:md:text-end text-center text-sm">
-						Hand-crafted &amp; Made by
-						<a href="https://divgm.com" target="_blank" class="text-primary-500 font-semibold">
-							Divgm Agency
-						</a>
-					</div>
-				</div>
-			</div>
-			   </footer> -->
 	</body>
 	<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
 	<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
@@ -307,5 +248,5 @@
 	</script>
 
 	{% block custom_page_js %}{% endblock %}
-	<!-- <script defer src="{% static 'js/vendors/alpine-persist.min.js' %}"></script> -->
+	{% block modals %}{% endblock %}
 </html>

@@ -19,4 +19,5 @@ class Collabs:
         
         LIST = f"{__SUB_FOLDER}/list.html"
         DETAIL = f"{__SUB_FOLDER}/detail.html"
+        ACCEPT_OFFER = f"{__SUB_FOLDER}/accept-offer.html"
         

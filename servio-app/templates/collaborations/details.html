@@ -57,10 +57,17 @@
                 </div>
             </div>
             <div class="flex gap-3">
-                <button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-brand-500 text-white text-sm font-medium tracking-wide shadow-lg shadow-brand-500/20 hover:bg-brand-500/90 transition-all">
-                    <span class="material-symbols-outlined mr-2">payments</span> Pay/Activate
+                {% if gig.status not in editable_statuses %}
+                <a href="{% url OPPURTUNITIES.DETAIL slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-brand-500 text-white text-sm font-medium tracking-wide shadow-lg shadow-brand-500/20 hover:bg-brand-500/90 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg> <span class="px-2">Public view</span>
+                </a>
+                <button class="flex cursor-pointer items-center justify-center rounded-xl h-11 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 transition-all">
+                    <span class="material-symbols-outlined">share</span>
                 </button>
-                {% if gig.status in editable_statuses %}
+                {% else %}
                 <a href="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
                     <span class="material-symbols-outlined mr-2">edit</span> Edit Gig
                 </a>

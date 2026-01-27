@@ -3,6 +3,7 @@ from core.url_names import OppurtunitiesURLS
 from django.views.generic import RedirectView
 from .views.list import OppurtunityListView
 from .views.detail import OppurtuniyDetailView
+from .views.accept_offer import AcceptOppurtuniyDetailView
 
 
 urlpatterns = [
@@ -19,5 +20,8 @@ urlpatterns = [
     
     path("details/<slug:slug>/", OppurtuniyDetailView.as_view(),
          name=OppurtunitiesURLS.DETAIL
+    ),
+    path("accept-offer/<slug:slug>/", AcceptOppurtuniyDetailView.as_view(),
+         name=OppurtunitiesURLS.ACCEPT_OFFER
     ),
 ]
