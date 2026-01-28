@@ -1,0 +1,69 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+			/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>
+			Servio - {% block title %}Resource Not Found{% endblock %}
+		</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+		<link href="{% static 'css/output.css' %}" rel="stylesheet">
+		<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+	<body
+		x-data="{ page: 'page503', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+		x-init="
+		darkMode = JSON.parse(localStorage.getItem('darkMode'));
+		$watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+		:class="{'dark bg-gray-900': darkMode === true}"
+	>
+		{% include "components/preloader.html" %}
+        <!-- ===== Page Wrapper Start ===== -->
+		 
+		<div class="relative flex min-h-screen items-center justify-center overflow-hidden px-6">
+			<!-- ===== Common Grid Shape Start ===== -->
+			<div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
+				<img src="{% static 'images/shape/grid-01.svg' %}" alt="grid" />
+			</div>
+			<div
+				class="absolute bottom-0 left-0 -z-1 w-full max-w-[250px] rotate-180 xl:max-w-[450px]"
+				>
+				<img src="{% static 'images/shape/grid-01.svg' %}" alt="grid" />
+			</div>
+			<div class="absolute inset-0 flex items-center justify-center -z-10">
+				<div class="size-[520px] rounded-full
+					bg-brand-200/30 dark:bg-brand-500/15
+					blur-[140px]"></div>
+
+				<div class="absolute -translate-x-52 -translate-y-32 size-[420px]
+					rounded-full bg-indigo-200/30 dark:bg-indigo-500/15
+					blur-[120px]"></div>
+
+				<div class="absolute translate-x-40 translate-y-36 size-[360px]
+					rounded-full bg-purple-200/25 dark:bg-purple-600/15
+					blur-[120px]"></div>
+			</div>
+			
+			{%block content %}{% endblock %}
+			<!-- Footer -->
+			<p
+				class="absolute bottom-6 left-1/2 -translate-x-1/2 text-center text-sm text-gray-500 dark:text-gray-400"
+				>
+				&copy; <span id="year"></span> - Servio by Divgm. All rights reserved.
+			</p>
+		</div>
+		<!-- ===== Page Wrapper End ===== -->
+		<script defer src="{% static 'js/vendors/init-alpine.js' %}"></script>
+		<script defer src="{% static 'js/vendors/alpine.min.js' %}"></script>
+		<script>
+			document.getElementById("year").textContent = new Date().getFullYear();
+		</script>
+</html>

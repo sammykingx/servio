@@ -22,3 +22,4 @@ servio-app/*.txt
 # django files
 *.sqlite3
 servio-app/media/*
+servio-app/staticfiles/*

@@ -28,6 +28,9 @@ import notifications.urls
 import payments.urls
 
 
+handler404 = "core.views.custom_404"
+handler500 = "core.views.custom_500"
+
 urlpatterns = [
     path(
         "",
@@ -66,3 +69,4 @@ if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
     )
+    

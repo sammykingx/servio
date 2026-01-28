@@ -7,8 +7,10 @@ from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.address import AddressType
 from collaboration.models.choices import GigStatus, PaymentOption
+from collaboration.schemas.gig_role import PAYMENT_OPTIONS
 from core.url_names import OppurtunitiesURLS
 from template_map.collaboration import Collabs
+import json
 
 
 GigModel = apps.get_model("collaboration","Gig")
@@ -35,8 +37,8 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context =super().get_context_data(**kwargs)
-        context["creator_location"] = self.object.creator.addresses.filter(label=AddressType.HOME).first()
-        context["offer_accepted"] = True if self.request.GET.get("offer_accepted") == "true" else False
+        context["payment_options"] = json.dumps(PAYMENT_OPTIONS)
+        context["negotiating"] = True if self.request.GET.get("negotiating") == "true" else False
         roles = self.object.required_roles.all()
         role_payment_meta = {}
         if roles:

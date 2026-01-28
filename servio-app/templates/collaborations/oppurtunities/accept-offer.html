@@ -151,7 +151,7 @@
                                         </p>
                                     </div>
                                     
-                                    {% if not offer_accepted %}
+                                    {% if negotiating %}
                                     <!-- Proposed Amount -->
                                     <div class="w-40">
                                         <label class="text-[10px] uppercase tracking-wide
@@ -587,4 +587,9 @@
         </div>
     </div>
 </section>
+{% endblock %}
+{% block custom_page_js %}
+<script id="payment-options-data" type="application/json" x-ref="paymentSplitData">
+  {{ payment_options|safe }}
+</script>
 {% endblock %}
