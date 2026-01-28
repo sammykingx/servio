@@ -3,7 +3,7 @@
 
 {% block content %}
 {% if not gigs %}
-   {% include "components/empty-states/empty-member-data.html" %}
+{% include "components/empty-states/empty-member-data.html" %}
 {% else %}
 <section class="flex-1 flex flex-col h-full overflow-hidden relative">
     <div class="flex-1 overflow-y-auto p-2 md:p-4">
@@ -23,10 +23,7 @@
                         <input class="block w-full pl-10 pr-3 py-3 rounded-xl border-none ring-1 ring-gray-200 dark:ring-gray-700 bg-white  dark:text-white placeholder-text-secondary focus:ring-2 focus:ring-brand-500 focus:outline-none transition-shadow text-sm" placeholder="Search projects, transactions..." type="text" />
                     </div> -->
                     <!-- SingleButton (Post Request) -->
-                    <a 
-                        href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}"
-                        class="flex items-center justify-center gap-2 bg-brand-500 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all transform active:scale-95 whitespace-nowrap"
-                    >
+                    <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="flex items-center justify-center gap-2 bg-brand-500 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all transform active:scale-95 whitespace-nowrap">
                         <span class="material-symbols-outlined text-[20px]">add</span>
                         <span>Create a gig/project</span>
                     </a>
@@ -42,341 +39,430 @@
                 <!-- Main Column (Projects) -->
                 <div class="lg:col-span-8 flex flex-col gap-6">
                     <!-- Active Gigs & Projects Card -->
-                    <div class="rounded-2xl p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 border border-brand-100 dark:border-transparent">
+                    <div class="relative rounded-2xl p-6 
+                        bg-white/80 dark:bg-slate-900/60 backdrop-blur 
+                        border border-slate-200/50 dark:border-slate-700/60
+                        ring-1 ring-black/5 dark:ring-white/5 shadow-sm"
+                    >
+                        <!-- Header -->
                         <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold  dark:text-white flex items-center gap-2">
-                                <span class="material-symbols-outlined text-brand-500">rocket_launch</span>
-                                Active Projects
+                            <h3 class="text-lg font-semibold tracking-tight dark:text-white">
+                                Active Gigs
                             </h3>
-                            <a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="text-brand-500 dark:text-gray-500 text-sm font-normal hover:underline dark:hover:text-brand-300" href="#">View All</a>
-                        </div>
-                        <div class="flex flex-col divide-y divide-gray-200/60 dark:divide-gray-800/60">
-                            <!-- Project Item 1 -->
-                             {% for gig in gigs %}
 
-                             {% endfor %}
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-5 px-4
-                                    rounded-xl
-                                    bg-background-light dark:bg-background-dark/50
-                                    hover:bg-gray-100 dark:hover:bg-gray-800
-                                    transition-all duration-300
-                                    border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
-                                <div class="flex items-center gap-4">
-                                    <div class="size-12 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                                        <span class="material-symbols-outlined">web</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold dark:text-white text-base">E-commerce Website Redesign</h4>
-                                        <p class="text-xs dark:text-gray-400 mt-0.5">Dev Team Alpha • Due Oct 24</p>
+                            <a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="text-xs font-medium text-brand-500/80 hover:text-brand-500 transition">
+                                View all →
+                            </a>
+                        </div>
+
+                        <!-- Gig List -->
+                        <div class="space-y-3">
+
+                            <!-- Gig Row -->
+                            <div class="group relative overflow-hidden rounded-xl p-4
+                                bg-white/70 dark:bg-slate-900/50 ring-1
+                                ring-slate-200/40 dark:ring-slate-700/40
+                                shadow-[0_8px_30px_-12px_rgba(0,0,0,0.15)]
+                                transition-all duration-300 hover:ring-brand-500/40
+                                hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.25)]"
+                            >
+                                <!-- Base ambient glow -->
+                                <div class="pointer-events-none absolute inset-0 opacity-70">
+                                    <div class="absolute -top-24 -right-24 size-64
+                                        bg-gradient-to-br from-brand-500/10 via-indigo-500/5
+                                        to-transparent blur-3xl"
+                                    ></div>
+                                </div>
+
+                                <!-- Ambient hover wash -->
+                                <div class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
+                                    <div class="absolute -left-24 top-1/2 size-48 -translate-y-1/2
+                                            bg-gradient-to-r from-brand-500/12 to-indigo-500/8 blur-3xl">
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-end gap-2 min-w-[140px]">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs font-medium text-brand-500 dark:text-brand-400">In Progress</span>
-                                        <span class="size-2 rounded-full bg-brand-500 dark:bg-brand-400 animate-pulse"></span>
+
+                                <div class="relative flex flex-col gap-3">
+
+                                    <!-- Title + Status -->
+                                    <div class="flex items-start justify-between gap-4">
+
+                                        <div class="min-w-0">
+                                            <h4 class="font-medium truncate dark:text-white">
+                                                E-commerce Website Redesign
+                                            </h4>
+
+                                            <p class="text-xs text-slate-500">
+                                                Active · Oct 12 → Nov 30
+                                            </p>
+                                        </div>
+
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                            bg-brand-500/10 text-brand-600 dark:text-brand-400
+                                            ring-1 ring-brand-500/20">
+                                            In Progress
+                                        </span>
                                     </div>
-                                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                                        <div class="bg-brand-500 h-1.5 rounded-full" style="width: 75%"></div>
+
+                                    <!-- Meta Row -->
+                                    <div class="flex flex-wrap items-center gap-2 text-[11px]">
+
+                                        <!-- Budget -->
+                                        <span class="px-2.5 py-1 rounded-full
+                                            bg-slate-100 dark:bg-slate-800
+                                            text-slate-600 dark:text-slate-400">
+                                            $18,500 total
+                                        </span>
+
+                                        <!-- Roles -->
+                                        <span class="px-2.5 py-1 rounded-full
+                                            bg-indigo-50 dark:bg-indigo-900/30
+                                            text-indigo-600 dark:text-indigo-400">
+                                            3 roles
+                                        </span>
+
+                                        <!-- Negotiable -->
+                                        <span class="px-2.5 py-1 rounded-full
+                                            bg-amber-50 dark:bg-amber-900/30
+                                            text-amber-600 dark:text-amber-400">
+                                            Negotiable
+                                        </span>
+
+                                        <!-- Escrow -->
+                                        <span class="px-2.5 py-1 rounded-full
+                                            bg-emerald-50 dark:bg-emerald-900/30
+                                            text-emerald-600 dark:text-emerald-400">
+                                            Funds in escrow
+                                        </span>
+
                                     </div>
-                                    <span class="text-xs dark:text-brand-300">75% Complete</span>
+
                                 </div>
                             </div>
-                            <!-- Project Item 2 -->
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-5 px-4
-                                    rounded-xl
-                                    bg-background-light dark:bg-background-dark/50
-                                    hover:bg-gray-100 dark:hover:bg-gray-800
-                                    transition-all duration-300
-                                    border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
-                                <div class="flex items-center gap-4">
-                                    <div class="size-12 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
-                                        <span class="material-symbols-outlined">design_services</span>
+
+                            <!-- Pending / Offer Stage -->
+                            <div class="group relative overflow-hidden rounded-xl p-4
+                                bg-white/60 dark:bg-slate-900/40
+                                ring-1 ring-slate-200/50 dark:ring-slate-700/50
+                                hover:ring-amber-400/40 transition"
+                            >
+
+                                <div class="relative flex flex-col gap-3">
+
+                                    <div class="flex justify-between items-start">
+
+                                        <div>
+                                            <h4 class="font-medium truncate dark:text-white">
+                                                Brand Identity Refresh
+                                            </h4>
+                                            <p class="text-xs text-slate-500">
+                                                Awaiting acceptance · No start date
+                                            </p>
+                                        </div>
+
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                            bg-amber-400/10 text-amber-600 dark:text-amber-400
+                                            ring-1 ring-amber-500/20">
+                                            Pending
+                                        </span>
                                     </div>
-                                    <div>
-                                        <h4 class="font-semibold  dark:text-white text-base">Brand Identity Refresh</h4>
-                                        <p class="text-xs dark:text-gray-400 mt-0.5">Creative Studio • Waiting for Offer</p>
+
+                                    <div class="flex flex-wrap gap-2 text-[11px]">
+
+                                        <span class="px-2.5 py-1 rounded-full
+                                            bg-slate-100 dark:bg-slate-800 text-slate-500">
+                                            $6,000 budget
+                                        </span>
+
+                                        <span class="px-2.5 py-1 rounded-full
+                                            bg-indigo-50 dark:bg-indigo-900/30
+                                            text-indigo-500">
+                                            1 role
+                                        </span>
+
                                     </div>
-                                </div>
-                                <div class="flex flex-col items-end gap-2 min-w-[140px]">
-                                    <span class="px-2.5 py-1 rounded-md bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs font-semibold">Pending Review</span>
+
                                 </div>
                             </div>
-                            <!-- Project Item 3 -->
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-background-light dark:bg-background-dark/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700">
-                                <div class="flex items-center gap-4">
-                                    <div class="size-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                                        <span class="material-symbols-outlined">business</span>
-                                    </div>
+
+                            <!-- Completed -->
+                            <div class="relative rounded-xl p-4
+                                bg-white/40 dark:bg-slate-900/30
+                                ring-1 ring-slate-200/40 dark:ring-slate-700/40">
+
+                                <div class="flex justify-between items-start">
+
                                     <div>
-                                        <h4 class="font-semibold  dark:text-white text-base">SEO Audit Q4</h4>
-                                        <p class="text-xs dark:text-gray-400 mt-0.5">MarketPro • Completed</p>
+                                        <h4 class="font-medium truncate dark:text-white">
+                                            SEO Audit Q4
+                                        </h4>
+                                        <p class="text-xs text-slate-500">
+                                            Completed · Sep 01 → Oct 10
+                                        </p>
                                     </div>
+
+                                    <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                        bg-emerald-500/10 text-emerald-600 dark:text-emerald-400
+                                        ring-1 ring-emerald-500/20">
+                                        Completed
+                                    </span>
+
                                 </div>
-                                <div class="flex flex-col items-end gap-2 min-w-[140px]">
-                                    <span class="px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">Completed</span>
-                                </div>
+
                             </div>
+
                         </div>
                     </div>
+
                     <!-- Two Column Split inside Main Column -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Proposals & Negotiations -->
-                         {% if proposals %}
-                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h3 class="text-base font-semibold  dark:text-white">Proposals</h3>
-                                    <button class="text-orange-300 dark:text-orange-200 hover:text-brand-500 transition-colors">
-                                        <span class="material-symbols-outlined">edit_square</span>
-                                    </button>
+                        {% if proposals %}
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-base font-semibold  dark:text-white">Proposals</h3>
+                                <button class="text-orange-300 dark:text-orange-200 hover:text-brand-500 transition-colors">
+                                    <span class="material-symbols-outlined">edit_square</span>
+                                </button>
+                            </div>
+                            <div class="flex flex-col gap-4">
+                                <!-- Message 1 -->
+                                <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
+                                    <div class="relative flex-shrink-0">
+                                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of John from Dev Team" style="background-image: url('{% static 'images/user/user-05.jpg' %}');"></div>
+                                        <div class="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex justify-between items-baseline mb-0.5">
+                                            <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">John Doe</h5>
+                                            <span class="text-[10px]  font-medium">2m ago</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Can you approve the latest mockup?</p>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col gap-4">
-                                    <!-- Message 1 -->
-                                    <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
-                                        <div class="relative flex-shrink-0">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of John from Dev Team" style="background-image: url('{% static 'images/user/user-05.jpg' %}');"></div>
-                                            <div class="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex justify-between items-baseline mb-0.5">
-                                                <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">John Doe</h5>
-                                                <span class="text-[10px]  font-medium">2m ago</span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Can you approve the latest mockup?</p>
-                                        </div>
+                                <!-- Message 2 -->
+                                <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
+                                    <div class="relative flex-shrink-0">
+                                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of Alice creative designer" style="background-image: url('{% static 'images/user/user-06.jpg' %}');"></div>
                                     </div>
-                                    <!-- Message 2 -->
-                                    <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
-                                        <div class="relative flex-shrink-0">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of Alice creative designer" style="background-image: url('{% static 'images/user/user-06.jpg' %}');"></div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex justify-between items-baseline mb-0.5">
+                                            <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Alice Smith</h5>
+                                            <span class="text-[10px]  font-medium">1h ago</span>
                                         </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex justify-between items-baseline mb-0.5">
-                                                <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Alice Smith</h5>
-                                                <span class="text-[10px]  font-medium">1h ago</span>
-                                            </div>
-                                            <p class="text-sm  dark:text-white font-medium truncate">I've sent the invoice for the logo.</p>
-                                        </div>
-                                        <div class="size-2 rounded-full bg-brand-500 mt-2"></div>
+                                        <p class="text-sm  dark:text-white font-medium truncate">I've sent the invoice for the logo.</p>
                                     </div>
-                                    <!-- Message 3 -->
-                                    <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
-                                        <div class="relative flex-shrink-0">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of Support Agent" style="background-image: url('{% static 'images/user/user-07.jpg' %}');"></div>
+                                    <div class="size-2 rounded-full bg-brand-500 mt-2"></div>
+                                </div>
+                                <!-- Message 3 -->
+                                <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
+                                    <div class="relative flex-shrink-0">
+                                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of Support Agent" style="background-image: url('{% static 'images/user/user-07.jpg' %}');"></div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex justify-between items-baseline mb-0.5">
+                                            <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Support Team</h5>
+                                            <span class="text-[10px]  font-medium">1d ago</span>
                                         </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex justify-between items-baseline mb-0.5">
-                                                <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Support Team</h5>
-                                                <span class="text-[10px]  font-medium">1d ago</span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Your ticket #9201 has been resolved.</p>
-                                        </div>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Your ticket #9201 has been resolved.</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         {% else %}
-                            <div
-                                class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6
                                     shadow-sm ring-1 ring-gray-100 dark:ring-gray-800
                                     flex flex-col h-full
                                     bg-white/80 dark:bg-[#121826]/90
                                     backdrop-blur-sm relative overflow-hidden">
 
-                                <!-- ===== Ambient Wash ===== -->
-                                <div
-                                    class="pointer-events-none absolute inset-0
+                            <!-- ===== Ambient Wash ===== -->
+                            <div class="pointer-events-none absolute inset-0
                                         bg-gradient-to-br from-brand-500/5 via-indigo-500/5 to-transparent">
-                                </div>
+                            </div>
 
-                                <!-- ===== Header ===== -->
-                                <div class="relative flex items-center justify-between mb-5">
+                            <!-- ===== Header ===== -->
+                            <div class="relative flex items-center justify-between mb-5">
 
-                                    <h3 class="text-base font-semibold dark:text-white">
-                                        Proposals
-                                    </h3>
+                                <h3 class="text-base font-semibold dark:text-white">
+                                    Proposals
+                                </h3>
 
-                                    <button
-                                        disabled
-                                        class="opacity-40 cursor-not-allowed text-slate-300 dark:text-slate-600">
-                                        <span class="material-symbols-outlined">arrow_outward</span>
-                                    </button>
+                                <button disabled class="opacity-40 cursor-not-allowed text-slate-300 dark:text-slate-600">
+                                    <span class="material-symbols-outlined">arrow_outward</span>
+                                </button>
 
-                                </div>
+                            </div>
 
-                                <!-- ===== Radiant Empty Banner ===== -->
-                                <div
-                                    class="relative mb-6 flex items-center gap-4
+                            <!-- ===== Radiant Empty Banner ===== -->
+                            <div class="relative mb-6 flex items-center gap-4
                                         rounded-2xl p-4
                                         bg-slate-50/70 dark:bg-[#151c2a]/60
                                         border border-slate-200/60 dark:border-slate-700/60">
 
-                                    <!-- Glow Icon -->
-                                    <div class="relative flex size-12 items-center justify-center shrink-0">
+                                <!-- Glow Icon -->
+                                <div class="relative flex size-12 items-center justify-center shrink-0">
 
-                                        <div
-                                            class="absolute inset-0 rounded-full blur-xl opacity-70
+                                    <div class="absolute inset-0 rounded-full blur-xl opacity-70
                                                 bg-brand-400 dark:bg-brand-900/30 animate-pulse">
-                                        </div>
+                                    </div>
 
-                                        <div
-                                            class="relative flex size-10 items-center justify-center
+                                    <div class="relative flex size-10 items-center justify-center
                                                 rounded-xl bg-white dark:bg-[#1a202c]
                                                 border border-slate-100 dark:border-slate-700
                                                 shadow-md">
 
-                                            <span class="text-base">
-                                                📜
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div>
-
-                                        <h5 class="font-normal text-slate-900 dark:text-white">
-                                            No proposals yet
-                                        </h5>
-
-                                        <p class="mt-0.5 font-sans text-sm text-slate-500 dark:text-slate-400">
-                                            Negotiations and offers will appear here once applicants start engaging.
-                                        </p>
+                                        <span class="text-base">
+                                            📜
+                                        </span>
 
                                     </div>
 
                                 </div>
 
-                                <!-- ===== Ghost Rows ===== -->
-                                <div class="relative flex flex-col gap-4 opacity-70">
-                                    {% for i in "123" %}
-                                        <div
-                                            class="flex items-start gap-3 pb-3 border-b
+                                <div>
+
+                                    <h5 class="font-normal text-slate-900 dark:text-white">
+                                        No proposals yet
+                                    </h5>
+
+                                    <p class="mt-0.5 font-sans text-sm text-slate-500 dark:text-slate-400">
+                                        Negotiations and offers will appear here once applicants start engaging.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <!-- ===== Ghost Rows ===== -->
+                            <div class="relative flex flex-col gap-4 opacity-70">
+                                {% for i in "123" %}
+                                <div class="flex items-start gap-3 pb-3 border-b
                                                 border-gray-100 dark:border-gray-800 last:border-0">
 
-                                            <!-- Avatar -->
-                                            <div
-                                                class="size-10 rounded-full bg-slate-200/70
+                                    <!-- Avatar -->
+                                    <div class="size-10 rounded-full bg-slate-200/70
                                                     dark:bg-slate-700/60 animate-pulse">
-                                            </div>
+                                    </div>
 
-                                            <!-- Content -->
-                                            <div class="flex-1 min-w-0 space-y-2">
-                                                <div class="flex justify-between">
-                                                    <div class="h-3 w-28 rounded bg-slate-200/80 dark:bg-slate-700 animate-pulse"></div>
-                                                    <div class="h-3 w-10 rounded bg-slate-200/60 dark:bg-slate-700/60"></div>
-                                                </div>
-                                                <div class="h-3 w-52 rounded bg-slate-200/60 dark:bg-slate-700/60 animate-pulse"></div>
-                                            </div>
-                                            <!-- Unread Dot -->
-                                            <div class="size-2 rounded-full bg-brand-400/40 mt-2"></div>
+                                    <!-- Content -->
+                                    <div class="flex-1 min-w-0 space-y-2">
+                                        <div class="flex justify-between">
+                                            <div class="h-3 w-28 rounded bg-slate-200/80 dark:bg-slate-700 animate-pulse"></div>
+                                            <div class="h-3 w-10 rounded bg-slate-200/60 dark:bg-slate-700/60"></div>
                                         </div>
-                                    {% endfor %}
+                                        <div class="h-3 w-52 rounded bg-slate-200/60 dark:bg-slate-700/60 animate-pulse"></div>
+                                    </div>
+                                    <!-- Unread Dot -->
+                                    <div class="size-2 rounded-full bg-brand-400/40 mt-2"></div>
                                 </div>
+                                {% endfor %}
                             </div>
+                        </div>
                         {% endif %}
-                        
+
                         <!-- Bookings & Appointments -->
-                         {% if escrowed %}
-                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h3 class="text-base font-semibold  dark:text-white">Future Payments</h3>
-                                    <button class="size-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                        <span class="material-symbols-outlined text-emerald-300 dark:text-emerald-200">lock</span>
-                                    </button>
-                                </div>
-                                <div class="flex flex-col gap-3">
-                                    <!-- Event 1 -->
-                                    <div class="p-3 rounded-xl bg-brand-500/5 border border-brand-500/10 flex gap-3 items-center">
-                                        <div class="flex flex-col items-center justify-center bg-white rounded-lg p-2 min-w-[50px] shadow-sm">
-                                            <span class="text-xs font-semibold text-brand-500 uppercase">Oct</span>
-                                            <span class="text-lg font-semibold">24</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-semibold text-brand-400 mb-0.5">Today, 2:00 PM</p>
-                                            <h4 class="text-sm font-semibold  dark:text-white leading-tight">Sync with Dev Team</h4>
-                                            <div class="flex items-center gap-1 mt-1">
-                                                <span class="material-symbols-outlined text-xs text-blue-500 dark:text-blue-400">videocam</span>
-                                                <span class="text-xs text-blue-500 dark:text-blue-400">Zoom Meeting</span>
-                                            </div>
+                        {% if escrowed %}
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-base font-semibold  dark:text-white">Future Payments</h3>
+                                <button class="size-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <span class="material-symbols-outlined text-emerald-300 dark:text-emerald-200">lock</span>
+                                </button>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <!-- Event 1 -->
+                                <div class="p-3 rounded-xl bg-brand-500/5 border border-brand-500/10 flex gap-3 items-center">
+                                    <div class="flex flex-col items-center justify-center bg-white rounded-lg p-2 min-w-[50px] shadow-sm">
+                                        <span class="text-xs font-semibold text-brand-500 uppercase">Oct</span>
+                                        <span class="text-lg font-semibold">24</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-semibold text-brand-400 mb-0.5">Today, 2:00 PM</p>
+                                        <h4 class="text-sm font-semibold  dark:text-white leading-tight">Sync with Dev Team</h4>
+                                        <div class="flex items-center gap-1 mt-1">
+                                            <span class="material-symbols-outlined text-xs text-blue-500 dark:text-blue-400">videocam</span>
+                                            <span class="text-xs text-blue-500 dark:text-blue-400">Zoom Meeting</span>
                                         </div>
                                     </div>
-                                    <!-- Event 2 (Next) -->
-                                    <div class="flex gap-3 items-center px-2 opacity-70">
-                                        <div class="flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg p-2 min-w-[50px]">
-                                            <span class="text-xs font-semibold dark:text-gray-300 uppercase">Oct</span>
-                                            <span class="text-lg font-semibold dark:text-gray-500">26</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-medium dark:text-gray-300 mb-0.5">Friday, 10:00 AM</p>
-                                            <h4 class="text-sm font-normal dark:text-gray-500 leading-tight">Design Review</h4>
-                                        </div>
+                                </div>
+                                <!-- Event 2 (Next) -->
+                                <div class="flex gap-3 items-center px-2 opacity-70">
+                                    <div class="flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-lg p-2 min-w-[50px]">
+                                        <span class="text-xs font-semibold dark:text-gray-300 uppercase">Oct</span>
+                                        <span class="text-lg font-semibold dark:text-gray-500">26</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-medium dark:text-gray-300 mb-0.5">Friday, 10:00 AM</p>
+                                        <h4 class="text-sm font-normal dark:text-gray-500 leading-tight">Design Review</h4>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         {% else %}
-                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
-                                <!-- Header -->
-                                <div class="flex items-center justify-between mb-4">
-                                    <h3 class="text-base font-semibold dark:text-white">
-                                        Future Payments
-                                    </h3>
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
+                            <!-- Header -->
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-base font-semibold dark:text-white">
+                                    Future Payments
+                                </h3>
 
-                                    <div class="size-9 flex items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500">
-                                        <span class="material-symbols-outlined">lock</span>
-                                    </div>
+                                <div class="size-9 flex items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500">
+                                    <span class="material-symbols-outlined">lock</span>
+                                </div>
+                            </div>
+
+                            <!-- Empty -->
+                            <div class="flex flex-col items-center text-center gap-4 py-8">
+
+                                <div class="size-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 ring-1 ring-emerald-200/40 dark:ring-emerald-800/40 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[22px]">account_balance_wallet</span>
                                 </div>
 
-                                <!-- Empty -->
-                                <div class="flex flex-col items-center text-center gap-4 py-8">
+                                <div>
+                                    <h4 class="font-medium dark:text-white">
+                                        No escrow payments scheduled
+                                    </h4>
+                                    <p class="text-sm text-gray-500 max-w-xs">
+                                        Funds held for active jobs will appear here until release.
+                                    </p>
+                                </div>
+                            </div>
 
-                                    <div class="size-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 ring-1 ring-emerald-200/40 dark:ring-emerald-800/40 flex items-center justify-center">
-                                        <span class="material-symbols-outlined text-[22px]">account_balance_wallet</span>
+                            <!-- Demo Upcoming -->
+                            <div class="space-y-3 opacity-50 pointer-events-none">
+
+                                <div class="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex gap-3 items-center">
+
+                                    <div class="flex flex-col items-center justify-center bg-white dark:bg-slate-900 rounded-lg p-2 min-w-[56px] shadow-sm">
+                                        <span class="text-xs font-semibold text-emerald-500 uppercase">
+                                            Sep
+                                        </span>
+                                        <span class="text-lg font-semibold">
+                                            28
+                                        </span>
                                     </div>
 
                                     <div>
-                                        <h4 class="font-medium dark:text-white">
-                                            No escrow payments scheduled
+                                        <p class="text-xs font-semibold text-emerald-400">
+                                            Release in 2 days
+                                        </p>
+                                        <h4 class="text-sm font-semibold dark:text-white">
+                                            UI Redesign Milestone
                                         </h4>
-                                        <p class="text-sm text-gray-500 max-w-xs">
-                                            Funds held for active jobs will appear here until release.
+                                        <p class="text-xs text-gray-500">
+                                            $1,250 • Pending approval
                                         </p>
                                     </div>
-                                </div>
-
-                                <!-- Demo Upcoming -->
-                                <div class="space-y-3 opacity-50 pointer-events-none">
-
-                                    <div class="p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex gap-3 items-center">
-
-                                        <div class="flex flex-col items-center justify-center bg-white dark:bg-slate-900 rounded-lg p-2 min-w-[56px] shadow-sm">
-                                            <span class="text-xs font-semibold text-emerald-500 uppercase">
-                                                Sep
-                                            </span>
-                                            <span class="text-lg font-semibold">
-                                                28
-                                            </span>
-                                        </div>
-
-                                        <div>
-                                            <p class="text-xs font-semibold text-emerald-400">
-                                                Release in 2 days
-                                            </p>
-                                            <h4 class="text-sm font-semibold dark:text-white">
-                                                UI Redesign Milestone
-                                            </h4>
-                                            <p class="text-xs text-gray-500">
-                                                $1,250 • Pending approval
-                                            </p>
-                                        </div>
-
-                                    </div>
 
                                 </div>
+
                             </div>
+                        </div>
 
                         {% endif %}
                     </div>
 
-                    
+
                 </div>
                 <!-- Sidebar Column (Wallet/Reviews) -->
                 <div class="lg:col-span-4 flex flex-col gap-6">
@@ -388,14 +474,10 @@
                         <p class="text-blue-100 text-sm font-medium mb-1">Total Balance in Escrow</p>
                         <h2 class="text-4xl font-semibold tracking-tight mb-6">$4,250.00</h2>
                         <div class="flex gap-3">
-                            <button 
-                                @click="showToast('Could not connect to a payment processor', 'info', 'Servio Wallet Mannager')"
-                                class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
+                            <button @click="showToast('Could not connect to a payment processor', 'info', 'Servio Wallet Mannager')" class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
                                 <span class="material-symbols-outlined text-[18px]">add</span> Top Up
                             </button>
-                            <button
-                                @click="showToast('Wallet history will be available once gateway is connected', 'info', 'Servio Wallet Mannager')"
-                                class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
+                            <button @click="showToast('Wallet history will be available once gateway is connected', 'info', 'Servio Wallet Mannager')" class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/10 rounded-xl py-2 px-4 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
                                 <span class="material-symbols-outlined text-[18px]">history</span> History
                             </button>
                         </div>
@@ -431,100 +513,100 @@
                         </div>
                     </div>
                     <!-- Reviews & Reputation -->
-                     {% if reviews %}
-                        <div class="rounded-2xl border border-slate-200 dark:border-slate-700 p-6 ring-1 ring-black/5 dark:ring-white/5 bg-white/80 dark:bg-slate-900/60 backdrop-blur flex flex-col gap-5">
-                            <!-- Header -->
-                            <div class="flex items-start justify-between">
-                                <div>
-                                    <h3 class="text-lg font-semibold tracking-tight dark:text-white">
-                                        Your Reputation
-                                    </h3>
-                                    <p class="text-xs text-slate-500">
-                                        Based on 12 completed projects
-                                    </p>
-                                </div>
-
-                                <!-- Floating Score -->
-                                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-200/40 dark:ring-emerald-800/40">
-                                    <span class="font-semibold text-lg">4.9</span>
-                                    <span class="material-symbols-outlined text-[18px] font-fill">
-                                        star
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Stars -->
-                            <div class="flex items-center gap-1 text-amber-400">
-                                <span class="material-symbols-outlined text-[18px] font-fill">star</span>
-                                <span class="material-symbols-outlined text-[18px] font-fill">star</span>
-                                <span class="material-symbols-outlined text-[18px] font-fill">star</span>
-                                <span class="material-symbols-outlined text-[18px] font-fill">star</span>
-                                <span class="material-symbols-outlined text-[18px] font-fill">star_half</span>
-                            </div>
-
-                            <!-- Featured Review -->
-                            <div class="relative rounded-xl bg-gradient-to-br from-slate-50 to-white dark:from-slate-800/40 dark:to-slate-900/40 p-4 ring-1 ring-slate-200/40 dark:ring-slate-700/40">
-
-                                <span class="material-symbols-outlined absolute top-3 left-3 text-slate-300 dark:text-slate-600 text-[22px]">
-                                    format_quote
-                                </span>
-
-                                <p class="text-sm italic text-slate-600 dark:text-slate-300 pl-6">
-                                    “Sarah was fantastic to work with. Clear requirements and prompt payment. Highly recommended!”
+                    {% if reviews %}
+                    <div class="rounded-2xl border border-slate-200 dark:border-slate-700 p-6 ring-1 ring-black/5 dark:ring-white/5 bg-white/80 dark:bg-slate-900/60 backdrop-blur flex flex-col gap-5">
+                        <!-- Header -->
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h3 class="text-lg font-semibold tracking-tight dark:text-white">
+                                    Your Reputation
+                                </h3>
+                                <p class="text-xs text-slate-500">
+                                    Based on 12 completed projects
                                 </p>
+                            </div>
 
-                                <div class="mt-3 text-xs font-medium text-right text-slate-500">
-                                    — Alex D.
-                                </div>
+                            <!-- Floating Score -->
+                            <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-200/40 dark:ring-emerald-800/40">
+                                <span class="font-semibold text-lg">4.9</span>
+                                <span class="material-symbols-outlined text-[18px] font-fill">
+                                    star
+                                </span>
                             </div>
                         </div>
+
+                        <!-- Stars -->
+                        <div class="flex items-center gap-1 text-amber-400">
+                            <span class="material-symbols-outlined text-[18px] font-fill">star</span>
+                            <span class="material-symbols-outlined text-[18px] font-fill">star</span>
+                            <span class="material-symbols-outlined text-[18px] font-fill">star</span>
+                            <span class="material-symbols-outlined text-[18px] font-fill">star</span>
+                            <span class="material-symbols-outlined text-[18px] font-fill">star_half</span>
+                        </div>
+
+                        <!-- Featured Review -->
+                        <div class="relative rounded-xl bg-gradient-to-br from-slate-50 to-white dark:from-slate-800/40 dark:to-slate-900/40 p-4 ring-1 ring-slate-200/40 dark:ring-slate-700/40">
+
+                            <span class="material-symbols-outlined absolute top-3 left-3 text-slate-300 dark:text-slate-600 text-[22px]">
+                                format_quote
+                            </span>
+
+                            <p class="text-sm italic text-slate-600 dark:text-slate-300 pl-6">
+                                “Sarah was fantastic to work with. Clear requirements and prompt payment. Highly recommended!”
+                            </p>
+
+                            <div class="mt-3 text-xs font-medium text-right text-slate-500">
+                                — Alex D.
+                            </div>
+                        </div>
+                    </div>
                     {% else %}
-                        <div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 p-6 ring-1 ring-black/5 dark:ring-white/5 bg-white/70 dark:bg-slate-900/50 backdrop-blur flex flex-col gap-6">
-                            <!-- Empty Header -->
-                            <div class="flex flex-col items-center text-center gap-3">
+                    <div class="rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 p-6 ring-1 ring-black/5 dark:ring-white/5 bg-white/70 dark:bg-slate-900/50 backdrop-blur flex flex-col gap-6">
+                        <!-- Empty Header -->
+                        <div class="flex flex-col items-center text-center gap-3">
 
-                                <div class="size-12 rounded-2xl bg-amber-100 dark:bg-amber-900/30 text-amber-500 ring-1 ring-amber-200/40 dark:ring-amber-800/40 flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-[22px]">
-                                        reviews
-                                    </span>
-                                </div>
-
-                                <div>
-                                    <h4 class="font-medium dark:text-white">
-                                        No reviews yet
-                                    </h4>
-                                    <p class="text-sm text-slate-500 max-w-xs">
-                                        Once clients leave feedback, your reputation will be displayed here.
-                                    </p>
-                                </div>
+                            <div class="size-12 rounded-2xl bg-amber-100 dark:bg-amber-900/30 text-amber-500 ring-1 ring-amber-200/40 dark:ring-amber-800/40 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[22px]">
+                                    reviews
+                                </span>
                             </div>
 
-                            <!-- Ghost Rating -->
-                            <div class="flex justify-center gap-1 opacity-40">
-                                <span class="material-symbols-outlined text-[18px]">star</span>
-                                <span class="material-symbols-outlined text-[18px]">star</span>
-                                <span class="material-symbols-outlined text-[18px]">star</span>
-                                <span class="material-symbols-outlined text-[18px]">star</span>
-                                <span class="material-symbols-outlined text-[18px]">star</span>
-                            </div>
-
-                            <!-- Ghost Reviews -->
-                            <div class="space-y-3 opacity-40">
-
-                                <div class="rounded-xl p-4 bg-slate-100 dark:bg-slate-800/40 space-y-2">
-                                    <div class="h-3 w-3/4 bg-slate-300 dark:bg-slate-600 rounded"></div>
-                                    <div class="h-3 w-2/3 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                                    <div class="h-3 w-24 ml-auto bg-slate-300 dark:bg-slate-600 rounded"></div>
-                                </div>
-
-                                <div class="rounded-xl p-4 bg-slate-100 dark:bg-slate-800/40 space-y-2">
-                                    <div class="h-3 w-2/3 bg-slate-300 dark:bg-slate-600 rounded"></div>
-                                    <div class="h-3 w-1/2 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                                    <div class="h-3 w-20 ml-auto bg-slate-300 dark:bg-slate-600 rounded"></div>
-                                </div>
-
+                            <div>
+                                <h4 class="font-medium dark:text-white">
+                                    No reviews yet
+                                </h4>
+                                <p class="text-sm text-slate-500 max-w-xs">
+                                    Once clients leave feedback, your reputation will be displayed here.
+                                </p>
                             </div>
                         </div>
+
+                        <!-- Ghost Rating -->
+                        <div class="flex justify-center gap-1 opacity-40">
+                            <span class="material-symbols-outlined text-[18px]">star</span>
+                            <span class="material-symbols-outlined text-[18px]">star</span>
+                            <span class="material-symbols-outlined text-[18px]">star</span>
+                            <span class="material-symbols-outlined text-[18px]">star</span>
+                            <span class="material-symbols-outlined text-[18px]">star</span>
+                        </div>
+
+                        <!-- Ghost Reviews -->
+                        <div class="space-y-3 opacity-40">
+
+                            <div class="rounded-xl p-4 bg-slate-100 dark:bg-slate-800/40 space-y-2">
+                                <div class="h-3 w-3/4 bg-slate-300 dark:bg-slate-600 rounded"></div>
+                                <div class="h-3 w-2/3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                <div class="h-3 w-24 ml-auto bg-slate-300 dark:bg-slate-600 rounded"></div>
+                            </div>
+
+                            <div class="rounded-xl p-4 bg-slate-100 dark:bg-slate-800/40 space-y-2">
+                                <div class="h-3 w-2/3 bg-slate-300 dark:bg-slate-600 rounded"></div>
+                                <div class="h-3 w-1/2 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                <div class="h-3 w-20 ml-auto bg-slate-300 dark:bg-slate-600 rounded"></div>
+                            </div>
+
+                        </div>
+                    </div>
                     {% endif %}
 
                     <!-- Help / Support Mini Card -->
