@@ -321,7 +321,7 @@
 					</a>
 					{% else %}
 					<span class="text-xs text-slate-400">
-						project owner still accepting proposals.
+						project owner is accepting proposals.
 					</span>
 					{% endif %}
 				</div>
@@ -388,9 +388,9 @@
 						<a href="{% url OPPURTUNITIES.ACCEPT_OFFER slug=gig.slug %}" class="w-full py-4 bg-brand-500 text-white rounded-xl font-semibold text-base shadow-lg shadow-brand-500/30 hover:bg-brand-400/90 transition-all text-center">
 							Accept Terms
 						</a>
-						<a href="{% url OPPURTUNITIES.ACCEPT_OFFER slug=gig.slug %}?negotiating=true" class="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold text-base hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+						<a href="{% url OPPURTUNITIES.ACCEPT_OFFER slug=gig.slug %}?negotiating=true" class="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold text-base text-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
 							Send Counteroffer
-						</button>
+						</a>
 					</div>
 					<p class="text-[11px] text-center text-slate-400 px-4">
 						By clicking 'Accept Terms', you agree to the project timeline and milestones as outlined.

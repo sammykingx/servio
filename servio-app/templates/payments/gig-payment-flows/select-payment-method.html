@@ -224,7 +224,9 @@
                     </div>
                 </a>
                 <!-- Option 2: Wallet -->
-                <a class="cursor-pointer relative flex items-start gap-4 p-5 md:p-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                <a 
+                    @click="showToast('Wallet system not configured yet, connect payment processor', 'info', 'Servio Payments Manger')"
+                    class="cursor-pointer relative flex items-start gap-4 p-5 md:p-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1.5">
                             <div class="p-1.5 bg-purple-100 dark:bg-purple-900/40 rounded text-purple-600 dark:text-purple-400">
@@ -236,8 +238,10 @@
                     </div>
                 </a>
                 <!-- Option 3: Apple Pay -->
-                <a class="cursor-pointer relative flex items-start gap-4 p-5 md:-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
-                    <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" />
+                <a 
+                    @click="showToast('Unable to process apple payments, connect payment processor', 'info', 'Servio Payments Manager')"
+                    class="cursor-pointer relative flex items-start gap-4 p-5 md:-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                    <!-- <input class="mt-1 size-5 text-brand-500 border-gray-300 focus:ring-brand-500 bg-transparent" name="payment_method" type="radio" /> -->
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1.5">
                             <div class="p-1.5 bg-gray-100 dark:bg-gray-700/50 rounded flex items-center justify-center">
@@ -258,10 +262,12 @@
                     </div>
                 </a>
                 <!-- Option 4: Bank Transfer -->
-                <a class="cursor-pointer relative flex items-start gap-4 p-5 md:p-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
+                <a 
+                    @click="showToast('ACH bank transfer not allowed, connect a payment processor', 'info', 'Servio Payments Manager')"
+                    class="cursor-pointer relative flex items-start gap-4 p-5 md:p-8 rounded-xl border border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark hover:border-brand-500 transition-all shadow-sm group has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 has-[:checked]:bg-brand-500/5">
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1.5">
-                            <div class="p-1.5 bg-orange-100 dark:bg-orange-900/40 rounded text-orange-600 dark:text-orange-400">
+                            <div class="px-1.5 py-2 bg-orange-100 dark:bg-orange-900/40 rounded text-orange-600 dark:text-orange-400">
                                 <span class="material-symbols-outlined text-xl leading-none">account_balance</span>
                             </div>
                             <span class="font-medium text-base dark:text-gray-400">Bank Transfer</span>

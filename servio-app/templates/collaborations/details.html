@@ -58,12 +58,14 @@
             </div>
             <div class="flex gap-3">
                 {% if gig.status not in editable_statuses %}
-                <a href="{% url OPPURTUNITIES.DETAIL slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-brand-500 text-white text-sm font-medium tracking-wide shadow-lg shadow-brand-500/20 hover:bg-brand-500/90 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                    </svg> <span class="px-2">Public view</span>
-                </a>
+                    {% if not_used %}
+                    <a href="{% url OPPURTUNITIES.DETAIL slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-brand-500 text-white text-sm font-medium tracking-wide shadow-lg shadow-brand-500/20 hover:bg-brand-500/90 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg> <span class="px-2">Public view</span>
+                    </a>
+                    {% endif %}
                 <button class="flex cursor-pointer items-center justify-center rounded-xl h-11 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 transition-all">
                     <span class="material-symbols-outlined">share</span>
                 </button>
@@ -72,9 +74,6 @@
                     <span class="material-symbols-outlined mr-2">edit</span> Edit Gig
                 </a>
                 {% endif %}
-                <button class="flex cursor-pointer items-center justify-center rounded-xl h-11 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 transition-all">
-                    <span class="material-symbols-outlined">share</span>
-                </button>
             </div>
         </div>
     </div>
@@ -205,71 +204,175 @@
 
                 <!-- Applications -->
                 <div class="p-2 overflow-x-auto">
-                    <div class="flex flex-col gap-2 min-w-max">
-
-                        <!-- Application Row 1 -->
-                        <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
-
-                            <div class="size-12 shrink-0 rounded-xl bg-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDJ-wkCVj52QOBKT4BqUsbyxKGXEyunLG2sBRpOgqVAvr9xoJ048bxIqUAs2roGdHAJwHYr9iG48rR4XygCndR5hXRf8Jop0Wt-ePjruFUIaKUeD5J9ZnqIxm8DFHcyWeOuEAfuwCY3j53M1rSO2GA8g3qz2HuFx8I7A79Lo85B0HteK7s64Mm4pb475F9RLMQxDv2bow6TbmDj9XSqtVdIhtIIKtqqH48-D0QJV7Y3ODlorlrXC5bz7oByPqPlr21cTQQGhcv04Xk');">
-                            </div>
-
-                            <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
-                                <div class="flex items-center gap-2">
-                                    <h5 class="font-medium">Alex Morgan</h5>
-                                    <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
-                                        98% MATCH
-                                    </span>
+                    {% if applications %}
+                        <div class="flex flex-col gap-2 min-w-max">
+                            <!-- Application Row 1 -->
+                            <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
+                                <div 
+                                    class="size-12 shrink-0 rounded-xl bg-slate-200 
+                                        bg-cover bg-center" 
+                                    style="background-image: url('{% static 'images/user/user-02.jpg' %}');">
                                 </div>
-                                <p class="text-sm text-gray-500">Product Designer • 6 yrs • San Francisco, CA</p>
-                            </div>
 
-                            <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="p-2 text-slate-400 hover:text-green-500">
-                                    <span class="material-symbols-outlined">check_circle</span>
-                                </button>
-                                <button class="p-2 text-slate-400 hover:text-red-500">
-                                    <span class="material-symbols-outlined">cancel</span>
-                                </button>
-                            </div>
-
-                            <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
-                                View Application
-                            </button>
-                        </div>
-
-                        <!-- Application Row 2 -->
-                        <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
-
-                            <div class="size-12 shrink-0 rounded-xl bg-slate-200 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNZLtQH6jGOTo2bNDbGfAcY0eW4ugCtWosZNURYirLJBhD3D5w2ugXUQGzRXREgn5d0OPdR3IQ8yJqugo6OuT_6CPzP3wLaF9fFYvudp9rKh4ltdxR7wK9GhBB6L1LziLzb72Ws_qyvtg38WWgelLIOMLLCuKqd6YbbUWSoRMZgP1vXs2pq5S5RZBNhxh9e32FqCEz6z3G1USG0v1N9pCvD95g4aRGgmCtL5z6s9wAFwO9pSGmILptgixzGlamFfjAZblN-ySglbY');">
-                            </div>
-
-                            <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
-                                <div class="flex items-center gap-2">
-                                    <h5 class="font-medium">Sarah Reed</h5>
-                                    <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
-                                        92% MATCH
-                                    </span>
+                                <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <h5 class="font-medium">Alex Morgan</h5>
+                                        <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
+                                            98% MATCH
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-500">Product Designer • 6 yrs • San Francisco, CA</p>
                                 </div>
-                                <p class="text-sm text-gray-500">Senior UI Expert • 9 yrs • London, UK</p>
+
+                                <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button class="p-2 text-slate-400 hover:text-green-500">
+                                        <span class="material-symbols-outlined">check_circle</span>
+                                    </button>
+                                    <button class="p-2 text-slate-400 hover:text-red-500">
+                                        <span class="material-symbols-outlined">cancel</span>
+                                    </button>
+                                </div>
+
+                                <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
+                                    View Application
+                                </button>
                             </div>
 
-                            <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="p-2 text-slate-400 hover:text-green-500">
-                                    <span class="material-symbols-outlined">check_circle</span>
-                                </button>
-                                <button class="p-2 text-slate-400 hover:text-red-500">
-                                    <span class="material-symbols-outlined">cancel</span>
+                            <!-- Application Row 2 -->
+                            <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
+
+                                <div class="size-12 shrink-0 rounded-xl bg-slate-200 
+                                    bg-cover bg-center" 
+                                    style="background-image: url('{% static 'images/user/user-03.jpg' %}');">
+                                </div>
+
+                                <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
+                                    <div class="flex items-center gap-2">
+                                        <h5 class="font-medium">Sarah Reed</h5>
+                                        <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
+                                            92% MATCH
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-500">Senior UI Expert • 9 yrs • London, UK</p>
+                                </div>
+
+                                <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button class="p-2 text-slate-400 hover:text-green-500">
+                                        <span class="material-symbols-outlined">check_circle</span>
+                                    </button>
+                                    <button class="p-2 text-slate-400 hover:text-red-500">
+                                        <span class="material-symbols-outlined">cancel</span>
+                                    </button>
+                                </div>
+                                <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
+                                    View Application
                                 </button>
                             </div>
-
-                            <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
-                                View Application
-                            </button>
                         </div>
+                    {% else %}
+                        <div class="p-2 overflow-x-auto">
 
-                    </div>
+                            <div class="relative flex flex-col gap-4 min-w-max">
+
+                                <!-- ===== Header Empty Message ===== -->
+                                <div
+                                    class="relative flex items-center gap-4 p-6 rounded-2xl
+                                        bg-slate-50/70 dark:bg-[#121826]/60
+                                        border border-slate-200/60 dark:border-slate-700/60
+                                        backdrop-blur-sm">
+
+                                    <!-- Radiant Icon -->
+                                    <div class="relative flex size-12 items-center justify-center shrink-0">
+
+                                        <div
+                                            class="absolute inset-0 rounded-full blur-xl opacity-70
+                                                bg-brand-400 dark:bg-brand-900/30 animate-pulse">
+                                        </div>
+
+                                        <div
+                                            class="relative flex size-10 items-center justify-center
+                                                rounded-xl bg-white dark:bg-[#1a202c]
+                                                border border-slate-100 dark:border-slate-700
+                                                shadow-md">
+
+                                            <span
+                                                class="material-symbols-outlined text-base
+                                                    text-brand-500 dark:text-white">
+                                                group
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="max-w-md">
+
+                                        <h5 class="font-semibold text-slate-900 dark:text-white">
+                                            No applications yet
+                                        </h5>
+
+                                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                            Professionals will appear here once they apply to this project.
+                                            Below is a preview of how applications will be displayed.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- ===== Ghost Preview Rows ===== -->
+
+                                {% for i in "123" %}
+
+                                <div
+                                    class="relative flex flex-nowrap items-center gap-4 p-4 min-w-max
+                                        rounded-xl
+                                        bg-white/70 dark:bg-[#151c2a]/70
+                                        border border-slate-200/50 dark:border-slate-700/50
+                                        backdrop-blur-sm
+                                        opacity-70">
+
+                                    <!-- Glow -->
+                                    <div
+                                        class="pointer-events-none absolute inset-0 rounded-xl
+                                            bg-gradient-to-r from-brand-500/5 via-indigo-500/5 to-transparent">
+                                    </div>
+
+                                    <!-- Avatar -->
+                                    <div
+                                        class="size-12 shrink-0 rounded-xl bg-slate-200/70
+                                            dark:bg-slate-700/60 animate-pulse">
+                                    </div>
+
+                                    <!-- Text Skeleton -->
+                                    <div class="flex-1 min-w-[240px] space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="h-4 w-28 rounded bg-slate-200/80 dark:bg-slate-700/70 animate-pulse"></div>
+                                            <div class="h-4 w-16 rounded bg-blue-100/60 dark:bg-blue-900/30"></div>
+                                        </div>
+                                        <div class="h-3 w-48 rounded bg-slate-200/60 dark:bg-slate-700/60 animate-pulse"></div>
+                                    </div>
+
+                                    <!-- Ghost Actions -->
+                                    <div class="flex gap-2 shrink-0 opacity-40">
+
+                                        <div class="size-8 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
+                                        <div class="size-8 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
+
+                                    </div>
+
+                                    <div
+                                        class="shrink-0 px-4 py-2 rounded-lg
+                                            bg-slate-200/60 dark:bg-slate-700/60
+                                            text-transparent">
+                                        View Application
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
-
             </div>
 
             <!-- Timeline & Milestones Section -->
@@ -278,41 +381,113 @@
                     <span class="material-symbols-outlined text-emerald-500 bg-emerald-50 dark:text-gray-500 dark:bg-gray-300 p-2 rounded-md">event_upcoming</span>
                     Timeline &amp; Milestones
                 </h3>
-                <div class="space-y-6 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
-                    <!-- Milestone 1 -->
-                    <div class="relative pl-12">
-                        <div class="absolute left-0 size-8 rounded-full bg-green-500 text-white flex items-center justify-center z-10 border-4 border-white dark:border-slate-900">
-                            <span class="material-symbols-outlined text-sm">check</span>
+                {% if gig.milestones.all %}
+                    <div class="space-y-6 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
+                        <!-- Milestone 1 -->
+                        <div class="relative pl-12">
+                            <div class="absolute left-0 size-8 rounded-full bg-green-500 text-white flex items-center justify-center z-10 border-4 border-white dark:border-slate-900">
+                                <span class="material-symbols-outlined text-sm">check</span>
+                            </div>
+                            <div>
+                                <h5 class="font-medium text-[#0d171b] dark:text-white">Project Discovery &amp; Audit</h5>
+                                <p class="text-xs text-green-600 font-medium mb-1">COMPLETED</p>
+                                <p class="text-sm text-gray-500">Due: Oct 15 • $1,200 payment released</p>
+                            </div>
                         </div>
-                        <div>
-                            <h5 class="font-medium text-[#0d171b] dark:text-white">Project Discovery &amp; Audit</h5>
-                            <p class="text-xs text-green-600 font-medium mb-1">COMPLETED</p>
-                            <p class="text-sm text-gray-500">Due: Oct 15 • $1,200 payment released</p>
+                        <!-- Milestone 2 -->
+                        <div class="relative pl-12">
+                            <div class="absolute left-0 size-8 rounded-full bg-brand-500 text-white flex items-center justify-center z-10 border-4 border-white dark:border-slate-900 animate-pulse">
+                                <span class="material-symbols-outlined text-sm">trending_up</span>
+                            </div>
+                            <div>
+                                <h5 class="font-medium text-[#0d171b] dark:text-white">Core UI Design System</h5>
+                                <p class="text-xs text-brand-500 font-medium mb-1">IN PROGRESS</p>
+                                <p class="text-sm text-gray-500">Due: Nov 10 • $2,500 pending release</p>
+                            </div>
+                        </div>
+                        <!-- Milestone 3 -->
+                        <div class="relative pl-12">
+                            <div class="absolute left-0 size-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center z-10 border-4 border-white dark:border-slate-900">
+                                <span class="material-symbols-outlined text-sm">lock</span>
+                            </div>
+                            <div>
+                                <h5 class="font-medium text-slate-400">High-Fidelity Wireframing</h5>
+                                <p class="text-xs text-slate-400 font-medium mb-1">LOCKED</p>
+                                <p class="text-sm text-slate-400">Due: Dec 05 • $2,000 to be escrowed</p>
+                            </div>
                         </div>
                     </div>
-                    <!-- Milestone 2 -->
-                    <div class="relative pl-12">
-                        <div class="absolute left-0 size-8 rounded-full bg-brand-500 text-white flex items-center justify-center z-10 border-4 border-white dark:border-slate-900 animate-pulse">
-                            <span class="material-symbols-outlined text-sm">trending_up</span>
+                {% else %}
+                    <div
+                        class="relative px-6 py-10 rounded-2xl
+                            bg-slate-50/70 dark:bg-[#121826]/60
+                            border border-slate-200/60 dark:border-slate-700/60
+                            backdrop-blur-sm"
+                    >
+
+                        <!-- Vertical Rail -->
+                        <div
+                            class="absolute left-6 top-6 bottom-6 w-[2px]
+                                bg-gradient-to-b
+                                from-transparent via-brand-500/20 to-transparent">
                         </div>
-                        <div>
-                            <h5 class="font-medium text-[#0d171b] dark:text-white">Core UI Design System</h5>
-                            <p class="text-xs text-brand-500 font-medium mb-1">IN PROGRESS</p>
-                            <p class="text-sm text-gray-500">Due: Nov 10 • $2,500 pending release</p>
+
+                        <!-- Center Node -->
+                        <div class="relative pl-14">
+
+                            <!-- Radiant Node -->
+                            <div class="absolute left-0 top-1">
+
+                                <div class="relative flex size-10 items-center justify-center">
+
+                                    <!-- Glow -->
+                                    <div
+                                        class="absolute inset-0 rounded-full blur-xl opacity-70
+                                            bg-brand-300 dark:bg-brand-900/30 animate-pulse">
+                                    </div>
+
+                                    <!-- Core -->
+                                    <div
+                                        class="relative flex size-8 items-center justify-center
+                                            rounded-full
+                                            bg-white dark:bg-[#1a202c]
+                                            border border-slate-100 dark:border-slate-700
+                                            shadow-md">
+
+                                        <span
+                                            class="material-symbols-outlined text-sm
+                                                text-brand-500 dark:text-white">
+                                            schedule
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Text -->
+                            <div class="max-w-md">
+
+                                <h5
+                                    class="font-semibold text-slate-900 dark:text-white">
+                                    No milestones yet
+                                </h5>
+
+                                <p
+                                    class="mt-1 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+
+                                    Once applicants propose timelines and deliverables,
+                                    their milestone schedules will appear here for review
+                                    and comparison.
+                                </p>
+
+                            </div>
+
                         </div>
+
                     </div>
-                    <!-- Milestone 3 -->
-                    <div class="relative pl-12">
-                        <div class="absolute left-0 size-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center z-10 border-4 border-white dark:border-slate-900">
-                            <span class="material-symbols-outlined text-sm">lock</span>
-                        </div>
-                        <div>
-                            <h5 class="font-medium text-slate-400">High-Fidelity Wireframing</h5>
-                            <p class="text-xs text-slate-400 font-medium mb-1">LOCKED</p>
-                            <p class="text-sm text-slate-400">Due: Dec 05 • $2,000 to be escrowed</p>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
             </div>
         </div>
         <!-- Right Column: Sidebar Panels -->
@@ -342,18 +517,37 @@
                         <span class="text-gray-500">Total Contract Value</span>
                         <span class="font-medium">${{ gig.total_budget|intcomma }}</span>
                     </div>
+                    {% if gig.has_gig_roles %}
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-500">Roles Budget</span>
+                            <span class="font-medium text-amber-600">${{ gig.total_role_budget|intcomma }}</span>
+                        </div>
+                    {% endif %}
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-gray-500">Amount Paid</span>
-                        <span class="font-medium text-green-600">$1,200.00</span>
+                        {% if gig_paid %}
+                            <span class="font-medium text-green-600">$1,200.00</span>
+                        {% else %}
+                            <span class="font-medium text-green-600">Not Paid</span>
+                        {% endif %}
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-gray-500">In Escrow</span>
-                        <span class="font-medium text-brand-500">$2,500.00</span>
+                        {% if escrowed %}
+                            <span class="font-medium text-brand-500">$2,500.00</span>
+                        {% else %}
+                            <span class="font-medium text-sm text-brand-500">Not Escrowed</span>
+                        {% endif %}
                     </div>
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-gray-500">Balance</span>
-                        <span class="font-medium text-blue-500">$2,500.00</span>
+                        {% if balanced %}
+                            <span class="font-medium text-blue-500">$2,500.00</span>
+                        {% else %}
+                            <span class="font-medium text-sm text-blue-500">No Balance</span>
+                    {% endif %}
                     </div>
+                    {% if escrowed %}
                     <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
                         <div class="flex justify-between mb-2">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Escrow Coverage</span>
@@ -364,32 +558,93 @@
                         </div>
                         <p class="text-[10px] text-gray-500 mt-2">Fund the next milestone to maintain designer momentum.</p>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             <!-- Action Panel -->
             <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
                 <h4 class="font-medium text-lg mb-4 text-gray-800 dark:text-gray-300">Active Negotiations</h4>
                 <div class="space-y-3">
-                    <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700">
-                        <div class="size-8 rounded-full bg-slate-300" data-alt="Negotiator avatar 1">
-                            <img alt="EB" class="rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVsbgsKj35U6PMwgQmtJ1BkXRe4_OQ6LhcHyfRzzq_7rkIGBXSElr6BbWxauMXTT7Am_nk6xxLaSErvCPxvvgKGRNB2Js3U14kNNcoH_JayYTaM69I-2rRG-0_BLm_Ypfx9NkeQ5MISh2a8r09W_GwgRTDe9jXZW_UTcemtLSy_7aLXX5v2WajzdhksJty40g4GyRMJAbH8WS_YQ1xQmfH7ji2_eAGdA2URm8h7e7GwTnjXjK16C4dWzVY_BxbXnxYXtH_rTemOH0" />
+                    {% if applications %}
+                        <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700">
+                            <div class="size-8 rounded-full bg-slate-300" data-alt="Negotiator avatar 1">
+                                <img alt="EB" class="rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVsbgsKj35U6PMwgQmtJ1BkXRe4_OQ6LhcHyfRzzq_7rkIGBXSElr6BbWxauMXTT7Am_nk6xxLaSErvCPxvvgKGRNB2Js3U14kNNcoH_JayYTaM69I-2rRG-0_BLm_Ypfx9NkeQ5MISh2a8r09W_GwgRTDe9jXZW_UTcemtLSy_7aLXX5v2WajzdhksJty40g4GyRMJAbH8WS_YQ1xQmfH7ji2_eAGdA2URm8h7e7GwTnjXjK16C4dWzVY_BxbXnxYXtH_rTemOH0" />
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-medium truncate text-gray-700 dark:text-gray-400">Lead Product Designer</p>
+                                <p class="text-[10px] text-amber-600 font-medium uppercase">Counter-offer received</p>
+                            </div>
+                            <button class="text-brand-500 dark:text-gray-500 text-xs font-semibold">VIEW</button>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-xs font-medium truncate text-gray-700 dark:text-gray-400">Lead Product Designer</p>
-                            <p class="text-[10px] text-amber-600 font-medium uppercase">Counter-offer received</p>
+                        <button class="w-full py-2.5 text-sm font-medium border-2 border-brand-500 dark:border-gray-600 hover:border-brand-500/10 text-brand-500 dark:text-gray-400 rounded-xl hover:bg-brand-500 hover:text-white transition-all">
+                            View All Negotiations (1)
+                        </button>
+                    {% else %}
+                        <div
+                            class="relative overflow-hidden rounded-2xl
+                                bg-white/70 dark:bg-[#121826]/70
+                                backdrop-blur-md
+                                border border-slate-200/60 dark:border-slate-700/60
+                                px-6 py-8 text-center"
+                        >
+
+                            <!-- Ambient Glow -->
+                            <div class="pointer-events-none absolute inset-0">
+                                <div
+                                    class="absolute inset-x-8 top-1/2 h-28
+                                        bg-gradient-to-r
+                                        from-brand-500/10 via-indigo-500/10 to-purple-500/10
+                                        blur-3xl">
+                                </div>
+                            </div>
+
+                            <!-- Icon Cluster -->
+                            <div class="relative mx-auto mb-5 flex size-16 items-center justify-center">
+
+                                <div
+                                    class="absolute inset-0 rounded-full blur-xl
+                                        bg-brand-200 dark:bg-brand-900/30">
+                                </div>
+
+                                <div
+                                    class="relative flex size-12 items-center justify-center
+                                        rounded-xl bg-white dark:bg-[#1a202c]
+                                        border border-slate-100 dark:border-slate-700
+                                        shadow-md">
+
+                                    <span
+                                        class="material-symbols-outlined text-xl
+                                            text-brand-500 dark:text-white">
+                                        forum
+                                    </span>
+
+                                </div>
+                            </div>
+
+                            <!-- Text -->
+                            <h4
+                                class="text-sm font-semibold text-slate-900 dark:text-white">
+                                No negotiations yet
+                            </h4>
+
+                            <p
+                                class="mt-1 text-xs leading-relaxed
+                                    text-slate-500 dark:text-slate-400
+                                    max-w-xs mx-auto">
+
+                                When applicants start discussing terms or counter-offers,
+                                they’ll appear here in real time.
+                            </p>
+
                         </div>
-                        <button class="text-brand-500 dark:text-gray-500 text-xs font-semibold">VIEW</button>
-                    </div>
-                    <button class="w-full py-2.5 text-sm font-medium border-2 border-brand-500 dark:border-gray-600 hover:border-brand-500/10 text-brand-500 dark:text-gray-400 rounded-xl hover:bg-brand-500 hover:text-white transition-all">
-                        View All Negotiations (1)
-                    </button>
+                    {% endif %}
                 </div>
             </div>
             <!-- Participants List -->
             <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <h4 class="font-medium text-gray-800 dark:text-gray-300">Project Team</h4>
-                    <span class="text-xs text-gray-500">3/5 Slots</span>
+                    <!-- <span class="text-xs text-gray-500">3/5 Slots</span> -->
                 </div>
                 <div class="flex flex-col gap-4">
                     <div class="flex items-center gap-3">
@@ -409,24 +664,39 @@
                             <p class="text-[11px] text-gray-500">Creator</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" data-alt="Team Member 2">
-                            <img alt="EB" class="rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWvJ9-VDZhe2C1TEfH0qN6hfpy5-bk57-5A-51Aa94LeO7CgEdWsvoqny2OztAtsIb3wgQzbTMwQ7yW4w8eCzH2QCXCrjA1bQKoYcpgoCHi__Odk3fx1-yQwTL5v254i7FueQDCo1iR5-U12TzBoDNXybf7c2yS1YWOHCnpTnr0dtHFI-bcjcEh1ejCg0S9khy3K7aRUzp3U0HoVOcPeEAeP3Mep3jhRP5hvbgVhEqpg2ducHQUMR3l1LbUXm4PzPeFJKz_2DW_qE" />
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium leading-none text-gray-700 dark:text-gray-400">Elena Belova</p>
-                            <p class="text-[11px] text-gray-500">Contractor • Lead Designer</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 opacity-50">
-                        <div class="size-10 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-sm text-slate-400">person_add</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium leading-none italic text-gray-700 dark:text-gray-400">Open Role</p>
-                            <p class="text-[11px] text-gray-500">no professional</p>
-                        </div>
-                    </div>
+                    {% with applications=gig.required_roles.applications.all|slice:":5" %}
+                        {% if applications %}
+                            {% for application in applications %}
+                                <div class="flex items-center gap-3">
+                                    <div class="size-10 rounded-full border-2 border-white dark:border-slate-800 shadow-sm" data-alt="Team Member 2">
+                                        {% if application.user.profile.avatar_url %}
+                                            <img alt="YOU" class="rounded-full w-full h-full object-cover" src="{{ application.user.profile.avatar_url.url }}" />
+                                        {% else %}
+                                            <span alt="YOU" 
+                                                class="flex rounded-full bg-white dark:bg-[#1a202c] overflow-hidden
+                                                    text-2xl font-semibold text-brand-500 justify-center">
+                                                {{ application.user.first_name|slice:":1"|upper }}{{ application.user.last_name|slice:":1"|upper }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium leading-none text-gray-700 dark:text-gray-400">{{ application.user.full_name|title }}</p>
+                                        <p class="text-[11px] text-gray-500">{{ application.user.profile.industry.name|truncatewords:4 }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="flex items-center gap-3 opacity-50">
+                                <div class="size-10 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-sm text-slate-400">person_add</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium leading-none italic text-gray-700 dark:text-gray-400">Open Role</p>
+                                    <p class="text-[11px] text-gray-500">no applications yet</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
                 </div>
             </div>
         </div>

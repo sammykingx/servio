@@ -18,7 +18,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
     
     template_name = Collabs.LIST_COLLABORATIONS
     context_object_name = "gigs"
-    paginate_by = 12
+    paginate_by = 16
 
     def get_queryset(self):
         """
@@ -92,14 +92,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         - Standard requests fall back to the default ListView rendering
         """
         if self.request.headers.get("HX-Request"):
-            status = self.request.GET.get("project_status")
-            htmx_response = (
-                "collaborations/partials/_project-list-wrapper.html"
-                if status else
-                "collaborations/partials/_gig-cards.html"
-            )
-            # print(context.get("page_obj").next_page_number)
-            # htmx_response = "collaborations/partials/_project-list-wrapper.html"
+            htmx_response = "collaborations/partials/_gig-cards.html"
             
             return render(self.request, htmx_response, context)
         

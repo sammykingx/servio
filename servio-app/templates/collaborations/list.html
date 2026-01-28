@@ -27,28 +27,138 @@
             
             <!-- Project Status Tabs -->
             <div class="flex overflow-x-auto pb-2 lg:pb-0 gap-6 no-scrollbar">
-                <a class="group flex items-center gap-2 border-b-2 border-brand-500 dark:border-gray-100 pb-3 px-1 cursor-pointer" href="#">
-                    <span class="text-brand-500  dark:text-gray-200 text-sm font-semibold whitespace-nowrap">All Gigs</span>
-                    <span class="flex items-center justify-center bg-brand-500/10 dark:bg-gray-600 text-brand-500 dark:text-gray-300 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.total }}</span>
-                </a>
-                <a class="group flex items-center gap-2 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 pb-3 px-1 cursor-pointer transition-colors" 
-                    href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}?project_status=pending"
-                >
-                    <span class="text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 text-sm font-semibold whitespace-nowrap">Pending</span>
-                    <span class="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.pending }}</span>
-                </a>
-                <a class="group flex items-center gap-2 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 pb-3 px-1 cursor-pointer transition-colors" href="#">
-                    <span class="text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 text-sm font-semibold whitespace-nowrap">Published</span>
-                    <span class="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.published }}</span>
-                </a>
-                <a class="group flex items-center gap-2 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 pb-3 px-1 cursor-pointer transition-colors" href="#">
-                    <span class="text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 text-sm font-semibold whitespace-nowrap">In Progress</span>
-                    <span class="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.in_progress }}</span>
-                </a>
-                <a class="group flex items-center gap-2 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 pb-3 px-1 cursor-pointer transition-colors" href="#">
-                    <span class="text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200 text-sm font-semibold whitespace-nowrap">Completed</span>
-                    <span class="flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">{{ gig_status_counts.completed }}</span>
-                </a>
+                {% with active_tab=request.GET.project_status %}
+                    <a
+                        href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}"
+                        class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if not active_tab %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        "
+                    >
+                        <span class="{% if not active_tab %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                            All Gigs
+                        </span>
+                        <span class="flex items-center justify-center
+                            {% if not active_tab %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                            {{ gig_status_counts.total }}
+                        </span>
+                    </a>
+
+                    <a
+                        href="{% if gig_status_counts.pending %}?project_status=pending{% else %}#{% endif %}"
+                        class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'pending' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        "
+                    >
+                        <span class="{% if active_tab == 'pending' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                            Pending
+                        </span>
+                        <span class="flex items-center justify-center
+                            {% if active_tab == 'pending' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                            {{ gig_status_counts.pending }}
+                        </span>
+                    </a>
+
+                    <a
+                        href="{% if gig_status_counts.published %}?project_status=published{% else %}#{% endif %}"
+                        class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'published' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        "
+                    >
+                        <span class="{% if active_tab == 'published' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                            Published
+                        </span>
+                        <span class="flex items-center justify-center
+                            {% if active_tab == 'published' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                            {{ gig_status_counts.published }}
+                        </span>
+                    </a>
+
+                    <a
+                        href="{% if gig_status_counts.in_progress %}?project_status=in_progress{% else %}#{% endif %}"
+                        class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'in_progress' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        "
+                    >
+                        <span class="{% if active_tab == 'in_progress' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                            In Progress
+                        </span>
+                        <span class="flex items-center justify-center
+                            {% if active_tab == 'in_progress' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                            {{ gig_status_counts.in_progress }}
+                        </span>
+                    </a>
+
+                    <a
+                        href="{% if gig_status_counts.completed %}?project_status=completed{% else %}#{% endif %}"
+                        class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'completed' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        "
+                    >
+                        <span class="{% if active_tab == 'completed' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                            Completed
+                        </span>
+                        <span class="flex items-center justify-center
+                            {% if active_tab == 'completed' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                            {{ gig_status_counts.completed }}
+                        </span>
+                    </a>
+
+                {% endwith %}
             </div>
 
             <!-- Project Filters -->
@@ -80,7 +190,6 @@
     </div>
 
     <div id="project-list-wrapper">
-
         <!-- Grid Layout -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-4">
             {% include "collaborations/partials/_gig-cards.html" %}
@@ -95,10 +204,10 @@
             data-status="{{ request.GET.project_status|default:'' }}"
             class="flex justify-center my-4"
         >
-        
+            {% if page_obj.has_next %}
             <button
                 id="load-more-btn"
-                hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}"
+                hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}{% if request.GET.status %}?status={{ request.GET.status }}&{% endif %}"
                 hx-vals='{"page": {{ page_obj.next_page_number }}, "project_status": "{{ request.GET.project_status|default:"" }}"}'
                 hx-target="#gig-list"
                 hx-swap="beforeend"
@@ -107,7 +216,7 @@
                 <span>Show more gigs</span>
                 <span class="material-symbols-outlined text-[16px]">expand_more</span>
             </button>
-        
+            {% endif %}
         </div>
     </div>
 </div>
@@ -125,11 +234,7 @@
         const totalPages = parseInt(container.dataset.totalPages);
         const status = container.dataset.status || "";
 
-        console.log(`BEFORE INCREASE: Currentpage Number: ${currentPage}, Staus: ${status}`);
-
         currentPage += 1;
-
-        console.log(`AFTER INCREASE: Currentpage Number: ${currentPage}, Staus: ${status}`);
 
         container.dataset.currentPage = currentPage;
         

@@ -129,11 +129,11 @@ class Gig(models.Model):
     def total_role_budget(self):
         """
             Returns the total budget allocated to all roles in this gig.
-            Efficiently sums the 'budget * quantity' for all related roles in the database.
+            Efficiently sums the 'budget * slots' for all related roles in the database.
         """
         from django.db.models import F, Sum
         result = self.required_roles.aggregate(
-            total=Sum(F('budget') * F('quantity'))
+            total=Sum(F('budget') * F('slots'))
         )
         return result['total'] or 0
 
