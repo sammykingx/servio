@@ -1,0 +1,12 @@
+3. Allow document upload for project briefs and materials
+4. The payment plan
+5. Applications & Proposals
+6. payments
+7. project milestones
+8. provider on-boarding flow (pending -> not important)
+9. milestone forworkmode type if it's resultbased, full time based
+- payment plan is 50, 30, 20,
+
+public_html/
+    static/
+    media/

@@ -20,4 +20,5 @@ dependencies = [
     "python-decouple>=3.8",
     "uuid6>=2025.0.1",
     "werkzeug>=3.1.4",
+    "whitenoise>=6.11.0",
 ]
