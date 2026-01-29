@@ -42,7 +42,7 @@ class Gig(models.Model):
     """
     id = models.UUIDField(primary_key=True, editable=False, default=uuid7)
     slug = models.SlugField(
-        max_length=580,
+        max_length=230,
         unique=True,
         editable=False,
         db_index=True
@@ -101,7 +101,7 @@ class Gig(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            base = slugify(self.title)[:250]
+            base = slugify(self.title)[:220]
             self.slug = f"{base}-{uuid7().hex[:12]}"
         super().save(*args, **kwargs)
     

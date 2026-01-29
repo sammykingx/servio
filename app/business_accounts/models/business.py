@@ -41,7 +41,7 @@ class BusinessAccount(models.Model):
     business_email = models.EmailField()
     business_phone = models.CharField(max_length=30)
     industry = models.CharField(max_length=70, null=True)
-    niche = models.CharField(blank=True, null=True)
+    niche = models.CharField(blank=True, null=True, max_length=70)
     bio = models.TextField(blank=True)
     logo_url = models.ImageField(
         upload_to="businesses/logos", null=True, blank=True

@@ -65,6 +65,7 @@ class UserProfile(models.Model):
     role = models.CharField(
         choices=UserRole.choices,
         default=UserRole.MEMBERS,
+        max_length=30,
     )
 
     class Meta:
