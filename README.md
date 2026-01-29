@@ -65,10 +65,10 @@ Servio is structured as a **modular Django monolith** — logically separated in
 
 | Phase         | Features                                      | Status            |
 |---------------|-----------------------------------------------|-------------------|
-| MVP 1         | Core accounts, services, offers               | ✅ In Progress    |
-| MVP 2         | Booking flow, payment integration             | 🔄 Planned        |
+| MVP 1         | Core accounts, projects, Escrow, offers               | ✅ In Progress    |
+| MVP 2         | Booking flow, services integration             | 🔄 Planned        |
 | MVP 3         | Reviews, notifications, chat                  | 🔄 Planned        |
-| MVP 4         | Provider dashboard & analytics                | 🔄 Planned        |
+| MVP 4         | Business Mode & analytics                | 🔄 Planned        |
 
 
 ---
@@ -146,10 +146,16 @@ pip install -r requirements.txt
 ### Environment Setup
 Create a `.env` file in the root directory
 ```
-DEBUG=True
+ENVIRONMENT="development" | "production"
 SECRET_KEY=your-secret-key
-DATABASE_URL=postgres://username:password@localhost:5432/servio
-ALLOWED_HOSTS=127.0.0.1,localhost
+
+ALLOWED_HOSTS="127.0.0.1, localhost"
+
+# DB CONFIGURATIONS
+DB_NAME=""
+DB_USER=""
+DB_PASSWORD=""
+DB_HOST=""
 
 # EMAIL SETTINGS
 EMAIL_BACKEND=""
@@ -175,11 +181,17 @@ npm install tailwindcss @tailwindcss/cli
 
 - Generate output
 ```
-# dev output
-npm run watch:css
+# app dev output
+npm run dev:app
 
 # prod output
-npm run build:css
+npm run build:app
+
+# landing page dev output
+npm run dev:landing
+
+# prod output
+npm run build:landing
 ```
 
 ## 🧱 Contributing

@@ -105,7 +105,6 @@ class Gig(models.Model):
             self.slug = f"{base}-{uuid7().hex[:12]}"
         super().save(*args, **kwargs)
     
-    # not used yet
     def is_active(self):
         """
             Returns True if the gig is published and still ongoing.
@@ -117,7 +116,6 @@ class Gig(models.Model):
             return (self.end_date - self.start_date).days
         return None
     
-    # not used yet
     def role_count(self):
         """
             Returns the number of roles associated with this gig.
@@ -125,7 +123,6 @@ class Gig(models.Model):
         """
         return getattr(self, 'roles', self.required_roles).count()
     
-    # not used yet
     def total_role_budget(self):
         """
             Returns the total budget allocated to all roles in this gig.
