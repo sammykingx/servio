@@ -32,12 +32,13 @@ handler404 = "core.views.custom_404"
 handler500 = "core.views.custom_500"
 
 urlpatterns = [
-    path(
-        "",
-        RedirectView.as_view(
-            url=reverse_lazy(AuthURLNames.LOGIN), permanent=True
-        ),
-    ),
+    path("", TemplateView.as_view(template_name="index.html"), name="landing-page"),
+    # path(
+    #     "",
+    #     RedirectView.as_view(
+    #         url=reverse_lazy(AuthURLNames.LOGIN), permanent=True
+    #     ),
+    # ),
     # path("admin/", admin.site.urls),
     # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
@@ -45,21 +46,21 @@ urlpatterns = [
     path("collaboration/", include(collaboration.urls)),
     path("notifications/", include(notifications.urls)),
     path("payments/", include(payments.urls)),
-    path(
-        "client/",
-        TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
-        name="user-dashboard",
-    ),
-    path(
-        "reviews/",
-        TemplateView.as_view(template_name=Reviews.BUSINESS_REVIEWS),
-        name=ReviewURLS.OVERVIEW
-    ),
-    path("kyc", TemplateView.as_view(template_name="account/kyc.html"), name="kyc-view"),
-    path("kyc-1", TemplateView.as_view(template_name="account/biz-kyc.html"), name="biz-director-view"),
-    path("kyc-2", TemplateView.as_view(template_name="account/kyc-2.html"), name="biz-doc-view"),
-    path("kyc-3", TemplateView.as_view(template_name="account/kyc-3.html"), name="kyc-3-view"),
-    path("kyc-4", TemplateView.as_view(template_name="account/kyc-4.html"), name="kyc-4-view"),
+    # path(
+    #     "client/",
+    #     TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
+    #     name="user-dashboard",
+    # ),
+    # path(
+    #     "reviews/",
+    #     TemplateView.as_view(template_name=Reviews.BUSINESS_REVIEWS),
+    #     name=ReviewURLS.OVERVIEW
+    # ),
+    # path("kyc", TemplateView.as_view(template_name="account/kyc.html"), name="kyc-view"),
+    # path("kyc-1", TemplateView.as_view(template_name="account/biz-kyc.html"), name="biz-director-view"),
+    # path("kyc-2", TemplateView.as_view(template_name="account/kyc-2.html"), name="biz-doc-view"),
+    # path("kyc-3", TemplateView.as_view(template_name="account/kyc-3.html"), name="kyc-3-view"),
+    # path("kyc-4", TemplateView.as_view(template_name="account/kyc-4.html"), name="kyc-4-view"),
 ]
 
 from django.conf import settings

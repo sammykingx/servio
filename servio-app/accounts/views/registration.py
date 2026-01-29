@@ -1,5 +1,5 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.views.generic import CreateView
@@ -24,6 +24,15 @@ class CustomSignup(CreateView):
     template_name = Accounts.Auth.SIGNUP
     form_class = UserSignupForm
     success_url = reverse_lazy(AuthURLNames.EMAIL_VERIFICATION_SENT)
+    
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Redirect authenticated users to their account dashboard
+        to prevent double signup/login.
+        """
+        if request.user.is_authenticated:
+            return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form: UserSignupForm) -> HttpResponse:
         """

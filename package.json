@@ -4,7 +4,9 @@
     "tailwindcss": "^4.1.14"
   },
   "scripts": {
-    "dev": "npx @tailwindcss/cli -i ./servio-app/static/css/input.css -o ./servio-app/static/css/output.css --watch",
-    "build": "npx @tailwindcss/cli -i ./servio-app/static/css/input.css -o ./servio-app/static/css/output.css --minify"
+    "dev:app": "npx @tailwindcss/cli -i ./servio-app/static/css/input.css -o ./servio-app/static/css/output.css --watch",
+    "dev:landing": "npx @tailwindcss/cli -i ./servio-app/static/css/landing-page.css -o ./servio-app/static/css/landing-page-style.css --watch",
+    "build:app": "npx @tailwindcss/cli -i ./servio-app/static/css/input.css -o ./servio-app/static/css/output.css --minify",
+    "build:landing": "npx @tailwindcss/cli -i ./servio-app/static/css/landing-page.css -o ./servio-app/static/css/landing-page.css --minify"
   }
 }

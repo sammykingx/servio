@@ -244,6 +244,13 @@
 			const toast = JSON.parse(el.textContent);
 			showToast(toast.message, toast.type, toast.title);
 		})
+		window.addEventListener("online", () => {
+			showToast("Internet connection is back ✅", "success", "Connection Restored");
+		});
+
+		window.addEventListener("offline", () => {
+			showToast("Internet connection lost ❌", "error", "Connection Lost");
+		});
 	</script>
 
 	{% block custom_page_js %}{% endblock %}

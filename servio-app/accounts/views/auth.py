@@ -21,7 +21,7 @@ class CustomSignin(LoginView):
 
     def form_invalid(self, form) -> HttpResponse:
         errors = form.errors.as_json()
-        print(errors)
+        
         response = super().form_invalid(form)
         return response
 
