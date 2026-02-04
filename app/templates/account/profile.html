@@ -97,6 +97,7 @@
           Socials
         </button> -->
         <button
+            @click="showToast('Social profiles can be updated/modified on the full release.', 'info', 'Demo Environment')"
           class="inline-flex items-center gap-2 px-4 py-2 rounded-full
                  border border-slate-200/80 dark:border-slate-700
                  bg-white/70 dark:bg-[#1a202c]
@@ -126,6 +127,7 @@
           Edit Profile
         </button> -->
         <button
+          @click="showToast('Account information is currently read-only.', 'info', 'Demo Environment')"
           class="inline-flex items-center gap-2 px-5 py-2 rounded-full
                  bg-brand-500 text-white font-medium
                  shadow-[0_8px_24px_rgba(79,70,229,0.35)]
@@ -165,7 +167,7 @@
 				</p>
 			</div>
 			<button
-				@click="$store.modals.open('personal-info')"
+				@click="showToast('Personal details is currently read-only.', 'info', 'Demo Environment')"
 				class="inline-flex items-center gap-2 px-4 py-2 rounded-full
 				text-sm font-medium text-brand-500 dark:text-brand-400
 				hover:bg-brand-50 dark:hover:bg-brand-500/10 transition">
@@ -302,7 +304,7 @@
 				</p>
 			</div>
 			<button
-				@click="showToast('update address information from account seetings', 'info', 'Account Settings')"
+				@click="showToast('Address updates are available on the full release.', 'info', 'Demo Environment')"
 				class="inline-flex items-center gap-2 px-4 py-2 rounded-full
 				text-sm font-medium text-brand-500 dark:text-brand-400
 				hover:bg-brand-50 dark:hover:bg-brand-500/10 transition">

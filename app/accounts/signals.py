@@ -6,7 +6,10 @@ from django.dispatch import receiver
 from .models.profile import UserProfile
 from notifications.models.notification_channels import NotificationChannels
 from django.conf import settings
+import logging
 
+
+logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_profile(sender, instance, created, **kwargs):
@@ -15,9 +18,10 @@ def create_profile(sender, instance, created, **kwargs):
             with transaction.atomic():
                 UserProfile.objects.create(user=instance)
                 NotificationChannels.objects.create(user=instance)
+                
         except Exception as e:
             # log for prod, print for dev or short term
-            print(e)
+            logger.error(f"Error creating profile or notification channels for user {instance.id}: {e}")
             # raise
             
 

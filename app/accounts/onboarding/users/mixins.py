@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from ..manager import resolve_onboarding_manager
 
 class OnboardingStepMixin:
-    view_step = None
+    view_step = 0
 
     def dispatch(self, request, *args, **kwargs):
         manager = resolve_onboarding_manager(request.user)

@@ -4,6 +4,7 @@ Django base settings for servio project.
 
 from pathlib import Path
 from decouple import config
+from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -86,12 +87,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-
+STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+
+if config("ENVIRONMENT") == "production":
+    DOCUMENT_ROOT = Path(config("DOCUMENT_ROOT"))
+    STATIC_ROOT = DOCUMENT_ROOT / "static"
+    MEDIA_ROOT = DOCUMENT_ROOT / "media"
+else:
+    STATIC_ROOT = BASE_DIR / "staticfiles"
+    MEDIA_ROOT = BASE_DIR / "media"
+    
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
 # Default primary key field type

@@ -1,0 +1,180 @@
+[2026-02-03 23:15:48,667] ERROR django.request:253 Internal Server Error: /accounts/upload/profile-picture/
+Traceback (most recent call last):
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 46, in post
+    self.save_profile_img(profile, uploaded_file)
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 61, in save_profile_img
+    profile.save()
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1132, in _save_table
+    (getattr(self, f.attname) if raw else f.pre_save(self, False)),
+                                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 338, in pre_save
+    file.save(file.name, file.file, save=False)
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 99, in save
+    self.name = self.storage.save(name, content, max_length=self.field.max_length)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/base.py", line 49, in save
+    name = self._save(name, content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/filesystem.py", line 100, in _save
+    os.makedirs(directory, exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+PermissionError: [Errno 13] Permission denied: '/home/divgmcom'
+[2026-02-03 23:15:48,667] ERROR django.request:253 Internal Server Error: /accounts/upload/profile-picture/
+Traceback (most recent call last):
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 46, in post
+    self.save_profile_img(profile, uploaded_file)
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 61, in save_profile_img
+    profile.save()
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1132, in _save_table
+    (getattr(self, f.attname) if raw else f.pre_save(self, False)),
+                                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 338, in pre_save
+    file.save(file.name, file.file, save=False)
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 99, in save
+    self.name = self.storage.save(name, content, max_length=self.field.max_length)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/base.py", line 49, in save
+    name = self._save(name, content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/filesystem.py", line 100, in _save
+    os.makedirs(directory, exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+PermissionError: [Errno 13] Permission denied: '/home/divgmcom'
+[2026-02-03 23:15:48,705] ERROR django.server:213 "POST /accounts/upload/profile-picture/ HTTP/1.1" 500 139305
+[2026-02-03 23:15:48,705] ERROR django.server:213 "POST /accounts/upload/profile-picture/ HTTP/1.1" 500 139305
+[2026-02-03 23:20:57,927] ERROR django.request:253 Internal Server Error: /accounts/upload/profile-picture/
+Traceback (most recent call last):
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 46, in post
+    self.save_profile_img(profile, uploaded_file)
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 61, in save_profile_img
+    profile.save()
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1132, in _save_table
+    (getattr(self, f.attname) if raw else f.pre_save(self, False)),
+                                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 338, in pre_save
+    file.save(file.name, file.file, save=False)
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 99, in save
+    self.name = self.storage.save(name, content, max_length=self.field.max_length)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/base.py", line 49, in save
+    name = self._save(name, content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/filesystem.py", line 100, in _save
+    os.makedirs(directory, exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+PermissionError: [Errno 13] Permission denied: '/home/divgmcom'
+[2026-02-03 23:20:57,927] ERROR django.request:253 Internal Server Error: /accounts/upload/profile-picture/
+Traceback (most recent call last):
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 46, in post
+    self.save_profile_img(profile, uploaded_file)
+  File "/home/sammykingx/projects/servio/app/accounts/views/account_updates.py", line 61, in save_profile_img
+    profile.save()
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 1132, in _save_table
+    (getattr(self, f.attname) if raw else f.pre_save(self, False)),
+                                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 338, in pre_save
+    file.save(file.name, file.file, save=False)
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 99, in save
+    self.name = self.storage.save(name, content, max_length=self.field.max_length)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/base.py", line 49, in save
+    name = self._save(name, content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sammykingx/projects/servio/.venv/lib/python3.12/site-packages/django/core/files/storage/filesystem.py", line 100, in _save
+    os.makedirs(directory, exist_ok=True)
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 215, in makedirs
+  File "<frozen os>", line 225, in makedirs
+PermissionError: [Errno 13] Permission denied: '/home/divgmcom'
+[2026-02-03 23:20:57,931] ERROR django.server:213 "POST /accounts/upload/profile-picture/ HTTP/1.1" 500 139305
+[2026-02-03 23:20:57,931] ERROR django.server:213 "POST /accounts/upload/profile-picture/ HTTP/1.1" 500 139305

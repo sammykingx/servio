@@ -57,12 +57,33 @@ def create_taxonomy_context() -> List[Dict[str, str | List]]:
 
 class CreateCollaborationView(LoginRequiredMixin, View):
     """
-    Docstring for CreateCollaborationView
+    Handles the creation of collaboration gigs/projects.
+
+    This view supports rendering the collaboration creation page and
+    processing gig creation requests submitted via JSON payloads.
+
+    Responsibilities:
+    - Renders the gig creation form with required taxonomy and payment data.
+    - Accepts and validates JSON payloads for creating gigs.
+    - Persists gig and associated role data atomically.
+    - Handles draft and publish workflows based on the requested action.
+    - Returns structured JSON responses for success and error cases.
+
+    Access is restricted to authenticated users.
     """
 
     http_method_names = ["get", "post"]
 
     def get(self, request) -> HttpResponse:
+        """
+        Render the collaboration creation page.
+
+        Provides the frontend with taxonomy data and available payment
+        options required to construct the gig creation form.
+
+        Returns:
+            HttpResponse: Rendered HTML page for creating a collaboration.
+        """
         context = {
             "gig_taxonomy": create_taxonomy_context(),
             "payment_options": json.dumps(PAYMENT_OPTIONS),
@@ -70,6 +91,22 @@ class CreateCollaborationView(LoginRequiredMixin, View):
         return render(request, Collabs.CREATE, context)
 
     def post(self, request) -> JsonResponse:
+        """
+        Handle gig creation requests submitted as JSON.
+
+        Expects a JSON payload describing the gig details, roles, and
+        requested action (e.g., draft or publish). The payload is validated
+        using a Pydantic schema before being persisted.
+
+        Error Handling:
+        - Returns 400 for invalid JSON payloads.
+        - Returns 400 for validation errors or missing required fields.
+        - Returns 400 for database integrity or operational errors.
+
+        Returns:
+            JsonResponse: A structured response describing the outcome
+            of the gig creation process.
+        """
         try:
             payload = json.loads(request.body)
             gig_data = CreateGigRequest(**payload)
@@ -116,6 +153,29 @@ class CreateCollaborationView(LoginRequiredMixin, View):
         # return JsonResponse({"message": "all good"})
 
     def save_gig_data(self, payload: GigPayload, action: CreateGigStates) -> Model:
+        """
+            Persist gig and associated role data atomically.
+
+            Creates a Gig record and, if provided, aggregates and creates
+            related GigRole records. All database operations are wrapped in
+            a transaction to ensure consistency.
+
+            Role entries with the same niche and professional are aggregated
+            by summing their slot counts before persistence.
+
+            Args:
+                payload (GigPayload): Validated gig and role data.
+                action (CreateGigStates): Determines whether the gig is saved
+                    as a draft or submitted for publishing.
+
+            Raises:
+                IntegrityError: If invalid categories are selected or a data
+                    conflict occurs during persistence.
+                OperationalError: If a database-level error prevents saving.
+
+            Returns:
+                Model: The created Gig instance.
+        """
         try:
             with transaction.atomic():
                 gig = GigModel.objects.create(
@@ -129,7 +189,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
                     is_negotiable=payload.isNegotiable,
                     has_gig_roles=True if payload.roles else False,
                     status=(
-                        GigStatus.PENDING
+                        GigStatus.PUBLISHED
                         if action == CreateGigStates.PUBLISH
                         else GigStatus.DRAFT
                     ),
@@ -188,10 +248,73 @@ class CreateCollaborationView(LoginRequiredMixin, View):
 
 
 class EditGigView(LoginRequiredMixin, View):
+    """
+    Handles editing of an existing Gig/Project owned by the authenticated user.
+
+    This class-based view supports both rendering the gig edit interface (GET)
+    and processing gig updates submitted as JSON (POST). Only gigs/projects created by
+    the currently authenticated user can be accessed or modified.
+
+    High-level behavior:
+    --------------------
+    - Restricts access to authenticated users only.
+    - Ensures the gig belongs to the requesting user.
+    - Allows editing only when the gig is in DRAFT or PENDING status.
+    - Performs all updates inside a database transaction to prevent race
+      conditions and partial writes.
+    - Supports full gig/project updates, including:
+        * Core gig/project fields (title, description, dates, budget, visibility)
+        * Associated gig/project roles (create, update, aggregate, delete)
+    - Prevents destructive changes (e.g., deleting roles) when active
+      applications exist.
+
+    GET request flow:
+    -----------------
+    - Fetches the gig and its related roles, niches, and applications using
+      optimized querysets.
+    - Serializes gig roles into a JSON-compatible payload for frontend usage.
+    - Provides taxonomy and payment metadata required by the edit UI.
+    - Redirects to the collaboration list if the gig does not exist or is
+      inaccessible.
+
+    POST request flow:
+    ------------------
+    - Expects a JSON payload describing the updated gig state.
+    - Validates the payload using a Pydantic schema.
+    - Delegates update logic to `update_gig_data`, which performs:
+        * Row-level locking
+        * Validation
+        * Role aggregation and upsert logic
+    - Returns structured JSON responses for success and all error cases.
+
+    Error handling:
+    ---------------
+    - Gracefully redirects on missing gigs or permission issues.
+    - Returns JSON error responses for:
+        * Invalid JSON payloads
+        * Validation failures
+        * Business-rule violations
+        * Database integrity or operational errors
+
+    This view is designed to be safe, transactional, and frontend-friendly,
+    making it suitable for asynchronous editing workflows.
+    """
     allowed_http_methods = ["GET", "POST"]
     template_name = Collabs.EDIT
 
     def get_queryset(self):
+        """
+        Returns a queryset of gigs owned by the current user with all required
+        related data eagerly loaded.
+
+        Optimizations:
+        - Selects the gig creator using `select_related`
+        - Prefetches required roles
+        - Prefetches role applications and their associated users
+
+        This queryset is used consistently across GET and POST requests to enforce
+        ownership and reduce database queries.
+        """
         return (
             GigModel.objects.filter(creator=self.request.user)
             .select_related("creator")
@@ -211,12 +334,35 @@ class EditGigView(LoginRequiredMixin, View):
         )
 
     def dispatch(self, request, *args, **kwargs):
+        """
+        Wraps the standard dispatch method to gracefully handle 404 errors.
+
+        If a Http404 is raised during request processing (e.g., gig not found),
+        the user is redirected to the collaborations list instead of seeing
+        a default error page.
+        """
         try:
             return super().dispatch(request, *args, **kwargs)
         except Http404:
             return redirect(CollaborationURLS.LIST_COLLABORATIONS)
 
     def get(self, request, slug) -> HttpResponse:
+        """
+        Renders the gig edit page.
+
+        Fetches the specified gig and its associated roles, then prepares a
+        serialized JSON payload consumed by the frontend editing interface.
+
+        Context includes:
+        - The gig instance
+        - Serialized gig roles
+        - Taxonomy metadata
+        - Payment option labels
+        - Editable gig statuses
+
+        Redirects to the collaboration list if the gig does not exist or does
+        not belong to the current user.
+        """
         try:
             gig = self.get_queryset().get(slug=slug)
             roles = gig.required_roles.all().order_by("-created_at")
@@ -252,6 +398,19 @@ class EditGigView(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
+        """
+        Processes updates to an existing gig.
+
+        Expects a JSON request body matching the `GigPayload` schema. The payload
+        is validated and then passed to `update_gig_data` for transactional
+        persistence.
+
+        Returns:
+        - 200 JSON response on successful update
+        - 400 for invalid JSON or validation errors
+        - Custom error responses for business-rule violations
+        - Redirects if the gig does not exist or is inaccessible
+        """
         gig_slug = kwargs.get("slug")
         try:
             gig = self.get_queryset().get(slug=gig_slug)
@@ -300,6 +459,33 @@ class EditGigView(LoginRequiredMixin, View):
         )
     
     def update_gig_data(self, gig_slug, payload: GigPayload) -> Model:
+        """
+            Applies validated gig updates inside a database transaction.
+
+            Responsibilities:
+            -----------------
+            - Locks the gig row using `select_for_update` to prevent concurrent edits
+            - Verifies the gig is editable based on its current status
+            - Updates core gig fields
+            - Handles role synchronization:
+                * Aggregates duplicate roles into slot counts
+                * Creates new roles
+                * Updates existing roles
+                * Deletes removed roles when safe
+            - Prevents deletion of roles with active applications
+            - Ensures all category references are valid
+
+            All changes are atomic: if any step fails, the transaction is rolled back.
+
+            Raises:
+            -------
+            - IntegrityError for data conflicts or invalid operations
+            - OperationalError for database-level failures
+
+            Returns:
+            --------
+            The updated Gig instance on success.
+        """
         try:
             with transaction.atomic():
                 # ---------------------------------

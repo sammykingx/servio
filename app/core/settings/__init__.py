@@ -15,6 +15,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = (
     DJANGO_MIDDLEWARE + THIRD_PARTY_MIDDLEWARES + LOCAL_MIDDLEWARES
 )
+
 # Used by default session engine
 # SESSION_ENGINE = "django.contrib.sessions.backends.db"
 

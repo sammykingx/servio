@@ -148,7 +148,7 @@ Create a `.env` file in the root directory
 ```
 ENVIRONMENT="development" | "production"
 SECRET_KEY=your-secret-key
-
+DOCUMENT_ROOT=""
 ALLOWED_HOSTS="127.0.0.1, localhost"
 
 # DB CONFIGURATIONS

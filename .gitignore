@@ -17,9 +17,10 @@ node_modules/
 # backup files
 bkp*
 *.bkp
-servio-app/*.txt
+app/*.txt
 
 # django files
 *.sqlite3
-servio-app/media/*
-servio-app/staticfiles/*
+app/media/*
+app/staticfiles/*
+app/**/migrations/
