@@ -1,9 +1,11 @@
 from django.views import View
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from accounts.models.socials import Platform
 from accounts.models.address import AddressType
 from collections import namedtuple
+from template_map.accounts import Accounts
 
 
 ValidationResult = namedtuple("ValidationResult", ["verified", "msg"])
@@ -150,7 +152,18 @@ class UpdateAddressView(LoginRequiredMixin, View):
 
 
 class UpdatePersonalInfoView(LoginRequiredMixin, View):
-    http_method_names = ["post"]
+    http_method_names = ["get", "post"]
+    template_name = Accounts.ACCOUNT_EDIT_PROFILE
+    
+    def get(self, request, *args, **kwargs):
+        profile = request.user.profile
+        return render(request, self.template_name, {"profile": profile})
+        # return JsonResponse({
+        #     "profile": {
+        #         "mobile_num": profile.mobile_num,
+        #         "alt_mobile_num": profile.alt_mobile_num,
+        #     }
+        # })
 
     def post(self, request, *args, **kwargs) -> JsonResponse:
         profile = request.user.profile
