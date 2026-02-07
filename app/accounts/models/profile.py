@@ -55,6 +55,12 @@ class UserProfile(models.Model):
         help_text="Professional bio shown on public profile",
     )
     
+    headline = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Short headline shown on public profile",
+    )
+    
     avatar_url = models.ImageField(
         upload_to="avatars/", null=True, blank=True
     )
@@ -68,5 +74,18 @@ class UserProfile(models.Model):
         max_length=30,
     )
 
+
     class Meta:
         db_table = "user_profiles"
+        
+    
+    @property
+    def social_links(self):
+        return {
+            link.platform: link.url
+            for link in self.user.social_links.all()
+        }
+        
+    @property
+    def home_address(self):
+        return self.user.addresses.filter(label="home").first()

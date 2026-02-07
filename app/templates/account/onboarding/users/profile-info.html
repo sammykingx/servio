@@ -66,51 +66,6 @@
     </div>
 
     <!-- Avatar uploader -->
-    <!-- <div class="relative flex flex-col items-center mb-14 group/uploader">
-        <div class="relative cursor-pointer">
-            <div class="size-32 rounded-full overflow-hidden
-                       bg-gradient-to-br from-slate-100 to-slate-200
-                       dark:from-slate-800 dark:to-slate-700
-                       border-4 border-white dark:border-gray-700
-                       shadow-md
-                       transition-all duration-300
-                       ">
-                <div class="absolute inset-0 bg-cover bg-center group-hover/uploader:scale-[1.02]
-                       group-hover/uploader:border-brand-500/30 rounded-full" style='background-image:url("/static/images/user/user-01.jpg");'>
-                </div>
-
-                <!-- <div
-                    class="absolute inset-0 bg-black/40
-                           flex items-center justify-center rounded-full
-                           opacity-0 group-hover/uploader:opacity-100
-                           transition-opacity"
-                >
-                    <span class="material-symbols-outlined text-white text-3xl">
-                        upload_file
-                    </span>
-                </div> --
-            </div>
-
-            <div class="absolute bottom-1 right-1
-                       bg-white dark:bg-gray-700
-                       rounded-full p-2
-                       border border-gray-200 dark:border-gray-600
-                       shadow-md text-brand-500">
-                <span class="material-symbols-outlined text-[18px]">edit</span>
-            </div>
-        </div>
-
-        <div class="mt-4 text-center">
-            <button type="button" class="text-brand-500 font-semibold text-sm
-                       hover:text-brand-500-hover hover:underline">
-                Upload photo
-            </button>
-            <p class="text-xs text-gray-600 mt-1">
-                JPG or PNG · Max 2MB
-            </p>
-        </div>
-    </div> -->
-	<!--New avatar uploader-->
 	<div
 		x-data="avatarUploader()"
 		class="relative flex flex-col items-center mb-14 group/uploader"
@@ -626,15 +581,14 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            // ✅ Client-side validation
             const allowedTypes = ["image/png", "image/jpeg"];
             if (!allowedTypes.includes(file.type)) {
                 showToast("Only JPG or PNG images are allowed", "warning", "Invalid File type");
                 return;
             }
 
-            if (file.size > 2 * 1024 * 1024) {
-                showToast("Image must be less than 2MB", "warning", "File too large");
+            if (file.size > 5 * 1024 * 1024) {
+                showToast("Image must be less than 5MB", "warning", "File too large");
                 return;
             }
 

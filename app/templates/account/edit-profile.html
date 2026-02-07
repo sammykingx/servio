@@ -2,160 +2,691 @@
 {% load static %}
 {% load custom_filters %}
 {% block browser_title %}User Profile{% endblock %}
-{% block custom_page_css %}
-<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-{% endblock %}
 {% block content %}
 
 <!-- Main Content Area -->
+<div>
+    <div class="flex flex-col md:flex-row md:items-center
+        md:justify-between gap-6 py-6">
+        <!-- Title Area -->
+        <div class="max-w-2xl">
+            <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight
+                    text-slate-900 dark:text-white">
+                Edit Profile
+            </h2>
 
-<div class="max-w-4xl mx-auto space-y-8">
-    <!-- Page Heading -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div class="space-y-1">
-            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Profile Settings</h1>
-            <p class="text-slate-500 dark:text-slate-400">Manage your identity, security settings, and professional credentials.</p>
+            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Manage your professional identity and presence.
+            </p>
         </div>
-        <div class="flex gap-3">
-            <button class="px-5 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center gap-2">
-                <span class="material-symbols-outlined !text-lg">download</span> Export Data
-            </button>
-            <button class="px-5 py-2 rounded-lg bg-brand-500 text-white text-sm font-semibold hover:bg-brand-500/90 transition-all shadow-lg shadow-brand-500/20">
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3 w-full md:w-auto">
+
+            <button class="flex-1 md:flex-none px-6 py-3 rounded-xl
+               bg-gradient-to-br from-brand-500 to-indigo-600
+               text-white text-sm font-semibold
+               shadow-lg shadow-brand-500/25
+               hover:shadow-xl hover:shadow-brand-500/40
+               transition-all">
+
                 Save Changes
             </button>
+
         </div>
+
     </div>
 
-    <!-- Profile Header Card -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500/40 via-brand-500 to-brand-500/40"></div>
-        <div class="flex flex-col sm:flex-row items-center gap-8">
-            <div class="relative group">
-                <div class="size-32 rounded-full overflow-hidden border-4 border-slate-50 dark:border-slate-800 ring-1 ring-slate-200 dark:ring-slate-700 shadow-xl">
-                    <img alt="Profile Large" class="w-full h-full object-cover" data-alt="Jonathan Sterling profile portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE22IDFM30lIcEsFqVaIE4XGGKKt6M1FWM30E3PBEWMHA_JBcAthNQ_t9vMv-bB-FizVCUj8PyuWWFLpcY3Ijff7GaenGlB46xesml1gxDQFgg7Uui5VNjLd_cCovGwOoU0EANCOxvfw4A44hWy2ersGEG8VFBnAPMV4FGQilzdKCs-LsR4Ar8VYbzwtd0lsuBbpWxHPMVXvxUinchWPNFAjaFziUzdFN41yUOecq1kvPiu8jKyebHm1jkCzZpvmOjm-CtK2ehuN4" />
-                </div>
-                <button class="absolute bottom-0 right-0 size-9 rounded-full bg-brand-500 text-white flex items-center justify-center border-4 border-white dark:border-slate-900 hover:scale-105 transition-transform">
-                    <span class="material-symbols-outlined !text-lg">photo_camera</span>
-                </button>
-            </div>
-            <div class="flex-1 text-center sm:text-left">
-                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-1">
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Jonathan Sterling</h2>
-                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
-                        <span class="material-symbols-outlined !text-sm">verified</span> Verified
-                    </span>
-                </div>
-                <p class="text-slate-500 dark:text-slate-400 font-medium">Senior Business Consultant &amp; Managing Director</p>
-                <div class="flex flex-wrap justify-center sm:justify-start gap-4 mt-4 text-xs font-medium text-slate-400">
-                    <span class="flex items-center gap-1.5"><span class="material-symbols-outlined !text-base">location_on</span> New York, USA</span>
-                    <span class="flex items-center gap-1.5"><span class="material-symbols-outlined !text-base">calendar_today</span> Joined Sept 2022</span>
-                    <span class="flex items-center gap-1.5"><span class="material-symbols-outlined !text-base">lock</span> Bank-grade security active</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Details Sections -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Personal Information -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
-            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span class="material-symbols-outlined text-brand-500">person</span> Personal Details
-                </h3>
-                <button class="text-brand-500 dark:text-slate-300 text-sm font-bold hover:underline">Edit</button>
-            </div>
-            <div class="p-6 space-y-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">First Name</label>
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Jonathan</p>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Last Name</label>
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Sterling</p>
-                    </div>
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
-                    <div class="flex items-center gap-2">
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">j.sterling@servio.io</p>
-                        <span class="material-symbols-outlined !text-base text-emerald-500" title="Email Verified">check_circle</span>
-                    </div>
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Phone Number</label>
-                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">+1 (555) 234-8901</p>
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date of Birth</label>
-                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">May 12, 1985</p>
-                </div>
-            </div>
-        </div>
-        <!-- Address Information -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
-            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span class="material-symbols-outlined text-brand-500">map</span> Office Address
-                </h3>
-                <button class="text-brand-500 dark:text-slate-300 text-sm font-bold hover:underline">Edit</button>
-            </div>
-            <div class="p-6 space-y-6">
-                <div class="space-y-1">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Street Address</label>
-                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">721 Business Plaza, Ste 402</p>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">City</label>
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Manhattan</p>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">State / Province</label>
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">NY</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ZIP / Postal Code</label>
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">10012</p>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Country</label>
-                        <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">United States</p>
-                    </div>
-                </div>
-                <div class="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                    <div class="w-full h-24 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
-                        <div class="absolute inset-0 opacity-40 mix-blend-multiply dark:mix-blend-overlay">
-                            <!-- Map Placeholder Visualization -->
-                            <div class="w-full h-full bg-[radial-gradient(circle,rgba(0,0,0,0.1)_1px,transparent_1px)] [background-size:12px_12px]" data-location="Manhattan, New York" style="background-image: url('/static/images/user/user-01.jpg');"></div>
-                        </div>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase bg-white/90 dark:bg-slate-900/90 px-2 py-1 rounded shadow-sm">Map Preview Protected</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Security Alert Section -->
-    <div class="bg-brand-500/5 dark:bg-brand-500/10 border border-brand-500/20 rounded-2xl p-6 flex items-start gap-4">
-        <div class="p-3 rounded-xl bg-white dark:bg-slate-800 text-brand-500 shadow-sm border border-brand-500/10">
-            <span class="material-symbols-outlined">shield_lock</span>
-        </div>
-        <div class="flex-1">
-            <h4 class="font-bold text-slate-900 dark:text-white mb-1">Two-Factor Authentication is Enabled</h4>
-            <p class="text-sm text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-                Your account is currently protected with a secondary authentication layer. Last verification was performed today from a recognized device in New York, USA.
-            </p>
-            <div class="flex gap-4 mt-4">
-                <button class="text-xs font-bold text-brand-500 dark:text-slate-300 hover:underline">Manage 2FA Devices</button>
-                <button class="text-xs font-bold text-slate-500 dark:text-slate-400 hover:underline">View Login History</button>
-            </div>
-        </div>
-    </div>
 </div>
+<form id="profile-update-form" action="{% url AUTH_URLS.UPDATE_PROFILE_INFO %}" method="POST">
+    {% csrf_token %}
+    
+    <div class="grid grid-cols-1 gap-8">
+        <div class="relative p-8 sm:p-10 rounded-2xl
+               border border-slate-200/60 dark:border-slate-800
+               backdrop-blur-xl">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-10">
+                <div class="relative shrink-0 flex flex-col items-center md:items-start w-full md:w-auto">
+    
+                    <!-- Glow -->
+                    <div class="absolute -inset-3 rounded-full
+                            bg-gradient-to-br from-brand-500/25 to-indigo-500/20 blur-2xl">
+                    </div>
+    
+                    <!-- Avatar -->
+                    {% if user.profile.avatar_url %}
+                        <!-- IMAGE -->
+                        <img
+                            src="{{ user.profile.avatar_url.url }}"
+                            alt="{{ user.get_full_name }}"
+                            class="relative size-32 sm:size-36 rounded-full object-cover
+                                ring-4 ring-white dark:ring-slate-900
+                                shadow-xl"
+                        />
+    
+                        {% else %}
+                        <!-- INITIALS FALLBACK -->
+                        <div
+                            class="relative size-30 sm:size-36 rounded-full
+                                bg-gradient-to-br from-brand-500 to-indigo-600
+                                flex items-center justify-center
+                                ring-2 ring-white dark:ring-slate-900
+                                shadow-xl"
+                        >
+    
+                            <span
+                                class="text-white font-semibold text-3xl tracking-wide uppercase"
+                            >
+                                {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                            </span>
+                        </div>
+                        {% endif %}
+    
+                    <!-- Edit -->
+                    <div x-data="avatarUpload()">
+                        <input
+                            type="file"
+                            x-ref="file"
+                            name="profile_image"
+                            multiple="false"
+                            accept="image/jpeg,image/png"
+                            hidden
+                            @change="upload" 
+                        />
+                        <button 
+                            type="button"
+                            @click="$refs.file.click()"
+                            class="absolute bottom-2 right-[calc(50%-72px)] md:right-2
+                                size-8 rounded-full bg-gray-100
+                                text-white flex items-center justify-center
+                                ring-2 ring-white shadow-lg hover:scale-110 transition"
+                            >
+                            <span class="material-symbols-outlined text-gray-600">edit</span>
+                        </button>
+                    </div>
+                </div>
+    
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                    <div>
+                        <label for="full-name" class="text-gray-800 dark:text-gray-100">Full Name</label>
+                        <input
+                            class="mt-2 w-full rounded-xl
+                                border border-slate-200 dark:border-slate-700
+                                bg-gray-50 dark:bg-slate-900/70
+                                px-4 py-3 text-sm text-gray-600 dark:text-gray-300
+                                placeholder:text-slate-400
+                                focus:outline-none
+                                focus:ring-2 focus:ring-brand-500/40
+                                focus:border-brand-500/60
+                                transition cursor-not-allowed"
+                            id="full-name"
+                            disabled
+                            type="text" value="{{ user.full_name|title }}" />
+                    </div>
+                    <div>
+                        <label for="headline" class="text-gray-800 dark:text-gray-100">Professional Headline</label>
+                        <input
+                            id="headline"
+                            name="headline"
+                            type="text"
+                            value="{{ user.profile.headline }}"
+                            placeholder="e.g. Senior Brand Designer"
+                            class="mt-2 w-full rounded-xl
+                                border border-slate-200 dark:border-slate-700
+                                bg-white/70 dark:bg-slate-900/70
+                                px-4 py-3 text-sm text-slate-600 dark:text-slate-300
+                                placeholder:text-slate-400
+                                outline-none
+                                focus:border-brand-500
+                                dark:focus:border-brand-400
+                                focus:ring-1 focus:ring-brand-500/40
+                                dark:focus:ring-brand-400/40
+                                transition-colors duration-150"
+                        />
+                    </div>
+                    <div>
+                        <label for="mobileNumber" class="text-gray-800 dark:text-gray-100">Mobile Number</label>
+                        <input
+                            class="mt-2 w-full rounded-xl
+                                border border-slate-200 dark:border-slate-700
+                                px-4 py-3 text-sm text-gray-600 dark:text-gray-300
+                                placeholder:text-slate-400
+                                bg-white/70 dark:bg-slate-900/70
+                                outline-none focus:border-brand-500
+                                dark:focus:border-brand-400
+                                focus:ring-1 focus:ring-brand-500/40
+                                dark:focus:ring-brand-400/40
+                                transition-colors duration-150"
+                            id="mobileNumber"
+                            type="tel"
+                            placeholder="e.g. +1 (555) 123-4567"
+                            value="{{ user.profile.mobile_num|default:''|format_mobile_number }}"
+                        />
+                        <span class="text-xs text-gray-600">provide your country code on all mobile numbers</span>
+                    </div>
+                    <div>
+                        <label for="altNumber" class="text-gray-800 dark:text-gray-100">Alt. Mobile Number</label>
+                        <input
+                            id="altNumber"
+                            name="alternate_number"
+                            type="tel"
+                            value="{{ user.profile.alt_mobile_num|default:''|format_mobile_number }}"
+                            placeholder="e.g. +1 (555) 123-4567"
+                            class="mt-2 w-full rounded-xl
+                                border border-slate-200 dark:border-slate-700
+                                bg-white/70 dark:bg-slate-900/70
+                                px-4 py-3 text-sm text-slate-600 dark:text-slate-300
+                                placeholder:text-slate-400
+                                outline-none
+                                focus:border-brand-500
+                                dark:focus:border-brand-400
+                                focus:ring-1 focus:ring-brand-500/40
+                                dark:focus:ring-brand-400/40
+                                transition-colors duration-150"
+                        />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="bio" class="text-gray-800 dark:text-gray-100">Bio / Professional Summary</label>
+                        <textarea
+                            id="bio"
+                            rows="8"
+                            name="bio"
+                            placeholder="Describe your professional journey and expertise..."
+                            class="mt-2 w-full rounded-xl
+                                border border-slate-200 dark:border-slate-700
+                                bg-white/70 dark:bg-slate-900/70
+                                px-4 py-3 text-sm text-slate-600 dark:text-slate-300
+                                resize-none
+                                outline-none
+                                focus:border-brand-500
+                                dark:focus:border-brand-400
+                                focus:ring-1 focus:ring-brand-500/40
+                                dark:focus:ring-brand-400/40
+                                transition-colors duration-150"
+                            >{{ user.profile.bio }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-8 rounded-xl custom-shadow border border-[#cdcdea] dark:border-[#2d2d4d] space-y-6">
+                <h3 class="flex items-center gap-3 text-lg font-medium tracking-tight">
+                    <span class="size-9 rounded-lg bg-rose-50
+                        text-rose-500 dark:text-gray-300 dark:bg-gray-800
+                        flex items-center justify-center
+                        shadow-inner">
+                        <span class="material-symbols-outlined text-[18px]">public</span>
+                    </span>
+    
+                    <span class="text-slate-900 dark:text-white">
+                        Social Profiles
+                    </span>
+                </h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs font-medium tracking-wide text-slate-500">
+                            LinkedIn URL
+                        </label>
+    
+                        <div class="relative group">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2
+                                text-slate-400 group-focus-within:text-brand-500 dark:group-focus-within:text-gray-300 transition">
+                                link
+                            </span>
+                            <input
+                                type="url"
+                                value="{{ user.profile.social_links.linkedin|default:'' }}"
+                                name="linkedin_url"
+                                placeholder="linkedin.com/in/username"
+                                class="w-full pl-11 pr-4 py-3 rounded-xl
+                                    border border-slate-200 dark:border-slate-700
+                                    bg-white/70 dark:bg-slate-900/70
+                                    text-sm text-slate-700 dark:text-slate-300
+                                    placeholder:text-slate-400
+                                    outline-none
+                                    focus:border-brand-500
+                                    dark:focus:border-brand-400
+                                    focus:ring-1 focus:ring-brand-500/40
+                                    dark:focus:ring-brand-400/40
+                                    transition-all duration-200
+                                    hover:border-slate-300 dark:hover:border-slate-600"
+                            />
+    
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium tracking-wide text-slate-500">
+                            Twitter/ X URL
+                        </label>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2
+                                text-slate-400 group-focus-within:text-brand-500 transition">
+                                link
+                            </span>
+                            <input
+                                type="url"
+                                value="{{ user.profile.social_links.twitter|default:'' }}"
+                                placeholder="x.com/username"
+                                name="twitter_url"
+                                class="w-full pl-11 pr-4 py-3 rounded-xl
+                                    border border-slate-200 dark:border-slate-700
+                                    bg-white/70 dark:bg-slate-900/70
+                                    text-sm text-slate-700 dark:text-slate-300
+                                    placeholder:text-slate-400
+                                    outline-none
+                                    focus:border-brand-500
+                                    dark:focus:border-brand-400
+                                    focus:ring-1 focus:ring-brand-500/40
+                                    dark:focus:ring-brand-400/40
+                                    transition-all duration-200
+                                    hover:border-slate-300 dark:hover:border-slate-600"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium tracking-wide text-slate-500">
+                            Facebook URL
+                        </label>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2
+                                text-slate-400 group-focus-within:text-brand-500 transition">
+                                link
+                            </span>
+                            <input
+                                type="url"
+                                name="facebook_url"
+                                value="{{ user.profile.social_links.facebook|default:'' }}"
+                                placeholder="facebook.com/username"
+                                class="w-full pl-11 pr-4 py-3 rounded-xl
+                                    border border-slate-200 dark:border-slate-700
+                                    bg-white/70 dark:bg-slate-900/70
+                                    text-sm text-slate-700 dark:text-slate-300
+                                    placeholder:text-slate-400
+                                    outline-none
+                                    focus:border-brand-500
+                                    dark:focus:border-brand-400
+                                    focus:ring-1 focus:ring-brand-500/40
+                                    dark:focus:ring-brand-400/40
+                                    transition-all duration-200
+                                    hover:border-slate-300 dark:hover:border-slate-600"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium tracking-wide text-slate-500">
+                            Instagram URL
+                        </label>
+                        <div class="relative group">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2
+                                text-slate-400 group-focus-within:text-brand-500 transition">
+                                link
+                            </span>
+                            <input
+                                type="url"
+                                name="instagram_url"
+                                value="{{ user.profile.social_links.instagram|default:'' }}"
+                                placeholder="instagram.com/username"
+                                class="w-full pl-11 pr-4 py-3 rounded-xl
+                                    border border-slate-200 dark:border-slate-700
+                                    bg-white/70 dark:bg-slate-900/70
+                                    text-sm text-slate-700 dark:text-slate-300
+                                    placeholder:text-slate-400
+                                    outline-none
+                                    focus:border-brand-500
+                                    dark:focus:border-brand-400
+                                    focus:ring-1 focus:ring-brand-500/40
+                                    dark:focus:ring-brand-400/40
+                                    transition-all duration-200
+                                    hover:border-slate-300 dark:hover:border-slate-600"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-8 rounded-xl custom-shadow border border-[#cdcdea] dark:border-[#2d2d4d] space-y-6">
+                <h3 class="flex items-center gap-3 text-lg font-medium tracking-tight">
+                    <span class="size-9 rounded-lg bg-green-50
+                        text-green-500 dark:text-gray-300 dark:bg-gray-800
+                        flex items-center justify-center
+                        shadow-inner">
+                        <span class="material-symbols-outlined text-[18px]">add_home_work</span>
+                    </span>
+    
+                    <span class="text-slate-900 dark:text-white">
+                        Address &amp; Contact Info
+                    </span>
+                </h3>
+                <div class="relative space-y-5">
+                    <!-- street -->
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-medium tracking-wide text-slate-500">
+                            Street Address
+                        </label>
+    
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2
+                                text-slate-400 group-focus-within:text-brand-500 transition">
+                                home_pin
+                            </span>
+                            <input
+                                type="text"
+                                name="street"
+                                value="{{ user.profile.home_address.street|default:'N/A' }}"
+                                placeholder="Street name and number"
+                                class="w-full pl-11 pr-4 py-3 rounded-xl
+                                    border border-slate-200 dark:border-slate-700
+                                    bg-white/70 dark:bg-slate-900/70
+                                    text-sm text-slate-700 dark:text-slate-300
+                                    placeholder:text-slate-400
+                                    outline-none
+                                    focus:border-brand-500
+                                    dark:focus:border-brand-400
+                                    focus:ring-1 focus:ring-brand-500/40
+                                    dark:focus:ring-brand-400/40
+                                    transition-all duration-200"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Street Line 2 -->
+                    <div class="space-y-1.5 group">
+                        <label class="text-xs font-medium tracking-wide text-slate-500">
+                            Steet Address Line 2 <span class="text-slate-400 italic">(optional)</span>
+                        </label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2
+                                text-slate-400 group-focus-within:text-brand-500 transition">
+                                person_pin_circle
+                            </span>
+                            <input
+                                type="text"
+                                name="street_line_2"
+                                value="{{ user.profile.home_address.street_line_2|default:'N/A' }}"
+                                placeholder="Apartment, suite, etc."
+                                class="w-full pl-11 pr-4 py-3 rounded-xl
+                                    border border-slate-200 dark:border-slate-700
+                                    bg-white/70 dark:bg-slate-900/70
+                                    text-sm text-slate-700 dark:text-slate-300
+                                    placeholder:text-slate-400
+                                    outline-none
+                                    focus:border-brand-500
+                                    dark:focus:border-brand-400
+                                    focus:ring-1 focus:ring-brand-500/40
+                                    dark:focus:ring-brand-400/40
+                                    transition-all duration-200"
+                            />
+                        </div>
+                    </div>
+    
+                    <!-- city + state -->
+                    <div class="grid grid-cols-2 gap-5">
+    
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-medium tracking-wide text-slate-500">
+                                City
+                            </label>
+                            <div class="relative">
+                                <!-- Icon -->
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+                                    location_city
+                                </span>
+    
+                                <!-- Input -->
+                                <input
+                                    type="text"
+                                    name="city"
+                                    value="{{ user.profile.home_address.city|default:'San Francisco' }}"
+                                    placeholder="City"
+                                    class="w-full pl-11 pr-4 py-3 rounded-xl
+                                        border border-slate-200 dark:border-slate-700
+                                        bg-white/70 dark:bg-slate-900/70
+                                        text-sm text-slate-700 dark:text-slate-300
+                                        placeholder:text-slate-400
+                                        outline-none
+                                        focus:border-brand-500
+                                        dark:focus:border-brand-400
+                                        focus:ring-1 focus:ring-brand-500/40
+                                        dark:focus:ring-brand-400/40
+                                        transition-all duration-200"
+                                />
+                            </div>
+                        </div>
+    
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-medium tracking-wide text-slate-500">
+                                State / Province
+                            </label>
+    
+                            <div class="relative">
+                                <!-- Icon -->
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+                                    map
+                                </span>
+    
+                                <!-- Input -->
+                                <input
+                                    type="text"
+                                    name="province"
+                                    value="{{ user.profile.home_address.province|default:'California' }}"
+                                    placeholder="State / Province"
+                                    class="w-full pl-11 pr-4 py-3 rounded-xl
+                                        border border-slate-200 dark:border-slate-700
+                                        bg-white/70 dark:bg-slate-900/70
+                                        text-sm text-slate-700 dark:text-slate-300
+                                        placeholder:text-slate-400
+                                        outline-none
+                                        focus:border-brand-500
+                                        dark:focus:border-brand-400
+                                        focus:ring-1 focus:ring-brand-500/40
+                                        dark:focus:ring-brand-400/40
+                                        transition-all duration-200"
+                                />
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                    <!-- postal + country -->
+                    <div class="grid grid-cols-2 gap-5">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-medium tracking-wide text-slate-500">
+                                Postal Code
+                            </label>
+                            <div class="relative">
+                                <!-- Icon -->
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+                                    mail
+                                </span>
+    
+                                <!-- Input -->
+                                <input
+                                    type="text"
+                                    name="postal_code"
+                                    value="{{ user.profile.home_address.postal_code|default:'94103'|upper }}"
+                                    placeholder="ZIP/Postal"
+                                    class="w-full pl-11 pr-4 py-3 rounded-xl
+                                        border border-slate-200 dark:border-slate-700
+                                        bg-white/70 dark:bg-slate-900/70
+                                        text-sm text-slate-700 dark:text-slate-300
+                                        placeholder:text-slate-400
+                                        outline-none
+                                        focus:border-brand-500
+                                        dark:focus:border-brand-400
+                                        focus:ring-1 focus:ring-brand-500/40
+                                        dark:focus:ring-brand-400/40
+                                        transition-all duration-200"
+                                />
+                            </div>
+                        </div>
+    
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-medium tracking-wide text-slate-500">
+                                Country
+                            </label>
+                            <div class="relative">
+                                <!-- Icon -->
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
+                                    public
+                                </span>
+    
+                                <!-- Input -->
+                                <input
+                                    type="text"
+                                    name="country"
+                                    value="{{ user.profile.home_address.country|default:'USA' }}"
+                                    placeholder="Country"
+                                    class="w-full pl-11 pr-4 py-3 rounded-xl
+                                        border border-slate-200 dark:border-slate-700
+                                        bg-white/70 dark:bg-slate-900/70
+                                        text-sm text-slate-700 dark:text-slate-300
+                                        placeholder:text-slate-400
+                                        outline-none
+                                        focus:border-brand-500
+                                        dark:focus:border-brand-400
+                                        focus:ring-1 focus:ring-brand-500/40
+                                        dark:focus:ring-brand-400/40
+                                        transition-all duration-200"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end items-center gap-4 pt-4 border-t border-[#cdcdea] dark:border-[#2d2d4d]">
+            <span class="text-xs text-[#4645a1] dark:text-gray-400">Last saved: 2 minutes ago</span>
+            <button type="submit" class="px-8 py-3 rounded-xl bg-brand-500 text-white font-medium hover:shadow-xl hover:shadow-brand-500/25 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">save</span>
+                Save All Changes
+            </button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+{% block custom_page_js %}
+<script>
+	function avatarUpload() {
+        return {
+            async upload() {
+                const file = this.$refs.file.files[0];
+
+                if (!file) return;
+
+                const allowedTypes = ["image/png", "image/jpeg"];
+
+                if (!allowedTypes.includes(file.type)) {
+                    showToast("Only PNG and JPEG images allowed", "warning", "Invalid file type");
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+                    showToast("Image must be less than 5MB", "warning", "File too large");
+                    return;
+                }
+
+                const form = new FormData();
+                form.append("profile_image", file);
+
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                try {
+                    const response = await fetch("{% url AUTH_URLS.UPLOAD_PROFILE_PICTURE %}", {
+                        method: "POST",
+                        headers: {
+                        "X-CSRFToken": csrftoken,
+                        },
+                        body: form,
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        showToast(data.error || "Upload failed", "error");
+                        return;
+                    }
+                    showToast("Profile photo updated successfully, image will be updated shortly", "success", "Image Uploaded");
+                } catch (errorr) {
+                    showToast("An error occurred during profile upload", "error", "Profile upload error");
+                    return;
+                }
+            }
+        }
+    }
+</script>
+<script>
+    const form = document.getElementById("profile-update-form");
+    const submitBtn = form.querySelector("button[type='submit']");
+    let isSubmitting = false;
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (isSubmitting) return;
+
+
+        const csrftoken = document.querySelector(
+            "[name=csrfmiddlewaretoken]"
+        ).value;
+
+        const payload = {
+            profile: {
+                headline: form.headline.value,
+                bio: form.bio.value,
+                mobile_number: form.mobileNumber?.value || "",
+                alternate_number: form.alternate_number.value,
+            },
+            social_links: {
+                linkedin_url: form.linkedin_url.value,
+                twitter_url: form.twitter_url.value,
+                facebook_url: form.facebook_url.value,
+                instagram_url: form.instagram_url.value,
+            },
+
+            address: {
+                street: form.street.value,
+                street_line_2: form.street_line_2.value,
+                city: form.city.value,
+                province: form.province.value,
+                postal_code: form.postal_code.value,
+                country: form.country.value,
+            },
+        };
+
+        try {
+            isSubmitting = true;
+            submitBtn.disabled = true;
+
+            submitBtn.classList.add("opacity-60", "cursor-not-allowed");
+            submitBtn.innerText = "Saving...";
+
+
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showToast(data.error || "Failed to save profile", "error", "Profile Update Failed");
+                return;
+            }
+
+            showToast(data.message || "Profile updated successfully", "success", "Profile Updated");
+
+        } catch (err) {
+            console.error(err);
+            showToast("Network error", "error");
+        } finally {
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove("opacity-60", "cursor-not-allowed");
+            submitBtn.innerText = "Save changes";
+        }
+    });
+</script>
+
 {% endblock %}

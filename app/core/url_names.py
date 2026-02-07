@@ -37,6 +37,7 @@ class AuthURLNames:
 
     # ACCOUNT UPDATES
     UPDATE_SOCIAL_LINKS = "update_social_links"
+    UPDATE_PERSONAL_INFO = "update_personal_info"
     UPDATE_PROFILE_INFO = "update_profile_info"
     UPDATE_ADDRESS_INFO = "update_address_info"
     UPLOAD_PROFILE_PICTURE = "upload_profile_picture"

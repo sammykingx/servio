@@ -109,8 +109,13 @@ urlpatterns = [
         name=AuthURLNames.UPDATE_SOCIAL_LINKS,
     ),
     path(
-        "update/profile-info/",
+        "update/personal-info/",
         account_updates.UpdatePersonalInfoView.as_view(),
+        name=AuthURLNames.UPDATE_PERSONAL_INFO,
+    ),
+    path(
+        "update/profile-info/",
+        account_updates.UpdateUserProfileView.as_view(),
         name=AuthURLNames.UPDATE_PROFILE_INFO,
     ),
     path(

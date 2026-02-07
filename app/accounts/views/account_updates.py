@@ -4,12 +4,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from accounts.models.socials import Platform
 from accounts.models.address import AddressType
+from accounts.validators import UserProfileUpdatePayload, UserAddressUpdatePayload
 from collections import namedtuple
 from template_map.accounts import Accounts
+from pydantic import ValidationError
+import json
 
 
 ValidationResult = namedtuple("ValidationResult", ["verified", "msg"])
-
+MAX_PROFILE_IMAGE_SIZE = 5 * 1024 * 1024
+ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 class UpdateSocialLinksView(LoginRequiredMixin, View):
     http_method_names = ["post"]
@@ -40,9 +44,23 @@ class UpdateProfilePictureView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         profile = request.user.profile
         uploaded_file = request.FILES.get("profile_image")
+        
+        print(uploaded_file.name, uploaded_file.size, uploaded_file.content_type)
 
         if not uploaded_file:
             return JsonResponse({"error": "No file uploaded"}, status=400)
+        
+        if uploaded_file.size > MAX_PROFILE_IMAGE_SIZE:
+            return JsonResponse(
+                {"error": "File size exceeds limits"},
+                status=400,
+            )
+
+        if uploaded_file.content_type not in ALLOWED_IMAGE_TYPES:
+            return JsonResponse(
+                {"error": "Unsupported media type"},
+                status=400,
+            )
 
         uploaded_file.name = self.build_filename(profile, uploaded_file.name)
         self.save_profile_img(profile, uploaded_file)
@@ -152,24 +170,11 @@ class UpdateAddressView(LoginRequiredMixin, View):
 
 
 class UpdatePersonalInfoView(LoginRequiredMixin, View):
-    http_method_names = ["get", "post"]
-    template_name = Accounts.ACCOUNT_EDIT_PROFILE
-    
-    def get(self, request, *args, **kwargs):
-        profile = request.user.profile
-        return render(request, self.template_name, {"profile": profile})
-        # return JsonResponse({
-        #     "profile": {
-        #         "mobile_num": profile.mobile_num,
-        #         "alt_mobile_num": profile.alt_mobile_num,
-        #     }
-        # })
+    http_method_names = ["post"]
 
     def post(self, request, *args, **kwargs) -> JsonResponse:
         profile = request.user.profile
-
-        allowed_fields = ["mobile_num", "alt_mobile_num"]
-
+        allowed_fields = ["bio", "mobile_num", "alt_mobile_num", "headline"]
         updated_fields = {}
 
         for field in allowed_fields:
@@ -178,12 +183,90 @@ class UpdatePersonalInfoView(LoginRequiredMixin, View):
             updated_fields[field] = value or ""
 
         profile.save()
-
+        
         return JsonResponse(
-            {
-                "status": "success",
-                "message": "Personal information updated successfully.",
-                "profile": updated_fields,
-            }
-        )
+                {
+                    "status": "success",
+                    "message": "Personal information updated successfully.",
+                    "profile": updated_fields,
+                }
+            )
 
+
+class UpdateUserProfileView(LoginRequiredMixin, View):
+    http_method_names = ["get", "post"]
+    template_name = Accounts.ACCOUNT_EDIT_PROFILE
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs) -> JsonResponse:
+        # This view can be used to update multiple aspects of the user's profile in one request
+        # For example, it can handle updates to personal info, social links, and address all at once
+        # The frontend can send a structured payload indicating which sections are being updated
+
+        try:
+            data = json.loads(request.body)
+            
+            profile_payload = UserProfileUpdatePayload(**data.get("profile", {}))
+            
+            address_payload = UserAddressUpdatePayload(**data.get("address", {}))
+            social_links_payload = data.get("social_links", {})
+            # print("Profile data: ", profile_payload)
+            # print("address data: ", address_payload)
+            # print("social links: ", social_links_payload)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON payload"}, status=400)
+        
+        except ValidationError as err:
+            for e in err.errors():
+                print(f"Validation error in field '{e['loc'][0]}': {e['msg']}")
+                message = f"{e['msg']}"
+                print("Error message: ", message)
+            return JsonResponse({"status": "error", "error": message}, status=400)
+        # Extract and process different sections of the profile update from the data
+        # For example:
+        # personal_info = data.get("personal_info", {})
+        # social_links = data.get("social_links", {})
+        # address_info = data.get("address_info", {})
+
+        # Then call the respective update methods for each section
+        # self.update_personal_info(request.user.profile, personal_info)
+        # self.update_social_links(request.user, social_links)
+        # self.update_address(request.user, address_info)
+
+        return JsonResponse({
+            "status": "success",
+            "message": "Profile updated successfully.",
+            # Optionally include updated profile data in the response
+        })
+        
+    def update_personal_info(self, profile, personal_info):
+        allowed_fields = ["bio", "mobile_num", "alt_mobile_num", "headline"]
+        for field in allowed_fields:
+            value = personal_info.get(field, "").strip()
+            setattr(profile, field, value)
+        profile.save()
+        
+    def update_social_links(self, user, social_links):
+        platform_map = dict(Platform.choices)
+        for platform_name, url in social_links.items():
+            if platform_name in platform_map:
+                user.social_links.update_or_create(
+                    platform=platform_name,
+                    defaults={"url": url},
+                )
+    
+    def update_address(self, user, address_info):
+        address_qs = user.addresses.filter(label=AddressType.HOME)
+        if address_qs.exists():
+            address = address_qs.first()
+            updated = self.update_fields(address, address_info)
+            
+        else:
+            address = user.addresses.model(user=user, **address_info)
+            created = True
+
+        if updated or created:
+            address.save()
