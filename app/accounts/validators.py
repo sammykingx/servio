@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Optional
 import phonenumbers, pycountry
 from phonenumbers.phonenumberutil import NumberParseException
@@ -17,26 +17,26 @@ class UserProfileUpdatePayload(BaseModel):
     mobile_number: str = Field(..., max_length=18, description="Primary mobile number")
     alternate_number: Optional[str] = Field(None, max_length=15, description="Alternative mobile number (optional)")
     
-    @field_validator("mobile_number", "alternate_number")
-    @classmethod
-    def validate_mobile_number(cls, value):
-        if value is None:
-            return value
+    # @field_validator("mobile_number", "alternate_number")
+    # @classmethod
+    # def validate_mobile_number(cls, value):
+    #     if value is None:
+    #         return value
         
-        try:
-            phone = phonenumbers.parse(value.strip(), None)
-        except NumberParseException:
-            raise ValueError("Invalid phone number format or missing country code")
+    #     try:
+    #         phone = phonenumbers.parse(value, None)
+    #     except NumberParseException:
+    #         raise ValueError("Invalid phone number format or missing country code")
 
-        if not phonenumbers.is_valid_number(phone):
-            raise ValueError("Invalid phone number")
+    #     if not phonenumbers.is_valid_number(phone):
+    #         raise ValueError("Invalid phone number")
 
-        if phonenumbers.number_type(phone) != phonenumbers.PhoneNumberType.MOBILE:
-            raise ValueError("Number must be a mobile number")
+    #     if phonenumbers.number_type(phone) != phonenumbers.PhoneNumberType.MOBILE:
+    #         raise ValueError("Number must be a mobile number")
 
-        return phonenumbers.format_number(
-            phone, phonenumbers.PhoneNumberFormat.E164
-        )
+    #     return phonenumbers.format_number(
+    #         phone, phonenumbers.PhoneNumberFormat.E164
+    #     )
         
     @field_validator("bio")
     @classmethod
@@ -56,23 +56,19 @@ class UserAddressUpdatePayload(BaseModel):
     postal_code: str = Field(..., max_length=10, description="Postal code")
 
 
-    def get_states(self, country_code):
-        subdivisions = pycountry.subdivisions.get(country_code=country_code)
-        return [s.name for s in subdivisions] if subdivisions else []
-
     @field_validator("country")
     @classmethod
     def validate_country(cls, value):
         if value is None:
             return value
         if not pycountry.countries.get(name=value) and not pycountry.countries.get(alpha_2=value):
-            raise ValueError("Invalid country")
+            raise ValueError("Hmm, we don’t recognize that country. Please double-check and try again.")
         return value
     
     @field_validator("province")
     @classmethod
     def validate_province(cls, value, values):
-        country = values.get("country")
+        country = values.data.get("country")
         if country is None:
             return value
         country_obj = pycountry.countries.get(name=country) or pycountry.countries.get(alpha_2=country)
@@ -85,7 +81,7 @@ class UserAddressUpdatePayload(BaseModel):
     @field_validator("postal_code")
     @classmethod
     def validate_postal_code(cls, value, values):
-        country = values.get("country")
+        country = values.data.get("country")
         if not country:
             return value  # cannot validate without country
         country_obj = pycountry.countries.get(name=country) or pycountry.countries.get(alpha_2=country)

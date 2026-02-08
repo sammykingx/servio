@@ -1,0 +1,2 @@
+class ProfileUpdateError(Exception):
+    pass

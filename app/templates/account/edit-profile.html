@@ -236,7 +236,7 @@
                             <input
                                 type="url"
                                 value="{{ user.profile.social_links.linkedin|default:'' }}"
-                                name="linkedin_url"
+                                name="linkedin"
                                 placeholder="linkedin.com/in/username"
                                 class="w-full pl-11 pr-4 py-3 rounded-xl
                                     border border-slate-200 dark:border-slate-700
@@ -267,7 +267,7 @@
                                 type="url"
                                 value="{{ user.profile.social_links.twitter|default:'' }}"
                                 placeholder="x.com/username"
-                                name="twitter_url"
+                                name="twitter"
                                 class="w-full pl-11 pr-4 py-3 rounded-xl
                                     border border-slate-200 dark:border-slate-700
                                     bg-white/70 dark:bg-slate-900/70
@@ -294,7 +294,7 @@
                             </span>
                             <input
                                 type="url"
-                                name="facebook_url"
+                                name="facebook"
                                 value="{{ user.profile.social_links.facebook|default:'' }}"
                                 placeholder="facebook.com/username"
                                 class="w-full pl-11 pr-4 py-3 rounded-xl
@@ -323,7 +323,7 @@
                             </span>
                             <input
                                 type="url"
-                                name="instagram_url"
+                                name="instagram"
                                 value="{{ user.profile.social_links.instagram|default:'' }}"
                                 placeholder="instagram.com/username"
                                 class="w-full pl-11 pr-4 py-3 rounded-xl
@@ -635,10 +635,10 @@
                 alternate_number: form.alternate_number.value,
             },
             social_links: {
-                linkedin_url: form.linkedin_url.value,
-                twitter_url: form.twitter_url.value,
-                facebook_url: form.facebook_url.value,
-                instagram_url: form.instagram_url.value,
+                linkedin: form.linkedin.value,
+                twitter: form.twitter.value,
+                facebook: form.facebook.value,
+                instagram: form.instagram.value,
             },
 
             address: {
@@ -671,7 +671,7 @@
             const data = await response.json();
 
             if (!response.ok) {
-                showToast(data.error || "Failed to save profile", "error", "Profile Update Failed");
+                showToast(data.message || "Failed to save profile", "error", "Profile Update Failed");
                 return;
             }
 
