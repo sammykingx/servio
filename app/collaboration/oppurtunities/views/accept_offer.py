@@ -13,6 +13,7 @@ from template_map.collaboration import Collabs
 import json
 
 
+GigCategoryModel = apps.get_model("collaboration", "GigCategory")
 GigModel = apps.get_model("collaboration","Gig")
 GigRoleModel = apps.get_model("collaboration", "GigRole")
 GigApplicationModel = apps.get_model("collaboration", "GigApplication")
@@ -37,17 +38,19 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context =super().get_context_data(**kwargs)
+        context["taxonomy_json"] = GigCategoryModel.objects.get_taxonomy_json()
         context["payment_options"] = json.dumps(PAYMENT_OPTIONS)
         context["negotiating"] = True if self.request.GET.get("negotiating") == "true" else False
         roles = self.object.required_roles.all()
-        role_payment_meta = {}
+        role_payment_plan = {}
         if roles:
             for role in roles:
+                role.can_apply = user_can_apply_for_role(self.request.user, role)
                 payment_value = role.payment_option
 
                 is_split = PaymentOption.is_split(payment_value)
 
-                role_payment_meta[role.id] = {
+                role_payment_plan[role.id] = {
                     "type": "Percentage Split" if is_split else "Full Upfront",
                     "installments": (
                         PaymentOption.installments_count(payment_value)
@@ -62,5 +65,15 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
                     "label": PaymentOption(payment_value).label,
                 }
                 
-            context["role_payment_meta"] = role_payment_meta
+            context["roles"] = roles
+            context["role_payment_plan"] = role_payment_plan
         return context
+    
+   
+
+def user_can_apply_for_role(user, role) -> bool:
+    if not user.is_authenticated:
+        return False
+
+    user_niches = set(user.profile.niches.values_list("id", flat=True))
+    return role.role_id in user_niches

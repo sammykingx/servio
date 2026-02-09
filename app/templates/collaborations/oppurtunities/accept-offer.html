@@ -90,121 +90,127 @@
                 </div>
             </section>
             <section class="flex flex-col gap-4">
-                {% if gig.required_roles.all %}
-                <div class="flex items-center justify-between">
-                    <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Select Your Roles</h3>
-                    <!-- <span class="text-xs font-semibold text-slate-400 uppercase">Multiple Selection Allowed</span> -->
-                </div>
-                <div class="grid grid-cols-1 gap-5">
-                    {% for role in gig.required_roles.all %}
-                    <label class="relative group cursor-pointer">
-                        <!-- Hidden Checkbox -->
-                        <input type="checkbox" class="peer sr-only role-checkbox" />
-                        <!-- Subtle Ambient Glow -->
-                        <div class="absolute -inset-1 rounded-2xl opacity-0 blur-2xl
-							bg-gradient-to-r from-brand-500/10 via-brand-500/5 to-transparent
-							peer-checked:opacity-100 transition duration-300">
-                        </div>
-                        <!-- Card -->
-                        <div class="relative rounded-2xl bg-white dark:bg-[#151c2a]
-							border border-slate-200/80 dark:border-slate-700/60
-							shadow-[0_2px_8px_rgba(0,0,0,0.04)]
-							hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
-							peer-checked:shadow-[0_12px_32px_rgba(0,0,0,0.10)]
-							peer-checked:border-brand-500/30
-							transition-all duration-300
-							p-6">
-                            <div class="flex flex-col gap-5 space-y-3">
-                                <!-- Top Row -->
-                                <div class="flex items-start justify-between gap-4">
-                                    <!-- Role -->
-                                    <div class="flex items-start gap-4">
-                                        <!-- Selection Indicator -->
-                                        <div class="flex size-9 shrink-0 items-center justify-center rounded-xl
-											bg-slate-100 dark:bg-slate-800
-											peer-checked:bg-brand-500
-											text-slate-400 peer-checked:text-white
-											shadow-sm transition">
-                                            <span class="material-symbols-outlined text-[18px]">
-                                                work_outline
-                                            </span>
+                {% if roles %}
+                    <div class="flex flex-col">
+                        <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Select Your Roles</h3>
+                        <span class="text-xs font-light text-slate-400 uppercase">Multiple Selection Allowed if qualified</span>
+                    </div>
+                    <div class="grid grid-cols-1 gap-5">
+                        {% for role in roles %}
+                        <label class="relative group cursor-pointer">
+                            <!-- Hidden Checkbox -->
+                            <input 
+                                type="checkbox" 
+                                class="peer sr-only role-checkbox" 
+                                data-role-id="{{ role.niche_id }}"
+                                data-can-apply="{{ role.can_apply|yesno:'true,false' }}"
+                            
+                            />
+                            <!-- Subtle Ambient Glow -->
+                            <div class="absolute -inset-1 rounded-2xl opacity-0 blur-2xl
+                                bg-gradient-to-r from-brand-500/10 via-brand-500/5 to-transparent
+                                peer-checked:opacity-100 transition duration-300">
+                            </div>
+                            <!-- Card -->
+                            <div class="relative rounded-2xl bg-white dark:bg-[#151c2a]
+                                border border-slate-200/80 dark:border-slate-700/60
+                                shadow-[0_2px_8px_rgba(0,0,0,0.04)]
+                                hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
+                                peer-checked:shadow-[0_12px_32px_rgba(0,0,0,0.10)]
+                                peer-checked:border-brand-500/30
+                                transition-all duration-300
+                                p-6">
+                                <div class="flex flex-col gap-5 space-y-3">
+                                    <!-- Top Row -->
+                                    <div class="flex items-start justify-between gap-4">
+                                        <!-- Role -->
+                                        <div class="flex items-start gap-4">
+                                            <!-- Selection Indicator -->
+                                            <div class="flex size-9 shrink-0 items-center justify-center rounded-xl
+                                                bg-slate-100 dark:bg-slate-800
+                                                peer-checked:bg-brand-500
+                                                text-slate-400 peer-checked:text-white
+                                                shadow-sm transition">
+                                                <span class="material-symbols-outlined text-[18px]">
+                                                    work_outline
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-semibold text-slate-900 dark:text-gray-200 leading-tight">
+                                                    {{ role.niche_name }}
+                                                </h4>
+                                                <p class="text-sm text-slate-500 dark:text-slate-400">
+                                                    {{ role.role_name }}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h4 class="font-semibold text-slate-900 dark:text-gray-200 leading-tight">
-                                                {{ role.niche_name }}
-                                            </h4>
-                                            <p class="text-sm text-slate-500 dark:text-slate-400">
-                                                {{ role.role_name }}
+                                    </div>
+                                    <!-- Budget Row (Always Inline) -->
+                                    <div class="grid grid-cols-2 md:grid-cols-3 items-center justify-evenly gap-4">
+                                        <!-- Budget Allocation -->
+                                        <div class="">
+                                            <p class="text-[10px] uppercase tracking-wide font-medium text-slate-400">
+                                                Budget Allocation
+                                            </p>
+                                            <p class="text-base font-normal text-slate-900 dark:text-gray-200">
+                                                ${{ role.budget|intcomma }}
                                             </p>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- Budget Row (Always Inline) -->
-                                <div class="grid grid-cols-2 md:grid-cols-3 items-center justify-evenly gap-4">
-                                    <!-- Budget Allocation -->
-                                    <div class="">
-                                        <p class="text-[10px] uppercase tracking-wide font-medium text-slate-400">
-                                            Budget Allocation
-                                        </p>
-                                        <p class="text-base font-normal text-slate-900 dark:text-gray-200">
-                                            ${{ role.budget|intcomma }}
-                                        </p>
-                                    </div>
-                                    
-                                    {% if negotiating %}
-                                    <!-- Proposed Amount -->
-                                    <div class="w-40">
-                                        <label class="text-[10px] uppercase tracking-wide
-						                    font-medium text-slate-400 block mb-1">
-                                            Proposed Amount
-                                        </label>
-                                        <div class="relative">
-                                            <span class="absolute left-3 top-1/2 
-                                                -translate-y-1/2 text-slate-400 dark:text-gray-300 font-semibold">$</span>
-                                            <input
-                                                type="text"
-                                                value="{{ role.budget|intcomma }}"
-                                                class="w-full pl-7 py-2.5
-                                                    rounded-xl bg-slate-50 dark:bg-slate-800    
-                                                    border border-slate-200 dark:border-slate-700
-                                                    text-sm font-normal text-slate-700 dark:text-gray-300
-                                                    focus:outline-none
-                                                    focus:border-brand-500
-                                                    focus:ring-0
-                                                    transition-colors duration-200"
-                                            />
+                                        
+                                        {% if negotiating %}
+                                        <!-- Proposed Amount -->
+                                        <div class="w-40">
+                                            <label class="text-[10px] uppercase tracking-wide
+                                                font-medium text-slate-400 block mb-1">
+                                                Proposed Amount
+                                            </label>
+                                            <div class="relative">
+                                                <span class="absolute left-3 top-1/2 
+                                                    -translate-y-1/2 text-slate-400 dark:text-gray-300 font-semibold">$</span>
+                                                <input
+                                                    type="text"
+                                                    value="{{ role.budget|intcomma }}"
+                                                    class="w-full pl-7 py-2.5
+                                                        rounded-xl bg-slate-50 dark:bg-slate-800    
+                                                        border border-slate-200 dark:border-slate-700
+                                                        text-sm font-normal text-slate-700 dark:text-gray-300
+                                                        focus:outline-none
+                                                        focus:border-brand-500
+                                                        focus:ring-0
+                                                        transition-colors duration-200"
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    {% endif %}
-                                    <div class="">
-                                        <p class="mb-1 text-[10px] uppercase tracking-wide font-medium text-slate-400">
-                                            Payment Plan
-                                        </p>
-                                        <select class="w-full h-12 rounded-xl
-                                            bg-slate-50 dark:bg-slate-800
-                                            border border-slate-200 dark:border-slate-700
-                                            px-4 text-sm font-normal text-slate-700 dark:text-gray-300
-                                            focus:outline-none focus:ring-0
-                                            focus:ring-brand-500/25
-                                            focus:border-brand-500 transition"
-                                        >
-                                            <option value="milestone"> -- select --</option>
-                                            <option value="50-50">50% Upfront / 50% Final</option>
-                                            <option value="60-40">60% Upfront / 40% Final</option>
-                                            <option value="70-30">70% Upfront / 30% Final</option>
-                                            <option value="80-20">80% Upfront / 20% Final</option>
-                                            <option value="50-30-20">50% Upfront / 30% Mid way / 20% Final</option>
-                                            <option value="40-30-30">40% Upfront / 30% Mid way / 30% Final</option>
-
-                                        </select>
+                                        {% endif %}
+                                        <div x-data="renderPaymentPlans({{ role.can_apply|yesno:'true,false' }})">
+                                            <p class="mb-1 text-[10px] uppercase tracking-wide font-medium text-slate-400">
+                                                Payment Plan
+                                            </p>
+                                            <select 
+                                                class="w-full h-12 rounded-xl
+                                                    bg-slate-50 dark:bg-slate-800
+                                                    border border-slate-200 dark:border-slate-700
+                                                    px-4 text-sm font-normal text-slate-700 dark:text-gray-300
+                                                    focus:outline-none focus:ring-0
+                                                    focus:ring-brand-500/25
+                                                    focus:border-brand-500 transition"
+                                                :class="!canSelect ? 'cursor-not-allowed opacity-60 bg-slate-100' : 'cursor-pointer'"
+                                                :disabled="!canSelect"
+                                            >
+                                                <option value="">select option</option>
+                                                <template x-for="plan in plans" :key="plan.value">
+                                                    <option :value="plan.value" x-text="plan.label"></option>
+                                                </template>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </label>
-                    {% endfor %}
-                </div>
+                        </label>
+                        {% endfor %}
+                    </div>
                 {% else %}
+                {# When project/gig has no specific roles #}
                 <div class="relative">
                     <!-- Ambient Frame -->
                     <div
@@ -233,7 +239,7 @@
                         </div>
 
                         <!-- Fields -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div x-data="taxonomyPicker()" class="grid grid-cols-1 md:grid-cols-3 gap-5">
 
                             <!-- Industry -->
                             <div>
@@ -243,6 +249,7 @@
                                 >Industry</label>
 
                                 <select
+                                    x-model="selectedIndustryId"
                                     class="w-full h-12 rounded-xl
                                         bg-slate-50 dark:bg-slate-800
                                         border border-slate-200 dark:border-slate-700
@@ -250,66 +257,68 @@
                                         focus:ring-0 focus:ring-brand-500/25
                                         focus:border-brand-500 transition"
                                     >
-                                        <option selected disabled>Select industry</option>
-                                        <option>Technology</option>
-                                        <option>Design & Creative</option>
-                                        <option>Marketing</option>
-                                        <option>Finance</option>
-                                        <option>Construction</option>
+                                        <option value="">Select industry</option>
+                                        <template x-for="item in industries" :key="item.id">
+                                            <option :value="item.id" x-text="item.name"></option>
+                                        </template>
                                 </select>
                             </div>
 
-                        <!-- Niche -->
-                        <div>
-                            <label
-                                class="text-[10px] uppercase tracking-wide font-medium
+                            <!-- Niche -->
+                            <div>
+                                <label
+                                    class="text-[10px] uppercase tracking-wide font-medium
+                                        text-slate-400 block mb-1"
+                                >Specialization</label>
+
+                                <select
+                                    class="w-full h-12 rounded-xl bg-slate-100
+                                        dark:bg-slate-800 border border-slate-200
+                                        dark:border-slate-700 focus:ring-0 focus:ring-brand-500/25
+                                        focus:border-brand-500 transition
+                                        px-4 text-sm font-normal text-slate-400"
+                                    :class="!selectedIndustryId ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-gray-300 border border-slate-200 dark:border-slate-700'"
+                                    :disabled="!selectedIndustryId"
+                                    x-model="selectedNicheId"
+                                >
+                                    <option value="" x-text="!selectedIndustryId ? 'Select industry first' : 'Select specialization'"></option>
+                                    <template x-for="sub in filteredSubcategories()" :key="sub.id">
+                                        <option :value="sub.id" x-text="sub.name"></option>
+                                    </template>
+                                </select>
+                            </div>
+
+                            <!-- Price -->
+                            <div>
+                                <label class="text-[10px] uppercase tracking-wide font-medium
                                     text-slate-400 block mb-1"
-                            >Specialization</label>
+                                >Proposed Amount</label>
 
-                            <select
-                                class="w-full h-12 rounded-xl bg-slate-100
-                                    dark:bg-slate-800 border border-slate-200
-                                    dark:border-slate-700 focus:ring-0 focus:ring-brand-500/25
-                                    focus:border-brand-500 transition
-                                    px-4 text-sm font-normal text-slate-400"
-                            >
-                                <option>Select industry first</option>
+                                <div class="relative">
+                                    <span
+                                        class="absolute left-3 top-1/2 -translate-y-1/2
+                                            text-slate-400 font-semibold"
+                                    >$</span>
 
-                            </select>
-                        </div>
-
-                        <!-- Price -->
-                        <div>
-                            <label class="text-[10px] uppercase tracking-wide font-medium
-                                text-slate-400 block mb-1"
-                            >Proposed Amount</label>
-
-                            <div class="relative">
-                                <span
-                                    class="absolute left-3 top-1/2 -translate-y-1/2
-                                        text-slate-400 font-semibold"
-                                >$</span>
-
-                                <input
-                                    type="text"
-                                    placeholder="0.00"
-                                    class="w-full h-12 pl-7 rounded-xl
-                                        bg-slate-50 dark:bg-slate-800
-                                        border border-slate-200 dark:border-slate-700
-                                        text-sm font-medium text-slate-800 dark:text-gray-300
-                                        focus:outline-none
-                                        focus:ring-0 focus:ring-brand-500/25
-                                        focus:border-brand-500 transition"
-                                />
+                                    <input
+                                        type="text"
+                                        placeholder="0.00"
+                                        class="w-full h-12 pl-7 rounded-xl
+                                            bg-slate-50 dark:bg-slate-800
+                                            border border-slate-200 dark:border-slate-700
+                                            text-sm font-medium text-slate-800 dark:text-gray-300
+                                            focus:outline-none
+                                            focus:ring-0 focus:ring-brand-500/25
+                                            focus:border-brand-500 transition"
+                                    />
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
                 {% endif %}
-            </section>
 
+            </section>
             {% if not gig.required_roles.all %}
             <!-- Payment Plan -->
             <section class="relative">
@@ -339,32 +348,29 @@
                         </div>
 
                         <!-- Grid -->
-                        <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 items-end">
-
+                        <div 
+                            
+                            class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 items-end"
+                        >
                             <!-- Selector -->
-                            <div class="flex flex-col gap-2">
-
+                            <div x-data="renderPaymentPlans()" class="flex flex-col gap-2">
                                 <label class="text-xs font-medium uppercase tracking-wide
                                 text-slate-500 dark:text-slate-400">
                                     Percentage Split
                                 </label>
-
-                                <select class="w-full h-12 rounded-xl
-                                    bg-slate-50 dark:bg-slate-800
-                                    border border-slate-200 dark:border-slate-700
-                                    px-4 text-sm font-medium text-slate-900 dark:text-gray-300
-                                    focus:outline-none focus:ring-0
-                                    focus:ring-brand-500/25
-                                    focus:border-brand-500 transition"
+                                <select 
+                                    class="w-full h-12 rounded-xl
+                                        bg-slate-50 dark:bg-slate-800
+                                        border border-slate-200 dark:border-slate-700
+                                        px-4 text-sm font-normal text-slate-700 dark:text-gray-300
+                                        focus:outline-none focus:ring-0
+                                        focus:ring-brand-500/25
+                                        focus:border-brand-500 transition"
                                 >
-                                    <option value="milestone">Percentage Split</option>
-                                    <option value="50-50">50% Upfront / 50% Final</option>
-                                    <option value="60-40">60% Upfront / 40% Final</option>
-                                    <option value="70-30">70% Upfront / 30% Final</option>
-                                    <option value="80-20">80% Upfront / 20% Final</option>
-                                    <option value="50-30-20">50% Upfront / 30% Mid way / 20% Final</option>
-                                    <option value="40-30-30">40% Upfront / 30% Mid way / 30% Final</option>
-
+                                    <option value="">select option</option>
+                                    <template x-for="plan in plans" :key="plan.value">
+                                        <option :value="plan.value" x-text="plan.label"></option>
+                                    </template>
                                 </select>
                             </div>
 
@@ -376,13 +382,9 @@
                                 text-slate-500 dark:text-slate-400"
                             >
                                 Payments are released automatically once milestones are approved by the client.
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
             </section>
             {% endif %}
@@ -398,9 +400,7 @@
                 <div class="relative rounded-3xl shadow-sm
                     bg-white dark:bg-[#151c2a] p-6 lg:p-8
                     border border-slate-200 dark:border-slate-700">
-
                     <div class="flex flex-col gap-7">
-
                         <!-- Header -->
                         <div class=>
                             <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">
@@ -413,80 +413,107 @@
                         </div>
 
                         <!-- Deliverables Builder -->
-                        <div class="flex flex-col gap-5">
+                        <div x-data="deliverablesManager()" x-ref="deliverablesUnit" class="flex flex-col gap-5">
+                            <template x-for="(item, index) in items" :key="item.id">
+                                <!-- Milestone Row -->
+                                <div
+                                    class="group relative rounded-2xl
+                                        bg-slate-50 dark:bg-slate-800/60
+                                        border border-slate-200 dark:border-slate-700
+                                        p-4 transition hover:shadow-sm">
 
-                            <!-- Milestone Row -->
-                            <div
-                                class="group relative rounded-2xl
-                                    bg-slate-50 dark:bg-slate-800/60
-                                    border border-slate-200 dark:border-slate-700
-                                    p-4 transition hover:shadow-sm">
+                                    <div class="grid grid-cols-1 gap-4">
+                                            <button x-show="items.length > 1" @click="removeItem(item.id)" 
+                                                class="absolute -top-2 -right-2 size-6 bg-red-100 text-error-500 rounded-full flex items-center justify-center hover:bg-red-200 transition">
+                                                <span class="material-symbols-outlined text-xs">close</span>
+                                            </button>
+                                            <div>
+                                                <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
+                                                    Deliverable Description
+                                                </label>
+                                                <textarea
+                                                    rows="8"
+                                                    x-model="item.title"
+                                                    placeholder="e.g. Homepage design, API integration, campaign strategy..."
+                                                    class="w-full resize-none rounded-xl
+                                                            bg-white dark:bg-slate-700
+                                                            border border-slate-200 dark:border-slate-700
+                                                            px-4 py-3 text-sm font-normal text-slate-700 dark:text-gray-300
+                                                            focus:outline-none focus:border-brand-500 focus:ring-0
+                                                            transition-colors duration-200"
+                                                ></textarea>
+                                            </div>
 
-                                <div class="grid grid-cols-1 gap-4">
-                                    <div>
-                                        <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                            Deliverable Description
-                                        </label>
-                                        <textarea
-                                            rows="8"
-                                            placeholder="e.g. Homepage design, API integration, campaign strategy..."
-                                            class="w-full resize-none rounded-xl
-                                                    bg-white dark:bg-slate-700
-                                                    border border-slate-200 dark:border-slate-700
-                                                    px-4 py-3 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                    focus:outline-none focus:border-brand-500 focus:ring-0
-                                                    transition-colors duration-200"
-                                        ></textarea>
+                                            <!-- Duration & Due Date side by side -->
+                                            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+                                                <!-- Duration -->
+                                                <div>
+                                                    <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
+                                                        Duration
+                                                    </label>
+                                                    <select
+                                                        x-model="item.unit" 
+                                                        
+                                                        class="w-full h-12 rounded-xl
+                                                            bg-white dark:bg-slate-700
+                                                            border border-slate-200 dark:border-slate-700
+                                                            px-3 text-sm font-normal text-slate-700 dark:text-gray-300
+                                                            focus:outline-none focus:border-brand-500 focus:ring-0
+                                                            transition-colors duration-200"
+                                                    >
+                                                        <option value="days">Days</option>
+                                                        <option value="weeks">Weeks</option>
+                                                        <option value="months">Months</option>
+                                                    </select>
+                                                </div>
+
+                                                <div>
+                                                    <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
+                                                        Value
+                                                    </label>
+                                                    <select
+                                                        x-model="item.value"
+                                                        class="w-full h-12 rounded-xl
+                                                            bg-white dark:bg-slate-700
+                                                            border border-slate-200 dark:border-slate-700
+                                                            px-3 text-sm font-normal text-slate-700 dark:text-gray-300
+                                                            focus:outline-none focus:border-brand-500 focus:ring-0
+                                                            transition-colors duration-200"
+                                                    >
+                                                        <template x-for="num in getValueOptions(item.unit)" :key="num">
+                                                            <option :value="num" x-text="num + ' ' + (num > 1 ? item.unit : item.unit.replace(/s$/, ''))"></option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Due Date -->
+                                                <div>
+                                                <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
+                                                    Due by
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    x-model="item.due_by"
+                                                    class="w-full h-12 rounded-xl
+                                                        bg-white dark:bg-slate-700 placeholder:text-xs
+                                                        border border-slate-200 dark:border-slate-700
+                                                        px-3 text-sm font-normal text-slate-700 dark:text-gray-300
+                                                        focus:outline-none focus:border-brand-500 focus:ring-0
+                                                        transition-colors duration-200"
+                                                />
+                                                </div>
+                                            </div>
+                                        
                                     </div>
 
-                                    <!-- Duration & Due Date side by side -->
-                                    <div class="grid grid-cols-2 gap-4">
-
-                                        <!-- Duration -->
-                                        <div>
-                                        <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                            Duration
-                                        </label>
-                                        <select
-                                            class="w-full h-12 rounded-xl
-                                                bg-white dark:bg-slate-700
-                                                border border-slate-200 dark:border-slate-700
-                                                px-3 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                focus:outline-none focus:border-brand-500 focus:ring-0
-                                                transition-colors duration-200"
-                                        >
-                                            <option>1 week</option>
-                                            <option>2 weeks</option>
-                                            <option>3 weeks</option>
-                                            <option>1 month</option>
-                                            <option>Custom</option>
-                                        </select>
-                                        </div>
-
-                                        <!-- Due Date -->
-                                        <div>
-                                        <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                            Due by
-                                        </label>
-                                        <input
-                                            type="date"
-                                            class="w-full h-12 rounded-xl
-                                                bg-white dark:bg-slate-700 placeholder:text-xs
-                                                border border-slate-200 dark:border-slate-700
-                                                px-3 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                focus:outline-none focus:border-brand-500 focus:ring-0
-                                                transition-colors duration-200"
-                                        />
-                                        </div>
-
-                                    </div>
-                                    </div>
-
-                            </div>
+                                </div>
+                            </template>
 
                             <!-- Add Deliverable -->
                             <button
                                 type="button"
+                                @click="addDeliverable()"
                                 class="group inline-flex items-center gap-2 self-start
                                     px-4 py-2.5 rounded-xl
                                     bg-brand-50 dark:bg-brand-500/10
@@ -564,7 +591,10 @@
                                 I agree to the <a class="text-brand-500 dark:text-brand-300 font-semibold underline" href="#">Terms of Engagement</a> and confirm that I can meet the project deadlines.
                             </span>
                         </label>
-                        <button class="w-full py-4 bg-brand-500 text-white rounded-xl font-semibold text-base shadow-lg shadow-brand-500/30 hover:bg-brand-500/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <button 
+                            type="button"
+                            @click="sendProposal()"
+                            class="w-full py-4 bg-brand-500 text-white rounded-xl font-semibold text-base shadow-lg shadow-brand-500/30 hover:bg-brand-500/90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                             <span>Send Proposal</span>
                             <span class="material-symbols-outlined text-xl">send</span>
                         </button>
@@ -589,7 +619,90 @@
 </section>
 {% endblock %}
 {% block custom_page_js %}
-<script id="payment-options-data" type="application/json" x-ref="paymentSplitData">
+<script id="taxonomy-data" type="application/json" x-ref="taxonomy">
+{{ taxonomy_json|safe }}
+</script>
+<script id="payment-options-data" type="application/json" x-ref="paymentPlans">
   {{ payment_options|safe }}
 </script>
+<script>
+document.querySelectorAll(".role-checkbox").forEach(cb => {
+    cb.addEventListener("click", (e) => {
+        if (cb.dataset.canApply === "false") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            showToast(
+                "You can’t apply for this role because it doesn’t match your expertise.",
+                "info",
+                "Ineligible Role"
+            );
+        }
+    });
+});
+</script>
+<script>
+    function renderPaymentPlans(canSelect) {
+        return {
+            canSelect,
+            plans: JSON.parse(document.getElementById('payment-options-data').textContent),
+        }
+    }
+
+    function taxonomyPicker() {
+        return {
+            industries: JSON.parse(document.getElementById('taxonomy-data').textContent),
+            selectedIndustryId: '',
+            subcategories: [],
+            selectedNicheId: '',
+
+            filteredSubcategories() {
+                const industry = this.industries.find(i => i.id == this.selectedIndustryId);
+                return industry ? industry.subcategories : [];
+            }
+        }
+    }
+
+    function deliverablesManager() {
+        return {
+            items: [],
+
+            init() {
+                this.addDeliverable();
+            },
+
+            addDeliverable() {
+                this.items.push({
+                    id: Date.now() + Math.random(),
+                    title: '',
+                    unit: 'days',
+                    value: 1,
+                    due_by: ''
+                });
+            },
+
+            removeItem(id) {
+                if (this.items.length > 1) {
+                    this.items = this.items.filter(item => item.id !== id);
+                }
+            },
+
+            getValueOptions(unit) {
+                const limits = { 'days': 6, 'weeks': 4, 'months': 12 };
+                const max = limits[unit] || 0;
+                return Array.from({ length: max }, (_, i) => i + 1);
+            },
+
+            buildPayload() {
+                return this.items.map(item => ({
+                    description: item.title,
+                    duration_unit: item.unit,
+                    duration_value: item.value,
+                    due_date: item.due_by
+                }));
+            },
+        }
+    }
+</script>
+<script src="{% static 'js/collaboration/accept-offer.js' %}"></script>
 {% endblock %}

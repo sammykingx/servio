@@ -24,4 +24,5 @@ app/*.txt
 app/media/*
 app/staticfiles/*
 app/**/migrations/
-logs/*
+app/logs/*
+app/**/*.log

@@ -191,17 +191,17 @@
 							<div class="flex-1">
 								<p class="text-sm font-semibold">Payment Plan</p>
 								{% with meta=role_payment_meta|get_item:role.id %}
-								{% if meta %}
-								<p class="text-[11px] text-gray-500">
-									{{ meta.type }}
-								</p>
-								<p class="text-[11px] text-gray-500">
-									{{ meta.installments }} payments —
-									{% for pct in meta.split %}
-									{{ pct }}%{% if not forloop.last %} / {% endif %}
-									{% endfor %}
-								</p>
-								{% endif %}
+									{% if meta %}
+										<p class="text-[11px] text-gray-500">
+											{{ meta.type }}
+										</p>
+										<p class="text-[11px] text-gray-500">
+											{{ meta.installments }} payments —
+											{% for pct in meta.split %}
+												{{ pct }}%{% if not forloop.last %} / {% endif %}
+											{% endfor %}
+										</p>
+									{% endif %}
 								{% endwith %}
 							</div>
 							<button class="text-brand-500 dark:text-gray-400 text-sm font-medium">
@@ -213,75 +213,6 @@
 				</div>
 			</div>
 			{% endif %}
-			<!-- <div class="flex flex-col gap-6">
-				<div class="flex items-center justify-between">
-					<h3 class="text-lg font-semibold">Timeline &amp; Milestones</h3>
-					<span class="text-sm font-medium text-slate-500">Total Duration: 10 Weeks</span>
-				</div>
-				<div class="w-full h-3 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex">
-					<div class="h-full bg-brand-500 w-1/4"></div>
-					<div class="h-full bg-slate-300 dark:bg-slate-700 w-3/4"></div>
-				</div>
-				<div class="flex flex-col gap-0">
-					<div class="relative flex gap-4 pb-8 milestone-line">
-						<div class="z-10 size-6 rounded-full bg-brand-500 flex items-center justify-center border-4 border-white dark:border-slate-900 shadow-sm">
-							<span class="material-symbols-outlined text-[10px] text-white font-black">check</span>
-						</div>
-						<div class="flex-1 bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center">
-							<div class="flex flex-col">
-								<p class="font-semibold text-slate-900 dark:text-white">Architecture Design &amp; Strategy</p>
-								<p class="text-xs text-slate-500">Due: Oct 20, 2023</p>
-							</div>
-							<div class="text-right">
-								<p class="font-semibold text-brand-500">$4,500</p>
-								<span class="text-[10px] font-semibold text-green-600 dark:text-green-400 uppercase">Released</span>
-							</div>
-						</div>
-					</div>
-					<div class="relative flex gap-4 pb-8 milestone-line">
-						<div class="z-10 size-6 rounded-full bg-brand-500 flex items-center justify-center border-4 border-white dark:border-slate-900 shadow-sm ring-2 ring-brand-500/20">
-						</div>
-						<div class="flex-1 bg-white dark:bg-slate-900 p-4 rounded-lg border border-brand-500/30 shadow-sm flex justify-between items-center">
-							<div class="flex flex-col">
-								<p class="font-semibold text-slate-900 dark:text-white">Core API Development</p>
-								<p class="text-xs text-slate-500">Due: Nov 15, 2023</p>
-							</div>
-							<div class="text-right">
-								<p class="font-semibold text-brand-500">$8,000</p>
-								<span class="text-[10px] font-semibold text-amber-600 uppercase">In Progress</span>
-							</div>
-						</div>
-					</div>
-					<div class="relative flex gap-4 pb-8 milestone-line">
-						<div class="z-10 size-6 rounded-full bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-sm">
-						</div>
-						<div class="flex-1 bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center opacity-60">
-							<div class="flex flex-col">
-								<p class="font-semibold text-slate-900 dark:text-white">Integration Testing &amp; QA</p>
-								<p class="text-xs text-slate-500">Due: Dec 05, 2023</p>
-							</div>
-							<div class="text-right">
-								<p class="font-semibold text-slate-400">$6,500</p>
-								<span class="text-[10px] font-semibold text-slate-400 uppercase">Upcoming</span>
-							</div>
-						</div>
-					</div>
-					<div class="relative flex gap-4 milestone-line">
-						<div class="z-10 size-6 rounded-full bg-slate-200 dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-sm">
-						</div>
-						<div class="flex-1 bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center opacity-60">
-							<div class="flex flex-col">
-								<p class="font-semibold text-slate-900 dark:text-white">Final Deployment &amp; Handover</p>
-								<p class="text-xs text-slate-500">Due: Dec 20, 2023</p>
-							</div>
-							<div class="text-right">
-								<p class="font-semibold text-slate-400">$6,000</p>
-								<span class="text-[10px] font-semibold text-slate-400 uppercase">Upcoming</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				</div> -->
 			<div class="rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur 
 				border border-slate-200/60 dark:border-slate-800/60 shadow-sm">
 				<div class="p-8 flex flex-col items-center text-center gap-6">
@@ -326,52 +257,6 @@
 					{% endif %}
 				</div>
 			</div>
-			<!-- <div class="rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur
-				border border-slate-200/60 dark:border-slate-800/60 shadow-sm">
-				<div class="p-8 flex flex-col items-center text-center gap-6">
-					<!-- Icon Stack --
-					<div class="relative">
-						<div class="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl"></div>
-						<div class="relative size-16 rounded-2xl bg-white dark:bg-slate-950
-							border border-slate-200 dark:border-slate-800
-							flex items-center justify-center shadow-md">
-							<span class="material-symbols-outlined text-3xl text-emerald-500">
-							account_balance_wallet
-							</span>
-						</div>
-					</div>
-					<!-- Copy --
-					<div class="space-y-2 max-w-sm">
-						<h4 class="font-semibold text-lg tracking-tight text-slate-900 dark:text-white">
-							Payment terms not defined yet
-						</h4>
-						<p class="text-sm text-slate-500 leading-relaxed">
-							This project doesn’t have an agreed percentage split or escrow release
-							schedule yet. Define how funds will be released before work begins.
-						</p>
-					</div>
-					<!-- Divider --
-					<div class="w-full max-w-xs h-px bg-gradient-to-r
-						from-transparent via-slate-200 dark:via-slate-800
-						to-transparent"></div>
-					<!-- CTA --
-					{% if can_negotiate %}
-					<a href="#deal-room"
-						class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
-						bg-emerald-500 text-white text-sm font-semibold
-						hover:bg-emerald-500/90 transition shadow-lg shadow-emerald-500/20">
-					Propose Payment Terms
-					<span class="material-symbols-outlined text-base">
-					receipt_long
-					</span>
-					</a>
-					{% else %}
-					<span class="text-xs text-slate-400">
-					Waiting for the project owner to define payment percentages
-					</span>
-					{% endif %}
-				</div>
-			</div> -->
 		</div>
 		<div class="flex flex-col gap-6">
 			<div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-md p-6">
@@ -525,9 +410,9 @@
 							<span class="text-slate-900 dark:text-white font-medium">{{ creator_location.city }}, {{ creator_location.province }}</span>
 						</div>
 					</div>
-					<!-- <button class="w-full text-center py-2 text-brand-500 font-semibold text-sm hover:bg-brand-500/5 rounded-lg transition-colors">
+					{# <button class="w-full text-center py-2 text-brand-500 font-semibold text-sm hover:bg-brand-500/5 rounded-lg transition-colors">
 						View Full Profile
-						</button> -->
+						</button> #}
 				</div>
 			</div>
 			<div class="p-6 bg-slate-100 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-300 dark:border-slate-700">

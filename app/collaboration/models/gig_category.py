@@ -1,6 +1,52 @@
 from django.db import models
 from django.apps import apps
+from typing import Any, Dict, List
+import json
 
+
+class GigCategoryManager(models.Manager):
+    def get_taxonomy_json(self) -> str:
+        """
+        Fetches active parent categories and their subcategories, 
+        returning a serialized JSON string for frontend use.
+
+        The structure of the returned JSON list is:
+        [
+            {
+                "id": int,
+                "name": str,
+                "subcategories": [{"id": int, "name": str}, ...]
+            },
+            ...
+        ]
+
+        Returns:
+            str: A JSON-encoded string of the hierarchical taxonomy.
+        """
+        niches:models.QuerySet["GigCategory"] = (
+            self.filter(parent__isnull=True, is_active=True)
+            .prefetch_related(
+                models.Prefetch(
+                    "subcategories",
+                    queryset=GigCategory.objects.filter(is_active=True).order_by("name"),
+                )
+            )
+            .order_by("name")
+        )
+
+        taxonomy:List[Dict[str, Any]] = [
+            {
+                "id": niche.id,
+                "name": niche.name,
+                "subcategories": [
+                    {"id": sub.id, "name": sub.name}
+                    for sub in niche.subcategories.all()
+                ],
+            }
+            for niche in niches
+        ]
+        return json.dumps(taxonomy)
+    
 
 class GigCategory(models.Model):
     """
@@ -40,6 +86,8 @@ class GigCategory(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    objects = GigCategoryManager()
 
     class Meta:
         db_table = "collaboration_gig_categories"

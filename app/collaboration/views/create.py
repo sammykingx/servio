@@ -24,7 +24,7 @@ GigModel = apps.get_model("collaboration", "Gig")
 GigRoleModel = apps.get_model("collaboration", "GigRole")
 GigApplicationModel = apps.get_model("collaboration", "GigApplication")
 
-
+# not used
 def create_taxonomy_context() -> List[Dict[str, str | List]]:
     niches = (
         GigCategory.objects.filter(parent__isnull=True, is_active=True)
@@ -85,7 +85,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
             HttpResponse: Rendered HTML page for creating a collaboration.
         """
         context = {
-            "gig_taxonomy": create_taxonomy_context(),
+            "gig_taxonomy": GigCategory.objects.get_taxonomy_json(),
             "payment_options": json.dumps(PAYMENT_OPTIONS),
         }
         return render(request, Collabs.CREATE, context)
@@ -390,7 +390,7 @@ class EditGigView(LoginRequiredMixin, View):
         context = {
             "gig": gig,
             "gig_roles_json": json.dumps(roles_payload),
-            "gig_taxonomy": create_taxonomy_context(),
+            "gig_taxonomy":  GigCategory.objects.get_taxonomy_json(),
             "payment_labels": json.dumps(PAYMENT_OPTIONS),
             "editable_statuses": ["pending", "draft"],
         }

@@ -37,6 +37,18 @@ class PaymentOption(models.TextChoices):
     @classmethod
     def installments_count(cls, value) -> int:
         return len(cls.percentages(value))
+    
+    @property
+    def label(self) -> str:
+        return {
+            self.FULL_UPFRONT: "100% Upfront",
+            self.SPLIT_50_50: "50% / 50%",
+            self.SPLIT_60_40: "60% / 40%",
+            self.SPLIT_70_30: "70% / 30%",
+            self.SPLIT_30_40_30: "30% / 40% / 30%",
+            self.SPLIT_40_30_30: "40% / 30% / 30%",
+            self.SPLIT_50_30_20: "50% / 30% / 20%",
+        }[self]
 
 class RoleStatus(models.TextChoices):
     ASSIGNED = "assigned", "Assigned"

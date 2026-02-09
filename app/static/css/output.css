@@ -9,6 +9,7 @@
       "Courier New", monospace;
     --color-red-50: oklch(97.1% 0.013 17.38);
     --color-red-100: oklch(93.6% 0.032 17.717);
+    --color-red-200: oklch(88.5% 0.062 18.334);
     --color-red-300: oklch(80.8% 0.114 19.571);
     --color-red-400: oklch(70.4% 0.191 22.216);
     --color-red-500: oklch(63.7% 0.237 25.331);
@@ -1533,9 +1534,6 @@
   .w-1\/3 {
     width: calc(1/3 * 100%);
   }
-  .w-1\/4 {
-    width: calc(1/4 * 100%);
-  }
   .w-2 {
     width: calc(var(--spacing) * 2);
   }
@@ -2136,9 +2134,6 @@
   .justify-evenly {
     justify-content: space-evenly;
   }
-  .gap-0 {
-    gap: calc(var(--spacing) * 0);
-  }
   .gap-0\.5 {
     gap: calc(var(--spacing) * 0.5);
   }
@@ -2548,12 +2543,6 @@
     border-color: color-mix(in srgb, #4c3aff 20%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-color: color-mix(in oklab, var(--color-brand-500) 20%, transparent);
-    }
-  }
-  .border-brand-500\/30 {
-    border-color: color-mix(in srgb, #4c3aff 30%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      border-color: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
     }
   }
   .border-brand-600 {
@@ -3141,12 +3130,6 @@
     background-color: color-mix(in srgb, oklch(69.6% 0.17 162.48) 10%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-emerald-500) 10%, transparent);
-    }
-  }
-  .bg-emerald-500\/20 {
-    background-color: color-mix(in srgb, oklch(69.6% 0.17 162.48) 20%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent);
     }
   }
   .bg-error-50 {
@@ -4683,9 +4666,6 @@
   .pb-7 {
     padding-bottom: calc(var(--spacing) * 7);
   }
-  .pb-8 {
-    padding-bottom: calc(var(--spacing) * 8);
-  }
   .pb-9 {
     padding-bottom: calc(var(--spacing) * 9);
   }
@@ -5008,9 +4988,6 @@
   }
   .text-\[\#0086c9\] {
     color: #0086c9;
-  }
-  .text-\[\#4645a1\] {
-    color: #4645a1;
   }
   .text-\[\#07883b\] {
     color: #07883b;
@@ -6400,30 +6377,6 @@
       }
     }
   }
-  .group-hover\/uploader\:scale-\[1\.02\] {
-    &:is(:where(.group\/uploader):hover *) {
-      @media (hover: hover) {
-        scale: 1.02;
-      }
-    }
-  }
-  .group-hover\/uploader\:border-brand-500\/30 {
-    &:is(:where(.group\/uploader):hover *) {
-      @media (hover: hover) {
-        border-color: color-mix(in srgb, #4c3aff 30%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          border-color: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
-        }
-      }
-    }
-  }
-  .group-hover\/uploader\:opacity-100 {
-    &:is(:where(.group\/uploader):hover *) {
-      @media (hover: hover) {
-        opacity: 100%;
-      }
-    }
-  }
   .peer-checked\:border-\[1\.5px\] {
     &:is(:where(.peer):checked ~ *) {
       border-style: var(--tw-border-style);
@@ -7184,16 +7137,6 @@
       }
     }
   }
-  .hover\:bg-emerald-500\/90 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, oklch(69.6% 0.17 162.48) 90%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-emerald-500) 90%, transparent);
-        }
-      }
-    }
-  }
   .hover\:bg-emerald-600 {
     &:hover {
       @media (hover: hover) {
@@ -7254,6 +7197,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-red-50);
+      }
+    }
+  }
+  .hover\:bg-red-200 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-red-200);
       }
     }
   }
@@ -8357,6 +8307,11 @@
       padding-inline: calc(var(--spacing) * 6);
     }
   }
+  .sm\:px-8 {
+    @media (width >= 40rem) {
+      padding-inline: calc(var(--spacing) * 8);
+    }
+  }
   .sm\:py-2 {
     @media (width >= 40rem) {
       padding-block: calc(var(--spacing) * 2);
@@ -8402,6 +8357,12 @@
     @media (width >= 40rem) {
       font-size: var(--text-3xl);
       line-height: var(--tw-leading, var(--text-3xl--line-height));
+    }
+  }
+  .sm\:text-base {
+    @media (width >= 40rem) {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
     }
   }
   .sm\:text-sm {
