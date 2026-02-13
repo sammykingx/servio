@@ -5389,6 +5389,9 @@
   .opacity-100 {
     opacity: 100%;
   }
+  .opacity-200 {
+    opacity: 200%;
+  }
   .shadow {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -6416,11 +6419,6 @@
   .peer-checked\:bg-brand-500 {
     &:is(:where(.peer):checked ~ *) {
       background-color: var(--color-brand-500);
-    }
-  }
-  .peer-checked\:text-white {
-    &:is(:where(.peer):checked ~ *) {
-      color: var(--color-white);
     }
   }
   .peer-checked\:opacity-100 {
@@ -9438,6 +9436,19 @@
       border-color: color-mix(in srgb, oklch(47.3% 0.137 46.201) 50%, transparent);
       @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-amber-800) 50%, transparent);
+      }
+    }
+  }
+  .dark\:border-brand-400 {
+    &:where(.dark, .dark *) {
+      border-color: var(--color-brand-400);
+    }
+  }
+  .dark\:border-brand-400\/30 {
+    &:where(.dark, .dark *) {
+      border-color: color-mix(in srgb, #7364ff 30%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        border-color: color-mix(in oklab, var(--color-brand-400) 30%, transparent);
       }
     }
   }

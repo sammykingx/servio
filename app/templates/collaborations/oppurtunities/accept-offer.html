@@ -89,6 +89,8 @@
                     </div>
                 </div>
             </section>
+
+            
             <section 
                 class="flex flex-col gap-4" 
                 x-data="roleApplicationManager([
@@ -97,11 +99,13 @@
                         industry_id: '{{ role.niche_id }}',
                         niche_id: '{{ role.role_id }}',
                         niche_name: '{{ role.niche_name }}',
-                        role_amount: {{ role.budget|default:0 }}
+                        role_amount: {{ role.budget|default:0 }},
+                        isActive: {{ role.can_apply|yesno:'true,false' }}
                     }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ])" 
-                x-ref="roleApplicationsUnit">
+                x-ref="roleApplicationsUnit"
+            >
                 {% if roles %}
                     <div class="flex flex-col">
                         <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Select Your Roles</h3>
@@ -122,17 +126,15 @@
                             <!-- Subtle Ambient Glow -->
                             <div class="absolute -inset-1 rounded-2xl opacity-0 blur-2xl bg-gradient-to-r
                                 from-brand-500/10 via-brand-500/5 to-transparent transition duration-300"
-                                :class="isRoleActive('{{ role.role_id }}') ? 'opacity-100' : 'opacity-0'">
+                                :class="isRoleActive('{{ role.role_id }}') ? 'opacity-200' : 'opacity-0'">
                             </div>
                             <!-- Card -->
                             <div class="relative rounded-2xl bg-white dark:bg-[#151c2a]
-                                border border-slate-200/80 dark:border-slate-700/60
-                                shadow-[0_2px_8px_rgba(0,0,0,0.04)]
-                                hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
+                                border p-6 hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
                                 transition-all duration-300
-                                p-6"
+                                "
                                 :class="isRoleActive('{{ role.role_id }}') 
-                                    ? 'shadow-[0_12px_32px_rgba(0,0,0,0.10)] border-brand-500/30 dark:border-gray-200' 
+                                    ? 'shadow-[0_12px_32px_rgba(0,0,0,0.10)] border-brand-500 dark:border-brand-400' 
                                     : 'border-slate-200/80 dark:border-slate-700/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]'"
                             >
                                 <div class="flex flex-col gap-5 space-y-3">
@@ -141,11 +143,13 @@
                                         <!-- Role -->
                                         <div class="flex items-start gap-4">
                                             <!-- Selection Indicator -->
-                                            <div class="flex size-9 shrink-0 items-center justify-center rounded-xl
-                                                bg-slate-100 dark:bg-slate-800
-                                                peer-checked:bg-brand-500
-                                                text-slate-400 peer-checked:text-white
-                                                shadow-sm transition">
+                                            <div 
+                                                class="flex size-9 shrink-0 items-center justify-center
+                                                    rounded-xl shadow-sm transition"
+                                                :class="isRoleActive('{{ role.role_id }}')
+                                                    ? 'bg-brand-500 text-white'
+                                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-400'"
+                                            >
                                                 <span class="material-symbols-outlined text-[18px]">
                                                     work_outline
                                                 </span>
@@ -664,94 +668,10 @@ document.querySelectorAll(".role-checkbox").forEach(cb => {
 });
 </script>
 <script>
-    function renderPaymentPlans(canSelect) {
-        return {
-            canSelect,
-            plans: JSON.parse(document.getElementById('payment-options-data').textContent),
-            selectedPaymentPlan: '',
-
-            selectedPlan() {
-                return this.selectedPaymentPlan;
-            }
-        }
-    }
-
-    function taxonomyPicker() {
-        return {
-            industries: JSON.parse(document.getElementById('taxonomy-data').textContent),
-            selectedIndustryId: '',
-            subcategories: [],
-            selectedNicheId: '',
-            roleAmount: 0,
-            payment_plan: '',
-
-            filteredSubcategories() {
-                const industry = this.industries.find(i => i.id == this.selectedIndustryId);
-                return industry ? industry.subcategories : [];
-            },
-
-            buildPayload() {
-                /*return [{
-                        industry_id: this.selectedIndustryId,
-                        niche_id: this.selectedNicheId,
-                        role_amount: this.roleAmount,
-                        //payment_plans: Alpine.$data(paymentPlanEl).selectedPlan(),
-                    }]*/
-                const paymentPlanEl = document.querySelector('[x-ref="gigPaymentPlan"]');
-                if (paymentPlanEl) {
-                    return [{
-                        industry_id: this.selectedIndustryId,
-                        niche_id: this.selectedNicheId,
-                        role_amount: this.roleAmount,
-                        payment_plans: Alpine.$data(paymentPlanEl).selectedPlan(),
-                    }];
-                } else {
-                    return null;
-                }
-            },
-        }
-    }
-
-    function deliverablesManager() {
-        return {
-            items: [],
-
-            init() {
-                this.addDeliverable();
-            },
-
-            addDeliverable() {
-                this.items.push({
-                    id: Date.now() + Math.random(),
-                    title: '',
-                    unit: 'days',
-                    value: 1,
-                    due_by: ''
-                });
-            },
-
-            removeItem(id) {
-                if (this.items.length > 1) {
-                    this.items = this.items.filter(item => item.id !== id);
-                }
-            },
-
-            getValueOptions(unit) {
-                const limits = { 'days': 6, 'weeks': 4, 'months': 12 };
-                const max = limits[unit] || 0;
-                return Array.from({ length: max }, (_, i) => i + 1);
-            },
-
-            buildPayload() {
-                return this.items.map(item => ({
-                    description: item.title,
-                    duration_unit: item.unit,
-                    duration_value: item.value,
-                    due_date: item.due_by
-                }));
-            },
-        }
-    }
 </script>
+<script src="{% static 'js/utils/renderIndustryTaxonomy.js' %}"></script>
+<script src="{% static 'js/utils/renderPaymentOptions.js' %}"></script>
+<script src="{% static 'js/collaboration/managers/deliverables.js' %}"></script>
+<script src="{% static 'js/collaboration/managers/roleApplication.js' %}"></script>
 <script src="{% static 'js/collaboration/accept-offer.js' %}"></script>
 {% endblock %}
