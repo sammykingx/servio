@@ -31,7 +31,13 @@
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div class="lg:col-span-2 flex flex-col gap-8">
-            <section id="gig-summary-section" data-has-roles="{{ gig.has_gig_roles|yesno:'true,false' }}" class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+            <section 
+                id="gig-summary-section" 
+                data-has-roles="{{ gig.has_gig_roles|yesno:'true,false' }}" 
+                data-end-date="{{ gig.end_date }}" 
+                data-csrf-token="{{ csrf_token }}"
+                data-end-point="{% url OPPURTUNITIES.ACCEPT_OFFER slug=gig.slug %}" 
+                class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
                 <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white mb-5">
                     Gig Summary
                 </h3>
@@ -48,7 +54,7 @@
 								text-slate-500 dark:text-slate-400">
                                 Project Timeline
                             </span>
-                            <span class="text-base font-medium text-slate-900 dark:text-white">
+                            <span class="text-sm font-medium text-slate-900 dark:text-white">
                                 {{ gig.start_date|date:"M d" }} – {{ gig.end_date|date:"M d" }}
                             </span>
                         </div>
@@ -65,7 +71,7 @@
 								text-slate-500 dark:text-slate-400">
                                 Estimated Duration
                             </span>
-                            <span class="text-base font-medium text-slate-900 dark:text-white">
+                            <span class="text-sm font-medium text-slate-900 dark:text-white">
                                 {{ gig.gig_duration }}
                             </span>
                         </div>
@@ -82,8 +88,8 @@
 								text-slate-500 dark:text-slate-400">
                                 Project Budget
                             </span>
-                            <span class="text-base font-medium text-slate-900 dark:text-white">
-                                ${{ gig.total_budget|intcomma }}
+                            <span class="text-sm font-medium text-slate-900 dark:text-white">
+                                {{ gig.dynamic_range }}
                             </span>
                         </div>
                     </div>
@@ -473,7 +479,7 @@
                                         </button>
                                         <div>
                                             <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                Deliverable Description
+                                                Deliverable Description <span class="text-error-500">*</span>
                                             </label>
                                             <textarea
                                                 rows="8"
@@ -494,7 +500,7 @@
                                             <!-- Duration -->
                                             <div>
                                                 <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                    Duration
+                                                    Duration <span class="text-error-500">*</span>
                                                 </label>
                                                 <select
                                                     x-model="item.unit"                                     
@@ -513,7 +519,7 @@
 
                                             <div>
                                                 <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                    Value
+                                                    Value <span class="text-error-500">*</span>
                                                 </label>
                                                 <select
                                                     x-model="item.value"
@@ -533,7 +539,7 @@
                                             <!-- Due Date -->
                                             <div>
                                                 <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                    Due by
+                                                    Due by <span class="text-error-500">*</span>
                                                 </label>
                                                 <input
                                                     type="date"
@@ -652,13 +658,13 @@
                     </div>
                 </div>
             </div>
-            <div class="p-6 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+            <div class="p-6 bg-brand50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
                 <div class="flex gap-3">
-                    <span class="material-symbols-outlined text-slate-400">info</span>
+                    <span class="material-symbols-outlined text-brand-500 dark:text-brand-400">info</span>
                     <div class="flex flex-col gap-1">
-                        <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">First time applying?</p>
-                        <p class="text-[11px] text-slate-500">Read our guide on how to craft a winning proposal and secure roles faster.</p>
-                        <a class="text-[11px] font-semibold text-brand-500 mt-1 hover:underline" href="#">Read Guide</a>
+                        <p class="text-xs font-semibold text-brand-700 dark:text-brand-400">First time applying?</p>
+                        <p class="text-[11px] text-brand-500/90 dark:text-brand-400/90">Read our guide on how to craft a winning proposal and secure roles faster.</p>
+                        <a class="text-[11px] font-semibold text-brand-500 dark:text-brand-400 mt-1 hover:underline" href="#">Read Guide</a>
                     </div>
                 </div>
             </div>
@@ -691,6 +697,7 @@ document.querySelectorAll(".role-checkbox").forEach(cb => {
 </script>
 <script>
 </script>
+<script src="{% static 'js/utils/sendRequest.js' %}"></script>
 <script src="{% static 'js/utils/updateProposalUI.js' %}"></script>
 <script src="{% static 'js/utils/renderIndustryTaxonomy.js' %}"></script>
 <script src="{% static 'js/utils/renderPaymentOptions.js' %}"></script>

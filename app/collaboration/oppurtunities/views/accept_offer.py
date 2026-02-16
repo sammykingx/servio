@@ -1,5 +1,5 @@
 from django.apps import apps
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.db.models import Prefetch
@@ -68,6 +68,30 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
             context["roles"] = roles
             context["role_payment_plan"] = role_payment_plan
         return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        try:
+            payload = json.loads(request.body)
+            print(payload)
+            
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {
+                    "error": "Invalid JSON payload",
+                    "message": "Request body should be a valid JSON data, check and try again.",
+                },
+                status=400,
+            )
+        
+        
+        # Usually, you'll want to return a redirect or the standard GET response
+        
+        return JsonResponse({
+            "title": "Proposal Sent!",
+            "status": "success",
+            "message": "High five! Your proposal is officially on its way to the creator for review. We'll let you know as soon as they take a look."
+        })
     
    
 

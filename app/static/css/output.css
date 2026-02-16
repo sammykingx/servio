@@ -5058,6 +5058,12 @@
   .text-brand-500 {
     color: var(--color-brand-500);
   }
+  .text-brand-500\/30 {
+    color: color-mix(in srgb, #4c3aff 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
+    }
+  }
   .text-brand-500\/80 {
     color: color-mix(in srgb, #4c3aff 80%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -5078,6 +5084,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       color: color-mix(in oklab, var(--color-brand-600) 70%, transparent);
     }
+  }
+  .text-brand-700 {
+    color: var(--color-brand-700);
   }
   .text-cyan-500 {
     color: var(--color-cyan-500);
@@ -11078,6 +11087,22 @@
   .dark\:text-brand-400 {
     &:where(.dark, .dark *) {
       color: var(--color-brand-400);
+    }
+  }
+  .dark\:text-brand-400\/80 {
+    &:where(.dark, .dark *) {
+      color: color-mix(in srgb, #7364ff 80%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, var(--color-brand-400) 80%, transparent);
+      }
+    }
+  }
+  .dark\:text-brand-400\/90 {
+    &:where(.dark, .dark *) {
+      color: color-mix(in srgb, #7364ff 90%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, var(--color-brand-400) 90%, transparent);
+      }
     }
   }
   .dark\:text-cyan-400 {

@@ -229,4 +229,17 @@ class Gig(models.Model):
         return (
             self.total_budget + self.service_fee + self.tax
         ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        
+    @property
+    def dynamic_range(self):
+        lower_raw = self.total_budget * Decimal('0.6')
+        upper_raw = self.total_budget * Decimal('1.1')
+
+        lower = (lower_raw / 10).quantize(Decimal('1'), rounding=ROUND_HALF_UP) * 10
+        upper = (upper_raw / 10).quantize(Decimal('1'), rounding=ROUND_HALF_UP) * 10
+
+        min_limit = Decimal('50')
+        display_lower = max(lower, min_limit)
+
+        return f"${display_lower:,.0f} - ${upper:,.0f}"
     
