@@ -23,7 +23,7 @@ def get_response_msg(action: CreateGigStates, gig:GigPayload) -> CreateGigRespon
     
     responses = {
         CreateGigStates.PUBLISH: CreateGigResponse(
-            message="All set! Your gig/project is published 🎉, next step is payment.",
+            message="All set! Your gig/project is published, Hurray 🎉.",
             url=str(reverse_lazy(PaymentURLS.GIG_PAYMENT_SUMMARY, kwargs={"gig_id": gig.id},)),
         ),
         CreateGigStates.DRAFT: CreateGigResponse(

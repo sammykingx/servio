@@ -71,7 +71,7 @@ function gigData() {
                 }
 
                 // Normal update
-                this.payload.description = this.editor.root.innerHTML;
+                this.payload.description = parseFloat(this.editor.root.innerHTML) || 0;
             });
 
         },
@@ -80,7 +80,7 @@ function gigData() {
             this.payload.roles = roles;
             
             const rolesTotal = roles.reduce(
-                (sum, r) => sum + (Number(r.budget) || 0), 0
+                (sum, r) => sum + (parseFloat(r.budget) || 0), 0
             );
 
             this.rolesTotalAmount = rolesTotal;

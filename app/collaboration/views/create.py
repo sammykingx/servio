@@ -150,7 +150,6 @@ class CreateCollaborationView(LoginRequiredMixin, View):
 
         response = get_response_msg(gig_data.action, gig)
         return JsonResponse(response.model_dump())
-        # return JsonResponse({"message": "all good"})
 
     def save_gig_data(self, payload: GigPayload, action: CreateGigStates) -> Model:
         """

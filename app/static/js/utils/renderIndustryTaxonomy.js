@@ -33,6 +33,18 @@ function taxonomyPicker() {
             return industry ? industry.subcategories : [];
         },
 
+        getSummary() {
+            const roleAmount = parseFloat(this.roleAmount);
+            const serviceFee = 0.05 * roleAmount;
+            const total = serviceFee + roleAmount;
+
+            updateProposalUI({
+                count: 1,
+                subtotal: roleAmount,
+                serviceFee,
+                total
+            })
+        },
         buildPayload() {
             const paymentPlanEl = document.querySelector('[x-ref="gigPaymentPlan"]');
             if (paymentPlanEl) {

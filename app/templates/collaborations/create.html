@@ -95,9 +95,12 @@
                                     "
                                 >
                                     <!-- Toolbar -->
-                                    <div id="quill-toolbar" class="flex flex-wrap items-center gap-x-2 gap-y-2 p-2 border-b 
-                                        border-slate-200 dark:border-slate-700 
-                                        bg-slate-100 dark:bg-slate-800">
+                                    <div 
+                                        id="quill-toolbar" 
+                                        class="flex flex-wrap items-center gap-x-2 gap-y-2 p-2 border-b 
+                                            border-slate-200 dark:border-slate-700 
+                                            bg-slate-100 dark:bg-slate-800 dark:text-gray-400"
+                                    >
                                         <!-- Header -->
                                         <div class="relative">
                                             <select class="ql-header">
@@ -350,7 +353,21 @@
                                         <!--Days of the month-->
                                         <div class="grid grid-cols-7 gap-1 mb-3">
                                             <template x-for="day in daysInMonth(type)" :key="day.dateObj ? day.dateObj.getTime() : 'empty-' + index">
-                                                <div> <button type="button" x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-brand-300 transition"></button> </div>
+                                                <div>
+                                                    <button 
+                                                        type="button" 
+                                                        x-show="!day.empty" 
+                                                        @click="selectDate(day.dateObj, type)" 
+                                                        x-text="day.date" 
+                                                        :disabled="day.disabled" 
+                                                        :class="{ 
+                                                            'bg-brand-500 text-white font-bold shadow-md': isSelected(day.dateObj, type), 
+                                                            'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-40': day.disabled,
+                                                            'text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-brand-300 dark:hover:bg-brand-600': !day.disabled && !isSelected(day.dateObj, type)
+                                                        }" 
+                                                        class="w-8 h-8 rounded-full text-sm hover:bg-brand-300 transition">
+                                                    </button>
+                                                </div>
                                             </template> </div>
                                     </div>
                                 </div> <!-- End date -->
@@ -384,7 +401,21 @@
                                         <!--Days of the month-->
                                         <div class="grid grid-cols-7 gap-1"> 
                                             <template x-for="day in daysInMonth(type)" :key="day.dateObj ? day.dateObj.getTime() : 'empty-' + index">
-                                                <div> <button type="button" x-show="!day.empty" @click="selectDate(day.dateObj, type)" x-text="day.date" :disabled="day.disabled" :class="{ 'bg-brand-500 text-white': isSelected(day.dateObj, type), 'text-gray-400 cursor-not-allowed': day.disabled }" class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition"></button> </div>
+                                                <div>
+                                                    <button 
+                                                        type="button" 
+                                                        x-show="!day.empty" 
+                                                        @click="selectDate(day.dateObj, type)" 
+                                                        x-text="day.date" 
+                                                        :disabled="day.disabled" 
+                                                        :class="{ 
+                                                            'bg-brand-500 text-white font-bold shadow-md': isSelected(day.dateObj, type), 
+                                                            'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-40': day.disabled,
+                                                            'text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-brand-300 dark:hover:bg-brand-600': !day.disabled && !isSelected(day.dateObj, type)
+                                                        }"
+                                                        class="w-8 h-8 rounded-full text-sm hover:bg-blue-200 transition">
+                                                    </button>
+                                                </div>
                                             </template>
                                         </div>
                                     </div>

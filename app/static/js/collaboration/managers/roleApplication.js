@@ -28,12 +28,13 @@ function roleApplicationManager(initialRoles = []) {
         applications: initialRoles.map(role => ({
             ...role,
             proposed_amount: role.role_amount,
-            payment_plan: ''
+
         })),
 
         toggleRole(nicheId) {
             const role = this.applications.find(a => a.niche_id === nicheId);
             if (role) role.isActive = !role.isActive;
+            updateProposalUI(this.getSummary());
         },
 
         updateRoleField(nicheId, field, value) {
@@ -44,18 +45,38 @@ function roleApplicationManager(initialRoles = []) {
                 if (value !== '' && value !== null) {
                     role.isActive = true;
                 }
+                updateProposalUI(this.getSummary());
             }
         },
 
         isRoleActive(roleId) {
             const role = this.applications.find(a => a.niche_id === roleId);
-            console.log("is active for role: ", role.isActive);
             return role ? role.isActive : false;
         },
 
         isFieldDisabled(roleId, canApply) {
             if (!canApply) return true;
             return false;
+        },
+
+        /**
+         * Returns calculated totals for active roles
+         */
+        getSummary() {
+            const activeRoles = this.applications.filter(app => app.isActive);
+            const subtotal = activeRoles.reduce((sum, app) => {
+                const price = parseFloat(app.proposed_amount) || parseFloat(app.role_amount) || 0;
+                return sum + price;
+            }, 0);
+
+            const serviceFee = subtotal * 0.05;
+
+            return {
+                count: activeRoles.length,
+                subtotal: subtotal,
+                serviceFee: serviceFee,
+                total: subtotal + serviceFee
+            };
         },
 
         buildPayload() {
@@ -71,3 +92,4 @@ function roleApplicationManager(initialRoles = []) {
         }
     }
 }
+
