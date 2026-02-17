@@ -8,8 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.address import AddressType
 from collaboration.models.choices import GigStatus, PaymentOption
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
+from collaboration.schemas.send_proposal import SendProposal
 from core.url_names import OppurtunitiesURLS
 from template_map.collaboration import Collabs
+from pydantic import ValidationError
 import json
 
 
@@ -73,7 +75,11 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
         self.object = self.get_object()
         try:
             payload = json.loads(request.body)
-            print(payload)
+            data = SendProposal(**payload)
+            # check if the vendor has paid subscription
+            #   - if not paid, then send them to payments
+            # create instance of application services
+            # send application
             
         except json.JSONDecodeError:
             return JsonResponse(
@@ -83,6 +89,16 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
                 },
                 status=400,
             )
+            
+        except ValidationError as err:
+            return JsonResponse(
+                {
+                    "error": "Validation error",
+                    "message": "Some required information is missing or invalid.",
+                },
+                status=400,
+            )
+            
         
         
         # Usually, you'll want to return a redirect or the standard GET response

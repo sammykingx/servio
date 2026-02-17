@@ -157,7 +157,7 @@ async function submitBtn(action="publish") {
     const body = { action, payload: gigPayload };
     
     try {
-        const response = await publishGig(body, endpoint, csrf_token);
+        const response = await sendPayload(body, endpoint, csrf_token);
 
         if (!response.ok) {
             // Server returned a non-2xx response

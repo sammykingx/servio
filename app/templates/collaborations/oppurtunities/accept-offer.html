@@ -172,7 +172,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 text-justify">{{ role.description|truncatewords:35 }}</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 text-justify">{{ role.description|truncatewords:35|capfirst }}</p>
                                         <!-- Budget Row (Always Inline) -->
                                         <div class="grid grid-cols-2 md:grid-cols-3 items-center justify-evenly gap-4">
                                             <!-- Budget Allocation -->
