@@ -89,3 +89,7 @@ class UserProfile(models.Model):
     @property
     def home_address(self):
         return self.user.addresses.filter(label="home").first()
+    
+    @property
+    def get_user_niches(self) -> list:
+        return self.niches.values_list("id", flat=True)

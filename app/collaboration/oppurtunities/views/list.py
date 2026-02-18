@@ -50,7 +50,7 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
         user = self.request.user
         profile = user.profile
         user_industry_id = profile.industry_id
-        user_niches = profile.niches.values_list("id", flat=True)
+        user_niches = profile.get_user_niches
         user_niche_count = len(user_niches)
         
         base_qs = (

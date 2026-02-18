@@ -7,6 +7,8 @@ from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.address import AddressType
 from collaboration.models.choices import GigStatus, PaymentOption
+from collaboration.proposals.exceptions import ProposalError
+from collaboration.proposals.services import ProposalService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
 from collaboration.schemas.send_proposal import SendProposal
 from core.url_names import OppurtunitiesURLS
@@ -76,10 +78,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
         try:
             payload = json.loads(request.body)
             data = SendProposal(**payload)
-            # check if the vendor has paid subscription
-            #   - if not paid, then send them to payments
-            # create instance of application services
-            # send application
+            ProposalService(request.user).send_proposal(self.object, data)
             
         except json.JSONDecodeError:
             return JsonResponse(
@@ -98,6 +97,13 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
                 },
                 status=400,
             )
+            
+        except ProposalError as e:
+            return JsonResponse({
+                "error": e.title,
+                "message": e.message,
+                "code": e.code
+            }, status=400)
             
         
         
