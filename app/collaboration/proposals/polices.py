@@ -38,18 +38,29 @@ class ProposalPolicy:
         if gig.creator == user:
             raise ProposalPermissionDenied(
                 "You cannot apply to your own projects.",
-                code=PolicyFailure.CANNOT_APPLY_TO_OWN_GIG,
+                code=PolicyFailure.CANNOT_APPLY_TO_OWN_GIG.code,
+                title=PolicyFailure.CANNOT_APPLY_TO_OWN_GIG.title
+            )
+            
+        if gig.status == GigStatus.IN_PROGRESS:
+            raise ProposalPermissionDenied(
+                "Applications for this gig are closed as the project has already commenced.",
+                code=PolicyFailure.GIG_ALREADY_STARTED.code,
+                title=PolicyFailure.GIG_ALREADY_STARTED.title
             )
 
         if gig.status != GigStatus.PUBLISHED:
             raise ProposalPermissionDenied(
                 "This project is no longer accepting applications.",
-                code=PolicyFailure.GIG_NOT_PUBLISHED)
+                code=PolicyFailure.GIG_NOT_PUBLISHED.code,
+                title=PolicyFailure.GIG_NOT_PUBLISHED.title
+            )
             
         if gig.start_date and timezone.now().date() > gig.start_date:
             raise ProposalPermissionDenied(
                 "The application window for this project has closed as the start date has passed.",
-                code=PolicyFailure.GIG_ALREADY_STARTED
+                code=PolicyFailure.GIG_START_DATE_PASSED.code,
+                title=PolicyFailure.GIG_START_DATE_PASSED.title
             )
 
     @staticmethod
@@ -64,13 +75,21 @@ class ProposalPolicy:
         ).exists()
 
         if not is_qualified:
-            raise ProposalPermissionDenied("Your profile does not match the project role's requirements.")
+            raise ProposalPermissionDenied(
+                "Your profile does not match the project role's requirements.",
+                code=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.code,
+                title=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.title
+            )
 
     @staticmethod
     def check_financial_status(profile):
         """Checks if the user has paid necessary fees."""
         if not profile.has_paid_onetime_fee:
-            raise ProposalPermissionDenied("Please pay the one-time registration fee to apply.")
+            raise ProposalPermissionDenied(
+                "Please pay the one-time registration fee to apply.",
+                code=PolicyFailure.SUBSCRIPTION_REQUIRED.code,
+                title=PolicyFailure.SUBSCRIPTION_REQUIRED.title,
+            )
 
     @classmethod
     def ensure_can_apply(cls, user, profile, gig):
@@ -80,7 +99,7 @@ class ProposalPolicy:
         """
         cls.check_gig_eligibility(gig, user)
         cls.check_user_eligibility(profile, gig)
-        # cls.check_financial_status(profile)
+        cls.check_financial_status(profile)
         
         return True
         

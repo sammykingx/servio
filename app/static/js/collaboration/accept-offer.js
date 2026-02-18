@@ -54,7 +54,7 @@ async function sendProposal() {
 
         if (!response.ok) {
             const msg = data.message || "Server rejected the request. Please check your input.";
-            showToast(msg, "error", "Unable to send proposal");
+            showToast(msg, "error", data.error || "Unable to send proposal");
             return;
         }
         showToast(

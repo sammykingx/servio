@@ -18,16 +18,15 @@ NON-GOALS:
 """
 
 from django.apps import apps
-from django.utils import timezone
 from collaboration.schemas.send_proposal import AppliedRoles, SendProposal
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure
 from datetime import timedelta
-from decimal import Decimal
 from typing import List
 
 
 GigCategory = apps.get_model("collaboration", "GigCategory")
+
 class ProposalValidator:
     """
     Stateless validator for enforcing proposal invariants.
@@ -60,6 +59,8 @@ class ProposalValidator:
         if len(industry_ids) > 1:
             raise ProposalValidationError(
                 "Applying to multiple industries in one proposal is not allowed.",
+                code=ValidationFailure.MULTIPLE_INDUSTRIES_NOT_ALLOWED.code,
+                title=ValidationFailure.MULTIPLE_INDUSTRIES_NOT_ALLOWED.title
             )
         
         industry_id = next(iter(industry_ids))
@@ -70,7 +71,11 @@ class ProposalValidator:
                 is_active=True
             )
         except GigCategory.DoesNotExist:
-            raise ProposalValidationError(f"Industry ID {industry_id} is invalid or inactive.")
+            raise ProposalValidationError(
+                f"Industry ID {industry_id} is invalid or inactive.",
+                code=ValidationFailure.INVALID_INDUSTRY,
+                title=ValidationFailure.INVALID_INDUSTRY.title
+            )
         
         return industry_obj
 
@@ -81,16 +86,18 @@ class ProposalValidator:
         if invalid_niche_ids:
             raise ProposalValidationError(
                 f"Niches {list(invalid_niche_ids)} do not belong to the selected industry.",
-                code=ValidationFailure.INVALID_ROLE
+                code=ValidationFailure.INVALID_ROLE,
+                title=ValidationFailure.INVALID_ROLE.title
             )
 
     @classmethod
     def _validate_minimum_role_amount(cls, role: AppliedRoles):
         final_amount = role.proposed_amount if role.proposed_amount is not None else role.role_amount
-        if final_amount < 20:
+        if final_amount < 50:
             raise ProposalValidationError(
-                "Quality work deserves more than pocket change! Please ensure each role amount is at least $20.",
+                "Quality work deserves more than pocket change! Please ensure each role amount is at least $50.",
                 code=ValidationFailure.INVALID_AMOUNT,
+                title=ValidationFailure.INVALID_AMOUNT.title,
             )
 
     @classmethod
@@ -103,5 +110,6 @@ class ProposalValidator:
             if d.due_date > cutoff_date:
                 raise ProposalValidationError(
                     f"Deliverable due date must be on or before {cutoff_date}.",
-                    code=ValidationFailure.INVALID_DUE_DATE,
+                    code=ValidationFailure.DURATION_EXCEEDS_LIMIT,
+                    title=ValidationFailure.DURATION_EXCEEDS_LIMIT.title
                 )

@@ -102,13 +102,11 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
             return JsonResponse({
                 "error": e.title,
                 "message": e.message,
-                "code": e.code
+                "code": e.code,
+                "url": e.redirect_url
+                
             }, status=400)
-            
-        
-        
-        # Usually, you'll want to return a redirect or the standard GET response
-        
+ 
         return JsonResponse({
             "title": "Proposal Sent!",
             "status": "success",
