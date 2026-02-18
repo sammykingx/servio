@@ -17,20 +17,91 @@ NON-GOALS:
 - Orchestration (e.g., Sending emails or updating state).
 """
 
+from django.apps import apps
+from django.utils import timezone
+from collaboration.schemas.send_proposal import AppliedRoles, SendProposal
 from .exceptions import ProposalValidationError
+from .status_codes import ValidationFailure
+from datetime import timedelta
+from decimal import Decimal
+from typing import List
 
+
+GigCategory = apps.get_model("collaboration", "GigCategory")
 class ProposalValidator:
     """
     Stateless validator for enforcing proposal invariants.
+    Ensures that a proposal is logically consistent with a Gig before creation.
+    Pydantic handles types/formats.
     """
     
-    @staticmethod
-    def validate(payload, gig):
-        """
-        Ensures the proposal payload is logically consistent with the target Gig.
-        """
-        if payload.price <= 0:
-            raise ProposalValidationError("Price must be a positive value.")
+    @classmethod
+    def validate(cls, payload: SendProposal, gig):
+        """Orchestrates cross-model validation logic."""
+        
+        cls._validate_taxonomy_integrity(payload.applied_roles)
+        cls._validate_deliverables_timeline(payload.deliverables, gig.end_date)
 
-        if payload.duration > gig.max_duration:
-            raise ProposalValidationError("Proposal duration exceeds the maximum allowed for this gig.")
+    @classmethod
+    def _validate_taxonomy_integrity(cls, applied_roles: List[AppliedRoles]):
+        industry_ids = set()
+        niche_ids = set()
+        
+        for role in applied_roles:
+            industry_ids.add(role.industry_id)
+            niche_ids.add(role.niche_id)
+            cls._validate_minimum_role_amount(role)
+        
+        validated_industry = cls._validate_industry(industry_ids)    
+        cls._validate_niche(niche_ids, validated_industry)
+
+    @classmethod
+    def _validate_industry(cls, industry_ids: set):
+        if len(industry_ids) > 1:
+            raise ProposalValidationError(
+                "Applying to multiple industries in one proposal is not allowed.",
+            )
+        
+        industry_id = next(iter(industry_ids))
+        try:
+            industry_obj = GigCategory.objects.get(
+                id=industry_id, 
+                parent__isnull=True, 
+                is_active=True
+            )
+        except GigCategory.DoesNotExist:
+            raise ProposalValidationError(f"Industry ID {industry_id} is invalid or inactive.")
+        
+        return industry_obj
+
+    @classmethod
+    def _validate_niche(cls, niche_ids: set, validated_industry):
+        valid_niche_ids = set(validated_industry.active_subcategories().values_list('id', flat=True))
+        invalid_niche_ids = niche_ids - valid_niche_ids
+        if invalid_niche_ids:
+            raise ProposalValidationError(
+                f"Niches {list(invalid_niche_ids)} do not belong to the selected industry.",
+                code=ValidationFailure.INVALID_ROLE
+            )
+
+    @classmethod
+    def _validate_minimum_role_amount(cls, role: AppliedRoles):
+        final_amount = role.proposed_amount if role.proposed_amount is not None else role.role_amount
+        if final_amount < 20:
+            raise ProposalValidationError(
+                "Quality work deserves more than pocket change! Please ensure each role amount is at least $20.",
+                code=ValidationFailure.INVALID_AMOUNT,
+            )
+
+    @classmethod
+    def _validate_deliverables_timeline(cls, deliverables, gig_end_date):
+        if not gig_end_date:
+            return
+
+        cutoff_date = gig_end_date - timedelta(days=3)
+        for d in deliverables:
+            if d.due_date > cutoff_date:
+                raise ProposalValidationError(
+                    f"Deliverable due date must be on or before {cutoff_date}.",
+                    code=ValidationFailure.INVALID_DUE_DATE,
+                )

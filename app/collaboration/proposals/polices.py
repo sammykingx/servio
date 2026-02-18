@@ -46,11 +46,11 @@ class ProposalPolicy:
                 "This project is no longer accepting applications.",
                 code=PolicyFailure.GIG_NOT_PUBLISHED)
             
-        # if gig.start_date and timezone.now().date() > gig.start_date:
-        #     raise ProposalPermissionDenied(
-        #         "This project has already started.",
-        #         code=PolicyFailure.GIG_ALREADY_STARTED
-        #     )
+        if gig.start_date and timezone.now().date() > gig.start_date:
+            raise ProposalPermissionDenied(
+                "The application window for this project has closed as the start date has passed.",
+                code=PolicyFailure.GIG_ALREADY_STARTED
+            )
 
     @staticmethod
     def check_user_eligibility(profile, gig):

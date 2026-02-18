@@ -20,7 +20,7 @@ class PolicyFailure:
 # Validation / Domain Codes
 # -----------------------------
 class ValidationFailure:
-    INVALID_PRICE = "INVALID_PRICE"
+    INVALID_AMOUNT = "INVALID_AMOUNT"
     DURATION_EXCEEDS_LIMIT = "DURATION_EXCEEDS_LIMIT"
     INVALID_DUE_DATE = "INVALID_DUE_DATE"
     DUPLICATE_APPLICATION = "DUPLICATE_APPLICATION"

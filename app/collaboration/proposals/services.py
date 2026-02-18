@@ -27,7 +27,9 @@ Services orchestrate. Domain modules decide and validate.
 from django.apps import apps
 from django.db import transaction
 from collaboration.models.choices import ApplicationStatus
+from collaboration.schemas.send_proposal import SendProposal
 from .polices import ProposalPolicy
+from .validators import ProposalValidator
 from .exceptions import ProposalPermissionDenied
 
 
@@ -48,7 +50,7 @@ class ProposalService:
         self.user = user
 
     @transaction.atomic
-    def send_proposal(self, gig, payload):
+    def send_proposal(self, gig, payload:SendProposal):
         """
         Executes the end-to-end proposal submission process.
 
@@ -70,8 +72,8 @@ class ProposalService:
             ProposalValidationError: If data integrity checks fail.
         """
 
-        self._ensure_can_apply(gig)
-        self._validate(payload, gig)
+        ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
+        ProposalValidator.validate(payload, gig)
 
         proposal = self._create_proposal(gig, payload)
 

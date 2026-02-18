@@ -33,7 +33,7 @@ async function sendProposal() {
     }
 
     // validating deliverables
-    ({ isValid, errorContext } = validateDeliverables(deliverablesPayload, projectEndDate));
+    isValid, errorContext = validateDeliverables(deliverablesPayload, projectEndDate);
     if (!isValid) {
         showToast(errorContext.message, errorContext.type, errorContext.title);
         return;
