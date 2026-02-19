@@ -1,5 +1,6 @@
 async function sendProposal() {
     const gigSummary = document.getElementById('gig-summary-section');
+    const sendBtn = document.getElementById('sndProposalBtn');
     const roleApplicationsEl = document.querySelector('[x-ref="roleApplicationsUnit"]');
     const projectRoleEl = document.querySelector('[x-ref="projectRole"]');
     const deliverablesEl = document.querySelector('[x-ref="deliverablesUnit"]');
@@ -7,6 +8,7 @@ async function sendProposal() {
     const errorTitle = "Session Out of Sync";
     const errorMsg = "Required project data could not be loaded. A quick refresh will resolvee/fix this.";
 
+    sendBtn.disabled = true;
     if (!gigSummary) {
         showToast(errorMsg, "info", errorTitle)
         return;
@@ -51,10 +53,17 @@ async function sendProposal() {
     try {
         const response = await sendPayload(masterPayload, endPoint, csrfToken);
         const data = await response.json().catch(() => ({}));
+        sendBtn.disabled = false;
 
         if (!response.ok) {
             const msg = data.message || "Server rejected the request. Please check your input.";
             showToast(msg, "error", data.error || "Unable to send proposal");
+            if (data?.url) {
+                setTimeout(() => {
+                    window.location.assign(data.url);
+                }, 2000);
+            }
+
             return;
         }
         showToast(
@@ -62,6 +71,7 @@ async function sendProposal() {
             "success",
             data.title || "Your Proposal is Live!"
         );
+
         if (data?.url) {
             setTimeout(() => {
                 window.location.assign(result.url);

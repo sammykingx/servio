@@ -1,0 +1,98 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block browser_title %}Subscription Fee{% endblock %}
+{% block content %}
+<main class="flex-grow flex flex-col items-center justify-center px-6 py-12">
+<!-- Hero Section -->
+<div class="text-center max-w-2xl mb-12">
+	<h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-slate-900 dark:text-white">
+		Unlock Servio Forever ✨
+	</h1>
+	<p class="text-md md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+		A one-time investment for a lifetime of professional growth. No monthly bills. No hidden fees. Just full access. 
+	</p>
+</div>
+<!-- Pricing Card Container -->
+<div class="w-full max-w-lg relative">
+	<!-- Subtle glow background effect -->
+	<div class="absolute -inset-1 bg-gradient-to-r from-brand-500/20 to-blue-400/20 rounded-xl blur-2xl opacity-50"></div>
+	<!-- Main Card -->
+	<div class="relative bg-white dark:bg-slate-900 border border-brand-400 dark:border-slate-800 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.04)] p-8 md:p-10 flex flex-col">
+		<!-- Badge -->
+		<div class="self-start px-3 py-1 rounded-full bg-brand-500/10 dark:bg-success-500/10 text-brand-500 dark:text-success-500 text-xs font-semibold uppercase tracking-wider mb-6">
+			Lifetime Access
+		</div>
+		<!-- Price Section -->
+		<div class="flex items-baseline gap-2 mb-8">
+			<span class="text-5xl font-bold tracking-tighter text-slate-900 dark:text-white">$40</span>
+			<span class="dark:text-slate-400 font-normal">one-time fee</span>
+		</div>
+		<!-- Divider -->
+		<div class="h-px w-full bg-border-brand-400 dark:bg-slate-800 mb-8"></div>
+		<!-- Benefits List -->
+		<ul class="space-y-5 mb-10">
+			<li class="flex items-start gap-3">
+				<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
+					<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
+				</div>
+				<span class="dark:text-slate-300 font-normal">Unlimited service listings</span>
+			</li>
+			<li class="flex items-start gap-3">
+				<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
+					<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
+				</div>
+				<span class="dark:text-slate-300 font-normal">Advanced project management tools</span>
+			</li>
+			<li class="flex items-start gap-3">
+				<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
+					<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
+				</div>
+				<span class="dark:text-slate-300 font-normal">Secure escrow protection</span>
+			</li>
+			<li class="flex items-start gap-3">
+				<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
+					<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
+				</div>
+				<span class="dark:text-slate-300 font-normal">Verified professional badge</span>
+			</li>
+			<li class="flex items-start gap-3">
+				<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
+					<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
+				</div>
+				<span class="dark:text-slate-300 font-normal">Priority 24/7 support</span>
+			</li>
+		</ul>
+		<!-- CTA Button -->
+		<button class="w-full bg-brand-500 hover:bg-brand-500/90 text-white font-semibold py-5 px-8 rounded-lg shadow-[0_4px_14px_0_rgba(29,26,255,0.3)] transform transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
+		<span>Get Lifetime Access</span>
+		<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+		</button>
+		<!-- Secure Signal -->
+		<div class="mt-6 flex items-center justify-center gap-2 dark:text-slate-400 text-xs sm:text-sm font-normal">
+			<span class="material-symbols-outlined text-green-500 text-lg">lock</span>
+			Secure Checkout powered by Stripe
+		</div>
+	</div>
+</div>
+<!-- Trust Signals / Footer -->
+<div class="mt-16 flex flex-col items-center gap-8">
+	<div class="flex flex-wrap justify-center items-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+		<img alt="Visa Logo" class="h-6" data-alt="Official Visa credit card payment logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfe-9jE5lUQxbMPqBJyDQgYpZsFq9m-zmayQefsi9g3D_0nDFg5TrW-J8r37yY3mx9KkEwkmbftYHYE0_ERHRkOvii-mSLsGr_qkAjBICNwVNaFqO8aEWYOj1mqs8MRhYvqCMeB1G7votDTFy4EeVe7nubiZ_4Z9nyF65N3O0VemlQ1dUiWL4hBoMyzEyo8lBhPUsQQG3Lr6TF0C1t2JbpcixhctQEXrQUnOQE4uwj-bPizdgqzvagQq4AVBNZ0ofskLtqUmp94JQ" />
+		<img alt="Mastercard Logo" class="h-8" data-alt="Official Mastercard payment gateway logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7O6hWkVhsfgdYEszldgWiQd9V9CMJjdqawZUnqUeSoFfdrPkUKV5wV6VfQbEIPCYLnGjbOq3bfD29a8xQAwgGwyU3ODtGQbU2UHOrW-cIkMlS9G47WFk2_HmMaQd43T9TVwh-g_yX4s5vj8iKLpWo-f39547HHGik8hn170X5j5LhNpE411eej1GnSRc6xM1lG_PYzsvDl3_xClmNZkpfuFCOcjWmumJ2mraixkfgu49Bf0dGrkcaKC2m7FjST4kOaVJFiRmpgY4" />
+		<img alt="Stripe Logo" class="h-7" data-alt="Official Stripe secure payment processor logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF4O_F8UeaIR7o1Yy5ua36KxHUs4P-qzZHqc637vcnpb7aJagccoGPoavszPhhtz-8C2se32-sifH-V2j___iHPL6cnzemjS2mYKOdlcMqXxiO-0N2ydR5qVQoPcoi0opIiwE5wCYobApdGbkTqR4EVoU1YvV38xqK-r9QAPKPqWaYN7soVIYWOF7XNxV0_BCFBLnzKW9Ab0BBpyRVvM6rzMKX3L143_1NPYClMITIQqHHv6tE5Qi-icav16hRE_AKwIdZR0e5dlQ" />
+		<img alt="PayPal Logo" class="h-6" data-alt="Official PayPal payment platform logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB_y6EGowoYm7ywxH1DtAFYUre_fv5svlIx39rcTXh-TXohXZlOJJf5UBahWv6PCLRl_boRQ4tar-IZTm9Hl0m3m8Giht-xS4n-7_lojfsXybFRe6AvwRhvI3GLORC1df2GS3XuLMgGgShoisizxdiRk50wMskYGFMd63og3Vio7NSvsk-8pgE2MQeLd2qpYilFGpsMmCeCPJCk2w39YXOb3PcqFDKKGmx2-fpgPzEjvwJdSjZCENhQ6cu7Bh6c5pBg7vTqXTjrCs" />
+	</div>
+	<div class="flex items-center gap-4 py-2 px-6 rounded-full dark:bg-slate-800 border border-brand-400 dark:border-slate-700">
+		<div class="flex items-center gap-1 text-xs font-semibold dark:text-slate-300">
+			<span class="material-symbols-outlined text-brand-500 text-sm">verified_user</span>
+			SSL SECURE
+		</div>
+		<div class="h-3 w-px bg-border-brand-400 dark:bg-slate-700"></div>
+		<div class="flex items-center gap-1 text-xs font-semibold dark:text-slate-300">
+			<span class="material-symbols-outlined text-brand-500 text-sm">shield_with_heart</span>
+			100% Encrypted
+		</div>
+	</div>
+</div>
+</section>
+{% endblock %}

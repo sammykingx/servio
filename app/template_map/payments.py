@@ -4,6 +4,7 @@ _BASE_FOLDER = TemplateRegistryBase("payments")
 
 class Payments:
     SUMMARY = _BASE_FOLDER.base_folder_files("transactions.html")
+    SUBSCRIPTION = _BASE_FOLDER.base_folder_files("subcriptions.html")
     
     class GigPayments:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("gig-payment-flows")

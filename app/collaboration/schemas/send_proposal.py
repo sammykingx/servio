@@ -17,6 +17,10 @@ class DeliverablesPayload(BaseModel):
     duration_value: int
     due_date: date
 
+    @field_validator("description", mode="after")
+    def validate_description(cls, value) -> str:
+        return value.strip()
+    
     @model_validator(mode='after')
     def validate_duration_logic(self) -> 'DeliverablesPayload':
         unit = self.duration_unit

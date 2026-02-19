@@ -89,7 +89,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
                 status=400,
             )
             
-        except ValidationError as err:
+        except ValidationError as err:                
             return JsonResponse(
                 {
                     "error": "Validation error",
@@ -113,11 +113,10 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
             "message": "High five! Your proposal is officially on its way to the creator for review. We'll let you know as soon as they take a look."
         })
     
-   
 
 def user_can_apply_for_role(user, role) -> bool:
     if not user.is_authenticated:
         return False
 
-    user_niches = set(user.profile.niches.values_list("id", flat=True))
+    user_niches = set(user.profile.get_user_niches)
     return role.role_id in user_niches

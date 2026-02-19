@@ -15,6 +15,11 @@ urlpatterns = [
         ),
     ),
     path(
+        "user-subcription/", 
+         TemplateView.as_view(template_name=Payments.SUBSCRIPTION), 
+         name=PaymentURLS.PAY_SUBSCRIPTION
+    ),
+    path(
         "all-payments/", 
          TemplateView.as_view(template_name=Payments.SUMMARY), 
          name=PaymentURLS.USER_PAYMENT_SUMMARY

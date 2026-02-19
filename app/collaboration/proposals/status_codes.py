@@ -9,7 +9,6 @@ from typing import NamedTuple, Optional
 class FailureDetail(NamedTuple):
     code: str
     title: str
-    redirect_url: Optional[str] = None
 
 # -----------------------------
 # Permission / Policy Codes
@@ -22,17 +21,8 @@ class PolicyFailure:
     GIG_ALREADY_STARTED = FailureDetail("GIG_ALREADY_STARTED", "Project In Progress")
     NOT_QUALIFIED_FOR_ROLES = FailureDetail("NOT_QUALIFIED_FOR_ROLES", "Requirement Mismatch")
     
-    SUBSCRIPTION_REQUIRED = FailureDetail(
-        "SUBSCRIPTION_REQUIRED",
-        "Subscription Required",
-        "/settings/billing/plans",
-    )
-    
-    PAYMENT_PENDING = FailureDetail(
-        "PAYMENT_PENDING",
-        "Pending Payment",
-        "/settings/billing/plans"
-    )
+    SUBSCRIPTION_REQUIRED = FailureDetail("SUBSCRIPTION_REQUIRED", "Subscription Required")
+    PAYMENT_PENDING = FailureDetail("PAYMENT_PENDING", "Pending Payment")
     
     APPLICATION_RESTRICTED = FailureDetail("APPLICATION_RESTRICTED", "Access Denied")
     DUPLICATE_APPLICATION = FailureDetail("DUPLICATE_APPLICATION", "Already Applied")

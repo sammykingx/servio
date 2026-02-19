@@ -25,16 +25,33 @@ Services orchestrate. Domain modules decide and validate.
 """
 
 from django.apps import apps
+from django.urls import reverse_lazy
 from django.db import transaction
-from collaboration.models.choices import ApplicationStatus
+from core.url_names import PaymentURLS
 from collaboration.schemas.send_proposal import SendProposal
-from .polices import ProposalPolicy
-from .validators import ProposalValidator
 from .exceptions import ProposalPermissionDenied
+from .polices import ProposalPolicy
+from .status_codes import PolicyFailure
+from .validators import ProposalValidator
 
 
 GigApplication = apps.get_model("collaboration", "GigApplication")
 
+def get_error_redirect(code: str, context: dict = None) -> str:
+    """
+    Maps failure codes to their respective redirect paths.
+    Using a context dict allows for dynamic URL construction (IDs, etc).
+    """
+    context = context or {}
+    
+    mapping = {
+        PolicyFailure.SUBSCRIPTION_REQUIRED.code: reverse_lazy(PaymentURLS.PAY_SUBSCRIPTION),
+        PolicyFailure.PAYMENT_PENDING.code: "#",
+        # Example of a dynamic URL using context
+        # ValidationFailure.INVALID_ROLE.code: f"/gigs/{context.get('gig_id')}/roles/",
+    }
+    
+    return mapping.get(code)
 
 class ProposalService:
     """
@@ -71,11 +88,16 @@ class ProposalService:
             ProposalPermissionDenied: If policy checks fail.
             ProposalValidationError: If data integrity checks fail.
         """
+        # prevent double cliks
+        try:
+            ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
+            ProposalValidator.validate(payload, gig)
 
-        ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
-        ProposalValidator.validate(payload, gig)
-
-        proposal = self._create_proposal(gig, payload)
+            proposal = self._create_proposal(gig, payload)
+            
+        except ProposalPermissionDenied as e:
+            e.redirect_url = get_error_redirect(e.code, {"gig_id": gig.id})
+            raise e
 
         # Future side-effects:
         # self._create_activity(gig, proposal)
