@@ -55,12 +55,23 @@ class RoleStatus(models.TextChoices):
     OPEN = "open", "Open"
     COMPLETED = "completed", "Completed"
 
-class ApplicationStatus(models.TextChoices):
-    PENDING = "pending", "Pending"
+class ProposalStatus(models.TextChoices):
+    # Initial Stages
+    SENT = "sent", "Sent"
+    
+    # Engagement Tracking
+    OPENED = "opened", "Opened"
+    REVIEWING = "reviewing", "In Review"
+    
+    # Active Discussion
+    NEGOTIATING = "negotiating", "Negotiation"
+    REVISIONS_PENDING = "revisions_pending", "Revisions Requested"
+    
+    # Final Outcomes
     ACCEPTED = "accepted", "Accepted"
-    NEGOTIATING = "negotiating", "Negotiating"
     REJECTED = "rejected", "Rejected"
     WITHDRAWN = "withdrawn", "Withdrawn"
+    EXPIRED = "expired", "Expired"
     
 class AssignmentStatus(models.TextChoices):
     ONGOING = "ongoing", "Ongoing"

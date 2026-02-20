@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -8,11 +7,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from core.url_names import CollaborationURLS
 from collaboration.models.choices import PaymentOption
 from template_map.collaboration import Collabs
+from registry_utils import get_registered_model
 
 
-GigModel = apps.get_model("collaboration","Gig")
-GigRoleModel = apps.get_model("collaboration", "GigRole")
-GigApplicationModel = apps.get_model("collaboration", "GigApplication")
+GigModel = get_registered_model("collaboration","Gig")
+GigRoleModel = get_registered_model("collaboration", "GigRole")
+ProposalModel = get_registered_model("collaboration", "Proposal")
 
 
 class GigDetailView(LoginRequiredMixin, DetailView):
@@ -21,7 +21,7 @@ class GigDetailView(LoginRequiredMixin, DetailView):
 
     This view enforces ownership access, ensuring users can only view gigs
     they created. In addition to core gig data, it enriches the context with
-    role-level payment metadata and prefetches related role applications for
+    role-level payment metadata and prefetches related role proposals for
     efficient rendering.
     """
     model = GigModel
@@ -80,7 +80,7 @@ class GigDetailView(LoginRequiredMixin, DetailView):
         The queryset:
         - Limits access to gigs created by the current user
         - Eager-loads the gig creator
-        - Prefetches required roles, their associated niches, and role applications
+        - Prefetches required roles, their associated niches, and role proposals
           along with applicant user data to minimize database queries
 
         Returns:
@@ -97,8 +97,8 @@ class GigDetailView(LoginRequiredMixin, DetailView):
                     .select_related("niche")
                     .prefetch_related(
                         Prefetch(
-                            "applications",
-                            queryset=GigApplicationModel.objects.select_related("user"),
+                            "proposals",
+                            queryset=ProposalModel.objects.select_related("user"),
                         )
                     )
                 )

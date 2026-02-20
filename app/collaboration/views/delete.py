@@ -7,11 +7,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from core.url_names import CollaborationURLS
 from template_map.collaboration import Collabs
 from collaboration.models.choices import GigStatus
+from registry_utils import get_registered_model
 from ..exceptions import GigError
 
 
-GigModel = apps.get_model("collaboration", "Gig")
-GigApplicationModel = apps.get_model("collaboration", "GigApplication")
+GigModel = get_registered_model("collaboration", "Gig")
+ProposalModel = get_registered_model("collaboration", "Proposal")
 
 
 class DeleteGigView(LoginRequiredMixin, View):
@@ -56,12 +57,12 @@ class DeleteGigView(LoginRequiredMixin, View):
                 gig = (
                     GigModel.objects
                     .select_for_update()
-                    .prefetch_related("required_roles__applications")
+                    .prefetch_related("required_roles__proposals")
                     .get(slug=gig_slug, creator=self.request.user)
                 )
                 roles = gig.required_roles.all()
-                has_applications = any(
-                    role.applications.exists()
+                has_proposals = any(
+                    role.proposals.exists()
                     for role in roles
                 )
 
@@ -72,24 +73,24 @@ class DeleteGigView(LoginRequiredMixin, View):
                     gig.delete()
                     return "deleted", "Gig deleted successfully."
 
-                if gig.status == GigStatus.PUBLISHED and not has_applications:
+                if gig.status == GigStatus.PUBLISHED and not has_proposals:
                     if roles:
                         roles.delete()
                         
                     gig.delete()
                     return "deleted", "Gig deleted successfully."
 
-                if has_applications:
+                if has_proposals:
                     gig.status = GigStatus.ARCHIVED
                     gig.is_active = False
                     gig.save(update_fields=["status", "is_active"])
 
-                    return "archived", "Gig has applications and was archived instead."
+                    return "archived", "Gig has proposals and was archived instead."
 
                 raise GigError(
-                    message="This gig can no longer be deleted because it has active applications.",
+                    message="This gig can no longer be deleted because it has active proposals.",
                     status_code=409,
-                    code="gig_has_applications"
+                    code="gig_has_proposals"
                 )
                 
         except GigModel.DoesNotExist:

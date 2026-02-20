@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -8,11 +7,12 @@ from accounts.models.address import AddressType
 from collaboration.models.choices import GigStatus, PaymentOption
 from core.url_names import OppurtunitiesURLS
 from template_map.collaboration import Collabs
+from registry_utils import get_registered_model
 
 
-GigModel = apps.get_model("collaboration","Gig")
-GigRoleModel = apps.get_model("collaboration", "GigRole")
-GigApplicationModel = apps.get_model("collaboration", "GigApplication")
+GigModel = get_registered_model("collaboration","Gig")
+GigRoleModel = get_registered_model("collaboration", "GigRole")
+ProposalModel = get_registered_model("collaboration", "Proposal")
 
 class OppurtuniyDetailView(LoginRequiredMixin, DetailView):
     model = GigModel

@@ -11,14 +11,15 @@ from collaboration.schemas.gig_role import PAYMENT_OPTIONS
 from collaboration.schemas.send_proposal import SendProposal
 from core.url_names import OppurtunitiesURLS
 from template_map.collaboration import Collabs
+from registry_utils import get_registered_model
 from pydantic import ValidationError
 import json
 
 
-GigCategoryModel = apps.get_model("collaboration", "GigCategory")
-GigModel = apps.get_model("collaboration","Gig")
-GigRoleModel = apps.get_model("collaboration", "GigRole")
-GigApplicationModel = apps.get_model("collaboration", "GigApplication")
+GigCategoryModel = get_registered_model("collaboration", "GigCategory")
+GigModel = get_registered_model("collaboration","Gig")
+GigRoleModel = get_registered_model("collaboration", "GigRole")
+
 
 class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
     model = GigModel

@@ -24,18 +24,19 @@ This module MUST NOT:
 Services orchestrate. Domain modules decide and validate.
 """
 
-from django.apps import apps
+from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 from django.db import transaction
 from core.url_names import PaymentURLS
 from collaboration.schemas.send_proposal import SendProposal
+from registry_utils import get_registered_model
 from .exceptions import ProposalPermissionDenied
 from .polices import ProposalPolicy
 from .status_codes import PolicyFailure
 from .validators import ProposalValidator
 
 
-GigApplication = apps.get_model("collaboration", "GigApplication")
+ProposalModel = get_registered_model("collaboration", "Proposal")
 
 def get_error_redirect(code: str, context: dict = None) -> str:
     """
@@ -53,6 +54,7 @@ def get_error_redirect(code: str, context: dict = None) -> str:
     
     return mapping.get(code)
 
+
 class ProposalService:
     """
     Domain Service for orchestrating the Proposal lifecycle.
@@ -63,7 +65,7 @@ class ProposalService:
     constraints are satisfied.
     """
 
-    def __init__(self, user):
+    def __init__(self, user:AbstractUser):
         self.user = user
 
     @transaction.atomic
@@ -94,6 +96,9 @@ class ProposalService:
             ProposalValidator.validate(payload, gig)
 
             proposal = self._create_proposal(gig, payload)
+            self._notify_creator_by_mail(gig.creator)
+            # self._create_activity(gig, proposal)
+            # self._send_notification(gig, proposal)
             
         except ProposalPermissionDenied as e:
             e.redirect_url = get_error_redirect(e.code, {"gig_id": gig.id})
@@ -105,6 +110,11 @@ class ProposalService:
         return proposal
 
     def _create_proposal(self, gig, payload):
+        
+        # ERRORS TO PREVENT
+        # - raise conditions
+        # - no duplicate application for same gig for the current user
+        
         # return GigApplication.objects.create(
         #     gig=gig,
         #     applicant=self.user,
@@ -114,3 +124,11 @@ class ProposalService:
         #     status=ApplicationStatus.PENDING,
         # )
         return True
+    
+    def _notify_creator_by_mail(self, creator:AbstractUser) -> None:
+        email = creator.email
+        return None
+    
+    def _in_app_notifications(self, creator:AbstractUser, proovider:AbstractUser) -> None:
+        """creates in-app notifications for both providers and creators"""
+        return None

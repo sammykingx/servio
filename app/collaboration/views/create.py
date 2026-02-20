@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.http import Http404
 from django.db import transaction, IntegrityError, OperationalError
 from django.shortcuts import render, redirect
@@ -10,6 +9,7 @@ from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
 from core.url_names import CollaborationURLS
 from formatters.pydantic_formatter import format_pydantic_errors
+from registry_utils import get_registered_model
 from ..schemas import CreateGigRequest, CreateGigStates, get_response_msg
 from ..exceptions import GigError
 from ..schemas.gig import GigPayload
@@ -19,10 +19,10 @@ from typing import Dict, List
 import json
 
 
-GigCategory = apps.get_model("collaboration", "GigCategory")
-GigModel = apps.get_model("collaboration", "Gig")
-GigRoleModel = apps.get_model("collaboration", "GigRole")
-GigApplicationModel = apps.get_model("collaboration", "GigApplication")
+GigCategory = get_registered_model("collaboration", "GigCategory")
+GigModel = get_registered_model("collaboration", "Gig")
+GigRoleModel = get_registered_model("collaboration", "GigRole")
+ProposalModel = get_registered_model("collaboration", "Proposal")
 
 # not used
 def create_taxonomy_context() -> List[Dict[str, str | List]]:
@@ -265,11 +265,11 @@ class EditGigView(LoginRequiredMixin, View):
         * Core gig/project fields (title, description, dates, budget, visibility)
         * Associated gig/project roles (create, update, aggregate, delete)
     - Prevents destructive changes (e.g., deleting roles) when active
-      applications exist.
+      proposals exist.
 
     GET request flow:
     -----------------
-    - Fetches the gig and its related roles, niches, and applications using
+    - Fetches the gig and its related roles, niches, and proposals using
       optimized querysets.
     - Serializes gig roles into a JSON-compatible payload for frontend usage.
     - Provides taxonomy and payment metadata required by the edit UI.
@@ -309,7 +309,7 @@ class EditGigView(LoginRequiredMixin, View):
         Optimizations:
         - Selects the gig creator using `select_related`
         - Prefetches required roles
-        - Prefetches role applications and their associated users
+        - Prefetches role proposals and their associated users
 
         This queryset is used consistently across GET and POST requests to enforce
         ownership and reduce database queries.
@@ -324,8 +324,8 @@ class EditGigView(LoginRequiredMixin, View):
                         "niche"
                     ).prefetch_related(
                         Prefetch(
-                            "applications",
-                            queryset=GigApplicationModel.objects.select_related("user"),
+                            "proposals",
+                            queryset=ProposalModel.objects.select_related("user"),
                         )
                     ),
                 )
@@ -384,7 +384,7 @@ class EditGigView(LoginRequiredMixin, View):
         ]   
         
         for role in roles:
-            applicants = role.applications.all()
+            applicants = role.proposals.all()
             
         context = {
             "gig": gig,
@@ -471,7 +471,7 @@ class EditGigView(LoginRequiredMixin, View):
                 * Creates new roles
                 * Updates existing roles
                 * Deletes removed roles when safe
-            - Prevents deletion of roles with active applications
+            - Prevents deletion of roles with active proposals
             - Ensures all category references are valid
 
             All changes are atomic: if any step fails, the transaction is rolled back.
@@ -524,10 +524,10 @@ class EditGigView(LoginRequiredMixin, View):
                 # If no roles -> delete all roles
                 # ---------------------------------
                 if not roles_payload:
-                    roles_with_applicants = GigRoleModel.objects.filter(gig=gig, applications__isnull=False)
+                    roles_with_applicants = GigRoleModel.objects.filter(gig=gig, proposals__isnull=False)
                     if roles_with_applicants.exists():
                         raise IntegrityError(
-                            "Cannot remove roles that have active applications."
+                            "Cannot remove roles that have active proposals."
                         )
                     
                     GigRoleModel.objects.filter(gig=gig).delete()

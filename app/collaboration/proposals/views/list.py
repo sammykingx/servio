@@ -9,7 +9,7 @@ class NegotiationListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.LIST
     context_object_name = "proposals"
     paginate_by = 8
-    model = get_registered_model("collaboration", "GigApplication")
+    model = get_registered_model("collaboration", "Proposal")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

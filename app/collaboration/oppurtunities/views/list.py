@@ -1,13 +1,15 @@
-from django.apps import apps
 from django.shortcuts import render
 from django.db.models import Q, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from collaboration.models.choices import GigStatus, GigVisibility, RoleStatus
 from template_map.collaboration import Collabs
+from registry_utils import get_registered_model
 
-GigsModel = apps.get_model("collaboration", "Gig")
-GigRole = apps.get_model("collaboration", "GigRole")
+
+GigsModel = get_registered_model("collaboration", "Gig")
+GigRole = get_registered_model("collaboration", "GigRole")
+
 
 class OppurtunityListView(LoginRequiredMixin, ListView):
     """
