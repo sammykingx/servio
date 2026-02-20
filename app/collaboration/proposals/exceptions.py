@@ -1,5 +1,6 @@
 """
 Domain-specific exceptions for proposal workflows.
+===================
 """
 from typing import Union
 

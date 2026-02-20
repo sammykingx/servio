@@ -1,5 +1,5 @@
 from django.urls import path, include, reverse_lazy
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import RedirectView
 from core.url_names import CollaborationURLS
 from .views.list import CollaborationListView
 from .views.create import CreateCollaborationView, EditGigView

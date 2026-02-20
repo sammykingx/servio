@@ -8,14 +8,12 @@
 {% if not gigs %}
 {% include "components/empty-states/no-oppurtunities.html" %}
 {% else %}
-
-<!-- section Content Container -->
-<section class="flex flex-col flex-1 max-w-[1380px] mx-auto w-full px-2 py-5 gap-6">
+<section class="min-h-screen w-full max-w-[1380px] flex flex-col gap-6">
     <!-- Page Heading Section -->
     <div class="flex flex-wrap justify-between items-end gap-3 px-2">
         <div class="flex min-w-72 flex-col gap-1">
             <p class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">Opportunities</p>
-            <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Browse curated B2B project opportunities in the Deal Room</p>
+            <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400 font-light">Select a project to view available RFPs and submit your proposal.</p>
         </div>
         <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-brand-500 text-white text-sm font-semibold leading-normal tracking-[0.015em] hover:bg-brand-500/90 transition-all shadow-lg shadow-brand-500/20">
             <span class="truncate">Create Project</span>

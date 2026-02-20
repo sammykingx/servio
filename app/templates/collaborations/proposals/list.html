@@ -4,8 +4,354 @@
 {% block content %}
 
 {% if not negotiations %}
-    {% include "components/empty-states/no-negotiations.html" %}
+{% include "components/empty-states/no-negotiations.html" %}
 {% else %}
-<p> Negotiatiosn available</p>
+<div class="min-h-screen w-full max-w-[1380px] flex flex-col gap-6">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+    <!-- Header Section -->
+    <div class="flex flex-wrap justify-between items-end gap-3 px-2">
+        <div class="flex min-w-72 flex-col gap-1">
+            <p class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">Proposals</p>
+            <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Select a project to view open RFPs and start your proposal process.</p>
+        </div>
+        <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-brand-500 text-white text-sm font-semibold leading-normal tracking-[0.015em] hover:bg-brand-500/90 transition-all shadow-lg shadow-brand-500/20">
+            <span class="truncate">Create Project</span>
+        </a>
+    </div>
+    <!-- Controls: Search, Tabs & Filters -->
+    <div class="flex flex-col gap-4 space-y-2">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-700 pb-1">
+            <!-- Project Status Tabs -->
+            <div class="flex overflow-x-auto pb-2 lg:pb-0 gap-6 no-scrollbar my-5">
+                {% with active_tab=request.GET.project_status %}
+                <a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if not active_tab %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        ">
+                    <span class="{% if not active_tab %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                        All
+                    </span>
+                    <span class="flex items-center justify-center
+                            {% if not active_tab %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                        {{ gig_status_counts.total }}
+                    </span>
+                </a>
+
+                <a href="{% if gig_status_counts.active %}?project_status=active{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'active' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        ">
+                    <span class="{% if active_tab == 'active' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                        Active
+                    </span>
+                    <span class="flex items-center justify-center
+                            {% if active_tab == 'active' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                        {{ gig_status_counts.active }}
+                    </span>
+                </a>
+
+                <a href="{% if gig_status_counts.countered %}?project_status=countered{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'countered' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        ">
+                    <span class="{% if active_tab == 'countered' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                        Countered
+                    </span>
+                    <span class="flex items-center justify-center
+                            {% if active_tab == 'countered' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                        {{ gig_status_counts.countered }}
+                    </span>
+                </a>
+
+                <a href="{% if gig_status_counts.accepted %}?project_status=accepted{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'accepted' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        ">
+                    <span class="{% if active_tab == 'accepted' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                        Accepted
+                    </span>
+                    <span class="flex items-center justify-center
+                            {% if active_tab == 'accepted' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                        {{ gig_status_counts.accepted }}
+                    </span>
+                </a>
+
+                <a href="{% if gig_status_counts.rejected %}?project_status=rejected{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'rejected' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        ">
+                    <span class="{% if active_tab == 'rejected' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                        Rejected
+                    </span>
+                    <span class="flex items-center justify-center
+                            {% if active_tab == 'rejected' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                        {{ gig_status_counts.rejected }}
+                    </span>
+                </a>
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    <div class="flex h-full gap-x-5">
+        <!-- LEFT: Proposals -->
+        <div class="flex-1 overflow-y-auto lg:mr-6 space-y-6">
+            {% for _ in "xyz" %}
+            <!-- Proposal Card -->
+                <div class="group relative bg-white dark:bg-slate-900
+    border border-slate-200 dark:border-slate-800
+    rounded-2xl
+    p-7
+    shadow-[0_6px_24px_rgba(15,23,42,0.04)]
+    hover:shadow-[0_12px_40px_rgba(27,23,255,0.10)]
+    hover:border-brand-300
+    transition-all duration-300 cursor-pointer">
+
+    <!-- Subtle left performance accent -->
+    
+
+    <div class="flex flex-col xl:flex-row xl:items-start justify-between gap-8">
+
+        <!-- LEFT: Proposal Info -->
+        <div class="flex-1 space-y-4 pl-3">
+
+            <!-- Title + Status -->
+            <div class="flex flex-wrap items-center gap-3">
+
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
+                    E-commerce UI Refresh
+                </h3>
+
+                <span class="text-[11px] font-semibold tracking-wide
+                    text-brand-600 bg-brand-100
+                    dark:bg-brand-800/40 dark:text-brand-300
+                    px-3 py-1 rounded-full uppercase">
+                    Awaiting Response
+                </span>
+
+            </div>
+
+            <!-- Description -->
+            <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 max-w-2xl">
+                Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
+            </p>
+
+            <!-- Meta -->
+            <div class="flex items-center gap-3 text-xs text-slate-500">
+
+                <span class="font-medium text-slate-800 dark:text-slate-300">
+                    Studio Pixel
+                </span>
+
+                <span class="size-1 bg-slate-300 rounded-full"></span>
+
+                <span>UI/UX Agency</span>
+
+                <span class="size-1 bg-slate-300 rounded-full"></span>
+
+                <span class="uppercase tracking-wide text-slate-400">
+                    Updated 12m ago
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT: Deal Metrics -->
+        <div class="flex flex-col items-end gap-5 min-w-[260px]">
+
+            <div class="grid grid-cols-2 gap-x-8 gap-y-4 text-right">
+
+                <div>
+                    <p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">
+                        Proposed Value
+                    </p>
+                    <p class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
+                        $2,800
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">
+                        Timeline
+                    </p>
+                    <p class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
+                        14 Days
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Subtle action hint -->
+            <div class="flex items-center gap-2 text-sm font-medium text-brand-600 
+                opacity-0 group-hover:opacity-100 transition-opacity">
+
+                Review Proposal
+                <span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+                    arrow_forward
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+            {% endfor %}
+        </div>
+
+
+        <!-- RIGHT: Metrics Aside -->
+        <aside class="hidden xl:flex w-[420px]  border border-slate-100 dark:border-slate-800
+            bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl
+            sticky top-0 h-screen flex-col"
+        >
+
+            <div class="p-8 space-y-10 overflow-y-auto">
+
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">
+                        Performance Insights
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        Your negotiation performance — last 30 days
+                    </p>
+                </div>
+
+                <!-- Metric Cards -->
+                <div class="space-y-4">
+
+                    <div class="p-6 rounded-2xl bg-gradient-to-br from-brand-100/60 to-white
+                        dark:from-brand-800/30 dark:to-slate-900
+                        border border-white/60 dark:border-slate-800"
+                    >
+
+                        <p class="text-xs uppercase font-semibold text-brand-600 tracking-wider">
+                            Total Volume
+                        </p>
+                        <div class="mt-2 flex items-baseline gap-3">
+                            <span class="text-3xl font-bold text-slate-900 dark:text-white">
+                                $42,500
+                            </span>
+                            <span class="text-sm font-semibold text-emerald-600">
+                                +12%
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50
+                        border border-slate-200 dark:border-slate-700"
+                    >
+
+                        <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">
+                            Avg. Response Time
+                        </p>
+                        <div class="mt-2 flex items-baseline gap-3">
+                            <span class="text-3xl font-bold text-slate-900 dark:text-white">
+                                4.2h
+                            </span>
+                            <span class="text-sm font-semibold text-brand-600">
+                                Top 10%
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Calm Callout -->
+                <div class="p-6 rounded-2xl bg-gradient-to-br
+                from-brand-500 to-brand-600
+                text-white shadow-lg">
+
+                    <h3 class="font-semibold mb-2">
+                        Run Structured Deals
+                    </h3>
+                    <p class="text-sm opacity-90 leading-relaxed">
+                        Faster responses and clear milestones increase acceptance rates.
+                        Keep negotiations inside Servio — leave WhatsApp for friends.
+                    </p>
+
+                    <button class="mt-4 w-full py-3 rounded-xl bg-white text-brand-600 font-semibold
+                    hover:bg-slate-100 transition-all">
+                        Open Negotiation Center
+                    </button>
+
+                </div>
+
+            </div>
+        </aside>
+
+    </div>
+
+    {% comment "Needed when integrating HTMX" %}
+    <div id="project-list-wrapper">
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-4">
+            {% include "collaborations/partials/_gig-cards.html" %}
+        </div>
+
+        <!-- HTMX gig listing -->
+        <div id="gig-list" class="my-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <div id="load-more-container" data-current-page="{{ page_obj.number }}" data-total-pages="{{ paginator.num_pages }}" data-status="{{ request.GET.project_status|default:'' }}" class="flex justify-center my-4">
+            {% if page_obj.has_next %}
+            <button id="load-more-btn" hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}{% if request.GET.status %}?status={{ request.GET.status }}&{% endif %}" hx-vals='{"page": {{ page_obj.next_page_number }}, "project_status": "{{ request.GET.project_status|default:"" }}"}' hx-target="#gig-list" hx-swap="beforeend" class="text-sm font-semibold text-gray-500 hover:text-brand-500
+                            transition-colors flex items-center gap-1">
+                <span>Show more gigs</span>
+                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endcomment %}
+</div>
 {% endif %}
 {% endblock %}

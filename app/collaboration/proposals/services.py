@@ -104,35 +104,6 @@ class ProposalService:
         # self._send_notification(gig, proposal)
         return proposal
 
-    # -------------------------
-    # Private orchestration steps
-    # -------------------------
-
-    def _ensure_can_apply(self, gig):
-        ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
-        
-    def _validate(self, payload, gig):
-        """
-        Enforces domain-level integrity and data invariants.
-
-        Unlike Policy checks (which handle authorization and eligibility), 
-        this method ensures the payload data is logically sound in the 
-        context of the target Gig's constraints.
-
-        Checks include:
-        - Price non-negativity and logical range.
-        - Duration limits relative to Gig requirements.
-        - Invariant consistency (e.g., end_date > start_date).
-
-        Args:
-            payload: The Pydantic/DTO object containing submitted data.
-            gig: The Gig entity providing the constraint context.
-
-        Raises:
-            ProposalValidationError: If any data invariant is violated.
-        """
-        return True
-
     def _create_proposal(self, gig, payload):
         # return GigApplication.objects.create(
         #     gig=gig,

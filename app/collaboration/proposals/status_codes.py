@@ -1,12 +1,28 @@
 """
-Proposal-related error codes for domain exceptions.
-These codes can be used across policies, validators, and services.
+Proposal Error Codes Module.
+============================
+
+This module defines a centralized registry of domain-specific error codes and 
+human-readable titles for failures occurring during the proposal lifecycle. 
+These constants are designed to be consumed by policies, validators, and 
+application services to ensure consistency in error reporting across the platform.
+
+The module utilizes a `NamedTuple` structure to provide immutable, type-hinted 
+failure details that can be easily serialized for API responses or logged 
+for debugging purposes.
 """
 
 from typing import NamedTuple, Optional
 
 
 class FailureDetail(NamedTuple):
+    """
+    A structured representation of a domain failure.
+
+    Attributes:
+        code (str): A unique, machine-readable string identifier (e.g., 'INVALID_AMOUNT').
+        title (str): A brief, human-readable description intended for end-user display.
+    """
     code: str
     title: str
 
@@ -14,6 +30,13 @@ class FailureDetail(NamedTuple):
 # Permission / Policy Codes
 # -----------------------------
 class PolicyFailure:
+    """
+    Constants representing authorization and business policy violations.
+
+    These codes are triggered when a user or action violates the fundamental 
+    rules of the marketplace, such as eligibility requirements, project status 
+    constraints, or subscription-level permissions.
+    """
     # Format: FailureDetail(CODE, HUMAN_READABLE_TITLE)
     CANNOT_APPLY_TO_OWN_GIG = FailureDetail("CANNOT_APPLY_TO_OWN_GIG", "Self-Application Restricted")
     GIG_NOT_PUBLISHED = FailureDetail("GIG_NOT_PUBLISHED", "Project Unavailable")
@@ -32,6 +55,13 @@ class PolicyFailure:
 # Validation / Domain Codes
 # -----------------------------
 class ValidationFailure:
+    """
+    Constants representing data integrity and business logic validation errors.
+
+    These codes are triggered during the proposal submission process when 
+    the provided data (e.g., bid amount, dates, or metadata) fails to meet 
+    the technical or logical requirements of the domain.
+    """
     INVALID_AMOUNT = FailureDetail("INVALID_AMOUNT", "Fair Pricing Policy")
     DURATION_EXCEEDS_LIMIT = FailureDetail("DURATION_EXCEEDS_LIMIT", "Duration Too Long")
     INVALID_INDUSTRY = FailureDetail("INVALID_INDUSTRY", "Invalid Industry Selected")

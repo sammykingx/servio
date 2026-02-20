@@ -18,14 +18,14 @@ NON-GOALS:
 - Side Effects (No emails, notifications, or state mutations).
 """
 
-from django.apps import apps
 from django.utils import timezone
 from collaboration.models.choices import GigStatus, RoleStatus
 from .exceptions import ProposalPermissionDenied
 from .status_codes import PolicyFailure
+from registry_utils import get_registered_model
 
-GigsModel = apps.get_model("collaboration", "Gig")
-GigRole = apps.get_model("collaboration", "GigRole")
+GigsModel = get_registered_model("collaboration", "Gig")
+GigRole = get_registered_model("collaboration", "GigRole")
 
 class ProposalPolicy:
     """

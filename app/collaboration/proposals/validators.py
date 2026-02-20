@@ -17,15 +17,15 @@ NON-GOALS:
 - Orchestration (e.g., Sending emails or updating state).
 """
 
-from django.apps import apps
 from collaboration.schemas.send_proposal import AppliedRoles, SendProposal
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure
+from registry_utils import get_registered_model
 from datetime import timedelta
 from typing import List
 
 
-GigCategory = apps.get_model("collaboration", "GigCategory")
+GigCategory = get_registered_model("collaboration", "GigCategory")
 
 class ProposalValidator:
     """

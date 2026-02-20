@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum
-from typing import Literal, List, Union
+from typing import List, Union
 
 
 class DurationUnit(str, Enum):

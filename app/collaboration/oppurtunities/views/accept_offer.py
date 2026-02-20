@@ -2,10 +2,8 @@ from django.apps import apps
 from django.http import Http404, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.db.models import Prefetch
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from accounts.models.address import AddressType
 from collaboration.models.choices import GigStatus, PaymentOption
 from collaboration.proposals.exceptions import ProposalError
 from collaboration.proposals.services import ProposalService
