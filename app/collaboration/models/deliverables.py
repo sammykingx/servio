@@ -1,6 +1,4 @@
 from django.db import models
-from uuid6 import uuid7
-from .choices import PaymentOption, ProposalStatus
 
 
 class DurationUnit(models.TextChoices):

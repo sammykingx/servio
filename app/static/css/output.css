@@ -9637,11 +9637,6 @@
       }
     }
   }
-  .dark\:border-slate-500 {
-    &:where(.dark, .dark *) {
-      border-color: var(--color-slate-500);
-    }
-  }
   .dark\:border-slate-600 {
     &:where(.dark, .dark *) {
       border-color: var(--color-slate-600);
@@ -11791,6 +11786,24 @@
       &:hover {
         @media (hover: hover) {
           border-color: var(--color-brand-200);
+        }
+      }
+    }
+  }
+  .dark\:hover\:border-brand-300 {
+    &:where(.dark, .dark *) {
+      &:hover {
+        @media (hover: hover) {
+          border-color: var(--color-brand-300);
+        }
+      }
+    }
+  }
+  .dark\:hover\:border-brand-400 {
+    &:where(.dark, .dark *) {
+      &:hover {
+        @media (hover: hover) {
+          border-color: var(--color-brand-400);
         }
       }
     }

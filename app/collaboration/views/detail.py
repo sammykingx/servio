@@ -95,13 +95,16 @@ class GigDetailView(LoginRequiredMixin, DetailView):
                     "required_roles",
                     queryset=GigRoleModel.objects
                     .select_related("niche")
-                    .prefetch_related(
-                        Prefetch(
-                            "proposals",
-                            queryset=ProposalModel.objects.select_related("user"),
-                        )
-                    )
-                )
+                ),
+                # i need only the 1st 3 for each status
+                # Prefetch(
+                #     "proposals",
+                #     queryset=ProposalModel.objects.select_related("user"),
+                # ),
+                # Prefetch(
+                #     'proposals__deliverables',
+                #     queryset=ProposalDeliverable.objects.select_related('role').only('id', 'due_date', 'proposal_id', 'role_id')
+                # ),
             )
         )
     

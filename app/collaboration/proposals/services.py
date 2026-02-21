@@ -28,15 +28,14 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 from django.db import transaction
 from core.url_names import PaymentURLS
-from collaboration.schemas.send_proposal import SendProposal
+from collaboration.schemas.send_proposal import AppliedRoles, DeliverablesPayload, SendProposal
 from registry_utils import get_registered_model
 from .exceptions import ProposalPermissionDenied
 from .polices import ProposalPolicy
 from .status_codes import PolicyFailure
 from .validators import ProposalValidator
+from typing import Dict, List
 
-
-ProposalModel = get_registered_model("collaboration", "Proposal")
 
 def get_error_redirect(code: str, context: dict = None) -> str:
     """
@@ -68,7 +67,6 @@ class ProposalService:
     def __init__(self, user:AbstractUser):
         self.user = user
 
-    @transaction.atomic
     def send_proposal(self, gig, payload:SendProposal):
         """
         Executes the end-to-end proposal submission process.
@@ -90,12 +88,12 @@ class ProposalService:
             ProposalPermissionDenied: If policy checks fail.
             ProposalValidationError: If data integrity checks fail.
         """
-        # prevent double cliks
+        # prevent double cliks/race conditions
         try:
             ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
             ProposalValidator.validate(payload, gig)
 
-            proposal = self._create_proposal(gig, payload)
+            proposal = self.create_proposal(gig, payload)
             self._notify_creator_by_mail(gig.creator)
             # self._create_activity(gig, proposal)
             # self._send_notification(gig, proposal)
@@ -109,21 +107,59 @@ class ProposalService:
         # self._send_notification(gig, proposal)
         return proposal
 
-    def _create_proposal(self, gig, payload):
+    @transaction.atomic
+    def create_proposal(self, gig, payload:SendProposal):
+        GigModel = get_registered_model("collaboration","Gig")
+        gig = (
+            GigModel.objects
+            .select_for_update()
+            .get(id=gig.id)
+        )
+        proposal = self._save_proposal(gig, payload.applied_roles)
+        self._save_proposal_roles(proposal, payload.applied_roles)
+        self._create_deliverables(proposal, payload.deliverables)
         
-        # ERRORS TO PREVENT
-        # - raise conditions
-        # - no duplicate application for same gig for the current user
+    def _save_proposal(self, gig, applied_roles:AppliedRoles):
+        ProposalModel = get_registered_model("collaboration", "Proposal")
+        proposal = ProposalModel.objects.create(
+            gig=gig,
+            user=self.user,
+            total_cost=self._calculate_total(applied_roles),
+        )
+        return proposal
+    
+    
+    def _save_proposal_roles(self, proposal, applied_roles:List[AppliedRoles]):
+        ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
+        role_instances = [
+            ProposalRoleModel(
+                proposal=proposal,
+                #gig_role_id=self._resolve_role_id(gig, role_payload),
+                role_amount=role_payload.role_amount,
+                proposed_amount=role_payload.proposed_amount,
+                payment_plan=role_payload.payment_plan,
+            )
+            for role_payload in applied_roles
+        ]
+
+        ProposalRoleModel.objects.bulk_create(role_instances)
+        created_roles = list(proposal.roles.all())
         
-        # return GigApplication.objects.create(
-        #     gig=gig,
-        #     applicant=self.user,
-        #     price=payload.price,
-        #     deliverables=payload.deliverables,
-        #     duration=payload.duration,
-        #     status=ApplicationStatus.PENDING,
-        # )
-        return True
+    def _create_deliverables(self, proposal, deliverables:List[DeliverablesPayload]):
+        ProposalDeliverableModel = get_registered_model("collboration", "ProposalDeliverable")
+        deliverable_instances = [
+            ProposalDeliverableModel(
+                proposal=proposal,
+                description=d.description,
+                duration_unit=d.duration_unit,
+                duration_value=d.duration_value,
+                due_date=d.due_date,
+                order=idx
+            )
+            for idx, d in enumerate(deliverables)
+        ]
+
+        ProposalDeliverableModel.objects.bulk_create(deliverable_instances)
     
     def _notify_creator_by_mail(self, creator:AbstractUser) -> None:
         email = creator.email

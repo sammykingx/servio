@@ -1,7 +1,5 @@
 from django.db import models
-from django.conf import settings
-from uuid6 import uuid7
-from .choices import PaymentOption, ProposalStatus
+from .choices import PaymentOption
 
 
 class ProposalRole(models.Model):
@@ -41,29 +39,8 @@ class ProposalRole(models.Model):
         choices=PaymentOption.choices,
     )    
     
-
-class GigNegotiation(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
-
-    application = models.ForeignKey(
-        "collaboration.GigApplication",
-        on_delete=models.CASCADE,
-        related_name="negotiations"
-    )
-
-    sender = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        related_name="sent_negotiations"
-    )
-
-    proposed_amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        null=True,
-        blank=True
-    )
-
-    message = models.TextField(blank=True, null=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        db_table = "proposal_roles"
+        verbose_name = "Proposal Role"
+        verbose_name_plural = "Proposal Roles"
+        

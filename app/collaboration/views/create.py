@@ -22,37 +22,6 @@ import json
 GigCategory = get_registered_model("collaboration", "GigCategory")
 GigModel = get_registered_model("collaboration", "Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
-ProposalModel = get_registered_model("collaboration", "Proposal")
-
-# not used
-def create_taxonomy_context() -> List[Dict[str, str | List]]:
-    niches = (
-        GigCategory.objects.filter(parent__isnull=True, is_active=True)
-        .prefetch_related(
-            Prefetch(
-                "subcategories",
-                queryset=GigCategory.objects.filter(is_active=True).order_by("name"),
-            )
-        )
-        .order_by("name")
-    )
-
-    taxonomy = [
-        {
-            "id": niche.id,
-            "name": niche.name,
-            "subcategories": [
-                {
-                    "id": sub.id,
-                    "name": sub.name,
-                }
-                for sub in niche.subcategories.all()
-            ],
-        }
-        for niche in niches
-    ]
-
-    return json.dumps(taxonomy)
 
 
 class CreateCollaborationView(LoginRequiredMixin, View):
@@ -320,15 +289,8 @@ class EditGigView(LoginRequiredMixin, View):
             .prefetch_related(
                 Prefetch(
                     "required_roles",
-                    queryset=GigRoleModel.objects.select_related(
-                        "niche"
-                    ).prefetch_related(
-                        Prefetch(
-                            "proposals",
-                            queryset=ProposalModel.objects.select_related("user"),
-                        )
-                    ),
-                )
+                    queryset=GigRoleModel.objects.select_related("niche"),
+                ),
             )
         )
 
@@ -383,8 +345,8 @@ class EditGigView(LoginRequiredMixin, View):
             for role in roles
         ]   
         
-        for role in roles:
-            applicants = role.proposals.all()
+        # for role in roles:
+        #     applicants = role.proposals.all()
             
         context = {
             "gig": gig,
