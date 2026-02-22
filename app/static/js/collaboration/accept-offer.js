@@ -42,13 +42,16 @@ async function sendProposal() {
     }
 
     // 3. Construct the master payload
+    const proposalTotal = document.getElementById("summary-total").textContent;
+    const rawValue = proposalTotal.replace(/[^0-9.]/g, '');
     const masterPayload = {
         deliverables: deliverablesPayload,
         applied_roles: roleApplicationPayload,
+        proposal_value: parseFloat(rawValue),
         sent_at: new Date().toISOString()
     };
 
-    // console.log("Master Payload ready for Backend:", JSON.stringify(masterPayload, null, 2));
+    console.log("Master Payload ready for Backend:", JSON.stringify(masterPayload, null, 2));
 
     try {
         const response = await sendPayload(masterPayload, endPoint, csrfToken);

@@ -454,7 +454,7 @@ class EditGigView(LoginRequiredMixin, View):
                 # ---------------------------------
                 gig = (
                     GigModel.objects
-                    .select_for_update()
+                    .select_for_update(nowait=True)
                     .get(slug=gig_slug, creator=self.request.user)
                 )
                 

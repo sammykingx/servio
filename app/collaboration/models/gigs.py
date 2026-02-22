@@ -30,6 +30,7 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.utils import timezone
 from django.utils.formats import date_format
+from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE
 from uuid6 import uuid7
 from .choices import GigVisibility, GigStatus
 from decimal import Decimal, ROUND_HALF_UP
@@ -205,30 +206,22 @@ class Gig(models.Model):
         return ", ".join(parts)
     
     @property
-    def all_applications(self):
-        return [
-            application
-            for role in self.required_roles.all()
-            for application in role.applications.all()
-        ]
-    
-    @property
     def service_fee(self):
         return (
-            self.total_budget * Decimal("0.05")
-        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            self.total_budget * Decimal(str(SERVICE_FEE))
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
     
     @property   
     def tax(self):
         return (
-            self.total_budget * Decimal("0.07")
-        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            self.total_budget * Decimal(str(GST_TAX_FEE))
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
 
     @property
     def total_amount_payable(self):
         return (
             self.total_budget + self.service_fee + self.tax
-        ).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
         
     @property
     def dynamic_range(self):

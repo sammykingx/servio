@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class DurationUnit(models.TextChoices):
@@ -11,6 +12,13 @@ class ProposalDeliverable(models.Model):
         "collaboration.Proposal",
         on_delete=models.CASCADE,
         related_name="deliverables",
+    )
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        to_field="email",
+        related_name="proposal_deliverables",
     )
 
     # will be enabled when role based proposl is allowed

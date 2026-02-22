@@ -99,7 +99,7 @@ class ProposalPolicy:
         """
         cls.check_gig_eligibility(gig, user)
         cls.check_user_eligibility(profile, gig)
-        cls.check_financial_status(profile)
+        # cls.check_financial_status(profile)
         
         return True
         

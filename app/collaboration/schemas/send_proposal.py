@@ -53,4 +53,5 @@ class AppliedRoles(BaseModel):
 class SendProposal(BaseModel):
     applied_roles: List[AppliedRoles]
     deliverables: List[DeliverablesPayload]
+    proposal_value: Decimal = Field(..., gt=0)
     sent_at: datetime

@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.http import Http404, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect

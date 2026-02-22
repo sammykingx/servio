@@ -63,6 +63,7 @@ class ValidationFailure:
     the technical or logical requirements of the domain.
     """
     INVALID_AMOUNT = FailureDetail("INVALID_AMOUNT", "Fair Pricing Policy")
+    UNBALANCED_BUDGET = FailureDetail("UNBALANCED_BUDGET", "Budget Allocation Error")
     DURATION_EXCEEDS_LIMIT = FailureDetail("DURATION_EXCEEDS_LIMIT", "Duration Too Long")
     INVALID_INDUSTRY = FailureDetail("INVALID_INDUSTRY", "Invalid Industry Selected")
     MULTIPLE_INDUSTRIES_NOT_ALLOWED = FailureDetail("MULTIPLE_INDUSTRIES_NOT_ALLOWED", "Single Industry Required")

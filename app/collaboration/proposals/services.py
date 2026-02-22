@@ -30,7 +30,7 @@ from django.db import transaction
 from core.url_names import PaymentURLS
 from collaboration.schemas.send_proposal import AppliedRoles, DeliverablesPayload, SendProposal
 from registry_utils import get_registered_model
-from .exceptions import ProposalPermissionDenied
+from .exceptions import ProposalError, ProposalPermissionDenied
 from .polices import ProposalPolicy
 from .status_codes import PolicyFailure
 from .validators import ProposalValidator
@@ -88,12 +88,11 @@ class ProposalService:
             ProposalPermissionDenied: If policy checks fail.
             ProposalValidationError: If data integrity checks fail.
         """
-        # prevent double cliks/race conditions
         try:
             ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
             ProposalValidator.validate(payload, gig)
 
-            proposal = self.create_proposal(gig, payload)
+            proposal = self.create_proposal_bundle(gig, payload)
             self._notify_creator_by_mail(gig.creator)
             # self._create_activity(gig, proposal)
             # self._send_notification(gig, proposal)
@@ -101,40 +100,45 @@ class ProposalService:
         except ProposalPermissionDenied as e:
             e.redirect_url = get_error_redirect(e.code, {"gig_id": gig.id})
             raise e
+        
+        except ProposalError as e:
+            raise
 
         # Future side-effects:
         # self._create_activity(gig, proposal)
         # self._send_notification(gig, proposal)
+        
         return proposal
 
     @transaction.atomic
-    def create_proposal(self, gig, payload:SendProposal):
+    def create_proposal_bundle(self, gig, payload:SendProposal):    
         GigModel = get_registered_model("collaboration","Gig")
         gig = (
             GigModel.objects
-            .select_for_update()
+            .select_for_update(nowait=True)
             .get(id=gig.id)
         )
-        proposal = self._save_proposal(gig, payload.applied_roles)
-        self._save_proposal_roles(proposal, payload.applied_roles)
+        proposal = self._create_proposal(gig, payload.proposal_value, payload.sent_at)
+        self._create_proposal_roles(proposal, payload.applied_roles)
         self._create_deliverables(proposal, payload.deliverables)
         
-    def _save_proposal(self, gig, applied_roles:AppliedRoles):
+    def _create_proposal(self, gig, proposal_value, sent_at):
         ProposalModel = get_registered_model("collaboration", "Proposal")
         proposal = ProposalModel.objects.create(
             gig=gig,
             user=self.user,
-            total_cost=self._calculate_total(applied_roles),
+            total_cost=proposal_value,
+            sent_at=sent_at,
         )
         return proposal
     
     
-    def _save_proposal_roles(self, proposal, applied_roles:List[AppliedRoles]):
+    def _create_proposal_roles(self, proposal, applied_roles:List[AppliedRoles]):
         ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
         role_instances = [
             ProposalRoleModel(
                 proposal=proposal,
-                #gig_role_id=self._resolve_role_id(gig, role_payload),
+                gig_role_id=role_payload.niche_id,
                 role_amount=role_payload.role_amount,
                 proposed_amount=role_payload.proposed_amount,
                 payment_plan=role_payload.payment_plan,

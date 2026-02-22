@@ -18,10 +18,12 @@ NON-GOALS:
 """
 
 from collaboration.schemas.send_proposal import AppliedRoles, SendProposal
+from constants import SERVICE_FEE, DECIMAL_PLACE
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure
 from registry_utils import get_registered_model
 from datetime import timedelta
+from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 
 
@@ -38,22 +40,43 @@ class ProposalValidator:
     def validate(cls, payload: SendProposal, gig):
         """Orchestrates cross-model validation logic."""
         
-        cls._validate_taxonomy_integrity(payload.applied_roles)
+        cls._validate_taxonomy_integrity(payload.applied_roles, payload.proposal_value)
         cls._validate_deliverables_timeline(payload.deliverables, gig.end_date)
 
     @classmethod
-    def _validate_taxonomy_integrity(cls, applied_roles: List[AppliedRoles]):
+    def _validate_taxonomy_integrity(cls, applied_roles: List[AppliedRoles], proposal_value:Decimal):
         industry_ids = set()
         niche_ids = set()
+        calc_role_value = Decimal("0")
         
         for role in applied_roles:
             industry_ids.add(role.industry_id)
             niche_ids.add(role.niche_id)
             cls._validate_minimum_role_amount(role)
+            calc_role_value += role.proposed_amount or role.role_amoount
         
-        validated_industry = cls._validate_industry(industry_ids)    
+        validated_industry = cls._validate_industry(industry_ids)
+        cls._validate_total_proposal_amount(proposal_value, calc_role_value)   
         cls._validate_niche(niche_ids, validated_industry)
 
+    @classmethod
+    def _validate_total_proposal_amount(cls, proposal_value:Decimal, calc_role_value:Decimal):
+        service_fee = (
+            calc_role_value * Decimal(str(SERVICE_FEE))
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+        calc_proposal_value = calc_role_value + service_fee
+        if proposal_value != calc_proposal_value:
+            message = (
+                f"Double-check your numbers! The proposal worth (${proposal_value:,.2f}) "
+                f"doesn't quite match the your roles worth (${calc_proposal_value:,.2f}). "
+                "Please ensure they balance out before proceeding."
+            )
+            raise ProposalValidationError(
+                message,
+                code=ValidationFailure.UNBALANCED_BUDGET.code,
+                title=ValidationFailure.UNBALANCED_BUDGET.title
+            )
+            
     @classmethod
     def _validate_industry(cls, industry_ids: set):
         if len(industry_ids) > 1:
