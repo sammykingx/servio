@@ -2,6 +2,9 @@
 {% load static %}
 {% load humanize %}
 {% block browser_title %}Accept Project{% endblock %}
+{% block custom_page_css %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+{% endblock %}
 {% block content %}
 <section class="flex flex-col flex-1 max-w-[1200px] mx-auto w-full px-2 py-8 gap-8">
     <div class="flex flex-col gap-4">
@@ -44,8 +47,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <!-- Commencement Date -->
                     <div class="flex items-center gap-4 rounded-xl 
-						bg-fuchsia-50/80 dark:bg-fuchsia-800/40 px-4 py-4">
-                        <div class="flex size-10 items-center justify-center 
+						bg-fuchsia-50/80 dark:bg-fuchsia-800/40 p-3">
+                        <div class="flex size-8 items-center justify-center 
 							rounded-lg bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400">
                             <span class="material-symbols-outlined">calendar_check</span>
                         </div>
@@ -61,8 +64,8 @@
                     </div>
                     <!-- Timeline -->
                     <div class="flex items-center gap-4 rounded-xl 
-						bg-amber-50/80 dark:bg-amber-800/40 px-4 py-4">
-                        <div class="flex size-10 items-center justify-center 
+						bg-amber-50/80 dark:bg-amber-800/40 p-3">
+                        <div class="flex size-8 items-center justify-center 
 							rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
                             <span class="material-symbols-outlined">calendar_clock</span>
                         </div>
@@ -78,8 +81,8 @@
                     </div>
                     <!-- Project budget -->
                     <div class="flex items-center gap-4 rounded-xl 
-						bg-emerald-50/80 dark:bg-emerald-800/40 px-5 py-4">
-                        <div class="flex size-10 items-center justify-center 
+						bg-emerald-50/80 dark:bg-emerald-800/40 p-3">
+                        <div class="flex size-8 items-center justify-center 
 							rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                             <span class="material-symbols-outlined">account_balance_wallet</span>
                         </div>
@@ -96,6 +99,22 @@
                 </div>
             </section>
 
+            <div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+				<div class="p-6 flex flex-col gap-6">
+					<div>
+						<h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Project Description</h3>
+						<div class="quill-content max-w-none text-gray-500 dark:text-gray-4=600 space-y-4 leading-relaxed">
+							{{ gig.description|safe }}
+						</div>
+					</div>
+					<div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+						<p class="mb-3 text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                            <span class="font-semibold text-brand-400 dark:text-brand-300">Critical:</span> Review the project requirements thoroughly. Your proposal deliverables and dates will form the basis of the binding agreement.
+                        </p>
+					</div>
+				</div>
+			</div>
+
             
             <section 
                 class="flex flex-col gap-4" 
@@ -107,8 +126,7 @@
                         niche_name: '{{ role.niche_name }}',
                         role_amount: {{ role.budget|default:0 }},
                         payment_plan: '{{ role.payment_option }}',
-                        isActive: false,
-                        {# isActive: {{ role.can_apply|yesno:'true,false' }} #}
+                        is_active: false,
                     }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ])" 
@@ -116,144 +134,146 @@
             >
                 {% if roles %}
                     <div class="flex flex-col">
-                        <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Select Your Roles: ({{ roles.count }})</h3>
+                        <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Select Your Role</h3>
                         <span class="text-xs font-light text-slate-400 uppercase">Multiple Selection Allowed if qualified</span>
                     </div>
                     <div class="grid grid-cols-1 gap-5">
                         {% for role in roles %}
-                            <label class="relative group cursor-pointer">
-                                <!-- Hidden Checkbox -->
-                                <input 
-                                    type="checkbox" 
-                                    class="sr-only role-checkbox"
-                                    :checked="isRoleActive({{ role.role_id }})"
-                                    data-role-id="{{ role.niche_id }}"
-                                    data-can-apply="{{ role.can_apply|yesno:'true,false' }}"
-                                    @change="toggleRole({{ role.role_id }})"
-                                />
-                                <!-- Subtle Ambient Glow -->
-                                <div class="absolute -inset-1 rounded-2xl opacity-0 blur-2xl bg-gradient-to-r
-                                    from-brand-500/10 via-brand-500/5 to-transparent transition duration-300"
-                                    :class="isRoleActive({{ role.role_id }}) ? 'opacity-200' : 'opacity-0'">
-                                </div>
-                                <!-- Card -->
-                                <div class="relative rounded-2xl bg-white dark:bg-[#151c2a]
-                                    border p-6 hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
-                                    transition-all duration-300
-                                    "
-                                    :class="isRoleActive({{ role.role_id }}) 
-                                        ? 'shadow-[0_12px_32px_rgba(0,0,0,0.10)] border-brand-500 dark:border-brand-400' 
-                                        : 'border-slate-200/80 dark:border-slate-700/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]'"
-                                >
-                                    <div class="flex flex-col gap-5 space-y-3">
-                                        <!-- Top Row -->
-                                        <div class="flex items-start justify-between gap-4">
-                                            <!-- Role -->
-                                            <div class="flex items-start gap-4">
-                                                <!-- Selection Indicator -->
-                                                <div 
-                                                    class="flex size-9 shrink-0 items-center justify-center
-                                                        rounded-xl shadow-sm transition"
-                                                    :class="isRoleActive({{ role.role_id }})
-                                                        ? 'bg-brand-500 text-white'
-                                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-400'"
-                                                >
-                                                    <span class="material-symbols-outlined text-[18px]">
-                                                        work_outline
-                                                    </span>
+                            {% if role.can_apply %}
+                                <label class="relative group cursor-pointer">
+                                    <!-- Hidden Checkbox -->
+                                    <input 
+                                        type="checkbox" 
+                                        class="sr-only role-checkbox"
+                                        :checked="isRoleActive({{ role.role_id }})"
+                                        data-role-id="{{ role.niche_id }}"
+                                        data-can-apply="{{ role.can_apply|yesno:'true,false' }}"
+                                        @change="toggleRole({{ role.role_id }})"
+                                    />
+                                    <!-- Subtle Ambient Glow -->
+                                    <div class="absolute -inset-1 rounded-2xl opacity-0 blur-2xl bg-gradient-to-r
+                                        from-brand-500/10 via-brand-500/5 to-transparent transition duration-300"
+                                        :class="isRoleActive({{ role.role_id }}) ? 'opacity-200' : 'opacity-0'">
+                                    </div>
+                                    <!-- Card -->
+                                    <div class="relative rounded-2xl bg-white dark:bg-[#151c2a]
+                                        border p-6 hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
+                                        transition-all duration-300
+                                        "
+                                        :class="isRoleActive({{ role.role_id }}) 
+                                            ? 'shadow-[0_12px_32px_rgba(0,0,0,0.10)] border-brand-500 dark:border-brand-400' 
+                                            : 'border-slate-200/80 dark:border-slate-700/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]'"
+                                    >
+                                        <div class="flex flex-col gap-5 space-y-3">
+                                            <!-- Top Row -->
+                                            <div class="flex items-start justify-between gap-4">
+                                                <!-- Role -->
+                                                <div class="flex items-start gap-4">
+                                                    <!-- Selection Indicator -->
+                                                    <div 
+                                                        class="flex size-9 shrink-0 items-center justify-center
+                                                            rounded-xl shadow-sm transition"
+                                                        :class="isRoleActive({{ role.role_id }})
+                                                            ? 'bg-brand-500 text-white'
+                                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-400'"
+                                                    >
+                                                        <span class="material-symbols-outlined text-[18px]">
+                                                            work_outline
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-semibold text-slate-900 dark:text-gray-200 leading-tight">
+                                                            {{ role.niche_name }}
+                                                        </h4>
+                                                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                                                            {{ role.role_name }}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h4 class="font-semibold text-slate-900 dark:text-gray-200 leading-tight">
-                                                        {{ role.niche_name }}
-                                                    </h4>
-                                                    <p class="text-sm text-slate-500 dark:text-slate-400">
-                                                        {{ role.role_name }}
+                                            </div>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 text-justify">{{ role.description|truncatewords:35|capfirst }}</p>
+                                            <!-- Budget Row (Always Inline) -->
+                                            <div class="grid grid-cols-2 md:grid-cols-3 items-center justify-evenly gap-4">
+                                                <!-- Budget Allocation -->
+                                                <div class="">
+                                                    <p class="text-[10px] uppercase tracking-wide font-medium text-slate-400">
+                                                        Budget Allocation
+                                                    </p>
+                                                    <p class="text-base font-normal text-slate-900 dark:text-gray-200">
+                                                        ${{ role.budget|intcomma }}
                                                     </p>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400 text-justify">{{ role.description|truncatewords:35|capfirst }}</p>
-                                        <!-- Budget Row (Always Inline) -->
-                                        <div class="grid grid-cols-2 md:grid-cols-3 items-center justify-evenly gap-4">
-                                            <!-- Budget Allocation -->
-                                            <div class="">
-                                                <p class="text-[10px] uppercase tracking-wide font-medium text-slate-400">
-                                                    Budget Allocation
-                                                </p>
-                                                <p class="text-base font-normal text-slate-900 dark:text-gray-200">
-                                                    ${{ role.budget|intcomma }}
-                                                </p>
-                                            </div>
-                                            
-                                            {% if negotiating %}
-                                            <!-- Proposed Amount -->
-                                            <div class="w-40">
-                                                <label class="text-[10px] uppercase tracking-wide
-                                                    font-medium text-slate-400 block mb-1">
-                                                    Proposed Amount
-                                                </label>
-                                                <div class="relative">
-                                                    <span class="absolute left-3 top-1/2 
-                                                        -translate-y-1/2 text-slate-400 dark:text-gray-300 font-semibold">$</span>
-                                                    <input
-                                                        type="number"
-                                                        name="proposed_amount"
-                                                        :class="isFieldDisabled( {{ role.role_id }}, {{ role.can_apply|yesno:'true,false' }}) ? 'cursor-not-allowed opacity-60 bg-slate-100' : 'cursor-pointer'"
-                                                        :disabled="isFieldDisabled({{ role.role_id }}, {{ role.can_apply|yesno:'true,false' }})"
-                                                        @change="updateRoleField({{ role.role_id }}, 'proposed_amount', $event.target.value)"
-                                                        value="{{ role.budget|intcomma }}"
-                                                        class="w-full pl-7 pr-3 py-2.5
-                                                            rounded-xl bg-slate-50 dark:bg-slate-800    
-                                                            border border-slate-200 dark:border-slate-700
-                                                            text-sm font-normal text-slate-700 dark:text-gray-300
-                                                            focus:outline-none focus:ring-0
-                                                            focus:border-brand-500
-                                                            transition-colors duration-200
-                                                        "
-                                                    />
+                                                
+                                                {% if negotiating %}
+                                                <!-- Proposed Amount -->
+                                                <div class="w-40">
+                                                    <label class="text-[10px] uppercase tracking-wide
+                                                        font-medium text-slate-400 block mb-1">
+                                                        Proposed Amount
+                                                    </label>
+                                                    <div class="relative">
+                                                        <span class="absolute left-3 top-1/2 
+                                                            -translate-y-1/2 text-slate-400 dark:text-gray-300 font-semibold">$</span>
+                                                        <input
+                                                            type="number"
+                                                            name="proposed_amount"
+                                                            :class="isFieldDisabled( {{ role.role_id }}, {{ role.can_apply|yesno:'true,false' }}) ? 'cursor-not-allowed opacity-60 bg-slate-100' : 'cursor-pointer'"
+                                                            :disabled="isFieldDisabled({{ role.role_id }}, {{ role.can_apply|yesno:'true,false' }})"
+                                                            @change="updateRoleField({{ role.role_id }}, 'proposed_amount', $event.target.value)"
+                                                            value="{{ role.budget|intcomma }}"
+                                                            class="w-full pl-7 pr-3 py-2.5
+                                                                rounded-xl bg-slate-50 dark:bg-slate-800    
+                                                                border border-slate-200 dark:border-slate-700
+                                                                text-sm font-normal text-slate-700 dark:text-gray-300
+                                                                focus:outline-none focus:ring-0
+                                                                focus:border-brand-500
+                                                                transition-colors duration-200
+                                                            "
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            {% endif %}
-
-                                            {# Gigs with roles #}
-                                            <div x-data="renderPaymentPlans({{ role.can_apply|yesno:'true,false' }})">
-                                                <p class="mb-1 text-[10px] uppercase tracking-wide font-medium text-slate-400">
-                                                    Payment Plan
-                                                </p>
-                                                {% if not negotiating %}
-                                                    <select 
-                                                        disabled
-                                                        class="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 
-                                                            bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-500 
-                                                            px-4 text-sm font-normal cursor-not-allowed opacity-75"
-                                                    >
-                                                        <option selected x-text="plans.find(p => p.value === '{{ role.payment_option }}')?.label || '{{ role.payment_option }}'"></option>
-                                                    </select>
-                                                {% else %}
-                                                    <select 
-                                                        x-model="selectedPaymentPlan"
-                                                        class="w-full h-12 rounded-xl
-                                                            bg-slate-50 dark:bg-slate-800
-                                                            border border-slate-200 dark:border-slate-700
-                                                            px-4 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                            focus:outline-none focus:ring-0
-                                                            focus:ring-brand-500/25
-                                                            focus:border-brand-500 transition"
-                                                        :class="!canSelect ? 'cursor-not-allowed opacity-60 bg-slate-100' : 'cursor-pointer'"
-                                                        :disabled="!canSelect"
-                                                        @change="updateRoleField({{ role.role_id }}, 'payment_plan', $event.target.value)"
-                                                    >
-                                                        <option value="">select option</option>
-                                                        <template x-for="plan in plans" :key="plan.value">
-                                                            <option :value="plan.value" x-text="plan.label"></option>
-                                                        </template>
-                                                    </select>
                                                 {% endif %}
+
+                                                {# Gigs with roles #}
+                                                <div x-data="renderPaymentPlans({{ role.can_apply|yesno:'true,false' }})">
+                                                    <p class="mb-1 text-[10px] uppercase tracking-wide font-medium text-slate-400">
+                                                        Payment Plan
+                                                    </p>
+                                                    {% if not negotiating %}
+                                                        <select 
+                                                            disabled
+                                                            class="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 
+                                                                bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-500 
+                                                                px-4 text-sm font-normal cursor-not-allowed opacity-75"
+                                                        >
+                                                            <option selected x-text="plans.find(p => p.value === '{{ role.payment_option }}')?.label || '{{ role.payment_option }}'"></option>
+                                                        </select>
+                                                    {% else %}
+                                                        <select 
+                                                            x-model="selectedPaymentPlan"
+                                                            class="w-full h-12 rounded-xl
+                                                                bg-slate-50 dark:bg-slate-800
+                                                                border border-slate-200 dark:border-slate-700
+                                                                px-4 text-sm font-normal text-slate-700 dark:text-gray-300
+                                                                focus:outline-none focus:ring-0
+                                                                focus:ring-brand-500/25
+                                                                focus:border-brand-500 transition"
+                                                            :class="!canSelect ? 'cursor-not-allowed opacity-60 bg-slate-100' : 'cursor-pointer'"
+                                                            :disabled="!canSelect"
+                                                            @change="updateRoleField({{ role.role_id }}, 'payment_plan', $event.target.value)"
+                                                        >
+                                                            <option value="">select option</option>
+                                                            <template x-for="plan in plans" :key="plan.value">
+                                                                <option :value="plan.value" x-text="plan.label"></option>
+                                                            </template>
+                                                        </select>
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </label>
+                                </label>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 {% else %}
@@ -426,12 +446,12 @@
 
                             <!-- Info Panel -->
                             <div class="rounded-2xl
-                                bg-slate-50 dark:bg-slate-800/50
-                                border border-slate-100 dark:border-slate-700
-                                px-4 py-3 text-smn max-w-sm
-                                text-slate-500 dark:text-slate-400"
+                                bg-success-25 dark:bg-slate-800/50
+                                border border-success-100 dark:border-slate-700
+                                px-4 py-3 text-sm max-w-sm
+                                text-emerald-500/60 dark:text-slate-400"
                             >
-                                Payments are released automatically once milestones are approved by the client.
+                                Funds are released according to your agreed payment plan and set dates.
                             </div>
                         </div>
                     </div>
@@ -696,6 +716,7 @@ document.querySelectorAll(".role-checkbox").forEach(cb => {
     });
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script src="{% static 'js/utils/sendRequest.js' %}"></script>
 <script src="{% static 'js/utils/updateProposalUI.js' %}"></script>
 <script src="{% static 'js/utils/renderIndustryTaxonomy.js' %}"></script>

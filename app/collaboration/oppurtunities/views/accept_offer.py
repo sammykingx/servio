@@ -87,7 +87,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
                 status=400,
             )
             
-        except ValidationError as err:                
+        except ValidationError:                
             return JsonResponse(
                 {
                     "error": "Validation error",
@@ -104,11 +104,25 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
                 "url": e.redirect_url
                 
             }, status=400)
+            
+        except Exception as err:
+            message = (
+                "We’ve encountered a brief hiccup while "
+                "processing your request. Our team has been "
+                "notified and is already looking into it. "
+                "Please try again in a moment, or reach out "
+                "if the issue persists."
+            )
+            return JsonResponse({
+                "error": "Technical Alignment in-progress",
+                "message": message,
+            }, status=500)
  
         return JsonResponse({
             "title": "Proposal Sent!",
             "status": "success",
-            "message": "High five! Your proposal is officially on its way to the creator for review. We'll let you know as soon as they take a look."
+            "message": "High five! Your proposal is officially on its way to the creator for review. We'll let you know as soon as they take a look.",
+            "url": reverse_lazy(OppurtunitiesURLS.ALL)
         })
     
 

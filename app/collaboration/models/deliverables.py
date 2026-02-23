@@ -14,7 +14,7 @@ class ProposalDeliverable(models.Model):
         related_name="deliverables",
     )
     
-    user = models.ForeignKey(
+    sender = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         to_field="email",

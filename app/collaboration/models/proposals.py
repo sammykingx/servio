@@ -14,7 +14,7 @@ class Proposal(models.Model):
         related_name="proposals",
     )
 
-    user = models.ForeignKey(
+    sender = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
         related_name="proposals",
@@ -47,9 +47,14 @@ class Proposal(models.Model):
         verbose_name = "Project Proposal"
         verbose_name_plural = "Project Proposals"
         ordering = ["-created_at"]
-        unique_together = ("gig", "user")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["gig", "sender"],
+                name="unique_sender_proposal_per_gig",
+            )
+        ]
         indexes = [
-            models.Index(fields=['user', 'status'], name='proposal_user_status_idx'),
+            models.Index(fields=['sender', 'status'], name='proposal_sender_status_idx'),
             models.Index(fields=['gig', 'status'], name='proposal_gig_status_idx'),
-            models.Index(fields=['user', 'gig'], name='proposal_user_gig_idx'),
+            models.Index(fields=['sender', 'gig'], name='proposal_sender_gig_idx'),
         ]

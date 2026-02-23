@@ -34,7 +34,7 @@ class ProposalPolicy:
 
     @staticmethod
     def check_gig_eligibility(gig, user):
-        """Validates if the Gig is in a state to accept proposals."""
+        """Validates if the Gig is in a state to accept proposals."""    
         if gig.creator == user:
             raise ProposalPermissionDenied(
                 "You cannot apply to your own projects.",
@@ -67,19 +67,27 @@ class ProposalPolicy:
     def check_user_eligibility(profile, gig):
         """Validates if the user is qualified for this specific gig."""
         
-        is_qualified = GigRole.objects.filter(
-            status=RoleStatus.OPEN,
-            niche_id=profile.industry_id,
-            role_id__in=profile.get_user_niches,
-            gig=gig
-        ).exists()
-
-        if not is_qualified:
+        if not profile.user.is_verified:
             raise ProposalPermissionDenied(
-                "Your profile does not match the project role's requirements.",
-                code=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.code,
-                title=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.title
+                "Verify your email to ensure your negotiations and contracts remain legally sound.",
+                code=PolicyFailure.EMAIL_NOT_VERIFIED.code,
+                title=PolicyFailure.EMAIL_NOT_VERIFIED.title,
             )
+            
+        if gig.has_gig_roles:
+            is_qualified = GigRole.objects.filter(
+                status=RoleStatus.OPEN,
+                niche_id=profile.industry_id,
+                role_id__in=profile.get_user_niches,
+                gig=gig
+            ).exists()
+
+            if not is_qualified:
+                raise ProposalPermissionDenied(
+                    "Your profile does not match the project role's requirements.",
+                    code=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.code,
+                    title=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.title
+                )
 
     @staticmethod
     def check_financial_status(profile):
@@ -92,14 +100,12 @@ class ProposalPolicy:
             )
 
     @classmethod
-    def ensure_can_apply(cls, user, profile, gig):
+    def ensure_can_apply(cls, user, profile, gig) -> None:
         """
         Orchestrator: Runs all checks. 
         If any fail, they raise a ProposalPermissionDenied with a specific message.
         """
         cls.check_gig_eligibility(gig, user)
         cls.check_user_eligibility(profile, gig)
-        # cls.check_financial_status(profile)
-        
-        return True
+        cls.check_financial_status(profile)
         

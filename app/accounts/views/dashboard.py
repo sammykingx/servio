@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from accounts.models.profile import UserRole
 from accounts.models.address import AddressType
 from template_map.accounts import Accounts
+from registry_utils import get_registered_model
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -33,6 +34,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["gigs"] = self.fetch_gig_info()
+        context["proposals"] = self.fetch_recent_proposals()
 
         user = self.request.user
 
@@ -55,7 +57,24 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     F("required_roles__budget") * F("required_roles__slots")
                 ),
             )
-            .order_by("-created_at")
+            .order_by("-created_at")[:3]
+        )
+        
+    def fetch_recent_proposals(self):
+        ProposalModel = get_registered_model("collaboration", "Proposal")
+        return (
+            ProposalModel.objects
+            .filter(gig__creator=self.request.user)
+            .select_related("sender", "gig")
+            # .only(
+            #     "id",
+            #     "status",
+            #     "sent_at",
+            #     "gig__title",
+            #     "sender__id",
+            #     "sender__username",
+            # )
+            .order_by("-created_at")[:4]
         )
 
 

@@ -53,7 +53,7 @@ class ProposalValidator:
             industry_ids.add(role.industry_id)
             niche_ids.add(role.niche_id)
             cls._validate_minimum_role_amount(role)
-            calc_role_value += role.proposed_amount or role.role_amoount
+            calc_role_value += role.proposed_amount or role.role_amount
         
         validated_industry = cls._validate_industry(industry_ids)
         cls._validate_total_proposal_amount(proposal_value, calc_role_value)   
