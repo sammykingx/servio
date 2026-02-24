@@ -56,6 +56,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
                 "start_date",
                 "end_date",
                 "total_budget",
+                "status",
             )
             .order_by("-created_at")
         )

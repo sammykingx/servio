@@ -85,7 +85,6 @@
 					<li>
 						<a
 							href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}"
-							@click="selected = (selected === 'dashboard' ? '':'dashboard')"
 							class="menu-item group {% url AUTH_URLS.ACCOUNT_DASHBOARD as dashboard_url %}{% if request.path == dashboard_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
 						>
 							<span class="material-symbols-outlined text-brand-500">dashboard</span>
