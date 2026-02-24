@@ -45,28 +45,35 @@
             <p class="text-sm font-semibold text-gray-700 dark:text-gray-400">{{ gig.end_date }}</p>
         </div>
     </div>
-    {% with applications=gig.required_roles.applications.all|slice:":5" %}
-        {% if applications %}
+    {% with proposals=gig.prefetched_proposals|slice:":5" %}
+        {% if proposals %}
             <div class="flex items-center justify-between mt-auto">
                 <div class="flex -space-x-2">
-                    {% for application in applications %}
-                        {% if application.user.profile.avatar_url %}
+                    {% for proposal in proposals %}
+                        {% if proposal.sender.profile.avatar_url %}
                             <div 
                                 class="w-8 h-8 rounded-full border-2 
                                     border-white dark:border-gray-800 
                                     bg-cover bg-center"
-                                data-alt="{{ application.user.full_name }}"
-                                style='background-image: url("/static/images/user/user-01.jpg");'
+                                data-alt="{{ proposal.sender.full_name }}"
+                                style='background-image: url("{{ proposal.sender.profile.avatar_url.url }}");'
                             ></div>
                         {% else %}
                             <span 
-                                alt="{{ application.user.full_name }}" 
-                                class="flex rounded-full bg-white dark:bg-[#1a202c] overflow-hidden
-                                    text-2xl font-semibold text-brand-500 justify-center">
-                                {{ application.user.first_name|slice:":1"|upper }}{{ application.user.last_name|slice:":1"|upper }}
+                                alt="{{ proposal.sender.full_name }}" 
+                                class="w-8 h-8 flex items-center justify-center rounded-full
+                                    bg-brand-500 text-white text-sm font-semibold">
+                                {{ proposal.sender.first_name|slice:":1"|upper }}{{ proposal.sender.last_name|slice:":1"|upper }}
                             </span>
                         {% endif %}
                     {% endfor %}
+                    {% if gig.total_proposals > 5 %}
+                        <span class="w-8 h-8 flex items-center justify-center
+                                    rounded-full bg-gray-200 dark:bg-gray-700 text-xs font-semibold
+                                    border-2 border-white dark:border-gray-800">
+                            +{{ gig.total_proposals|add:"-5" }}
+                        </span>
+                    {% endif %}
                 </div>
             </div>
 

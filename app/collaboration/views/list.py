@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.db.models import Count, Sum, F, Q
+from django.db.models import Count, Sum, F, Q, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from template_map.collaboration import Collabs
+from registry_utils import get_registered_model
 
 
 class CollaborationListView(LoginRequiredMixin, ListView):
@@ -36,15 +37,25 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         Returns:
             QuerySet: A filtered and annotated queryset of user-owned gigs.
         """
-        
+        ProposalModel = get_registered_model("collaboration", "Proposal")
+        proposal_prefetch = Prefetch(
+            "proposals",
+            queryset=ProposalModel.objects.select_related("sender").only(
+                "id", "sender__id", "sender__profile__avatar_url"
+            ),
+            to_attr="prefetched_proposals"
+        )
         queryset =  (
             self.request.user.gigs
-            .prefetch_related("required_roles")
-            .annotate(
-                role_count_db=Count("required_roles"),
-                total_role_budget_db=Sum(
-                    F("required_roles__budget") * F("required_roles__slots")
-                ),
+            .prefetch_related(proposal_prefetch)
+            .annotate(total_proposals=Count("proposals"))
+            .only(
+                "id",
+                "title",
+                "description",
+                "start_date",
+                "end_date",
+                "total_budget",
             )
             .order_by("-created_at")
         )

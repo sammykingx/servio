@@ -27,13 +27,11 @@
       <li>
          <a
             href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}"
-            @click="selected = (selected === 'gig_and_project' ? '':'gig_and_project')"
-            class="menu-item group text-gray-500"
-            :class=" (selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-active' : 'menu-item-inactive'"
+            class="menu-item group {% url COLLABORATION_URLS.LIST_COLLABORATIONS as project_url %}{% if request.path == project_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
             >
             <span 
                class="material-symbols-outlined icon-gigs"
-               :class="(selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+               
             >
                workspaces
             </span>
@@ -48,9 +46,8 @@
       <li>
          <a
             href="{% url OPPURTUNITIES.ALL %}"
-            @click="selected = (selected === 'gig_and_project' ? '':'gig_and_project')"
-            class="menu-item group text-gray-500"
-            :class=" (selected === 'gig_and_project') && (page === 'gig_and_project') ? 'menu-item-active' : 'menu-item-inactive'"
+            class="menu-item group {% url OPPURTUNITIES.ALL as oppurtunities_url %}{% if request.path == oppurtunities_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
+
             >
             <span 
                class="material-symbols-outlined icon-opportunities"
@@ -66,7 +63,8 @@
             </span>
          </a>
       </li>
-      <!-- <li>
+      {% comment "Bookings" %}
+      <li>
          <a
             href="#"
             @click="selected = (selected === 'bookings' ? '':'bookings')"
@@ -81,14 +79,13 @@
                Bookings
             </span>
          </a>
-      </li> -->
+      </li>
+      {% endcomment %}
       <li>
          <a
             href="{% url PAYMENT_URLS.USER_PAYMENT_SUMMARY %}"
-            @click="selected = (selected === 'payments' ? '':'payments')"
-            class="menu-item group text-gray-500"
-            :class=" (selected === 'payments') && (page === 'payments') ? 'menu-item-active' : 'menu-item-inactive'"
-            >
+            class="menu-item group {% url PAYMENT_URLS.USER_PAYMENT_SUMMARY as payment_url %}{% if request.path == payment_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
+         >
            <span class="material-symbols-outlined icon-payments">local_atm</span>
             <span
                class="menu-item-text"
@@ -101,13 +98,10 @@
       <li>
          <a
             href="{% url ESCROW.OVERVIEW %}"
-            @click="selected = (selected === 'escrow' ? '':'escrow')"
-            class="menu-item group text-gray-500"
-            :class=" (selected === 'escrow') && (page === 'escrow') ? 'menu-item-active' : 'menu-item-inactive'"
+            class="menu-item group {% url ESCROW.OVERVIEW as escrow_url %}{% if request.path == escrow_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
             >
             <span 
                class="material-symbols-outlined icon-escrow"
-               :class="(selected === 'escrow') && (page === 'escrow') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
             >
                money_bag
             </span>
@@ -122,9 +116,7 @@
       <li>
          <a
             href="{% url PROPOSALS.LIST %}"
-            @click="selected = (selected === 'negotiations' ? '':'negotiations')"
-            class="menu-item group text-gray-500"
-            :class=" (selected === 'negotiations') && (page === 'negotiations') ? 'menu-item-active' : 'menu-item-inactive'"
+            class="menu-item group {% url PROPOSALS.LIST as proposal_url %}{% if request.path == proposal_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
             >
             <span class="material-symbols-outlined icon-negotiations">contract</span>
             <span
@@ -139,10 +131,8 @@
       <li>
          <a
             href="{% url REVIEWS.OVERVIEW %}"
-            @click="selected = (selected === 'Rewards' ? '':'Rewards')"
-            class="menu-item group text-gray-500"
-            :class=" (selected === 'Rewards') && (page === 'Rewards') ? 'menu-item-active' : 'menu-item-inactive'"
-            >
+            class="menu-item group {% url REVIEWS.OVERVIEW as reviews_url %}{% if request.path == reviews_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
+         >
             <span class="material-symbols-outlined text-fuchsia-400">award_star</span>
             <span
                class="menu-item-text"
