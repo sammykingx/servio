@@ -1,1 +1,1 @@
-from .list import NegotiationListView
+from .list import ProposalListView

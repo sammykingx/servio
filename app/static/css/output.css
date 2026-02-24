@@ -5118,6 +5118,9 @@
   .text-blue-800 {
     color: var(--color-blue-800);
   }
+  .text-brand-300 {
+    color: var(--color-brand-300);
+  }
   .text-brand-400 {
     color: var(--color-brand-400);
   }
@@ -10112,6 +10115,14 @@
       }
     }
   }
+  .dark\:bg-error-800\/40 {
+    &:where(.dark, .dark *) {
+      background-color: color-mix(in srgb, #912018 40%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--color-error-800) 40%, transparent);
+      }
+    }
+  }
   .dark\:bg-error-900 {
     &:where(.dark, .dark *) {
       background-color: var(--color-error-900);
@@ -11259,6 +11270,11 @@
       color: var(--color-emerald-200);
     }
   }
+  .dark\:text-emerald-300 {
+    &:where(.dark, .dark *) {
+      color: var(--color-emerald-300);
+    }
+  }
   .dark\:text-emerald-400 {
     &:where(.dark, .dark *) {
       color: var(--color-emerald-400);
@@ -11282,6 +11298,11 @@
   .dark\:text-error-200 {
     &:where(.dark, .dark *) {
       color: var(--color-error-200);
+    }
+  }
+  .dark\:text-error-300 {
+    &:where(.dark, .dark *) {
+      color: var(--color-error-300);
     }
   }
   .dark\:text-error-400 {

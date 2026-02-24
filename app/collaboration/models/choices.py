@@ -60,20 +60,19 @@ class ProposalStatus(models.TextChoices):
     SENT = "sent", "Sent"
     
     # Engagement Tracking
-    OPENED = "opened", "Opened"
-    REVIEWING = "reviewing", "In Review"
+    REVIEWING = "reviewing", "In Review" # when the cretor opens the proposal
     
     # Active Discussion
     NEGOTIATING = "negotiating", "Negotiation"
-    REVISIONS_PENDING = "revisions_pending", "Revisions Requested"
+    
     
     # Final Outcomes
     ACCEPTED = "accepted", "Accepted"
     REJECTED = "rejected", "Rejected"
     WITHDRAWN = "withdrawn", "Withdrawn"
-    EXPIRED = "expired", "Expired"
     
 class AssignmentStatus(models.TextChoices):
     ONGOING = "ongoing", "Ongoing"
     COMPLETED = "completed", "Completed"
     WITHDRAWN = "withdrawn", "Withdrawn"
+    REVISIONS_PENDING = "revisions_pending", "Revisions Requested"
