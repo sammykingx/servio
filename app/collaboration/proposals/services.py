@@ -71,7 +71,7 @@ class ProposalService:
     def __init__(self, user:AbstractUser):
         self.user = user
 
-    def send_proposal(self, gig, payload:SendProposal):
+    def send_proposal(self, gig, payload:SendProposal, is_negotiating:bool):
         """
         Executes the end-to-end proposal submission process.
 
@@ -96,7 +96,7 @@ class ProposalService:
             ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
             ProposalValidator.validate(payload, gig)
 
-            proposal = self.create_proposal_bundle(gig, payload)
+            proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
             self.notifications_flow(gig.creator)
             
         except ProposalPermissionDenied as e:
@@ -112,18 +112,18 @@ class ProposalService:
         return proposal
 
     @transaction.atomic
-    def create_proposal_bundle(self, gig, payload:SendProposal):    
+    def create_proposal_bundle(self, gig, payload:SendProposal, is_negotiating: bool):    
         GigModel = get_registered_model("collaboration","Gig")
         gig = (
             GigModel.objects
             .select_for_update(nowait=True)
             .get(id=gig.id)
         )
-        proposal = self._create_proposal(gig, payload.proposal_value, payload.sent_at)
+        proposal = self._create_proposal(gig, payload.proposal_value, payload.sent_at, is_negotiating)
         self._create_proposal_roles(gig, proposal, payload.applied_roles)
         self._create_deliverables(proposal, payload.deliverables)
         
-    def _create_proposal(self, gig, proposal_value, sent_at):
+    def _create_proposal(self, gig, proposal_value, sent_at, is_negotiating):
         ProposalModel = get_registered_model("collaboration", "Proposal")
         try:
             proposal = ProposalModel.objects.create(
@@ -131,6 +131,7 @@ class ProposalService:
                 sender=self.user,
                 total_cost=proposal_value,
                 sent_at=sent_at,
+                is_negotiating=is_negotiating,
             )
             return proposal
         
