@@ -499,14 +499,31 @@
                                         </button>
                                         <div>
                                             <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
+                                                Deliverable Title <span class="text-error-500">*</span>
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                x-model="item.title"
+                                                @input="item.title.length > 50 ? item.title = item.title.substring(0, 50) : null"
+                                                placeholder="e.g. System Architecture Design"
+                                                class="w-full h-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-4 text-sm font-normal text-slate-700 dark:text-gray-300 focus:outline-none focus:border-brand-500 focus:ring-0 transition-colors duration-200"
+                                            />
+                                            <span :class="item.title.length >= 50 ? 'text-error-500' : 'text-slate-400'" 
+                                                class="text-[9px] font-mono pl-3">
+                                                <span x-text="item.title.length"></span>/50
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
                                                 Deliverable Description <span class="text-error-500">*</span>
                                             </label>
                                             <textarea
                                                 rows="8"
-                                                x-model="item.title"
+                                                x-model="item.description"
                                                 placeholder="e.g. Homepage design, API integration, campaign strategy..."
                                                 class="w-full resize-none rounded-xl
-                                                    bg-white dark:bg-slate-700
+                                                    bg-white dark:bg-slate-900
                                                     border border-slate-200 dark:border-slate-700
                                                     px-4 py-3 text-sm font-normal text-slate-700 dark:text-gray-300
                                                     focus:outline-none focus:border-brand-500 focus:ring-0
@@ -525,7 +542,7 @@
                                                 <select
                                                     x-model="item.unit"                                     
                                                     class="w-full h-12 rounded-xl
-                                                        bg-white dark:bg-slate-700
+                                                        bg-white dark:bg-slate-900
                                                         border border-slate-200 dark:border-slate-700
                                                         px-3 text-sm font-normal text-slate-700 dark:text-gray-300
                                                         focus:outline-none focus:border-brand-500 focus:ring-0
@@ -544,7 +561,7 @@
                                                 <select
                                                     x-model="item.value"
                                                     class="w-full h-12 rounded-xl
-                                                        bg-white dark:bg-slate-700
+                                                        bg-white dark:bg-slate-900
                                                         border border-slate-200 dark:border-slate-700
                                                         px-3 text-sm font-normal text-slate-700 dark:text-gray-300
                                                         focus:outline-none focus:border-brand-500 focus:ring-0
@@ -565,7 +582,7 @@
                                                     type="date"
                                                     x-model="item.due_by"
                                                     class="w-full h-12 rounded-xl
-                                                        bg-white dark:bg-slate-700 placeholder:text-xs
+                                                        bg-white dark:bg-slate-900 placeholder:text-xs
                                                         border border-slate-200 dark:border-slate-700
                                                         px-3 text-sm font-normal text-slate-700 dark:text-gray-300
                                                         focus:outline-none focus:border-brand-500 focus:ring-0

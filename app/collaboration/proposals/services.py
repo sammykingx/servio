@@ -167,10 +167,18 @@ class ProposalService:
         for role_payload in applied_roles:
             if gig.has_gig_roles:
                 try:
-                    role_obj = GigRoleModel.objects.get(role_id=role_payload.niche_id)
+                    role_obj = gig.required_roles.get(
+                        role_id=role_payload.niche_id
+                    )
                 except GigRoleModel.DoesNotExist:
                     raise ProposalPermissionDenied(
                         "It looks like this specific role isn't part of this project's current needs.",
+                        code=PolicyFailure.INVALID_ROLE.code,
+                        title=PolicyFailure.INVALID_ROLE.title
+                    )
+                except GigRoleModel.MultipleObjectsReturned:
+                    raise ProposalPermissionDenied(
+                        "There seems to be a configuration issue with this role.",
                         code=PolicyFailure.INVALID_ROLE.code,
                         title=PolicyFailure.INVALID_ROLE.title
                     )
@@ -201,6 +209,7 @@ class ProposalService:
             ProposalDeliverableModel(
                 proposal=proposal,
                 sender=self.user,
+                title=d.title,
                 description=d.description,
                 duration_unit=d.duration_unit,
                 duration_value=d.duration_value,

@@ -73,10 +73,11 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        is_negotiating = True if self.request.GET.get("negotiating", None) else False
         try:
             payload = json.loads(request.body)
             data = SendProposal(**payload)
-            ProposalService(request.user).send_proposal(self.object, data)
+            ProposalService(request.user).send_proposal(self.object, data, is_negotiating)
             
         except json.JSONDecodeError:
             return JsonResponse(

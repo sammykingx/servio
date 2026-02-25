@@ -1,8 +1,9 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+{% load humanize %}
 {% block browser_title %}Negotiation Center{% endblock %}
 {% block content %}
-{% if not proposals %}
+{% if not gigs %}
 {% include "components/empty-states/no-negotiations.html" %}
 {% else %}
 <div class="min-h-screen w-full max-w-[1380px] flex flex-col gap-6">
@@ -11,7 +12,7 @@
 	<div class="flex flex-wrap justify-between items-end gap-3 px-2">
 		<div class="flex min-w-72 flex-col gap-1">
 			<p class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">Proposals</p>
-			<p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Select a project to view open RFPs and start your proposal process.</p>
+			<p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Select a project to view open RFPs and start your project workflow.
 		</div>
 		<a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-brand-500 text-white text-sm font-semibold leading-normal tracking-[0.015em] hover:bg-brand-500/90 transition-all shadow-lg shadow-brand-500/20">
 		<span class="truncate">Create Project</span>
@@ -75,20 +76,19 @@
 					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
 					{% endif %}
 					">
-				<span class="{% if active_tab == 'countered' %}text-brand-500{% else %}text-gray-500{% endif %}
-					dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-				Countered
-				</span>
-				<span class="flex items-center justify-center
-					{% if active_tab == 'countered' %}
-					bg-brand-500/10 text-brand-500
-					{% else %}
-					bg-gray-100 text-gray-500
-					{% endif %}
-					dark:bg-gray-700 dark:text-gray-300
-					text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
-				{{ gig_status_counts.countered }}
-				</span>
+					<span class="{% if active_tab == 'countered' %}text-brand-500{% else %}text-gray-500{% endif %}
+						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+					Countered
+					</span>
+					<span class="flex items-center justify-center
+						{% if active_tab == 'countered' %}
+						bg-brand-500/10 text-brand-500
+						{% else %}
+						bg-gray-100 text-gray-500
+						{% endif %}
+						dark:bg-gray-700 dark:text-gray-300
+						text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]"
+					>{{ gig_status_counts.countered }}</span>
 				</a>
 				<a href="{% if gig_status_counts.accepted %}?project_status=accepted{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
 					{% if active_tab == 'accepted' %}
@@ -97,20 +97,20 @@
 					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
 					{% endif %}
 					">
-				<span class="{% if active_tab == 'accepted' %}text-brand-500{% else %}text-gray-500{% endif %}
-					dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-				Accepted
-				</span>
-				<span class="flex items-center justify-center
-					{% if active_tab == 'accepted' %}
-					bg-brand-500/10 text-brand-500
-					{% else %}
-					bg-gray-100 text-gray-500
-					{% endif %}
-					dark:bg-gray-700 dark:text-gray-300
-					text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
-				{{ gig_status_counts.accepted }}
-				</span>
+					<span class="{% if active_tab == 'accepted' %}text-brand-500{% else %}text-gray-500{% endif %}
+						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+					Accepted
+					</span>
+					<span class="flex items-center justify-center
+						{% if active_tab == 'accepted' %}
+						bg-brand-500/10 text-brand-500
+						{% else %}
+						bg-gray-100 text-gray-500
+						{% endif %}
+						dark:bg-gray-700 dark:text-gray-300
+						text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+					{{ gig_status_counts.accepted }}
+					</span>
 				</a>
 				<a href="{% if gig_status_counts.rejected %}?project_status=rejected{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
 					{% if active_tab == 'rejected' %}
@@ -119,20 +119,20 @@
 					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
 					{% endif %}
 					">
-				<span class="{% if active_tab == 'rejected' %}text-brand-500{% else %}text-gray-500{% endif %}
-					dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-				Rejected
-				</span>
-				<span class="flex items-center justify-center
-					{% if active_tab == 'rejected' %}
-					bg-brand-500/10 text-brand-500
-					{% else %}
-					bg-gray-100 text-gray-500
-					{% endif %}
-					dark:bg-gray-700 dark:text-gray-300
-					text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
-				{{ gig_status_counts.rejected }}
-				</span>
+					<span class="{% if active_tab == 'rejected' %}text-brand-500{% else %}text-gray-500{% endif %}
+						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+					Rejected
+					</span>
+					<span class="flex items-center justify-center
+						{% if active_tab == 'rejected' %}
+						bg-brand-500/10 text-brand-500
+						{% else %}
+						bg-gray-100 text-gray-500
+						{% endif %}
+						dark:bg-gray-700 dark:text-gray-300
+						text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+					{{ gig_status_counts.rejected }}
+					</span>
 				</a>
 				{% endwith %}
 			</div>
@@ -141,265 +141,187 @@
 	<div class="flex h-full gap-x-5">
 		<!-- LEFT: Proposals -->
 		<div class="flex-1 overflow-y-auto lg:mr-6 space-y-6">
-			<!--Card 1 -->
-			<div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
-				border border-white/60 dark:border-slate-800
-				rounded-2xl p-6 hover:border-brand-300
-				shadow-[0_6px_24px_rgba(15,23,42,0.04)]
-				hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
-				transition-all duration-300 cursor-pointer"
-			>
-				<!-- TOP: Title + Status -->
-				<div class="flex items-center justify-between mb-3">
-					<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
-						E-commerce UI Refresh
-					</h3>
-					<span class="text-[11px] font-medium tracking-wide
-								text-emerald-700 bg-emerald-100
-								dark:bg-emerald-800/40 dark:text-emerald-300
-								px-3 py-1 rounded-full uppercase">
-						Accepted
-					</span>
-				</div>
-
-				<!-- MIDDLE: Description -->
-				<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 mb-4">
-					Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
-				</p>
-
-				<!-- BOTTOM: Meta + Metrics -->
-				<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-					<!-- Meta Info -->
-					<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-						<span class="font-medium text-slate-800 dark:text-slate-300">Studio Pixel</span>
-						<span class="size-1 bg-slate-300 rounded-full"></span>
-						<span>UI/UX Agency</span>
-						<span class="size-1 bg-slate-300 rounded-full"></span>
-						<span class="uppercase tracking-wide text-slate-400">Updated 12m ago</span>
+			{% for gig in gigs %}
+				<!--Card 1 -->
+				<div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
+					border border-white/60 dark:border-slate-800
+					rounded-2xl p-6 hover:border-brand-300
+					shadow-[0_6px_24px_rgba(15,23,42,0.04)]
+					hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
+					transition-all duration-300 cursor-pointer"
+				>
+					<!-- TOP: Title + Status -->
+					<div class="flex items-center justify-between mb-4">
+						<h3 class="text-lg font-medium text-slate-900 dark:text-white tracking-tight truncate">
+							{{ gig.title|title }}
+						</h3>
+						<span class="text-[11px] font-medium tracking-wide
+									text-emerald-700 bg-emerald-100
+									dark:bg-emerald-800/40 dark:text-emerald-300
+									px-3 py-1 rounded-full uppercase">
+							{{ gig.total_proposals }} proposal{{ gig.total_proposals|pluralize }}
+						</span>
 					</div>
 
-					<!-- Deal Metrics -->
-					<div class="flex gap-6 mt-3 md:mt-0">
-						<div>
-							<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Role Budget</p>
-							<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$12,800</p>
+					<!-- MIDDLE: Description -->
+					<p class="text-sm leading-relaxed text-justify text-slate-600 dark:text-slate-400 mb-4">
+						{{ gig.description|striptags|truncatewords:45 }}
+					</p>
+
+					<!-- BOTTOM: Meta + Metrics -->
+					<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+						<!-- Deal Metrics -->
+						<div class="flex gap-6 mt-3 md:mt-0">
+							<div>
+								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Project Budget</p>
+								<p class="text-base font-medium text-slate-900 dark:text-white tracking-tight">${{ gig.total_budget|intcomma }}</p>
+							</div>
+							<div>
+								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
+								<p class="text-base font-medium text-slate-900 dark:text-white tracking-tight">{{ gig.gig_duration }}</p>
+							</div>
 						</div>
-						<div>
-							<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Proposed Value</p>
-							<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$10,800</p>
-						</div>
-						<div>
-							<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
-							<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">14 Days</p>
-						</div>
-					</div>
-				</div>
-
-				<!-- Subtle hover hint -->
-				<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
-							opacity-0 group-hover:opacity-100 transition-opacity">
-					Open RFP's
-					<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
-						arrow_forward
-					</span>
-				</div>
-			</div>
-
-			<!-- Card 2 Negotiating -->
-			<div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
-				border border-white/60 dark:border-slate-800
-				rounded-2xl p-6 hover:border-brand-300
-				shadow-[0_6px_24px_rgba(15,23,42,0.04)]
-				hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
-				transition-all duration-300 cursor-pointer"
-			>
-				<!-- TOP: Title + Status -->
-				<div class="flex items-center justify-between mb-3">
-					<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
-						E-commerce UI Refresh
-					</h3>
-					<span class="text-[11px] font-medium tracking-wide
-								text-amber-700 bg-amber-100
-								dark:bg-amber-800/40 dark:text-amber-300
-								px-3 py-1 rounded-full uppercase">
-						Negotiating
-					</span>
-				</div>
-
-				<!-- MIDDLE: Description -->
-				<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 mb-4">
-					Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
-				</p>
-
-				<!-- BOTTOM: Meta + Metrics -->
-				<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-					<!-- Meta Info -->
-					<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-						<span class="font-medium text-slate-800 dark:text-slate-300">Studio Pixel</span>
-						<span class="size-1 bg-slate-300 rounded-full"></span>
-						<span>UI/UX Agency</span>
-						<span class="size-1 bg-slate-300 rounded-full"></span>
-						<span class="uppercase tracking-wide text-slate-400">Updated 12m ago</span>
-					</div>
-
-					<!-- Deal Metrics -->
-					<div class="flex gap-6 mt-3 md:mt-0">
-						<div>
-							<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Proposed Value</p>
-							<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$12,800</p>
-						</div>
-						<div>
-							<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
-							<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">14 Days</p>
+						<!-- Meta Info -->
+						<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+							{% if gig.has_gig_roles %}
+								<span class="size-1 bg-green-300 rounded-full animate-pulse"></span>
+								<span class="uppercase tracking-wide text-slate-400">{{ gig.role_count }} Role{{ gig.role_count|pluralize }} Associated</span>
+							{% endif %}
 						</div>
 					</div>
-				</div>
 
-				<!-- Subtle hover hint -->
-				<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
-							opacity-0 group-hover:opacity-100 transition-opacity">
-					Review Proposal
-					<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
-						arrow_forward
-					</span>
-				</div>
-			</div>
-
-			<!-- card 3 Rejected -->
-			 <div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
-				border border-white/60 dark:border-slate-800
-				rounded-2xl p-6 hover:border-brand-300
-				shadow-[0_6px_24px_rgba(15,23,42,0.04)]
-				hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
-				transition-all duration-300 cursor-pointer"
-			>
-				<!-- TOP: Title + Status -->
-				<div class="flex items-center justify-between mb-3">
-					<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
-						E-commerce UI Refresh
-					</h3>
-					<span class="text-[11px] font-medium tracking-wide
-								text-error-700 bg-error-100
-								dark:bg-error-800/40 dark:text-error-300
-								px-3 py-1 rounded-full uppercase">
-						Rejected
-					</span>
-				</div>
-
-				<!-- MIDDLE: Description -->
-				<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 mb-4">
-					Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
-				</p>
-
-				<!-- BOTTOM: Meta + Metrics -->
-				<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-					<!-- Meta Info -->
-					<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-						<span class="font-medium text-slate-800 dark:text-slate-300">Studio Pixel</span>
-						<span class="size-1 bg-slate-300 rounded-full"></span>
-						<span>UI/UX Agency</span>
-						<span class="size-1 bg-slate-300 rounded-full"></span>
-						<span class="uppercase tracking-wide text-slate-400">Updated 12m ago</span>
-					</div>
-
-					<!-- Deal Metrics -->
-					<div class="flex gap-6 mt-3 md:mt-0">
-						<div>
-							<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Proposed Value</p>
-							<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$12,800</p>
-						</div>
-						<div>
-							<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
-							<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">14 Days</p>
-						</div>
+					<!-- Subtle hover hint -->
+					<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
+								opacity-0 group-hover:opacity-100 transition-opacity">
+						Open RFP's
+						<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+							arrow_forward
+						</span>
 					</div>
 				</div>
+			{% endfor %}
 
-				<!-- Subtle hover hint -->
-				<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
-							opacity-0 group-hover:opacity-100 transition-opacity">
-					Review Proposal
-					<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
-						arrow_forward
-					</span>
-				</div>
-			</div>
+			{% comment "sample template for proposals" %}
+				<!-- Card 2 Negotiating -->
+				<div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
+					border border-white/60 dark:border-slate-800
+					rounded-2xl p-6 hover:border-brand-300
+					shadow-[0_6px_24px_rgba(15,23,42,0.04)]
+					hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
+					transition-all duration-300 cursor-pointer"
+				>
+					<!-- TOP: Title + Status -->
+					<div class="flex items-center justify-between mb-3">
+						<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
+							E-commerce UI Refresh
+						</h3>
+						<span class="text-[11px] font-medium tracking-wide
+									text-amber-700 bg-amber-100
+									dark:bg-amber-800/40 dark:text-amber-300
+									px-3 py-1 rounded-full uppercase">
+							Negotiating
+						</span>
+					</div>
 
-			{% for _ in "xyz" %}
-			<!-- Proposal Card -->
-			<div class="group relative bg-white dark:bg-slate-900
-				border border-slate-200 dark:border-slate-800
-				rounded-2xl
-				p-7
-				shadow-[0_6px_24px_rgba(15,23,42,0.04)]
-				hover:shadow-[0_12px_40px_rgba(27,23,255,0.10)]
-				hover:border-brand-300
-				transition-all duration-300 cursor-pointer">
-				<!-- Subtle left performance accent -->
-				<div class="flex flex-col xl:flex-row xl:items-start justify-between gap-8">
-					<!-- LEFT: Proposal Info -->
-					<div class="flex-1 space-y-4 pl-3">
-						<!-- Title + Status -->
-						<div class="flex flex-wrap items-center gap-3">
-							<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
-								E-commerce UI Refresh
-							</h3>
-							<span class="text-[11px] font-semibold tracking-wide
-								text-brand-600 bg-brand-100
-								dark:bg-brand-800/40 dark:text-brand-300
-								px-3 py-1 rounded-full uppercase">
-							Awaiting Response
-							</span>
-						</div>
-						<!-- Description -->
-						<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 max-w-2xl">
-							Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
-						</p>
-						<!-- Meta -->
-						<div class="flex items-center gap-3 text-xs text-slate-500">
-							<span class="font-medium text-slate-800 dark:text-slate-300">
-							Studio Pixel
-							</span>
+					<!-- MIDDLE: Description -->
+					<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 mb-4">
+						Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
+					</p>
+
+					<!-- BOTTOM: Meta + Metrics -->
+					<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+						<!-- Meta Info -->
+						<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+							<span class="font-medium text-slate-800 dark:text-slate-300">Studio Pixel</span>
 							<span class="size-1 bg-slate-300 rounded-full"></span>
 							<span>UI/UX Agency</span>
 							<span class="size-1 bg-slate-300 rounded-full"></span>
-							<span class="uppercase tracking-wide text-slate-400">
-							Updated 12m ago
-							</span>
+							<span class="uppercase tracking-wide text-slate-400">Updated 12m ago</span>
+						</div>
+
+						<!-- Deal Metrics -->
+						<div class="flex gap-6 mt-3 md:mt-0">
+							<div>
+								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Proposed Value</p>
+								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$12,800</p>
+							</div>
+							<div>
+								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
+								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">14 Days</p>
+							</div>
 						</div>
 					</div>
-					<!-- RIGHT: Deal Metrics -->
-					<div class="flex flex-col items-end gap-5 min-w-[260px]">
-						<div class="grid grid-cols-2 gap-x-8 gap-y-4 text-right">
-							<div>
-								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">
-									Proposed Value
-								</p>
-								<p class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
-									$2,800
-								</p>
-							</div>
-							<div>
-								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">
-									Timeline
-								</p>
-								<p class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
-									14 Days
-								</p>
-							</div>
-						</div>
-						<!-- Subtle action hint -->
-						<div class="flex items-center gap-2 text-sm font-medium text-brand-400 
-							opacity-0 group-hover:opacity-100 transition-opacity">
-							Review Proposal
-							<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+
+					<!-- Subtle hover hint -->
+					<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
+								opacity-0 group-hover:opacity-100 transition-opacity">
+						Review Proposal
+						<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
 							arrow_forward
-							</span>
-						</div>
+						</span>
 					</div>
 				</div>
-			</div>
-			{% endfor %}
+
+				<!-- card 3 Rejected -->
+				<div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
+					border border-white/60 dark:border-slate-800
+					rounded-2xl p-6 hover:border-brand-300
+					shadow-[0_6px_24px_rgba(15,23,42,0.04)]
+					hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
+					transition-all duration-300 cursor-pointer"
+				>
+					<!-- TOP: Title + Status -->
+					<div class="flex items-center justify-between mb-3">
+						<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
+							E-commerce UI Refresh
+						</h3>
+						<span class="text-[11px] font-medium tracking-wide
+									text-error-700 bg-error-100
+									dark:bg-error-800/40 dark:text-error-300
+									px-3 py-1 rounded-full uppercase">
+							Rejected
+						</span>
+					</div>
+
+					<!-- MIDDLE: Description -->
+					<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 mb-4">
+						Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
+					</p>
+
+					<!-- BOTTOM: Meta + Metrics -->
+					<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+						<!-- Meta Info -->
+						<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+							<span class="font-medium text-slate-800 dark:text-slate-300">Studio Pixel</span>
+							<span class="size-1 bg-slate-300 rounded-full"></span>
+							<span>UI/UX Agency</span>
+							<span class="size-1 bg-slate-300 rounded-full"></span>
+							<span class="uppercase tracking-wide text-slate-400">Updated 12m ago</span>
+						</div>
+
+						<!-- Deal Metrics -->
+						<div class="flex gap-6 mt-3 md:mt-0">
+							<div>
+								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Proposed Value</p>
+								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$12,800</p>
+							</div>
+							<div>
+								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
+								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">14 Days</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Subtle hover hint -->
+					<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
+								opacity-0 group-hover:opacity-100 transition-opacity">
+						Review Proposal
+						<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+							arrow_forward
+						</span>
+					</div>
+				</div>
+			{% endcomment %}
 		</div>
 		<!-- RIGHT: Metrics Aside -->
 		<aside class="hidden xl:flex w-[420px]  border border-slate-100 dark:border-slate-800

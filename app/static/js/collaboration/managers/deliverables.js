@@ -31,6 +31,7 @@ function deliverablesManager() {
             this.items.push({
                 id: Date.now() + Math.random(),
                 title: '',
+                description: '',
                 unit: 'days',
                 value: 1,
                 due_by: ''
@@ -44,14 +45,15 @@ function deliverablesManager() {
         },
 
         getValueOptions(unit) {
-            const limits = { 'days': 6, 'weeks': 4, 'months': 12 };
+            const limits = { 'days': 11, 'weeks': 4, 'months': 12 };
             const max = limits[unit] || 0;
             return Array.from({ length: max }, (_, i) => i + 1);
         },
 
         buildPayload() {
             return this.items.map(item => ({
-                description: item.title,
+                title: item.title,
+                description: item.description,
                 duration_unit: item.unit,
                 duration_value: item.value,
                 due_date: item.due_by

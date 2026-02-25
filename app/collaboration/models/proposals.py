@@ -36,7 +36,7 @@ class Proposal(models.Model):
             "This is filled after the proposal has been accepted."
         )
     )
-
+    is_negotiating = models.BooleanField(default=True)
     sent_at = models.DateTimeField()
 
     created_at = models.DateTimeField(auto_now_add=True)

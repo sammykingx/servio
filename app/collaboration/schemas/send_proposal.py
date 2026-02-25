@@ -12,6 +12,7 @@ class DurationUnit(str, Enum):
     MONTHS = "months"
     
 class DeliverablesPayload(BaseModel):
+    title: str = Field(..., max_lenth=55)
     description: str = Field(..., max_length=2000)
     duration_unit: DurationUnit
     duration_value: int
@@ -27,7 +28,7 @@ class DeliverablesPayload(BaseModel):
         value = self.duration_value
 
         limits = {
-            DurationUnit.DAYS: (1, 6),
+            DurationUnit.DAYS: (1, 11),
             DurationUnit.WEEKS: (1, 4),
             DurationUnit.MONTHS: (1, 12),
         }

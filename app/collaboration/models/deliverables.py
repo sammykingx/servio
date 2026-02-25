@@ -29,7 +29,7 @@ class ProposalDeliverable(models.Model):
     #     null=True,
     #     blank=True,
     # )
-
+    title = models.CharField(max_length=60)
     description = models.TextField(max_length=2010)
 
     duration_unit = models.CharField(
