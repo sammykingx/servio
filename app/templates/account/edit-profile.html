@@ -30,7 +30,7 @@
                     text-white text-sm font-semibold
                     shadow-lg shadow-brand-500/25
                     hover:shadow-xl hover:shadow-brand-500/40
-                    transition-all"
+                    transition-all hover:cursor-pointer "
                 >
                 Save Changes
             </button>
@@ -125,13 +125,20 @@
                             disabled
                             type="text" value="{{ user.full_name|title }}" />
                     </div>
-                    <div>
-                        <label for="headline" class="text-gray-800 dark:text-gray-100">Professional Headline</label>
+                    <div x-data="{ headline: '{{ user.profile.headline }}' }">
+                        <label 
+                            for="headline" 
+                            class="text-gray-800 dark:text-gray-100"
+                        >
+                            Professional Headline
+                            <span class="text-error-500">*</span>
+                        </label>
                         <input
                             id="headline"
                             name="headline"
                             type="text"
-                            value="{{ user.profile.headline }}"
+                            x-model="headline"
+                            @input="headline = headline.substring(0, 33)"
                             placeholder="e.g. Senior Brand Designer"
                             class="mt-2 w-full rounded-xl
                                 border border-slate-200 dark:border-slate-700
@@ -145,9 +152,16 @@
                                 dark:focus:ring-brand-400/40
                                 transition-colors duration-150"
                         />
+                        <span :class="headline.length >= 50 ? 'text-red-500' : 'text-slate-400'" 
+                            class="text-[10px] font-mono ml-2">
+                            <span x-text="headline.length"></span>/50
+                        </span>
                     </div>
                     <div>
-                        <label for="mobileNumber" class="text-gray-800 dark:text-gray-100">Mobile Number</label>
+                        <label 
+                            for="mobileNumber" 
+                            class="text-gray-800 dark:text-gray-100"
+                        >Mobile Number <span class="text-error-500">*</span></label>
                         <input
                             class="mt-2 w-full rounded-xl
                                 border border-slate-200 dark:border-slate-700
@@ -187,12 +201,16 @@
                                 transition-colors duration-150"
                         />
                     </div>
-                    <div class="md:col-span-2">
-                        <label for="bio" class="text-gray-800 dark:text-gray-100">Bio / Professional Summary</label>
+                    <div class="md:col-span-2" x-data="{ bio : '{{ user.profile.bio }}' }">
+                        <label 
+                            for="bio" 
+                            class="text-gray-800 dark:text-gray-100"
+                        >Bio / Professional Summary <span class="text-error-500">*</span></label>
                         <textarea
                             id="bio"
                             rows="8"
-                            name="bio"
+                            x-model="bio"
+                            @input="bio = bio.substring(0, 250)"
                             placeholder="Describe your professional journey and expertise..."
                             class="mt-2 w-full rounded-xl
                                 border border-slate-200 dark:border-slate-700
@@ -206,6 +224,10 @@
                                 dark:focus:ring-brand-400/40
                                 transition-colors duration-150"
                             >{{ user.profile.bio }}</textarea>
+                        <span :class="bio.length >= 250 ? 'text-red-500' : 'text-slate-400'" 
+                            class="text-[10px] font-mono ml-2">
+                            <span x-text="bio.length"></span>/250
+                        </span>
                     </div>
                 </div>
             </div>
@@ -360,9 +382,12 @@
                 </h3>
                 <div class="relative space-y-5">
                     <!-- street -->
-                    <div class="space-y-1.5">
+                    <div class="space-y-1.5" x-data="{ street: '{{ user.profile.home_address.street|default:'N/A' }}' }">
                         <label class="text-xs font-medium tracking-wide text-slate-500">
-                            Street Address
+                            Street Address <span class="text-error-500">*</span>
+                            <span :class="street.length >= 50 ? 'text-error-500' : 'text-slate-400'" class="text-[9px] font-mono">
+                                <span x-text="street.length"></span>/50
+                            </span>
                         </label>
     
                         <div class="relative">
@@ -372,8 +397,9 @@
                             </span>
                             <input
                                 type="text"
+                                x-model="street"
                                 name="street"
-                                value="{{ user.profile.home_address.street|default:'N/A' }}"
+                                @input="street = street.substring(0, 50)"
                                 placeholder="Street name and number"
                                 class="w-full pl-11 pr-4 py-3 rounded-xl
                                     border border-slate-200 dark:border-slate-700
@@ -391,9 +417,12 @@
                     </div>
 
                     <!-- Street Line 2 -->
-                    <div class="space-y-1.5 group">
+                    <div class="space-y-1.5 group" x-data="{ street_line_2: '{{ user.profile.home_address.street_line_2|default:'N/A' }}' }">
                         <label class="text-xs font-medium tracking-wide text-slate-500">
                             Steet Address Line 2 <span class="text-slate-400 italic">(optional)</span>
+                            <span :class="street_line_2.length >= 50 ? 'text-error-500' : 'text-slate-400'" class="text-[9px] font-mono">
+                                <span x-text="street_line_2.length"></span>/50
+                            </span>
                         </label>
                         <div class="relative">
                             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2
@@ -403,7 +432,8 @@
                             <input
                                 type="text"
                                 name="street_line_2"
-                                value="{{ user.profile.home_address.street_line_2|default:'N/A' }}"
+                                x-model="street_line_2"
+                                @input="street_line_2 = street_line_2.substring(0, 50)"
                                 placeholder="Apartment, suite, etc."
                                 class="w-full pl-11 pr-4 py-3 rounded-xl
                                     border border-slate-200 dark:border-slate-700
@@ -423,9 +453,12 @@
                     <!-- city + state -->
                     <div class="grid grid-cols-2 gap-5">
     
-                        <div class="space-y-1.5">
+                        <div class="space-y-1.5" x-data="{ city: '{{ user.profile.home_address.city|default:'N/A' }}' }">
                             <label class="text-xs font-medium tracking-wide text-slate-500">
-                                City
+                                City <span class="text-error-500">*</span>
+                                <span :class="city.length >= 17 ? 'text-error-500' : 'text-slate-400'" class="text-[9px] font-mono">
+                                    <span x-text="city.length"></span>/17
+                                </span>
                             </label>
                             <div class="relative">
                                 <!-- Icon -->
@@ -436,8 +469,9 @@
                                 <!-- Input -->
                                 <input
                                     type="text"
+                                    x-model="city"
                                     name="city"
-                                    value="{{ user.profile.home_address.city|default:'San Francisco' }}"
+                                    @input="city = city.substring(0, 17)"
                                     placeholder="City"
                                     class="w-full pl-11 pr-4 py-3 rounded-xl
                                         border border-slate-200 dark:border-slate-700
@@ -454,9 +488,12 @@
                             </div>
                         </div>
     
-                        <div class="space-y-1.5">
+                        <div class="space-y-1.5" x-data="{ province: '{{ user.profile.home_address.province|default:'N/A' }}' }">
                             <label class="text-xs font-medium tracking-wide text-slate-500">
-                                State / Province
+                                State / Province <span class="text-error-500">*</span>
+                                <span :class="province.length >= 25 ? 'text-error-500' : 'text-slate-400'" class="text-[9px] font-mono">
+                                    <span x-text="province.length"></span>/25
+                                </span>
                             </label>
     
                             <div class="relative">
@@ -469,7 +506,8 @@
                                 <input
                                     type="text"
                                     name="province"
-                                    value="{{ user.profile.home_address.province|default:'California' }}"
+                                    x-model="province"
+                                    @input="province = province.substring(0, 25)"
                                     placeholder="State / Province"
                                     class="w-full pl-11 pr-4 py-3 rounded-xl
                                         border border-slate-200 dark:border-slate-700
@@ -492,7 +530,7 @@
                     <div class="grid grid-cols-2 gap-5">
                         <div class="space-y-1.5">
                             <label class="text-xs font-medium tracking-wide text-slate-500">
-                                Postal Code
+                                Postal Code <span class="text-error-500">*</span>
                             </label>
                             <div class="relative">
                                 <!-- Icon -->
@@ -523,7 +561,7 @@
     
                         <div class="space-y-1.5">
                             <label class="text-xs font-medium tracking-wide text-slate-500">
-                                Country
+                                Country <span class="text-error-500">*</span>
                             </label>
                             <div class="relative">
                                 <!-- Icon -->

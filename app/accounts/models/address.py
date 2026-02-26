@@ -22,7 +22,7 @@ class Address(models.Model):
     street = models.CharField(max_length=60)
     street_line_2 = models.CharField(max_length=60, blank=True, null=True)
     city = models.CharField(max_length=20)
-    province = models.CharField(max_length=20)
+    province = models.CharField(max_length=30)
     country = models.CharField(max_length=70, blank=True)
     postal_code = models.CharField(max_length=13)
     label = models.CharField(

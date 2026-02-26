@@ -12,8 +12,8 @@ POSTAL_REGEX = {
 }
 
 class UserProfileUpdatePayload(BaseModel):
-    headline: str = Field(..., max_length=45, description="Professional headline shown on public profile")
-    bio: str = Field(..., max_length=550, description="Professional bio shown on public profile")
+    headline: str = Field(..., max_length=35, description="Professional headline shown on public profile")
+    bio: str = Field(..., max_length=250, description="Professional bio shown on public profile")
     mobile_number: str = Field(..., max_length=18, description="Primary mobile number")
     alternate_number: Optional[str] = Field(None, max_length=15, description="Alternative mobile number (optional)")
     
@@ -51,7 +51,7 @@ class UserAddressUpdatePayload(BaseModel):
     street: str = Field(..., max_length=50, description="Street address")
     street_line_2: Optional[str] = Field(None, max_length=50, description="Additional address line (optional)")
     city: str = Field(..., max_length=17, description="City")
-    province: str = Field(..., max_length=17, description="Province/State")
+    province: str = Field(..., max_length=25, description="Province/State")
     country: Optional[str] = Field(None, max_length=65)
     postal_code: str = Field(..., max_length=10, description="Postal code")
 

@@ -182,98 +182,158 @@
             </div>
             {% endif %}
             <!-- Tabbed Applications Interface -->
-            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-
+            <div 
+                id="proposals-section"
+                class="bg-white dark:bg-slate-900 rounded-xl 
+                    border border-slate-100 dark:border-slate-800 
+                    shadow-sm"
+            >
                 <!-- Tabs -->
                 <div class="border-b border-slate-100 dark:border-slate-800 px-4 overflow-x-auto">
                     <div class="flex gap-8 whitespace-nowrap">
                         <button class="shrink-0 py-4 border-b-2 border-brand-500 dark:border-gray-200 text-brand-500 dark:text-gray-300 text-sm font-medium">
-                            Proposals (2)
+                            Agreed (2)
                         </button>
                         <button class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
-                            Negotiating (1)
-                        </button>
-                        <button class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
-                            Shortlisted (3)
-                        </button>
-                        <button class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
-                            Collaborators (1)
+                            Countered
                         </button>
                     </div>
                 </div>
 
-                <!-- Applications -->
+                <!-- proposals -->
                 <div class="p-2 overflow-x-auto">
-                    {% if applications %}
-                        <div class="flex flex-col gap-2 min-w-max">
-                            <!-- Application Row 1 -->
-                            <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
-                                <div 
-                                    class="size-12 shrink-0 rounded-xl bg-slate-200 
-                                        bg-cover bg-center" 
-                                    style="background-image: url('{% static 'images/user/user-02.jpg' %}');">
-                                </div>
+                    {% if gig.proposals %}
+                        <div class="flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
 
-                                <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
-                                    <div class="flex items-center gap-2">
-                                        <h5 class="font-medium">Alex Morgan</h5>
-                                        <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
-                                            98% MATCH
-                                        </span>
+                            {% for proposal in gig.preview_proposals %}
+
+                            <div class="p-5 sm:p-6 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-all rounded-xl">
+
+                                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+
+                                    <!-- LEFT: Identity -->
+                                    <div class="flex items-start gap-4">
+
+                                        {% if proposal.sender.profile.avatar_url %}
+                                            <div 
+                                                class="size-12 sm:size-14 shrink-0 rounded-2xl bg-cover bg-center 
+                                                    border border-slate-200 dark:border-slate-700"
+                                                style="background-image: url('{{ proposal.sender.profile.avatar_url.url }}');">
+                                            </div>
+                                        {% else %}
+                                            <div class="size-12 sm:size-14 shrink-0 rounded-2xl bg-brand-500 text-white 
+                                                        flex items-center justify-center text-lg font-semibold shadow-sm">
+                                                {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="min-w-0">
+                                            <div class="flex flex-wrap items-center gap-2">
+                                                <h4 class="text-sm sm:text-base font-semibold text-slate-900 dark:text-white truncate">
+                                                    {{ proposal.sender.full_name|title }}
+                                                </h4>
+
+                                                <span class="px-2 py-0.5 text-[10px] sm:text-[11px] font-medium rounded-full
+                                                            bg-emerald-50 text-emerald-600
+                                                            dark:bg-emerald-900/20 dark:text-emerald-400">
+                                                    {{ proposal.status|title }}
+                                                </span>
+                                            </div>
+                                            {% if proposal.sender.profile.headline %}
+                                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 truncate">
+                                                    {{ proposal.sender.profile.headline|title }}
+                                                </p>
+                                            {% endif %}
+
+                                            <p class="text-xs text-slate-400 mt-1">
+                                                Submitted {{ proposal.created_at|timesince }} ago
+                                            </p>
+                                        </div>
                                     </div>
-                                    <p class="text-sm text-gray-500">Product Designer • 6 yrs • San Francisco, CA</p>
-                                </div>
 
-                                <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button class="p-2 text-slate-400 hover:text-green-500">
-                                        <span class="material-symbols-outlined">check_circle</span>
-                                    </button>
-                                    <button class="p-2 text-slate-400 hover:text-red-500">
-                                        <span class="material-symbols-outlined">cancel</span>
-                                    </button>
-                                </div>
+                                    <!-- MIDDLE: Role + Budget Comparison -->
+                                    <div class="flex-1 max-w-xl">
+                                        <!-- Role Applied For -->
+                                        <div class="mb-4">
+                                            <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
+                                                Role Applied For
+                                            </p>
+                                            <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                                                {{ proposal.role.title }}
+                                            </p>
+                                        </div>
 
-                                <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
-                                    View Application
-                                </button>
-                            </div>
+                                        <!-- Comparison Card -->
+                                        <div class="rounded-xl bg-slate-50 dark:bg-slate-800/60
+                                                    border border-slate-100 dark:border-slate-700
+                                                    p-4 grid grid-cols-2 gap-4">
 
-                            <!-- Application Row 2 -->
-                            <div class="flex flex-nowrap items-center gap-4 p-4 min-w-max hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group">
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
+                                                    Initial Offer
+                                                </p>
+                                                <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                                                    ${{ proposal.role.budget|default:123009|intcomma }}
+                                                </p>
+                                            </div>
 
-                                <div class="size-12 shrink-0 rounded-xl bg-slate-200 
-                                    bg-cover bg-center" 
-                                    style="background-image: url('{% static 'images/user/user-03.jpg' %}');">
-                                </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
+                                                    Asking
+                                                </p>
+                                                <p class="text-sm font-semibold
+                                                        {% if proposal.amount > proposal.role.budget %}
+                                                            text-amber-600
+                                                        {% else %}
+                                                            text-emerald-600
+                                                        {% endif %}">
+                                                    ${{ proposal.amount|intcomma }}
+                                                </p>
+                                            </div>
 
-                                <div class="flex-1 min-w-[240px] text-gray-800 dark:text-gray-400">
-                                    <div class="flex items-center gap-2">
-                                        <h5 class="font-medium">Sarah Reed</h5>
-                                        <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-medium">
-                                            92% MATCH
-                                        </span>
+                                        </div>
+
+                                        <!-- Timeline -->
+                                        <p class="text-xs text-slate-400 mt-3">
+                                            Timeline: {{ proposal.gig.gig_duration }}
+                                        </p>
+
                                     </div>
-                                    <p class="text-sm text-gray-500">Senior UI Expert • 9 yrs • London, UK</p>
-                                </div>
 
-                                <div class="flex gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button class="p-2 text-slate-400 hover:text-green-500">
-                                        <span class="material-symbols-outlined">check_circle</span>
-                                    </button>
-                                    <button class="p-2 text-slate-400 hover:text-red-500">
-                                        <span class="material-symbols-outlined">cancel</span>
-                                    </button>
+
+                                    <!-- RIGHT: Actions -->
+                                    <div class="flex flex-col sm:flex-row lg:flex-col gap-3 lg:min-w-[180px]">
+
+                                        <a href="#"
+                                        class="w-full text-center px-4 py-2 rounded-lg
+                                                bg-brand-500 text-white text-sm font-medium
+                                                hover:bg-brand-600 transition-all shadow-sm">
+                                            View Deliverables
+                                        </a>
+
+                                        <div class="flex gap-2">
+                                            <button class="flex-1 px-3 py-2 text-sm rounded-lg
+                                                        bg-emerald-50 text-emerald-600
+                                                        hover:bg-emerald-100
+                                                        dark:bg-emerald-900/20 dark:text-emerald-400">
+                                                Accept
+                                            </button>
+
+                                            <button class="flex-1 px-3 py-2 text-sm rounded-lg
+                                                        bg-red-50 text-red-600
+                                                        hover:bg-red-100
+                                                        dark:bg-red-900/20 dark:text-red-400">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button class="shrink-0 px-4 py-2 bg-slate-100 dark:bg-gray-800 text-sm text-brand-400 dark:text-gray-300 font-medium rounded-lg hover:bg-brand-500 hover:text-white transition-all">
-                                    View Application
-                                </button>
                             </div>
+                            {% endfor %}
                         </div>
                     {% else %}
                         <div class="p-2 overflow-x-auto">
-
                             <div class="relative flex flex-col gap-4 min-w-max">
-
                                 <!-- ===== Header Empty Message ===== -->
                                 <div
                                     class="relative flex items-center gap-4 p-6 rounded-2xl
@@ -365,7 +425,7 @@
                                         class="shrink-0 px-4 py-2 rounded-lg
                                             bg-slate-200/60 dark:bg-slate-700/60
                                             text-transparent">
-                                        View Application
+                                        View Proposal
                                     </div>
                                 </div>
                                 {% endfor %}

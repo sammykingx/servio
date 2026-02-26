@@ -12,7 +12,7 @@ from template_map.accounts import Accounts
 from pydantic import ValidationError
 import json, logging
 
-logger = logging.getLogger("django")
+logger = logging.getLogger(__name__)
 
 
 ValidationResult = namedtuple("ValidationResult", ["verified", "msg"])
@@ -282,12 +282,14 @@ class UpdateUserProfileView(LoginRequiredMixin, View):
         user = self.request.user
         platform_map = dict(Platform.choices)
         for platform_name, url in social_links.items():
-            if platform_name in platform_map:
-                user.social_links.update_or_create(
-                    platform=platform_name,
-                    defaults={"url": url},
-                )
-    
+            if url:
+                # print(f"Updating social link for platform: {platform_name} with URL: {url}")
+                if platform_name in platform_map:
+                    user.social_links.update_or_create(
+                        platform=platform_name,
+                        defaults={"url": url},
+                    )
+        
     def update_address(self, home_address_obj, address_payload:UserAddressUpdatePayload):
         """
             Update the user's home address information.

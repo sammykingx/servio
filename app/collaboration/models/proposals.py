@@ -4,7 +4,6 @@ from uuid6 import uuid7
 from .choices import ProposalStatus
 
 
-
 class Proposal(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
 
@@ -36,7 +35,8 @@ class Proposal(models.Model):
             "This is filled after the proposal has been accepted."
         )
     )
-    is_negotiating = models.BooleanField(default=True)
+    
+    is_negotiating = models.BooleanField(default=False)
     sent_at = models.DateTimeField()
 
     created_at = models.DateTimeField(auto_now_add=True)

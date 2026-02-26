@@ -47,6 +47,7 @@ class GigDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         context["editable_statuses"] = ["pending", "draft"]
+        context["applications"] = True
         roles = self.object.required_roles.all()
         role_payment_meta = {}
         if roles:
@@ -96,11 +97,21 @@ class GigDetailView(LoginRequiredMixin, DetailView):
                     queryset=GigRoleModel.objects
                     .select_related("niche")
                 ),
-                # i need only the 1st 3 for each status
-                # Prefetch(
-                #     "proposals",
-                #     queryset=ProposalModel.objects.select_related("user"),
-                # ),
+                Prefetch(
+                    "proposals",
+                    queryset=ProposalModel.objects
+                        .select_related("sender__profile")
+                        .only(
+                            "id",
+                            "status",
+                            "sent_at",
+                            "sender__profile__avatar_url",
+                            "sender__profile__headline",
+                            "sender__profile__bio",
+                        )
+                        .order_by("-created_at")[:3],
+                    to_attr="preview_proposals"
+                ),
                 # Prefetch(
                 #     'proposals__deliverables',
                 #     queryset=ProposalDeliverable.objects.select_related('role').only('id', 'due_date', 'proposal_id', 'role_id')
