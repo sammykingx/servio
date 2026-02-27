@@ -191,62 +191,68 @@
                 <!-- Tabs -->
                 <div class="border-b border-slate-100 dark:border-slate-800 px-4 overflow-x-auto">
                     <div class="flex gap-8 whitespace-nowrap">
-                        <button class="shrink-0 py-4 border-b-2 border-brand-500 dark:border-gray-200 text-brand-500 dark:text-gray-300 text-sm font-medium">
-                            Agreed (2)
+                        <button data-tab="all" class="shrink-0 py-4 border-b-2 border-brand-500 dark:border-gray-200 text-brand-500 dark:text-gray-300 text-sm font-medium">
+                            All {% if proposal_count %}({{ proposal_count.total_proposals }}){% endif %}
                         </button>
-                        <button class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
-                            Countered
+                        <button data-tab="accepted" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
+                            Accepted {% if proposal_count %}({{ proposal_count.accepted }}){% endif %}
+                        </button>
+                        <button data-tab="countered" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
+                            Countered {% if proposal_count %}({{ proposal_count.countered }}){% endif %}
                         </button>
                     </div>
                 </div>
 
                 <!-- proposals -->
                 <div class="p-2 overflow-x-auto">
-                    {% if gig.proposals %}
+                    {% if proposal_roles %}
                         <div class="flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
 
-                            {% for proposal in gig.preview_proposals %}
+                            {% for proposal_role in proposal_roles %}
 
-                            <div class="p-5 sm:p-6 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-all rounded-xl">
-
+                            <div 
+                                data-status="{% if proposal_role.proposal.is_negotiating %}countered{% else %}accepted{% endif %}"
+                                class="p-5 sm:p-6 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 
+                                    transition-all rounded-xl proposal-item"
+                            >
                                 <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
 
                                     <!-- LEFT: Identity -->
                                     <div class="flex items-start gap-4">
 
-                                        {% if proposal.sender.profile.avatar_url %}
+                                        {% if proposal_role.proposal.sender.profile.avatar_url %}
                                             <div 
                                                 class="size-12 sm:size-14 shrink-0 rounded-2xl bg-cover bg-center 
                                                     border border-slate-200 dark:border-slate-700"
-                                                style="background-image: url('{{ proposal.sender.profile.avatar_url.url }}');">
+                                                style="background-image: url('{{ proposal_role.proposal.sender.profile.avatar_url.url }}');">
                                             </div>
                                         {% else %}
                                             <div class="size-12 sm:size-14 shrink-0 rounded-2xl bg-brand-500 text-white 
                                                         flex items-center justify-center text-lg font-semibold shadow-sm">
-                                                {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
+                                                {{ proposal_role.proposal.sender.first_name|first }}{{ proposal_role.proposal.sender.last_name|first }}
                                             </div>
                                         {% endif %}
 
                                         <div class="min-w-0">
                                             <div class="flex flex-wrap items-center gap-2">
                                                 <h4 class="text-sm sm:text-base font-semibold text-slate-900 dark:text-white truncate">
-                                                    {{ proposal.sender.full_name|title }}
+                                                    {{ proposal_role.proposal.sender.full_name|title }}
                                                 </h4>
 
                                                 <span class="px-2 py-0.5 text-[10px] sm:text-[11px] font-medium rounded-full
                                                             bg-emerald-50 text-emerald-600
                                                             dark:bg-emerald-900/20 dark:text-emerald-400">
-                                                    {{ proposal.status|title }}
+                                                    {{ proposal_role.proposal.status|title }}
                                                 </span>
                                             </div>
-                                            {% if proposal.sender.profile.headline %}
+                                            {% if proposal_role.proposal.sender.profile.headline %}
                                                 <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 truncate">
-                                                    {{ proposal.sender.profile.headline|title }}
+                                                    {{ proposal_role.proposal.sender.profile.headline|title }}
                                                 </p>
                                             {% endif %}
 
                                             <p class="text-xs text-slate-400 mt-1">
-                                                Submitted {{ proposal.created_at|timesince }} ago
+                                                Submitted {{ proposal_role.proposal.created_at|timesince }} ago
                                             </p>
                                         </div>
                                     </div>
@@ -259,45 +265,70 @@
                                                 Role Applied For
                                             </p>
                                             <p class="text-sm font-semibold text-slate-900 dark:text-white">
-                                                {{ proposal.role.title }}
+                                                {{ proposal_role.role_name|title }}
                                             </p>
                                         </div>
 
                                         <!-- Comparison Card -->
                                         <div class="rounded-xl bg-slate-50 dark:bg-slate-800/60
-                                                    border border-slate-100 dark:border-slate-700
-                                                    p-4 grid grid-cols-2 gap-4">
+                                            border border-slate-100 dark:border-slate-700
+                                            p-4 grid grid-cols-2 gap-4"
+                                        >
+                                            {% if gig.has_gig_roles %}
+                                                <div>
+                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
+                                                        Initial Offer
+                                                    </p>
+                                                    <p class="text-sm font-semibold text-slate-700 dark:text-white">
+                                                        ${{ proposal_role.role_amount|intcomma }}
+                                                    </p>
+                                                </div>
 
-                                            <div>
-                                                <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
-                                                    Initial Offer
-                                                </p>
-                                                <p class="text-sm font-semibold text-slate-900 dark:text-white">
-                                                    ${{ proposal.role.budget|default:123009|intcomma }}
-                                                </p>
-                                            </div>
+                                                <div>
+                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
+                                                        Asking
+                                                    </p>
+                                                    <p class="text-sm font-semibold
+                                                            {% if proposal_role.proposed_amount > proposal_role.role_amount %}
+                                                                text-amber-600
+                                                            {% else %}
+                                                                text-emerald-600
+                                                            {% endif %}">
+                                                        ${{ proposal_role.proposed_amount|intcomma }}
+                                                    </p>
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
+                                                        Budget
+                                                    </p>
+                                                    <p class="text-sm font-semibold text-slate-700 dark:text-white">
+                                                        ${{ gig.total_budget|intcomma }}
+                                                    </p>
+                                                </div>
 
-                                            <div>
-                                                <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
-                                                    Asking
-                                                </p>
-                                                <p class="text-sm font-semibold
-                                                        {% if proposal.amount > proposal.role.budget %}
-                                                            text-amber-600
-                                                        {% else %}
-                                                            text-emerald-600
-                                                        {% endif %}">
-                                                    ${{ proposal.amount|intcomma }}
-                                                </p>
-                                            </div>
-
+                                                <div>
+                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
+                                                        Asking
+                                                    </p>
+                                                    <p class="text-sm font-semibold
+                                                            {% if proposal_role.role_amount > gig.total_budget %}
+                                                                text-amber-600
+                                                            {% else %}
+                                                                text-emerald-600
+                                                            {% endif %}">
+                                                        ${{ proposal_role.role_amount|intcomma }}
+                                                    </p>
+                                                </div>
+                                            {% endif %}
                                         </div>
 
                                         <!-- Timeline -->
-                                        <p class="text-xs text-slate-400 mt-3">
-                                            Timeline: {{ proposal.gig.gig_duration }}
-                                        </p>
-
+                                        {% if gig.has_gig_roles %}
+                                            <p class="text-xs text-slate-400 mt-3">
+                                                Timeline: {{ proposal_role.proposal.gig.gig_duration }}
+                                            </p>
+                                        {% endif %}
                                     </div>
 
 

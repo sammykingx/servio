@@ -13,6 +13,7 @@ from registry_utils import get_registered_model
 GigModel = get_registered_model("collaboration","Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
 ProposalModel = get_registered_model("collaboration", "Proposal")
+ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
 
 
 class GigDetailView(LoginRequiredMixin, DetailView):
@@ -46,8 +47,12 @@ class GigDetailView(LoginRequiredMixin, DetailView):
         """
         context = super().get_context_data(**kwargs)
 
+        proposal_roles, proposal_count = self.fetch_proposal_roles(self.object)
+        
         context["editable_statuses"] = ["pending", "draft"]
-        context["applications"] = True
+        context["proposal_roles"] = proposal_roles
+        context["proposal_count"] = proposal_count
+        
         roles = self.object.required_roles.all()
         role_payment_meta = {}
         if roles:
@@ -94,30 +99,46 @@ class GigDetailView(LoginRequiredMixin, DetailView):
             .prefetch_related(
                 Prefetch(
                     "required_roles",
-                    queryset=GigRoleModel.objects
-                    .select_related("niche")
-                ),
-                Prefetch(
-                    "proposals",
-                    queryset=ProposalModel.objects
-                        .select_related("sender__profile")
-                        .only(
-                            "id",
-                            "status",
-                            "sent_at",
-                            "sender__profile__avatar_url",
-                            "sender__profile__headline",
-                            "sender__profile__bio",
-                        )
-                        .order_by("-created_at")[:3],
-                    to_attr="preview_proposals"
-                ),
-                # Prefetch(
-                #     'proposals__deliverables',
-                #     queryset=ProposalDeliverable.objects.select_related('role').only('id', 'due_date', 'proposal_id', 'role_id')
-                # ),
+                    queryset=GigRoleModel.objects.select_related("niche"),
+                )
             )
         )
+        
+    def fetch_proposal_roles(self, gig):
+        """
+        Retrieves proposal roles associated with the gig's required roles.
+
+        This method gathers all proposal roles linked to the gig's required roles,
+        including related proposal and applicant user data for comprehensive context.
+
+        Args:
+            gig (Gig): The gig instance for which to fetch proposal roles.
+
+        Returns:
+            QuerySet: A queryset of ProposalRole instances with related data.
+        """
+        preview_roles = (
+            ProposalRoleModel.objects
+            .filter(proposal__gig=gig)
+            .select_related("proposal__sender__profile", "gig_role")
+            .only(
+                "role_amount",
+                "proposed_amount",
+                "gig_role__role_name",
+                "proposal__sender__profile__avatar_url",
+                "proposal__sender__profile__headline",
+                "proposal__status",
+                "proposal__sent_at",
+            )
+            .order_by("-proposal__created_at")[:4]
+        )
+        all_proposals = ProposalModel.objects.filter(gig=gig)
+        role_count = {
+            "total_proposals": all_proposals.count(),
+            "accepted": all_proposals.filter(is_negotiating=False).count(),
+            "countered": all_proposals.filter(is_negotiating=True).count()
+        }
+        return preview_roles, role_count
     
     def dispatch(self, request, *args, **kwargs):
         """

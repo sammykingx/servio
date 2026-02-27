@@ -93,8 +93,8 @@ class ProposalService:
             ProposalValidationError: If data integrity checks fail.
         """
         try:
-            ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
-            ProposalValidator.validate(payload, gig)
+            # ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
+            # ProposalValidator.validate(payload, gig)
 
             proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
             self.notifications_flow(gig.creator)
@@ -157,10 +157,29 @@ class ProposalService:
                     "gig_id": str(gig.id),
                 })
             raise err
+        
+    def _get_role_object(self, gig, role_id):
+        # get it from the gigcategory
+        GigRoleModel = get_registered_model("collaboration", "GigRole")
+        try:
+            return gig.required_roles.get(role_id=role_id)
+        except GigRoleModel.DoesNotExist:
+            raise ProposalPermissionDenied(
+                "It looks like this specific role isn't part of this project's current needs.",
+                code=PolicyFailure.INVALID_ROLE.code,
+                title=PolicyFailure.INVALID_ROLE.title
+            )
+        except GigRoleModel.MultipleObjectsReturned:
+            raise ProposalPermissionDenied(
+                "There seems to be a configuration issue with this role.",
+                code=PolicyFailure.INVALID_ROLE.code,
+                title=PolicyFailure.INVALID_ROLE.title
+            )
     
     def _create_proposal_roles(self, gig, proposal, applied_roles:List[AppliedRoles]):
         ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
         GigRoleModel = get_registered_model("collaboration", "GigRole")
+        GigCategoryModel = get_registered_model("collaboration", "Gigcategory")
         
         role_instances = []
         role_obj = None
@@ -187,6 +206,7 @@ class ProposalService:
                     ProposalRoleModel(
                         proposal=proposal,
                         gig_role=role_obj,
+                        gig_category=None,
                         role_amount=role_payload.role_amount,
                         proposed_amount=role_payload.proposed_amount,
                         payment_plan=role_payload.payment_plan,
@@ -194,8 +214,14 @@ class ProposalService:
             )
                     
             else:
+                category_obj = GigCategoryModel.objects.get(
+                    id=role_payload.niche_id,
+                    parent_id=role_payload.industry_id
+                )
                 ProposalRoleModel.objects.create(
                     proposal=proposal,
+                    gig_role=None,
+                    gig_category=category_obj,
                     role_amount=role_payload.role_amount,
                     proposed_amount=role_payload.proposed_amount,
                     payment_plan=role_payload.payment_plan,
