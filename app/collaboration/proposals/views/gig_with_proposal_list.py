@@ -8,8 +8,8 @@ from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
 
 
-class ProposalListView(LoginRequiredMixin, ListView):
-    template_name = Collabs.Proposals.LIST
+class GigProposalListView(LoginRequiredMixin, ListView):
+    template_name = Collabs.Proposals.GIGS_WITH_PROPOSAL_LIST
     context_object_name = "gigs"
     paginate_by = 18
     model = get_registered_model("collaboration", "Gig")

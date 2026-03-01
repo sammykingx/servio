@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
-{% block browser_title %}Negotiation Center{% endblock %}
+{% block browser_title %}Project Proposals{% endblock %}
 {% block content %}
 {% if not gigs %}
 {% include "components/empty-states/no-negotiations.html" %}
@@ -151,7 +151,7 @@
 					transition-all duration-300 cursor-pointer"
 				>
 					<a 
-						href="{% url COLLABORATION_URLS.DETAIL_COLLABORATION slug=gig.slug %}#proposals-section" 
+						href="{% url PROPOSALS.PROPOSAL_LISTINGS gig_slug=gig.slug %}"
 						class="absolute inset-0 z-10" 
 						aria-label="{{ gig.title }}">
     				</a>

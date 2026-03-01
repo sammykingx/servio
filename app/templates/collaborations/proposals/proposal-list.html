@@ -1,0 +1,211 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Project Proposals{% endblock %}
+{% block content %}
+
+        <section class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <div class="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    
+                    <h1 class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">Senior UI/UX Design System</h1>
+                    <div class="mt-3 flex flex-wrap items-center gap-y-2 gap-x-6 text-sm text-slate-600 dark:text-slate-400">
+                        <span class="flex items-center gap-1.5 font-medium text-brand-400 bg-brand-500/10 px-2.5 py-0.5 rounded-lg">
+                            <span class="material-symbols-outlined text-sm">group</span>
+                            24 Proposals Submitted
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">payments</span>
+                            Budget: <span class="font-semibold text-slate-900 dark:text-slate-100">$5,000</span>
+                        </span>
+                        <span class="flex items-center gap-1.5 text-red-600 dark:text-red-400">
+                            <span class="material-symbols-outlined text-sm">event</span>
+                            Deadline: Oct 30
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 hover:bg-brand-500/90 transition-all">
+                        <span class="material-symbols-outlined text-lg">edit</span>
+                        Edit Project
+                    </button>
+                    <button class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 transition-colors">
+                        <span class="material-symbols-outlined">more_horiz</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Controls Section -->
+            <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button class="rounded-lg bg-brand-500 px-4 py-1.5 text-xs font-semibold text-white dark:bg-brand-400 dark:text-slate-900">All Proposals</button>
+                    <button class="rounded-lg bg-white border border-slate-200 px-4 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">Negotiating</button>
+                    <button class="rounded-lg bg-white border border-slate-200 px-4 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">Awaiting Response</button>
+                    <button class="rounded-lg bg-white border border-slate-200 px-4 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">Accepted</button>
+                    <button class="rounded-lg bg-white border border-slate-200 px-4 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">Declined</button>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sort by:</span>
+                    <div class="relative min-w-[160px]">
+                        <select class="w-full appearance-none rounded-xl border-slate-200 bg-white py-2 pl-4 pr-10 text-sm font-semibold text-slate-700 focus:border-brand-500 focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                            <option>Latest</option>
+                            <option>Lowest Amount</option>
+                            <option>Highest Amount</option>
+                            <option>Shortest Timeline</option>
+                        </select>
+                        <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">unfold_more</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Proposals List -->
+            <div class="space-y-4">
+                <!-- Card 1 -->
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-brand-500/50 hover:shadow-md dark:border-slate-800 dark:bg-brand-500">
+                    <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                        <div class="flex flex-1 gap-5">
+                            <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+                                <img alt="Alex Rivera avatar" class="h-full w-full object-cover" data-alt="Profile photo of Alex Rivera, product designer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpNdCacMDe-gWe7wqsDJvG50_PMIJGz5qePDosBo0qLtLqUnDWE1SlIgBhxqxNUgWg6nsZiaNj9mfUppGAYIqLQsuLMpxx9tX-OQaI1uyYYgdJms5HVk4Xi2xsVc5WsqaEcHB7Y_82Ocp2zBKGQ-3MD_-gGaNHAK7G2rEFjtzYtYJtgWrWKh3vIwdyi7yaD9DE3rUizAK6-MP9XT6IXvhOfS3e6-fceE1y11amIipejKT2Xj5VZQBYyDDQIlx3j4wqHp5ZLoGU3ZU" />
+                            </div>
+                            <div class="flex-1">
+                                <div class="mb-1 flex flex-wrap items-center gap-3">
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Alex Rivera</h3>
+                                    <span class="inline-flex items-center rounded-lg bg-blue-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">Awaiting Response</span>
+                                    <span class="text-xs text-slate-400">2 hours ago</span>
+                                </div>
+                                <p class="text-sm font-semibold text-brand-500">Lead Product Designer</p>
+                                <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                    I can deliver a comprehensive design system with high-fidelity prototypes and developer documentation using Figma's latest variables and components.
+                                </p>
+                                <div class="mt-4 flex items-center gap-4">
+                                    <button class="text-xs font-semibold text-slate-900 underline decoration-slate-200 underline-offset-4 hover:decoration-brand-500 dark:text-white">View Full Proposal</button>
+                                    <button class="text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors">Portfolio</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex w-full shrink-0 flex-col gap-4 border-t border-slate-100 pt-6 md:w-48 md:border-l md:border-t-0 md:pl-8 md:pt-0 dark:border-slate-800">
+                            <div>
+                                <div class="text-2xl font-black text-slate-900 dark:text-white">$4,200</div>
+                                <div class="text-xs font-medium text-slate-400">Project Total</div>
+                            </div>
+                            <div class="flex items-center gap-4 md:flex-col md:items-start md:gap-1">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm text-slate-400">schedule</span>
+                                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">21 Days</span>
+                                </div>
+                                <div class="text-[10px] font-semibold text-slate-400 uppercase">Est. Delivery</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 rounded-xl bg-brand-500/10 py-2 text-xs font-semibold text-brand-500 hover:bg-brand-500 hover:text-white transition-all">Accept</button>
+                                <button class="rounded-xl border border-slate-200 bg-white p-2 text-slate-400 hover:text-slate-600 dark:border-slate-700 dark:bg-slate-800">
+                                    <span class="material-symbols-outlined text-sm">mail</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-brand-500/50 hover:shadow-md dark:border-slate-800 dark:bg-brand-500">
+                    <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                        <div class="flex flex-1 gap-5">
+                            <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+                                <img alt="Sarah Jenkins avatar" class="h-full w-full object-cover" data-alt="Profile photo of Sarah Jenkins, senior UI designer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVgKCERBVkjaE7ZDxe_kdjbI8TgGVVVYjaYz57iYf9ykbrW1dFCMO6fZ8wvYgZTpS-E7_XMloTzSaSxuAFDqX_3O1Cve8e9nxweJ9NcuZS2sVqwqk6qtO_KzT3AZ4X9IkEl9CmnSdsWKZIziVwh78Sn4S_5itbfcVTENbt_E3QxU1drZlsLh7MTbvoYJqnU4jnEX4eYH3Oc48Jj0V9tJQRmq-3xhxXIZuByqVB73KJxCL54XyreKNl0B7hqsBEs4LfIFWPANlafHg" />
+                            </div>
+                            <div class="flex-1">
+                                <div class="mb-1 flex flex-wrap items-center gap-3">
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Sarah Jenkins</h3>
+                                    <span class="inline-flex items-center rounded-lg bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Negotiating</span>
+                                    <span class="text-xs text-slate-400">5 hours ago</span>
+                                </div>
+                                <p class="text-sm font-semibold text-brand-500">Senior Brand &amp; UI Designer</p>
+                                <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                    Focusing on accessibility and brand consistency. My approach includes a 14-day sprint for core components and additional audit of current assets.
+                                </p>
+                                <div class="mt-4 flex items-center gap-4">
+                                    <button class="text-xs font-semibold text-slate-900 underline decoration-slate-200 underline-offset-4 hover:decoration-brand-500 dark:text-white">View Full Proposal</button>
+                                    <button class="text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors">Portfolio</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex w-full shrink-0 flex-col gap-4 border-t border-slate-100 pt-6 md:w-48 md:border-l md:border-t-0 md:pl-8 md:pt-0 dark:border-slate-800">
+                            <div>
+                                <div class="text-2xl font-black text-slate-900 dark:text-white">$5,100</div>
+                                <div class="text-xs font-medium text-slate-400">Project Total</div>
+                            </div>
+                            <div class="flex items-center gap-4 md:flex-col md:items-start md:gap-1">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm text-slate-400">schedule</span>
+                                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">14 Days</span>
+                                </div>
+                                <div class="text-[10px] font-semibold text-slate-400 uppercase">Est. Delivery</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 rounded-xl bg-brand-500/10 py-2 text-xs font-semibold text-brand-500 hover:bg-brand-500 hover:text-white transition-all">Accept</button>
+                                <button class="rounded-xl border border-slate-200 bg-white p-2 text-slate-400 hover:text-slate-600 dark:border-slate-700 dark:bg-slate-800">
+                                    <span class="material-symbols-outlined text-sm">mail</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-brand-500/50 hover:shadow-md dark:border-slate-800 dark:bg-brand-500">
+                    <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                        <div class="flex flex-1 gap-5">
+                            <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+                                <img alt="Marcus Chen avatar" class="h-full w-full object-cover" data-alt="Profile photo of Marcus Chen, interface engineer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLxjthiU0gLrBbcGYFuNmXPqAuNGjyDJt_MZHXCX617HNS_N66vYnn-NHhBTZ0py3FiOC8UStrRRt76wVIOMrzErkPOVDBgjqvkQMnXwuGBY-AG_POazWFcaYk9JzzFzk3nHmAPGVBjDfQz2bPitcGhfti580F0AWUre2xFhYdROgF80CK4iWsZdSHzmVID-rnVCQNU7DYb24v7gTPGjW5bvgkCj8Sa_twtSZ3Kpwmkbb8mQT23Sb7pCWekZ9v3PiDPxj5dJiu0wU" />
+                            </div>
+                            <div class="flex-1">
+                                <div class="mb-1 flex flex-wrap items-center gap-3">
+                                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Marcus Chen</h3>
+                                    <span class="inline-flex items-center rounded-lg bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600 dark:bg-slate-800 dark:text-slate-400">Pending</span>
+                                    <span class="text-xs text-slate-400">Yesterday</span>
+                                </div>
+                                <p class="text-sm font-semibold text-brand-500">Interface Engineer &amp; UX Strategist</p>
+                                <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                    Bridging the gap between design and code. I'll build the system in Figma and provide a Storybook reference for your engineering team.
+                                </p>
+                                <div class="mt-4 flex items-center gap-4">
+                                    <button class="text-xs font-semibold text-slate-900 underline decoration-slate-200 underline-offset-4 hover:decoration-brand-500 dark:text-white">View Full Proposal</button>
+                                    <button class="text-xs font-semibold text-slate-400 hover:text-slate-600 transition-colors">Portfolio</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex w-full shrink-0 flex-col gap-4 border-t border-slate-100 pt-6 md:w-48 md:border-l md:border-t-0 md:pl-8 md:pt-0 dark:border-slate-800">
+                            <div>
+                                <div class="text-2xl font-black text-slate-900 dark:text-white">$3,850</div>
+                                <div class="text-xs font-medium text-slate-400">Project Total</div>
+                            </div>
+                            <div class="flex items-center gap-4 md:flex-col md:items-start md:gap-1">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm text-slate-400">schedule</span>
+                                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">28 Days</span>
+                                </div>
+                                <div class="text-[10px] font-semibold text-slate-400 uppercase">Est. Delivery</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 rounded-xl bg-brand-500/10 py-2 text-xs font-semibold text-brand-500 hover:bg-brand-500 hover:text-white transition-all">Accept</button>
+                                <button class="rounded-xl border border-slate-200 bg-white p-2 text-slate-400 hover:text-slate-600 dark:border-slate-700 dark:bg-slate-800">
+                                    <span class="material-symbols-outlined text-sm">mail</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pagination/Footer Area -->
+            <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row dark:border-slate-800">
+                <p class="text-sm font-medium text-slate-500">Showing 3 of 24 proposals</p>
+                <div class="flex items-center gap-2">
+                    <button class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-400 dark:border-slate-700">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-xs font-semibold text-white">1</button>
+                    <button class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">2</button>
+                    <button class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">3</button>
+                    <button class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}

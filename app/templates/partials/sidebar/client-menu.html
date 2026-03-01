@@ -115,8 +115,8 @@
       </li>
       <li>
          <a
-            href="{% url PROPOSALS.LIST %}"
-            class="menu-item group {% url PROPOSALS.LIST as proposal_url %}{% if request.path == proposal_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
+            href="{% url PROPOSALS.GIG_WITH_PROPOSALS_LIST %}"
+            class="menu-item group {% url PROPOSALS.GIG_WITH_PROPOSALS_LIST as proposal_url %}{% if request.path == proposal_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
             >
             <span class="material-symbols-outlined icon-negotiations">contract</span>
             <span

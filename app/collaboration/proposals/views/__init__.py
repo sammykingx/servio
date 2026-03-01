@@ -1,1 +1,2 @@
-from .list import ProposalListView
+from .gig_with_proposal_list import GigProposalListView
+from .proposal_list import ProposalRoleListView
