@@ -19,125 +19,127 @@
 		</a>
 	</div>
 	<!-- Controls: Search, Tabs & Filters -->
-	<div class="flex flex-col gap-4 space-y-2">
-		<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-700 pb-1">
-			<!-- Project Status Tabs -->
-			<div class="flex overflow-x-auto pb-2 lg:pb-0 gap-6 no-scrollbar my-5">
-				{% with active_tab=request.GET.project_status %}
-				<a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
-					{% if not active_tab %}
-					border-b-2 border-brand-500
-					{% else %}
-					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
-					{% endif %}
-					"
-				>
-					<span class="{% if not active_tab %}text-brand-500 dark:text-brand-300{% else %}text-gray-500{% endif %}
-						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-					All
-					</span>
-					<span class="flex items-center justify-center
+	{% comment "Project Status Tabs" %}
+		<div class="flex flex-col gap-4 space-y-2">
+			<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-700 pb-1">
+				<!-- Project Status Tabs -->
+				<div class="flex overflow-x-auto pb-2 lg:pb-0 gap-6 no-scrollbar my-5">
+					{% with active_tab=request.GET.project_status %}
+					<a href="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
 						{% if not active_tab %}
-						bg-brand-500/10 text-brand-500 dark:text-brand-300
+						border-b-2 border-brand-500
+						{% else %}
+						border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+						{% endif %}
+						"
+					>
+						<span class="{% if not active_tab %}text-brand-500 dark:text-brand-300{% else %}text-gray-500{% endif %}
+							dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+						All
+						</span>
+						<span class="flex items-center justify-center
+							{% if not active_tab %}
+							bg-brand-500/10 text-brand-500 dark:text-brand-300
+							{% else %}
+							bg-gray-100 text-gray-500
+							{% endif %}
+							dark:bg-gray-700 dark:text-gray-300
+							text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+						{{ gig_status_counts.total }}
+					</span>
+					</a>
+					<a href="{% if gig_status_counts.active %}?project_status=active{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+						{% if active_tab == 'active' %}
+						border-b-2 border-brand-500
+						{% else %}
+						border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+						{% endif %}
+						">
+					<span class="{% if active_tab == 'active' %}text-brand-500{% else %}text-gray-500{% endif %}
+						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+					Active
+					</span>
+					<span class="flex items-center justify-center
+						{% if active_tab == 'active' %}
+						bg-brand-500/10 text-brand-500
 						{% else %}
 						bg-gray-100 text-gray-500
 						{% endif %}
 						dark:bg-gray-700 dark:text-gray-300
 						text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
-					{{ gig_status_counts.total }}
-				</span>
-				</a>
-				<a href="{% if gig_status_counts.active %}?project_status=active{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
-					{% if active_tab == 'active' %}
-					border-b-2 border-brand-500
-					{% else %}
-					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
-					{% endif %}
-					">
-				<span class="{% if active_tab == 'active' %}text-brand-500{% else %}text-gray-500{% endif %}
-					dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-				Active
-				</span>
-				<span class="flex items-center justify-center
-					{% if active_tab == 'active' %}
-					bg-brand-500/10 text-brand-500
-					{% else %}
-					bg-gray-100 text-gray-500
-					{% endif %}
-					dark:bg-gray-700 dark:text-gray-300
-					text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
-				{{ gig_status_counts.active }}
-				</span>
-				</a>
-				<a href="{% if gig_status_counts.countered %}?project_status=countered{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
-					{% if active_tab == 'countered' %}
-					border-b-2 border-brand-500
-					{% else %}
-					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
-					{% endif %}
-					">
-					<span class="{% if active_tab == 'countered' %}text-brand-500{% else %}text-gray-500{% endif %}
-						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-					Countered
+					{{ gig_status_counts.active }}
 					</span>
-					<span class="flex items-center justify-center
+					</a>
+					<a href="{% if gig_status_counts.countered %}?project_status=countered{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
 						{% if active_tab == 'countered' %}
-						bg-brand-500/10 text-brand-500
+						border-b-2 border-brand-500
 						{% else %}
-						bg-gray-100 text-gray-500
+						border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
 						{% endif %}
-						dark:bg-gray-700 dark:text-gray-300
-						text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]"
-					>{{ gig_status_counts.countered }}</span>
-				</a>
-				<a href="{% if gig_status_counts.accepted %}?project_status=accepted{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
-					{% if active_tab == 'accepted' %}
-					border-b-2 border-brand-500
-					{% else %}
-					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
-					{% endif %}
-					">
-					<span class="{% if active_tab == 'accepted' %}text-brand-500{% else %}text-gray-500{% endif %}
-						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-					Accepted
-					</span>
-					<span class="flex items-center justify-center
+						">
+						<span class="{% if active_tab == 'countered' %}text-brand-500{% else %}text-gray-500{% endif %}
+							dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+						Countered
+						</span>
+						<span class="flex items-center justify-center
+							{% if active_tab == 'countered' %}
+							bg-brand-500/10 text-brand-500
+							{% else %}
+							bg-gray-100 text-gray-500
+							{% endif %}
+							dark:bg-gray-700 dark:text-gray-300
+							text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]"
+						>{{ gig_status_counts.countered }}</span>
+					</a>
+					<a href="{% if gig_status_counts.accepted %}?project_status=accepted{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
 						{% if active_tab == 'accepted' %}
-						bg-brand-500/10 text-brand-500
+						border-b-2 border-brand-500
 						{% else %}
-						bg-gray-100 text-gray-500
+						border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
 						{% endif %}
-						dark:bg-gray-700 dark:text-gray-300
-						text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
-					{{ gig_status_counts.accepted }}
-					</span>
-				</a>
-				<a href="{% if gig_status_counts.rejected %}?project_status=rejected{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
-					{% if active_tab == 'rejected' %}
-					border-b-2 border-brand-500
-					{% else %}
-					border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
-					{% endif %}
-					">
-					<span class="{% if active_tab == 'rejected' %}text-brand-500{% else %}text-gray-500{% endif %}
-						dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-					Rejected
-					</span>
-					<span class="flex items-center justify-center
+						">
+						<span class="{% if active_tab == 'accepted' %}text-brand-500{% else %}text-gray-500{% endif %}
+							dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+						Accepted
+						</span>
+						<span class="flex items-center justify-center
+							{% if active_tab == 'accepted' %}
+							bg-brand-500/10 text-brand-500
+							{% else %}
+							bg-gray-100 text-gray-500
+							{% endif %}
+							dark:bg-gray-700 dark:text-gray-300
+							text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+						{{ gig_status_counts.accepted }}
+						</span>
+					</a>
+					<a href="{% if gig_status_counts.rejected %}?project_status=rejected{% else %}#{% endif %}" class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
 						{% if active_tab == 'rejected' %}
-						bg-brand-500/10 text-brand-500
+						border-b-2 border-brand-500
 						{% else %}
-						bg-gray-100 text-gray-500
+						border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
 						{% endif %}
-						dark:bg-gray-700 dark:text-gray-300
-						text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
-					{{ gig_status_counts.rejected }}
-					</span>
-				</a>
-				{% endwith %}
+						">
+						<span class="{% if active_tab == 'rejected' %}text-brand-500{% else %}text-gray-500{% endif %}
+							dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+						Rejected
+						</span>
+						<span class="flex items-center justify-center
+							{% if active_tab == 'rejected' %}
+							bg-brand-500/10 text-brand-500
+							{% else %}
+							bg-gray-100 text-gray-500
+							{% endif %}
+							dark:bg-gray-700 dark:text-gray-300
+							text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+						{{ gig_status_counts.rejected }}
+						</span>
+					</a>
+					{% endwith %}
+				</div>
 			</div>
 		</div>
-	</div>
+	{% endcomment %}
 	<div class="flex h-full gap-x-5">
 		<!-- LEFT: Proposals -->
 		<div class="flex-1 overflow-y-auto lg:mr-6 space-y-6">

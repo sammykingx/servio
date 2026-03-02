@@ -75,7 +75,7 @@
 				{% include "partials/header.html" %}
 				<!-- ===== Main Content Start ===== -->
 				<main class="bg-[#faf9ff] dark:bg-black" hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' x-transition.opacity.duration.400ms>
-					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+					<div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 min-h-screen">
 						
 						{% for message in messages %}
 						<div

@@ -71,6 +71,10 @@ class ProposalRole(models.Model):
         elif self.gig_category:
             return self.gig_category.name
         return "Unknown Role"
+    
+    @property
+    def budget_difference(self):
+        return self.proposed_amount - self.role_amount
         
     def clean(self):
         from django.core.exceptions import ValidationError

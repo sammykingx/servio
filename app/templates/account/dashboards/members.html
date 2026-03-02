@@ -209,7 +209,7 @@
                                     </h3>
 
                                     <a 
-                                        href="{% url PROPOSALS.LIST %}"
+                                        href="{% url PROPOSALS.GIG_WITH_PROPOSALS_LIST %}"
                                         class="text-brand-500 dark:text-brand-400 hover:text-brand-600 dark:hover:text-brand-300 transition"
                                     >
                                         <span class="material-symbols-outlined">arrow_outward</span>
@@ -277,66 +277,12 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        {% comment "enable later" %}
-                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800 flex flex-col h-full">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h3 class="text-base font-semibold  dark:text-white">Proposals</h3>
-                                    <button class="text-orange-300 dark:text-orange-200 hover:text-brand-500 transition-colors">
-                                        <span class="material-symbols-outlined">edit_square</span>
-                                    </button>
-                                </div>
-                                <div class="flex flex-col gap-4">
-                                    <!-- Message 1 -->
-                                    <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
-                                        <div class="relative flex-shrink-0">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of John from Dev Team" style="background-image: url('{% static 'images/user/user-05.jpg' %}');"></div>
-                                            <div class="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex justify-between items-baseline mb-0.5">
-                                                <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">John Doe</h5>
-                                                <span class="text-[10px]  font-medium">2m ago</span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Can you approve the latest mockup?</p>
-                                        </div>
-                                    </div>
-                                    <!-- Message 2 -->
-                                    <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
-                                        <div class="relative flex-shrink-0">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of Alice creative designer" style="background-image: url('{% static 'images/user/user-06.jpg' %}');"></div>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex justify-between items-baseline mb-0.5">
-                                                <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Alice Smith</h5>
-                                                <span class="text-[10px]  font-medium">1h ago</span>
-                                            </div>
-                                            <p class="text-sm  dark:text-white font-medium truncate">I've sent the invoice for the logo.</p>
-                                        </div>
-                                        <div class="size-2 rounded-full bg-brand-500 mt-2"></div>
-                                    </div>
-                                    <!-- Message 3 -->
-                                    <div class="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-800 last:border-0 last:pb-0 cursor-pointer group">
-                                        <div class="relative flex-shrink-0">
-                                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of Support Agent" style="background-image: url('{% static 'images/user/user-07.jpg' %}');"></div>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex justify-between items-baseline mb-0.5">
-                                                <h5 class="text-sm font-semibold  dark:text-white group-hover:text-brand-500 transition-colors">Support Team</h5>
-                                                <span class="text-[10px]  font-medium">1d ago</span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">Your ticket #9201 has been resolved.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endcomment %}
                         {% else %}
                         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6
-                                    shadow-sm ring-1 ring-gray-100 dark:ring-gray-800
-                                    flex flex-col h-full
-                                    bg-white/80 dark:bg-[#121826]/90
-                                    backdrop-blur-sm relative overflow-hidden">
-
+                            shadow-sm ring-1 ring-gray-100 dark:ring-gray-800
+                            flex flex-col h-full bg-white/80 dark:bg-[#121826]/90
+                            backdrop-blur-sm relative overflow-hidden"
+                        >
                             <!-- ===== Ambient Wash ===== -->
                             <div class="pointer-events-none absolute inset-0
                                         bg-gradient-to-br from-brand-500/5 via-indigo-500/5 to-transparent">
