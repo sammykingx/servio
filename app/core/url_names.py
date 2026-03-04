@@ -78,7 +78,9 @@ class CollaborationURLS:
   
     
 class ProposalURLS:
-    GIG_WITH_PROPOSALS_LIST = "gig_with_proposals_listings"
+    # SENT PROPOSALS, RECEIVED
+    SENT_PROPOSALS = "sent_proposals"
+    RECEIVED_PROPOSALS = "gig_with_proposals_listings"
     PROPOSAL_LISTINGS = "proposal_listings"
     DETAILS = "negotiation_details"
     GIG_NEGOTIATIONS = "gig_negotiations"

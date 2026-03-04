@@ -113,10 +113,10 @@
             </span>
          </a>
       </li>
-      <li>
+      <!-- <li>
          <a
-            href="{% url PROPOSALS.GIG_WITH_PROPOSALS_LIST %}"
-            class="menu-item group {% url PROPOSALS.GIG_WITH_PROPOSALS_LIST as proposal_url %}{% if request.path == proposal_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
+            href="{% url PROPOSALS.RECEIVED_PROPOSALS %}"
+            class="menu-item group {% url PROPOSALS.RECEIVED_PROPOSALS as proposal_url %}{% if request.path == proposal_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
             >
             <span class="material-symbols-outlined icon-negotiations">contract</span>
             <span
@@ -126,9 +126,69 @@
                Proposals
             </span>
          </a>
+      </li> -->
+      <li x-data="{ open: false }">
+         <!-- Parent Item -->
+         <button
+            @click="open = !open"
+            class="menu-item group w-full flex items-center justify-between
+                  {% if request.resolver_match.url_name in 'proposals_sent proposals_received' %}
+                     menu-item-active
+                  {% else %}
+                     menu-item-inactive
+                  {% endif %}"
+         >
+            <div class="flex items-center gap-3">
+               <span class="material-symbols-outlined icon-negotiations">contract</span>
+               <span class="menu-item-text"
+                     :class="sidebarToggle ? 'xl:hidden' : ''">
+                  Proposals
+               </span>
+            </div>
+
+            <!-- Arrow -->
+            <span class="material-symbols-outlined text-sm transition-transform"
+                  :class="open ? 'rotate-180' : ''">
+               keyboard_arrow_down
+            </span>
+         </button>
+
+         <!-- Submenu -->
+         <ul x-show="open"
+            x-transition
+            class="mt-2 space-y-1 pl-10"
+         >
+            <!-- Sent -->
+            <li>
+               <a href="#"
+                  class="block py-2 px-3 text-sm rounded-lg
+                        {% url PROPOSAL.SENT_PROPOSALS as sent_url %}
+                        {% if request.path == sent_url %}
+                           menu-dropdown-item-active
+                        {% else %}
+                           menu-dropdown-item-inactive
+                        {% endif %}">
+                  Sent Proposals
+               </a>
+            </li>
+
+            <!-- Received -->
+            <li>
+               <a href="{% url PROPOSALS.RECEIVED_PROPOSALS %}"
+                  class="block py-2 px-3 text-sm rounded-lg
+                        {% url PROPOSALS.RECEIVED_PROPOSALS as received_url %}
+                        {% if request.path == received_url %}
+                           menu-dropdown-item-active
+                        {% else %}
+                           menu-dropdown-item-inactive
+                        {% endif %}">
+                  Received Proposals
+               </a>
+            </li>
+
+         </ul>
       </li>
-      
-      <li>
+            <li>
          <a
             href="{% url REVIEWS.OVERVIEW %}"
             class="menu-item group {% url REVIEWS.OVERVIEW as reviews_url %}{% if request.path == reviews_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"

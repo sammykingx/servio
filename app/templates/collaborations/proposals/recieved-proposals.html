@@ -6,7 +6,7 @@
 {% if not gigs %}
 {% include "components/empty-states/no-negotiations.html" %}
 {% else %}
-<div class="min-h-screen w-full max-w-[1380px] flex flex-col gap-6">
+<div class="w-full max-w-[1380px] flex flex-col gap-6 py-5">
 	<div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
 	<!-- Header Section -->
 	<div class="flex flex-wrap justify-between items-end gap-3 px-2">
@@ -159,8 +159,8 @@
     				</a>
 					<!-- TOP: Title + Status -->
 					<div class="flex items-center justify-between mb-4">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white tracking-tight truncate">
-							{{ gig.title|title }}
+						<h3 class="text-lg font-medium text-slate-900 dark:text-white tracking-tight">
+							{{ gig.title|title|truncatechars:25 }}
 						</h3>
 						<span class="text-[11px] font-medium tracking-wide
 									text-emerald-700 bg-emerald-100
@@ -207,128 +207,106 @@
 					</div>
 				</div>
 			{% endfor %}
+			{% if is_paginated %}
+				<div class="mt-12 pt-8 border-t border-slate-200/70 dark:border-slate-800/70">
+					<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+						<!-- Summary -->
+						<p class="text-sm text-slate-500 dark:text-slate-400">
+							Showing 
+							<span class="font-medium text-slate-800 dark:text-slate-200">
+								{{ page_obj.start_index }} – {{ page_obj.end_index }}
+							</span>
+							of 
+							<span class="font-medium text-slate-800 dark:text-slate-200">
+								{{ paginator.count }}
+							</span>
+							projects
+						</p>
 
-			{% comment "sample template for proposals" %}
-				<!-- Card 2 Negotiating -->
-				<div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
-					border border-white/60 dark:border-slate-800
-					rounded-2xl p-6 hover:border-brand-300
-					shadow-[0_6px_24px_rgba(15,23,42,0.04)]
-					hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
-					transition-all duration-300 cursor-pointer"
-				>
-					<!-- TOP: Title + Status -->
-					<div class="flex items-center justify-between mb-3">
-						<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
-							E-commerce UI Refresh
-						</h3>
-						<span class="text-[11px] font-medium tracking-wide
-									text-amber-700 bg-amber-100
-									dark:bg-amber-800/40 dark:text-amber-300
-									px-3 py-1 rounded-full uppercase">
-							Negotiating
-						</span>
-					</div>
+						<!-- Pagination Controls -->
+						<div class="flex items-center gap-2">
+							<!-- Previous -->
+							{% if page_obj.has_previous %}
+								<a href="?page={{ page_obj.previous_page_number }}"
+								class="flex h-9 w-9 items-center justify-center rounded-xl
+										border border-slate-200 dark:border-slate-700
+										bg-white/70 dark:bg-slate-900/60
+										hover:bg-slate-100 dark:hover:bg-slate-800
+										transition-all shadow-sm">
+									<span class="material-symbols-outlined text-slate-500">
+										chevron_left
+									</span>
+								</a>
+							{% else %}
+								<span class="flex h-9 w-9 items-center justify-center rounded-xl
+											border border-slate-200 dark:border-slate-700
+											opacity-40 cursor-not-allowed">
+									<span class="material-symbols-outlined text-slate-400">
+										chevron_left
+									</span>
+								</span>
+							{% endif %}
 
-					<!-- MIDDLE: Description -->
-					<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 mb-4">
-						Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
-					</p>
+							<!-- Page Numbers -->
+							{% for num in paginator.page_range %}
+								{% if num == page_obj.number %}
+									<span class="flex h-9 w-9 items-center justify-center
+												rounded-xl bg-brand-500 text-white
+												text-xs font-semibold shadow-md">
+										{{ num }}
+									</span>
 
-					<!-- BOTTOM: Meta + Metrics -->
-					<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-						<!-- Meta Info -->
-						<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-							<span class="font-medium text-slate-800 dark:text-slate-300">Studio Pixel</span>
-							<span class="size-1 bg-slate-300 rounded-full"></span>
-							<span>UI/UX Agency</span>
-							<span class="size-1 bg-slate-300 rounded-full"></span>
-							<span class="uppercase tracking-wide text-slate-400">Updated 12m ago</span>
+								{% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+									<a href="?page={{ num }}"
+									class="flex h-9 w-9 items-center justify-center
+											rounded-xl text-xs font-semibold
+											text-slate-600 dark:text-slate-400
+											hover:bg-slate-100 dark:hover:bg-slate-800
+											transition-colors">
+										{{ num }}
+									</a>
+
+								{% elif num == 1 or num == paginator.num_pages %}
+									<a href="?page={{ num }}"
+									class="flex h-9 w-9 items-center justify-center
+											rounded-xl text-xs font-semibold
+											text-slate-500 hover:bg-slate-100
+											dark:text-slate-400 dark:hover:bg-slate-800
+											transition-colors">
+										{{ num }}
+									</a>
+
+								{% elif forloop.first or forloop.last %}
+									<span class="px-2 text-slate-400 text-sm">…</span>
+								{% endif %}
+							{% endfor %}
+
+							<!-- Next -->
+							{% if page_obj.has_next %}
+								<a href="?page={{ page_obj.next_page_number }}"
+								class="flex h-9 w-9 items-center justify-center rounded-xl
+										border border-slate-200 dark:border-slate-700
+										bg-white/70 dark:bg-slate-900/60
+										hover:bg-slate-100 dark:hover:bg-slate-800
+										transition-all shadow-sm">
+									<span class="material-symbols-outlined text-slate-500">
+										chevron_right
+									</span>
+								</a>
+							{% else %}
+								<span class="flex h-9 w-9 items-center justify-center rounded-xl
+											border border-slate-200 dark:border-slate-700
+											opacity-40 cursor-not-allowed">
+									<span class="material-symbols-outlined text-slate-400">
+										chevron_right
+									</span>
+								</span>
+							{% endif %}
+
 						</div>
-
-						<!-- Deal Metrics -->
-						<div class="flex gap-6 mt-3 md:mt-0">
-							<div>
-								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Proposed Value</p>
-								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$12,800</p>
-							</div>
-							<div>
-								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
-								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">14 Days</p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Subtle hover hint -->
-					<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
-								opacity-0 group-hover:opacity-100 transition-opacity">
-						Review Proposal
-						<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
-							arrow_forward
-						</span>
 					</div>
 				</div>
-
-				<!-- card 3 Rejected -->
-				<div class="group relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl
-					border border-white/60 dark:border-slate-800
-					rounded-2xl p-6 hover:border-brand-300
-					shadow-[0_6px_24px_rgba(15,23,42,0.04)]
-					hover:shadow-[0_12px_40px_rgba(76,58,255,0.12)]
-					transition-all duration-300 cursor-pointer"
-				>
-					<!-- TOP: Title + Status -->
-					<div class="flex items-center justify-between mb-3">
-						<h3 class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
-							E-commerce UI Refresh
-						</h3>
-						<span class="text-[11px] font-medium tracking-wide
-									text-error-700 bg-error-100
-									dark:bg-error-800/40 dark:text-error-300
-									px-3 py-1 rounded-full uppercase">
-							Rejected
-						</span>
-					</div>
-
-					<!-- MIDDLE: Description -->
-					<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400 mb-4">
-						Updated scope includes responsive tablet layouts and revised milestone structure aligned with delivery phases.
-					</p>
-
-					<!-- BOTTOM: Meta + Metrics -->
-					<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-						<!-- Meta Info -->
-						<div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-							<span class="font-medium text-slate-800 dark:text-slate-300">Studio Pixel</span>
-							<span class="size-1 bg-slate-300 rounded-full"></span>
-							<span>UI/UX Agency</span>
-							<span class="size-1 bg-slate-300 rounded-full"></span>
-							<span class="uppercase tracking-wide text-slate-400">Updated 12m ago</span>
-						</div>
-
-						<!-- Deal Metrics -->
-						<div class="flex gap-6 mt-3 md:mt-0">
-							<div>
-								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Proposed Value</p>
-								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">$12,800</p>
-							</div>
-							<div>
-								<p class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Timeline</p>
-								<p class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight">14 Days</p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Subtle hover hint -->
-					<div class="mt-4 flex items-center gap-2 text-sm font-medium text-brand-400 
-								opacity-0 group-hover:opacity-100 transition-opacity">
-						Review Proposal
-						<span class="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
-							arrow_forward
-						</span>
-					</div>
-				</div>
-			{% endcomment %}
+			{% endif %}
 		</div>
 		<!-- RIGHT: Metrics Aside -->
 		<aside class="hidden xl:flex w-[420px]  border border-slate-100 dark:border-slate-800
@@ -338,43 +316,66 @@
 			<div class="p-8 space-y-10 overflow-y-auto">
 				<div>
 					<h2 class="text-xl font-bold text-slate-900 dark:text-white">
-						Performance Insights
+						Proposal Insights
 					</h2>
 					<p class="text-sm text-slate-500 dark:text-slate-400">
-						Your negotiation performance — last 30 days
+						Overview of proposal activity across your active projects
 					</p>
 				</div>
 				<!-- Metric Cards -->
 				<div class="space-y-4">
-					<div class="p-6 rounded-2xl bg-gradient-to-br from-brand-100/60 to-white
-						dark:from-brand-800/30 dark:to-slate-900
-						border border-brand-50/60 dark:border-slate-700"
-						>
-						<p class="text-xs uppercase font-semibold text-success-500 tracking-wider">
-							Total Volume
+					<!-- Card 1 -->
+					<div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50
+						border border-slate-200 dark:border-slate-700">
+
+						<p class="text-xs uppercase font-semibold tracking-wider
+							text-slate-400">
+							Incoming Proposals
 						</p>
-						<div class="mt-2 flex items-baseline gap-3">
-							<span class="text-3xl font-bold text-slate-900 dark:text-white">
-							$42,500
+
+						<div class="mt-3">
+							<span class="text-2xl font-semibold text-slate-800 dark:text-white">
+								{{ total_proposals|intcomma|default:"0" }}
 							</span>
-							<span class="text-sm font-semibold text-emerald-600">
-							+12%
-							</span>
+							<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+								Total interest across your active projects ✨
+							</p>
 						</div>
 					</div>
+
+					<!-- Confirmed Collaborations -->
 					<div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50
-						border border-slate-200 dark:border-slate-700"
-						>
-						<p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">
-							Avg. Response Time
+						border border-slate-200 dark:border-slate-700">
+
+						<p class="text-xs uppercase font-semibold tracking-wider text-slate-400">
+							Committed Deal Value
 						</p>
-						<div class="mt-2 flex items-baseline gap-3">
-							<span class="text-3xl font-bold text-slate-900 dark:text-white">
-							4.2h
+
+						<div class="mt-3">
+							<span class="text-2xl font-semibold text-slate-800 dark:text-white">
+								${{ accepted_worth|intcomma|default:"0" }}
 							</span>
-							<span class="text-sm font-semibold text-brand-300 dark:text-warning-300">
-							Top 10%
+							<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+								Proposals from providers who've said 'yes' 🤝
+							</p>
+						</div>
+					</div>
+
+					<!-- Active Negotiations -->
+					<div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50
+						border border-slate-200 dark:border-slate-700">
+
+						<p class="text-xs uppercase font-semibold tracking-wider text-slate-400">
+							Active Negotiations
+						</p>
+
+						<div class="mt-3">
+							<span class="text-2xl font-semibold text-slate-800 dark:text-white">
+								${{ negotiating_worth|intcomma|default:"0" }}
 							</span>
+							<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+								Total value of every open proposal. Go get 'em! 💸
+							</p>
 						</div>
 					</div>
 				</div>
@@ -382,40 +383,24 @@
 				<div class="p-6 rounded-2xl bg-gradient-to-br
 					from-brand-500 to-brand-600
 					text-white shadow-lg">
+
 					<h3 class="font-semibold mb-2">
-						Run Structured Deals
+						Keep Negotiations Structured
 					</h3>
+
 					<p class="text-sm opacity-90 leading-relaxed">
-						Faster responses and clear milestones increase acceptance rates.
-						Keep negotiations inside Servio and leave WhatsApp for friends.
+						Clear milestones and centralized communication
+						help you close deals faster and with less friction.
 					</p>
+
 					<button class="mt-4 w-full py-3 rounded-xl bg-white text-brand-600 font-semibold
 						hover:bg-slate-100 transition-all">
-					Open Negotiation Center
+						Open Negotiation Center
 					</button>
 				</div>
 			</div>
 		</aside>
 	</div>
-	{% comment "Needed when integrating HTMX" %}
-	<div id="project-list-wrapper">
-		<!-- Grid Layout -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-4">
-			{% include "collaborations/partials/_gig-cards.html" %}
-		</div>
-		<!-- HTMX gig listing -->
-		<div id="gig-list" class="my-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-		<div id="load-more-container" data-current-page="{{ page_obj.number }}" data-total-pages="{{ paginator.num_pages }}" data-status="{{ request.GET.project_status|default:'' }}" class="flex justify-center my-4">
-			{% if page_obj.has_next %}
-			<button id="load-more-btn" hx-get="{% url COLLABORATION_URLS.LIST_COLLABORATIONS %}{% if request.GET.status %}?status={{ request.GET.status }}&{% endif %}" hx-vals='{"page": {{ page_obj.next_page_number }}, "project_status": "{{ request.GET.project_status|default:"" }}"}' hx-target="#gig-list" hx-swap="beforeend" class="text-sm font-semibold text-gray-500 hover:text-brand-500
-				transition-colors flex items-center gap-1">
-			<span>Show more gigs</span>
-			<span class="material-symbols-outlined text-[16px]">expand_more</span>
-			</button>
-			{% endif %}
-		</div>
-	</div>
-	{% endcomment %}
 </div>
 {% endif %}
 {% endblock %}

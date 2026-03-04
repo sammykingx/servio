@@ -9,10 +9,10 @@ urlpatterns = [
     path(
         "",
         RedirectView.as_view(
-            url=reverse_lazy(ProposalURLS.GIG_WITH_PROPOSALS_LIST), permanent=True
+            url=reverse_lazy(ProposalURLS.RECEIVED_PROPOSALS), permanent=True
         ),
     ),
-    path("all/", GigProposalListView.as_view(), name=ProposalURLS.GIG_WITH_PROPOSALS_LIST),
+    path("all/", GigProposalListView.as_view(), name=ProposalURLS.RECEIVED_PROPOSALS),
     path("all/<slug:gig_slug>/", ProposalRoleListView.as_view(), name=ProposalURLS.PROPOSAL_LISTINGS),
     path("details/<slug:slug>", TemplateView.as_view(
         template_name=Collabs.Proposals.DETAILS),
