@@ -12,6 +12,7 @@ class Collabs:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("proposals")
         
         RECEIVED_PROPOSALS = f"{__SUB_FOLDER}/recieved-proposals.html"
+        SENT_PROPOSALS = f"{__SUB_FOLDER}/sent-proposals.html"
         PROPOSAL_LIST = f"{__SUB_FOLDER}/proposal-list.html"
         DETAILS = f"{__SUB_FOLDER}/detail.html"
         

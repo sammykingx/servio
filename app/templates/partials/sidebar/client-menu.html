@@ -128,31 +128,32 @@
          </a>
       </li> -->
       <li x-data="{ open: false }">
-         <!-- Parent Item -->
-         <button
-            @click="open = !open"
-            class="menu-item group w-full flex items-center justify-between
-                  {% if request.resolver_match.url_name in 'proposals_sent proposals_received' %}
-                     menu-item-active
-                  {% else %}
-                     menu-item-inactive
-                  {% endif %}"
-         >
-            <div class="flex items-center gap-3">
-               <span class="material-symbols-outlined icon-negotiations">contract</span>
-               <span class="menu-item-text"
-                     :class="sidebarToggle ? 'xl:hidden' : ''">
-                  Proposals
+         {% with url_name=request.resolver_match.url_name %}
+            <!-- Parent Item -->
+            <button
+               @click="open = !open"
+               class="menu-item group w-full flex items-center justify-between
+               {% if url_name == PROPOSALS.SENT_PROPOSALS or url_name == PROPOSALS.RECEIVED_PROPOSALS %}
+                  menu-item-active
+               {% else %}
+                  menu-item-inactive
+               {% endif %}"
+            >
+               <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined icon-negotiations">contract</span>
+                  <span class="menu-item-text"
+                        :class="sidebarToggle ? 'xl:hidden' : ''">
+                     Proposals
+                  </span>
+               </div>
+
+               <!-- Arrow -->
+               <span class="material-symbols-outlined text-sm transition-transform"
+                     :class="open ? 'rotate-180' : ''">
+                  keyboard_arrow_down
                </span>
-            </div>
-
-            <!-- Arrow -->
-            <span class="material-symbols-outlined text-sm transition-transform"
-                  :class="open ? 'rotate-180' : ''">
-               keyboard_arrow_down
-            </span>
-         </button>
-
+            </button>
+         {% endwith %}
          <!-- Submenu -->
          <ul x-show="open"
             x-transition
@@ -160,9 +161,9 @@
          >
             <!-- Sent -->
             <li>
-               <a href="#"
+               <a href="{% url PROPOSALS.SENT_PROPOSALS %}"
                   class="block py-2 px-3 text-sm rounded-lg
-                        {% url PROPOSAL.SENT_PROPOSALS as sent_url %}
+                        {% url PROPOSALS.SENT_PROPOSALS as sent_url %}
                         {% if request.path == sent_url %}
                            menu-dropdown-item-active
                         {% else %}

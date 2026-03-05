@@ -35,6 +35,7 @@ from .polices import ProposalPolicy
 from .status_codes import PolicyFailure
 from .validators import ProposalValidator
 from typing import Dict, List
+from uuid import UUID
 import logging
 
 
@@ -110,6 +111,15 @@ class ProposalService:
             raise
         
         return proposal
+    
+    def accept_proposals(self, proposal_id:UUID, proposal_role_id:UUID):
+        pass
+    
+    def reject_proposals(self, proposal_id:UUID, proposal_role_id:UUID):
+        pass
+    
+    def withdraw_proposals(self, proposal_id:UUID, proposal_role_id:UUID):
+        pass
 
     @transaction.atomic
     def create_proposal_bundle(self, gig, payload:SendProposal, is_negotiating: bool):    

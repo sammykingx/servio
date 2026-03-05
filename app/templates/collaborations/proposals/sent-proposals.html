@@ -1,0 +1,179 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Project Proposals{% endblock %}
+{% block content %}
+
+<div class="w-full max-w-[1380px] flex flex-col gap-6 py-5">
+	<div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+    {% if proposals %}
+        <!-- Header Section -->
+        <div class="flex flex-wrap justify-between items-end gap-3 px-2">
+            <div class="flex min-w-72 flex-col gap-1">
+                <p class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">Proposals</p>
+                <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Select a project to view RFPs and start your project workflow.
+            </div>
+            <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-brand-500 text-white text-sm font-semibold leading-normal tracking-[0.015em] hover:bg-brand-500/90 transition-all shadow-lg shadow-brand-500/20">
+            <span class="truncate">Create Project</span>
+            </a>
+        </div>
+    {% endif %}
+
+    <!-- Proposals List -->
+    {% for proposal in proposals %}
+        <div class="w-full mx-auto p-2">
+            <div class="group relative rounded-[2.5rem] border border-slate-200/80 bg-white p-6 md:p-10 shadow-xl shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none transition-all duration-500 hover:border-brand-500/30">
+                
+                <div class="absolute -top-12 -right-12 w-40 h-40 bg-brand-500/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+
+                <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-10">
+                    <div class="space-y-2">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-medium uppercase tracking-widest text-slate-500">
+                            <span class="size-1.5 rounded-full bg-brand-500"></span>
+                            Project Proposal
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-medium text-slate-800 dark:text-white leading-tight">
+                            {{ proposal.gig.title }}
+                        </h3>
+                        <div class="flex items-center gap-4 text-xs font-normal text-slate-400">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> {{ proposal.sent_at|date:"M d, Y" }}</span>
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">history</span> Sent {{ proposal.sent_ago }} ago</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-end gap-2">
+                        <span class="px-5 py-2 rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 text-xs font-medium uppercase tracking-widest border border-amber-100 dark:border-amber-500/20">
+                            Under Review
+                        </span>
+                    </div>
+                </div>
+                {% for role in proposal.roles.all %}
+                    <div class="space-y-4">
+                        <div class="hidden md:grid grid-cols-4 px-6 text-[11px] font-normal uppercase tracking-[0.15em] text-slate-400">
+                            <span>Applied Role</span>
+                            <span>Client Budget</span>
+                            <span>Your Quote</span>
+                            <span class="text-right">Status</span>
+                        </div>
+
+                        <div class="grid gap-3">
+                            <div class="grid grid-cols-2 md:grid-cols-4 items-center gap-4 bg-slate-50/80 dark:bg-slate-800/40 rounded-[1.5rem] p-5 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all">
+                                <div class="col-span-2 md:col-span-1 flex flex-col">
+                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Role</span>
+                                    <span class="font-medium text-slate-900 dark:text-white">{{ role.role_name|title }}</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Budget</span>
+                                    <span class="text-slate-500 dark:text-slate-400 font-normal">
+                                        {% if proposal.gig.has_gig_roles %}
+                                            {{ proposal.gig.dynamic_range }}
+                                        {% else %}
+                                            {{ role.dynamic_budget_range }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Quote</span>
+                                    <span class="text-brand-600 dark:text-brand-400 font-normal">${{ role.proposed_amount|default:role.role_amount|intcomma }}</span>
+                                </div>
+                                <div class="flex flex-col md:items-end">
+                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Status</span>
+                                    {% if role.status == "accepted" %}
+                                        <span class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-[11px] font-medium">
+                                            Accepted
+                                        </span>
+                                    {% elif role.status == "rejected" %}
+                                        <span class="inline-flex items-center gap-1.5 text-red-600 dark:text-red-400 text-[11px] font-medium">
+                                            Rejected
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1.5 text-amber-600 dark:text-amber-400 text-[11px] font-medium">
+                                            Reviewing
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-6">
+                    <div class="flex items-center gap-6">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] uppercase font-normal text-slate-400 tracking-tighter">Total Proposed</span>
+                            <span class="text-xl font-normal text-slate-900 dark:text-white">${{ proposal.total_cost|default:0|intcomma }}</span>
+                        </div>
+                        <a href="" class="text-sm font-medium text-slate-400 hover:text-brand-500 dark:hover:text-brand-300 flex items-center gap-1 group/btn">
+                            more details
+                            <span class="material-symbols-outlined text-lg group-hover/btn:translate-x-1 transition-transform">arrow_right_alt</span>
+                        </a>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button class="flex-1 sm:flex-none px-8 py-3 rounded-2xl bg-brand-500 text-white text-sm font-semibold hover:scale-105 transition-transform shadow-lg shadow-slate-900/10">
+                            Open Chat
+                        </button>
+                        <button class="px-3 py-2 rounded-2xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors">
+                            <span class="material-symbols-outlined text-lg block">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    {% empty %}
+        <div class="flex flex-col">
+            <div class="flex-1 flex items-center justify-center py-16">
+                <div class="flex flex-col items-center justify-center max-w-xl w-full text-center">
+                    <!-- Visual Cluster -->
+                    <div class="relative flex items-center justify-center size-40 mb-8">                            <!-- Soft Background Glow -->
+                        <div class="absolute size-36 bg-brand-400/10 rounded-full blur-2xl"></div>
+                            <!-- Main Card -->
+                            <div class="relative z-10 flex items-center justify-center size-20
+                                bg-white dark:bg-slate-900 rounded-2xl
+                                shadow-lg border border-slate-100 dark:border-slate-700">
+                                <span 
+                                    class="material-symbols-outlined icon-negotiations" 
+                                    x-text="darkMode ? '🗂️' : '📋'"
+                                ></span>
+                            </div>
+
+                            <!-- Floating Accent -->
+                            <div class="absolute -top-3 -right-3 size-10 bg-white dark:bg-slate-800 
+                                rounded-xl shadow-md border border-slate-100 dark:border-slate-700 
+                                flex items-center justify-center rotate-12">
+                                <span class="material-symbols-outlined text-blue-500 text-lg">
+                                    send
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <!-- Text -->
+                        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+                            You haven’t submitted any proposals yet
+                        </h2>
+
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
+                            Browse available projects and send proposals to start collaborating.
+                            Once submitted, they’ll appear here for tracking and updates.
+                        </p>
+
+                        <!-- CTA -->
+                        <a href="{% url OPPURTUNITIES.ALL %}"
+                            class="flex items-center gap-2 px-6 py-3 rounded-xl
+                            bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold
+                            shadow-lg shadow-brand-500/20 transition-all duration-200
+                            hover:-translate-y-0.5">
+
+                            <span class="material-symbols-outlined text-[20px]">
+                                search
+                        </span>
+                        Explore Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
+</div>
+{% endblock %}

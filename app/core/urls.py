@@ -42,7 +42,7 @@ urlpatterns = [
     # path("admin/", admin.site.urls),
     # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
-    path("business/", include(business_accounts.urls)),
+    # path("business/", include(business_accounts.urls)),
     path("collaboration/", include(collaboration.urls)),
     path("notifications/", include(notifications.urls)),
     path("payments/", include(payments.urls)),

@@ -4,7 +4,7 @@
 {% block browser_title %}Project Proposals{% endblock %}
 {% block content %}
 {% if not gigs %}
-{% include "components/empty-states/no-negotiations.html" %}
+{% include "components/empty-states/no-proposals.html" %}
 {% else %}
 <div class="w-full max-w-[1380px] flex flex-col gap-6 py-5">
 	<div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
@@ -330,15 +330,15 @@
 
 						<p class="text-xs uppercase font-semibold tracking-wider
 							text-slate-400">
-							Incoming Proposals
+							Overall Project Value
 						</p>
 
 						<div class="mt-3">
 							<span class="text-2xl font-semibold text-slate-800 dark:text-white">
-								{{ total_proposals|intcomma|default:"0" }}
+								${{ gig_total_budget|intcomma|default:"0" }}
 							</span>
 							<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-								Total interest across your active projects ✨
+								Est. budget across your active projects ✨
 							</p>
 						</div>
 					</div>

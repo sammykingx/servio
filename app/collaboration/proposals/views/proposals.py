@@ -1,6 +1,6 @@
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Exists, F, OuterRef, Q, Sum
+from django.db.models import Count, DecimalField, Exists, F, OuterRef, Q, Sum
 from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from django.views.generic import ListView
@@ -10,15 +10,11 @@ from registry_utils import get_registered_model
 from decimal import Decimal
 
 
-class GigProposalListView(LoginRequiredMixin, ListView):
+class RecievedProposalListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.RECEIVED_PROPOSALS
     context_object_name = "gigs"
     paginate_by = 7
     model = get_registered_model("collaboration", "Gig")
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
     
     def get_queryset(self):
         Proposal = get_registered_model("collaboration", "Proposal")
@@ -56,6 +52,29 @@ class GigProposalListView(LoginRequiredMixin, ListView):
         Proposal = get_registered_model("collaboration", "Proposal")
         ProposalRole = get_registered_model("collaboration", "ProposalRole")
 
+        gig_filter = Q(
+            creator=self.request.user,
+            status=GigStatus.PUBLISHED,
+            is_gig_active=True,
+        )
+
+        proposal_exists = Proposal.objects.filter(
+            gig=OuterRef("pk")
+        )
+
+        total_budget = (
+            self.model.objects
+            .filter(gig_filter)
+            .annotate(has_proposals=Exists(proposal_exists))
+            .filter(has_proposals=True)
+            .aggregate(
+                total=Coalesce(
+                    Sum("total_budget"),
+                    Decimal("0.00")
+                )
+            )["total"]
+        )
+        
         proposal_filter = Q(
             proposal__gig__creator=self.request.user,
             proposal__gig__status=GigStatus.PUBLISHED,
@@ -66,10 +85,6 @@ class GigProposalListView(LoginRequiredMixin, ListView):
         metrics = ProposalRole.objects.filter(
             proposal_filter
         ).aggregate(
-            total_proposals=Count(
-                "proposal",
-                distinct=True
-            ),
             negotiating_worth=Coalesce(
                 Sum(
                     "proposed_amount",
@@ -86,7 +101,7 @@ class GigProposalListView(LoginRequiredMixin, ListView):
             )
         )
 
-        context.update(metrics)
+        context.update(metrics, gig_total_budget=total_budget)
         return context
     
     def render_to_response(self, context, **response_kwargs):
@@ -101,3 +116,37 @@ class GigProposalListView(LoginRequiredMixin, ListView):
             return render(self.request, htmx_response, context)
         
         return super().render_to_response(context, **response_kwargs)
+    
+
+class SentProposalListView(LoginRequiredMixin, ListView):
+    template_name = Collabs.Proposals.SENT_PROPOSALS
+    context_object_name = "proposals"
+    paginate_by = 7
+    model = get_registered_model("collaboration", "Proposal")
+    
+    def get_queryset(self):
+        qs = (
+            super().get_queryset()
+            .filter(sender=self.request.user)
+            .select_related("gig",)
+            .prefetch_related("roles")  # assuming related_name="roles"
+            .annotate(
+                role_count=Count("roles"),
+                total_proposed=Coalesce(
+                    Sum("roles__proposed_amount"),
+                    0,
+                    output_field=DecimalField(),
+                )
+            )
+            .only(
+                "id",
+                "status",
+                "is_negotiating",
+                "sent_at",
+                "gig__title",
+                "gig__total_budget",
+                "gig__slug",
+            )
+            .order_by("-sent_at")
+        )
+        return qs

@@ -3,7 +3,6 @@
 {% load humanize %}
 {% block browser_title %}Project Proposals{% endblock %}
 {% block content %}
-
 <section class="w-full max-w-8xl mx-auto px-3 py-4">
     <div class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <!-- Left: Gig Info -->
@@ -45,162 +44,180 @@
     <div class="space-y-4">
         <!-- Card 1 -->
         {% for proposal in applications %}
-        <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 
-            bg-white/80 backdrop-blur-sm p-6 shadow-sm transition-all duration-300 
-            hover:shadow-xl hover:-translate-y-1 
-            dark:border-slate-800 dark:bg-slate-900/60"
-        >
-            <div class="flex flex-col gap-6">
-                <!-- HEADER -->
-                <div class="flex items-start justify-between gap-4">
-                    <div class="flex items-start gap-4">
-                        {% if proposal.sender.profile.avatar_url %}
-                        <div class="size-12 shrink-0 rounded-2xl bg-cover bg-center 
-                            border border-slate-200 dark:border-slate-700" style="background-image: url('{{ proposal.sender.profile.avatar_url.url }}');">
-                        </div>
-                        {% else %}
-                        <div class="size-12 shrink-0 rounded-2xl 
-                            bg-gradient-to-br from-brand-400 to-brand-600 
-                            text-white flex items-center justify-center 
-                            text-lg font-semibold shadow-sm"
-                        >
-                            {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
-                        </div>
-                        {% endif %}
-
-                        <div>
-                            <h3 class="text-base font-semibold text-slate-900 dark:text-white">
-                                {{ proposal.sender.get_full_name|title }}
-                            </h3>
-
-                            <p class="text-xs text-slate-400 mt-1">
-                                Sent {{ proposal.sent_ago }} ago
-                            </p>
-
-                            {% if proposal.sender.profile.headline %}
-                            <p class="text-xs text-slate-500 mt-1 text-nowrap">
-                                {{ proposal.sender.profile.headline }}
-                            </p>
+            <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 
+                bg-white/80 backdrop-blur-sm p-6 shadow-sm transition-all duration-300 
+                hover:shadow-xl hover:-translate-y-1 
+                dark:border-slate-800 dark:bg-slate-900/60"
+            >
+                <div class="flex flex-col gap-6">
+                    <!-- HEADER -->
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex items-start gap-4">
+                            {% if proposal.sender.profile.avatar_url %}
+                            <div class="size-12 shrink-0 rounded-2xl bg-cover bg-center 
+                                border border-slate-200 dark:border-slate-700" style="background-image: url('{{ proposal.sender.profile.avatar_url.url }}');">
+                            </div>
+                            {% else %}
+                            <div class="size-12 shrink-0 rounded-2xl 
+                                bg-gradient-to-br from-brand-400 to-brand-600 
+                                text-white flex items-center justify-center 
+                                text-lg font-semibold shadow-sm"
+                            >
+                                {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
+                            </div>
                             {% endif %}
-                        </div>
-                    </div>
 
-                    <!-- Status Badge -->
-                    <span class="text-[10px] font-medium uppercase tracking-wider 
-                        px-3 py-1 rounded-full
-                        {% if proposal.is_negotiating %}
-                            bg-amber-50 text-amber-600 
-                        {% else %}
-                            bg-emerald-50 text-emerald-600
-                        {% endif %}"
-                    >
-                        {% if proposal.is_negotiating %}
-                            Countered
-                        {% else %}
-                            Accepted
-                        {% endif %}
-                    </span>
-                </div>
-
-                <!-- ROLES SECTION -->
-                <div class="space-y-5">
-                    {% for role in proposal.roles.all %}
-                    <div class="rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 p-5
-                            border border-slate-200/60 dark:border-slate-700">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                             <div>
-                                <p class="text-xs uppercase tracking-wide text-slate-400 mb-0.5">
-                                    Role
-                                </p>
-                                <h4 class="text-sm md:text-md font-semibold text-brand-600 dark:text-brand-300">
-                                    {% if role.gig_role %}
-                                        {{ role.role_name }}
-                                    {% else %}
-                                        {{ role.role_name }}
-                                    {% endif %}
-                                </h4>
-                            </div>
+                                <h3 class="text-base font-semibold text-slate-900 dark:text-white">
+                                    {{ proposal.sender.get_full_name|title }}
+                                </h3>
 
-                            <div class="grid grid-cols-2 gap-6 text-sm">
-                                <div>
-                                    <p class="text-[11px] uppercase tracking-wide text-slate-400">
-                                        Your Budget
-                                    </p>
-                                    <p class="font-semibold text-slate-900 dark:text-white">
-                                        {% if gig.has_gig_roles %}
-                                            ${{ role.role_amount|intcomma }}
-                                        {% else %}
-                                            ${{ gig.total_budget|intcomma }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p class="text-[11px] uppercase tracking-wide text-slate-400">
-                                        Asking
-                                    </p>
-                                    <p class="font-semibold text-slate-900 dark:text-white">
-                                        {% if role.proposed_amount %}
-                                            ${{ role.proposed_amount|intcomma }}
-                                        {% else %}
-                                            ${{ role.role_amount|intcomma }}
-                                        {% endif %}
-                                    </p>
-                                </div>
+                                <p class="text-xs text-slate-400 mt-1">
+                                    Sent {{ proposal.sent_ago }} ago
+                                </p>
+
+                                {% if proposal.sender.profile.headline %}
+                                <p class="text-xs text-slate-500 mt-1 text-nowrap">
+                                    {{ proposal.sender.profile.headline }}
+                                </p>
+                                {% endif %}
                             </div>
                         </div>
-                        <!-- Difference -->
-                        {% if gig.has_gig_roles %}
-                            {% if role.proposed_amount > role.role_amount %}
-                                <div class="mt-3 text-xs font-medium text-red-500">
-                                    +${{ role.budget_difference|intcomma }} above budget
-                                </div>
-                            {% elif role.proposed_amount < role.role_amount %}
-                                <div class="mt-3 text-xs font-medium text-emerald-500">
-                                    -${{ role.budget_difference|intcomma }} under budget
-                                </div>
-                            {% else %}
-                                <div class="mt-3 text-xs font-medium text-slate-400">
-                                    Matches your budget
-                                </div>
-                            {% endif %}
-                        {% else %}
-                            {% if role.role_amount > gig.total_budget %}
-                                <div class="mt-3 text-xs font-medium text-red-500">
-                                    Exceeds set budget
-                                </div>
-                            {% elif role.role_amount < gig.total_budget %}
-                                <div class="mt-3 text-xs font-normal text-emerald-500">
-                                    Within budget limits
-                                </div>
-                            {% else %}
-                                <div class="mt-3 text-xs font-medium text-amber-600">
-                                    Matches budget. Heads up: no room for other roles.
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
 
-                <!-- ACTIONS -->
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <button class="text-xs md:text-sm font-medium text-slate-600 
-                        hover:text-brand-600 dark:hover:text-brand-300 transition-colors">
-                        View Deliverables →
-                    </button>
-                    <div class="flex gap-3">
-                        <button class="px-5 py-2 rounded-xl text-xs md:text-sm font-medium
-                            bg-emerald-50 text-emerald-600 hover:bg-emerald-100">
-                            Accept
-                        </button>
-                        <button class="px-5 py-2 rounded-xl text-xs md:text-sm font-medium
-                            bg-red-50 text-red-600 hover:bg-red-100">
-                            Reject
-                        </button>
+                        <!-- Status Badge -->
+                        <span class="text-[10px] font-medium uppercase tracking-wider 
+                            px-3 py-1 rounded-full
+                            {% if proposal.is_negotiating %}
+                                bg-amber-50 text-amber-600 
+                            {% else %}
+                                bg-emerald-50 text-emerald-600
+                            {% endif %}"
+                        >
+                            {% if proposal.is_negotiating %}
+                                Countered
+                            {% else %}
+                                Accepted
+                            {% endif %}
+                        </span>
                     </div>
+
+                    <!-- ROLES SECTION -->
+                    <div class="space-y-5">
+                        {% for role in proposal.roles.all %}
+                        <div class="rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 p-5
+                                border border-slate-200/60 dark:border-slate-700">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div>
+                                    <p class="text-xs uppercase tracking-wide text-slate-400 mb-0.5">
+                                        Role
+                                    </p>
+                                    <h4 class="text-sm md:text-md font-semibold text-brand-600 dark:text-brand-300">
+                                        {{ role.role_name|title }}
+                                    </h4>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-6 text-sm">
+                                    <div>
+                                        <p class="text-[11px] uppercase tracking-wide text-slate-400">
+                                            Your Budget
+                                        </p>
+                                        <p class="font-semibold text-slate-900 dark:text-white">
+                                            {% if gig.has_gig_roles %}
+                                                ${{ role.role_amount|intcomma }}
+                                            {% else %}
+                                                ${{ gig.total_budget|intcomma }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[11px] uppercase tracking-wide text-slate-400">
+                                            Asking
+                                        </p>
+                                        <p class="font-semibold text-slate-900 dark:text-white">
+                                            {% if role.proposed_amount %}
+                                                ${{ role.proposed_amount|intcomma }}
+                                            {% else %}
+                                                ${{ role.role_amount|intcomma }}
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Difference -->
+                            {% if gig.has_gig_roles %}
+                                {% if role.proposed_amount > role.role_amount %}
+                                    <div class="mt-3 text-xs font-medium text-red-500">
+                                        +${{ role.budget_difference|intcomma }} above budget
+                                    </div>
+                                {% elif role.proposed_amount < role.role_amount %}
+                                    <div class="mt-3 text-xs font-medium text-emerald-500">
+                                        -${{ role.budget_difference|intcomma }} under budget
+                                    </div>
+                                {% else %}
+                                    <div class="mt-3 text-xs font-medium text-slate-400">
+                                        Matches your budget
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                {% if role.role_amount > gig.total_budget %}
+                                    <div class="mt-3 text-xs font-medium text-red-500">
+                                        Exceeds set budget
+                                    </div>
+                                {% elif role.role_amount < gig.total_budget %}
+                                    <div class="mt-3 text-xs font-normal text-emerald-500">
+                                        Within budget limits
+                                    </div>
+                                {% else %}
+                                    <div class="mt-3 text-xs font-medium text-amber-600">
+                                        Matches budget. Heads up: no room for other roles.
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            <div class="mt-4 flex justify-end gap-3">
+                                <form method="POST" action="#">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                        class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
+                                        bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition">
+                                        Accept
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="#">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                        class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
+                                        bg-red-50 text-red-600 hover:bg-red-100 transition">
+                                        Reject
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% comment "revisit later forui updates" %}
+                        <!-- ACTIONS -->
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <button class="text-xs md:text-sm font-medium text-slate-600 
+                                hover:text-brand-600 dark:hover:text-brand-300 transition-colors">
+                                View Deliverables →
+                            </button>
+                            
+                            <div class="flex gap-3">
+                                <button class="px-5 py-2 rounded-xl text-xs md:text-sm font-medium
+                                    bg-emerald-50 text-emerald-600 hover:bg-emerald-100">
+                                    Accept
+                                </button>
+                                <button class="px-5 py-2 rounded-xl text-xs md:text-sm font-medium
+                                    bg-red-50 text-red-600 hover:bg-red-100">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    {% endcomment %}
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
     <!-- Pagination/Footer Area -->

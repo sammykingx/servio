@@ -1,2 +1,2 @@
-from .recieved_proposals import GigProposalListView
-from .proposal_list import ProposalRoleListView
+from .proposals import RecievedProposalListView, SentProposalListView
+from .proposal_role_list import ProposalRoleListView

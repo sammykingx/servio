@@ -1,5 +1,6 @@
 from django.db import models
 from .choices import PaymentOption
+from decimal import Decimal, ROUND_HALF_UP
 
 
 class ProposalRole(models.Model):
@@ -71,6 +72,20 @@ class ProposalRole(models.Model):
         elif self.gig_category:
             return self.gig_category.name
         return "Unknown Role"
+    
+    @property
+    def dynamic_budget_range(self):
+        amount = self.role_amount
+        lower_raw = amount * Decimal('0.6')
+        upper_raw = amount * Decimal('1.1')
+
+        lower = (lower_raw / 10).quantize(Decimal('1'), rounding=ROUND_HALF_UP) * 10
+        upper = (upper_raw / 10).quantize(Decimal('1'), rounding=ROUND_HALF_UP) * 10
+
+        min_limit = Decimal('50')
+        display_lower = max(lower, min_limit)
+
+        return f"${display_lower:,.0f} - ${upper:,.0f}"
     
     @property
     def budget_difference(self):

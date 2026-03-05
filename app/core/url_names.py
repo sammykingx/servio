@@ -75,10 +75,15 @@ class CollaborationURLS:
     EDIT_COLLABORATION = "edit_collaboration"
     COLLABORATION_PAYMENTS = "collaboration_payment"
     DELETE_COLLABORATION = "delete_collaboration"
+    
+    
+class OppurtunitiesURLS:
+    ALL = "all_oppurtunities"
+    DETAIL = "oppurtunity_detail"
+    ACCEPT_OFFER = "accept_oppurtunity_offer"
   
     
 class ProposalURLS:
-    # SENT PROPOSALS, RECEIVED
     SENT_PROPOSALS = "sent_proposals"
     RECEIVED_PROPOSALS = "gig_with_proposals_listings"
     PROPOSAL_LISTINGS = "proposal_listings"
@@ -103,9 +108,3 @@ class EscrowURLS:
     
 class ReviewURLS:
     OVERVIEW = "account_reviews"
-    
-    
-class OppurtunitiesURLS:
-    ALL = "all_oppurtunities"
-    DETAIL = "oppurtunity_detail"
-    ACCEPT_OFFER = "accept_oppurtunity_offer"
