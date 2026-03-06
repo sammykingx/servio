@@ -29,11 +29,13 @@ from django.urls import reverse_lazy
 from django.db import transaction, IntegrityError
 from core.url_names import PaymentURLS
 from collaboration.schemas.send_proposal import AppliedRoles, DeliverablesPayload, SendProposal
+from constants import SERVICE_FEE, DECIMAL_PLACE
 from registry_utils import get_registered_model
 from .exceptions import ProposalError, ProposalPermissionDenied
 from .polices import ProposalPolicy
 from .status_codes import PolicyFailure
 from .validators import ProposalValidator
+from decimal import Decimal, ROUND_HALF_UP
 from typing import Dict, List
 from uuid import UUID
 import logging
@@ -135,11 +137,17 @@ class ProposalService:
         
     def _create_proposal(self, gig, proposal_value, sent_at, is_negotiating):
         ProposalModel = get_registered_model("collaboration", "Proposal")
+        
+        service_fee_rate = Decimal(str(SERVICE_FEE))
+        precision = Decimal(str(DECIMAL_PLACE))
+        
+        service_fee_amount = (proposal_value * service_fee_rate).quantize(precision, rounding=ROUND_HALF_UP)
+        excl_service_fee = proposal_value - service_fee_amount
         try:
             proposal = ProposalModel.objects.create(
                 gig=gig,
                 sender=self.user,
-                total_cost=proposal_value,
+                total_cost=excl_service_fee,
                 sent_at=sent_at,
                 is_negotiating=is_negotiating,
             )
