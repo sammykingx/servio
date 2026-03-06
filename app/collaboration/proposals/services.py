@@ -31,6 +31,8 @@ from core.url_names import PaymentURLS
 from collaboration.schemas.send_proposal import AppliedRoles, DeliverablesPayload, SendProposal
 from constants import SERVICE_FEE, DECIMAL_PLACE
 from registry_utils import get_registered_model
+from services.email_service import EmailService
+from template_map.emails import ProposalMails
 from .exceptions import ProposalError, ProposalPermissionDenied
 from .polices import ProposalPolicy
 from .status_codes import PolicyFailure
@@ -71,8 +73,9 @@ class ProposalService:
     constraints are satisfied.
     """
 
-    def __init__(self, user:AbstractUser):
+    def __init__(self, user:AbstractUser, request):
         self.user = user
+        self.request = request
 
     def send_proposal(self, gig, payload:SendProposal, is_negotiating:bool):
         """
@@ -100,7 +103,7 @@ class ProposalService:
             # ProposalValidator.validate(payload, gig)
 
             proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
-            self.notifications_flow(gig.creator)
+            self.notifications_flow(gig.creator, gig.title)
             
         except ProposalPermissionDenied as e:
             if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED:
@@ -266,15 +269,28 @@ class ProposalService:
 
         ProposalDeliverableModel.objects.bulk_create(deliverable_instances)
     
-    def notifications_flow(self, creator:AbstractUser):
-        self._notify_creator_by_mail(creator)
+    def notifications_flow(self, creator:AbstractUser, gig_title:str):
+        self._notify_creator_by_mail(creator, gig_title)
         self._in_app_notifications(creator)
         
-    def _notify_creator_by_mail(self, creator:AbstractUser) -> bool:
+    def _notify_creator_by_mail(self, creator:AbstractUser, gig_title:str, gig_proposals_count:int) -> bool:
         if not creator.is_verified:
             print("Not sending any email")
             return False
-
+        
+        context = {
+            "host": self.request.build_absolute_uri("/"),
+            "project_title": gig_title,
+            "project_proposal_url": self.request.build_absolute_uri(reverse_lazy("collaboration:proposal-detail", kwargs={"proposal_id": self.proposal.id})),
+            "num_of_proposals": gig_proposals_count
+        }
+        
+        resp = EmailService(creator.email).set_subject(
+            ProposalMails.Subjects.PROPOSAL_RECEIVED
+        ).use_template(ProposalMails.PROPOSAL_RECEIVED).with_context(
+            **context
+        ).send()
+        
         return True
     
     def _in_app_notifications(self, creator:AbstractUser) -> None:

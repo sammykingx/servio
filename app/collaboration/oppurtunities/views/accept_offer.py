@@ -77,7 +77,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
         try:
             payload = json.loads(request.body)
             data = SendProposal(**payload)
-            ProposalService(request.user).send_proposal(self.object, data, is_negotiating)
+            ProposalService(request.user, request).send_proposal(self.object, data, is_negotiating)
             
         except json.JSONDecodeError:
             return JsonResponse(
