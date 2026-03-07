@@ -28,7 +28,11 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 from django.db import transaction, IntegrityError
 from core.url_names import PaymentURLS
-from collaboration.schemas.send_proposal import AppliedRoles, DeliverablesPayload, SendProposal
+from collaboration.schemas.send_proposal import (
+    AppliedRoles,
+    DeliverablesPayload,
+    SendProposal,
+)
 from constants import SERVICE_FEE, DECIMAL_PLACE
 from registry_utils import get_registered_model
 from services.email_service import EmailService
@@ -52,14 +56,16 @@ def get_error_redirect(code: str, context: dict = None) -> str:
     Using a context dict allows for dynamic URL construction (IDs, etc).
     """
     context = context or {}
-    
+
     mapping = {
-        PolicyFailure.SUBSCRIPTION_REQUIRED.code: reverse_lazy(PaymentURLS.PAY_SUBSCRIPTION),
+        PolicyFailure.SUBSCRIPTION_REQUIRED.code: reverse_lazy(
+            PaymentURLS.PAY_SUBSCRIPTION
+        ),
         PolicyFailure.PAYMENT_PENDING.code: "#",
         # Example of a dynamic URL using context
         # ValidationFailure.INVALID_ROLE.code: f"/gigs/{context.get('gig_id')}/roles/",
     }
-    
+
     return mapping.get(code)
 
 
@@ -67,17 +73,17 @@ class ProposalService:
     """
     Domain Service for orchestrating the Proposal lifecycle.
 
-    This service acts as the (conductor), coordinating between 
-    Policies, Validators, and Persistence layers. It ensures that 
-    proposals are only created when all business and integrity 
+    This service acts as the (conductor), coordinating between
+    Policies, Validators, and Persistence layers. It ensures that
+    proposals are only created when all business and integrity
     constraints are satisfied.
     """
 
-    def __init__(self, user:AbstractUser, request):
+    def __init__(self, user: AbstractUser, request):
         self.user = user
         self.request = request
 
-    def send_proposal(self, gig, payload:SendProposal, is_negotiating:bool):
+    def send_proposal(self, gig, payload: SendProposal, is_negotiating: bool):
         """
         Executes the end-to-end proposal submission process.
 
@@ -99,53 +105,54 @@ class ProposalService:
             ProposalValidationError: If data integrity checks fail.
         """
         try:
-            # ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
-            # ProposalValidator.validate(payload, gig)
+            ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
+            ProposalValidator.validate(payload, gig)
 
             proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
-            self.notifications_flow(gig.creator, gig.title)
-            
+            self.notifications_flow(gig)
+
         except ProposalPermissionDenied as e:
             if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED:
                 e.redirect_url = get_error_redirect(e.code, {"gig_id": gig.id})
             raise e
-        
+
         except Exception as e:
             import traceback
+
             traceback.print_exc()
             raise
-        
+
         return proposal
-    
-    def accept_proposals(self, proposal_id:UUID, proposal_role_id:UUID):
+
+    def accept_proposals(self, proposal_id: UUID, proposal_role_id: UUID):
         pass
-    
-    def reject_proposals(self, proposal_id:UUID, proposal_role_id:UUID):
+
+    def reject_proposals(self, proposal_id: UUID, proposal_role_id: UUID):
         pass
-    
-    def withdraw_proposals(self, proposal_id:UUID, proposal_role_id:UUID):
+
+    def withdraw_proposals(self, proposal_id: UUID, proposal_role_id: UUID):
         pass
 
     @transaction.atomic
-    def create_proposal_bundle(self, gig, payload:SendProposal, is_negotiating: bool):    
-        GigModel = get_registered_model("collaboration","Gig")
-        gig = (
-            GigModel.objects
-            .select_for_update(nowait=True)
-            .get(id=gig.id)
+    def create_proposal_bundle(self, gig, payload: SendProposal, is_negotiating: bool):
+        GigModel = get_registered_model("collaboration", "Gig")
+        gig = GigModel.objects.get(id=gig.id)
+        proposal = self._create_proposal(
+            gig, payload.proposal_value, payload.sent_at, is_negotiating
         )
-        proposal = self._create_proposal(gig, payload.proposal_value, payload.sent_at, is_negotiating)
         self._create_proposal_roles(gig, proposal, payload.applied_roles)
         self._create_deliverables(proposal, payload.deliverables)
-        
+
     def _create_proposal(self, gig, proposal_value, sent_at, is_negotiating):
         ProposalModel = get_registered_model("collaboration", "Proposal")
-        
+
         service_fee_rate = Decimal(str(SERVICE_FEE))
         precision = Decimal(str(DECIMAL_PLACE))
+
+        excl_service_fee = (proposal_value / (Decimal('1') + service_fee_rate)).quantize(
+            precision, rounding=ROUND_HALF_UP
+        )
         
-        service_fee_amount = (proposal_value * service_fee_rate).quantize(precision, rounding=ROUND_HALF_UP)
-        excl_service_fee = proposal_value - service_fee_amount
         try:
             proposal = ProposalModel.objects.create(
                 gig=gig,
@@ -155,13 +162,13 @@ class ProposalService:
                 is_negotiating=is_negotiating,
             )
             return proposal
-        
+
         except IntegrityError as err:
             if getattr(err.__cause__, "args", None):
                 db_error_code = err.__cause__.args[0]
                 # MYSQL 1st then sqlite
                 if db_error_code == 1062 or "UNIQUE constraint failed" in db_error_code:
-                    message=(
+                    message = (
                         "It looks like you’ve already shared your "
                         "vision for this project!. Sit tight whilst "
                         "the previous proposal is been reviewed."
@@ -176,11 +183,11 @@ class ProposalService:
                 extra={
                     "user_id": str(self.user.id),
                     "gig_id": str(gig.id),
-                })
+                },
+            )
             raise err
-        
+
     def _get_role_object(self, gig, role_id):
-        # get it from the gigcategory
         GigRoleModel = get_registered_model("collaboration", "GigRole")
         try:
             return gig.required_roles.get(role_id=role_id)
@@ -188,40 +195,38 @@ class ProposalService:
             raise ProposalPermissionDenied(
                 "It looks like this specific role isn't part of this project's current needs.",
                 code=PolicyFailure.INVALID_ROLE.code,
-                title=PolicyFailure.INVALID_ROLE.title
+                title=PolicyFailure.INVALID_ROLE.title,
             )
         except GigRoleModel.MultipleObjectsReturned:
             raise ProposalPermissionDenied(
                 "There seems to be a configuration issue with this role.",
                 code=PolicyFailure.INVALID_ROLE.code,
-                title=PolicyFailure.INVALID_ROLE.title
+                title=PolicyFailure.INVALID_ROLE.title,
             )
-    
-    def _create_proposal_roles(self, gig, proposal, applied_roles:List[AppliedRoles]):
+
+    def _create_proposal_roles(self, gig, proposal, applied_roles: List[AppliedRoles]):
         ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
         GigRoleModel = get_registered_model("collaboration", "GigRole")
         GigCategoryModel = get_registered_model("collaboration", "Gigcategory")
-        
+
         role_instances = []
         role_obj = None
-        
+
         for role_payload in applied_roles:
             if gig.has_gig_roles:
                 try:
-                    role_obj = gig.required_roles.get(
-                        role_id=role_payload.niche_id
-                    )
+                    role_obj = gig.required_roles.get(role_id=role_payload.niche_id)
                 except GigRoleModel.DoesNotExist:
                     raise ProposalPermissionDenied(
                         "It looks like this specific role isn't part of this project's current needs.",
                         code=PolicyFailure.INVALID_ROLE.code,
-                        title=PolicyFailure.INVALID_ROLE.title
+                        title=PolicyFailure.INVALID_ROLE.title,
                     )
                 except GigRoleModel.MultipleObjectsReturned:
                     raise ProposalPermissionDenied(
                         "There seems to be a configuration issue with this role.",
                         code=PolicyFailure.INVALID_ROLE.code,
-                        title=PolicyFailure.INVALID_ROLE.title
+                        title=PolicyFailure.INVALID_ROLE.title,
                     )
                 role_instances.append(
                     ProposalRoleModel(
@@ -232,12 +237,11 @@ class ProposalService:
                         proposed_amount=role_payload.proposed_amount,
                         payment_plan=role_payload.payment_plan,
                     )
-            )
-                    
+                )
+
             else:
                 category_obj = GigCategoryModel.objects.get(
-                    id=role_payload.niche_id,
-                    parent_id=role_payload.industry_id
+                    id=role_payload.niche_id, parent_id=role_payload.industry_id
                 )
                 ProposalRoleModel.objects.create(
                     proposal=proposal,
@@ -247,12 +251,14 @@ class ProposalService:
                     proposed_amount=role_payload.proposed_amount,
                     payment_plan=role_payload.payment_plan,
                 )
-                
+
         if gig.has_gig_roles:
             ProposalRoleModel.objects.bulk_create(role_instances)
-        
-    def _create_deliverables(self, proposal, deliverables:List[DeliverablesPayload]):
-        ProposalDeliverableModel = get_registered_model("collaboration", "ProposalDeliverable")
+
+    def _create_deliverables(self, proposal, deliverables: List[DeliverablesPayload]):
+        ProposalDeliverableModel = get_registered_model(
+            "collaboration", "ProposalDeliverable"
+        )
         deliverable_instances = [
             ProposalDeliverableModel(
                 proposal=proposal,
@@ -262,37 +268,47 @@ class ProposalService:
                 duration_unit=d.duration_unit,
                 duration_value=d.duration_value,
                 due_date=d.due_date,
-                order=idx
+                order=idx,
             )
             for idx, d in enumerate(deliverables)
         ]
 
         ProposalDeliverableModel.objects.bulk_create(deliverable_instances)
-    
-    def notifications_flow(self, creator:AbstractUser, gig_title:str):
-        self._notify_creator_by_mail(creator, gig_title)
-        self._in_app_notifications(creator)
+
+    def notifications_flow(self, gig):
+        self._notify_creator_by_mail(gig)
+        self._in_app_notifications(gig.creator)
+
+    def _notify_creator_by_mail(self, gig) -> bool:
+        from core.url_names import ProposalURLS
         
-    def _notify_creator_by_mail(self, creator:AbstractUser, gig_title:str, gig_proposals_count:int) -> bool:
-        if not creator.is_verified:
+        if not gig.creator.is_verified:
             print("Not sending any email")
             return False
-        
+
         context = {
             "host": self.request.build_absolute_uri("/"),
-            "project_title": gig_title,
-            "project_proposal_url": self.request.build_absolute_uri(reverse_lazy("collaboration:proposal-detail", kwargs={"proposal_id": self.proposal.id})),
-            "num_of_proposals": gig_proposals_count
+            "project_title": gig.title,
+            "project_proposal_url": self.request.build_absolute_uri(
+                reverse_lazy(
+                    ProposalURLS.PROPOSAL_LISTINGS,
+                    kwargs={"gig_slug": gig.slug},
+                )
+            ),
+            "num_of_proposals": gig.active_proposals_count,
         }
-        
-        resp = EmailService(creator.email).set_subject(
-            ProposalMails.Subjects.PROPOSAL_RECEIVED
-        ).use_template(ProposalMails.PROPOSAL_RECEIVED).with_context(
-            **context
-        ).send()
-        
+
+        resp = (
+            EmailService(gig.creator.email)
+                .set_subject(ProposalMails.Subjects.PROPOSAL_RECEIVED)
+                .use_template(ProposalMails.PROPOSAL_RECEIVED)
+                .with_context(**context)
+                .send()
+        )
+
         return True
-    
-    def _in_app_notifications(self, creator:AbstractUser) -> None:
+
+    def _in_app_notifications(self, creator: AbstractUser) -> None:
         """creates in-app notifications for both providers and creators"""
+        # notify the both gig creator and service providers
         return None

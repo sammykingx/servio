@@ -18,7 +18,7 @@ async function sendProposal() {
     const deliverablesPayload = Alpine.$data(deliverablesEl).buildPayload();
     const projectEndDate = gigSummary.dataset.endDate;
     const csrfToken = gigSummary.dataset.csrfToken;
-    const endPoint = gigSummary.dataset.endPoint;
+    const endPoint = window.location.href;
 
     let roleApplicationPayload;
     if (gigHasRoles) {

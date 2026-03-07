@@ -28,7 +28,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "slug"
     
     def get_queryset(self):
-        return super().get_queryset().filter(
+        return super().get_queryset().select_related('creator').filter(
             status=GigStatus.PUBLISHED
         ).exclude(creator=self.request.user)
     
@@ -73,7 +73,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        is_negotiating = True if self.request.GET.get("negotiating", None) else False
+        is_negotiating = request.GET.get("negotiating", None) == "true"
         try:
             payload = json.loads(request.body)
             data = SendProposal(**payload)

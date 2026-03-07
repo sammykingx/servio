@@ -8,9 +8,10 @@ from registry_utils import get_registered_model
 
 class CollaborationListView(LoginRequiredMixin, ListView):
     """
-    Displays a paginated list of gigs and projects created by the authenticated user.
+    :Description:
+        Displays a paginated list of gigs and projects created by the authenticated user.
 
-    The view supports:
+    :The view supports:
     - Filtering projects by status via query parameters
     - Aggregating role-related metadata for each gig
     - Providing summary counts of projects grouped by status

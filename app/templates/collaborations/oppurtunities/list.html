@@ -111,21 +111,57 @@
         {% endfor %}
     </div>
     <!-- Pagination/Load More (Subtle divider style) -->
-    {% if is_paginated %}
-    <div class="flex flex-col items-center gap-4 py-8 border-t border-slate-200 dark:border-slate-800 mt-4">
-        <p class="text-slate-500 dark:text-slate-400 text-sm">
-            Showing {{ page_obj.end_index }} of {{ paginator.count }} opportunities
-        </p>
-        {% if page_obj.has_next %}
-            <a
-                href="?page={{ page_obj.next_page_number }}"
-                class="flex items-center gap-2 px-6 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            >
-                Load More
-                <span class="material-symbols-outlined text-lg">arrow_downward</span>
-            </a>
-        {% endif %}
-    </div>
+     {% if is_paginated %}
+        <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row dark:border-slate-800">
+            <!-- Summary -->
+            <p class="text-sm font-medium text-slate-500">
+                Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }} proposals
+            </p>
+
+            <!-- Buttons -->
+            <div class="flex items-center gap-2">
+                <!-- Previous -->
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-400 dark:border-slate-700">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </a>
+                {% else %}
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-200 dark:border-slate-700">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </span>
+                {% endif %}
+
+                <!-- Page Numbers -->
+                {% for num in paginator.page_range %}
+                    {% if num == page_obj.number %}
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-xs font-semibold text-white">
+                        {{ num }}
+                    </span>
+                    {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+                    <a href="?page={{ num }}" class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+                        {{ num }}
+                    </a>
+                    {% elif num == 1 or num == paginator.num_pages %}
+                    <a href="?page={{ num }}" class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+                        {{ num }}
+                    </a>
+                    {% elif forloop.first or forloop.last %}
+                    ...
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Next -->
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </a>
+                {% else %}
+                    <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-200 dark:border-slate-700">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </span>
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
 </section>
 {% endif %}

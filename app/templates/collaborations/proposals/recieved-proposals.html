@@ -158,14 +158,18 @@
 						aria-label="{{ gig.title }}">
     				</a>
 					<!-- TOP: Title + Status -->
-					<div class="flex items-center justify-between mb-4">
-						<h3 class="text-lg font-medium text-slate-900 dark:text-white tracking-tight">
-							{{ gig.title|title|truncatechars:25 }}
-						</h3>
-						<span class="text-[11px] font-medium tracking-wide
+					<div class="flex items-center justify-between gap-4 mb-4">
+						<div class="min-w-0 flex-1">
+							<h3 class="text-lg font-medium text-slate-900 dark:text-white tracking-tight truncate" 
+								title="{{ gig.title|title }}">
+								{{ gig.title|title }}
+							</h3>
+						</div>
+
+						<span class="flex-shrink-0 text-[11px] font-medium tracking-wide
 									text-emerald-700 bg-emerald-100
 									dark:bg-emerald-800/40 dark:text-emerald-300
-									px-3 py-1 rounded-full uppercase">
+									px-3 py-1 rounded-full uppercase whitespace-nowrap">
 							{{ gig.total_proposals }} proposal{{ gig.total_proposals|pluralize }}
 						</span>
 					</div>

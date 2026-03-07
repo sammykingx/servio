@@ -170,6 +170,10 @@ class Gig(models.Model):
         ).values_list('niche__parent__name', flat=True).distinct()
         
     @property
+    def active_proposals_count(self):
+        return self.proposals.count()
+    
+    @property
     def updated_display(self):
         now = timezone.now()
         delta = now - self.updated_at

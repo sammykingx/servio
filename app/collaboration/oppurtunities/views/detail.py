@@ -22,7 +22,7 @@ class OppurtuniyDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "slug"
     
     def get_queryset(self):
-        return super().get_queryset().filter(
+        return super().get_queryset().select_related('creator').filter(
             status__in=[
                 GigStatus.PUBLISHED,
                 GigStatus.IN_PROGRESS,

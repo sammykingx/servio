@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Q, Prefetch
+from django.db.models import Exists, Q, OuterRef, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from collaboration.models.choices import GigStatus, GigVisibility, RoleStatus
@@ -27,19 +27,20 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
     model = GigsModel
     template_name = Collabs.Oppurtunities.LIST
     context_object_name = "gigs"
-    paginate_by = 18
+    paginate_by = 12
 
     def get_queryset(self):
         """
+        :Description:
             Builds and returns a ranked list of gigs based on how well they match
             the user's industry and niche skills.
 
-            Matching logic:
+            :Matching logic:
                 - Gigs without required roles are included as open opportunities
                 - Gigs with required roles are included only if at least one role
             matches the user's niches within their industry
 
-            For each gig, the method calculates:
+            **For each gig, the method calculates:**
                 - Number of matched roles
                 - Match percentage against user's niches
                 - Budget range derived from matched roles
@@ -55,6 +56,13 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
         user_niches = profile.get_user_niches
         user_niche_count = len(user_niches)
         
+        Proposal = get_registered_model("collaboration", "Proposal")
+        
+        user_proposals = Proposal.objects.filter(
+            gig=OuterRef("pk"),
+            sender=user
+        )
+        
         base_qs = (
             super().get_queryset()
             .filter(
@@ -63,6 +71,10 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
                 is_gig_active=True
             )
             .exclude(creator=user)
+            .annotate(
+                user_has_proposal=Exists(user_proposals)
+            )
+            .filter(user_has_proposal=False)
         )
 
         matched_roles = GigRole.objects.filter(
@@ -70,11 +82,6 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
             niche_id=user_industry_id,
             role_id__in=user_niches,
         )
-
-        gigs_without_roles = base_qs.filter(has_gig_roles=False)
-        gigs_with_matching_roles = base_qs.filter(
-            required_roles__in=matched_roles,
-        ).distinct()
 
         gigs = ( 
             base_qs

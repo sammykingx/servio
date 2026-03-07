@@ -6,6 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
 <head>
 <title></title>
+{% load static %}
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <!--[if !mso]>-->
@@ -147,7 +148,7 @@ text-decoration: none
 </td></tr></table>
 </td></tr><tr><td><div class=t14 style="mso-line-height-rule:exactly;mso-line-height-alt:17px;line-height:17px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr><tr><td align=left>
 <table class=t18 role=presentation cellpadding=0 cellspacing=0 style="Margin-right:auto;"><tr><td width=342 class=t17 style="width:342px;">
-<table class=t16 role=presentation cellpadding=0 cellspacing=0 width=100% style="width:100%;"><tr><td class=t15><p class=t13 style="margin:0;Margin:0;font-family:Inter,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.6px;direction:ltr;color:#424040;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">Good news!, your project <span class=t11 style="margin:0;Margin:0;font-weight:700;mso-line-height-rule:exactly;">{{ project_title }}</span> is buzzing right now. You have received <span class=t12 style="margin:0;Margin:0;mso-line-height-rule:exactly;">{{ num_of_proposals }}</span>from providers eager to help get the job done.</p></td></tr></table>
+<table class=t16 role=presentation cellpadding=0 cellspacing=0 width=100% style="width:100%;"><tr><td class=t15><p class=t13 style="margin:0;Margin:0;font-family:Inter,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;line-height:22px;font-weight:500;font-style:normal;font-size:14px;text-decoration:none;text-transform:none;letter-spacing:-0.6px;direction:ltr;color:#424040;text-align:left;mso-line-height-rule:exactly;mso-text-raise:2px;">Good news!, your project <span class=t11 style="margin:0;Margin:0;font-weight:700;mso-line-height-rule:exactly;">{{ project_title }}</span> is buzzing right now. You have received <span class=t12 style="margin:0;Margin:0;mso-line-height-rule:exactly;">{{ num_of_proposals }} proposal{{ num_of_proposals|pluralize }} </span>from providers eager to help get the job done.</p></td></tr></table>
 </td></tr></table>
 </td></tr><tr><td><div class=t20 style="mso-line-height-rule:exactly;mso-line-height-alt:17px;line-height:17px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr><tr><td align=left>
 <table class=t24 role=presentation cellpadding=0 cellspacing=0 style="Margin-right:auto;"><tr><td width=340 class=t23 style="width:340px;">
