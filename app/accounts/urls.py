@@ -58,6 +58,11 @@ urlpatterns = [
         name=AuthURLNames.EMAIL_VERIFICATION_SENT,
     ),
     path(
+        "resend/verification-email/", 
+        registration.ResendEmailVerificationView.as_view(), 
+        name=AuthURLNames.RESEND_VERIFICATION_EMAIL
+    ),
+    path(
         "email/verify/<token>/",
         registration.EmailVerificationView.as_view(),
         name=AuthURLNames.EMAIL_CONFIRMATION,

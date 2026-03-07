@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.base import TemplateView
 from django.views import View
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -33,6 +35,16 @@ class CustomSignup(CreateView):
         if request.user.is_authenticated:
             return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_success_url(self):
+        """
+        Returns the URL to redirect to after successful registration.
+
+        This method can be overridden to provide dynamic success URLs based
+        on the request or other factors. By default, it returns a static
+        URL defined in the `success_url` attribute.
+        """
+        return super().get_success_url()
 
     def form_valid(self, form: UserSignupForm) -> HttpResponse:
         """
@@ -60,7 +72,6 @@ class CustomSignup(CreateView):
 
     def form_invalid(self, form: UserSignupForm) -> HttpResponse:
         errors = form.errors.as_json()
-        print(errors)
         response = super().form_invalid(form)
         return response
 
@@ -80,15 +91,65 @@ class CustomSignup(CreateView):
             "acct_activation_url": acct_activation_url,
         }
 
-        EmailService(self.object.email).set_subject(
+        self.email_sent = EmailService(self.object.email).set_subject(
             AccountMails.Subjects.EMAIL_VERIFICATION
         ).use_template(AccountMails.EMAIL_VERIFICATION).with_context(
             **context
         ).send()
 
         return None
+    
 
+class ResendEmailVerificationView(LoginRequiredMixin,View):
+    """
+    View to handle resending of email verification links to users who have not yet verified their email addresses.
+    """
 
+    http_method_names = ["get"]
+    
+    def get(self, request, *args, **kwargs) -> HttpResponse:
+        result = UserToken.objects.generate_token(
+            user=self.request.user,
+            token_type=TokenType.EMAIL_VERIFICATION,
+        )
+        
+        sent = self.send_verification_email(self.request.user, result.token)
+        if not sent:
+            return render(
+                request,
+                Accounts.Auth.SIGNUP_VERV_EMAIL_FAILED,
+            )
+            
+        return render(
+            request,
+            Accounts.Auth.SIGNUP_VERV_EMAIL_SENT,
+        )
+
+    
+    def send_verification_email(self, user, token) -> None:
+        acct_activation_url = self.request.build_absolute_uri(
+            reverse_lazy(
+                AuthURLNames.EMAIL_CONFIRMATION,
+                kwargs={"token": token},
+            )
+        )
+
+        context = {
+            "host": self.request.build_absolute_uri("/"),
+            "acct_activation_url": acct_activation_url,
+        }
+
+        resp = EmailService("egorovan@xviath.com").set_subject(
+            AccountMails.Subjects.EMAIL_VERIFICATION
+        ).use_template(AccountMails.EMAIL_VERIFICATION).with_context(
+            **context
+        ).send()
+
+        print(f"Response from email: {resp}")
+        
+        return resp
+    
+    
 class EmailVerificationView(View):
     """
     Handles email verification requests using a token provided in the URL.

@@ -8,6 +8,7 @@ class AuthURLNames:
     SIGNUP = "account_signup"
     EMAIL_VERIFICATION_SENT = "account_email_verification_sent"
     EMAIL_CONFIRMATION = "account_confirm_email"
+    RESEND_VERIFICATION_EMAIL = "resend_verification_email"
 
     # PASSWORD RESET
     REQUEST_PASSWORD_RESET = (
