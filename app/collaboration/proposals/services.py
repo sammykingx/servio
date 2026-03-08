@@ -118,7 +118,6 @@ class ProposalService:
 
         except Exception as e:
             import traceback
-
             traceback.print_exc()
             raise
 
@@ -283,7 +282,6 @@ class ProposalService:
         from core.url_names import ProposalURLS
         
         if not gig.creator.is_verified:
-            print("Not sending any email")
             return False
 
         context = {
@@ -306,7 +304,7 @@ class ProposalService:
                 .send()
         )
 
-        return True
+        return resp
 
     def _in_app_notifications(self, creator: AbstractUser) -> None:
         """creates in-app notifications for both providers and creators"""

@@ -39,6 +39,9 @@ class Accounts:
         SIGNUP_VERV_EMAIL_SENT = (
             f"{__SUB_FOLDER}/email-verification-sent.html"
         )
+        SIGNUP_VERV_EMAIL_FAILED = (
+            f"{__SUB_FOLDER}/email-verification-mail-failed.html"
+        )
         SIGNUP_EMAIL_VERIFIED = f"{__SUB_FOLDER}/email-verified.html"
 
         REQUEST_PASSWORD_RESET = (
