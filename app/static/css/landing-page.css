@@ -31,8 +31,14 @@
       0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
       100% { transform: translateY(800px) rotate(360deg); opacity: 0; }
     }
+
     @keyframes shimmer {
       100% { left: 150%; }
+    }
+
+    @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
     }
 
     /* Define Animation Utilities */
@@ -70,4 +76,14 @@
     }
 	.delay-300 { animation-delay: 300ms; }
   	.delay-700 { animation-delay: 700ms; }
+
+    .animate-marquee {
+        animation: marquee 30s linear infinite;
+        display: flex;
+        width: max-content;
+    }
+    /* Pause animation on hover for interactivity */
+    .animate-marquee:hover {
+        animation-play-state: paused;
+    }
 }
