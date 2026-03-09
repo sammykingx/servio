@@ -147,11 +147,11 @@
                             {% if gig.has_gig_roles %}
                                 {% if role.proposed_amount > role.role_amount %}
                                     <div class="mt-3 text-xs font-medium text-red-500">
-                                        +${{ role.budget_difference|intcomma }} above budget
+                                        {{ role.budget_difference }} above budget
                                     </div>
                                 {% elif role.proposed_amount < role.role_amount %}
                                     <div class="mt-3 text-xs font-medium text-emerald-500">
-                                        -${{ role.budget_difference|intcomma }} under budget
+                                        {{ role.budget_difference }} under budget
                                     </div>
                                 {% else %}
                                     <div class="mt-3 text-xs font-medium text-slate-400">

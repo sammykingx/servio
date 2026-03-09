@@ -1,577 +1,515 @@
 <!DOCTYPE html>
 <html class="light" lang="en">
-{% load static %}
-    <head>
-        <meta charset="utf-8" />
-        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport" />
-        <title>Servio - modern solution for everyday needs</title>
+	{% load static %}
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport" />
+		<title>Servio - modern solution for everyday needs</title>
+		<!-- Open Graph -->
+		<meta property="og:type" content="website">
+		<meta property="og:site_name" content="Servio">
+		<meta property="og:title" content="Servio – Build your team around your project">
+		<meta property="og:description" content="Assemble the right service providers. Manage everything in one place.">
+		<meta property="og:url" content="{{ request.url }}">
 
-        <!-- Open Graph -->
-        <meta property="og:type" content="website">
-        <meta property="og:site_name" content="Servio">
-        <meta property="og:title" content="Servio – Build your team around your project">
-        <meta property="og:description" content="Assemble the right service providers. Manage everything in one place.">
-        <meta property="og:url" content="{{ request.url }}">
-
-
-        <!-- <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script> -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
-        <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+		<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="{% static 'css/landing-page-style.css' %}" />
-    </head>
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="{% static 'css/landing-page-style.css' %}" />
+	</head>
+	<body class="bg-white text-slate-900 font-sans selection:bg-slate-900 selection:text-white overflow-x-hidden">
+		<header class="fixed top-0 z-50 w-full bg-transparent backdrop-blur-md border-b border-white/10">
+			<div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+				<!-- Left: Logo -->
+				<div class="flex items-center gap-2">
+					<img 
+                        id="navbar-logo"
+						src="{% static 'images/logo/sidebar-logo-dark.png' %}" 
+						data-dark="{% static 'images/logo/sidebar-logo-dark.png' %}"
+                        data-light="{% static 'images/logo/sidebar-logo-light.png' %}"
+                        alt="Servio" 
+						class="h-15 w-auto object-contain transition-transform duration-200 hover:scale-105"
+					/>
+				</div>
+				<!-- Center: Navigation -->
+				<nav id="nav-links" class="hidden md:flex items-center gap-8 text-sm font-medium">
+					<a class="hover:text-secondary transition-colors" href="#">Overview</a>
+					<a class="hover:text-secondary transition-colors" href="#">Product</a>
+					<a class="hover:text-secondary transition-colors" href="#">Pricing</a>
+					<a class="hover:text-secondary transition-colors" href="#">Docs</a>
+				</nav>
+				<!-- Right: Button -->
+				<div>
+					<a id="nav-cta-button" href="{% url AUTH_URLS.SIGNUP %}" class="bg-primary text-white text-sm font-bold h-11 px-8 py-4 rounded-full shadow-lg hover:bg-slate-800 transition-all">
+					    Get Started
+					</a>
+				</div>
+			</div>
+		</header>
+		<main>
+			<!-- BEGIN: Hero Section -->
+			<section id="hero" class="relative min-h-[92vh] flex items-center overflow-hidden">
 
-    <body class="bg-white text-slate-900 font-sans selection:bg-slate-900 selection:text-white overflow-x-hidden">
-        <header class="fixed top-0 z-50 w-full bg-white/70 backdrop-blur-md">
-            <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
-                
-                <!-- Left: Logo -->
-                <div class="flex items-center gap-2">
-                <img 
-                    src="{% static 'images/logo/sidebar-logo-light.png' %}" 
-                    alt="Servio" 
-                    class="h-15 w-auto object-contain transition-transform duration-200 hover:scale-105"
-                />
+                <!-- Background Image -->
+                <div class="absolute inset-0">
+                    <img 
+                        src="{% static 'images/cover-images/hero-bg.jpg' %}"
+                        alt="Professionals working across different industries"
+                        class="w-full h-full object-cover"
+                    >
                 </div>
 
-                <!-- Center: Navigation -->
-                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-500">
-                <a class="hover:text-black transition-colors" href="#">Overview</a>
-                <a class="hover:text-black transition-colors" href="#">Product</a>
-                <a class="hover:text-black transition-colors" href="#">Pricing</a>
-                <a class="hover:text-black transition-colors" href="#">Docs</a>
-                </nav>
+                <!-- Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/65 to-black/30"></div>
 
-                <!-- Right: Button -->
-                <div>
-                <a href="{% url AUTH_URLS.SIGNUP %}" class="bg-primary text-white text-sm font-bold h-11 px-8 py-4 rounded-full shadow-lg hover:bg-slate-800 transition-all">
-                    Get Started
-                </a>
-                </div>
+                <!-- Bottom Fade -->
+                <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/70 to-transparent"></div>
 
-            </div>
-        </header>
-        <section class="mesh-gradient-calm min-h-screen pt-40 pb-20 px-8">
-            <div class="max-w-[1400px] mx-auto grid lg:grid-cols-[1fr_1.5fr] gap-16 items-center">
-                <div class="max-w-xl">
-                    <div class="inline-flex items-center gap-2 mb-6">
-                        <span class="size-2 bg-emerald-400 rounded-full"></span>
-                        <span class="text-xs font-mono text-slate-500 uppercase tracking-widest">Real-time Service OS</span>
-                    </div>
-                    <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-1.5 text-slate-900 leading-[1.05]">
-                        Run Enterprise Programs
-                    </h1>
-                    <p class="text-xl font-sans text-primary italic mb-8">
-                        with ease and confidence.
-                    </p>
-                    <p class="text-lg md:text-xl font-sans text-slate-500 mb-10 leading-relaxed max-w-lg">
-                        Get things done, with your team and trusted vendors, no headaches, no management overhead.
-                    </p>
-                    <div class="flex flex-wrap gap-4 mb-20">
-                        <a href="{% url AUTH_URLS.SIGNUP %}" class="h-14 px-8 bg-primary text-white font-bold rounded-full flex items-center gap-2 group hover:gap-3 transition-all">
-                            Get Started
-                            <span class="material-symbols-outlined text-xl">arrow_forward</span>
-                        </a>
-                        <button class="h-14 px-8 bg-white border border-slate-200 text-slate-900 font-bold rounded-full flex items-center gap-2 hover:bg-slate-50 transition-all shadow-sm">
-                            <span class="material-symbols-outlined text-xl">play_circle</span>
-                            View demo
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="flex items-start gap-4">
-  <!-- Icon 1 -->
-  <div class="size-10 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-300 flex items-center justify-center text-white shadow-md">
-    <span class="material-symbols-outlined text-xl">grid_view</span>
-  </div>
-  <div>
-    <p class="text-sm font-bold text-slate-900">Unified Analytics</p>
-    <p class="text-xs text-slate-500 mt-1">See revenue at a glance.</p>
-  </div>
-</div>
+                <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full">
 
-<div class="flex items-start gap-4">
-  <!-- Icon 2 -->
-  <div class="size-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-indigo-300 flex items-center justify-center text-white shadow-md">
-    <span class="material-symbols-outlined text-xl">query_stats</span>
-  </div>
-  <div>
-    <p class="text-sm font-bold text-slate-900">Real-Time Trends</p>
-    <p class="text-xs text-slate-500 mt-1">Monitor KPIs daily.</p>
-  </div>
-</div>
+                    <div class="max-w-3xl py-24 lg:py-32">
 
-<div class="flex items-start gap-4">
-  <!-- Icon 3 -->
-  <div class="size-10 rounded-xl bg-gradient-to-tr from-amber-400 to-amber-200 flex items-center justify-center text-white shadow-md">
-    <span class="material-symbols-outlined text-xl">schedule</span>
-  </div>
-  <div>
-    <p class="text-sm font-bold text-slate-900">Automated Reports</p>
-    <p class="text-xs text-slate-500 mt-1">Schedule insights.</p>
-  </div>
-</div>
+                        <!-- Headline -->
+                        <h2 class="text-3xl lg:text-5xl font-semibold text-white leading-[1.05] tracking-tight mb-6">
+                            Connect with the <span class="text-secondary">right professionals</span> to get work done
+                        </h2>
 
-                    </div>
-                </div>
-                <div class="relative animate-float">
-                    <div class="glass-morphism rounded-[32px] p-6 lg:p-8 overflow-hidden">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-                            <div>
-                                <h2 class="text-2xl font-bold text-slate-900">It's Night time, Dylan 👋</h2>
-                                <p class="text-slate-500 text-sm mt-1">Here's what's happening with your projects today.</p>
-                            </div>
-                            <button class="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
-                                <span class="material-symbols-outlined text-lg">add</span>
-                                Create a gig/project
-                            </button>
+                        <!-- Subtext -->
+                        <p class="text-lg text-gray-200 leading-relaxed mb-10 max-w-xl">
+                            Servio connects skilled professionals with ready clients. 
+                            Get matched to needs that fit your skills automatically, or post one and connect with the right professionals, no bidding wars.
+                        </p>
+
+                        <!-- CTA Buttons -->
+                        <div class="grid grid-cols-2 gap-3 max-w-md">
+
+                            <a href="{% url AUTH_URLS.SIGNUP %}"
+                                class="w-full text-center px-5 py-3 bg-secondary text-charcoal rounded-xl font-semibold text-sm md:text-base hover:bg-brand-700 hover:text-white transition shadow-lg shadow-blue-500/25">
+                                Join Servio
+                            </a>
+
+                            <a href="#"
+                            class="w-full text-center px-5 py-3 bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl font-semibold text-sm md:text-base hover:bg-white/20 transition">
+                                See How It Works
+                            </a>
+
                         </div>
-                        <div class="grid lg:grid-cols-[1.8fr_1fr] gap-6">
-                            <div class="space-y-6">
-                                <div class="bg-white/40 border border-white/60 rounded-2xl">
-                                    <div class="flex items-center justify-between mb-6">
-                                        <h3 class="font-bold text-slate-900">Active Gigs</h3>
-                                        <button class="text-indigo-600 text-xs font-bold flex items-center gap-1">View all <span class="material-symbols-outlined text-xs">arrow_forward</span></button>
-                                    </div>
-                                    <div class="space-y-4">
-                                        <div class="bg-white/80 border border-slate-100 hover:border-brand-300 p-5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                            <div>
-                                                <div class="flex items-center gap-2 mb-1">
-                                                    <h4 class="font-bold text-slate-900 text-base">HQ Renovation Plan</h4>
-                                                    <span class="px-1.5 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded-full">In Progress</span>
-                                                </div>
-                                                <p class="text-xs text-slate-500">Active • Oct 12 → Nov 30</p>
-                                                <div class="flex flex-wrap gap-2 mt-3">
-                                                    <span class="px-2 py-1 bg-slate-50 text-slate-500 text-[10px] font-bold rounded">$18,500 total</span>
-                                                    <span class="px-2 py-1 bg-indigo-50 text-indigo-500 text-[10px] font-bold rounded">3 roles</span>
-                                                    <span class="px-2 py-1 bg-amber-50 text-amber-600 text-[10px] font-bold rounded">Negotiable</span>
-                                                    <span class="px-2 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded">Funds in escrow</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="bg-white/80 border border-slate-100 hover:border-brand-300 p-5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 opacity-80 hover:opacity-100 transition-opacity">
-                                            <div>
-                                                <div class="flex items-center gap-2 mb-1">
-                                                    <h4 class="font-bold text-slate-900">Education Portal Build</h4>
-                                                    <span class="px-2 py-0.5 bg-amber-50 text-amber-600 text-[10px] font-bold rounded-full">Pending</span>
-                                                </div>
-                                                <p class="text-xs text-slate-500">Awaiting acceptance • No start date</p>
-                                                <div class="flex flex-wrap gap-2 mt-3">
-                                                    <span class="px-2 py-1 bg-slate-50 text-slate-500 text-[10px] font-bold rounded">$6,000 budget</span>
-                                                    <span class="px-2 py-1 bg-indigo-50 text-indigo-500 text-[10px] font-bold rounded">1 role</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div class="bg-white/40 border border-white/60 rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                        <div class="size-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-500 mb-4">
-                                            <span class="material-symbols-outlined">description</span>
-                                        </div>
-                                        <h4 class="font-bold text-slate-900 mb-1">No proposals yet</h4>
-                                        <p class="text-xs text-slate-400">Negotiations and offers will appear here.</p>
-                                    </div>
-                                    <div class="bg-white/40 border border-white/60 rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                        <div class="size-12 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500 mb-4">
-                                            <span class="material-symbols-outlined">lock</span>
-                                        </div>
-                                        <h4 class="font-bold text-slate-900 mb-1">Future Payments</h4>
-                                        <p class="text-xs text-slate-400">No escrow payments scheduled.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="space-y-6">
-                                <div class="bg-indigo-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-100">
-                                    <p class="text-indigo-100 text-xs font-bold uppercase tracking-wider mb-2">Total Balance in Escrow</p>
-                                    <h3 class="text-4xl font-bold mb-6">$4,250.00</h3>
-                                    <div class="flex gap-3">
-                                        <button class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-md h-10 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-colors">
-                                            <span class="material-symbols-outlined text-lg">add</span> Top Up
-                                        </button>
-                                        <button class="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-md h-10 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-colors">
-                                            <span class="material-symbols-outlined text-lg">history</span> History
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="bg-white/40 border border-white/60 rounded-2xl p-6">
-                                    <h4 class="font-bold text-slate-900 mb-4">Recent Transactions</h4>
-                                    <div class="space-y-4">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-3">
-                                                <div class="size-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
-                                                    <span class="material-symbols-outlined text-sm">arrow_upward</span>
-                                                </div>
-                                                <div>
-                                                    <p class="text-[13px] font-bold text-slate-900">Payment Sent</p>
-                                                    <p class="text-[10px] text-slate-500">Web Design Gig</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-sm font-bold text-slate-900">-$850.00</span>
-                                        </div>
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-3">
-                                                <div class="size-8 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center">
-                                                    <span class="material-symbols-outlined text-sm">arrow_downward</span>
-                                                </div>
-                                                <div>
-                                                    <p class="text-[13px] font-bold text-slate-900">Refund</p>
-                                                    <p class="text-[10px] text-slate-500">Project Cancelled</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-sm font-bold text-emerald-500">+$200.00</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="bg-white/40 border border-white/60 rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-                                    <div class="size-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500 mb-4">
-                                        <span class="material-symbols-outlined">stars</span>
-                                    </div>
-                                    <h4 class="text-[13px] font-bold text-slate-900 mb-1">No reviews yet</h4>
-                                    <p class="text-[10px] text-slate-400">Your reputation will appear here after client feedback.</p>
-                                    <div class="flex gap-1 mt-3">
-                                        <span class="material-symbols-outlined text-slate-200 text-sm">star</span>
-                                        <span class="material-symbols-outlined text-slate-200 text-sm">star</span>
-                                        <span class="material-symbols-outlined text-slate-200 text-sm">star</span>
-                                        <span class="material-symbols-outlined text-slate-200 text-sm">star</span>
-                                        <span class="material-symbols-outlined text-slate-200 text-sm">star</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute -bottom-6 -left-10 bg-white shadow-2xl rounded-2xl p-4 flex items-center gap-4 border border-slate-100 z-20 animate-float-slow">
-                        <div class="size-10 bg-orange-500 rounded-xl flex items-center justify-center text-white">
-                            <span class="material-symbols-outlined">stat_3</span>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase">Trend</p>
-                            <p class="text-sm font-bold text-slate-900">↑ Improving</p>
-                        </div>
-                    </div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-96 bg-brand-accent/20 blur-[120px] rounded-full -z-10"></div>
-                </div>
-            </div>
-        </section>
-        <section class="py-32 px-8 bg-neutral-light">
-            <div class="max-w-7xl mx-auto text-center mb-20">
-                <h2 class="text-4xl font-bold tracking-tight mb-4">Built for Professionals</h2>
-                <p class="text-slate-500 text-lg">Tailored experiences for your specific business model.</p>
-            </div>
-            <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-3xl p-10 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
-                    <div class="size-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">corporate_fare</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-6">For SMEs</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3 text-slate-500 font-medium">
-                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
-                            Team-wide visibility
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-500 font-medium">
-                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
-                            Payroll automation
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-500 font-medium">
-                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
-                            Global tax compliance
-                        </li>
-                    </ul>
-                </div>
-                <div class="bg-slate-900 rounded-3xl p-10 shadow-2xl relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-6">
-                        <span class="bg-white/10 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Popular</span>
-                    </div>
-                    <div class="size-16 bg-white/10 text-white rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">person</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-6 text-white">For Residents</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3 text-slate-400 font-medium">
-                            <span class="material-symbols-outlined text-blue-400">check_circle</span>
-                            Personal branding tools
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-400 font-medium">
-                            <span class="material-symbols-outlined text-blue-400">check_circle</span>
-                            Escrow protection
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-400 font-medium">
-                            <span class="material-symbols-outlined text-blue-400">check_circle</span>
-                            Smart scheduling
-                        </li>
-                    </ul>
-                </div>
-                <div class="bg-white rounded-3xl p-10 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
-                    <div class="size-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-4xl">groups</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-6">For Agencies</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3 text-slate-500 font-medium">
-                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
-                            White-label portals
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-500 font-medium">
-                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
-                            Advanced permissions
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-500 font-medium">
-                            <span class="material-symbols-outlined text-emerald-500">check_circle</span>
-                            API access &amp; webhooks
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        <section class="py-32 px-8 bg-deep-charcoal overflow-hidden relative">
-            <div class="absolute inset-0 workflow-gradient pointer-events-none"></div>
-            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10">
-                <div class="flex flex-col gap-10">
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 border border-white/10 rounded-full mb-6">
-                            <span class="size-1.5 bg-emerald-400 rounded-full"></span>
-                            <span class="text-[10px] font-bold text-white uppercase tracking-widest">Product workflow</span>
-                        </div>
-                        <h2 class="text-5xl font-bold text-white tracking-tight mb-6 leading-tight">From project <br />to payout</h2>
-                        <p class="text-slate-400 text-base leading-relaxed max-w-md">
-                            Connect, understand, and act—end-to-end service automation in three simple steps.
+
+                        <!-- Supporting Text -->
+                        <p class="text-sm text-gray-300 mt-6">
+                            One account. Find projects. Post projects. Collaborate with professionals.
                         </p>
                     </div>
-                    <div class="space-y-12 pr-3">
-                        <div class="flex items-start gap-8 group">
-                            <span class="text-6xl font-bold text-white/10 group-hover:text-white/20 transition-colors leading-none">1</span>
-                            <div>
-                                <h4 class="text-2xl font-bold text-white mb-2">Post</h4>
-                                <p class="text-slate-400 text-base">Describe your need and project requirements in detail.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-8 group">
-                            <span class="text-6xl font-bold text-white/10 group-hover:text-white/20 transition-colors leading-none">2</span>
-                            <div>
-                                <h4 class="text-2xl font-bold text-white mb-2">Match</h4>
-                                <p class="text-slate-400 text-base">Get paired with a curated selection of verified professionals.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-8 group">
-                            <span class="text-6xl font-bold text-white/10 group-hover:text-white/20 transition-colors leading-none">3</span>
-                            <div>
-                                <h4 class="text-2xl font-bold text-white mb-2">Execute</h4>
-                                <p class="text-slate-400 text-base">Track milestones in real-time and release funds upon success.</p>
-                            </div>
-                        </div>
+                </div>
+            </section>
+			<!-- END: Hero Section -->
+
+            <!-- BEGIN: Trusted Partners -->
+			<section class="py-12 border-y border-gray-100 bg-white">
+				<div class="max-w-7xl mx-auto px-4">
+					<p class="text-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-10">Trusted by modern enterprises</p>
+					<div class="flex flex-wrap justify-center gap-12 opacity-50 grayscale transition-all hover:grayscale-0">
+						<img alt="Canva" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz3bFfzbQPcR8deCWQEytNntAmcKE8LdqQgSP2LSncvBMXomLADUP0xJz4qXsXteyhqGs71YRcL8Tuxsru-cbiaAmlSRPD-a0mfMyn9ampGTD9yW9cJrFHXqiwjNEHjeTRti-hHqwEUWVsDjD4EmhA1AS7yHrVYe6Am8bqvQiP09jzZ-stb5m6ewc4dOS6JJQROr0iya_efWGLMuKMxY1PUIFFBeXFK_3YH36v6IB_PPVzclner4TFx3UrtVTPV7k2tRyygTz1vS8" />
+						<img alt="Slack" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmaPxpRgT2EsSxfcuYWArqJzduvCdm9HLK4cluT2ZDv83231j-Bc4S8bISK4gkRpINIVObQ2_kEDH3LEu9sNPSCNnN8jS-CdMdTB_XXAKGMvDVzXx2eargR18TgBg7ZsY6wKDBlHGe3RnJjpgoptJgKP9wFViTQFbDhQQV0maGNZIWiGp2AtYvyNzeJBqbmKVEV7bqDgbGJmvzQwKColugIjINDu21acCSrh7s-8MZQZ2MvojZvGoTbU4WHSR0Acc7y0f-WRieiEE" />
+						<img alt="Microsoft" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc5EDfIqAni9_k75n0z8KB9O0q_Rzt6Fve2Tiul-1UFBj5C1eTye2iOCT8-ByXHpBeXOnE-2EHC53q0p7xWQK6NoWaH-sbotpAAWnfoFkaj5K75UtGyE__xE0euy_M7izOX2DrbhzJkDtEleaq_ytuIPf-4Bn10jqNAJRBcMa3dhKlLfR9w9Or2KPs45NIKMus2MsghrCFm9foBv0bkWsOemHwI1HaiUQsbl87I4j40NKRB1VAgoPncNBdM9S0WfPmzoALwChtDEQ" />
+						<img alt="Notion" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXk2sUGK5kkCVP3eklWzmudpgEgOrNKNb4afI353h3CG5FSet5yu_6704VeLLWeRu0deBJtsEkw-4ZPt-buSzrUkgNCJb5HxMkbAVfl3V7Cqyl-FtPEkOYjfa0-wHu8Pg3Rok_U7h9ivicFj383NSU8TieTVko4d-Fy12PU73HSB6jfqON2kBx4xrqv0x2_AVnyYlMWi9sI98o6QjYxC9mv2udlfuGBWBmpMseQ9ZIiF-kn3QOOnjVmAfp5djQDuxpblNwaRv4Kug" />
+						<img alt="Google" class="h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABpX7bhw2BfgjhTXPbWsIySqMjNpkRHp-SOL7y-UXKovjGmM8eoO8j7YFkdkZ3OQVE8ssjhjpU7vrCdmD0bFayL7_OqFtZYQl_HKho8A6EiGkLD52Vav8Y8uH8oNKzqS9X7J2kMqWkiLgxAgEk0hepuZvQWL6K2fIF_a5s87GSg-nswz08z_pGQ00VPSINAYHRJsysZbTjFC4qPCTLwZwvU8WOBON9Kt5Qx-zcQNg3Z0Z_gx7ECXl8EVCdvjMCIvkp7BdHuwW4aM8" />
+					</div>
+				</div>
+			</section>
+			<!-- END: Trusted Partners -->
+
+			<!-- BEGIN: Category Grid -->
+			<section class="py-24 bg-white overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <div class="mb-20">
+                        <h2 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Find experts for every type of work</h2>
+                        <p class="text-slate-500 max-w-xl mx-auto text-lg">
+                            From personal needs to business needs, Servio connects you with professionals for anything you can imagine.
+                        </p>
                     </div>
-                    <div class="pt-8">
-                        <button class="h-14 px-8 bg-white text-black font-bold rounded-xl flex items-center gap-2 hover:bg-slate-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                            Explore the demo
-                            <span class="material-symbols-outlined text-xl">arrow_forward</span>
-                        </button>
+
+                    <div class="relative flex justify-center items-center h-[500px] md:h-[600px]">
+                        <div class="relative z-20 w-48 h-58 md:w-64 md:h-64 rounded-full border-8 border-white shadow-2xl overflow-hidden ring-1 ring-slate-100">
+                            <img src="{% static '/images/cover-images/user-center.png' %}" alt="Client" class="w-full h-full object-cover" />
+                        </div>
+
+                    <div class="absolute w-[320px] h-[320px] md:w-[500px] md:h-[500px] animate-spin-slow pause-on-hover">
+                        
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div class="animate-reversespin flex flex-col items-center group">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 shadow-sm border border-purple-100 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"></path></svg>
+                            </div>
+                            <span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Development</span>
+                        </div>
+                        </div>
+
+                        <div class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
+                        <div class="animate-reversespin flex flex-col items-center group">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-pink-50 rounded-2xl flex items-center justify-center text-pink-600 shadow-sm border border-pink-100 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                            </div>
+                            <span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Design</span>
+                        </div>
+                        </div>
+
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+                        <div class="animate-reversespin flex flex-col items-center group">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 shadow-sm border border-green-100 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            </div>
+                            <span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Marketing</span>
+                        </div>
+                        </div>
+
+                        <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2">
+                        <div class="animate-reversespin flex flex-col items-center group">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600 shadow-sm border border-orange-100 group-hover:scale-110 transition-transform">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"></path></svg>
+                            </div>
+                            <span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Home Services</span>
+                        </div>
+                        </div>
+
+                    </div>
+
+                    <div class="absolute w-[320px] h-[320px] md:w-[500px] md:h-[500px] border border-slate-100 rounded-full"></div>
+                    <div class="absolute w-[450px] h-[450px] md:w-[700px] md:h-[700px] border border-slate-50 rounded-full hidden sm:block"></div>
+
                     </div>
                 </div>
-                <div class="relative flex justify-center items-center">
-                    <div class="relative perspective-1000">
-                        <div class="w-96 h-60 bg-gradient-to-br from-slate-100 to-slate-300 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.6)] border border-white/20 relative transform rotate-y-12 rotate-x-6">
-                            <div class="absolute top-8 left-10 w-12 h-12 bg-amber-400/80 rounded-xl blur-[1px] shadow-inner"></div>
-                            <div class="absolute top-10 right-10 flex items-center justify-center size-20 bg-red-500 rounded-full shadow-lg border-4 border-red-600/50">
-                                <span class="text-white text-4xl font-bold">$</span>
-                            </div>
-                            <div class="absolute bottom-10 left-10 space-y-2">
-                                <div class="h-2 w-16 bg-slate-400/40 rounded-full"></div>
-                                <div class="h-2 w-12 bg-slate-400/30 rounded-full"></div>
-                            </div>
-                        </div>
+            </section>
+			<!-- END: Category Grid -->
+
+			<!-- BEGIN: How It Works -->
+			<section class="py-16 md:py-24 bg-offWhite overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 relative">
+                    
+                    <div class="text-center mb-16 md:mb-20">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Built for clarity</h2>
+                    <p class="text-slateCustom max-w-xl mx-auto px-4">Your project journey, simplified — from objectives to payment.</p>
                     </div>
-                    <div class="absolute -top-12 right-0 bg-white/95 backdrop-blur-xl p-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-white/40 transform -rotate-3 hover:scale-105 transition-transform duration-500 cursor-default">
-                        <div class="size-10 bg-indigo-500 rounded-lg flex items-center justify-center text-white">
-                            <span class="material-symbols-outlined text-2xl">monitoring</span>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Insight</p>
-                            <p class="text-sm font-bold text-slate-900">Funds released by Servio</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="py-26 px-8 bg-white overflow-hidden relative opportunity-gradient">
-            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-                <div class="relative z-10">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 border border-indigo-100 rounded-full mb-6">
-                        <span class="size-1.5 bg-brand-indigo rounded-full"></span>
-                        <span class="text-[10px] font-bold text-brand-indigo uppercase tracking-widest">Growth Center</span>
-                    </div>
-                    <h2 class="text-4xl font-bold text-slate-900 tracking-tight mb-6 leading-tight">Access a world of high-value opportunities</h2>
-                    <p class="text-slate-500 text-lg leading-relaxed max-w-md mb-10">
-                        Servio's Deal Room uses proprietary matching algorithms to pair your expertise with verified businesses seeking high-impact solutions. Matches are made based on your skill profile and historical performance.
-                    </p>
-                    <div class="flex flex-col gap-6 mb-12">
-                        <div class="flex items-center gap-4">
-                            <div class="size-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
-                                <span class="material-symbols-outlined">auto_awesome</span>
-                            </div>
-                            <p class="text-slate-700 font-medium">Smart AI match-making</p>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="size-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                <span class="material-symbols-outlined">verified</span>
-                            </div>
-                            <p class="text-slate-700 font-medium">Verified project budgets</p>
-                        </div>
-                    </div>
-                    <button class="h-14 px-8 bg-primary text-white font-bold rounded-xl flex items-center gap-2 hover:bg-slate-800 transition-all shadow-xl">
-                        Browse opportunities
-                        <span class="material-symbols-outlined text-xl">rocket_launch</span>
-                    </button>
-                </div>
-                <div class="relative perspective-3000">
-                    <div class="w-full bg-[#f8faff] border border-slate-200 rounded-[32px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] overflow-hidden rotate-y-12-neg transition-transform duration-700 hover:rotate-0">
-                        <div class="bg-white px-4 py-6 border-b border-slate-100 flex items-center justify-between">
-                            <div>
-                                <h3 class="text-2xl font-bold text-slate-900">Opportunities</h3>
-                                <p class="text-xs text-slate-400 font-medium">Browse curated B2B project opportunities</p>
-                            </div>
-                            <div class="size-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white">
-                                <span class="material-symbols-outlined">add</span>
-                            </div>
-                        </div>
-                        <div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm relative group overflow-hidden">
-                                <div class="absolute top-0 right-0 p-4">
-                                    <span class="material-symbols-outlined text-slate-300">lock_open</span>
-                                </div>
-                                <div class="inline-flex items-center gap-2 px-2 py-1 bg-indigo-50 text-[10px] font-bold text-indigo-600 rounded-md mb-4">
-                                    <span class="material-symbols-outlined text-xs">bolt</span> AI MATCH • HIGH PRIORITY
-                                </div>
-                                <h4 class="font-bold text-slate-900 mb-2">Startup MVP Launch</h4>
-                                <div class="flex items-center gap-2 mb-4">
-                                    <div class="size-6 rounded-full bg-slate-200 overflow-hidden">
-                                        <img alt="Client" src="{% static '/images/user/user-02.jpg' %}" />
-                                    </div>
-                                    <span class="text-xs font-semibold text-slate-500">Dylan Chris <span class="text-amber-500">★ 4.9</span></span>
-                                </div>
-                                <div class="space-y-2 mb-6">
-                                    <div class="flex items-center gap-2 text-indigo-600 font-bold text-lg">
-                                        <span class="material-symbols-outlined text-sm">payments</span> $3,000.00
-                                    </div>
-                                    <div class="flex items-center gap-2 text-slate-400 text-xs">
-                                        <span class="material-symbols-outlined text-sm">calendar_month</span> Jan 30 — Mar 31
-                                    </div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button class="flex-1 h-10 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700">Accept Offer</button>
-                                    <button class="flex-1 h-10 border border-slate-200 text-slate-600 text-xs font-bold rounded-lg hover:bg-slate-50">Counteroffer</button>
-                                </div>
-                            </div>
-                            <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm relative group opacity-60">
-                                <div class="absolute top-0 right-0 p-4">
-                                    <span class="material-symbols-outlined text-slate-300">lock_open</span>
-                                </div>
-                                <div class="inline-flex items-center gap-2 px-2 py-1 bg-indigo-50 text-[10px] font-bold text-indigo-600 rounded-md mb-4">
-                                    <span class="material-symbols-outlined text-xs">bolt</span> AI MATCH • 98%
-                                </div>
-                                <h4 class="font-bold text-slate-900 mb-2">Birthday Gala Program</h4>
-                                <div class="flex items-center gap-2 mb-4">
-                                    <div class="size-6 rounded-full bg-slate-200 overflow-hidden">
-                                        <img alt="Client" src="{% static '/images/user/user-03.jpg' %}" />
-                                    </div>
-                                    <span class="text-xs font-semibold text-slate-500">Sarah Jenkins <span class="text-amber-500">★ 5.0</span></span>
-                                </div>
-                                <div class="space-y-2 mb-6">
-                                    <div class="flex items-center gap-2 text-indigo-600 font-bold text-lg">
-                                        <span class="material-symbols-outlined text-sm">payments</span> $2,400.00
-                                    </div>
-                                    <div class="flex items-center gap-2 text-slate-400 text-xs">
-                                        <span class="material-symbols-outlined text-sm">calendar_month</span> Feb 14 — Feb 28
-                                    </div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <div class="flex-1 h-10 bg-indigo-600/50 text-white text-xs font-bold rounded-lg flex items-center justify-center">Accept Offer</div>
-                                    <div class="flex-1 h-10 border border-slate-200 text-slate-600 text-xs font-bold rounded-lg flex items-center justify-center">Counteroffer</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute -top-10 -right-10 bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/50 z-20 hidden xl:block animate-float">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="size-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
-                                <span class="material-symbols-outlined">trending_up</span>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase">Match Score</p>
-                                <p class="text-sm font-bold text-slate-900">Highly Compatible</p>
-                            </div>
-                        </div>
-                        <div class="w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
-                            <div class="w-[94%] h-full bg-emerald-500"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="py-24 px-8">
-            <div class="max-w-7xl mx-auto">
-                <div class="bg-slate-900 rounded-[48px] py-15 px-10 md:px-20 text-center relative overflow-hidden">
-                    <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-accent/20 blur-[120px] rounded-full"></div>
-                    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/20 blur-[120px] rounded-full"></div>
-                    <div class="relative z-10 max-w-2xl mx-auto">
-                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight leading-tight">Ready to gain full visibility?</h2>
-                        <p class="text-slate-400 text-xl mb-12">No credit card required. Join 1,200+ professionals today.</p>
-                        <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <button class="h-16 px-12 bg-white text-black font-bold rounded-full text-lg shadow-xl hover:scale-105 transition-transform">
-                                Get Started Free
-                            </button>
-                            <button class="h-16 px-12 bg-white/10 text-white font-bold rounded-full text-lg backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all">
-                                Talk to Sales
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer class="bg-white py-20 px-8 border-t border-slate-100">
-            <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
-                <div class="col-span-2">
-                    <div class="flex items-center gap-2 mb-4">
-                        <img 
-                            src="{% static 'images/logo/sidebar-logo-light.png' %}" 
-                            alt="Servio" 
-                            class="h-20 w-auto object-contain transition-transform 
-                                duration-200 hover:scale-105"
+
+                    <div class="relative">
+                    <div class="hidden md:block absolute top-10 left-1/2 -translate-x-1/2 w-full h-[80%] pointer-events-none z-0">
+                        <svg class="w-full h-full" viewBox="0 0 1000 400" fill="none" preserveAspectRatio="none">
+                        <path 
+                            d="M 166 40 C 350 40, 350 200, 500 200 C 650 200, 650 360, 833 360" 
+                            stroke="url(#gradient-line)" 
+                            stroke-width="4" 
+                            stroke-dasharray="12 8"
+                            fill="none" 
                         />
+                        <defs>
+                            <linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#3b82f6" />
+                            <stop offset="50%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#22c55e" />
+                            </linearGradient>
+                        </defs>
+                        </svg>
                     </div>
-                    <p class="text-slate-500 max-w-xs leading-relaxed">
-                        The modern operating system for the service economy. Built for speed, precision, and growth.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Capabilities</h4>
-                    <div class="flex flex-col gap-4">
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">Unified Dashboard</a>
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">Automated Reports</a>
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">Smart Escrow</a>
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">Integrations</a>
+
+                    <div class="absolute left-1/2 -translate-x-1/2 top-10 bottom-10 w-0.5 border-l-2 border-dashed border-slate-300 md:hidden z-0"></div>
+
+                    <div class="flex flex-col gap-16 md:gap-0 md:flex-row items-center md:items-start justify-between relative z-10">
+                        
+                        <div class="flex flex-col items-center w-full md:w-1/3 transform transition-all hover:-translate-y-2">
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl md:text-2xl font-bold mb-6 shadow-xl ring-8 ring-white relative z-10">1</div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
+                            <h3 class="font-bold text-xl mb-2">Post Objectives</h3>
+                            <p class="text-slateCustom text-sm leading-relaxed">
+                            Define your KPIs and project scope in our structured environment.
+                            </p>
+                        </div>
+                        </div>
+
+                        <div class="flex flex-col items-center w-full md:w-1/3 md:pt-40 transform transition-all hover:-translate-y-2">
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-purple-500 text-white flex items-center justify-center text-xl md:text-2xl font-bold mb-6 shadow-xl ring-8 ring-white relative z-10">2</div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
+                            <h3 class="font-bold text-xl mb-2">Match & Negotiate</h3>
+                            <p class="text-slateCustom text-sm leading-relaxed">
+                            Connect with vetted experts. Use B2B terms that protect both parties.
+                            </p>
+                        </div>
+                        </div>
+
+                        <div class="flex flex-col items-center w-full md:w-1/3 md:pt-80 transform transition-all hover:-translate-y-2">
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-green-500 text-white flex items-center justify-center text-xl md:text-2xl font-bold mb-6 shadow-xl ring-8 ring-white relative z-10">3</div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
+                            <h3 class="font-bold text-xl mb-2">Perform & Pay</h3>
+                            <p class="text-slateCustom text-sm leading-relaxed">
+                            Work through milestones. Funds released only when requirements are met.
+                            </p>
+                        </div>
+                        </div>
+
+                    </div>
                     </div>
                 </div>
-                <div>
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Company</h4>
-                    <div class="flex flex-col gap-4">
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">About Us</a>
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">Careers</a>
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">Privacy Policy</a>
-                        <a class="text-slate-600 hover:text-black transition-colors" href="#">Terms of Service</a>
-                    </div>
-                </div>
+            </section>
+			<!-- END: How It Works -->
+
+			<!-- BEGIN: Value Proposition (Bento Box) -->
+			<section class="py-24 bg-white">
+				<div class="max-w-7xl mx-auto px-4">
+					<div class="bento-grid">
+						<!-- Main Large Card -->
+						<div class="col-span-12 lg:col-span-8 bg-charcoal rounded-2xl p-10 text-white relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+							<div class="z-10">
+								<h3 class="text-3xl font-bold mb-4">Real B2B Negotiation</h3>
+								<p class="text-gray-400 max-w-md">Moving beyond bidding. Servio provides the framework for professional contracts, MSA integration, and complex deliverables management.</p>
+							</div>
+							<div class="z-10 mt-8">
+								<button class="px-6 py-3 bg-white text-charcoal rounded-xl font-bold hover:bg-gray-100 transition-all">Learn About Contracts</button>
+							</div>
+							<div class="absolute right-0 bottom-0 opacity-20 transform translate-x-1/4 translate-y-1/4">
+								<svg fill="none" height="400" viewbox="0 0 400 400" width="400" xmlns="http://www.w3.org/2000/svg">
+									<circle cx="200" cy="200" r="199" stroke="white" stroke-dasharray="10 10" stroke-width="2"></circle>
+									<circle cx="200" cy="200" r="150" stroke="white" stroke-width="2"></circle>
+								</svg>
+							</div>
+						</div>
+						<!-- Side Card 1 -->
+						<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-blue-50 rounded-2xl p-8 border border-blue-100">
+							<div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary mb-6 shadow-sm">
+								<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+									<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+								</svg>
+							</div>
+							<h3 class="text-xl font-bold mb-3">Escrow Protection</h3>
+							<p class="text-slateCustom text-sm leading-relaxed">Your capital is secured in audited escrow accounts, released strictly on milestone approval.</p>
+						</div>
+						<!-- Side Card 2 -->
+						<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-gray-50 rounded-2xl p-8 border border-gray-100">
+							<div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary mb-6 shadow-sm">
+								<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+								</svg>
+							</div>
+							<h3 class="text-xl font-bold mb-3">Verified Professionals</h3>
+							<p class="text-slateCustom text-sm leading-relaxed">Every expert undergoes identity, skill, and background verification before joining.</p>
+						</div>
+						<!-- Long Bottom Card -->
+						<div class="col-span-12 lg:col-span-8 bg-offWhite rounded-2xl p-8 border border-gray-200 flex flex-col md:flex-row items-center gap-8">
+							<div class="flex-1">
+								<h3 class="text-xl font-bold mb-3">Compliance Ready</h3>
+								<p class="text-slateCustom text-sm">Automated tax forms, SOC2 compliance, and enterprise-grade security for your global workforce.</p>
+							</div>
+							<div class="flex gap-2">
+								<div class="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center font-bold text-gray-400">SOC2</div>
+								<div class="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center font-bold text-gray-400">GDPR</div>
+								<div class="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center font-bold text-gray-400">ISO</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- END: Value Proposition -->
+
+			<!-- BEGIN: Testimonials -->
+			<section class="py-24 bg-charcoal text-white">
+				<div id="testimonials" class="max-w-7xl mx-auto px-4">
+					<h2 class="text-4xl font-bold text-center mb-20">Trusted by Global Leaders</h2>
+					<div class="grid md:grid-cols-3 gap-10">
+						<div class="p-8 rounded-2xl bg-white/5 border border-white/10">
+							<p class="text-lg italic mb-8 text-gray-300">"Servio completely changed how we handle our outsourced engineering. The milestone-based payments keep everyone aligned."</p>
+							<div class="flex items-center gap-4">
+								<img alt="Sarah Chen" class="w-12 h-12 rounded-full border border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPdhkHriLCHmAjAvjDy-5gQ4mbfLPd_A9i7gxUr4UW0tp7--C2raLYF-_Zp4oh5tNUaIVjPjPCe3NtiuI35z3K5enNg8-2HAarB0Z7x5CwkY1jqRd3foiIzirq9AB-6UKhIiA9OAPOjKXjwQ-lLFnt7IWj9YjWbpIg8jVutyFc6l880KUGhm8xawLelusCVQZAjCX7x_n05YiEVVt8S5ZbtggxtNw1QEQ6vMEk_k0NVM03dZo56IrZQC9P5fuqON4FYmSgw1Bmpws" />
+								<div>
+									<p class="font-bold">Sarah Chen</p>
+									<p class="text-sm text-gray-500">VP of Product, Finly</p>
+								</div>
+							</div>
+						</div>
+						<div class="p-8 rounded-2xl bg-white/5 border border-white/10">
+							<p class="text-lg italic mb-8 text-gray-300">"The quality of experts is miles ahead of any other platform. It's built for actual business professionals."</p>
+							<div class="flex items-center gap-4">
+								<img alt="Marcus Aurelius" class="w-12 h-12 rounded-full border border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQm9xrknUWO-QCjPD1k7wG_enPwzDOxfWjOazHF7b14gawAfQfLYI-PSczTLbMBA9OGtuo09UtyLwMjG4gIge2FvaJa29Y_76AAqBbOPWBBbrmke8BdXbXKmAmQGuzxDCT-11NcrhT6TO8DZYYbmXr6nm_1U296lLBUUj92cRffw9dNT4qk7AE1_N-ztsxTN0Vj02qZObFujn18tnrSMeCY2mcrsm50sh9I7XxaxbTg1VPYOJ_k6Q1zTZSQ2xR3eFgXcbFZHl5Pog" />
+								<div>
+									<p class="font-bold">Marcus Thorne</p>
+									<p class="text-sm text-gray-500">Founder, Pillar Group</p>
+								</div>
+							</div>
+						</div>
+						<div class="p-8 rounded-2xl bg-white/5 border border-white/10">
+							<p class="text-lg italic mb-8 text-gray-300">"We found our entire go-to-market team here. The negotiation framework is extremely sophisticated."</p>
+							<div class="flex items-center gap-4">
+								<img alt="Elena Rodriguez" class="w-12 h-12 rounded-full border border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVZHg5l4F45_i5TYp9W4qZmWNiUHE5uJQ6VyBoEumpsxKwnTtu3M8BHdjSmadFAOh-89QpwXYAozDFnbMyLWDIzydD5spt6YJQnV80T9_ISJWpX3r3zsdr-D8WiSzVsf4BfLLAgCnk5-j2w9sYdKFZHI6z4BXLAqyUnaBpulFCAUHgRn6LshS7b6NakVOv1Eke1Ha8S39aZrUxLMyyjOu23J3cIX4qNysoV0xmyFmcqiRyON0CBsQ-u09fpBfIWLYbTP04yUj2mWk" />
+								<div>
+									<p class="font-bold">Elena Rodriguez</p>
+									<p class="text-sm text-gray-500">COO, CloudStream</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- END: Testimonials -->
+			
+            <!-- BEGIN: Final CTA -->
+			<<section class="py-24 relative overflow-hidden bg-slate-950">
+  <div class="absolute inset-0 z-0">
+    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full animate-pulse"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 blur-[120px] rounded-full animate-pulse-slow"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
+    
+    <div class="relative group bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[40px] p-12 lg:p-24 shadow-[0_0_80px_-15px_rgba(59,130,246,0.3)] overflow-hidden">
+      
+      <div class="absolute inset-0 pointer-events-none opacity-50">
+        <div class="absolute top-[-10%] left-[10%] w-2 h-4 bg-blue-400 rotate-45 animate-fall-slow"></div>
+        <div class="absolute top-[-5%] left-[30%] w-3 h-3 bg-purple-400 rounded-full animate-fall"></div>
+        <div class="absolute top-[-15%] left-[70%] w-2 h-5 bg-pink-400 -rotate-12 animate-fall-slow delay-700"></div>
+        <div class="absolute top-[-8%] left-[90%] w-3 h-3 bg-yellow-400 animate-fall delay-300"></div>
+      </div>
+
+      <div class="relative z-20">
+        <span class="inline-block py-1 px-4 mb-6 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-sm font-medium tracking-wide uppercase">
+          Join the Future of Service
+        </span>
+        
+        <h2 class="text-5xl lg:text-7xl font-extrabold mb-8 tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
+          Run your business <br class="hidden md:block" /> 
+          without the <span class="text-blue-400">chaos.</span>
+        </h2>
+
+        <p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+          Ditch the messy WhatsApp threads. Join <span class="text-white font-semibold">10,000+ top-tier companies</span> who’ve reclaimed their time and scaled with Servio.
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+          <button class="group relative px-12 py-6 bg-white text-slate-950 rounded-2xl font-bold text-xl transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]">
+            <span class="relative z-10">Get Started for Free</span>
+            <div class="absolute inset-0 overflow-hidden rounded-2xl">
+              <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shimmer"></div>
             </div>
-            <div class="max-w-7xl mx-auto pt-20 mt-20 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
-                <p class="text-slate-400 text-sm">© 2026 Servio by Divgm. All rights reserved.</p>
-                <div class="flex items-center gap-6">
-                    <a class="text-slate-400 hover:text-black transition-colors text-sm" href="#">Twitter</a>
-                    <a class="text-slate-400 hover:text-black transition-colors text-sm" href="#">LinkedIn</a>
-                    <a class="text-slate-400 hover:text-black transition-colors text-sm" href="#">GitHub</a>
-                </div>
-            </div>
-        </footer>
-    </body>
+          </button>
+          
+          <button class="px-12 py-6 bg-transparent text-white rounded-2xl font-bold text-xl border border-white/20 hover:bg-white/5 transition-colors">
+            Contact Sales
+          </button>
+        </div>
+      </div>
+
+      <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+    </div>
+  </div>
+</section>
+
+
+			<!-- END: Final CTA -->
+		</main>
+		<!-- BEGIN: Footer -->
+		<footer class="bg-white border-t border-gray-100 pt-20 pb-12">
+			<div class="max-w-7xl mx-auto px-4">
+				<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 mb-20">
+					<div class="col-span-2">
+						<a class="text-2xl font-bold tracking-tight text-charcoal flex items-center gap-2 mb-6" href="#">
+							<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+								<div class="w-3 h-3 bg-white rounded-full"></div>
+							</div>
+							Servio
+						</a>
+						<p class="text-slateCustom text-sm leading-relaxed max-w-xs">
+							The professional network for complex B2B performance. Vetted experts, secured capital, guaranteed delivery.
+						</p>
+					</div>
+					<div>
+						<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-gray-400">Platform</h4>
+						<ul class="space-y-4 text-sm text-slateCustom">
+							<li><a class="hover:text-primary transition-colors" href="#">How it Works</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">For Agencies</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">For Enterprise</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+						</ul>
+					</div>
+					<div>
+						<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-gray-400">Categories</h4>
+						<ul class="space-y-4 text-sm text-slateCustom">
+							<li><a class="hover:text-primary transition-colors" href="#">Engineering</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Design</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Sales</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Marketing</a></li>
+						</ul>
+					</div>
+					<div>
+						<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-gray-400">Resources</h4>
+						<ul class="space-y-4 text-sm text-slateCustom">
+							<li><a class="hover:text-primary transition-colors" href="#">Help Center</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Guides</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Community</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">API Docs</a></li>
+						</ul>
+					</div>
+					<div>
+						<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-gray-400">Legal</h4>
+						<ul class="space-y-4 text-sm text-slateCustom">
+							<li><a class="hover:text-primary transition-colors" href="#">Privacy</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Terms</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">Cookie Policy</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+					<p class="text-xs text-gray-400">© 2024 Servio Global Performance Network. All rights reserved.</p>
+					<div class="flex gap-6">
+						<a class="text-gray-400 hover:text-primary transition-colors" href="#">
+							<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+								<path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+							</svg>
+						</a>
+						<a class="text-gray-400 hover:text-primary transition-colors" href="#">
+							<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+								<path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</div>
+		</footer>
+        <script>
+            const logo = document.getElementById('navbar-logo');
+            const navButton = document.getElementById('nav-cta-button');
+            const navLinks = document.getElementById('nav-links');
+            const heroSection = document.getElementById('hero');
+            const testimonialsSection = document.getElementById('testimonials');
+
+            const yellowClasses = ['bg-secondary', 'text-charcoal'];
+            const primaryClasses = ['bg-primary', 'text-white'];
+
+            const observerOptions = {threshold: 0.01 };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navButton.classList.add(...yellowClasses);
+                        navButton.classList.remove(...primaryClasses);
+
+                        logo.src = logo.dataset.dark;
+
+                        navLinks.classList.add('text-white');
+                        navLinks.classList.remove('text-charcoal');
+                    } else {
+                        navButton.classList.add(...primaryClasses);
+                        navButton.classList.remove(...yellowClasses);
+                        logo.src = logo.dataset.light;
+                        navLinks.classList.add('text-charcoal');
+                        navLinks.classList.remove('text-white');
+                    }
+                });
+            }, observerOptions);
+
+            observer.observe(heroSection);
+            // observer.observe(testimonialsSection);
+        </script>
+	</body>
 </html>

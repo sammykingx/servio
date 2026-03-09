@@ -89,7 +89,8 @@ class ProposalRole(models.Model):
     
     @property
     def budget_difference(self):
-        return self.proposed_amount - self.role_amount
+        diff = self.proposed_amount - self.role_amount
+        return f"+${diff:,.2f}" if diff > 0 else f"-${abs(diff):,.2f}" if diff < 0 else "No Change"
         
     def clean(self):
         from django.core.exceptions import ValidationError

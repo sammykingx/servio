@@ -1,5 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.base import TemplateView
 from django.views import View
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
