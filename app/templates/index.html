@@ -44,7 +44,7 @@
 				</nav>
 				<!-- Right: Button -->
 				<div>
-					<a id="nav-cta-button" href="{% url AUTH_URLS.SIGNUP %}" class="bg-primary text-white text-sm font-bold h-11 px-8 py-4 rounded-full shadow-lg hover:bg-slate-800 transition-all">
+					<a id="nav-cta-button" href="{% url AUTH_URLS.SIGNUP %}" class="bg-primary text-white text-sm font-bold h-11 px-8 py-4 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all">
 					    Get Started
 					</a>
 				</div>
@@ -152,7 +152,7 @@
                         <div class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
                         <div class="animate-reversespin flex flex-col items-center group">
                             <div class="w-14 h-14 md:w-16 md:h-16 bg-pink-50 rounded-2xl flex items-center justify-center text-pink-600 shadow-sm border border-pink-100 group-hover:scale-110 transition-transform">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                            	<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                             </div>
                             <span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Design</span>
                         </div>
@@ -192,7 +192,7 @@
                     
                     <div class="text-center mb-16 md:mb-20">
                     <h2 class="text-3xl md:text-4xl font-bold mb-4">Built for clarity</h2>
-                    <p class="text-slateCustom max-w-xl mx-auto px-4">Your project journey, simplified — from objectives to payment.</p>
+                    <p class="text-slateCustom max-w-xl mx-auto px-4">Your project journey simplified from objectives to payment.</p>
                     </div>
 
                     <div class="relative">
@@ -234,7 +234,7 @@
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
                             <h3 class="font-bold text-xl mb-2">Match & Negotiate</h3>
                             <p class="text-slateCustom text-sm leading-relaxed">
-                            Connect with vetted experts. Use B2B terms that protect both parties.
+                            Connect with vetted experts. See deliverables before committing.
                             </p>
                         </div>
                         </div>
@@ -244,7 +244,7 @@
                         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
                             <h3 class="font-bold text-xl mb-2">Perform & Pay</h3>
                             <p class="text-slateCustom text-sm leading-relaxed">
-                            Work through milestones. Funds released only when requirements are met.
+                            Work through deliverables. Funds are released automatically at agreed terms, no stress.
                             </p>
                         </div>
                         </div>
@@ -260,13 +260,13 @@
 				<div class="max-w-7xl mx-auto px-4">
 					<div class="bento-grid">
 						<!-- Main Large Card -->
-						<div class="col-span-12 lg:col-span-8 bg-charcoal rounded-2xl p-10 text-white relative overflow-hidden flex flex-col justify-between min-h-[400px]">
+						<div id="b2b-coal" class="col-span-12 lg:col-span-8 bg-charcoal rounded-2xl p-10 text-white relative overflow-hidden flex flex-col justify-between min-h-[400px]">
 							<div class="z-10">
-								<h3 class="text-3xl font-bold mb-4">Real B2B Negotiation</h3>
-								<p class="text-gray-400 max-w-md">Moving beyond bidding. Servio provides the framework for professional contracts, MSA integration, and complex deliverables management.</p>
+								<h3 class="text-3xl font-bold mb-4">Build a Team, Not Just a Project</h3>
+								<p class="text-gray-400 max-w-md">Many projects require multiple skills. Servio lets you assemble a team in one project need managed orderly.</p>
 							</div>
 							<div class="z-10 mt-8">
-								<button class="px-6 py-3 bg-white text-charcoal rounded-xl font-bold hover:bg-gray-100 transition-all">Learn About Contracts</button>
+								<a href="{% url AUTH_URLS.SIGNUP %}" class="px-6 py-3 bg-white text-charcoal rounded-xl font-bold hover:bg-gray-100 transition-all">Join servio</a>
 							</div>
 							<div class="absolute right-0 bottom-0 opacity-20 transform translate-x-1/4 translate-y-1/4">
 								<svg fill="none" height="400" viewbox="0 0 400 400" width="400" xmlns="http://www.w3.org/2000/svg">
@@ -283,8 +283,8 @@
 									<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
 								</svg>
 							</div>
-							<h3 class="text-xl font-bold mb-3">Escrow Protection</h3>
-							<p class="text-slateCustom text-sm leading-relaxed">Your capital is secured in audited escrow accounts, released strictly on milestone approval.</p>
+							<h3 class="text-xl font-bold mb-3">Smart Talent Matching</h3>
+							<p class="text-slateCustom text-sm leading-relaxed">Servio matches project needs with the right professionals automatically, ensuring the best fit for every task <span class="text-emerald-600 font-semibold">no endless searching.</span></p>
 						</div>
 						<!-- Side Card 2 -->
 						<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-gray-50 rounded-2xl p-8 border border-gray-100">
@@ -293,14 +293,14 @@
 									<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
 								</svg>
 							</div>
-							<h3 class="text-xl font-bold mb-3">Verified Professionals</h3>
-							<p class="text-slateCustom text-sm leading-relaxed">Every expert undergoes identity, skill, and background verification before joining.</p>
+							<h3 class="text-xl font-bold mb-3">Real Value without Price Wars</h3>
+							<p class="text-slateCustom text-sm leading-relaxed">Work on your terms, clients receive quality results, no undercutting, no race to the lowest price. Earn the value for your work.</p>
 						</div>
 						<!-- Long Bottom Card -->
 						<div class="col-span-12 lg:col-span-8 bg-offWhite rounded-2xl p-8 border border-gray-200 flex flex-col md:flex-row items-center gap-8">
 							<div class="flex-1">
-								<h3 class="text-xl font-bold mb-3">Compliance Ready</h3>
-								<p class="text-slateCustom text-sm">Automated tax forms, SOC2 compliance, and enterprise-grade security for your global workforce.</p>
+								<h3 class="text-xl font-bold mb-3">Guaranteed Payments</h3>
+								<p class="text-slateCustom text-sm">Funds are secured upfront and released automatically when agreed work is completed. You don’t chase clients, and clients only pay for work delivered.</p>
 							</div>
 							<div class="flex gap-2">
 								<div class="w-12 h-12 rounded-lg bg-white border border-gray-200 flex items-center justify-center font-bold text-gray-400">SOC2</div>
@@ -354,56 +354,56 @@
 			<!-- END: Testimonials -->
 			
             <!-- BEGIN: Final CTA -->
-			<<section class="py-24 relative overflow-hidden bg-slate-950">
-  <div class="absolute inset-0 z-0">
-    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full animate-pulse"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 blur-[120px] rounded-full animate-pulse-slow"></div>
-  </div>
+			<section class="py-24 relative overflow-hidden bg-slate-950">
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full animate-pulse"></div>
+                    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 blur-[120px] rounded-full animate-pulse-slow"></div>
+                </div>
 
-  <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
-    
-    <div class="relative group bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[40px] p-12 lg:p-24 shadow-[0_0_80px_-15px_rgba(59,130,246,0.3)] overflow-hidden">
-      
-      <div class="absolute inset-0 pointer-events-none opacity-50">
-        <div class="absolute top-[-10%] left-[10%] w-2 h-4 bg-blue-400 rotate-45 animate-fall-slow"></div>
-        <div class="absolute top-[-5%] left-[30%] w-3 h-3 bg-purple-400 rounded-full animate-fall"></div>
-        <div class="absolute top-[-15%] left-[70%] w-2 h-5 bg-pink-400 -rotate-12 animate-fall-slow delay-700"></div>
-        <div class="absolute top-[-8%] left-[90%] w-3 h-3 bg-yellow-400 animate-fall delay-300"></div>
-      </div>
+                <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
+                    
+                    <div class="relative group bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[40px] p-12 lg:p-24 shadow-[0_0_80px_-15px_rgba(59,130,246,0.3)] overflow-hidden">
+                    
+                    <div class="absolute inset-0 pointer-events-none opacity-50">
+                        <div class="absolute top-[-10%] left-[10%] w-2 h-4 bg-blue-400 rotate-45 animate-fall-slow"></div>
+                        <div class="absolute top-[-5%] left-[30%] w-3 h-3 bg-purple-400 rounded-full animate-fall"></div>
+                        <div class="absolute top-[-15%] left-[70%] w-2 h-5 bg-pink-400 -rotate-12 animate-fall-slow delay-700"></div>
+                        <div class="absolute top-[-8%] left-[90%] w-3 h-3 bg-yellow-400 animate-fall delay-300"></div>
+                    </div>
 
-      <div class="relative z-20">
-        <span class="inline-block py-1 px-4 mb-6 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-sm font-medium tracking-wide uppercase">
-          Join the Future of Service
-        </span>
-        
-        <h2 class="text-5xl lg:text-7xl font-extrabold mb-8 tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
-          Run your business <br class="hidden md:block" /> 
-          without the <span class="text-blue-400">chaos.</span>
-        </h2>
+                    <div class="relative z-20">
+                        <span class="inline-block py-1 px-4 mb-6 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-sm font-mono tracking-wide uppercase">
+                            There’s a better way
+                        </span>
+                        
+                        <h2 class="text-2xl lg:text-4xl font-extrabold mb-8 tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
+							From big projects to everyday tasks, <br class="hidden md:block" /> 
+							get it done the <span class="text-emerald-500 font-semibold">right way.</span>
+                        </h2>
 
-        <p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
-          Ditch the messy WhatsApp threads. Join <span class="text-white font-semibold">10,000+ top-tier companies</span> who’ve reclaimed their time and scaled with Servio.
-        </p>
+                        <p class="text-sm md:text-lg text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                        	WhatsApp threads are messy, and <span>freelance platforms create bidding wars</span>. <br>Servio connects you with the right professionals in one organized workspace.
+                        </p>
 
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
-          <button class="group relative px-12 py-6 bg-white text-slate-950 rounded-2xl font-bold text-xl transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]">
-            <span class="relative z-10">Get Started for Free</span>
-            <div class="absolute inset-0 overflow-hidden rounded-2xl">
-              <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shimmer"></div>
-            </div>
-          </button>
-          
-          <button class="px-12 py-6 bg-transparent text-white rounded-2xl font-bold text-xl border border-white/20 hover:bg-white/5 transition-colors">
-            Contact Sales
-          </button>
-        </div>
-      </div>
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                        <a href="{% url AUTH_URLS.SIGNUP %}" class="group relative px-12 py-6 bg-white text-slate-950 rounded-2xl font-bold text-md md:text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]">
+                            <span class="relative z-10">Get Started for Free</span>
+                            <div class="absolute inset-0 overflow-hidden rounded-2xl">
+                                <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shimmer"></div>
+                            </div>
+                        </a>
+                        
+                        <button class="px-12 py-6 bg-transparent text-white rounded-2xl font-bold text-md md:text-xl border border-white/20 hover:bg-white/5 transition-colors">
+                            Contact Sales
+                        </button>
+                        </div>
+                    </div>
 
-      <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
-    </div>
-  </div>
-</section>
+                    <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl"></div>
+                    </div>
+                </div>
+            </section>
 
 
 			<!-- END: Final CTA -->
@@ -413,23 +413,24 @@
 			<div class="max-w-7xl mx-auto px-4">
 				<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 mb-20">
 					<div class="col-span-2">
-						<a class="text-2xl font-bold tracking-tight text-charcoal flex items-center gap-2 mb-6" href="#">
+						<!-- <a class="text-2xl font-bold tracking-tight text-charcoal flex items-center gap-2 mb-6" href="#">
 							<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
 								<div class="w-3 h-3 bg-white rounded-full"></div>
 							</div>
 							Servio
-						</a>
-						<p class="text-slateCustom text-sm leading-relaxed max-w-xs">
-							The professional network for complex B2B performance. Vetted experts, secured capital, guaranteed delivery.
+						</a> -->
+						<p class="text-center md:text-left text-slateCustom text-sm leading-relaxed max-w-xs">
+							Find the right professionals. Work clearly. Pay securely.
 						</p>
 					</div>
 					<div>
 						<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-gray-400">Platform</h4>
 						<ul class="space-y-4 text-sm text-slateCustom">
 							<li><a class="hover:text-primary transition-colors" href="#">How it Works</a></li>
+							<li><a class="hover:text-primary transition-colors" href="#">For Users</a></li>
 							<li><a class="hover:text-primary transition-colors" href="#">For Agencies</a></li>
 							<li><a class="hover:text-primary transition-colors" href="#">For Enterprise</a></li>
-							<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+							
 						</ul>
 					</div>
 					<div>
@@ -460,7 +461,7 @@
 					</div>
 				</div>
 				<div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-					<p class="text-xs text-gray-400">© 2024 Servio Global Performance Network. All rights reserved.</p>
+					<p class="text-xs text-gray-400">© 2026 Servio by divgm. All rights reserved.</p>
 					<div class="flex gap-6">
 						<a class="text-gray-400 hover:text-primary transition-colors" href="#">
 							<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
@@ -482,6 +483,7 @@
             const navLinks = document.getElementById('nav-links');
             const heroSection = document.getElementById('hero');
             const testimonialsSection = document.getElementById('testimonials');
+			const b2bCoalSection = document.getElementById('b2b-coal');
 
             const yellowClasses = ['bg-secondary', 'text-charcoal'];
             const primaryClasses = ['bg-primary', 'text-white'];
@@ -508,8 +510,28 @@
                 });
             }, observerOptions);
 
+			const pageObserverOptions = {threshold: 0 };
+
+			const pageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navButton.classList.add(...yellowClasses);
+                        navButton.classList.remove(...primaryClasses);
+
+                        logo.src = logo.dataset.dark;
+
+                    } else {
+                        navButton.classList.add(...primaryClasses);
+                        navButton.classList.remove(...yellowClasses);
+                        logo.src = logo.dataset.light;
+                    }
+                });
+            }, pageObserverOptions);
+
             observer.observe(heroSection);
-            // observer.observe(testimonialsSection);
+
+            // pageObserver.observe(b2bCoalSection);
+            pageObserver.observe(testimonialsSection);
         </script>
 	</body>
 </html>
