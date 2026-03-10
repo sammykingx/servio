@@ -2,7 +2,8 @@ from django.urls import path, include, reverse_lazy
 from django.views.generic import RedirectView
 from core.url_names import CollaborationURLS
 from .views.list import CollaborationListView
-from .views.create import CreateCollaborationView, EditGigView
+from .views.create import CreateCollaborationView
+from .views.modify import EditGigView, LiveEditCollaborationView
 from .views.detail import GigDetailView
 from .views.delete import DeleteGigView
 from .proposals import urls as proposal_urls
@@ -28,6 +29,10 @@ urlpatterns = [
     ),
     path("modify/<slug:slug>/", EditGigView.as_view(),
          name=CollaborationURLS.EDIT_COLLABORATION,
+    ),
+    path("live/modify/<slug:slug>/",
+         LiveEditCollaborationView.as_view(),
+         name=CollaborationURLS.LIVE_COLLABORATION_EDIT,
     ),
     path("new-collaborations", CreateCollaborationView.as_view(),
          name=CollaborationURLS.CREATE_COLLABORATION,
