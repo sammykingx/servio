@@ -154,31 +154,56 @@
                             </div>
                             
                             <div class="flex justify-between items-center">
-                                <span class="text-[11px] font-bold text-gray-500 uppercase tracking-tight">Active Experts</span>
-                                <div class="flex -space-x-2">
-                                    <img class="size-8 rounded-full border-2 border-white dark:border-gray-900 object-cover" src="https://i.pravatar.cc/100?u=9" />
-                                    <img class="size-8 rounded-full border-2 border-white dark:border-gray-900 object-cover" src="https://i.pravatar.cc/100?u=12" />
-                                    <div class="size-8 rounded-full bg-gray-50 dark:bg-white/5 border-2 border-white dark:border-gray-800 flex items-center justify-center text-[10px] font-bold text-brand-500">
-                                        +4
+                                <span class="text-[11px] font-bold text-gray-500 uppercase tracking-tight">Active Proposals</span>
+                                {% if proposals %}
+                                    <div class="flex -space-x-2">
+                                        {% for proposal in proposals|slice:":3" %}
+                                            {% if proposal.sender.profile.avatar_url %}
+                                                <div 
+                                                    class="size-8 rounded-full border-2 border-white dark:border-gray-900 bg-cover bg-center"
+                                                    title="{{ proposal.sender.first_name }} {{ proposal.sender.last_name }}"
+                                                    style='background-image:url("{{ proposal.sender.profile.avatar_url.url }}")'>
+                                                </div>
+                                            {% else %}
+                                                <div 
+                                                    class="size-8 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-900 bg-brand-500 dark:bg-brand-400 text-white text-xs font-bold"
+                                                    title="{{ proposal.sender.first_name }} {{ proposal.sender.last_name }}"
+                                                >
+                                                    {{ proposal.sender.first_name|slice:":1"|upper }}{{ proposal.sender.last_name|slice:":1"|upper }}
+
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if proposals|length > 3 %}
+                                            <div class="size-8 rounded-full bg-gray-50 dark:bg-white/5 border-2 border-white dark:border-gray-800 flex items-center justify-center text-[10px] font-bold text-brand-500">
+                                                +{{ proposals|length|add:"-3" }}
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                </div>
+                                {% else %}
+                                    <!-- Empty State -->
+                                    <span class="text-xs text-gray-400 dark:text-gray-500 italic">
+                                        No proposals yet
+                                    </span>
+                                {% endif %}
                             </div>
                         </div>
 
                         <div class="p-4 rounded-2xl bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/[0.05] space-y-3">
                             <h4 class="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-4">Financial Ledger</h4>
-                            
-                            <div class="flex justify-between items-center">
-                                <span class="text-[11px] text-gray-500">Total Role Amount</span>
-                                <span class="text-xs font-bold text-gray-900 dark:text-white">
-                                    ${{ gig.total_role_budget|intcomma }}
-                                </span>
-                            </div>
+                            {% if gig.has_gig_roles %}
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[11px] text-gray-500">Total Role Amount</span>
+                                    <span class="text-xs font-bold text-gray-900 dark:text-white">
+                                        ${{ gig.total_role_budget|intcomma }}
+                                    </span>
+                                </div>
+                            {% endif %}
 
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center gap-1.5">
                                     <span class="text-[11px] text-gray-500">In Escrow</span>
-                                    <span class="material-symbols-outlined text-[10px] text-warning-500">lock</span>
+                                    <span class="material-symbols-outlined text-[8px] text-warning-500">lock</span>
                                 </div>
                                 <span class="text-xs font-bold text-warning-600 dark:text-warning-400">
                                     {% if escrowed %}
@@ -200,16 +225,17 @@
                                 </span>
                             </div>
                         </div>
-
-                        <div class="pt-2">
-                            <div class="flex justify-between items-center mb-3">
-                                <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tight">Milestone Progress</p>
-                                <p class="text-xs font-bold text-gray-900 dark:text-white">64%</p>
+                        {% if milestone %}
+                            <div class="pt-2">
+                                <div class="flex justify-between items-center mb-3">
+                                    <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-tight">Milestone Progress</p>
+                                    <p class="text-xs font-bold text-gray-900 dark:text-white">64%</p>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                                    <div class="bg-brand-500 dark:bg-brand-400 h-full rounded-full transition-all duration-1000" style="width: 64%"></div>
+                                </div>
                             </div>
-                            <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
-                                <div class="bg-brand-500 dark:bg-brand-400 h-full rounded-full transition-all duration-1000" style="width: 64%"></div>
-                            </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
 

@@ -19,6 +19,7 @@ import json
 GigCategory = get_registered_model("collaboration", "GigCategory")
 GigModel = get_registered_model("collaboration", "Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
+ProposalModel = get_registered_model("collaboration", "Proposal")
 
 
 class EditGigView(LoginRequiredMixin, DetailView):
@@ -95,8 +96,11 @@ class EditGigView(LoginRequiredMixin, DetailView):
         """
         return (
             super().get_queryset()
-            .filter(creator=self.request.user)
-            .select_related("creator")
+            .filter(
+                creator=self.request.user,
+                status__in=[GigStatus.DRAFT, GigStatus.PENDING]
+            )
+            .select_related("creator") # no need for adding the creator since the creator is the request.user, but it doesn't hurt to have it for other contexts
             .prefetch_related(
                 Prefetch(
                     "required_roles",
@@ -409,7 +413,10 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
         return (
             super()
             .get_queryset()
-            .filter(creator=self.request.user)
+            .filter(
+                creator=self.request.user,
+                status__in=[GigStatus.PUBLISHED]
+            )
         )
 
     def get_object(self, queryset=None):
@@ -439,5 +446,19 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        gig = self.object
+        proposals = (
+            ProposalModel.objects
+            .filter(gig=gig)
+            .select_related("sender__profile")
+            .order_by("-created_at")
+            .only(
+                "sender__first_name", 
+                "sender__last_name", 
+                "sender__profile__avatar_url"
+            )
+        )
+        
+        context["proposals"] = proposals
 
         return context
