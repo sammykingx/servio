@@ -21,7 +21,7 @@ GigModel = get_registered_model("collaboration", "Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
 
 
-class EditGigView(LoginRequiredMixin, View):
+class EditGigView(LoginRequiredMixin, DetailView):
     """
     Handles editing of an existing Gig/Project owned by the authenticated user.
 
@@ -73,10 +73,12 @@ class EditGigView(LoginRequiredMixin, View):
     This view is designed to be safe, transactional, and frontend-friendly,
     making it suitable for asynchronous editing workflows.
     """
-    allowed_http_methods = ["GET", "POST"]
+    # allowed_http_methods = ["GET", "POST"]
     template_name = Collabs.EDIT
     model = GigModel
     context_object_name = "gig"
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
 
     def get_queryset(self):
         """
@@ -92,7 +94,8 @@ class EditGigView(LoginRequiredMixin, View):
         ownership and reduce database queries.
         """
         return (
-            GigModel.objects.filter(creator=self.request.user)
+            super().get_queryset()
+            .filter(creator=self.request.user)
             .select_related("creator")
             .prefetch_related(
                 Prefetch(
@@ -115,30 +118,13 @@ class EditGigView(LoginRequiredMixin, View):
         except Http404:
             return redirect(CollaborationURLS.LIST_COLLABORATIONS)
 
-    def get(self, request, slug) -> HttpResponse:
+    def get_context_data(self, **kwargs):
         """
-        Renders the gig edit page.
-
-        Fetches the specified gig and its associated roles, then prepares a
-        serialized JSON payload consumed by the frontend editing interface.
-
-        Context includes:
-        - The gig instance
-        - Serialized gig roles
-        - Taxonomy metadata
-        - Payment option labels
-        - Editable gig statuses
-
-        Redirects to the collaboration list if the gig does not exist or does
-        not belong to the current user.
+        
         """
-        try:
-            gig = self.get_queryset().get(slug=slug)
-            roles = gig.required_roles.all().order_by("-created_at")
-            
-        except GigModel.DoesNotExist:
-            return redirect(CollaborationURLS.LIST_COLLABORATIONS)
-
+        context = super().get_context_data()
+        gig = self.object
+        roles = gig.required_roles.all()
         roles_payload = [
             {
                 "nicheId": role.niche_id,
@@ -153,15 +139,14 @@ class EditGigView(LoginRequiredMixin, View):
             for role in roles
         ]   
         
-        context = {
-            "gig": gig,
+        context.update({
             "gig_roles_json": json.dumps(roles_payload),
             "gig_taxonomy":  GigCategory.objects.get_taxonomy_json(),
             "payment_labels": json.dumps(PAYMENT_OPTIONS),
             "editable_statuses": ["pending", "draft"],
-        }
+        })
 
-        return render(request, self.template_name, context)
+        return context
 
     def post(self, request, *args, **kwargs):
         """
@@ -415,4 +400,44 @@ class EditGigView(LoginRequiredMixin, View):
 class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
     template_name = Collabs.LIVE_EDIT
     model = get_registered_model("collaboration", "Gig")
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
     context_object_name = "gig"
+    
+    # from django internals, get_object calls get_queryset
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .filter(creator=self.request.user)
+        )
+
+    def get_object(self, queryset=None):
+        gig = super().get_object(queryset)
+
+        if gig.has_gig_roles:
+            gig.required_roles_cache = list(
+                GigRoleModel.objects
+                .filter(gig=gig)
+                .only("niche_name", "role_name", "budget")
+            )
+
+        return gig
+    
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Wraps the standard dispatch method to gracefully handle 404 errors.
+
+        If a Http404 is raised during request processing (e.g., gig not found),
+        the user is redirected to the collaborations list instead of seeing
+        a default error page.
+        """
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except Http404:
+            return redirect(CollaborationURLS.LIST_COLLABORATIONS)
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        return context

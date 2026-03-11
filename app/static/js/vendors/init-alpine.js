@@ -1,7 +1,7 @@
 document.addEventListener("alpine:init", () => {
     // Main menu interactions (dropdowns, etc.)
     Alpine.data("menu", () => ({
-        selected: "", // stores currently opened menu section
+        selected: "",
         select(menu) {
             this.selected = this.selected === menu ? "" : menu;
         },
@@ -33,29 +33,6 @@ document.addEventListener("alpine:init", () => {
             return this.formatDate(date);
         }
     }));
-
-    // Modal management
-    Alpine.store("modals", {
-        profile: false,
-        address: false,
-        socials: false,
-
-        // optional: helper methods
-        open(modalName) {
-            this[modalName] = true;
-        },
-        close(modalName) {
-            this[modalName] = false;
-        },
-        toggle(modalName) {
-            this[modalName] = !this[modalName];
-        },
-        closeAll() {
-            this.profile = false;
-            this.address = false;
-            this.socials = false;
-        }
-    });
 
     Alpine.store("dropdown", {
         openId: null,

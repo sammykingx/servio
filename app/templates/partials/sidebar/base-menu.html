@@ -23,30 +23,7 @@
 				<img class="hidden dark:block object-center"
 					src="{% static 'images/logo/sidebar-logo-dark.png' %}" alt="Logo" />
 			</span>
-
-			<!-- ICON LOGO (desktop only, when collapsed) -->
-			<!-- <img class="logo-icon"
-				:class="sidebarToggle ? 'hidden xl:block' : 'hidden'"
-				src="{% static 'images/logo/logo-icon.svg' %}" alt="Logo"
-			/> -->
-
     	</a>
-		<!-- <a href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}">
-			<span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-			<img class="dark:hidden" src="{% static 'images/logo/sidebar-logo-light.png' %}" alt="Logo" />
-			<img
-				class="hidden dark:block"
-				src="{% static 'images/logo/sidebar-logo-dark.png' %}"
-				alt="Logo"
-				/>
-			</span>
-			<img
-				class="logo-icon"
-				:class="sidebarToggle ? 'xl:block' : 'hidden'"
-				src="{% static 'images/logo/logo-icon.svg' %}"
-				alt="Logo"
-				/>
-		</a> -->
 	</div>
 	<!-- SIDEBAR HEADER END -->
 	<div
@@ -122,49 +99,6 @@
 							Sign out
 						</button>
 					</form>
-					 <!-- <li>
-						<a
-							href="{% url AUTH_URLS.LOGOUT %}"
-							class="menu-item group text-gray-500"
-							:class=" (selected === 'logout') && (page === 'sign-out') ? 'menu-item-active' : 'menu-item-inactive'"
-						>
-							<svg
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M16 17L21 12L16 7"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-								<path
-									d="M21 12H9"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-								<path
-									d="M12 19C12 19.5304 11.7893 20.0391 11.4142 20.4142C11.0391 20.7893 10.5304 21 10 21H6C5.46957 21 4.96086 20.7893 4.58579 20.4142C4.21071 20.0391 4 19.5304 4 19V5C4 4.46957 4.21071 3.96086 4.58579 3.58579C4.96086 3.21071 5.46957 3 6 3H10C10.5304 3 11.0391 3.21071 11.4142 3.58579C11.7893 3.96086 12 4.46957 12 5"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-							<span
-								class="menu-item-text"
-								:class="sidebarToggle ? 'xl:hidden' : ''"
-							>
-								Sign Out
-							</span>
-						</a>
-					</li> -->
 				</ul>
 			</div>
 		</nav>
@@ -190,6 +124,5 @@
 			Purchase Plan
 			</a>
 		</div>
-		<!-- Promo Box -->
 	</div>
 </aside>

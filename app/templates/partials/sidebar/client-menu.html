@@ -113,20 +113,6 @@
             </span>
          </a>
       </li>
-      <!-- <li>
-         <a
-            href="{% url PROPOSALS.RECEIVED_PROPOSALS %}"
-            class="menu-item group {% url PROPOSALS.RECEIVED_PROPOSALS as proposal_url %}{% if request.path == proposal_url %}menu-item-active{% else %}menu-item-inactive{% endif %}"
-            >
-            <span class="material-symbols-outlined icon-negotiations">contract</span>
-            <span
-               class="menu-item-text"
-               :class="sidebarToggle ? 'xl:hidden' : ''"
-            >
-               Proposals
-            </span>
-         </a>
-      </li> -->
       <li x-data="{ open: false }">
          {% with url_name=request.resolver_match.url_name %}
             <!-- Parent Item -->

@@ -45,6 +45,7 @@
 				w-full max-w-md px-4 space-y-3 pointer-events-none">
 		</div>
 		
+		
 		<!-- Ambient Background -->
 		<div class="fixed inset-0 -z-10 overflow-hidden">
 			<div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full 
@@ -56,6 +57,8 @@
 			<div class="absolute bottom-0 left-1/4 w-[400px] h-[400px] rounded-full 
 				bg-purple-500/10 blur-3xl animate-pulse-slowest"></div>
 		</div>
+		<!-- Small Device Overlay Start -->
+				{% include "components/overlay.html" %}
 
 		<!-- ===== Preloader Start ===== -->
 		{% include "components/preloader.html" %}
@@ -69,8 +72,6 @@
     			backdrop-blur-xl bg-white/70 dark:bg-gray-900/70"
 			>
 
-				<!-- Small Device Overlay Start -->
-				{% include "components/overlay.html" %}
 				<!-- ===== Header Start ===== -->
 				{% include "partials/header.html" %}
 				<!-- ===== Main Content Start ===== -->
