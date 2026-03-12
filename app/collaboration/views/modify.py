@@ -640,12 +640,19 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
 
                 GigRoleModel.objects.bulk_update(updates, ["budget"])
                 
-                for role in updates:
-                    ProposalRoleModel.objects.filter(
-                        gig_role=role
-                    ).update(
-                        role_amount=role.budget
-                    )
+                # im still thinking on the side effects
+                # as it affects the proposals providers
+                # sents before the update, it fucks integrity
+                # for role in updates:
+                #     ProposalRoleModel.objects.filter(
+                #         gig_role=role
+                #     ).update(
+                #         role_amount=role.budget
+                #     )
+                    
+                # emitt a signal to proposal service to notify users
+                # that the role amoun has change if they'll want to
+                # update the proposal
                 
                 
         except OperationalError:
