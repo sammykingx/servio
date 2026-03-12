@@ -33,7 +33,7 @@ class VisibilityEnum(str, Enum):
 class GigPayload(BaseModel):
     title: str = Field(..., max_length=320)
     description: str = Field(..., max_length=3000)
-    projectBudget: Decimal = Field(..., gt=0)
+    projectBudget: Decimal = Field(..., gt=0, max_digits=12, decimal_places=2)
     visibility: VisibilityEnum
     startDate: date
     endDate: date

@@ -28,7 +28,7 @@
                             Project Title
                         </label>
                         <div class="flex items-center gap-2">
-                            <span class="text-base font-semibold text-gray-700 dark:text-gray-300 truncate">
+                            <span id="project-name" class="text-base font-semibold text-gray-700 dark:text-gray-300 truncate">
                                 {{ gig.title|title }}
                             </span>
                             <span class="material-symbols-outlined text-xs text-gray-500">lock</span>
@@ -50,7 +50,7 @@
                 
                 <div class="grid grid-cols-2 gap-8">
                     <div class="space-y-2">
-                        <label class="text-[11px] font-medium text-gray-400 uppercase tracking-wider ml-1" for="start-date">Start date</label>
+                        <label for="start-date" class="text-[11px] font-medium text-gray-400 uppercase tracking-wider ml-1" for="start-date">Start date</label>
                         <input class="w-full px-5 py-3.5 border border-gray-100 dark:border-gray-700 rounded-xl 
                             focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 
                             text-sm font-normal text-gray-700 dark:text-gray-400 outline-none" 
@@ -58,7 +58,7 @@
                         />
                     </div>
                     <div class="space-y-2">
-                        <label class="text-[11px] font-medium text-gray-400 uppercase tracking-wider ml-1" for="end-date">Est. Due date</label>
+                        <label for="end-date" class="text-[11px] font-medium text-gray-400 uppercase tracking-wider ml-1" for="end-date">Est. Due date</label>
                         <input class="w-full px-5 py-3.5 border border-gray-100 dark:border-gray-700 rounded-xl 
                             focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 
                             text-sm font-normal text-gray-700 dark:text-gray-400 outline-none" 
@@ -88,11 +88,15 @@
                     </div>
 
                     <div class="mb-12">
-                        <label class="text-xs md:text-sm text-gray-500 uppercase tracking-[0.2em] mb-4 block">Total Budget Allocation (USD)</label>
+                        <label forid="total-budget" class="text-xs md:text-sm text-gray-500 uppercase tracking-[0.2em] mb-4 block">Total Budget Allocation (USD)</label>
                         <div class="flex items-center gap-4 group">
                             <span class="text-4xl font-light text-success-500">$</span>
                             <input class="bg-transparent border-none p-0 text-5xl md:text-6xl text-white focus:ring-0 w-full selection:bg-brand-500 font-bold" 
-                                id="total-budget" type="text" value="{{ gig.total_budget|intcomma }}" 
+                                id="total-budget"
+                                type="text"
+                                inputmode="decimal"
+                                data-currency-format
+                                value="{{ gig.total_budget|intcomma }}" 
                             />
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">click to modify budget</p>
@@ -123,7 +127,13 @@
                                     <div class="relative shrink-0 ml-4">
                                         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-semibold text-xs">$</span>
                                         <input 
-                                            type="text" 
+                                            type="text"
+                                            id="role-amount"
+                                            inputmode="decimal"
+                                            data-currency-format
+                                            data-role-budget-input
+                                            data-industry-id="{{ role.niche_id }}" 
+                                            data-role-id="{{ role.role_id }}"
                                             value="{{ role.budget|intcomma }}"
                                             class="w-24 md:w-32 pl-7 pr-4 py-2.5 bg-black border border-gray-800 rounded-xl text-sm font-bold text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none" 
                                         />
@@ -181,7 +191,6 @@
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    <!-- Empty State -->
                                     <span class="text-xs text-gray-400 dark:text-gray-500 italic">
                                         No proposals yet
                                     </span>
@@ -189,7 +198,7 @@
                             </div>
                         </div>
 
-                        <div class="p-4 rounded-2xl bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/[0.05] space-y-3">
+                        <div class="p-4 rounded-2xl bg-gray-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/[0.05] space-y-3">
                             <h4 class="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-4">Financial Ledger</h4>
                             {% if gig.has_gig_roles %}
                                 <div class="flex justify-between items-center">
@@ -241,11 +250,17 @@
 
                 <div class="bg-white dark:bg-black p-3 rounded-[1.5rem] shadow-[0_20px_50px_rgba(16,24,40,0.08)] border border-gray-100 dark:border-gray-700">
                     <div class="p-4 space-y-2">
-                        <button class="w-full bg-brand-500 hover:bg-brand-400 text-white font-bold py-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-lg shadow-black/10">
+                        <button
+                            id="saveChanges"
+                            data-endpiont="{% url COLLABORATION_URLS.LIVE_COLLABORATION_EDIT slug=gig.slug %}"
+                            data-csrf-token="{{ csrf_token }}"
+                            class="w-full bg-brand-500 hover:bg-brand-400 text-white font-bold py-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-lg shadow-black/10">
                             <span class="material-symbols-outlined text-lg">rocket_launch</span>
                             Save Changes
                         </button>
-                        <button class="w-full text-gray-500 hover:text-error-600 dark:hover:text-error-500 
+                        <button
+                            id="discardChanges"
+                            class="w-full text-gray-500 hover:text-error-600 dark:hover:text-error-500 
                             py-3 rounded-xl text-sm transition-all tracking-[0.2em] uppercase
                             bg-gray-50 dark:bg-transparent"
                         >
@@ -264,4 +279,32 @@
         </aside>
     </div>
 </div>
+{% endblock %}
+{% block custom_page_js %}
+<script src="{% static 'js/collaboration/managers/modifyLiveProject.js' %}"></script>
+<script src="{% static 'js/collaboration/update-live-gig.js' %}"></script>
+<script src="{% static 'js/utils/sendRequest.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        window.projectCollector = new ProjectDataCollector();
+        window.projectCollector.init();
+
+        const saveBtn = document.getElementById('saveChanges');
+        const discardBtn = document.getElementById('discardChanges');
+
+        if (saveBtn) {
+            saveBtn.addEventListener('click', async () => {
+                await updateLiveGig();
+            });
+        }
+
+        if (discardBtn) {
+            discardBtn.addEventListener('click', () => {
+                if (confirm("Are you sure? All unsaved modifications will be lost.")) {
+                    window.location.reload();
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

@@ -15,7 +15,7 @@ class GigRolePayload(BaseModel):
     niche: str
     professionalId: int = Field(..., gt=0)
     professional: str = Field(..., max_length=90)
-    budget: Decimal = Field(..., gt=30)
+    budget: Decimal = Field(..., gt=30, max_digits=12, decimal_places=2)
     paymentOption: PaymentOption = PaymentOption.SPLIT_50_50
     description: str = Field(..., max_length=730)
     slots: Optional[int] = Field(1, gt=0)

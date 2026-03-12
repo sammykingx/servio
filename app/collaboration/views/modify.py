@@ -1,11 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction, IntegrityError, OperationalError
 from django.db.models import Model, Prefetch
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, View
-from django.http import Http404, JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
-from core.url_names import CollaborationURLS
+from django.http import Http404, JsonResponse
+from django.shortcuts import redirect
+from django.views.generic import DetailView
 from collaboration.models.choices import GigStatus
+from collaboration.schemas.modify_gig import ModifyLiveGig
+from core.url_names import CollaborationURLS
 from formatters.pydantic_formatter import format_pydantic_errors
 from registry_utils import get_registered_model
 from template_map.collaboration import Collabs
@@ -96,10 +97,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
         """
         return (
             super().get_queryset()
-            .filter(
-                creator=self.request.user,
-                status__in=[GigStatus.DRAFT, GigStatus.PENDING]
-            )
+            .filter(creator=self.request.user)
             .select_related("creator") # no need for adding the creator since the creator is the request.user, but it doesn't hurt to have it for other contexts
             .prefetch_related(
                 Prefetch(
@@ -118,7 +116,15 @@ class EditGigView(LoginRequiredMixin, DetailView):
         a default error page.
         """
         try:
+            self.object = self.get_object()
+            if self.object.status == GigStatus.PUBLISHED:
+                return redirect(CollaborationURLS.LIVE_COLLABORATION_EDIT, slug=self.object.slug)
+            
+            if self.object.status not in (GigStatus.DRAFT, GigStatus.PENDING):
+                return redirect(CollaborationURLS.LIST_COLLABORATIONS)
+
             return super().dispatch(request, *args, **kwargs)
+        
         except Http404:
             return redirect(CollaborationURLS.LIST_COLLABORATIONS)
 
@@ -168,7 +174,6 @@ class EditGigView(LoginRequiredMixin, DetailView):
         """
         gig_slug = kwargs.get("slug")
         try:
-            gig = self.get_queryset().get(slug=gig_slug)
             payload = json.loads(request.body)
             gig_data = GigPayload(**payload)
             self.update_gig_data(gig_slug, gig_data)
@@ -197,13 +202,14 @@ class EditGigView(LoginRequiredMixin, DetailView):
         
         except GigError as err:
             return JsonResponse(
-        {
-            "error": err.error,
-            "message": err.message,
-            "status": err.type,
-        },
-        status=err.status_code,
-    )
+                {
+                    "error": err.error,
+                    "message": err.message,
+                    "status": err.type,
+                },
+                status=err.status_code,
+            )
+            
         return JsonResponse(
             {
                 "status": "success",
@@ -417,6 +423,14 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
                 creator=self.request.user,
                 status__in=[GigStatus.PUBLISHED]
             )
+            .only(
+                "id",
+                "slug",
+                "has_gig_roles",
+                "start_date",
+                "end_date",
+                "total_budget",
+            )
         )
 
     def get_object(self, queryset=None):
@@ -462,3 +476,127 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
         context["proposals"] = proposals
 
         return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        try:
+            payload = json.loads(request.body)
+            gig_data = ModifyLiveGig(**payload)
+            self.validate_gig(gig_data)
+            
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {
+                    "error": "Invalid JSON payload",
+                    "message": "Request body should be a valid JSON data, check and try again.",
+                },
+                status=400,
+            )
+            
+        except ValidationError as e:
+            return JsonResponse(
+                {
+                    "error": "Validation error",
+                    "message": "Some required information is missing or invalid.",
+                    "fields": format_pydantic_errors(e),
+                },
+                status=400,
+            )
+        
+        except GigError as err:
+            return JsonResponse(
+                {
+                    "error": err.error,
+                    "message": err.message,
+                    "status": err.type,
+                },
+                status=err.status_code,
+            )
+            
+        except Exception:
+            return JsonResponse({}, status=500)
+        
+        return JsonResponse(
+            {
+                "msg": "was succefull",
+            }, status=200
+        )
+        
+    def validate_gig(self, payload:ModifyLiveGig):
+        from django.utils import timezone
+    
+        today = timezone.now().date()
+        
+        if self.object.start_date <= today:
+            if payload.start_date <= today:
+                raise GigError("Project commencement date must be in the future")
+        
+        if self.object.has_gig_roles and payload.roles is None:
+            raise GigError("No role data provided in request data")
+        
+        payload_role_pairs = set()
+
+        if self.object.has_gig_roles:
+            for role in payload.roles:
+                payload_role_pairs.add((role.industry_id, role.role_id))
+                
+            gig_role_pairs = {
+                (role.niche_id, role.role_id)
+                for role in self.object.required_roles.all()
+            }
+            
+            invalid_roles = payload_role_pairs - gig_role_pairs
+
+            if invalid_roles:
+                raise GigError(
+                    f"Invalid role identifiers detected in request data"
+                )
+
+            if len(payload_role_pairs) != len(gig_role_pairs):
+                raise GigError("Role payload does not match project's configuration")
+
+        return True
+    
+    @transaction.atomic
+    def partial_gig_update(self, payload:ModifyLiveGig):
+        from django.db import DatabaseError, OperationalError, IntegrityError
+        try:
+            gig = (
+                self.model.objects
+                .select_for_update(nowait=True)
+                .get(pk=self.object.pk)
+            )
+            
+            gig.start_date = payload.start_date
+            gig.end_date = payload.end_date
+            gig.total_budget = payload.project_budget
+
+            gig.save(update_fields=[
+                "start_date",
+                "end_date",
+                "total_budget",
+            ])
+            
+            if self.object.has_gig_roles:
+                roles = {
+                    (r.niche_id, r.role_id): r
+                    for r in (
+                        GigRoleModel.objects
+                        .select_for_update(nowait=True)
+                        .filter(gig=self.object)
+                    )
+                }
+
+                updates = []
+
+                for role in payload.roles:
+                    obj = roles[(role.industry_id, role.role_id)]
+                    obj.budget = role.amount
+                    updates.append(obj)
+
+                GigRoleModel.objects.bulk_update(updates, ["budget"])
+        except OperationalError as err:
+            raise GigError("")
+        
+        except DatabaseError:
+            raise

@@ -36,7 +36,7 @@ class GigRole(models.Model):
         blank=True,
         help_text="Optional specific role title (e.g. Senior Frontend Engineer)"
     )
-    budget = models.DecimalField(max_digits=10, decimal_places=2)
+    budget = models.DecimalField(max_digits=12, decimal_places=2)
     payment_option = models.CharField(
         max_length=40,
         choices=PaymentOption.choices,
