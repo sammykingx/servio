@@ -19,10 +19,15 @@ async function updateLiveGig() {
         const result = await response.json();
 
         if (response.ok) {
-            showToast("Project updated successfully!", "success");
-            // setTimeout(() => window.location.reload(), 1500);
+            const msg = "We've updated your project details. Everything looks good!";
+            showToast(
+                result.message || msg,
+                "success",
+                result.title || "All set, Changes Saved"
+            );
+            setTimeout(() => window.location.reload(), 1500);
         } else {
-            console.log(JSON.stringify(result, null, 2));
+            // console.log(JSON.stringify(result, null, 2));
             showToast(
                 result.message || "Please check your inputs.",
                 result.status || "error",

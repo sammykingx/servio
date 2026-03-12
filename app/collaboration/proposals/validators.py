@@ -70,7 +70,6 @@ class ProposalValidator:
             Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP
         )
         calc_proposal_value = calc_role_value + service_fee
-        print(proposal_value, calc_role_value, service_fee, calc_proposal_value)
         if proposal_value != calc_proposal_value:
             message = (
                 f"Double-check your numbers! The proposal worth (${proposal_value:,.2f}) "

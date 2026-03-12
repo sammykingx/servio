@@ -3,6 +3,7 @@ from django.db import transaction, IntegrityError, OperationalError
 from django.db.models import Model, Prefetch
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from collaboration.models.choices import GigStatus
 from collaboration.schemas.modify_gig import ModifyLiveGig
@@ -14,7 +15,10 @@ from ..exceptions import GigError
 from ..schemas.gig import GigPayload
 from ..schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
-import json
+import json, logging
+
+
+logger = logging.getLogger(__name__)
 
 
 GigCategory = get_registered_model("collaboration", "GigCategory")
@@ -209,12 +213,27 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 },
                 status=err.status_code,
             )
+        
+        except Exception as e:
+            logger.error(
+                f"Error in EditGigView for slug {kwargs.get('slug')}: {str(e)}",
+                exc_info=True,
+                extra={
+                    'user': request.user.email,
+                    'path': request.path
+                }
+            )
+            return JsonResponse({
+                "error": "System Glitch",
+                "message": "We’re having trouble processing this request right now, our team has been notified.",
+                "status": "danger",
+            }, status=500)
             
         return JsonResponse(
             {
                 "status": "success",
-                "message": "Gig updated successfully.",
-                # "url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
+                "message": "Project updated successfully.",
+                "url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
             },
             status=200,
         )
@@ -483,6 +502,7 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
             payload = json.loads(request.body)
             gig_data = ModifyLiveGig(**payload)
             self.validate_gig(gig_data)
+            self.partial_gig_update(gig_data)
             
         except json.JSONDecodeError:
             return JsonResponse(
@@ -513,17 +533,30 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
                 status=err.status_code,
             )
             
-        except Exception:
-            return JsonResponse({}, status=500)
+        except Exception as e:
+            logger.error(
+                f"Error in LiveEditCollaborationView for project {kwargs.get('slug')}: {str(e)}",
+                exc_info=True,
+                extra={
+                    'user': request.user.email,
+                    'path': request.path
+                }
+            )
+            return JsonResponse({
+                "error": "System Glitch",
+                "message": "We encountered an unexpected hiccup. We're on it, please try again shortly!",
+                "status": "error",
+            }, status=500)
         
-        return JsonResponse(
-            {
-                "msg": "was succefull",
-            }, status=200
-        )
+        return JsonResponse({
+            "status": "success",
+            "title": "Live Update Successful",
+            "message": "Your project modifications are now active for all collaborators."
+        }, status=200)
         
     def validate_gig(self, payload:ModifyLiveGig):
         from django.utils import timezone
+        from decimal import Decimal
     
         today = timezone.now().date()
         
@@ -537,8 +570,13 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
         payload_role_pairs = set()
 
         if self.object.has_gig_roles:
+            total_role_sum = Decimal("0")
             for role in payload.roles:
                 payload_role_pairs.add((role.industry_id, role.role_id))
+                total_role_sum += role.amount
+
+            if payload.project_budget < total_role_sum:
+                raise GigError("The total cost of your selected roles exceeds your project budget. Please adjust your budget or roles to continue.")
                 
             gig_role_pairs = {
                 (role.niche_id, role.role_id)
@@ -559,7 +597,11 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
     
     @transaction.atomic
     def partial_gig_update(self, payload:ModifyLiveGig):
-        from django.db import DatabaseError, OperationalError, IntegrityError
+        from django.db import OperationalError, IntegrityError
+        from django.db.models import F
+        
+        ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
+        
         try:
             gig = (
                 self.model.objects
@@ -588,15 +630,27 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
                 }
 
                 updates = []
+                
 
                 for role in payload.roles:
                     obj = roles[(role.industry_id, role.role_id)]
                     obj.budget = role.amount
                     updates.append(obj)
+                    
 
                 GigRoleModel.objects.bulk_update(updates, ["budget"])
-        except OperationalError as err:
-            raise GigError("")
+                
+                for role in updates:
+                    ProposalRoleModel.objects.filter(
+                        gig_role=role
+                    ).update(
+                        role_amount=role.budget
+                    )
+                
+                
+        except OperationalError:
+            raise GigError("Hang tight! This project is being updated by another process. Wait a few seconds and try your update again")
         
-        except DatabaseError:
-            raise
+        except IntegrityError:
+            raise GigError("The gears didn't quite mesh there. Some of the information provided doesn't match our records. Double-check your entries?")
+        

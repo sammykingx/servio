@@ -570,9 +570,6 @@
   .-top-2 {
     top: calc(var(--spacing) * -2);
   }
-  .-top-2\.5 {
-    top: calc(var(--spacing) * -2.5);
-  }
   .-top-3 {
     top: calc(var(--spacing) * -3);
   }
@@ -2579,10 +2576,6 @@
   .border-0 {
     border-style: var(--tw-border-style);
     border-width: 0px;
-  }
-  .border-1 {
-    border-style: var(--tw-border-style);
-    border-width: 1px;
   }
   .border-2 {
     border-style: var(--tw-border-style);
@@ -5253,6 +5246,9 @@
   }
   .\!text-\[48px\] {
     font-size: 48px !important;
+  }
+  .text-\[8px\] {
+    font-size: 8px;
   }
   .text-\[9px\] {
     font-size: 9px;
@@ -8574,14 +8570,6 @@
   .focus\:ring-brand-500 {
     &:focus {
       --tw-ring-color: var(--color-brand-500);
-    }
-  }
-  .focus\:ring-brand-500\/5 {
-    &:focus {
-      --tw-ring-color: color-mix(in srgb, #4c3aff 5%, transparent);
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--color-brand-500) 5%, transparent);
-      }
     }
   }
   .focus\:ring-brand-500\/10 {
@@ -13394,13 +13382,6 @@
       }
     }
   }
-  .dark\:focus\:border-brand-300 {
-    &:where(.dark, .dark *) {
-      &:focus {
-        border-color: var(--color-brand-300);
-      }
-    }
-  }
   .dark\:focus\:border-brand-400 {
     &:where(.dark, .dark *) {
       &:focus {
@@ -13433,16 +13414,6 @@
     &:where(.dark, .dark *) {
       &:focus {
         border-color: var(--color-warning-200);
-      }
-    }
-  }
-  .dark\:focus\:ring-brand-300\/5 {
-    &:where(.dark, .dark *) {
-      &:focus {
-        --tw-ring-color: color-mix(in srgb, #9990ff 5%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          --tw-ring-color: color-mix(in oklab, var(--color-brand-300) 5%, transparent);
-        }
       }
     }
   }
