@@ -185,7 +185,13 @@
 						<div class="flex justify-between items-start">
 							<div>
 								<h4 class="font-medium text-lg">{{ role.niche_name|truncatechars:24 }}</h4>
-								<p class="text-sm text-gray-500">{{ role.role_name|truncatechars:24 }}</p>
+								<p class="text-sm text-gray-500">
+									{{ role.role_name|truncatechars:24 }}
+									{% if role.status == "assigned" %}
+										<span class="px-2 py-0.5 rounded bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/30 dark:text-fuchsia-400 text-[10px] font-medium uppercase">{{ role.status }}</span>
+									{% endif %}
+								</p>
+								<p></p>
 							</div>
 							<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-success-900/30 dark:text-success-400 text-[10px] font-medium uppercase">Slots: {{ role.slots }}</span>
 						</div>

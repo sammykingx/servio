@@ -126,9 +126,11 @@
     --color-purple-900: oklch(38.1% 0.176 304.987);
     --color-purple-950: oklch(29.1% 0.149 302.717);
     --color-fuchsia-50: oklch(97.7% 0.017 320.058);
+    --color-fuchsia-100: oklch(95.2% 0.037 318.852);
     --color-fuchsia-400: oklch(74% 0.238 322.16);
     --color-fuchsia-500: oklch(66.7% 0.295 322.15);
     --color-fuchsia-600: oklch(59.1% 0.293 322.896);
+    --color-fuchsia-700: oklch(51.8% 0.253 323.949);
     --color-fuchsia-800: oklch(45.2% 0.211 324.591);
     --color-fuchsia-900: oklch(40.1% 0.17 325.612);
     --color-pink-50: oklch(97.1% 0.014 343.198);
@@ -1625,9 +1627,6 @@
   .max-h-\[400px\] {
     max-height: 400px;
   }
-  .max-h-\[420px\] {
-    max-height: 420px;
-  }
   .min-h-\[92vh\] {
     min-height: 92vh;
   }
@@ -2815,9 +2814,6 @@
   .border-error-200 {
     border-color: var(--color-error-200);
   }
-  .border-gray-50 {
-    border-color: var(--color-gray-50);
-  }
   .border-gray-100 {
     border-color: var(--color-gray-100);
   }
@@ -2859,9 +2855,6 @@
   }
   .border-indigo-200 {
     border-color: var(--color-indigo-200);
-  }
-  .border-indigo-500 {
-    border-color: var(--color-indigo-500);
   }
   .border-orange-100 {
     border-color: var(--color-orange-100);
@@ -3497,6 +3490,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-fuchsia-50) 80%, transparent);
     }
+  }
+  .bg-fuchsia-100 {
+    background-color: var(--color-fuchsia-100);
   }
   .bg-fuchsia-500\/10 {
     background-color: color-mix(in srgb, oklch(66.7% 0.295 322.15) 10%, transparent);
@@ -5714,6 +5710,9 @@
   .text-fuchsia-600 {
     color: var(--color-fuchsia-600);
   }
+  .text-fuchsia-700 {
+    color: var(--color-fuchsia-700);
+  }
   .text-gray-200 {
     color: var(--color-gray-200);
   }
@@ -7538,19 +7537,9 @@
       border-color: var(--color-brand-600);
     }
   }
-  .checked\:border-indigo-600 {
-    &:checked {
-      border-color: var(--color-indigo-600);
-    }
-  }
   .checked\:bg-brand-600 {
     &:checked {
       background-color: var(--color-brand-600);
-    }
-  }
-  .checked\:bg-indigo-600 {
-    &:checked {
-      background-color: var(--color-indigo-600);
     }
   }
   .focus-within\:border-brand-300 {
@@ -11621,11 +11610,6 @@
       @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-indigo-500) 20%, transparent);
       }
-    }
-  }
-  .dark\:bg-indigo-600 {
-    &:where(.dark, .dark *) {
-      background-color: var(--color-indigo-600);
     }
   }
   .dark\:bg-indigo-800 {

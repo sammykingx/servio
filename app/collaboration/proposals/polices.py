@@ -32,7 +32,7 @@ class ProposalPolicy:
     """
     Stateless decision logic for proposal-related actions.
     """
-
+    
     @staticmethod
     def check_gig_eligibility(gig, user):
         """Validates if the Gig is in a state to accept proposals."""
@@ -63,6 +63,11 @@ class ProposalPolicy:
                 code=PolicyFailure.GIG_START_DATE_PASSED.code,
                 title=PolicyFailure.GIG_START_DATE_PASSED.title,
             )
+            
+    @staticmethod
+    def check_role_eligibility(user, gig):
+        # if gig has roles, and the
+        pass
 
     @staticmethod
     def check_user_eligibility(profile, gig):
@@ -89,23 +94,35 @@ class ProposalPolicy:
                     code=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.code,
                     title=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.title,
                 )
+    @staticmethod
+    def chack_max_proposals(gig):
+        """Ensures the user is not floded with more proposals than they can handle"""
+        pass
 
     @staticmethod
     def check_financial_status(profile):
         """Checks if the user has paid necessary fees."""
         if not profile.has_paid_onetime_fee:
             raise ProposalPermissionDenied(
-                "Please pay the one-time registration fee to apply.",
+                "Please pay the one-time sign-on fee to proceed",
                 code=PolicyFailure.SUBSCRIPTION_REQUIRED.code,
                 title=PolicyFailure.SUBSCRIPTION_REQUIRED.title,
             )
-
+            
     @classmethod
-    def ensure_can_apply(cls, user, profile, gig) -> None:
+    def ensure_can_apply(cls, user, gig) -> None:
         """
         Orchestrator: Runs all checks.
         If any fail, they raise a ProposalPermissionDenied with a specific message.
         """
+        cls.check_user_eligibility(user.profile, gig)
         cls.check_gig_eligibility(gig, user)
-        cls.check_user_eligibility(profile, gig)
-        cls.check_financial_status(profile)
+        cls.check_role_eligibility(gig)
+        
+        cls.check_financial_status(user.profile)
+        
+    
+    # ---- Accepting proposal workflow ------------
+    @classmethod
+    def should_accept_proposal(cls, user, proposal):
+        cls.check_financial_status(user.profile)

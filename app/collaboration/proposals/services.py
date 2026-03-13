@@ -82,6 +82,11 @@ class ProposalService:
     def __init__(self, user: AbstractUser, request):
         self.user = user
         self.request = request
+        if not all([self.user, self.request]):
+            raise Exception(
+                f"Initialization failed: Both 'user' and 'request' are required. "
+                f"Received: user={type(user).__name__}, request={type(request).__name__}"
+            )
 
     def send_proposal(self, gig, payload: SendProposal, is_negotiating: bool):
         """
@@ -105,7 +110,7 @@ class ProposalService:
             ProposalValidationError: If data integrity checks fail.
         """
         try:
-            ProposalPolicy.ensure_can_apply(self.user, self.user.profile, gig)
+            ProposalPolicy.ensure_can_apply(self.user, gig)
             ProposalValidator.validate(payload, gig)
 
             proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
@@ -123,8 +128,21 @@ class ProposalService:
 
         return proposal
 
-    def accept_proposals(self, proposal_id: UUID, proposal_role_id: UUID):
-        pass
+    def accept_proposals(self, proposal_obj: UUID, proposal_role_id: UUID):
+        """User in this context is the project/gig creator"""
+        
+        # proposal ID
+        # if proposal gig has roles
+        #   - update the proposal role
+        #   - 
+        try:
+            ProposalPolicy.should_accept_proposal(self.user, proposal_obj)
+
+        except ProposalPermissionDenied as e:
+            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED:
+                e.redirect_url = get_error_redirect(e.code, {"gig_id": proposal_obj.gig})
+            raise e
+        
 
     def reject_proposals(self, proposal_id: UUID, proposal_role_id: UUID):
         pass

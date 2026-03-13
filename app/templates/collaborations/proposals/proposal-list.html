@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
-{% block browser_title %}Project Proposals{% endblock %}
+{% block browser_title %}Proposals{% endblock %}
 {% block content %}
 <section class="w-full max-w-8xl mx-auto px-3 py-4">
     <div class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -176,29 +176,23 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
-                            <div class="mt-4 flex justify-end gap-3">
-                                {# <form method="POST" action="#"> #}
-                                    {% csrf_token %}
-                                    <button 
-                                        type="buttton"
-                                        @click="showToast('You’re just one step away! Activate your account with a one-time fee to start accepting or rejecting proposals', 'info', 'Preview Mode Active')"
-                                        class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
-                                        bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition">
-                                        Accept
-                                    </button>
-                                {# </form> #}
-
-                                {# <form method="POST" action="#"> #}
-                                    {# @click="confirm('Are you sure you want to reject this proposal? This action cannot be undone.') && $refs.rejectForm.submit()" #}
-                                    {% csrf_token %}
-                                    <button 
-                                        type="button"
-                                        @click="showToast('You’re just one step away! Activate your account with a one-time fee to start accepting or rejecting proposals', 'info', 'Preview Mode Active')"
-                                        class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
-                                        bg-red-50 text-red-600 hover:bg-red-100 transition">
-                                        Reject
-                                    </button>
-                                {# </form> #}
+                            <div id="proposalB=Actions" data-csrf-token="{{ csrf_token }}" data-endpiont="{% PROPOSALS.UPDATE_PROPOSAL_STATUS %}" class="mt-4 flex justify-end gap-3">
+                                <button 
+                                    type="buttton"
+                                    @click="showToast('You’re just one step away! Activate your account with a one-time fee to start accepting or rejecting proposals', 'info', 'Preview Mode Active')"
+                                    class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
+                                        bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition"
+                                >
+                                    Accept
+                                </button>
+                                <button 
+                                    type="button"
+                                    @click="showToast('You’re just one step away! Activate your account with a one-time fee to start accepting or rejecting proposals', 'info', 'Preview Mode Active')"
+                                    class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
+                                        bg-red-50 text-red-600 hover:bg-red-100 transition"
+                                >
+                                    Reject
+                                </button>
                             </div>
                         </div>
                         {% endfor %}
@@ -282,4 +276,8 @@
         </div>
     {% endif %}
 </section>
+{% endblock %}
+{% block custom_page_js %}
+    <script src="{% static 'js/utils/sendRequest.js' %}"></script>
+
 {% endblock %}

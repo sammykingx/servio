@@ -26,7 +26,6 @@ class AccountSettingsView(LoginRequiredMixin, TemplateView):
 
         return context
 
-
 @login_required
 def business_settings_toggle(request) -> HttpResponse:
     if request.htmx:

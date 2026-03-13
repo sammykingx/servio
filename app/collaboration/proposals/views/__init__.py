@@ -1,2 +1,2 @@
-from .proposals import RecievedProposalListView, SentProposalListView
+from .proposals import RecievedProposalListView, SentProposalListView, UpdateProposalStatusView
 from .proposal_role_list import ProposalRoleListView

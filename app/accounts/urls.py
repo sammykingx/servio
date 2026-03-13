@@ -133,10 +133,10 @@ urlpatterns = [
         account_updates.UpdateProfilePictureView.as_view(),
         name=AuthURLNames.UPLOAD_PROFILE_PICTURE,
     ),
-    path(
-        "become-provider/",
-        settings.business_settings_toggle,
-        name=AuthURLNames.SWITCH_TO_BUSINESS,
-    ),
+    # path(
+    #     "become-provider/",
+    #     settings.business_settings_toggle,
+    #     name=AuthURLNames.SWITCH_TO_BUSINESS,
+    # ),
     
 ]

@@ -56,19 +56,19 @@ class RoleStatus(models.TextChoices):
     COMPLETED = "completed", "Completed"
 
 class ProposalStatus(models.TextChoices):
-    # Initial Stages
+    # Initial Stages (what providers see)
     SENT = "sent", "Sent"
     
     # Engagement Tracking
-    REVIEWING = "reviewing", "In Review" # when the cretor opens the proposal
+    REVIEWING = "reviewing", "In Review" # when the cretor opens the proposal to see deliverables, not done yet
     
-    # Active Discussion
+    # Active Discussion (not implemented)
     NEGOTIATING = "negotiating", "Negotiation"
       
     # Final Outcomes
     ACCEPTED = "accepted", "Accepted"
     REJECTED = "rejected", "Rejected"
-    WITHDRAWN = "withdrawn", "Withdrawn"
+    WITHDRAWN = "withdrawn", "Withdrawn" # providers can withdraw their proposal
     
 class AssignmentStatus(models.TextChoices):
     ONGOING = "ongoing", "Ongoing"

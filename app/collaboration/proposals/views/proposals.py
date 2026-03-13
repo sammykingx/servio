@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, DecimalField, Exists, F, OuterRef, Q, Sum
 from django.db.models.functions import Coalesce
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, View
 from collaboration.models.choices import GigStatus, GigVisibility, ProposalStatus
+from collaboration.proposals.services import ProposalService
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
 from decimal import Decimal
@@ -122,3 +125,32 @@ class SentProposalListView(LoginRequiredMixin, ListView):
             .order_by("-sent_at")
         )
         return qs
+    
+class UpdateProposalStatusView(LoginRequiredMixin, View):
+    """Accepts service provider proposal"""
+    
+    allowed_http_names = ["GET"]
+    
+    def get(self, request, *args, **kwrags) -> HttpResponse:
+        state = request.GET.get("state")
+        allowed_states = {
+            ProposalStatus.ACCEPTED, 
+            ProposalStatus.REJECTED, 
+            ProposalStatus.WITHDRAWN
+        }
+        
+        if state not in allowed_states:
+            return HttpResponseBadRequest(f"Invalid or missing state. Received: '{state}'.")
+        
+        proposal_service = ProposalService(self.request.user, request)
+        # if state == ProposalStatus.ACCEPTED:
+        #     proposal_service.accept_proposals("proposal obj", "proposal role_obj")
+        
+        return JsonResponse({
+            "status": "success",
+            "title": f"Proposal {state.title()}",
+            "message": f"The proposal has been {state} and the service provider has been notified"
+        }, status=200)
+        
+        
+    
