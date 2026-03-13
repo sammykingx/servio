@@ -24,3 +24,9 @@ class Collabs:
         DETAIL = f"{__SUB_FOLDER}/detail.html"
         ACCEPT_OFFER = f"{__SUB_FOLDER}/accept-offer.html"
         
+    class Contracts:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("contracts")
+        
+        BUILD_CONTRACT = f"{__SUB_FOLDER}/contract-builder.html"
+        VIEW_CONTRACT = f"{__SUB_FOLDER}/view-contract.html"
+        

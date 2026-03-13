@@ -92,6 +92,10 @@ class ProposalURLS:
     DETAILS = "negotiation_details"
     GIG_NEGOTIATIONS = "gig_negotiations"
     
+class ContractURLS:
+    PREVIEW_CONTRACT = "preview_contract"
+    BUILD_CONTRACT = "build_contract"
+    
     
 class PaymentURLS:
     USER_PAYMENT_SUMMARY = "payment_summary"

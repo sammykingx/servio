@@ -21,7 +21,7 @@ class ProposalDeliverable(models.Model):
         related_name="proposal_deliverables",
     )
 
-    # will be enabled when role based proposl is allowed
+    # will be enabled when role based deliverables is allowed
     # role = models.ForeignKey(
     #     "collaboration.ProposalRole",
     #     on_delete=models.CASCADE,

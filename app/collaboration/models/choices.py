@@ -64,8 +64,7 @@ class ProposalStatus(models.TextChoices):
     
     # Active Discussion
     NEGOTIATING = "negotiating", "Negotiation"
-    
-    
+      
     # Final Outcomes
     ACCEPTED = "accepted", "Accepted"
     REJECTED = "rejected", "Rejected"
