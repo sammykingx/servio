@@ -187,8 +187,6 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
             raise Exception("proposal_service must be an instance of ProposalService")
         
         print(f"Data received: {data.model_dump_json(indent=2)}")
-        import time
-        time.sleep(5)
         service.modify_proposal_state(data)
             
     
