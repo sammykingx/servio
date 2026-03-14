@@ -124,5 +124,5 @@ class ProposalPolicy:
     
     # ---- Accepting proposal workflow ------------
     @classmethod
-    def should_accept_proposal(cls, user, proposal):
+    def should_modify_state(cls, user, proposal):
         cls.check_financial_status(user.profile)

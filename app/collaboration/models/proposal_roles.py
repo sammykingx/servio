@@ -1,5 +1,5 @@
 from django.db import models
-from .choices import PaymentOption
+from .choices import PaymentOption, ProposalRoleStatus
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -54,7 +54,14 @@ class ProposalRole(models.Model):
         max_length=20,
         choices=PaymentOption.choices,
     )
-    # has_gig_role = models.BooleanField()   
+    
+    status = models.CharField(
+        max_length=20,
+        choices=ProposalRoleStatus.choices,
+        default=ProposalRoleStatus.SUBMITTED,
+    )
+    
+    # has_gig_role = models.BooleanField() 
     
     class Meta:
         db_table = "proposal_roles"

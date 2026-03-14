@@ -8,9 +8,12 @@ from django.views.generic import ListView, View
 from collaboration.models.choices import GigStatus, GigVisibility, ProposalStatus
 from collaboration.proposals.exceptions import ProposalError
 from collaboration.proposals.services import ProposalService
+from collaboration.schemas.modify_proposal_state import ModifyProposalState
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
 from decimal import Decimal
+from pydantic import ValidationError
+import json
 
 
 class RecievedProposalListView(LoginRequiredMixin, ListView):
@@ -133,55 +136,59 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
     allowed_http_names = ["PATCH"]
     
     def patch(self, request, *args, **kwrags) -> HttpResponse:
-        state = request.GET.get("state")
-        proposal_id = request.GET.get("proposal_id")
-        proposal_role_id = request.GET.get("proposal_role_id")
-        
-        allowed_states = {
-            ProposalStatus.ACCEPTED, 
-            ProposalStatus.REJECTED, 
-            ProposalStatus.WITHDRAWN
-        }
-        
-        if state not in allowed_states:
-            return JsonResponse({
-                "error": "Unkown State",
-                "message": "Sorry! the state processed isn't on the guest list for this proposal right now.",
-                "status": "error"
-            }, status=400)
-        
         try:
+            payload = json.loads(request.body)
+            data = ModifyProposalState(**payload)
             proposal_service = ProposalService(self.request.user, request)
-            self.update_proposal_state(proposal_service, state)
+            self.update_proposal_state(proposal_service, data)
+            
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "title": "Invalid JSON payload",
+                    "message": "Request body should be a valid JSON data, check and try again.",
+                },
+                status=400,
+            )
+            
+        except ValidationError: 
+            return JsonResponse(
+                {
+                    "title": "Invalid Data Format",
+                    "message": "It looks like some of the information provided doesn't match our requirements. Please check your details and try again.",
+                    "status": "error"
+                },
+                status=400,
+            )
             
         except ProposalError as err:
             return JsonResponse({
-                "error": err.title,
+                "title": err.title,
                 "message": err.message,
                 "status": "error"
             }, status=400)
             
         except Exception:
             return JsonResponse({
-                    "error": "System Glitch",
+                    "title": "System Glitch",
                     "message": "We encountered an unexpected hiccup. Please try again shortly!",
                     "status": "error",
                 }, status=500)
         
         return JsonResponse({
             "status": "success",
-            "title": f"Proposal {state.title()}",
-            "message": f"The proposal has been {state} and the service provider has been notified."
+            "title": f"Proposal {data.state.title()}",
+            "message": f"The proposal has been {data.state} and the service provider has been notified."
         }, status=200)
         
-    def update_proposal_state(self, service: ProposalService, state:str):
+    def update_proposal_state(self, service: ProposalService, data:ModifyProposalState):
         if not isinstance(service, ProposalService):
             raise Exception("proposal_service must be an instance of ProposalService")
         
-        print(f"State received: {state}")
+        print(f"Data received: {data.model_dump_json(indent=2)}")
         import time
         time.sleep(5)
-        # if state == ProposalStatus.ACCEPTED:
-        #     service.accept_proposals("proposal obj", "proposal role_obj")
+        service.modify_proposal_state(data)
             
     

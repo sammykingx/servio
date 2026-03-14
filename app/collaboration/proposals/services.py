@@ -26,13 +26,14 @@ Services orchestrate. Domain modules decide and validate.
 
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
-from django.db import transaction, IntegrityError
+from django.db import transaction, IntegrityError, OperationalError
 from core.url_names import PaymentURLS
 from collaboration.schemas.send_proposal import (
     AppliedRoles,
     DeliverablesPayload,
     SendProposal,
 )
+from collaboration.schemas.modify_proposal_state import ModifyProposalState
 from constants import SERVICE_FEE, DECIMAL_PLACE
 from registry_utils import get_registered_model
 from services.email_service import EmailService
@@ -48,6 +49,14 @@ import logging
 
 
 logger = logging.getLogger("app_file")
+
+GigModel = get_registered_model("collaboration", "Gig")
+GigRoleModel = get_registered_model("collaboration", "GigRole")
+GigCategoryModel = get_registered_model("collaboration", "Gigcategory")
+
+Proposal = get_registered_model("collaboration", "Proposal")
+ProposalRole = get_registered_model("collaboration", "ProposalRole")
+ProposalDeliverable = get_registered_model("collaboration", "ProposalDeliverable")
 
 
 def get_error_redirect(code: str, context: dict = None) -> str:
@@ -128,15 +137,14 @@ class ProposalService:
 
         return proposal
 
-    def accept_proposals(self, proposal_obj: UUID, proposal_role_id: UUID):
+    def modify_proposal_state(self, payload:ModifyProposalState):
         """User in this context is the project/gig creator"""
-        
-        # proposal ID
-        # if proposal gig has roles
-        #   - update the proposal role
-        #   - 
+
         try:
-            ProposalPolicy.should_accept_proposal(self.user, proposal_obj)
+            proposal_role = self.validate_proposal_role(payload.proposal_id, payload.role_id)
+            proposal_obj = proposal_role.proposal
+            ProposalPolicy.should_modify_state(self.user, proposal_obj)
+            self._transition_proposal_status(payload)
 
         except ProposalPermissionDenied as e:
             if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED:
@@ -144,15 +152,29 @@ class ProposalService:
             raise e
         
 
-    def reject_proposals(self, proposal_id: UUID, proposal_role_id: UUID):
-        pass
+    def validate_proposal_role(self, proposal_id:UUID, proposal_role_id:UUID):
+        proposal_role = (
+            Proposal.objects
+            .select_related("proposal", "proposal__gig")
+            .filter(
+                gig_role_id=proposal_role_id,
+                proposal_id=proposal_id,
+                proposal__gig__creator=self.user
+            )
+            .first()
+        )
 
-    def withdraw_proposals(self, proposal_id: UUID, proposal_role_id: UUID):
-        pass
-
+        if not proposal_role:
+            raise ProposalPermissionDenied(
+                message="We couldn't find that specific proposal in your project records. Please make sure you're accessing the correct link.",
+                code=PolicyFailure.APPLICATION_RESTRICTED.code,
+                title=PolicyFailure.APPLICATION_RESTRICTED.title
+            )
+        
+        return proposal_role
+        
     @transaction.atomic
     def create_proposal_bundle(self, gig, payload: SendProposal, is_negotiating: bool):
-        GigModel = get_registered_model("collaboration", "Gig")
         gig = GigModel.objects.get(id=gig.id)
         proposal = self._create_proposal(
             gig, payload.proposal_value, payload.sent_at, is_negotiating
@@ -222,10 +244,6 @@ class ProposalService:
             )
 
     def _create_proposal_roles(self, gig, proposal, applied_roles: List[AppliedRoles]):
-        ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
-        GigRoleModel = get_registered_model("collaboration", "GigRole")
-        GigCategoryModel = get_registered_model("collaboration", "Gigcategory")
-
         role_instances = []
         role_obj = None
 
@@ -246,7 +264,7 @@ class ProposalService:
                         title=PolicyFailure.INVALID_ROLE.title,
                     )
                 role_instances.append(
-                    ProposalRoleModel(
+                    Proposal(
                         proposal=proposal,
                         gig_role=role_obj,
                         gig_category=None,
@@ -260,7 +278,8 @@ class ProposalService:
                 category_obj = GigCategoryModel.objects.get(
                     id=role_payload.niche_id, parent_id=role_payload.industry_id
                 )
-                ProposalRoleModel.objects.create(
+                
+                Proposal.objects.create(
                     proposal=proposal,
                     gig_role=None,
                     gig_category=category_obj,
@@ -270,14 +289,11 @@ class ProposalService:
                 )
 
         if gig.has_gig_roles:
-            ProposalRoleModel.objects.bulk_create(role_instances)
+            ProposalRole.objects.bulk_create(role_instances)
 
     def _create_deliverables(self, proposal, deliverables: List[DeliverablesPayload]):
-        ProposalDeliverableModel = get_registered_model(
-            "collaboration", "ProposalDeliverable"
-        )
         deliverable_instances = [
-            ProposalDeliverableModel(
+            ProposalDeliverable(
                 proposal=proposal,
                 sender=self.user,
                 title=d.title,
@@ -290,8 +306,33 @@ class ProposalService:
             for idx, d in enumerate(deliverables)
         ]
 
-        ProposalDeliverableModel.objects.bulk_create(deliverable_instances)
-
+        ProposalDeliverable.objects.bulk_create(deliverable_instances)
+        
+    @transaction.atomic
+    def _transition_proposal_status(self, payload:ModifyProposalState):
+        try:
+            proposal_role = ProposalRole.objects.select_for_update(nowait=True).get(
+                proposal_id=payload.proposal_id,
+                gig_role_id=payload.role_id,
+            )
+        
+            proposal = Proposal.objects.select_for_update(nowait=True).get(
+                id=payload.proposal_id
+            )
+            
+            if proposal_role.status != payload.state:
+                proposal_role.status = payload.state
+                proposal.status = payload.status
+                        
+                proposal_role.save(update_fields=["status"])
+                proposal.save(update_fields=["status"])
+        
+        except OperationalError:
+            raise ProposalError(
+                message="This proposal is currently being updated by another action. Please wait a moment and try again.",
+                title="Action in Progress",
+            )
+        
     def notifications_flow(self, gig):
         self._notify_creator_by_mail(gig)
         self._in_app_notifications(gig.creator)

@@ -295,13 +295,8 @@
                     // Get data from attributes
                     const baseUrl = actionContainer.getAttribute('data-endpiont');
                     const csrfToken = actionContainer.getAttribute('data-csrf-token');
-                    const proposalId = actionContainer.getAttribute('proposal-id');
-                    const roleId = actionContainer.getAttribute('proposal_role_id');
-
-                    // Construct URL with query parameter
-                    const url = new URL(baseUrl, window.location.origin);
-                    url.searchParams.append('state', status);
-                    
+                    const proposalId = actionContainer.getAttribute('data-proposal-id');
+                    const roleId = actionContainer.getAttribute('data-proposal-role-id');
 
                     const buttons = actionContainer.querySelectorAll('button');
 
@@ -333,14 +328,13 @@
                                 data.status || "error",
                                 data.title || "Update didn't go through"
                             );
-                            return
+                        } else {
+                            showToast(
+                                data.message || "We’ve updated the proposal state for you",
+                                data.status || "success",
+                                data.title || "Proposal Updated"
+                            );
                         }
-
-                        showToast(
-                            data.message || "We’ve updated the proposal state for you",
-                            data.status || "success",
-                            data.title || "Proposal Updated"
-                        );
 
                     } catch {
                         showToast(
@@ -350,7 +344,7 @@
                         );
                     } finally {
                         buttons.forEach(btn => {
-                            btn.disabled = true;
+                            btn.disabled = false;
                             btn.classList.remove('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
                         });
                     }

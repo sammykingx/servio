@@ -70,6 +70,11 @@ class ProposalStatus(models.TextChoices):
     REJECTED = "rejected", "Rejected"
     WITHDRAWN = "withdrawn", "Withdrawn" # providers can withdraw their proposal
     
+class ProposalRoleStatus(models.TextChoices):
+    SUBMITTED = "submitted", "Submitted"
+    ACCEPTED = "accepted", "Accepted"
+    REJECTED = "rejected", "Rejected"
+    
 class AssignmentStatus(models.TextChoices):
     ONGOING = "ongoing", "Ongoing"
     COMPLETED = "completed", "Completed"

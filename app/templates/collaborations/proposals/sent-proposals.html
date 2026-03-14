@@ -95,19 +95,16 @@
                                 </div>
                                 <div class="flex flex-col md:items-end">
                                     <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Status</span>
-                                    {% if role.status == "accepted" %}
-                                        <span class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-[11px] font-medium">
-                                            Accepted
-                                        </span>
-                                    {% elif role.status == "rejected" %}
-                                        <span class="inline-flex items-center gap-1.5 text-red-600 dark:text-red-400 text-[11px] font-medium">
-                                            Rejected
-                                        </span>
-                                    {% else %}
-                                        <span class="inline-flex items-center gap-1.5 text-amber-600 dark:text-amber-400 text-[11px] font-medium">
-                                            Reviewing
-                                        </span>
-                                    {% endif %}
+                                    <span class="inline-flex items-center gap-1.5 
+                                        {% if role.status == 'accepted' %}
+                                            text-emerald-600 dark:text-emerald-400
+                                        {% elif role.status == 'rejected' %}
+                                            text-red-600 dark:text-red
+                                        {% else %}
+                                            text-amber-600 dark:text-amber-400
+                                        {% endif %}
+                                        text-[11px] font-medium
+                                    ">{{ role.status|title }}</span>                            
                                 </div>
                             </div>
                         </div>
