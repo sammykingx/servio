@@ -89,7 +89,9 @@ class ProposalURLS:
     SENT_PROPOSALS = "sent_proposals"
     RECEIVED_PROPOSALS = "gig_with_proposals_listings"
     PROPOSAL_LISTINGS = "proposal_listings"
+    
     DETAILS = "negotiation_details"
+    
     UPDATE_PROPOSAL_STATUS = "update_proposal_status"
     GIG_NEGOTIATIONS = "gig_negotiations"
     

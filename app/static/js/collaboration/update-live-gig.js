@@ -35,8 +35,8 @@ async function updateLiveGig() {
             );
         }
     } catch (error) {
-        console.error("Fetch Error:", error);
-        showToast("System Error", "Could not reach the server.", "error");
+        // anything else asides rendering show tost
+        return;
     } finally {
         saveBtn.disabled = false;
         saveBtn.classList.remove('opacity-70', 'cursor-not-allowed');

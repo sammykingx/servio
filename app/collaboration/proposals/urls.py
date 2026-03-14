@@ -32,9 +32,5 @@ urlpatterns = [
         ProposalRoleListView.as_view(),
         name=ProposalURLS.PROPOSAL_LISTINGS,
     ),
-    path(
-        "details/<slug:slug>",
-        TemplateView.as_view(template_name=Collabs.Proposals.DETAILS),
-        name=ProposalURLS.DETAILS,
-    ),
+    
 ]

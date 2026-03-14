@@ -176,18 +176,18 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
-                            <div id="proposalB=Actions" data-csrf-token="{{ csrf_token }}" data-endpiont="{% PROPOSALS.UPDATE_PROPOSAL_STATUS %}" class="mt-4 flex justify-end gap-3">
-                                <button 
+                            <div id="proposalActions" data-proposal-id="{{ proposal.id }}" data-proposal-role-id="{{ role.gig_role.id }}" data-csrf-token="{{ csrf_token }}" data-endpiont="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" class="mt-4 flex justify-end gap-3">
+                                <button
+                                    id="acceptProposal"
                                     type="buttton"
-                                    @click="showToast('You’re just one step away! Activate your account with a one-time fee to start accepting or rejecting proposals', 'info', 'Preview Mode Active')"
                                     class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
                                         bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition"
                                 >
                                     Accept
                                 </button>
-                                <button 
+                                <button
+                                    id="rejectProposal"
                                     type="button"
-                                    @click="showToast('You’re just one step away! Activate your account with a one-time fee to start accepting or rejecting proposals', 'info', 'Preview Mode Active')"
                                     class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
                                         bg-red-50 text-red-600 hover:bg-red-100 transition"
                                 >
@@ -198,7 +198,7 @@
                         {% endfor %}
                     </div>
 
-                    {% comment "revisit later forui updates" %}
+                    {% comment "revisit later for updates to allow users see deliverables upfront" %}
                         <!-- ACTIONS -->
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <button class="text-xs md:text-sm font-medium text-slate-600 
@@ -279,5 +279,92 @@
 {% endblock %}
 {% block custom_page_js %}
     <script src="{% static 'js/utils/sendRequest.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const actionContainer = document.getElementById('proposalActions');
+
+            if (actionContainer) {
+                actionContainer.addEventListener('click', async (e) => {
+                    
+                    const button = e.target.closest('button');
+                    if (!button) return;
+
+                    const isAccept = button.id === 'acceptProposal';
+                    const status = isAccept ? 'accepted' : 'rejected';
+                    
+                    // Get data from attributes
+                    const baseUrl = actionContainer.getAttribute('data-endpiont');
+                    const csrfToken = actionContainer.getAttribute('data-csrf-token');
+                    const proposalId = actionContainer.getAttribute('proposal-id');
+                    const roleId = actionContainer.getAttribute('proposal_role_id');
+
+                    // Construct URL with query parameter
+                    const url = new URL(baseUrl, window.location.origin);
+                    url.searchParams.append('state', status);
+                    
+
+                    const buttons = actionContainer.querySelectorAll('button');
+
+                    try {
+                        buttons.forEach(btn => {
+                            btn.disabled = true;
+                            btn.classList.add('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
+                        });
+
+                        const response = await fetch(baseUrl, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify({
+                                proposal_id: proposalId,
+                                role_id: roleId,
+                                state: status
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            showToast(
+                                data.message || "We couldn't update the proposal state. Please try again in a moment.",
+                                data.status || "error",
+                                data.title || "Update didn't go through"
+                            );
+                            return
+                        }
+
+                        showToast(
+                            data.message || "We’ve updated the proposal state for you",
+                            data.status || "success",
+                            data.title || "Proposal Updated"
+                        );
+
+                    } catch {
+                        showToast(
+                            "We couldn't reach the server. Please check your internet connection and try again.",
+                            "error",
+                            "Client Side Error"
+                        );
+                    } finally {
+                        buttons.forEach(btn => {
+                            btn.disabled = true;
+                            btn.classList.remove('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
+                        });
+                    }
+                });
+            } else {
+                setTimeout(() => {
+                    showToast(
+                        "Proposal settings failed to load. Refresh to try again or contact support.",
+                        "error", 
+                        "Configuration Error"
+                    );
+                }, 1100);
+            }
+        });
+    </script>
 
 {% endblock %}

@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView, View
 from collaboration.models.choices import GigStatus, GigVisibility, ProposalStatus
+from collaboration.proposals.exceptions import ProposalError
 from collaboration.proposals.services import ProposalService
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
@@ -129,10 +130,13 @@ class SentProposalListView(LoginRequiredMixin, ListView):
 class UpdateProposalStatusView(LoginRequiredMixin, View):
     """Accepts service provider proposal"""
     
-    allowed_http_names = ["GET"]
+    allowed_http_names = ["PATCH"]
     
-    def get(self, request, *args, **kwrags) -> HttpResponse:
+    def patch(self, request, *args, **kwrags) -> HttpResponse:
         state = request.GET.get("state")
+        proposal_id = request.GET.get("proposal_id")
+        proposal_role_id = request.GET.get("proposal_role_id")
+        
         allowed_states = {
             ProposalStatus.ACCEPTED, 
             ProposalStatus.REJECTED, 
@@ -140,17 +144,44 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
         }
         
         if state not in allowed_states:
-            return HttpResponseBadRequest(f"Invalid or missing state. Received: '{state}'.")
+            return JsonResponse({
+                "error": "Unkown State",
+                "message": "Sorry! the state processed isn't on the guest list for this proposal right now.",
+                "status": "error"
+            }, status=400)
         
-        proposal_service = ProposalService(self.request.user, request)
-        # if state == ProposalStatus.ACCEPTED:
-        #     proposal_service.accept_proposals("proposal obj", "proposal role_obj")
+        try:
+            proposal_service = ProposalService(self.request.user, request)
+            self.update_proposal_state(proposal_service, state)
+            
+        except ProposalError as err:
+            return JsonResponse({
+                "error": err.title,
+                "message": err.message,
+                "status": "error"
+            }, status=400)
+            
+        except Exception:
+            return JsonResponse({
+                    "error": "System Glitch",
+                    "message": "We encountered an unexpected hiccup. Please try again shortly!",
+                    "status": "error",
+                }, status=500)
         
         return JsonResponse({
             "status": "success",
             "title": f"Proposal {state.title()}",
-            "message": f"The proposal has been {state} and the service provider has been notified"
+            "message": f"The proposal has been {state} and the service provider has been notified."
         }, status=200)
         
+    def update_proposal_state(self, service: ProposalService, state:str):
+        if not isinstance(service, ProposalService):
+            raise Exception("proposal_service must be an instance of ProposalService")
         
+        print(f"State received: {state}")
+        import time
+        time.sleep(5)
+        # if state == ProposalStatus.ACCEPTED:
+        #     service.accept_proposals("proposal obj", "proposal role_obj")
+            
     
