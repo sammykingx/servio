@@ -5,6 +5,7 @@ from core.url_names import (
 )
 from notifications.models.notification_channels import NotificationChannels
 from accounts.models.profile import UserRole
+from constants import APP_SUBSCRIPTION_FEE
 
 
 class NamespacedURLs:
@@ -51,4 +52,5 @@ def app_urlnames(request):
         "REVIEWS": ReviewURLS,
         "USER_ONBOARDING_URLS": users_onboarding_urls,
         "UserRole": UserRole,
+        "SUBSCRIPTION_FEE": APP_SUBSCRIPTION_FEE,
     }

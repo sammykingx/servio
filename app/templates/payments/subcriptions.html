@@ -4,9 +4,6 @@
 {% block content %}
 <section class="relative flex flex-col items-center justify-center px-4 py-14 overflow-hidden transition-colors duration-500 text-slate-600 dark:text-slate-300">
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full blur-[120px] bg-brand-200/50 dark:bg-brand-500/20 animate-pulse"></div>
-        <div class="absolute bottom-0 right-0 w-[40%] h-[40%] rounded-full blur-[100px] bg-blue-200/40 dark:bg-blue-600/10"></div>
-        
         <div class="absolute top-20 right-[10%] opacity-20 dark:opacity-10 animate-spin-slow">
             <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="100" cy="100" r="80" stroke="currentColor" stroke-width="2" stroke-dasharray="10 10"/>
@@ -16,22 +13,33 @@
     </div>
 
     <div class="relative z-10 text-center mb-16 px-4">
-        <span class="inline-block px-4 py-1.5 mb-6 rounded-full bg-white dark:bg-slate-800 shadow-sm dark:shadow-none border border-slate-200 dark:border-slate-700 text-brand-600 dark:text-brand-400 text-[10px]  uppercase tracking-[0.3em]">
-            Ownership Model
-        </span>
-        <h1 class="text-3xl sm:text-5xl md:text-6xl tracking-tighter text-slate-900 dark:text-white mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-semibold uppercase tracking-widest mb-4 border border-brand-500/20 dark:border-brand-300/20">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500 dark:bg-brand-300"></span>
+            </span>
+            Own Servio once, manage forever.
+        </div>
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-medium tracking-tighter text-slate-900 dark:text-white mb-6">
             Pay once. <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-blue-500 dark:from-brand-400 dark:to-blue-400">Own it</span> forever.
         </h1>
-        <p class="text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-xl mx-auto font-medium">
-            Join the elite circle of professionals. A one-time investment for a lifetime of premium features.
+        <p class="text-xs sm:text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-xl mx-auto font-medium">
+            Join the amazing people who value execution over chatter. Secure lifetime access to our client-provider engine and leave the chaos behind.
         </p>
+        <div class="flex items-center justify-center -space-x-2 my-4">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="{% static 'images/user/user-15.jpg' %}" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="{% static 'images/user/user-22.jpg' %}" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="{% static 'images/user/user-34.jpg' %}" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="{% static 'images/user/user-17.jpg' %}" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="{% static 'images/user/user-36.jpg' %}" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="{% static 'images/user/user-37.jpg' %}" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="{% static 'images/user/user-13.jpg' %}" alt="User">            <div class="size-8 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-semibold text-slate-500">+2k</div>
+        </div>
     </div>
 
-    <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-5">
-        
-        <div class="md:col-span-7 relative group overflow-hidden bg-white/70 dark:bg-slate-900/50 backdrop-blur-2xl border border-white dark:border-white/10 rounded-[3rem] p-8 sm:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col justify-between hover:border-brand-400 dark:hover:border-brand-500/50 transition-all duration-500">
+    <div class="relative w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-5">
+        <div class="md:col-span-7 relative group overflow-hidden bg-white/70 dark:bg-slate-900/50 backdrop-blur-2xl border border-brand-100 dark:border-white/10 rounded-[3rem] p-8 sm:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col justify-between hover:border-brand-400 dark:hover:border-brand-300/50 transition-all duration-500">
             <div class="absolute -right-20 -top-20 size-64 bg-brand-500/5 dark:bg-brand-500/10 rounded-full blur-3xl group-hover:bg-brand-500/20 transition-colors"></div>
-            
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-12">
                     <div>
@@ -44,7 +52,7 @@
                 </div>
 
                 <div class="flex items-baseline gap-4 mb-10">
-                    <span class="text-8xl  text-slate-900 dark:text-white tracking-tighter">$40</span>
+                    <span class="text-8xl  text-slate-900 dark:text-white tracking-tighter">${{ SUBSCRIPTION_FEE }}</span>
                     <div class="flex flex-col">
                         <span class="text-brand-600 dark:text-brand-300  text-2xl italic leading-none">FOREVER</span>
                         <span class="text-slate-400 dark:text-slate-500 text-xs font-semibold uppercase tracking-tighter">No monthly BS</span>
@@ -52,7 +60,9 @@
                 </div>
             </div>
 
-            <button class="relative w-full group/btn overflow-hidden bg-slate-900 dark:bg-white text-white dark:text-slate-800 py-6 rounded-2xl text-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg shadow-brand-500/20">
+            <button 
+                @click="showToast('Payment geteway not connected, kindly connect a gateway to proceed', 'info', 'Payment manager')"
+                class="relative w-full group/btn overflow-hidden bg-slate-900 dark:bg-white text-white dark:text-slate-800 py-6 rounded-2xl text-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg shadow-brand-500/20">
                 <div class="absolute inset-0 bg-brand-500 dark:bg-warning-300 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
                 <span class="relative flex items-center justify-center gap-3">
                     CLAIM ACCESS
@@ -62,26 +72,26 @@
         </div>
 
         <div class="md:col-span-5 grid grid-cols-1 gap-5">
-            <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-white dark:border-white/5 rounded-[2.5rem] p-7 shadow-lg shadow-slate-200/50 dark:shadow-none hover:translate-y-[-4px] transition-all">
+            <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-white hover:border-emerald-300 dark:border-white/5 rounded-[2.5rem] p-7 shadow-lg shadow-slate-200/50 dark:shadow-none hover:translate-y-[-4px] transition-all">
                 <div class="flex items-center gap-5">
                     <div class="size-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-sm">
                         <span class="material-symbols-outlined font-semibold">verified_user</span>
                     </div>
                     <div>
-                        <h3 class=" text-slate-900 dark:text-white text-lg leading-tight">Secure Escrow</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-500 font-medium">Peace of mind, guaranteed.</p>
+                        <h3 class=" text-slate-900 dark:text-white text-lg leading-tight">Seamless Alignment</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-500 font-medium">Match expectations instantly, no back-and-forth.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-white dark:border-white/5 rounded-[2.5rem] p-7 shadow-lg shadow-slate-200/50 dark:shadow-none hover:translate-y-[-4px] transition-all">
+            <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-white dark:border-white/5 hover:border-amber-300 rounded-[2.5rem] p-7 shadow-lg shadow-slate-200/50 dark:shadow-none hover:translate-y-[-4px] transition-all">
                 <div class="flex items-center gap-5">
-                    <div class="size-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-sm">
+                    <div class="size-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-sm">
                         <span class="material-symbols-outlined font-semibold">query_stats</span>
                     </div>
                     <div>
-                        <h3 class=" text-slate-900 dark:text-white text-lg leading-tight">Smart Tracking</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-500 font-medium">Real-time revenue insights.</p>
+                        <h3 class=" text-slate-900 dark:text-white text-lg leading-tight">Precision Matching</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-500 font-medium">Find the right hands, not just more names.</p>
                     </div>
                 </div>
             </div>
@@ -111,114 +121,9 @@
             <span class="text-lg md:text-2xl tracking-tighter">MASTERCARD</span>
             <span class="text-lg md:text-2xl tracking-tighter">PAYPAL</span>
         </div>
+        
         <p class="text-[10px]  text-slate-400 dark:text-slate-600 uppercase tracking-[0.5em]">Powered by Global Infrastructure</p>
     </div>
 
-</section>
-<section class="relative flex flex-col items-center justify-center px-4 py-10 overflow-hidden">
-    <!-- <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] size-72 sm:size-96 bg-brand-500/10 rounded-full blur-[120px] animate-pulse"></div>
-        <div class="absolute bottom-[10%] right-[-10%] size-72 sm:size-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
-    </div> -->
-
-    <div class="relative text-center max-w-2xl mb-12">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-semibold uppercase tracking-widest mb-4 border border-brand-500/20">
-            <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
-            </span>
-            Limited Time Offer
-        </div>
-        <h1 class="text-2xl sm:text-5xl md:text-6xl  tracking-tight mb-6 bg-gradient-to-b from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
-            One Payment. <br/> <span class="text-brand-500">Infinite</span> Possibilities.
-        </h1>
-        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
-            Join 2,000+ professionals who ditched monthly subscriptions for the freedom of Servio Lifetime.
-        </p>
-    </div>
-
-    <div class="relative z-10 w-full max-w-[440px] group">
-        <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-500 to-blue-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-        
-        <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 sm:p-10 shadow-2xl overflow-hidden">
-            
-            <div class="relative mb-8 text-center sm:text-left">
-                <div class="flex items-center justify-center sm:justify-start gap-1 mb-2">
-                    <span class="text-sm font-semibold text-slate-400 line-through">$149</span>
-                    <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px]  uppercase">Save 70%</span>
-                </div>
-                <div class="flex items-center justify-center sm:justify-start">
-                    <span class="text-6xl sm:text-7xl  tracking-tighter text-slate-900 dark:text-white">$40</span>
-                    <div class="ml-3 text-left">
-                        <p class="text-sm font-semibold text-brand-500 uppercase tracking-tighter leading-none">USD</p>
-                        <p class="text-xs text-slate-400 font-medium">Once forever</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-4 mb-10">
-                <p class="text-[11px]  uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-4">Everything Included</p>
-                
-                <div class="grid gap-4">
-                    <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-brand-500/20 transition-colors group/item">
-                        <div class="size-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center group-hover/item:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-brand-500">rocket_launch</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Unlimited Listings</p>
-                            <p class="text-[11px] text-slate-500">Post as many services as you want.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-brand-500/20 transition-colors group/item">
-                        <div class="size-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center group-hover/item:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-brand-500">verified_user</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Pro Badge</p>
-                            <p class="text-[11px] text-slate-500">Stand out with a verified profile.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-brand-500/20 transition-colors group/item">
-                        <div class="size-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center group-hover/item:scale-110 transition-transform">
-                            <span class="material-symbols-outlined text-brand-500">support_agent</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Priority Support</p>
-                            <p class="text-[11px] text-slate-500">Get answers in under 12 hours.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="relative w-full overflow-hidden rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900  py-5 px-8 transition-all active:scale-[0.95] group/btn">
-                <div class="absolute inset-0 bg-brand-500 translate-y-[101%] group-hover/btn:translate-y-0 transition-transform duration-300"></div>
-                <span class="relative z-10 flex items-center justify-center gap-2 text-lg italic tracking-tight">
-                    GET ACCESS NOW
-                    <span class="material-symbols-outlined transition-transform group-hover/btn:translate-x-2">bolt</span>
-                </span>
-            </button>
-
-            <div class="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 grayscale opacity-50">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" class="h-4">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" class="h-3">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="h-5">
-            </div>
-        </div>
-    </div>
-
-    <div class="mt-12 text-center">
-        <div class="flex items-center justify-center -space-x-2 mb-4">
-            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="https://i.pravatar.cc/100?u=1" alt="User">
-            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="https://i.pravatar.cc/100?u=2" alt="User">
-            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="https://i.pravatar.cc/100?u=3" alt="User">
-            <div class="size-8 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-semibold text-slate-500">+2k</div>
-        </div>
-        <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
-            <span class="size-1.5 rounded-full bg-emerald-500"></span>
-            30-Day Money Back Guarantee
-        </p>
-    </div>
 </section>
 {% endblock %}
