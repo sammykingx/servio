@@ -147,14 +147,13 @@ class ProposalService:
             self._transition_proposal_status(payload)
 
         except ProposalPermissionDenied as e:
-            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED:
+            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
                 e.redirect_url = get_error_redirect(e.code, {"gig_id": proposal_obj.gig})
             raise e
-        
-
+    
     def validate_proposal_role(self, proposal_id:UUID, proposal_role_id:UUID):
         proposal_role = (
-            Proposal.objects
+            ProposalRole.objects
             .select_related("proposal", "proposal__gig")
             .filter(
                 gig_role_id=proposal_role_id,
@@ -316,16 +315,18 @@ class ProposalService:
                 gig_role_id=payload.role_id,
             )
         
-            proposal = Proposal.objects.select_for_update(nowait=True).get(
-                id=payload.proposal_id
-            )
+            # comeback to
+            # proposal = Proposal.objects.select_for_update(nowait=True).get(
+            #     id=payload.proposal_id
+            # )
             
             if proposal_role.status != payload.state:
                 proposal_role.status = payload.state
-                proposal.status = payload.status
+                # proposal.status = payload.state
                         
                 proposal_role.save(update_fields=["status"])
-                proposal.save(update_fields=["status"])
+                # change gig_role to assign if gig has roles
+                # proposal.save(update_fields=["status"])
         
         except OperationalError:
             raise ProposalError(

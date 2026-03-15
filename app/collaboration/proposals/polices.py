@@ -123,6 +123,13 @@ class ProposalPolicy:
         
     
     # ---- Accepting proposal workflow ------------
+    @staticmethod
+    def was_previously_assigned(gig_obj):
+        pass
+    
+    
     @classmethod
     def should_modify_state(cls, user, proposal):
         cls.check_financial_status(user.profile)
+        # checkif previously assigned for gigs with roles
+        # if previously assigned check if reassign is in payload

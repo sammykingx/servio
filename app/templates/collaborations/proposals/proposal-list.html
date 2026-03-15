@@ -43,181 +43,133 @@
             </button>
         </div>
     </div>
+    
     <!-- Proposals List -->
-    <div class="space-y-4">
-        <!-- Card 1 -->
+    <div class="space-y-6">
         {% for proposal in applications %}
-            <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 
-                bg-white/80 backdrop-blur-sm p-6 shadow-sm transition-all duration-300 
-                hover:shadow-xl hover:-translate-y-1 
-                dark:border-slate-800 dark:bg-slate-900/60"
-            >
-                <div class="flex flex-col gap-6">
-                    <!-- HEADER -->
-                    <div class="flex items-start justify-between gap-4">
-                        <div class="flex items-start gap-4">
-                            {% if proposal.sender.profile.avatar_url %}
-                            <div class="size-12 shrink-0 rounded-2xl bg-cover bg-center 
-                                border border-slate-200 dark:border-slate-700" style="background-image: url('{{ proposal.sender.profile.avatar_url.url }}');">
-                            </div>
-                            {% else %}
-                            <div class="size-12 shrink-0 rounded-2xl 
-                                bg-gradient-to-br from-brand-400 to-brand-600 
-                                text-white flex items-center justify-center 
-                                text-lg font-semibold shadow-sm"
-                            >
+            <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 backdrop-blur-sm p-3 sm:p-4 shadow-sm transition-all duration-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/60"> 
+                <div class="flex flex-col gap-5">
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        {% if proposal.sender.profile.avatar_url %}
+                            <div class="size-12 sm:size-14 shrink-0 rounded-2xl bg-cover bg-center border border-slate-200 dark:border-slate-700" style="background-image: url('{{ proposal.sender.profile.avatar_url.url }}');"></div>
+                        {% else %}
+                            <div class="size-12 sm:size-14 shrink-0 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-base sm:text-lg font-bold">
                                 {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
                             </div>
-                            {% endif %}
+                        {% endif %}
 
-                            <div>
-                                <h3 class="text-base font-semibold text-slate-900 dark:text-white">
-                                    {{ proposal.sender.get_full_name|title }}
-                                </h3>
-
-                                <p class="text-xs text-slate-400 mt-1">
-                                    Sent {{ proposal.sent_ago }} ago
-                                </p>
-
-                                {% if proposal.sender.profile.headline %}
-                                <p class="text-xs text-slate-500 mt-1 text-nowrap">
-                                    {{ proposal.sender.profile.headline }}
-                                </p>
-                                {% endif %}
+                        <div class="min-w-0">
+                            <h3 class="text-base sm:text-lg font-semibold text-slate-900 dark:text-white truncate">
+                                {{ proposal.sender.get_full_name|title }}
+                            </h3>
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
+                                <span class="text-[11px] sm:text-xs text-slate-400">Sent {{ proposal.sent_ago }} ago</span>
+                                <span class="hidden sm:block size-1 bg-slate-300 rounded-full"></span>
+                                <span class="text-[11px] sm:text-xs font-medium text-brand-500 dark:text-brand-300 truncate">{{ proposal.sender.profile.headline|default:"Professional" }}</span>
                             </div>
                         </div>
-
-                        <!-- Status Badge -->
-                        <span class="text-[10px] font-medium uppercase tracking-wider 
-                            px-3 py-1 rounded-full
-                            {% if proposal.is_negotiating %}
-                                bg-amber-50 text-amber-600 
-                            {% else %}
-                                bg-emerald-50 text-emerald-600
-                            {% endif %}"
-                        >
-                            {% if proposal.is_negotiating %}
-                                Countered
-                            {% else %}
-                                Accepted
-                            {% endif %}
-                        </span>
                     </div>
 
-                    <!-- ROLES SECTION -->
-                    <div class="space-y-5">
+                    <div class="grid gap-3">
                         {% for role in proposal.roles.all %}
-                        <div class="rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 p-5
-                                border border-slate-200/60 dark:border-slate-700">
-                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                <div>
-                                    <p class="text-xs uppercase tracking-wide text-slate-400 mb-0.5">
-                                        Role
+                        <div class="rounded-2xl border border-slate-100 bg-slate-50/50 dark:bg-slate-800/40 dark:border-slate-700/50 p-4 relative">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                
+                                <div class="flex-1 min-w-0 pr-8 sm:pr-0"> <div class="flex items-center gap-2 mb-1.5">
+                                        <h4 class="font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-200 truncate">{{ role.role_name|title }}</h4>
+                                        {% if role.status == 'accepted' %}
+                                            <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] uppercase
+                                                bg-emerald-50 dark:bg-emerald-700/40 border 
+                                                border-emerald-300 dark:border-emerald-400
+                                                text-emerald-700 dark:text-emerald-300 shadow-sm">
+                                                {{ role.status|default:"Pending" }}
+                                            </span>
+                                        {% elif role.status == 'rejected' %}
+                                            <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] uppercase
+                                                bg-error-50 dark:bg-error-200 border 
+                                                border-error-300 dark:border-error-700
+                                                text-error-700 shadow-sm">
+                                                {{ role.status }}
+                                            </span>
+                                        {% endif %}
+
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 font-medium flex items-center gap-1">
+                                        <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                                        <span class="font-normal">Split: </span>
+                                        {{ role.get_payment_plan_display|default:"Milestones" }}
                                     </p>
-                                    <h4 class="text-sm md:text-md font-semibold text-brand-600 dark:text-brand-300">
-                                        {{ role.role_name|title }}
-                                    </h4>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-6 text-sm">
-                                    <div>
-                                        <p class="text-[11px] uppercase tracking-wide text-slate-400">
-                                            Your Budget
-                                        </p>
-                                        <p class="font-semibold text-slate-900 dark:text-white">
-                                            {% if gig.has_gig_roles %}
-                                                ${{ role.role_amount|intcomma }}
-                                            {% else %}
-                                                ${{ gig.total_budget|intcomma }}
-                                            {% endif %}
-                                        </p>
+                                <div class="flex items-center justify-between sm:justify-end gap-4 sm:gap-8 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60">
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-[9px] uppercase text-slate-400 font-bold tracking-widest">Budget</p>
+                                        <p class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400">${{ role.role_amount|intcomma }}</p>
                                     </div>
-                                    <div>
-                                        <p class="text-[11px] uppercase tracking-wide text-slate-400">
-                                            Asking
-                                        </p>
-                                        <p class="font-semibold text-slate-900 dark:text-white">
-                                            {% if role.proposed_amount %}
-                                                ${{ role.proposed_amount|intcomma }}
-                                            {% else %}
-                                                ${{ role.role_amount|intcomma }}
-                                            {% endif %}
-                                        </p>
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-[9px] uppercase text-slate-400 font-bold tracking-widest">Asking</p>
+                                        <p class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">${{ role.proposed_amount|default:role.role_amount|intcomma }}</p>
+                                    </div>
+                                    <div class="text-right sm:min-w-[60px]">
+                                        {% if role.proposed_amount > role.role_amount %}
+                                            <span class="text-[10px] font-bold text-red-500">{{ role.budget_difference }}</span>
+                                        {% elif role.proposed_amount < role.role_amount %}
+                                            <span class="text-[10px] font-bold text-emerald-500">{{ role.budget_difference }}</span>
+                                        {% else %}
+                                            <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400">Match</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="relative pr-5 md:pr-0" x-data="{ open: false }">
+                                        <button @click="open = !open" class="p-2 -mr-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                                            <svg class="size-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                                        </button>
+                                        <div
+                                            id="proposalActions"
+                                            data-proposal-id="{{ proposal.id }}"
+                                            data-proposal-role-id="{{ role.gig_role.id }}"
+                                            data-csrf-token="{{ csrf_token }}"
+                                            data-endpiont="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}"
+                                            x-show="open" 
+                                            @click.away="open = false" 
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="transform opacity-0 scale-95"
+                                            class="absolute right-0 mt-2 w-40 rounded-xl border border-slate-200 bg-white shadow-xl z-20 py-1.5 dark:bg-slate-800 dark:border-slate-700">
+                                            <button 
+                                                id="acceptProposal"
+                                                class="w-full text-left px-4 py-2 text-sm text-emerald-500 dark:text-emerald-400 hover:bg-emerald-50"
+                                                data-proposal-id="{{ proposal.id }}" 
+                                                data-role-id="{{ role.id }}"
+                                                data-action="accept"
+                                            >
+                                                Accept Role
+                                            </button>
+                                            <button 
+                                                id="rejectProposal"
+                                                class="w-full text-left px-4 py-2 text-sm text-red-500 dark:text-red-400 hover:bg-red-50"
+                                                data-proposal-id="{{ proposal.id }}" 
+                                                data-role-id="{{ role.id }}"
+                                                data-action="reject">
+                                                Reject Role
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Difference -->
-                            {% if gig.has_gig_roles %}
-                                {% if role.proposed_amount > role.role_amount %}
-                                    <div class="mt-3 text-xs font-medium text-red-500">
-                                        {{ role.budget_difference }} above budget
-                                    </div>
-                                {% elif role.proposed_amount < role.role_amount %}
-                                    <div class="mt-3 text-xs font-medium text-emerald-500">
-                                        {{ role.budget_difference }} under budget
-                                    </div>
-                                {% else %}
-                                    <div class="mt-3 text-xs font-medium text-slate-400">
-                                        Matches your budget
-                                    </div>
-                                {% endif %}
-                            {% else %}
-                                {% if role.role_amount > gig.total_budget %}
-                                    <div class="mt-3 text-xs font-medium text-red-500">
-                                        Exceeds set budget
-                                    </div>
-                                {% elif role.role_amount < gig.total_budget %}
-                                    <div class="mt-3 text-xs font-normal text-emerald-500">
-                                        Within budget limits
-                                    </div>
-                                {% else %}
-                                    <div class="mt-3 text-xs font-medium text-amber-600">
-                                        Matches budget. Heads up: no room for other roles.
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                            <div id="proposalActions" data-proposal-id="{{ proposal.id }}" data-proposal-role-id="{{ role.gig_role.id }}" data-csrf-token="{{ csrf_token }}" data-endpiont="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" class="mt-4 flex justify-end gap-3">
-                                <button
-                                    id="acceptProposal"
-                                    type="buttton"
-                                    class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
-                                        bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition"
-                                >
-                                    Accept
-                                </button>
-                                <button
-                                    id="rejectProposal"
-                                    type="button"
-                                    class="px-4 py-2 rounded-xl text-xs md:text-sm font-medium
-                                        bg-red-50 text-red-600 hover:bg-red-100 transition"
-                                >
-                                    Reject
-                                </button>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
 
-                    {% comment "revisit later for updates to allow users see deliverables upfront" %}
-                        <!-- ACTIONS -->
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <button class="text-xs md:text-sm font-medium text-slate-600 
-                                hover:text-brand-600 dark:hover:text-brand-300 transition-colors">
-                                View Deliverables →
-                            </button>
-                            
-                            <div class="flex gap-3">
-                                <button class="px-5 py-2 rounded-xl text-xs md:text-sm font-medium
-                                    bg-emerald-50 text-emerald-600 hover:bg-emerald-100">
-                                    Accept
-                                </button>
-                                <button class="px-5 py-2 rounded-xl text-xs md:text-sm font-medium
-                                    bg-red-50 text-red-600 hover:bg-red-100">
-                                    Reject
-                                </button>
-                            </div>
-                        </div>
-                    {% endcomment %}
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <button class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 text-white hover:bg-brand-400 transition-all text-sm font-semibold">
+                            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            View Deliverables
+                        </button>
+                        
+                        <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium italic">
+                            Deliverables are defined at the proposal level.
+                        </p>
+                    </div>
                 </div>
             </div>
         {% endfor %}
@@ -322,25 +274,31 @@
 
                         const data = await response.json();
 
-                        if (!response.ok) {
-                            showToast(
-                                data.message || "We couldn't update the proposal state. Please try again in a moment.",
-                                data.status || "error",
-                                data.title || "Update didn't go through"
-                            );
-                        } else {
+                        if (response.ok) {
                             showToast(
                                 data.message || "We’ve updated the proposal state for you",
                                 data.status || "success",
                                 data.title || "Proposal Updated"
                             );
+                        } else {
+                            showToast(
+                                data.message || "We couldn't update the proposal state.",
+                                data.status || "error",
+                                data.title || "Update didn't go through"
+                            );
+                        }
+
+                        if (data.redirect && data.url) {
+                            setTimeout(() => {
+                                window.location.assign(data.url)
+                            }, 1600);
                         }
 
                     } catch {
                         showToast(
                             "We couldn't reach the server. Please check your internet connection and try again.",
                             "error",
-                            "Client Side Error"
+                            "Client Side Error",
                         );
                     } finally {
                         buttons.forEach(btn => {

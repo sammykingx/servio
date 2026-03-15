@@ -13,6 +13,7 @@ from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
 from decimal import Decimal
 from pydantic import ValidationError
+from formatters.pydantic_formatter import format_pydantic_errors
 import json
 
 
@@ -152,7 +153,8 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
                 status=400,
             )
             
-        except ValidationError: 
+        except ValidationError as err:
+            print(format_pydantic_errors(err))
             return JsonResponse(
                 {
                     "title": "Invalid Data Format",
@@ -163,13 +165,25 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
             )
             
         except ProposalError as err:
-            return JsonResponse({
+            status_code = 400
+            data = {
                 "title": err.title,
                 "message": err.message,
                 "status": "error"
-            }, status=400)
+            }
+
+            if err.redirect_url:
+                status_code = 402
+                data.update({
+                    "redirect": True,
+                    "url": err.redirect_url
+                })
+
+            return JsonResponse(data, status=status_code)
             
         except Exception:
+            import traceback
+            traceback.print_exc()
             return JsonResponse({
                     "title": "System Glitch",
                     "message": "We encountered an unexpected hiccup. Please try again shortly!",
@@ -179,14 +193,14 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
         return JsonResponse({
             "status": "success",
             "title": f"Proposal {data.state.title()}",
-            "message": f"The proposal has been {data.state} and the service provider has been notified."
+            "message": f"The proposal has been {data.state} and the service provider has been notified.",
+            "redirect": True,
+            "url": "#"
         }, status=200)
         
     def update_proposal_state(self, service: ProposalService, data:ModifyProposalState):
         if not isinstance(service, ProposalService):
             raise Exception("proposal_service must be an instance of ProposalService")
-        
-        print(f"Data received: {data.model_dump_json(indent=2)}")
         service.modify_proposal_state(data)
             
     

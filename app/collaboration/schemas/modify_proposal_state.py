@@ -7,4 +7,5 @@ class ModifyProposalState(BaseModel):
     proposal_id: UUID
     role_id: UUID
     state: ProposalRoleStatus
+    re_assign: bool = False
     
