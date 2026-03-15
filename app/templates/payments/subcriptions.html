@@ -2,99 +2,223 @@
 {% load static %}
 {% block browser_title %}Subscription Fee{% endblock %}
 {% block content %}
-<section class="flex-grow flex flex-col items-center justify-center px-3 py-5">
-	<!-- Hero Section -->
-	<div class="text-center max-w-2xl mb-6">
-		<h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 text-slate-900 dark:text-white">
-			Unlock Servio Forever ✨
-		</h1>
-		<p class="text-sm sm:text-md md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-			A one-time investment for a lifetime of professional growth. No monthly bills. No hidden fees. Just full access. 
-		</p>
-	</div>
+<section class="relative flex flex-col items-center justify-center px-4 py-14 overflow-hidden transition-colors duration-500 text-slate-600 dark:text-slate-300">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full blur-[120px] bg-brand-200/50 dark:bg-brand-500/20 animate-pulse"></div>
+        <div class="absolute bottom-0 right-0 w-[40%] h-[40%] rounded-full blur-[100px] bg-blue-200/40 dark:bg-blue-600/10"></div>
+        
+        <div class="absolute top-20 right-[10%] opacity-20 dark:opacity-10 animate-spin-slow">
+            <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="80" stroke="currentColor" stroke-width="2" stroke-dasharray="10 10"/>
+                <rect x="60" y="60" width="80" height="80" rx="20" stroke="currentColor" stroke-width="2" transform="rotate(15 100 100)"/>
+            </svg>
+        </div>
+    </div>
 
-	<!-- Pricing Card Container -->
-	<div class="w-full max-w-lg relative">
-		<!-- Subtle glow background effect -->
-		<div class="absolute -inset-1 bg-gradient-to-r from-brand-500/20 to-blue-400/20 rounded-xl blur-2xl opacity-50"></div>
-		
-		<!-- Main Card -->
-		<div class="relative bg-white dark:bg-slate-900 border border-brand-400 dark:border-slate-800 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.04)] p-6 md:p-10 flex flex-col">
-			<!-- Badge -->
-			<div class="self-start px-3 py-1 rounded-full bg-brand-500/10 dark:bg-success-500/10 text-brand-500 dark:text-success-500 text-xs font-semibold uppercase tracking-wider mb-6">
-				Lifetime Access
-			</div>
-			<!-- Price Section -->
-			<div class="flex items-baseline gap-2 mb-8">
-				<span class="text-5xl font-bold tracking-tighter text-slate-900 dark:text-white">$40</span>
-				<span class="dark:text-slate-400 font-normal">one-time fee</span>
-			</div>
-			<!-- Divider -->
-			<div class="h-px w-full bg-border-brand-400 dark:bg-slate-800 mb-8"></div>
-			<!-- Benefits List -->
-			<ul class="space-y-5 mb-10">
-				<li class="flex items-start gap-3">
-					<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
-						<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
-					</div>
-					<span class="dark:text-slate-300 font-normal">Unlimited service listings</span>
-				</li>
-				<li class="flex items-start gap-3">
-					<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
-						<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
-					</div>
-					<span class="dark:text-slate-300 font-normal">Advanced project management tools</span>
-				</li>
-				<li class="flex items-start gap-3">
-					<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
-						<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
-					</div>
-					<span class="dark:text-slate-300 font-normal">Secure escrow protection</span>
-				</li>
-				<li class="flex items-start gap-3">
-					<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
-						<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
-					</div>
-					<span class="dark:text-slate-300 font-normal">Verified professional badge</span>
-				</li>
-				<li class="flex items-start gap-3">
-					<div class="mt-0.5 flex-shrink-0 size-6 bg-brand-500/10 rounded-full flex items-center justify-center">
-						<span class="material-symbols-outlined text-brand-500 text-[18px] font-semibold">check</span>
-					</div>
-					<span class="dark:text-slate-300 font-normal">Priority 24/7 support</span>
-				</li>
-			</ul>
-			<!-- CTA Button -->
-			<button @click="showToast('No payment processor available', 'info', 'Payment Service')" class="w-full bg-brand-500 hover:bg-brand-500/90 text-white font-semibold py-5 px-8 rounded-lg shadow-[0_4px_14px_0_rgba(29,26,255,0.3)] transform transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
-				<span>Get Lifetime Access</span>
-				<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-			</button>
-			<!-- Secure Signal -->
-			<div class="mt-5 flex items-center justify-center gap-2 dark:text-slate-400 text-xs sm:text-sm font-normal">
-				<span class="material-symbols-outlined text-green-500 text-lg">lock</span>
-				Secure Checkout powered by Stripe
-			</div>
-		</div>
-	</div>
-	<!-- Trust Signals / Footer -->
-	<div class="mt-10 flex flex-col items-center gap-8">
-		<div class="flex flex-wrap justify-center items-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
-			<img alt="Visa Logo" class="h-6" data-alt="Official Visa credit card payment logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfe-9jE5lUQxbMPqBJyDQgYpZsFq9m-zmayQefsi9g3D_0nDFg5TrW-J8r37yY3mx9KkEwkmbftYHYE0_ERHRkOvii-mSLsGr_qkAjBICNwVNaFqO8aEWYOj1mqs8MRhYvqCMeB1G7votDTFy4EeVe7nubiZ_4Z9nyF65N3O0VemlQ1dUiWL4hBoMyzEyo8lBhPUsQQG3Lr6TF0C1t2JbpcixhctQEXrQUnOQE4uwj-bPizdgqzvagQq4AVBNZ0ofskLtqUmp94JQ" />
-			<img alt="Mastercard Logo" class="h-8" data-alt="Official Mastercard payment gateway logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7O6hWkVhsfgdYEszldgWiQd9V9CMJjdqawZUnqUeSoFfdrPkUKV5wV6VfQbEIPCYLnGjbOq3bfD29a8xQAwgGwyU3ODtGQbU2UHOrW-cIkMlS9G47WFk2_HmMaQd43T9TVwh-g_yX4s5vj8iKLpWo-f39547HHGik8hn170X5j5LhNpE411eej1GnSRc6xM1lG_PYzsvDl3_xClmNZkpfuFCOcjWmumJ2mraixkfgu49Bf0dGrkcaKC2m7FjST4kOaVJFiRmpgY4" />
-			<img alt="Stripe Logo" class="h-7" data-alt="Official Stripe secure payment processor logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF4O_F8UeaIR7o1Yy5ua36KxHUs4P-qzZHqc637vcnpb7aJagccoGPoavszPhhtz-8C2se32-sifH-V2j___iHPL6cnzemjS2mYKOdlcMqXxiO-0N2ydR5qVQoPcoi0opIiwE5wCYobApdGbkTqR4EVoU1YvV38xqK-r9QAPKPqWaYN7soVIYWOF7XNxV0_BCFBLnzKW9Ab0BBpyRVvM6rzMKX3L143_1NPYClMITIQqHHv6tE5Qi-icav16hRE_AKwIdZR0e5dlQ" />
-			<img alt="PayPal Logo" class="h-6" data-alt="Official PayPal payment platform logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB_y6EGowoYm7ywxH1DtAFYUre_fv5svlIx39rcTXh-TXohXZlOJJf5UBahWv6PCLRl_boRQ4tar-IZTm9Hl0m3m8Giht-xS4n-7_lojfsXybFRe6AvwRhvI3GLORC1df2GS3XuLMgGgShoisizxdiRk50wMskYGFMd63og3Vio7NSvsk-8pgE2MQeLd2qpYilFGpsMmCeCPJCk2w39YXOb3PcqFDKKGmx2-fpgPzEjvwJdSjZCENhQ6cu7Bh6c5pBg7vTqXTjrCs" />
-		</div>
-		<div class="flex items-center gap-4 py-2 px-6 rounded-full dark:bg-slate-800 border border-brand-400 dark:border-slate-700">
-			<div class="flex items-center gap-1 text-xs font-semibold dark:text-slate-300">
-				<span class="material-symbols-outlined text-brand-500 text-sm">verified_user</span>
-				SSL SECURE
-			</div>
-			<div class="h-3 w-px bg-border-brand-400 dark:bg-slate-700"></div>
-			<div class="flex items-center gap-1 text-xs font-semibold dark:text-slate-300">
-				<span class="material-symbols-outlined text-brand-500 text-sm">shield_with_heart</span>
-				100% Encrypted
-			</div>
-		</div>
-	</div>
+    <div class="relative z-10 text-center mb-16 px-4">
+        <span class="inline-block px-4 py-1.5 mb-6 rounded-full bg-white dark:bg-slate-800 shadow-sm dark:shadow-none border border-slate-200 dark:border-slate-700 text-brand-600 dark:text-brand-400 text-[10px]  uppercase tracking-[0.3em]">
+            Ownership Model
+        </span>
+        <h1 class="text-3xl sm:text-5xl md:text-6xl tracking-tighter text-slate-900 dark:text-white mb-6">
+            Pay once. <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-blue-500 dark:from-brand-400 dark:to-blue-400">Own it</span> forever.
+        </h1>
+        <p class="text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-xl mx-auto font-medium">
+            Join the elite circle of professionals. A one-time investment for a lifetime of premium features.
+        </p>
+    </div>
+
+    <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-5">
+        
+        <div class="md:col-span-7 relative group overflow-hidden bg-white/70 dark:bg-slate-900/50 backdrop-blur-2xl border border-white dark:border-white/10 rounded-[3rem] p-8 sm:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col justify-between hover:border-brand-400 dark:hover:border-brand-500/50 transition-all duration-500">
+            <div class="absolute -right-20 -top-20 size-64 bg-brand-500/5 dark:bg-brand-500/10 rounded-full blur-3xl group-hover:bg-brand-500/20 transition-colors"></div>
+            
+            <div class="relative z-10">
+                <div class="flex justify-between items-start mb-12">
+                    <div>
+                        <h2 class="text-3xl  text-slate-900 dark:text-white mb-2 italic">Servio Pro</h2>
+                        <p class="text-sm font-semibold text-brand-600 dark:text-slate-400 uppercase tracking-widest">Lifetime Access</p>
+                    </div>
+                    <div class="size-14 rounded-2xl bg-brand-50 dark:bg-brand-500/20 border border-brand-100 dark:border-brand-500/30 flex items-center justify-center text-brand-600 dark:text-brand-400 shadow-inner">
+                        <span class="material-symbols-outlined text-3xl font-semibold">workspace_premium</span>
+                    </div>
+                </div>
+
+                <div class="flex items-baseline gap-4 mb-10">
+                    <span class="text-8xl  text-slate-900 dark:text-white tracking-tighter">$40</span>
+                    <div class="flex flex-col">
+                        <span class="text-brand-600 dark:text-brand-300  text-2xl italic leading-none">FOREVER</span>
+                        <span class="text-slate-400 dark:text-slate-500 text-xs font-semibold uppercase tracking-tighter">No monthly BS</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="relative w-full group/btn overflow-hidden bg-slate-900 dark:bg-white text-white dark:text-slate-800 py-6 rounded-2xl text-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg shadow-brand-500/20">
+                <div class="absolute inset-0 bg-brand-500 dark:bg-warning-300 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                <span class="relative flex items-center justify-center gap-3">
+                    CLAIM ACCESS
+                    <span class="material-symbols-outlined group-hover/btn:translate-x-2 transition-transform">bolt</span>
+                </span>
+            </button>
+        </div>
+
+        <div class="md:col-span-5 grid grid-cols-1 gap-5">
+            <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-white dark:border-white/5 rounded-[2.5rem] p-7 shadow-lg shadow-slate-200/50 dark:shadow-none hover:translate-y-[-4px] transition-all">
+                <div class="flex items-center gap-5">
+                    <div class="size-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-sm">
+                        <span class="material-symbols-outlined font-semibold">verified_user</span>
+                    </div>
+                    <div>
+                        <h3 class=" text-slate-900 dark:text-white text-lg leading-tight">Secure Escrow</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-500 font-medium">Peace of mind, guaranteed.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-white dark:border-white/5 rounded-[2.5rem] p-7 shadow-lg shadow-slate-200/50 dark:shadow-none hover:translate-y-[-4px] transition-all">
+                <div class="flex items-center gap-5">
+                    <div class="size-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-sm">
+                        <span class="material-symbols-outlined font-semibold">query_stats</span>
+                    </div>
+                    <div>
+                        <h3 class=" text-slate-900 dark:text-white text-lg leading-tight">Smart Tracking</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-500 font-medium">Real-time revenue insights.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative overflow-hidden bg-gradient-to-br from-brand-600 to-blue-700 dark:from-brand-600/30 dark:to-blue-600/30 backdrop-blur-md border border-brand-200 dark:border-brand-500/20 rounded-[2.5rem] p-7 flex flex-col justify-center text-white">
+                <div class="absolute top-0 right-0 size-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                <div class="flex items-center justify-between opacity-90 mb-4">
+                    <span class="text-[10px]  tracking-[0.2em] uppercase">PCI Level 1 Secure</span>
+                    <span class="material-symbols-outlined text-sm">lock</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" class="h-6 brightness-[10] contrast-100">
+                    <div class="h-5 w-px bg-white/20"></div>
+                    <div class="flex gap-2">
+                         <div class="w-10 h-6 bg-white/10 rounded-md border border-white/20 flex items-center justify-center">
+                            <div class="size-3 bg-white/40 rounded-full"></div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-20 flex flex-col items-center gap-8 relative z-10">
+        <div class="flex items-center gap-10 opacity-40 dark:opacity-20 grayscale hover:grayscale-0 transition-all duration-700">
+            <span class="text-lg md:text-2xl  tracking-tighter">VISA</span>
+            <span class="text-lg md:text-2xl tracking-tighter">MASTERCARD</span>
+            <span class="text-lg md:text-2xl tracking-tighter">PAYPAL</span>
+        </div>
+        <p class="text-[10px]  text-slate-400 dark:text-slate-600 uppercase tracking-[0.5em]">Powered by Global Infrastructure</p>
+    </div>
+
+</section>
+<section class="relative flex flex-col items-center justify-center px-4 py-10 overflow-hidden">
+    <!-- <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] size-72 sm:size-96 bg-brand-500/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div class="absolute bottom-[10%] right-[-10%] size-72 sm:size-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style="animation-delay: 2s;"></div>
+    </div> -->
+
+    <div class="relative text-center max-w-2xl mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-semibold uppercase tracking-widest mb-4 border border-brand-500/20">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+            </span>
+            Limited Time Offer
+        </div>
+        <h1 class="text-2xl sm:text-5xl md:text-6xl  tracking-tight mb-6 bg-gradient-to-b from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
+            One Payment. <br/> <span class="text-brand-500">Infinite</span> Possibilities.
+        </h1>
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+            Join 2,000+ professionals who ditched monthly subscriptions for the freedom of Servio Lifetime.
+        </p>
+    </div>
+
+    <div class="relative z-10 w-full max-w-[440px] group">
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-500 to-blue-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+        
+        <div class="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 sm:p-10 shadow-2xl overflow-hidden">
+            
+            <div class="relative mb-8 text-center sm:text-left">
+                <div class="flex items-center justify-center sm:justify-start gap-1 mb-2">
+                    <span class="text-sm font-semibold text-slate-400 line-through">$149</span>
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[10px]  uppercase">Save 70%</span>
+                </div>
+                <div class="flex items-center justify-center sm:justify-start">
+                    <span class="text-6xl sm:text-7xl  tracking-tighter text-slate-900 dark:text-white">$40</span>
+                    <div class="ml-3 text-left">
+                        <p class="text-sm font-semibold text-brand-500 uppercase tracking-tighter leading-none">USD</p>
+                        <p class="text-xs text-slate-400 font-medium">Once forever</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4 mb-10">
+                <p class="text-[11px]  uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-4">Everything Included</p>
+                
+                <div class="grid gap-4">
+                    <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-brand-500/20 transition-colors group/item">
+                        <div class="size-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-brand-500">rocket_launch</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Unlimited Listings</p>
+                            <p class="text-[11px] text-slate-500">Post as many services as you want.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-brand-500/20 transition-colors group/item">
+                        <div class="size-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-brand-500">verified_user</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Pro Badge</p>
+                            <p class="text-[11px] text-slate-500">Stand out with a verified profile.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-transparent hover:border-brand-500/20 transition-colors group/item">
+                        <div class="size-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center group-hover/item:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-brand-500">support_agent</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Priority Support</p>
+                            <p class="text-[11px] text-slate-500">Get answers in under 12 hours.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="relative w-full overflow-hidden rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900  py-5 px-8 transition-all active:scale-[0.95] group/btn">
+                <div class="absolute inset-0 bg-brand-500 translate-y-[101%] group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                <span class="relative z-10 flex items-center justify-center gap-2 text-lg italic tracking-tight">
+                    GET ACCESS NOW
+                    <span class="material-symbols-outlined transition-transform group-hover/btn:translate-x-2">bolt</span>
+                </span>
+            </button>
+
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 grayscale opacity-50">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" class="h-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" class="h-3">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="h-5">
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12 text-center">
+        <div class="flex items-center justify-center -space-x-2 mb-4">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="https://i.pravatar.cc/100?u=1" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="https://i.pravatar.cc/100?u=2" alt="User">
+            <img class="size-8 rounded-full border-2 border-white dark:border-slate-900" src="https://i.pravatar.cc/100?u=3" alt="User">
+            <div class="size-8 rounded-full bg-slate-200 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center text-[10px] font-semibold text-slate-500">+2k</div>
+        </div>
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
+            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+            30-Day Money Back Guarantee
+        </p>
+    </div>
 </section>
 {% endblock %}
