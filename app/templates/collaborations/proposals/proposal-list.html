@@ -161,10 +161,10 @@
                     </div>
 
                     <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <button class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 text-white hover:bg-brand-400 transition-all text-sm font-semibold">
+                        <a href="{% url PROPOSALS.VIEW_DELIEVERABLES proposal_id=proposal.id %}" class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 text-white hover:bg-brand-400 transition-all text-sm font-semibold">
                             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             View Deliverables
-                        </button>
+                        </a>
                         
                         <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium italic">
                             Deliverables are defined at the proposal level.
