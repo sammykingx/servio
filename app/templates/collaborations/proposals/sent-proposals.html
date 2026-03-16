@@ -116,17 +116,19 @@
                             <span class="text-[10px] uppercase font-normal text-slate-400 tracking-tighter">Total Proposed</span>
                             <span class="text-xl font-normal text-slate-900 dark:text-white">${{ proposal.total_cost|default:0|intcomma }}</span>
                         </div>
-                        <a href="#" class="text-sm font-medium text-slate-400 hover:text-brand-500 dark:hover:text-brand-300 flex items-center gap-1 group/btn">
+                        <a href="{% url PROPOSALS.VIEW_DELIEVERABLES proposal_id=proposal.id %}" class="text-sm font-medium text-slate-400 hover:text-brand-500 dark:hover:text-brand-300 flex items-center gap-1 group/btn">
                             more details
                             <span class="material-symbols-outlined text-lg group-hover/btn:translate-x-1 transition-transform">arrow_right_alt</span>
                         </a>
                     </div>
 
                     <div class="flex items-center gap-3 w-full sm:w-auto">
-                        <button class="flex-1 sm:flex-none px-8 py-3 rounded-2xl bg-brand-500 text-white text-sm font-semibold hover:scale-105 transition-transform shadow-lg shadow-slate-900/10">
-                            Build Contract
-                        </button>
-                        <button class="px-3 py-2 rounded-2xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors">
+                        {% comment %}
+                            <button class="flex-1 sm:flex-none px-8 py-3 rounded-2xl bg-brand-500 text-white text-sm font-semibold hover:scale-105 transition-transform shadow-lg shadow-slate-900/10">
+                                Build Contract
+                            </button>
+                        {% endcomment %}
+                        <button title="withdraw proposal sent" class="px-3 py-2 rounded-2xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors">
                             <span class="material-symbols-outlined text-lg block">delete</span>
                         </button>
                     </div>

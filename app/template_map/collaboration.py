@@ -16,6 +16,7 @@ class Collabs:
         SENT_PROPOSALS = f"{__SUB_FOLDER}/sent-proposals.html"
         PROPOSAL_LIST = f"{__SUB_FOLDER}/proposal-list.html"
         DETAILS = f"{__SUB_FOLDER}/detail.html"
+        VIEW_DELIEVERABLES = f"{__SUB_FOLDER}/view-delieverables.html"
         
     class Oppurtunities:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("oppurtunities")

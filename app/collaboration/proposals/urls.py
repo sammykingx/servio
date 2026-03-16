@@ -5,7 +5,8 @@ from collaboration.proposals.views import (
     RecievedProposalListView,
     ProposalRoleListView,
     SentProposalListView,
-    UpdateProposalStatusView
+    UpdateProposalStatusView,
+    RenderProposalDeliverablesView
 )
 from template_map.collaboration import Collabs
 
@@ -31,6 +32,11 @@ urlpatterns = [
         "all/<slug:gig_slug>/",
         ProposalRoleListView.as_view(),
         name=ProposalURLS.PROPOSAL_LISTINGS,
+    ),
+    path(
+        "deliverables/<uuid:proposal_id>/",
+        RenderProposalDeliverablesView.as_view(),
+        name=ProposalURLS.VIEW_DELIEVERABLES,
     ),
     
 ]

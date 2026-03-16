@@ -141,7 +141,7 @@ class ProposalService:
         """User in this context is the project/gig creator"""
 
         try:
-            proposal_role = self.validate_proposal_role(payload.proposal_id, payload.role_id)
+            proposal_role = self._get_proposal_role(payload.proposal_id, payload.role_id)
             proposal_obj = proposal_role.proposal
             ProposalPolicy.should_modify_state(self.user, proposal_obj)
             self._transition_proposal_status(payload)
@@ -151,7 +151,7 @@ class ProposalService:
                 e.redirect_url = get_error_redirect(e.code, {"gig_id": proposal_obj.gig})
             raise e
     
-    def validate_proposal_role(self, proposal_id:UUID, proposal_role_id:UUID):
+    def _get_proposal_role(self, proposal_id:UUID, proposal_role_id:UUID):
         proposal_role = (
             ProposalRole.objects
             .select_related("proposal", "proposal__gig")

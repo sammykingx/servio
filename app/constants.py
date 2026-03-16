@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_HALF_UP
+
 APP_NAME = "servio"
 APP_VERSION = "v1.2"
 
