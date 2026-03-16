@@ -3,5 +3,139 @@
 {% load humanize %}
 {% block browser_title %}Project Proposal Delieverables{% endblock %}
 {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-10">
+    <section class="relative overflow-hidden rounded-[3rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none mb-10 p-8 md:p-20 text-center">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)]"></div>
+            <div class="absolute top-10 left-10 size-2 bg-brand-500 rounded-full animate-ping"></div>
+            <div class="absolute bottom-20 right-20 size-3 bg-blue-400 rounded-full animate-bounce"></div>
+        </div>
 
+        <div class="relative">
+            <div class="flex items-center justify-center gap-4 md:gap-16 mb-12">
+                <div class="relative group">
+                    <div class="absolute -inset-4 bg-brand-500/20 rounded-full blur-2xl group-hover:bg-brand-500/40 transition-all duration-700"></div>
+                    <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-slate-100 p-1 rotate-[-6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+                        <img src="{% static 'images/user/user-19.jpg' %}" class="size-full rounded-[2.2rem] object-cover" alt="Client">
+                    </div>
+                    <div class="absolute -bottom-2 -right-2 size-8 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center text-brand-500 dark:text-brand-300">
+                        <span class="material-symbols-outlined text-sm">person</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center gap-4">
+                    <div class="flex items-center justify-center gap-2 md:gap-3">
+                        
+                        <div class="relative h-1 w-12 md:w-28 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent w-1/2 animate-spark-flow"></div>
+                            <div class="absolute right-0 top-1/2 -translate-y-1/2 size-2 bg-success-400 blur-[4px] rounded-full"></div>
+                        </div>
+
+                        <div class="relative group">
+                            <div class="absolute inset-0 bg-brand-500/20 dark:bg-white/10 rounded-full animate-ping scale-150 opacity-20"></div>
+                            
+                            <div class="relative z-10 size-12 md:size-16 rounded-full bg-brand-500 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-[0_0_30px_rgba(var(--brand-rgb),0.3)] dark:shadow-[0_0_30px_rgba(255,255,255,0.2)] border-4 border-white dark:border-slate-900">
+                                <span class="material-symbols-outlined text-2xl md:text-3xl animate-spin-slow">sync</span>
+                            </div>
+                        </div>
+
+                        <div class="relative h-1 w-12 md:w-28 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-400 to-transparent w-1/2 animate-spark-flow-reverse"></div>
+                            <div class="absolute left-0 top-1/2 -translate-y-1/2 size-2 bg-success-400 blur-[4px] rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span class="size-1.5 bg-brand-500 dark:bg-warning-300 rounded-full animate-pulse"></span>
+                        <span class="text-[10px] tracking-[0.5em] text-brand-500 dark:text-warning-400 uppercase italic">
+                            Match Made
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div class="absolute -inset-4 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/40 transition-all duration-700"></div>
+                    <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-slate-100 p-1 rotate-[6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+                        <img src="{% static 'images/user/user-17.jpg' %}" class="size-full rounded-[2.2rem] object-cover" alt="Provider">
+                    </div>
+                    <div class="absolute -bottom-2 -left-2 size-7 bg-success-500 dark:bg-success-600 rounded-xl shadow-lg flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined text-[9px] font-semibold">verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <h1 class="text-3xl md:text-6xl font-semibold tracking-tighter text-slate-900 dark:text-white mb-6">
+                    It's a <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-blue-500">Done Deal.</span>
+                </h1>
+                <p class="text-mdd:text-lgtext-slate-500 dark:text-slate-400 leading-relaxed">
+                    The partnership for <span class="text-slate-900 dark:text-white font-semibold underline decoration-brand-400/30 dark:decoration-emerald-300 decoration-3">Enterprise SaaS Redesign</span> is officially active.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-12">
+        <div class="md:col-span-8 bg-brand-25 dark:bg-gray-800/30 border border-slate-200 dark:border-gray-700 rounded-[2.5rem] p-7">
+            <h3 class="text-xl font-medium text-slate-900 dark:text-white mb-8 flex items-center gap-2">
+                Choose your first move
+            </h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <button class="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all text-left">
+                    <div class="size-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined">chat</span>
+                    </div>
+                    <p class="font-semibold text-slate-900 dark:text-white">WhatsApp</p>
+                    <p class="text-[11px] text-slate-500">Fast & Direct</p>
+                </button>
+
+                <button class="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all text-left">
+                    <div class="size-12 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined">call</span>
+                    </div>
+                    <p class="font-semibold text-slate-900 dark:text-white">Phone Call</p>
+                    <p class="text-[11px] text-slate-500">Voice Sync</p>
+                </button>
+
+                <button class="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-amber-500 transition-all text-left">
+                    <div class="size-12 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined">alternate_email</span>
+                    </div>
+                    <p class="font-semibold text-slate-900 dark:text-white">Email</p>
+                    <p class="text-[11px] text-slate-500">Official Docs</p>
+                </button>
+            </div>
+        </div>
+
+        <div class="md:col-span-4 bg-slate-900 dark:bg-slate-800/30 text-white border border-brand-100 dark:border-gray-700 rounded-[2.5rem] p-8 flex flex-col justify-between relative overflow-hidden group">
+            <div class="absolute top-0 right-0 size-32 bg-brand-500/20 blur-3xl rounded-full -mr-16 -mt-16"></div>
+            
+            <div class="relative">
+                <p class="text-[10px] font-semibold tracking-widest text-slate-400 uppercase mb-4">Financial Core</p>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end border-b border-white/10 pb-4">
+                        <span class="text-sm text-slate-400">Total Budget</span>
+                        <span class="text-2xl font-semibold">$4,500</span>
+                    </div>
+                    <div class="flex justify-between items-end border-b border-white/10 pb-4">
+                        <span class="text-sm text-slate-400">Servio Split</span>
+                        <div class="text-right">
+                            <span class="text-xl font-semibold text-brand-400">10%</span>
+                            <p class="text-[10px] text-slate-500">Platform Fee</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <span class="text-sm text-slate-400">Provider Payout</span>
+                        <span class="text-xl font-semibold text-emerald-400">$4,050</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="relative w-full mt-8 py-4 bg-white text-slate-900 rounded-2xl font-semibold hover:bg-brand-500 hover:text-white transition-all active:scale-95">
+                WORKSPACE →
+            </button>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -748,6 +748,28 @@ span.flatpickr-weekday,
 
 /*end for subscription box*/
 
+/* for client-provider connection box ui */
+@keyframes spark-flow {
+        0% { transform: translateX(-200%); }
+        100% { transform: translateX(200%); }
+    }
+    
+    /* Spark flowing from right to left */
+    @keyframes spark-flow-reverse {
+        0% { transform: translateX(200%); }
+        100% { transform: translateX(-200%); }
+    }
+
+    .animate-spark-flow {
+        animation: spark-flow 2s infinite linear;
+    }
+    
+    .animate-spark-flow-reverse {
+        animation: spark-flow-reverse 2s infinite linear;
+    }
+
+/* end */
+
 @keyframes float {
   0%, 100% { transform: translateY(0px) translateX(0px); }
   50% { transform: translateY(-40px) translateX(30px); }
