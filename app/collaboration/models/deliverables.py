@@ -21,14 +21,6 @@ class ProposalDeliverable(models.Model):
         related_name="proposal_deliverables",
     )
 
-    # will be enabled when role based deliverables is allowed
-    # role = models.ForeignKey(
-    #     "collaboration.ProposalRole",
-    #     on_delete=models.CASCADE,
-    #     related_name="deliverables",
-    #     null=True,
-    #     blank=True,
-    # )
     title = models.CharField(max_length=60)
     description = models.TextField(max_length=2010)
 

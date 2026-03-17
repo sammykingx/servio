@@ -109,7 +109,16 @@ class Proposal(models.Model):
             parts.append(f"{final_days} day{'s' if final_days > 1 else ''}")
 
         return " and ".join(parts) if len(parts) > 1 else parts[0]
-       
+    
+    
+    def get_deliverable_count(self):
+        """Returns the total number of deliverables for this proposal."""
+        return self.deliverables.count()
+    
+    def get_role_count(self):
+        """returns the total number of roles associated with the proposal"""
+        return self.roles.count()
+    
     @property
     def sent_ago(self):
         if not self.sent_at:
