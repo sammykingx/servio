@@ -77,6 +77,7 @@ class CollaborationURLS:
     LIVE_COLLABORATION_EDIT = "live_edit_collaboration"
     COLLABORATION_PAYMENTS = "collaboration_payment"
     DELETE_COLLABORATION = "delete_collaboration"
+    COMPLETE_COLLABORATION = "complete_collaboration"
     
     
 class OppurtunitiesURLS:

@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Sum, Min, Max
+from django.db.models.functions import Coalesce
 from django.conf import settings
 from django.utils import timezone
 from uuid6 import uuid7
@@ -33,7 +35,7 @@ class Proposal(models.Model):
         blank=True,
         help_text=(
             "The worth of the user's proposal (summation of role amounts). "
-            "This is filled after the proposal has been accepted."
+            "This is filled during and after the proposal creation or accepted."
         )
     )
     
@@ -59,7 +61,55 @@ class Proposal(models.Model):
             models.Index(fields=['gig', 'status'], name='proposal_gig_status_idx'),
             models.Index(fields=['sender', 'gig'], name='proposal_sender_gig_idx'),
         ]
+    
+    def calculate_total_role_cost(self):
+        """
+        Calculates the sum of proposed_amounts, falling back to 
+        role_amount for each role where proposed_amount is null.
+        """
+        result = self.roles.aggregate(
+            total=Sum(Coalesce('proposed_amount', 'role_amount'))
+        )
+        return result['total'] or 0.00
+    
+    def timeline_summary(self):
+        dates = self.deliverables.aggregate(
+            start=Min('due_date'),
+            end=Max('due_date')
+        )
         
+        start_date = dates['start']
+        end_date = dates['end']
+
+        if not start_date or not end_date:
+            return "No deliverables"
+
+        delta = end_date - start_date
+        total_days = delta.days
+
+        if total_days == 0:
+            return "1 day"
+
+        return self._format_duration(total_days)
+
+    def _format_duration(self, days):
+        """Helper to break days into Months, Weeks, and Days"""
+        months = days // 30
+        remaining_days = days % 30
+        
+        weeks = remaining_days // 7
+        final_days = remaining_days % 7
+
+        parts = []
+        if months > 0:
+            parts.append(f"{months} month{'s' if months > 1 else ''}")
+        if weeks > 0:
+            parts.append(f"{weeks} week{'s' if weeks > 1 else ''}")
+        if final_days > 0:
+            parts.append(f"{final_days} day{'s' if final_days > 1 else ''}")
+
+        return " and ".join(parts) if len(parts) > 1 else parts[0]
+       
     @property
     def sent_ago(self):
         if not self.sent_at:
