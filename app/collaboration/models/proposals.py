@@ -73,19 +73,21 @@ class Proposal(models.Model):
         return result['total'] or 0.00
     
     def timeline_summary(self):
-        dates = self.deliverables.aggregate(
-            start=Min('due_date'),
-            end=Max('due_date')
-        )
-        
-        start_date = dates['start']
-        end_date = dates['end']
+        deliverables = self.deliverables.order_by("order")
+
+        first = deliverables.first()
+        last = deliverables.last()
+
+        if not first or not last:
+            return None
+
+        start_date = first.due_date
+        end_date = last.due_date
 
         if not start_date or not end_date:
-            return "No deliverables"
+            return None
 
-        delta = end_date - start_date
-        total_days = delta.days
+        total_days = (end_date - start_date).days
 
         if total_days == 0:
             return "1 day"

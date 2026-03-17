@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
@@ -22,7 +22,8 @@ class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
             return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
         
     def get_queryset(self):
-        from django.db import connection
+        ProposalRole = get_registered_model("collaboration", "ProposalRole")
+        ProposalDeliverable = get_registered_model("collaboration", "ProposalDeliverable")
         
         qs = (
             super().get_queryset()
@@ -31,17 +32,22 @@ class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
                 "gig__has_gig_roles", "gig__title", "gig__description", "gig__total_budget",
                 "sender__first_name", "sender__last_name", "sender__is_verified", "sender__profile__headline"
             )
-            .prefetch_related("roles", "deliverables")
-            # .prefetch_related(
-            #     Prefetch(
-            #         "roles",
-            #         queryset=ProposalRole.objects.only("id", "proposal_id", "role_amount")
-            #     ),
-            #     Prefetch(
-            #         "deliverables",
-            #         queryset=ProposalDeliverable.objects.only("id", "proposal_id", "title", "due_date")
-            #     )
-            # )
+            .prefetch_related(
+                Prefetch(
+                    "roles",
+                    queryset=ProposalRole.objects.only(
+                        "id", "proposal_id", "role_amount", 
+                        "proposed_amount", "gig_role", "gig_category"
+                    )
+                ),
+                Prefetch(
+                    "deliverables",
+                    queryset=(
+                        ProposalDeliverable.objects
+                        .order_by("order")
+                    )
+                )
+            )
             .filter(
                 Q(sender=self.request.user) | Q(gig__creator=self.request.user)
             )

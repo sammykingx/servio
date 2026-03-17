@@ -47,7 +47,7 @@
     <!-- Proposals List -->
     <div class="space-y-6">
         {% for proposal in applications %}
-            <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 backdrop-blur-sm p-3 sm:p-4 shadow-sm transition-all duration-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/60"> 
+            <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/60"> 
                 <div class="flex flex-col gap-5">
                     <div class="flex items-center gap-3 sm:gap-4">
                         {% if proposal.sender.profile.avatar_url %}
@@ -81,14 +81,14 @@
                                             <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] uppercase
                                                 bg-emerald-50 dark:bg-emerald-700/40 border 
                                                 border-emerald-300 dark:border-emerald-400
-                                                text-emerald-700 dark:text-emerald-300 shadow-sm">
+                                                text-emerald-700 dark:text-emerald-300">
                                                 {{ role.status|default:"Pending" }}
                                             </span>
                                         {% elif role.status == 'rejected' %}
                                             <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] uppercase
                                                 bg-error-50 dark:bg-error-200 border 
                                                 border-error-300 dark:border-error-700
-                                                text-error-700 shadow-sm">
+                                                text-error-700">
                                                 {{ role.status }}
                                             </span>
                                         {% endif %}

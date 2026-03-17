@@ -745,28 +745,46 @@ span.flatpickr-weekday,
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
 }
-
 /*end for subscription box*/
+
+/* deliverables section in proposal detail view */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0; /* slate-200 */
+  border-radius: 20px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e293b; /* slate-800 */
+}
+/* end */
 
 /* for client-provider connection box ui */
 @keyframes spark-flow {
-        0% { transform: translateX(-200%); }
-        100% { transform: translateX(200%); }
-    }
+  0% { transform: translateX(-200%); }
+  100% { transform: translateX(200%); }
+}
     
-    /* Spark flowing from right to left */
-    @keyframes spark-flow-reverse {
-        0% { transform: translateX(200%); }
-        100% { transform: translateX(-200%); }
-    }
+/* Spark flowing from right to left */
+@keyframes spark-flow-reverse {
+  0% { transform: translateX(200%); }
+  100% { transform: translateX(-200%); }
+}
 
-    .animate-spark-flow {
-        animation: spark-flow 2s infinite linear;
-    }
+.animate-spark-flow {
+  animation: spark-flow 2s infinite linear;
+}
     
-    .animate-spark-flow-reverse {
-        animation: spark-flow-reverse 2s infinite linear;
-    }
+.animate-spark-flow-reverse {
+  animation: spark-flow-reverse 2s infinite linear;
+}
 
 /* end */
 

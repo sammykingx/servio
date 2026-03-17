@@ -94,3 +94,6 @@ class UserProfile(models.Model):
     @property
     def get_user_niches(self) -> list:
         return self.niches.values_list("id", flat=True)
+    
+    def all_user_niches(self):
+        return self.niches.all()
