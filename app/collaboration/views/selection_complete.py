@@ -17,6 +17,10 @@ class CompleteCollaborationView(LoginRequiredMixin, TemplateView):
     def dispatch(self, request, *args, **kwargs):
         proposal_id = kwargs.get("proposal_id")
         self.proposal = self.get_validated_proposal(proposal_id)
+        self.is_creator = self.proposal.gig.creator == self.request.user
+        
+        self.provider = self.proposal.sender
+        self.creator = self.proposal.gig.creator
         
         if not self.proposal:
             return redirect(AuthURLNames.ACCOUNT_DASHBOARD)
@@ -37,28 +41,29 @@ class CompleteCollaborationView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        is_creator = self.proposal.sender == self.request.user
-        if is_creator:
-            # creator -> provider
-            whatsapp_msg = self.get_url_message(self.proposal, self.request.user, is_creator)
-        else:
-            whatsapp_msg = self.get_url_message(self.proposal, self.proposal.sender, is_creator)
+        
+        whatsapp_msg = self.get_whatsapp_message()
+        mail_msg_url = self.get_mailto_url()
         
         context["gig_title"] = self.proposal.gig.title
-        context["provider"] = self.proposal.sender
+        context["provider"] = self.provider
+        context["creator"] = self.creator
         context["wa_msg"] = whatsapp_msg
+        context["mail_msg"] = mail_msg_url
+        context["phone"] = self.get_tel_url()
         # context["whatsapp_number"] = proposal.sender.phone_number # Example
         # Add your other context fields here...
         
         return context
     
-    def get_url_message(self, proposal, recipient: AbstractUser, is_creator: bool):
-        project_title = proposal.gig.title
-
-        if is_creator:
+    def get_whatsapp_message(self):
+        project_title = self.proposal.gig.title
+        
+        if self.is_creator:
             # Creator → Provider
+            number = self.provider.profile.mobile_num
             message = (
-                f"Hi {recipient.first_name.title()},\n\n"
+                f"Hi {self.provider.first_name.title()},\n\n"
                 f"I'm reaching out regarding our project *\"{project_title}\"* on *Servio*.\n\n"
                 "We've aligned on the deliverables and payment structure, and I'm looking forward "
                 "to getting started with you.\n\n"
@@ -67,8 +72,9 @@ class CompleteCollaborationView(LoginRequiredMixin, TemplateView):
             )
         else:
             # Provider → Creator
+            number = self.creator.profile.mobile_num
             message = (
-                f"Hi {recipient.first_name.title()},\n\n"
+                f"Hi {self.creator.first_name.title()},\n\n"
                 f"I'm reaching out regarding our project *\"{project_title}\"* on *Servio*.\n\n"
                 "Everything looks good on my end regarding the deliverables and payment terms, "
                 "and I'm ready to get started.\n\n"
@@ -77,82 +83,64 @@ class CompleteCollaborationView(LoginRequiredMixin, TemplateView):
             )
 
         encoded_message = urllib.parse.quote(message)
-        return f"https://wa.me/{recipient.profile.mobile_num}?text={encoded_message}"
+        return f"https://wa.me/{number}?text={encoded_message}"
     
-    def get_mailto_url(self, proposal, sender:AbstractUser, recipient:AbstractUser):
-        project_title = proposal.gig.title
-        sender_name = sender.first_name.title()
-        recipient_name = recipient.first_name.title()
+    def get_mailto_url(self):
+        project_title = self.proposal.gig.title
         subject = f"Project Kickoff: {project_title} (via Servio)"
-
-        is_creator = sender == proposal.gig.creator
-
-        # Get timeline summary (your existing method)
-        timeline = proposal.timeline_summary()
-
-        # Optional: include deliverables summary
-        deliverables = proposal.deliverables.all()
-        deliverables_list = "\n".join(
-            [f"- {d.title} (Due: {d.due_date})" for d in deliverables]
-        ) if deliverables else "No deliverables specified."
-
-
-        if is_creator:
+        # sender_name = sender.first_name.title()
+        # recipient_name = recipient.first_name.title()
+        
+        if self.is_creator:
+            # creator to provider
+            email = self.provider.email
             body = f"""
-                Hi {recipient_name},
+                Hi {self.provider.first_name.title()},
 
                 I hope you're doing well.
 
                 I'm reaching out to officially kick off our collaboration on the project "{project_title}" via Servio.
 
-                We've aligned on the scope, deliverables, and payment structure, and I'm excited to begin working with you.
+                We've aligned on the scope and payment terms for your role, and I'm looking forward to getting started with you.
 
-                Project Summary:
-                - Project: {project_title}
-                - Timeline: {timeline}
+                Please feel free to use this channel or WhatsApp for coordination, updates, and any clarifications as we move forward.
 
-                Deliverables:
-                {deliverables_list}
-
-                You can use this email or WhatsApp for communication, but feel free to suggest your preferred workflow.
-
-                Looking forward to a smooth and successful collaboration.
+                Let me know a good time to align on next steps or kickoff.
 
                 Best regards,  
-                {sender_name}
+                {self.creator.full_name.title()}
 
                 —
                 Sent via Servio by DivGM
                 """
         else:
+            email = self.creator.email
             body = f"""
-                Hi {recipient_name},
+            Hi {self.creator.first_name.title()},
 
-                I hope you're doing well.
+            I hope you're doing well.
 
-                I'm reaching out regarding our confirmed collaboration on the project "{project_title}" via Servio.
+            I'm reaching out regarding our confirmed collaboration on the project "{project_title}" via Servio.
 
-                Everything looks good on my end regarding the agreed deliverables and payment terms, and I'm ready to get started.
+            Everything looks good on my end regarding the agreed scope and payment terms for my role, and I'm ready to get started.
 
-                Project Summary:
-                - Project: {project_title}
-                - Timeline: {timeline}
+            Please let me know the next steps or any initial direction you'd like me to follow.
 
-                Deliverables:
-                {deliverables_list}
+            Happy to coordinate here or via WhatsApp for updates and communication.
 
-                Please let me know any initial steps or kickoff requirements you'd like me to follow.
+            Looking forward to working with you.
 
-                Looking forward to working together.
+            Best regards,  
+            {self.provider.full_name.title()}
 
-                Best regards,  
-                {sender_name}
-
-                —
-                Sent via Servio by DivGM
-                """
+            —
+            Sent via Servio by DivGM
+            """
 
         encoded_subject = urllib.parse.quote(subject.strip())
         encoded_body = urllib.parse.quote(body.strip())
 
-        return f"mailto:{recipient.email}?subject={encoded_subject}&body={encoded_body}"
+        return f"mailto:{email}?subject={encoded_subject}&body={encoded_body}"
+    
+    def get_tel_url(self):
+        return None

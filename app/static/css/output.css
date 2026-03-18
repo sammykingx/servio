@@ -2280,9 +2280,6 @@
   .rotate-\[-6deg\] {
     rotate: -6deg;
   }
-  .rotate-\[6deg\] {
-    rotate: 6deg;
-  }
   .rotate-x-6 {
     --tw-rotate-x: rotateX(6deg);
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
@@ -3049,9 +3046,6 @@
   }
   .border-slate-800 {
     border-color: var(--color-slate-800);
-  }
-  .border-slate-900 {
-    border-color: var(--color-slate-900);
   }
   .border-success-100 {
     border-color: var(--color-success-100);
@@ -4740,6 +4734,10 @@
     @supports (color: color-mix(in lab, red, red)) {
       --tw-gradient-to: color-mix(in oklab, var(--color-blue-200) 30%, transparent);
     }
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .to-blue-400 {
+    --tw-gradient-to: var(--color-blue-400);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .to-blue-400\/20 {
