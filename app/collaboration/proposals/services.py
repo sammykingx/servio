@@ -310,25 +310,29 @@ class ProposalService:
     @transaction.atomic
     def _transition_proposal_status(self, payload:ModifyProposalState):
         try:
-            proposal_role = ProposalRole.objects.select_for_update(nowait=True).get(
+            proposal_role = ProposalRole.objects.select_for_update().get(
                 proposal_id=payload.proposal_id,
                 gig_role_id=payload.role_id,
             )
         
             # comeback to
-            # proposal = Proposal.objects.select_for_update(nowait=True).get(
-            #     id=payload.proposal_id
-            # )
+            proposal = Proposal.objects.select_for_update().get(
+                id=payload.proposal_id
+            )
             
             if proposal_role.status != payload.state:
                 proposal_role.status = payload.state
-                # proposal.status = payload.state
-                        
                 proposal_role.save(update_fields=["status"])
+                
+            if proposal.status != payload.state:
+                proposal.status = payload.state
+
                 # change gig_role to assign if gig has roles
-                # proposal.save(update_fields=["status"])
+                proposal.save(update_fields=["status"])
         
         except OperationalError:
+            import traceback
+            traceback.print_exc()
             raise ProposalError(
                 message="This proposal is currently being updated by another action. Please wait a moment and try again.",
                 title="Action in Progress",

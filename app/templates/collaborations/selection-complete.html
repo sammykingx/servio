@@ -15,9 +15,17 @@
             <div class="flex items-center justify-center gap-4 md:gap-16 mb-12">
                 <div class="relative group">
                     <div class="absolute -inset-4 bg-brand-500/20 rounded-full blur-2xl group-hover:bg-brand-500/40 transition-all duration-700"></div>
-                    <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-slate-100 p-1 rotate-[-6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
-                        <img src="{% static 'images/user/user-19.jpg' %}" class="size-full rounded-[2.2rem] object-cover" alt="Client">
-                    </div>
+                    {% if user.profile.avatar_url %}
+                        <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-slate-100 p-1 rotate-[-6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+                            <img src="{{ user.profile.avatar_url.url }}" class="size-full rounded-[2.2rem] object-cover" alt="{{ user.get_full_name }}">
+                        </div>
+                    {% else %}
+                        <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-brand-500 flex items-center justify-center rotate-[-6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+                            <span class="text-white font-bold text-xl md:text-2xl uppercase">
+                                {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                            </span>
+                        </div>
+                    {% endif %}
                     <div class="absolute -bottom-2 -right-2 size-8 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center text-brand-500 dark:text-brand-300">
                         <span class="material-symbols-outlined text-sm">person</span>
                     </div>
@@ -55,11 +63,19 @@
 
                 <div class="relative group">
                     <div class="absolute -inset-4 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/40 transition-all duration-700"></div>
-                    <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-slate-100 p-1 rotate-[6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
-                        <img src="{% static 'images/user/user-17.jpg' %}" class="size-full rounded-[2.2rem] object-cover" alt="Provider">
-                    </div>
-                    <div class="absolute -bottom-2 -left-2 size-7 bg-success-500 dark:bg-success-600 rounded-xl shadow-lg flex items-center justify-center text-white">
-                        <span class="material-symbols-outlined text-[9px] font-semibold">verified</span>
+                    {% if provider.profile.avatar_url %}
+                        <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-slate-100 p-1 rotate-[-6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+                            <img src="{{ provider.profile.avatar_url.url }}" class="size-full rounded-[2.2rem] object-cover" alt="{{ provider.get_full_name }}">
+                        </div>
+                    {% else %}
+                        <div class="relative size-18 md:size-26 rounded-[2.5rem] bg-brand-500 flex items-center justify-center rotate-[-6deg] group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+                            <span class="text-white font-bold text-xl md:text-2xl uppercase">
+                                {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                            </span>
+                        </div>
+                    {% endif %}
+                    <div class="absolute -bottom-2 -left-2 size-7 {% if provider.is_verified %}bg-success-500 dark:bg-success-600{% else %}bg-error-500 dark:bg-error-600{% endif %} rounded-xl shadow-lg flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined text-[9px] font-semibold">{% if provider.is_verified %}verified{% else %}account_circle_off{% endif %}</span>
                     </div>
                 </div>
             </div>
@@ -69,7 +85,7 @@
                     It's a <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-blue-500">Done Deal.</span>
                 </h1>
                 <p class="text-mdd:text-lgtext-slate-500 dark:text-slate-400 leading-relaxed">
-                    The partnership for <span class="text-slate-900 dark:text-white font-semibold underline decoration-brand-400/30 dark:decoration-emerald-300 decoration-3">Enterprise SaaS Redesign</span> is officially active.
+                    The partnership for <span class="text-slate-900 dark:text-white font-semibold underline decoration-brand-400/30 dark:decoration-emerald-300 decoration-3">{{ gig_title|title }}</span> is officially active.
                 </p>
             </div>
         </div>
@@ -82,13 +98,13 @@
             </h3>
             
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <button class="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all text-left">
+                <a href="{% if user == provider %}{{ user_wame }}{% else %}{{ prov_wame }}{% endif %}" target="_blank" class="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all text-left">
                     <div class="size-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                         <span class="material-symbols-outlined">chat</span>
                     </div>
                     <p class="font-semibold text-slate-900 dark:text-white">WhatsApp</p>
                     <p class="text-[11px] text-slate-500">Fast & Direct</p>
-                </button>
+                </a>
 
                 <button class="group p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all text-left">
                     <div class="size-12 rounded-2xl bg-blue-500/10 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -132,7 +148,9 @@
                 </div>
             </div>
 
-            <button class="relative w-full mt-8 py-4 bg-white text-slate-900 rounded-2xl font-semibold hover:bg-brand-500 hover:text-white transition-all active:scale-95">
+            <button
+                @click="showToast('We’re rolling out Workspace in v2 to help you organize better than ever. We can’t wait for you to try it!', 'success', 'Workspace is almost here! 🚀')"
+                class="relative w-full mt-8 py-4 bg-white text-slate-900 rounded-2xl font-semibold hover:bg-brand-500 hover:text-white transition-all active:scale-95">
                 WORKSPACE →
             </button>
         </div>

@@ -129,7 +129,7 @@
                                             data-proposal-id="{{ proposal.id }}"
                                             data-proposal-role-id="{{ role.gig_role.id }}"
                                             data-csrf-token="{{ csrf_token }}"
-                                            data-endpiont="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}"
+                                            data-endpoint="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}"
                                             x-show="open" 
                                             @click.away="open = false" 
                                             x-transition:enter="transition ease-out duration-100"
@@ -163,7 +163,7 @@
                     <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <a href="{% url PROPOSALS.VIEW_DELIEVERABLES proposal_id=proposal.id %}" class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 text-white hover:bg-brand-400 transition-all text-sm font-semibold">
                             <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                            View Deliverables
+                            More Details
                         </a>
                         
                         <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium italic">
@@ -230,7 +230,6 @@
 </section>
 {% endblock %}
 {% block custom_page_js %}
-    <script src="{% static 'js/utils/sendRequest.js' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const actionContainer = document.getElementById('proposalActions');
@@ -245,7 +244,7 @@
                     const status = isAccept ? 'accepted' : 'rejected';
                     
                     // Get data from attributes
-                    const baseUrl = actionContainer.getAttribute('data-endpiont');
+                    const baseUrl = actionContainer.getAttribute('data-endpoint');
                     const csrfToken = actionContainer.getAttribute('data-csrf-token');
                     const proposalId = actionContainer.getAttribute('data-proposal-id');
                     const roleId = actionContainer.getAttribute('data-proposal-role-id');

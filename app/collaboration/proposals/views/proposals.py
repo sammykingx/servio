@@ -1,14 +1,14 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, DecimalField, Exists, F, OuterRef, Q, Sum
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import ListView, View
 from collaboration.models.choices import GigStatus, GigVisibility, ProposalStatus
 from collaboration.proposals.exceptions import ProposalError
 from collaboration.proposals.services import ProposalService
 from collaboration.schemas.modify_proposal_state import ModifyProposalState
+from core.url_names import CollaborationURLS
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
 from decimal import Decimal
@@ -154,7 +154,6 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
             )
             
         except ValidationError as err:
-            print(format_pydantic_errors(err))
             return JsonResponse(
                 {
                     "title": "Invalid Data Format",
@@ -190,13 +189,22 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
                     "status": "error",
                 }, status=500)
         
-        return JsonResponse({
+        resp = {
             "status": "success",
             "title": f"Proposal {data.state.title()}",
             "message": f"The proposal has been {data.state} and the service provider has been notified.",
-            "redirect": True,
-            "url": "#"
-        }, status=200)
+        }
+        
+        if data.state == ProposalStatus.ACCEPTED:
+            resp.update(
+                url=reverse_lazy(
+                    CollaborationURLS.COMPLETE_COLLABORATION,
+                    kwargs={'proposal_id': data.proposal_id}
+                ),
+                redirect=True
+            )
+            
+        return JsonResponse(resp, status=200)
         
     def update_proposal_state(self, service: ProposalService, data:ModifyProposalState):
         if not isinstance(service, ProposalService):
