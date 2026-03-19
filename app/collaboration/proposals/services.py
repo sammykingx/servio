@@ -28,6 +28,7 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 from django.db import transaction, IntegrityError, OperationalError
 from core.url_names import PaymentURLS
+from collaboration.models.choices import ProposalRoleStatus
 from collaboration.schemas.send_proposal import (
     AppliedRoles,
     DeliverablesPayload,
@@ -43,7 +44,7 @@ from .polices import ProposalPolicy
 from .status_codes import PolicyFailure
 from .validators import ProposalValidator
 from decimal import Decimal, ROUND_HALF_UP
-from typing import Dict, List
+from typing import List
 from uuid import UUID
 import logging
 
@@ -143,7 +144,7 @@ class ProposalService:
         try:
             proposal_role = self._get_proposal_role(payload.proposal_id, payload.role_id)
             proposal_obj = proposal_role.proposal
-            ProposalPolicy.should_modify_state(self.user, proposal_obj)
+            ProposalPolicy.should_modify_state(self.user, proposal_obj, payload)
             self._transition_proposal_status(payload)
 
         except ProposalPermissionDenied as e:
@@ -320,9 +321,20 @@ class ProposalService:
                 id=payload.proposal_id
             )
             
+            role_update_fields = []
+
             if proposal_role.status != payload.state:
                 proposal_role.status = payload.state
-                proposal_role.save(update_fields=["status"])
+                role_update_fields.append("status")
+
+            if payload.state == ProposalRoleStatus.ACCEPTED:
+                proposal_role.final_amount = (
+                    proposal_role.proposed_amount or proposal_role.role_amount
+                )
+                role_update_fields.append("final_amount")
+
+            if role_update_fields:
+                proposal_role.save(update_fields=role_update_fields)
                 
             if proposal.status != payload.state:
                 proposal.status = payload.state

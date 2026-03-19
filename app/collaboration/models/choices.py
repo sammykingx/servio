@@ -74,6 +74,7 @@ class ProposalRoleStatus(models.TextChoices):
     SUBMITTED = "submitted", "Submitted"
     ACCEPTED = "accepted", "Accepted"
     REJECTED = "rejected", "Rejected"
+    WITHDRAWN = "withdrawn", "Withdrawn"
     
 class AssignmentStatus(models.TextChoices):
     ONGOING = "ongoing", "Ongoing"

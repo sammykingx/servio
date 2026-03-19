@@ -1,5 +1,6 @@
 from django.db import models
 from .choices import PaymentOption, ProposalRoleStatus
+from constants import DECIMAL_PLACE, SERVICE_FEE
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -98,6 +99,17 @@ class ProposalRole(models.Model):
     def budget_difference(self):
         diff = self.proposed_amount - self.role_amount
         return f"+${diff:,.2f}" if diff > 0 else f"-${abs(diff):,.2f}" if diff < 0 else "No Change"
+    @property
+    def service_fee(self):
+        return (
+            self.final_amount * Decimal(str(SERVICE_FEE))
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+    
+    @property
+    def payout_amount(self):
+        return (
+            self.final_amount - self.service_fee
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
         
     def clean(self):
         from django.core.exceptions import ValidationError

@@ -1,40 +1,69 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
+from constants import SERVICE_FEE
 from core.url_names import AuthURLNames
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
+from decimal import Decimal
 from uuid import UUID
 import urllib.parse
 
 
-class CompleteCollaborationView(LoginRequiredMixin, TemplateView):
-    template_name = Collabs.SELECTION_COMPLETE
+class StartCollaborationView(LoginRequiredMixin, TemplateView):
+    template_name = Collabs.START_COLLABORATION
     
     def dispatch(self, request, *args, **kwargs):
         proposal_id = kwargs.get("proposal_id")
-        self.proposal = self.get_validated_proposal(proposal_id)
-        self.is_creator = self.proposal.gig.creator == self.request.user
-        
-        self.provider = self.proposal.sender
-        self.creator = self.proposal.gig.creator
+        role_id = kwargs.get("role_id")
+        self.proposal = self.get_validated_proposal(proposal_id, role_id)
         
         if not self.proposal:
             return redirect(AuthURLNames.ACCOUNT_DASHBOARD)
+        
+        self.role = (
+            self.proposal.selected_role[0]
+            if getattr(self.proposal, "selected_role", [])
+            else None
+        )
+        self.is_creator = self.proposal.gig.creator == self.request.user
+        self.provider = self.proposal.sender
+        self.creator = self.proposal.gig.creator
+        self.service_fee = (Decimal(str(SERVICE_FEE)) * 100).normalize()
             
         return super().dispatch(request, *args, **kwargs)
 
-    def get_validated_proposal(self, proposal_id):
+    def get_validated_proposal(self, proposal_id, role_id):
         Proposal = get_registered_model("collaboration", "Proposal")
+        ProposalRole = get_registered_model("collaboration", "ProposalRole")
+        
         try:
-            return Proposal.objects.select_related(
-                "gig", "gig__creator", "sender", "sender__profile"
-            ).get(
-                Q(sender=self.request.user) | Q(gig__creator=self.request.user),
-                id=proposal_id
+            return (
+                    Proposal.objects.select_related(
+                    "gig", "gig__creator", "sender", "sender__profile"
+                )
+                .prefetch_related(
+                    Prefetch(
+                        "roles",
+                        queryset=ProposalRole.objects.filter(gig_role_id=role_id)
+                        .only(
+                            "id",
+                            "role_amount",
+                            "proposed_amount",
+                            "final_amount",
+                            "payment_plan",
+                        ),
+                        to_attr="selected_role"
+                    )
+                )
+                .get(
+                    Q(sender=self.request.user) | Q(gig__creator=self.request.user),
+                    id=proposal_id,
+                    roles__gig_role_id=role_id
+                )
             )
         except (ObjectDoesNotExist, ValueError):
             return None
@@ -46,8 +75,10 @@ class CompleteCollaborationView(LoginRequiredMixin, TemplateView):
         mail_msg_url = self.get_mailto_url()
         
         context["gig_title"] = self.proposal.gig.title
+        context["role"] = self.role
         context["provider"] = self.provider
         context["creator"] = self.creator
+        context["service_fee"] = self.service_fee
         context["wa_msg"] = whatsapp_msg
         context["mail_msg"] = mail_msg_url
         context["phone"] = self.get_tel_url()

@@ -198,8 +198,8 @@ class UpdateProposalStatusView(LoginRequiredMixin, View):
         if data.state == ProposalStatus.ACCEPTED:
             resp.update(
                 url=reverse_lazy(
-                    CollaborationURLS.COMPLETE_COLLABORATION,
-                    kwargs={'proposal_id': data.proposal_id}
+                    CollaborationURLS.START_COLLABORATION,
+                    kwargs={'proposal_id': data.proposal_id, "role_id": data.role_id}
                 ),
                 redirect=True
             )

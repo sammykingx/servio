@@ -6,7 +6,7 @@ from .views.create import CreateCollaborationView
 from .views.modify import EditGigView, LiveEditCollaborationView
 from .views.detail import GigDetailView
 from .views.delete import DeleteGigView
-from .views.selection_complete import CompleteCollaborationView
+from .views.start_collaboration import StartCollaborationView
 from .proposals import urls as proposal_urls
 from .oppurtunities import urls as oppurtunity_urls
 from template_map.collaboration import Collabs
@@ -45,8 +45,8 @@ urlpatterns = [
          TemplateView.as_view(template_name=Collabs.Contracts.VIEW_CONTRACT),
          name=ContractURLS.PREVIEW_CONTRACT,
      ),
-    path("contact/<uuid:proposal_id>/",
-         CompleteCollaborationView.as_view(),
-         name=CollaborationURLS.COMPLETE_COLLABORATION,
+    path("contact/<uuid:proposal_id>/<uuid:role_id>/",
+         StartCollaborationView.as_view(),
+         name=CollaborationURLS.START_COLLABORATION,
      ),
 ]

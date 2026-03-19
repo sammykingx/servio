@@ -19,7 +19,8 @@ NON-GOALS:
 """
 
 from django.utils import timezone
-from collaboration.models.choices import GigStatus, RoleStatus
+from collaboration.models.choices import GigStatus, RoleStatus, ProposalRoleStatus
+from collaboration.schemas.modify_proposal_state import ModifyProposalState
 from .exceptions import ProposalPermissionDenied
 from .status_codes import PolicyFailure
 from registry_utils import get_registered_model
@@ -124,12 +125,30 @@ class ProposalPolicy:
     
     # ---- Accepting proposal workflow ------------
     @staticmethod
+    def validate_state_transition(user, proposal, new_state):
+        """
+        Ensures a provider can only move a proposal to a WITHDRAWN state.
+        Any other transition requires recipient (Project Creator) authority.
+        """
+        is_sender = proposal.sender == user
+        is_withdrawing = new_state == ProposalRoleStatus.WITHDRAWN
+
+        if is_sender and not is_withdrawing:
+            failure = PolicyFailure.INVALID_ACTION_FOR_SENDER
+            raise ProposalPermissionDenied(
+                "Only the project creators can authorize this action.",
+                code=failure.code,
+                title=failure.title,
+            )
+            
+    @staticmethod
     def was_previously_assigned(gig_obj):
         pass
     
     
     @classmethod
-    def should_modify_state(cls, user, proposal):
+    def should_modify_state(cls, user, proposal, payload:ModifyProposalState):
+        cls.validate_state_transition(user, proposal, payload.state)
         cls.check_financial_status(user.profile)
         # checkif previously assigned for gigs with roles
         # if previously assigned check if reassign is in payload

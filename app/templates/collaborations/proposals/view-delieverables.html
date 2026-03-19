@@ -3,122 +3,124 @@
 {% load humanize %}
 {% block browser_title %}Project Proposal Delieverables{% endblock %}
 {% block content %}
-<section class="max-w-7xl mx-auto py-8"> 
-    <!-- Provider Header Info -->
-    <div class="relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] md:rounded-[3rem] p-5 md:p-10 mb-8">
-        <div class="absolute top-0 right-0 w-full md:w-1/3 h-full pointer-events-none opacity-[0.03] md:opacity-10 dark:opacity-20">
-            <svg viewBox="0 0 100 100" class="h-full w-full" preserveAspectRatio="none">
-                <defs>
-                    <pattern id="grid-responsive" width="10" height="10" patternUnits="userSpaceOnUse">
-                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" stroke-width="0.5"/>
-                    </pattern>
-                </defs>
-                <rect width="100" height="100" fill="url(#grid-responsive)" />
-            </svg>
-        </div>
-
-        <div class="relative flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
-            
-            <div class="relative shrink-0">
-                <div class="absolute -inset-1.5 md:-inset-2 border border-brand-500/20 dark:border-gray-700 rounded-[1.8rem] md:rounded-[2.5rem] animate-[spin_15s_linear_infinite]"></div>
-                
-                <div class="size-24 md:size-40 rounded-[1.5rem] md:rounded-[2.2rem] overflow-hidden border-2 md:border-4 border-white dark:border-slate-800 shadow-xl md:shadow-2xl rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
-                    {% if proposal.sender.profile.avatar_url %}
-                        <img 
-                            alt="{{ proposal.sender.get_full_name }}" 
-                            class="w-full h-full object-cover"
-                            src="{{ proposal.sender.profile.avatar_url.url }}" 
-                        />
-                    {% else %}
-                        <div class="w-full h-full bg-brand-500 flex items-center justify-center text-white font-semibold text-2xl md:text-4xl uppercase ">
-                            {{ proposal.sender.first_name|slice:":1" }}{{ proposal.sender.last_name|slice:":1" }}
-                        </div>
-                    {% endif %}
-                </div>
-                
-                {% if proposal.sender.is_verified %}
-                    <div class="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 bg-emerald-500 text-white size-8 md:size-10 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg border-1 md:border-4 border-white dark:border-slate-900">
-                        <span class="material-symbols-outlined text-base md:text-xl">verified</span>
-                    </div>
-                {% else %}
-                    <div class="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 bg-red-500 text-white size-8 md:size-10 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg border-1 md:border-4 border-white dark:border-slate-900">
-                        <span class="material-symbols-outlined text-base md:text-xl">verified_off</span>
-                    </div>
-                {% endif %}
+<section class="max-w-7xl mx-auto py-8">
+     {% if proposal.sender != user %}
+        <!-- Provider Header Info -->
+        <div class="relative overflow-hidden bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] md:rounded-[3rem] p-5 md:p-10 mb-8">
+            <div class="absolute top-0 right-0 w-full md:w-1/3 h-full pointer-events-none opacity-[0.03] md:opacity-10 dark:opacity-20">
+                <svg viewBox="0 0 100 100" class="h-full w-full" preserveAspectRatio="none">
+                    <defs>
+                        <pattern id="grid-responsive" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#grid-responsive)" />
+                </svg>
             </div>
 
-            <div class="flex-1 text-center md:text-left w-full">
-                <div class="flex flex-col md:flex-row md:items-center justify-center md:justify-start gap-2 md:gap-3 mb-4">
-                    <h1 class="text-2xl md:text-4xl font-semibold text-gray-800 dark:text-white tracking-tighter">
-                        {{ proposal.sender.full_name|title }}
-                    </h1>
-                    <div class="flex justify-center">
-                        {% if recommends %}
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-500/10 text-[9px] md:text-[10px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest border border-brand-100 dark:border-brand-500/20">
-                                Top Tier Expert
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
-
+            <div class="relative flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
                 
-                <p class="text-sm md:text-lg text-slate-500 dark:text-slate-400 font-medium max-w-2xl mb-6 px-2 md:px-0 line-clamp-2">
-                    {% if proposal.sender.profile.bio %}
-                        {{ proposal.sender.profile.bio }}
-                    {% else %}
-                        Dedicated to delivering 
-                        <span class="text-gray-800 dark:text-white font-semibold">Strategic Solutions</span> 
-                        and 
-                        <span class="text-gray-800 dark:text-white font-semibold">High-Quality Results</span> 
-                        tailored to your project goals.
-                    {% endif %}
-                </p>
-
-                <div class="flex flex-wrap justify-center md:justify-start gap-2 md:gap-4 mb-2">
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-slate-50 dark:bg-slate-800/40 rounded-lg md:rounded-xl border border-slate-100 dark:border-slate-700">
-                        <span class="material-symbols-outlined text-brand-500 dark:text-brand-400 text-xs md:text-sm">location_on</span>
-                        <span class="text-[10px] md:text-xs font-semibold text-slate-600 dark:text-slate-300">{{ proposal.sender.profile.home_address.province|title }}, {{ proposal.sender.profile.home_address.country|title }}</span>
-                    </div>
-                    {% if reviews %}
-                        <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-slate-50 dark:bg-slate-800/40 rounded-lg md:rounded-xl border border-slate-100 dark:border-slate-700">
-                            <span class="material-symbols-outlined text-blue-500 text-xs md:text-sm">star</span>
-                            <span class="text-[10px] md:text-xs font-semibold text-slate-600 dark:text-slate-300">4.9 (124)</span>
-                        </div>
-                    {% else %}
-                        <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-blue-50/50 dark:bg-blue-500/10 rounded-lg md:rounded-xl border border-blue-100 dark:border-blue-500/20">
-                            <span class="material-symbols-outlined text-blue-500 text-xs md:text-sm animate-pulse">auto_awesome</span>
-                            <span class="text-[10px] md:text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Rising Star</span>
-                        </div>
-                    {% endif %}
-                    {% comment 'enable when completion rate is present' %}
-                        <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-slate-50 dark:bg-slate-800/40 rounded-lg md:rounded-xl border border-slate-100 dark:border-slate-700">
-                            <span class="material-symbols-outlined text-emerald-500 text-xs md:text-sm">bolt</span>
-                            <span class="text-[10px] md:text-xs font-semibold text-slate-600 dark:text-slate-300">98% Success</span>
-                        </div>
-                    {% endcomment %}
-                </div>
-            </div>
-
-            <div class="hidden xl:flex flex-col items-center justify-center border-l border-slate-100 dark:border-slate-800 pl-10 ml-4">
-                <div class="size-20 rounded-full border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center hover:rotate-45 transition-transform duration-1000">
-                    <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-4xl">
-                        {% if profile.sender.is_verified %}
-                            shield
+                <div class="relative shrink-0">
+                    <div class="absolute -inset-1.5 md:-inset-2 border border-brand-500/20 dark:border-gray-700 rounded-[1.8rem] md:rounded-[2.5rem] animate-[spin_15s_linear_infinite]"></div>
+                    
+                    <div class="size-24 md:size-40 rounded-[1.5rem] md:rounded-[2.2rem] overflow-hidden border-2 md:border-4 border-white dark:border-slate-800 shadow-xl md:shadow-2xl rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500">
+                        {% if proposal.sender.profile.avatar_url %}
+                            <img 
+                                alt="{{ proposal.sender.get_full_name }}" 
+                                class="w-full h-full object-cover"
+                                src="{{ proposal.sender.profile.avatar_url.url }}" 
+                            />
                         {% else %}
-                            account_circle_off
+                            <div class="w-full h-full bg-brand-500 flex items-center justify-center text-white font-semibold text-2xl md:text-4xl uppercase ">
+                                {{ proposal.sender.first_name|slice:":1" }}{{ proposal.sender.last_name|slice:":1" }}
+                            </div>
                         {% endif %}
-                    </span>
-                </div>
-                <p class="text-[9px] font-medium text-slate-400 uppercase tracking-[0.3em] mt-4">
-                    {% if profile.sender.is_verified %}
-                        Verified professional
+                    </div>
+                    
+                    {% if proposal.sender.is_verified %}
+                        <div class="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 bg-emerald-500 text-white size-8 md:size-10 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg border-1 md:border-4 border-white dark:border-slate-900">
+                            <span class="material-symbols-outlined text-base md:text-xl">verified</span>
+                        </div>
                     {% else %}
-                        Incognito Mode
+                        <div class="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 bg-red-500 text-white size-8 md:size-10 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg border-1 md:border-4 border-white dark:border-slate-900">
+                            <span class="material-symbols-outlined text-base md:text-xl">verified_off</span>
+                        </div>
                     {% endif %}
-                </p>
+                </div>
+
+                <div class="flex-1 text-center md:text-left w-full">
+                    <div class="flex flex-col md:flex-row md:items-center justify-center md:justify-start gap-2 md:gap-3 mb-4">
+                        <h1 class="text-2xl md:text-4xl font-semibold text-gray-800 dark:text-white tracking-tighter">
+                            {{ proposal.sender.full_name|title }}
+                        </h1>
+                        <div class="flex justify-center">
+                            {% if recommends %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-500/10 text-[9px] md:text-[10px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest border border-brand-100 dark:border-brand-500/20">
+                                    Top Tier Expert
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    
+                    <p class="text-sm md:text-lg text-slate-500 dark:text-slate-400 font-medium max-w-2xl mb-6 px-2 md:px-0 line-clamp-2">
+                        {% if proposal.sender.profile.bio %}
+                            {{ proposal.sender.profile.bio }}
+                        {% else %}
+                            Dedicated to delivering 
+                            <span class="text-gray-800 dark:text-white font-semibold">Strategic Solutions</span> 
+                            and 
+                            <span class="text-gray-800 dark:text-white font-semibold">High-Quality Results</span> 
+                            tailored to your project goals.
+                        {% endif %}
+                    </p>
+
+                    <div class="flex flex-wrap justify-center md:justify-start gap-2 md:gap-4 mb-2">
+                        <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-slate-50 dark:bg-slate-800/40 rounded-lg md:rounded-xl border border-slate-100 dark:border-slate-700">
+                            <span class="material-symbols-outlined text-brand-500 dark:text-brand-400 text-xs md:text-sm">location_on</span>
+                            <span class="text-[10px] md:text-xs font-semibold text-slate-600 dark:text-slate-300">{{ proposal.sender.profile.home_address.province|title }}, {{ proposal.sender.profile.home_address.country|title }}</span>
+                        </div>
+                        {% if reviews %}
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-slate-50 dark:bg-slate-800/40 rounded-lg md:rounded-xl border border-slate-100 dark:border-slate-700">
+                                <span class="material-symbols-outlined text-blue-500 text-xs md:text-sm">star</span>
+                                <span class="text-[10px] md:text-xs font-semibold text-slate-600 dark:text-slate-300">4.9 (124)</span>
+                            </div>
+                        {% else %}
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-blue-50/50 dark:bg-blue-500/10 rounded-lg md:rounded-xl border border-blue-100 dark:border-blue-500/20">
+                                <span class="material-symbols-outlined text-blue-500 text-xs md:text-sm animate-pulse">auto_awesome</span>
+                                <span class="text-[10px] md:text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Rising Star</span>
+                            </div>
+                        {% endif %}
+                        {% comment 'enable when completion rate is present' %}
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 bg-slate-50 dark:bg-slate-800/40 rounded-lg md:rounded-xl border border-slate-100 dark:border-slate-700">
+                                <span class="material-symbols-outlined text-emerald-500 text-xs md:text-sm">bolt</span>
+                                <span class="text-[10px] md:text-xs font-semibold text-slate-600 dark:text-slate-300">98% Success</span>
+                            </div>
+                        {% endcomment %}
+                    </div>
+                </div>
+
+                <div class="hidden xl:flex flex-col items-center justify-center border-l border-slate-100 dark:border-slate-800 pl-10 ml-4">
+                    <div class="size-20 rounded-full border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center hover:rotate-45 transition-transform duration-1000">
+                        <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-4xl">
+                            {% if profile.sender.is_verified %}
+                                shield
+                            {% else %}
+                                account_circle_off
+                            {% endif %}
+                        </span>
+                    </div>
+                    <p class="text-[9px] font-medium text-slate-400 uppercase tracking-[0.3em] mt-4">
+                        {% if profile.sender.is_verified %}
+                            Verified professional
+                        {% else %}
+                            Incognito Mode
+                        {% endif %}
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
     <!-- proposal Stats card -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-10">
@@ -203,7 +205,7 @@
         </div>
     </div>
 
-    <!-- Proposal deliverables and overview -->
+    <!-- Proposal project Overview and deliverables -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div class="lg:col-span-8 space-y-10">
             <!-- Project recap -->
@@ -250,99 +252,244 @@
                     <h2 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-white tracking-tight">Role Allocation</h2>
                     <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest text-balance">Review and approve specific resource costs for this engagement.</p>
                 </div>
+                
+                {% if proposal.sender != user %}
+                    {# render roles for project creator with actions #}
+                    <div class="p-0 md:p-4">                  
+                        {% if proposal.roles.exists %}
+                        <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+                            <div class="col-span-5 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Applied Role</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Budget</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Asking</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Status</div>
+                            <div class="col-span-1 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-right">Actions</div>
+                        </div>
+                        {% endif %}
 
-                <div class="p-0 md:p-4">                  
-                    {% if proposal.roles.exists %}
-                    <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-                        <div class="col-span-5 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Applied Role</div>
-                        <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Budget</div>
-                        <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Asking</div>
-                        <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Status</div>
-                        <div class="col-span-1 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-right">Actions</div>
-                    </div>
-                    {% endif %}
-
-                    {% for role in proposal.roles.all %} 
-                        <div class="group px-6 py-8 md:py-6 border-b last:border-0 border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
-                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 items-center">
-                                
-                                <div class="col-span-1 md:col-span-5">
-                                    <p class="text-base font-semibold text-gray-800 dark:text-white">{{ role.role_name|title }}</p>
-                                    <p class="text-xs text-slate-500 font-medium">Plan: {{ role.get_payment_plan_display }}</p>
-                                </div>
-
-                                <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center border-t md:border-t-0 pt-4 md:pt-0 border-slate-100 dark:border-slate-800">
-                                    <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Your Budget</span>
-                                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 text-center">
-                                        ${% if proposal.gig.has_gig_roles %}{{ role.role_amount|intcomma }}{% else %}{{ proposal.gig.total_budget|intcomma }}{% endif %}
-                                    </p>
-                                </div>
-
-                                <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center">
-                                    <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Asking</span>
-                                    <p class="text-lg font-semibold text-gray-800 dark:text-white text-center tracking-tighter">
-                                        ${% if proposal.gig.has_gig_roles %}{{ role.proposed_amount|intcomma }}{% else %}{{ role.role_amount|intcomma }}{% endif %}
-                                    </p>
-                                </div>
-
-                                <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center">
-                                    <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Status</span>
-                                    <div class="text-center">
+                        {% for role in proposal.roles.all %} 
+                            <div class="group relative px-6 py-8 md:py-6 border-b last:border-0 border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                                {% if role.status == 'accepted' %}
+                                    <a href="{% url COLLABORATION_URLS.COMPLETE_COLLABORATION proposal.id role.gig_role.id %}" target="_blanck" class="absolute inset-0 z-10 cursor-pointer" aria-label="Begin Collaboration"></a>
+                                {% endif %}
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 items-center">  
+                                    <div class="col-span-1 md:col-span-5">
+                                        <p class="text-base font-semibold text-gray-800 dark:text-white">{{ role.role_name|title }}</p>
+                                        <p class="text-xs text-slate-500 font-medium">Plan: {{ role.get_payment_plan_display }}</p>
                                         {% if role.status == 'accepted' %}
-                                            <span class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-emerald-100 dark:border-emerald-500/20">Accepted</span>
-                                        {% elif role.status == 'rejected' %}
-                                            <span class="px-2.5 py-1 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-rose-100 dark:border-rose-500/20">Rejected</span>
-                                        {% else %}
-                                            <span class="px-2.5 py-1 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-amber-100 dark:border-amber-500/20">Pending</span>
+                                            <p class="text-[10px] font-light text-brand-500 dark:text-brand-400 mt-1 flex items-center gap-1 animate-pulse">
+                                                Click to begin collaboration
+                                            </p>
                                         {% endif %}
                                     </div>
-                                </div>
 
-                                <!-- Proposal Actions -->
-                                <div data-proposal-actions data-endpoint="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" data-proposal-id="{{ proposal.id }}" data-role-id="{{ role.gig_role.id }}" data-csrf-token="{{ csrf_token }}" class="col-span-1">
-                                    <!-- Desktop view -->
-                                    <div class="hidden md:block relative text-right group/menu">
-                                        <button class="inline-flex items-center justify-center size-10 bg-brand-400 dark:bg-gray-100 text-white dark:text-slate-900 rounded-xl hover:bg-brand-500 dark:hover:bg-brand-500 dark:hover:text-white transition-all">
-                                            <span class="material-symbols-outlined">more_horiz</span>
-                                        </button>
-                                        
-                                        <div class="invisible group-hover/menu:visible opacity-0 group-hover/menu:opacity-100 absolute right-0 top-full mt-2 w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-30 transition-all p-1.5">
-                                            <button data-action="accepted" class="flex items-center w-full px-3 py-2 text-[11px] font-medium text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-lg">
-                                                <span class="material-symbols-outlined text-sm mr-2">check_circle</span> ACCEPT
-                                            </button>
-                                            <button data-action="rejected" class="flex items-center w-full px-3 py-2 text-[11px] font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg">
-                                                <span class="material-symbols-outlined text-sm mr-2">block</span> REJECT
-                                            </button>
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center border-t md:border-t-0 pt-4 md:pt-0 border-slate-100 dark:border-slate-800">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Your Budget</span>
+                                        <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 text-center">
+                                            ${% if proposal.gig.has_gig_roles %}{{ role.role_amount|intcomma }}{% else %}{{ proposal.gig.total_budget|intcomma }}{% endif %}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Asking</span>
+                                        <p class="text-lg font-semibold text-gray-800 dark:text-white text-center tracking-tighter">
+                                            ${% if proposal.gig.has_gig_roles %}{{ role.proposed_amount|intcomma }}{% else %}{{ role.role_amount|intcomma }}{% endif %}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Status</span>
+                                        <div class="text-center">
+                                            {% if role.status == 'accepted' %}
+                                                <span class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-emerald-100 dark:border-emerald-500/20">Accepted</span>
+                                            {% elif role.status == 'rejected' %}
+                                                <span class="px-2.5 py-1 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-rose-100 dark:border-rose-500/20">Rejected</span>
+                                            {% else %}
+                                                <span class="px-2.5 py-1 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-amber-100 dark:border-amber-500/20">Pending</span>
+                                            {% endif %}
                                         </div>
                                     </div>
 
-                                    <!-- Mobile view -->
-                                    <div class="grid grid-cols-2 gap-3 md:hidden">
-                                        <button data-action="accepted" class="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 rounded-xl text-[10px] font-medium uppercase tracking-widest border border-emerald-100 dark:border-emerald-500/20">
-                                            <span class="material-symbols-outlined text-sm">check</span> Accept
-                                        </button>
-                                        <button data-action="rejected" class="flex items-center justify-center gap-2 py-3 bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 rounded-xl text-[10px] font-medium uppercase tracking-widest border border-rose-100 dark:border-rose-500/20">
-                                            <span class="material-symbols-outlined text-sm">close</span> Reject
-                                        </button>
+                                    <!-- Proposal Actions -->
+                                    <div data-proposal-actions data-endpoint="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" data-proposal-id="{{ proposal.id }}" data-role-id="{{ role.gig_role.id }}" data-csrf-token="{{ csrf_token }}" class="col-span-1">
+                                        <!-- Desktop view -->
+                                        <div class="hidden md:block relative text-right group/menu">
+                                            <button class="inline-flex items-center justify-center size-10 bg-brand-400 dark:bg-gray-100 text-white dark:text-slate-900 rounded-xl hover:bg-brand-500 dark:hover:bg-brand-500 dark:hover:text-white transition-all">
+                                                <span class="material-symbols-outlined">more_horiz</span>
+                                            </button>
+                                            
+                                            <div class="invisible group-hover/menu:visible opacity-0 group-hover/menu:opacity-100 absolute right-0 top-full mt-2 w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-30 transition-all p-1.5">
+                                                <button data-action="accepted" class="flex items-center w-full px-3 py-2 text-[11px] font-medium text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-lg">
+                                                    <span class="material-symbols-outlined text-sm mr-2">check_circle</span> ACCEPT
+                                                </button>
+                                                <button data-action="rejected" class="flex items-center w-full px-3 py-2 text-[11px] font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg">
+                                                    <span class="material-symbols-outlined text-sm mr-2">block</span> REJECT
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mobile view -->
+                                        <div class="grid grid-cols-2 gap-3 md:hidden">
+                                            <button data-action="accepted" class="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 rounded-xl text-[10px] font-medium uppercase tracking-widest border border-emerald-100 dark:border-emerald-500/20">
+                                                <span class="material-symbols-outlined text-sm">check</span> Accept
+                                            </button>
+                                            <button data-action="rejected" class="flex items-center justify-center gap-2 py-3 bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 rounded-xl text-[10px] font-medium uppercase tracking-widest border border-rose-100 dark:border-rose-500/20">
+                                                <span class="material-symbols-outlined text-sm">close</span> Reject
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        {% empty %}
+                            <div class="p-12 md:p-20 flex flex-col items-center justify-center text-center">
+                                <div class="relative mb-6">
+                                    <div class="absolute inset-0 size-16 bg-brand-500/20 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2"></div>
+                                    <div class="relative size-16 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-300 dark:text-slate-600">
+                                        <span class="material-symbols-outlined text-3xl">person_add</span>
+                                    </div>
+                                </div>
+                                <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">No roles attached to this proposal</h3>
+                                <p class="text-sm text-slate-500 max-w-[280px] leading-relaxed">
+                                    The provider has submitted this as a general offer without specific role assignments.
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {# render roles for provider without actions #}
+                    <div class="p-0 md:p-4">                  
+                        {% if proposal.roles.exists %}
+                        <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+                            <div class="col-span-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Applied Role</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Budget</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Asking</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Status</div>
                         </div>
-                    {% empty %}
-                        <div class="p-12 md:p-20 flex flex-col items-center justify-center text-center">
-                            <div class="relative mb-6">
-                                <div class="absolute inset-0 size-16 bg-brand-500/20 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2"></div>
-                                <div class="relative size-16 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-300 dark:text-slate-600">
-                                    <span class="material-symbols-outlined text-3xl">person_add</span>
+                        {% endif %}
+
+                        {% for role in proposal.roles.all %} 
+                            <div class="group relative px-6 py-8 md:py-6 border-b last:border-0 border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                                {% if role.status == 'accepted' %}
+                                    <a href="{% url COLLABORATION_URLS.COMPLETE_COLLABORATION proposal.id role.gig_role.id %}" target="_blanck" class="absolute inset-0 z-10 cursor-pointer" aria-label="Begin Collaboration"></a>
+                                {% endif %}
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 items-center">
+                                    
+                                    <div class="col-span-1 md:col-span-6">
+                                        <p class="text-base font-semibold text-gray-800 dark:text-white">{{ role.role_name|title }}</p>
+                                        <p class="text-xs text-slate-500 font-medium">Plan: {{ role.get_payment_plan_display }}</p>
+                                        {% if role.status == 'accepted' %}
+                                            <p class="text-[10px] font-light text-brand-500 dark:text-brand-400 mt-1 flex items-center gap-1 animate-pulse">
+                                                Click to begin collaboration
+                                            </p>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center border-t md:border-t-0 pt-4 md:pt-0 border-slate-100 dark:border-slate-800">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Your Budget</span>
+                                        <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 text-center">
+                                            ${% if proposal.gig.has_gig_roles %}{{ role.role_amount|intcomma }}{% else %}{{ proposal.gig.total_budget|intcomma }}{% endif %}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Asking</span>
+                                        <p class="text-lg font-semibold text-gray-800 dark:text-white text-center tracking-tighter">
+                                            ${% if proposal.gig.has_gig_roles %}{{ role.proposed_amount|intcomma }}{% else %}{{ role.role_amount|intcomma }}{% endif %}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Status</span>
+                                        <div class="text-center">
+                                            {% if role.status == 'accepted' %}
+                                                <span class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-emerald-100 dark:border-emerald-500/20">Accepted</span>
+                                            {% elif role.status == 'rejected' %}
+                                                <span class="px-2.5 py-1 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-rose-100 dark:border-rose-500/20">Rejected</span>
+                                            {% else %}
+                                                <span class="px-2.5 py-1 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-amber-100 dark:border-amber-500/20">Pending</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">No roles attached to this proposal</h3>
-                            <p class="text-sm text-slate-500 max-w-[280px] leading-relaxed">
-                                The provider has submitted this as a general offer without specific role assignments.
-                            </p>
+                        {% empty %}
+                            <div class="p-12 md:p-20 flex flex-col items-center justify-center text-center">
+                                <div class="relative mb-6">
+                                    <div class="absolute inset-0 size-16 bg-brand-500/20 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2"></div>
+                                    <div class="relative size-16 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-300 dark:text-slate-600">
+                                        <span class="material-symbols-outlined text-3xl">person_add</span>
+                                    </div>
+                                </div>
+                                <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">No roles attached to this proposal</h3>
+                                <p class="text-sm text-slate-500 max-w-[280px] leading-relaxed">
+                                    No role was attached to this proposal.
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- <div class="p-0 md:p-4">                  
+                        {% if proposal.roles.exists %}
+                        <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+                            <div class="col-span-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Applied Role</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Budget</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Asking</div>
+                            <div class="col-span-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Status</div>
                         </div>
-                    {% endfor %}
-                </div>
+                        {% endif %}
+
+                        {% for role in proposal.roles.all %} 
+                            <div class="group relative px-6 py-8 md:py-6 border-b last:border-0 border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                                
+                                {% if role.status == 'accepted' %}
+                                    <a href="#" class="absolute inset-0 z-10 cursor-pointer" aria-label="Begin Collaboration"></a>
+                                {% endif %}
+
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 items-center">
+                                    
+                                    <div class="col-span-1 md:col-span-6">
+                                        <p class="text-base font-semibold text-gray-800 dark:text-white">{{ role.role_name|title }}</p>
+                                        <div class="mt-0.5">
+                                            <p class="text-xs text-slate-500 font-medium">Plan: {{ role.get_payment_plan_display }}</p>
+                                            
+                                            {% if role.status == 'accepted' %}
+                                                <p class="text-[10px] font-light text-brand-500 dark:text-brand-400 mt-1 flex items-center gap-1 animate-pulse">
+                                                    Click to begin collaboration
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center border-t md:border-t-0 pt-4 md:pt-0 border-slate-100 dark:border-slate-800">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Your Budget</span>
+                                        <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 text-center">
+                                            ${% if proposal.gig.has_gig_roles %}{{ role.role_amount|intcomma }}{% else %}{{ proposal.gig.total_budget|intcomma }}{% endif %}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Asking</span>
+                                        <p class="text-lg font-semibold text-gray-800 dark:text-white text-center tracking-tighter">
+                                            ${% if proposal.gig.has_gig_roles %}{{ role.proposed_amount|intcomma }}{% else %}{{ role.role_amount|intcomma }}{% endif %}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-2 flex md:block justify-between items-center relative z-20">
+                                        <span class="md:hidden text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Status</span>
+                                        <div class="text-center">
+                                            {% if role.status == 'accepted' %}
+                                                <span class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-emerald-100 dark:border-emerald-500/20">Accepted</span>
+                                            {% elif role.status == 'rejected' %}
+                                                <span class="px-2.5 py-1 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-rose-100 dark:border-rose-500/20">Rejected</span>
+                                            {% else %}
+                                                <span class="px-2.5 py-1 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[9px] font-medium uppercase tracking-wider rounded-full border border-amber-100 dark:border-amber-500/20">Pending</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                        {% endfor %}
+                    </div> -->
+                {% endif %}
 
                 <div class="p-6 md:px-10 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
                     <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Projected Investment</span>
@@ -430,21 +577,37 @@
         </div>
 
         <div class="lg:col-span-4 space-y-6">
-            
-            <div class="relative overflow-hidden bg-brand-800 dark:bg-brand-500 p-8 rounded-[2.5rem] shadow-2xl">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                    <span class="material-symbols-outlined text-6xl text-white">gavel</span>
+            {% if proposal.sender != user %}
+                <div class="relative overflow-hidden bg-brand-800 dark:bg-brand-500 p-8 rounded-[2.5rem] shadow-2xl">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="material-symbols-outlined text-6xl text-white">gavel</span>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-white font-semibold text-xl mb-2 tracking-tight">Modify Scope?</h3>
+                        <p class="text-white/70 text-sm mb-8 leading-relaxed">If the timeline or deliverables don't align with your goals, propose an adjustment.</p>
+                        <button 
+                            @click="showToast('Refining our negotiation engine for you. Expect total control in the next update.', 'info', 'Upcoming Feature (v2)')"
+                            class="w-full py-4 bg-white text-gray-800 rounded-2xl font-semibold text-xs uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl">
+                            Draft Counter Offer
+                        </button>
+                    </div>
                 </div>
-                <div class="relative z-10">
-                    <h3 class="text-white font-semibold text-xl mb-2 tracking-tight">Modify Scope?</h3>
-                    <p class="text-white/70 text-sm mb-8 leading-relaxed">If the timeline or deliverables don't align with your goals, propose an adjustment.</p>
-                    <button 
-                        @click="showToast('Refining our negotiation engine for you. Expect total control in the next update.', 'info', 'Upcoming Feature (v2)')"
-                        class="w-full py-4 bg-white text-gray-800 rounded-2xl font-semibold text-xs uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl">
-                        Draft Counter Offer
-                    </button>
+            {% else %}
+                <div class="relative overflow-hidden bg-brand-800 dark:bg-brand-500 p-8 rounded-[2.5rem] shadow-2xl">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="material-symbols-outlined text-6xl text-white">handshake</span>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-white font-semibold text-xl mb-2 tracking-tight">Negotiate Terms?</h3>
+                        <p class="text-white/70 text-sm mb-8 leading-relaxed">If the client's counter-offer doesn't meet your margins, you can refine the pricing or deliverables here.</p>
+                        <button 
+                            @click="showToast('We are fine-tuning the Deal Engine to give you seamless counter-offer logic. Stay tuned for v2!', 'info', 'Feature Arriving in v2')"
+                            class="w-full py-4 bg-white text-gray-800 rounded-2xl font-semibold text-xs uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl">
+                            Open Deal Engine
+                        </button>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             <div class="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-6 rounded-[2rem]">
                 <div class="flex gap-4">
@@ -459,7 +622,7 @@
             </div>
 
             <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-[2.5rem]">
-                <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.3em] mb-6">Provider Expertise Stack</p>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.3em] mb-6">{% if proposal.sender != user %}Provider{% else %}Your{% endif %} Expertise Stack</p>
                 <div class="flex flex-wrap gap-2">
                     {% for niche in proposal.sender.profile.all_user_niches %}
                         <span class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-[10px] font-semibold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 uppercase tracking-widest">{{ niche.name }}</span>
@@ -478,8 +641,19 @@
 </section>
 {% endblock %}
 {% block custom_page_js %}
-<script src="{% static 'js/collaboration/managers/mutateProposalState.js' %}"></script>
+<script 
+    id="proposal-script" 
+    data-should-init="{% if proposal.sender != user %}true{% else %}false{% endif %}" 
+    src="{% static 'js/collaboration/managers/mutateProposalState.js' %}">
+</script>
 <script>
-    document.addEventListener('DOMContentLoaded', ProposalManager.init);
+    document.addEventListener('DOMContentLoaded', () => {
+        const scriptTag = document.getElementById('proposal-script');
+        const shouldInit = scriptTag.dataset.shouldInit === 'true';
+        
+        if (shouldInit) {
+            ProposalManager.init();
+        }
+    });
 </script>
 {% endblock %}
