@@ -11,24 +11,13 @@ function updateGigData(el) {
             // composed later
             roles: [],
             isNegotiable: false,
+            go_live: false,
         },
         status: el.dataset.status,
         locked: false,
         budgetLocked: false,
         rolesTotalAmount: 0,
         maxDescriptionLength: 2000,
-        roleColors: [
-            'bg-success-400',
-            'bg-blue-500',
-            'bg-purple-500',
-            'bg-orange-500',
-            'bg-pink-500',
-            'bg-teal-500',
-            'bg-indigo-500',
-            'bg-emerald-500',
-            'bg-rose-500',
-            'bg-cyan-500',
-        ],
 
         init() {
             this.locked = this.status === 'in_progress';
@@ -132,6 +121,9 @@ async function saveChanges() {
         );
         return;
     }
+
+    const userConfirmed = confirm("Would you like to publish this project now? \n\nClick 'OK' to publish, or 'Cancel' to keep it as a draft.");
+    gigPayload.go_live = userConfirmed ? true : false;
     
     try {
         const response = await updateGig(gigPayload, endpoint, csrf_token);

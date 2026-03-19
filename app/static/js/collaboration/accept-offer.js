@@ -8,7 +8,6 @@ async function sendProposal() {
     const errorTitle = "Session Out of Sync";
     const errorMsg = "Required project data could not be loaded. A quick refresh will resolvee/fix this.";
 
-    sendBtn.disabled = true;
     if (!gigSummary) {
         showToast(errorMsg, "info", errorTitle)
         return;
@@ -54,13 +53,17 @@ async function sendProposal() {
     // console.log("Master Payload ready for Backend:", JSON.stringify(masterPayload, null, 2));
 
     try {
+
+        sendBtn.disabled = true;
+        sendBtn.classList.add('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
+
         const response = await sendPayload(masterPayload, endPoint, csrfToken);
         const data = await response.json().catch(() => ({}));
-        sendBtn.disabled = false;
 
         if (!response.ok) {
             const msg = data.message || "Server rejected the request. Please check your input.";
-            showToast(msg, "error", data.error || "Unable to send proposal");
+            showToast(msg, data.status || "error", data.error || "Unable to send proposal");
+            console.log(JSON.stringify(data, null, 2));
             if (data?.url) {
                 setTimeout(() => {
                     window.location.assign(data.url);
@@ -77,13 +80,16 @@ async function sendProposal() {
 
         if (data?.url) {
             setTimeout(() => {
-                window.location.assign(result.url);
+                window.location.assign(data.url);
             }, 2000);
         }
     } catch (err) {
         // The "catch" in sendPayload already showed a toast, 
         // but you can do extra cleanup here if needed.
         return;
+    } finally {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
     }
 }
 

@@ -46,7 +46,7 @@ class DeliverablesPayload(BaseModel):
 class AppliedRoles(BaseModel):
     industry_id: int 
     niche_id: int
-    role_amount: Decimal = Field(..., gt=0, max_digits=12, decimal_places=2)
+    role_amount: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)
     proposed_amount: Union[Decimal, None] = None
     payment_plan: PaymentOption = PaymentOption.SPLIT_50_50
     
@@ -54,5 +54,5 @@ class AppliedRoles(BaseModel):
 class SendProposal(BaseModel):
     applied_roles: List[AppliedRoles]
     deliverables: List[DeliverablesPayload]
-    proposal_value: Decimal = Field(..., gt=0, max_digits=12, decimal_places=2)
+    proposal_value: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)
     sent_at: datetime

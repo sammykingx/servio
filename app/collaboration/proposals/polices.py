@@ -66,8 +66,8 @@ class ProposalPolicy:
             )
             
     @staticmethod
-    def check_role_eligibility(user, gig):
-        # if gig has roles, and the
+    def check_role_eligibility(gig):
+        # if gig has roles, and the role is assigned prevent from applying
         pass
 
     @staticmethod
@@ -118,8 +118,6 @@ class ProposalPolicy:
         """
         cls.check_user_eligibility(user.profile, gig)
         cls.check_gig_eligibility(gig, user)
-        cls.check_role_eligibility(gig)
-        
         cls.check_financial_status(user.profile)
         
     

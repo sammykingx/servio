@@ -78,7 +78,7 @@ function roleApplicationManager(initialRoles = []) {
                 count: activeRoles.length,
                 subtotal: subtotal,
                 serviceFee: serviceFee,
-                total: subtotal + serviceFee
+                total: subtotal - serviceFee
             };
         },
 

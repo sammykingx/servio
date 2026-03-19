@@ -124,11 +124,11 @@ class ProposalService:
             ProposalValidator.validate(payload, gig)
 
             proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
-            self.notifications_flow(gig)
+            # self.notifications_flow(gig)
 
         except ProposalPermissionDenied as e:
-            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED:
-                e.redirect_url = get_error_redirect(e.code, {"gig_id": gig.id})
+            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
+                e.redirect_url = get_error_redirect(e.code)
             raise e
 
         except Exception as e:
@@ -183,8 +183,6 @@ class ProposalService:
         self._create_deliverables(proposal, payload.deliverables)
 
     def _create_proposal(self, gig, proposal_value, sent_at, is_negotiating):
-        ProposalModel = get_registered_model("collaboration", "Proposal")
-
         service_fee_rate = Decimal(str(SERVICE_FEE))
         precision = Decimal(str(DECIMAL_PLACE))
 
@@ -193,7 +191,7 @@ class ProposalService:
         )
         
         try:
-            proposal = ProposalModel.objects.create(
+            proposal = Proposal.objects.create(
                 gig=gig,
                 sender=self.user,
                 total_cost=excl_service_fee,

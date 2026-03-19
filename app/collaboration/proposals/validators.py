@@ -69,7 +69,7 @@ class ProposalValidator:
         service_fee = (calc_role_value * Decimal(str(SERVICE_FEE))).quantize(
             Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP
         )
-        calc_proposal_value = calc_role_value + service_fee
+        calc_proposal_value = calc_role_value - service_fee
         if proposal_value != calc_proposal_value:
             message = (
                 f"Double-check your numbers! The proposal worth (${proposal_value:,.2f}) "

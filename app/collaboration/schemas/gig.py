@@ -31,6 +31,8 @@ class VisibilityEnum(str, Enum):
     private = "private"
 
 class GigPayload(BaseModel):
+    """Editting gig that is in draft mode"""
+    
     title: str = Field(..., max_length=320)
     description: str = Field(..., max_length=3000)
     projectBudget: Decimal = Field(..., gt=0, max_digits=12, decimal_places=2)
@@ -38,8 +40,8 @@ class GigPayload(BaseModel):
     startDate: date
     endDate: date
     isNegotiable: bool
+    go_live: bool
     roles: List[GigRolePayload] = Field(default_factory=list)
-    
 
     @field_validator("description", mode="before")
     @classmethod

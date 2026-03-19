@@ -296,6 +296,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 gig.end_date = payload.endDate
                 gig.is_negotiable = payload.isNegotiable
                 gig.has_gig_roles = True if payload.roles else False
+                gig.status = GigStatus.PUBLISHED if payload.go_live else GigStatus.DRAFT
 
                 gig.full_clean()
                 gig.save()

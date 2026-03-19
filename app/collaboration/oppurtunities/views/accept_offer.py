@@ -8,7 +8,7 @@ from collaboration.proposals.exceptions import ProposalError
 from collaboration.proposals.services import ProposalService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
 from collaboration.schemas.send_proposal import SendProposal
-from core.url_names import OppurtunitiesURLS
+from core.url_names import OppurtunitiesURLS, ProposalURLS
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
 from pydantic import ValidationError
@@ -99,6 +99,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
             
         except ProposalError as e:
             return JsonResponse({
+                "status": "warning",
                 "error": e.title,
                 "message": e.message,
                 "code": e.code,
@@ -123,7 +124,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
             "title": "Proposal Sent!",
             "status": "success",
             "message": "High five! Your proposal is officially on its way to the creator for review. We'll let you know as soon as they take a look.",
-            "url": reverse_lazy(OppurtunitiesURLS.ALL)
+            "url": reverse_lazy(ProposalURLS.SENT_PROPOSALS)
         })
     
 

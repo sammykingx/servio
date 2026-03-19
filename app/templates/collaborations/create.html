@@ -6,16 +6,16 @@
 {% block browser_title %}Project Info{% endblock %}
 {% block content %}
 
-<div data-gig-data x-data="gigData()" data-endpoint="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" data-csrf-token="{{ csrf_token }}" class="py-3">
+<div data-gig-data x-data="gigData()" data-endpoint="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" data-csrf-token="{{ csrf_token }}" class="py-3 w-full max-w-7xl mx-auto">
     <div class="flex-1 w-full pb-32">
-        <div class="mx-auto w-full max-w-[1600px] flex flex-col gap-8">
+        <div class="flex flex-col gap-8">
             <div class="flex flex-col gap-3">
                 <h1 class="text-gray-800 dark:text-gray-300 text-title-sm md:text-title-md font-semibold leading-tight tracking-[-0.033em]">Create New Gig/Project</h1>
                 <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Broadcast your project to thousands of verified professionals.</p>
             </div>
             <form action="#" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-8 flex flex-col gap-6">
-                    <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="p-2 rounded-md bg-blue-50 dark:bg-blue-600/30 text-blue-700 dark:text-blue-400">
@@ -67,7 +67,7 @@
                                     <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Visibility</label>
                                     <div class="relative flex bg-[#f8f9fc] dark:bg-[#2d3748] p-1 rounded-lg border border-[#cfd7e7] dark:border-[#4a5568] w-fit">
                                         <!-- Sliding background -->
-                                        <div class="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[47%] bg-white dark:bg-gray-100 rounded-lg shadow-sm transition-all duration-300" :class="payload.visibility === 'private' ? 'translate-x-full' : 'translate-x-0'">
+                                        <div class="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[47%] bg-white dark:bg-gray-100 rounded-lg transition-all duration-300" :class="payload.visibility === 'private' ? 'translate-x-full' : 'translate-x-0'">
                                         </div>
 
                                         <!-- Buttons -->
@@ -231,7 +231,7 @@
                         </div>
                     </div>
 
-                    <div x-data="gigRoles($refs.taxonomy, $refs.paymentSplitData)" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div x-data="gigRoles($refs.taxonomy, $refs.paymentSplitData)" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600">
@@ -311,7 +311,7 @@
                     </div>
                 </div>
                 <div class="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
-                    <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center gap-2">
                             <div class="p-2 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600">
                                 <span class="material-symbols-outlined text-[20px]">calendar_month</span>
@@ -361,7 +361,7 @@
                                                         x-text="day.date" 
                                                         :disabled="day.disabled" 
                                                         :class="{ 
-                                                            'bg-brand-500 text-white font-bold shadow-md': isSelected(day.dateObj, type), 
+                                                            'bg-brand-500 text-white font-semibold': isSelected(day.dateObj, type), 
                                                             'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-40': day.disabled,
                                                             'text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-brand-300 dark:hover:bg-brand-600': !day.disabled && !isSelected(day.dateObj, type)
                                                         }" 
@@ -409,7 +409,7 @@
                                                         x-text="day.date" 
                                                         :disabled="day.disabled" 
                                                         :class="{ 
-                                                            'bg-brand-500 text-white font-bold shadow-md': isSelected(day.dateObj, type), 
+                                                            'bg-brand-500 text-white font-semibold': isSelected(day.dateObj, type), 
                                                             'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-40': day.disabled,
                                                             'text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-brand-300 dark:hover:bg-brand-600': !day.disabled && !isSelected(day.dateObj, type)
                                                         }"
@@ -433,7 +433,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center gap-2">
                             <div class="p-2 rounded-lg bg-green-50 dark:bg-green-900/30 text-green-600">
                                 <span class="material-symbols-outlined text-[20px]">payments</span>
