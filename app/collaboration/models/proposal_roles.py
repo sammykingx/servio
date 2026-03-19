@@ -99,6 +99,7 @@ class ProposalRole(models.Model):
     def budget_difference(self):
         diff = self.proposed_amount - self.role_amount
         return f"+${diff:,.2f}" if diff > 0 else f"-${abs(diff):,.2f}" if diff < 0 else "No Change"
+    
     @property
     def service_fee(self):
         return (
@@ -122,4 +123,3 @@ class ProposalRole(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
-        

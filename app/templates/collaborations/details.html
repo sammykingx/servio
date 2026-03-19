@@ -66,11 +66,11 @@
                         </svg> <span class="px-2">Public view</span>
                     </a>
                 {% endif %}
-                <button class="flex cursor-pointer items-center justify-center rounded-xl h-11 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 transition-all">
+                <button class="flex cursor-pointer items-center justify-center rounded-xl h-11 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-gray-800 dark:text-white text-sm font-medium hover:bg-slate-50 transition-all">
                     <span class="material-symbols-outlined">share</span>
                 </button>
                 {% if gig.status in editable_statuses %}
-                    <a href="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[#0d171b] dark:text-white text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                    <a href="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-gray-800 dark:text-white text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
                         <span class="material-symbols-outlined mr-2">edit</span> Edit Gig
                     </a>
                 {% else %}
@@ -95,17 +95,17 @@
             <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div class="flex flex-col gap-1">
                     <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Gig/Project Budget</p>
-                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">${{ gig.total_budget|intcomma }}</p>
+                    <p class="text-gray-800 dark:text-gray-300 text-xl font-semibold">${{ gig.total_budget|intcomma }}</p>
                     <p class="text-gray-500 text-xs">Total project value</p>
                 </div>
                 <div class="flex flex-col gap-1 border-l border-slate-100 dark:border-slate-800 sm:pl-6">
                     <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Timeline</p>
-                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">{{ gig.gig_duration }}</p>
+                    <p class="text-gray-800 dark:text-gray-300 text-xl font-semibold">{{ gig.gig_duration }}</p>
                     <p class="text-gray-500 text-xs">Expected completion</p>
                 </div>
                 <div class="flex flex-col gap-1 border-l border-slate-100 dark:border-slate-800 sm:pl-6">
                     <p class="text-gray-500 text-xs font-normal uppercase tracking-wider">Payment Type</p>
-                    <p class="text-[#0d171b] dark:text-gray-300 text-xl font-bold">Split Payments</p>
+                    <p class="text-gray-800 dark:text-gray-300 text-xl font-semibold">Split Payments</p>
                     <p class="text-gray-500 text-xs">
                         Payments are released in agreed stages.
                     </p>
@@ -209,10 +209,10 @@
                             <button data-tab="all" class="shrink-0 py-4 border-b-2 border-brand-500 dark:border-gray-200 text-brand-500 dark:text-gray-300 text-sm font-medium">
                                 All {% if proposal_count %}({{ proposal_count.total_proposals }}){% endif %}
                             </button>
-                            <button data-tab="accepted" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
+                            <button data-tab="accepted" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-white text-sm font-medium">
                                 Accepted {% if proposal_count %}({{ proposal_count.accepted }}){% endif %}
                             </button>
-                            <button data-tab="countered" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-[#0d171b] dark:hover:text-white text-sm font-medium">
+                            <button data-tab="countered" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-white text-sm font-medium">
                                 Countered {% if proposal_count %}({{ proposal_count.countered }}){% endif %}
                             </button>
                         {% endcomment %}
@@ -530,7 +530,7 @@
                                 <span class="material-symbols-outlined text-sm">check</span>
                             </div>
                             <div>
-                                <h5 class="font-medium text-[#0d171b] dark:text-white">Project Discovery &amp; Audit</h5>
+                                <h5 class="font-medium text-gray-800 dark:text-white">Project Discovery &amp; Audit</h5>
                                 <p class="text-xs text-green-600 font-medium mb-1">COMPLETED</p>
                                 <p class="text-sm text-gray-500">Due: Oct 15 • $1,200 payment released</p>
                             </div>
@@ -541,7 +541,7 @@
                                 <span class="material-symbols-outlined text-sm">trending_up</span>
                             </div>
                             <div>
-                                <h5 class="font-medium text-[#0d171b] dark:text-white">Core UI Design System</h5>
+                                <h5 class="font-medium text-gray-800 dark:text-white">Core UI Design System</h5>
                                 <p class="text-xs text-brand-500 font-medium mb-1">IN PROGRESS</p>
                                 <p class="text-sm text-gray-500">Due: Nov 10 • $2,500 pending release</p>
                             </div>
@@ -793,9 +793,7 @@
                             {% if user.profile.avatar_url %}
                                 <img alt="YOU" class="rounded-full w-full h-full object-cover" src="{{ user.profile.avatar_url.url }}" />
                             {% else %}
-                                <span alt="YOU" 
-                                    class="flex rounded-full bg-white dark:bg-[#1a202c] overflow-hidden
-                                        text-2xl font-semibold text-brand-500 justify-center">
+                                <span class="flex items-center justify-center rounded-full w-full h-full bg-brand-500 dark:bg-brand-400 overflow-hidden text-xl font-semibold text-white">
                                     {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
                                 </span>
                             {% endif %}
@@ -815,7 +813,7 @@
                                         {% else %}
                                             <span alt="{{ application.user.full_name }}" 
                                                 class="flex rounded-full bg-white dark:bg-[#1a202c] overflow-hidden
-                                                    text-2xl font-semibold text-brand-500 justify-center">
+                                                    text-xl font-semibold text-brand-500 justify-center">
                                                 {{ application.user.first_name|slice:":1"|upper }}{{ application.user.last_name|slice:":1"|upper }}
                                             </span>
                                         {% endif %}

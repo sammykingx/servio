@@ -71,7 +71,7 @@ function gigData() {
                 }
 
                 // Normal update
-                this.payload.description = parseFloat(this.editor.root.innerHTML) || 0;
+                this.payload.description = this.editor.root.innerHTML || "";
             });
 
         },
@@ -219,7 +219,7 @@ function resolveGigPayload() {
 }
 
 function validatePayload(gigPayload) {
-  const errors = [];
+    const errors = [];
 
     if (!gigPayload) {
         errors.push("Gig data is missing.");
@@ -232,7 +232,9 @@ function validatePayload(gigPayload) {
         errors.push("Project title must be meaningful");
     }
 
-    const wordCount = description.trim().match(/\b\w+\b/g)?.length || 0;
+    // const wordCount = description.trim().match(/\b\w+\b/g)?.length || 0;
+    // This handles null, undefined, or missing description safely
+    const wordCount = (description || "").toString().trim().match(/\b\w+\b/g)?.length || 0;
 
     if (wordCount < 6) {
         errors.push("Project description must be descriptive enough for professionals to understand");

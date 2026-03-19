@@ -223,10 +223,11 @@ class EditGigView(LoginRequiredMixin, DetailView):
                     'path': request.path
                 }
             )
+            
             return JsonResponse({
                 "error": "System Glitch",
                 "message": "We’re having trouble processing this request right now, our team has been notified.",
-                "status": "danger",
+                "status": "error",
             }, status=500)
             
         return JsonResponse(
@@ -390,7 +391,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
                                 role_id=role_id,
                                 role_name=role_data.professional,
                                 budget=role_data.budget,
-                                workload=role_data.workload,
+                                payment_option=role_data.paymentOption,
                                 description=role_data.description,
                                 slots=slots,
                             )
