@@ -40,7 +40,6 @@ class GigPayload(BaseModel):
     startDate: date
     endDate: date
     isNegotiable: bool
-    go_live: bool
     roles: List[GigRolePayload] = Field(default_factory=list)
 
     @field_validator("description", mode="before")

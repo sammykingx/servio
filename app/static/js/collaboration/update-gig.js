@@ -123,10 +123,12 @@ async function saveChanges() {
     }
 
     const userConfirmed = confirm("Would you like to publish this project now? \n\nClick 'OK' to publish, or 'Cancel' to keep it as a draft.");
-    gigPayload.go_live = userConfirmed ? true : false;
+    const action = userConfirmed ? 'publish' : 'draft';
+
+    const body = { action, payload: gigPayload };
     
     try {
-        const response = await updateGig(gigPayload, endpoint, csrf_token);
+        const response = await updateGig(body, endpoint, csrf_token);
 
         if (!response.ok) {
             // Server returned a non-2xx response

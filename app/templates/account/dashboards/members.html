@@ -58,7 +58,7 @@
                                     <!-- Base ambient glow -->
                                     <div class="pointer-events-none absolute inset-0 opacity-70">
                                         <div class="absolute -top-24 -right-24 size-64
-                                            bg-gradient-to-br from-brand-500/10 via-indigo-500/5
+                                            bg-gradient-to-br from-brand-500/10 via-brand-500/5
                                             to-transparent blur-3xl"
                                         ></div>
                                     </div>
@@ -66,7 +66,7 @@
                                     <!-- Ambient hover wash -->
                                     <div class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                                         <div class="absolute -left-24 top-1/2 size-48 -translate-y-1/2
-                                                bg-gradient-to-r from-brand-500/12 to-indigo-500/8 blur-3xl">
+                                                bg-gradient-to-r from-brand-500/12 to-brand-500/8 blur-3xl">
                                         </div>
                                     </div>
 
@@ -149,8 +149,8 @@
                                             {% if gig.has_gig_roles %}
                                                 <!-- Roles -->
                                                 <span class="px-2.5 py-1 rounded-full
-                                                    bg-indigo-50 dark:bg-indigo-900/30
-                                                    text-indigo-600 dark:text-indigo-400">
+                                                    bg-brand-50 dark:bg-brand-900/30
+                                                    text-brand-600 dark:text-brand-400">
                                                     {{ gig.role_count }} role{{ gig.role_count|pluralize }}
                                                 </span>
                                             {% endif %}
@@ -198,7 +198,7 @@
                             >
                                 <!-- ===== Ambient Wash ===== -->
                                 <div class="pointer-events-none absolute inset-0
-                                    bg-gradient-to-br from-brand-500/5 via-indigo-500/5 to-transparent">
+                                    bg-gradient-to-br from-brand-500/5 via-brand-500/5 to-transparent">
                                 </div>
 
                                 <!-- ===== Header ===== -->
@@ -285,7 +285,7 @@
                         >
                             <!-- ===== Ambient Wash ===== -->
                             <div class="pointer-events-none absolute inset-0
-                                        bg-gradient-to-br from-brand-500/5 via-indigo-500/5 to-transparent">
+                                        bg-gradient-to-br from-brand-500/5 via-brand-500/5 to-transparent">
                             </div>
 
                             <!-- ===== Header ===== -->
@@ -500,7 +500,7 @@
                             <!-- Ambient glow -->
                             <div class="pointer-events-none absolute inset-0">
                                 <div class="absolute -top-24 -right-24 size-72
-                                    bg-gradient-to-br from-brand-500/10 via-indigo-500/10 to-cyan-500/10
+                                    bg-gradient-to-br from-brand-500/10 via-brand-500/10 to-cyan-500/10
                                     blur-3xl opacity-70">
                                 </div>
                             </div>
@@ -684,13 +684,26 @@
                     {% endif %}
 
                     <!-- Help / Support Mini Card -->
-                    <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl p-4 border border-indigo-100 dark:border-indigo-900/30 flex items-center gap-3">
-                        <div class="size-8 rounded-full bg-indigo-200 dark:bg-indigo-800 flex items-center justify-center text-indigo-700 dark:text-indigo-300">
-                            <span class="material-symbols-outlined text-[18px]">help</span>
-                        </div>
-                        <div class="flex-1">
-                            <p class="text-xs font-semibold text-indigo-900 dark:text-indigo-200">Need technical help?</p>
-                            <a class="text-xs text-indigo-600 dark:text-indigo-400 font-medium hover:underline" href="mailto:support@divgm.com">Contact Support</a>
+                    <div class="group relative overflow-hidden bg-brand-25 dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:shadow-md transition-all duration-300">
+                        <div class="absolute -right-4 -top-4 size-24 bg-brand-500/10 blur-3xl group-hover:bg-brand-500/20 transition-colors"></div>
+                        
+                        <div class="flex items-start gap-4 relative z-10">
+                            <div class="size-10 shrink-0 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-lg shadow-brand-200 dark:shadow-none">
+                                <span class="material-symbols-outlined text-[20px]">support_agent</span>
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <p class="text-sm font-semibold text-slate-900 dark:text-white leading-tight">
+                                    Stuck on something?
+                                </p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">
+                                    Our team of engineers and specialists are ready to assist.
+                                </p>
+                                <a href="mailto:support@divgm.com" class="inline-flex items-center text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 gap-1 group/link">
+                                    Contact Support 
+                                    <span class="material-symbols-outlined text-[14px] transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

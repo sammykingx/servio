@@ -12,7 +12,7 @@ from formatters.pydantic_formatter import format_pydantic_errors
 from registry_utils import get_registered_model
 from template_map.collaboration import Collabs
 from ..exceptions import GigError
-from ..schemas.gig import GigPayload
+from ..schemas import CreateGigRequest, CreateGigStates
 from ..schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
 import json, logging
@@ -179,7 +179,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
         gig_slug = kwargs.get("slug")
         try:
             payload = json.loads(request.body)
-            gig_data = GigPayload(**payload)
+            gig_data = CreateGigRequest(**payload)
             self.update_gig_data(gig_slug, gig_data)
             
         except GigModel.DoesNotExist:
@@ -239,7 +239,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
             status=200,
         )
     
-    def update_gig_data(self, gig_slug, payload: GigPayload) -> Model:
+    def update_gig_data(self, gig_slug, data: CreateGigRequest) -> Model:
         """
             Applies validated gig updates inside a database transaction.
 
@@ -288,20 +288,24 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 # ---------------------------------
                 # Update gig fields
                 # ---------------------------------
-                gig.title = payload.title
-                gig.description = payload.description
-                gig.total_budget = payload.projectBudget
-                gig.visibility = payload.visibility
-                gig.start_date = payload.startDate
-                gig.end_date = payload.endDate
-                gig.is_negotiable = payload.isNegotiable
-                gig.has_gig_roles = True if payload.roles else False
-                gig.status = GigStatus.PUBLISHED if payload.go_live else GigStatus.DRAFT
+                gig.title = data.payload.title
+                gig.description = data.payload.description
+                gig.total_budget = data.payload.projectBudget
+                gig.visibility = data.payload.visibility
+                gig.start_date = data.payload.startDate
+                gig.end_date = data.payload.endDate
+                gig.is_negotiable = data.payload.isNegotiable
+                gig.has_gig_roles = True if data.payload.roles else False
+                gig.status = (
+                    GigStatus.PUBLISHED
+                    if data.action == CreateGigStates.PUBLISH
+                    else GigStatus.DRAFT
+                )
 
                 gig.full_clean()
                 gig.save()
 
-                roles_payload = payload.roles or []
+                roles_payload = data.payload.roles or []
 
                 # ---------------------------------
                 # If no roles -> delete all roles
