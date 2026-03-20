@@ -108,6 +108,118 @@
         data-status="{{ gig.status }}" 
         class="lg:col-span-8 flex flex-col gap-6"
     >
+        <!--New project engine -->
+        {% comment "project engine v2" %}
+            <section 
+                class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-xl transition-all dark:border-white/10 dark:bg-slate-900/80 shadow-2xl shadow-slate-200/50 dark:shadow-none"
+            >
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 bg-slate-50/40 px-6 py-4 dark:border-white/5 dark:bg-white/[0.02] gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 text-white shadow-lg shadow-brand-500/20">
+                            <span class="material-symbols-outlined text-[22px] animate-pulse">tune</span>
+                            <div v-if="payload.status === 'live'" class="absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-slate-900"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium tracking-tight text-gray-900 dark:text-white">Project Engine</h3>
+                            <div class="flex items-center gap-1.5">
+                                <span class="h-1.5 w-1.5 rounded-full bg-brand-500/40"></span>
+                                <p class="text-[10px] font-sans uppercase tracking-widest text-brand-500/80">Active Configuration</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:w-auto flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-1.5 dark:border-white/10 dark:bg-slate-800 shadow-inner">
+                        <button 
+                            @click="payload.status = 'draft'"
+                            :class="payload.status === 'draft' ? 'bg-slate-900 text-white shadow-lg dark:bg-white dark:text-slate-900' : 'text-slate-400 hover:text-slate-600'"
+                            class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl">
+                            Draft
+                        </button>
+                        <button 
+                            @click="payload.status = 'live'"
+                            :class="payload.status === 'live' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'text-slate-400 hover:text-slate-600'"
+                            class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl">
+                            Go Live
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-10 space-y-10">
+                    <div class="relative group">
+                        <label class="mb-2 flex items-center gap-2 text-[11px] text-brand-500 uppercase tracking-widest">
+                            <span class="material-symbols-outlined text-xs">edit_note</span>
+                            Master Title
+                        </label>
+                        <div class="relative">
+                            <input 
+                                x-model="payload.title" 
+                                :disabled="locked" 
+                                class="w-full bg-transparent text-md md:text-xl text-gray-900 outline-none transition-all placeholder:text-slate-200 dark:text-white dark:placeholder:text-slate-800"
+                                :class="locked ? 'opacity-40 cursor-not-allowed' : 'focus:pl-2'"
+                                type="text" />
+                            <div class="h-[2px] w-full bg-slate-100 dark:bg-white/5 mt-2 overflow-hidden">
+                                <div class="h-full bg-brand-500 w-0 transition-all duration-700 group-focus-within:w-full"></div>
+                            </div>
+                        </div>
+                        <span class="absolute right-0 top-8 text-[10px] font-medium text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">Click to edit</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+                        <div class="space-y-4">
+                            <label class="text-[11px] text-slate-400 dark:text-slate-500 uppercase tracking-widest">Access Protocol</label>
+                            <div class="grid grid-cols-2 p-1.5 bg-slate-100/50 dark:bg-white/[0.03] rounded-2xl relative border border-slate-200/50 dark:border-white/5">
+                                <button 
+                                    @click="payload.visibility = 'public'"
+                                    class="relative z-10 flex items-center justify-center gap-3 py-4 text-xs transition-all"
+                                    :class="payload.visibility === 'public' ? 'text-brand-600 dark:text-white' : 'text-slate-400'">
+                                    <span class="material-symbols-outlined text-[20px]">language</span>
+                                    Public
+                                </button>
+                                <button 
+                                    @click="payload.visibility = 'private'"
+                                    class="relative z-10 flex items-center justify-center gap-3 py-4 text-xs transition-all"
+                                    :class="payload.visibility === 'private' ? 'text-brand-600 dark:text-white' : 'text-slate-400'">
+                                    <span class="material-symbols-outlined text-[20px]">encrypted</span>
+                                    Private
+                                </button>
+                                <div 
+                                    class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-white dark:bg-slate-700 rounded-xl shadow-md transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                                    :style="payload.visibility === 'private' ? 'transform: translateX(100%);' : 'transform: translateX(0%);'">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label class="text-[11px] text-slate-400 dark:text-slate-500 uppercase tracking-widest">Financial Allocation</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none">
+                                    <span class="text-lg md:text-xl text-slate-300 group-focus-within:text-brand-500 transition-colors">$</span>
+                                </div>
+                                <input 
+                                    x-model="payload.projectBudget" 
+                                    :disabled="budgetLocked" 
+                                    type="number" 
+                                    class="w-full rounded-2xl border-2 border-slate-100 bg-white py-5 pl-12 pr-6 text-xl text-gray-900 outline-none transition-all focus:border-brand-500/20 focus:bg-brand-50/5 dark:border-white/5 dark:bg-white/[0.02] dark:text-white dark:focus:border-brand-500/30" 
+                                    :class="budgetLocked ? 'opacity-40 cursor-not-allowed' : ''" />
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-slate-50 dark:bg-white/5 text-[9px] font-medium text-slate-400 uppercase tracking-tighter">
+                                    USD
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="px-8 py-4 bg-slate-50/50 dark:bg-white/[0.01] border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+                <span class="flex items-center gap-2 text-[10px] font-medium text-slate-400 uppercase tracking-widest">
+                    <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                    Engine Synced
+                </span>
+                <p class="text-[10px] text-slate-400 font-medium">Auto-save active</p>
+                </div>
+            </section>
+        {% endcomment %}
+
+        <!--Old engine -->
         <section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
             <div class="flex items-center gap-2 mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
                 <span class="p-2 bg-brand-50 dark:bg-gray-600 dark:brand-600/30 rounded-lg material-symbols-outlined text-[20px] text-brand-500 dark:text-gray-400">article</span>
@@ -500,57 +612,153 @@
     </div>
     <!-- Right Column: Sidebar -->
     <div class="lg:col-span-4 space-y-6">
-        <!-- Status Widget -->
-        <!-- <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Gig Status</h3>
-            <div class="flex items-start gap-3 mb-4">
-                <div class="mt-1 size-3 rounded-full bg-amber-500 animate-pulse"></div>
-                <div>
-                    <p class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Active &amp; In Progress</p>
-                    <p class="text-sm text-slate-500 mt-1">This gig is currently live. Roles are being filled and work has started.</p>
+        {% comment "engine v2" %}
+        <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-1 shadow-xl dark:border-white/10 dark:bg-slate-900">
+            <div class="rounded-[22px] bg-slate-50/50 p-6 dark:bg-white/[0.02]">
+                <h3 class="mb-6 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                    <span class="relative flex h-2 w-2">
+                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75"></span>
+                        <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+                    </span>
+                    Engine Overview
+                </h3>
+
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-medium text-slate-400 uppercase">Allocated Budget</p>
+                        <p class="text-xl font-semibold text-gray-900 dark:text-white transition-all" x-text="'$' + (payload.projectBudget || 0)">
+                            $0
+                        </p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-medium text-slate-400 uppercase">Active Roles</p>
+                        <p class="text-xl font-semibold text-gray-900 dark:text-white">
+                            {{ gig.roles_count|default:"0" }}
+                        </p>
+                    </div>
+                </div>
+
+                <button 
+                    @click="saveProject()"
+                    class="group relative w-full flex items-center justify-center gap-3 overflow-hidden rounded-2xl bg-slate-900 py-4 font-semibold text-white transition-all hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-500/20 active:scale-95 dark:bg-white dark:text-slate-900 dark:hover:bg-brand-50"
+                >
+                    <span class="relative z-10 text-sm uppercase tracking-widest">Commit Changes</span>
+                    <span class="material-symbols-outlined relative z-10 text-[20px] transition-transform group-hover:translate-x-1">bolt</span>
+                    
+                    <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full"></div>
+                </button>
+            </div>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/50">
+            <div class="space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-50 pb-4 dark:border-white/5">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
+                            <span class="material-symbols-outlined text-[18px] text-slate-500">history</span>
+                        </div>
+                        <span class="text-[11px] font-medium text-slate-500 uppercase">Last Sync</span>
+                    </div>
+                    <span class="text-xs font-semibold text-gray-700 dark:text-slate-300">{{ gig.updated_display }}</span>
+                </div>
+
+                <div class="flex items-center justify-between border-b border-slate-50 pb-4 dark:border-white/5">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
+                            <span class="material-symbols-outlined text-[18px] text-slate-500">calendar_today</span>
+                        </div>
+                        <span class="text-[11px] font-medium text-slate-500 uppercase">Engine Init</span>
+                    </div>
+                    <span class="text-xs font-semibold text-gray-700 dark:text-slate-300">{{ gig.created_at|date:"M j, Y" }}</span>
+                </div>
+                
+                <div class="mt-2 flex items-center justify-center gap-2 rounded-xl bg-brand-50/50 py-2 dark:bg-brand-500/5">
+                    <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
+                    <span class="text-[10px] font-medium text-brand-600 dark:text-brand-400 uppercase tracking-tight">Infrastructure Secure</span>
                 </div>
             </div>
-            <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-2">
-                <div class="bg-brand-500 h-2 rounded-full" style="width: 35%"></div>
+        </div>
+
+        <!-- v2 -->
+        <div class="group relative overflow-hidden rounded-2xl border-2 border-slate-900 bg-slate-900 p-6 shadow-2xl dark:border-brand-500/20 dark:bg-slate-950">
+            <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-brand-500/10 blur-3xl group-hover:bg-brand-500/20 transition-all"></div>
+
+            <div class="relative z-10">
+                <div class="mb-6 flex items-center justify-between">
+                    <span class="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-brand-500/60">System Controller</span>
+                    <span class="flex h-5 items-center rounded-md bg-white/10 px-2 text-[9px] font-medium text-white uppercase tracking-tighter backdrop-blur-md">
+                        v.2.0.4
+                    </span>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex items-end justify-between border-b border-white/5 pb-4">
+                        <div>
+                            <p class="text-[10px] font-medium text-slate-500 uppercase tracking-tight">Active Budget</p>
+                            <h4 class="text-2xl font-semibold text-white" x-text="'$' + (payload.projectBudget || 0)">$0</h4>
+                        </div>
+                        <div class="h-8 w-1 bg-brand-500/30 rounded-full overflow-hidden">
+                            <div class="h-1/2 w-full bg-brand-500"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-end justify-between border-b border-white/5 pb-4">
+                        <div>
+                            <p class="text-[10px] font-medium text-slate-500 uppercase tracking-tight">Resource Count</p>
+                            <h4 class="text-2xl font-semibold text-white">{{ gig.roles_count|default:"0" }} <span class="text-xs font-medium text-slate-500">Units</span></h4>
+                        </div>
+                        <span class="material-symbols-outlined text-brand-500/40">account_tree</span>
+                    </div>
+                </div>
+
+                <button 
+                    @click="saveProject()"
+                    class="mt-8 flex w-full items-center justify-between rounded-xl bg-brand-500 p-4 transition-all hover:bg-brand-400 hover:ring-4 hover:ring-brand-500/20 active:scale-[0.98]"
+                >
+                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-white">Deploy Updates</span>
+                    <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-black/20">
+                        <span class="material-symbols-outlined text-sm text-white">double_arrow</span>
+                    </div>
+                </button>
             </div>
-            <p class="text-xs text-right text-slate-500">35% Budget Utilized</p>
-        </div> -->
-        <!-- Quick Actions -->
-        <!-- <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Quick Actions</h3>
-            <div class="flex flex-col gap-2">
-                <button class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors text-left">
-                    <div class="flex items-center gap-3">
-                        <div class="size-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[18px]">handshake</span>
-                        </div>
-                        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-brand-500">View Negotiations</span>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/30">
+            <div class="p-5">
+                <div class="mb-4 flex items-center gap-2">
+                    <div class="h-1 w-1 rounded-full bg-slate-400"></div>
+                    <span class="text-[10px] font-medium uppercase tracking-widest text-slate-400">Terminal Metadata</span>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-[9px] font-medium text-slate-400 uppercase tracking-tighter">Sync Timestamp</span>
+                        <span class="font-mono text-[11px] font-medium text-slate-700 dark:text-slate-300">
+                            {{ gig.updated_display|upper }}
+                        </span>
                     </div>
-                    <span class="material-symbols-outlined text-slate-400 text-[16px]">arrow_forward</span>
-                </button>
-                <button class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors text-left">
-                    <div class="flex items-center gap-3">
-                        <div class="size-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[18px]">payments</span>
-                        </div>
-                        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-brand-500">View Payments</span>
+                    
+                    <div class="flex flex-col gap-1">
+                        <span class="text-[9px] font-medium text-slate-400 uppercase tracking-tighter">Creation Signature</span>
+                        <span class="font-mono text-[11px] font-medium text-slate-700 dark:text-slate-300">
+                            ID_{{ gig.created_at|date:"Ymd" }}—AUTH_SERVIO
+                        </span>
                     </div>
-                    <span class="material-symbols-outlined text-slate-400 text-[16px]">arrow_forward</span>
-                </button>
-                <button class="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors text-left">
-                    <div class="flex items-center gap-3">
-                        <div class="size-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[18px]">chat</span>
-                        </div>
-                        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-brand-500">Team Chat</span>
-                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-100 dark:border-white/5 p-4 bg-slate-50/50 dark:bg-black/20">
+                <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <span class="bg-red-500 text-white text-[10px] px-1.5 rounded-full font-bold">2</span>
-                        <span class="material-symbols-outlined text-slate-400 text-[16px]">arrow_forward</span>
+                        <span class="flex h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                        <span class="text-[9px] font-medium text-slate-500 uppercase">Engine Status: Optimal</span>
                     </div>
-                </button>
+                    <span class="material-symbols-outlined text-xs text-slate-300">verified_user</span>
+                </div>
             </div>
-        </div> -->
+        </div>
+        {% endcomment %}
+
         <!-- Activity & Metadata -->
         <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Activity &amp; Metadata</h3>
@@ -569,65 +777,6 @@
                         <p class="text-sm font-medium text-slate-700 dark:text-white">{{ gig.created_at|date:"M j, Y" }}</p>
                     </div>
                 </div>
-                {% comment "Enable this later to add metrice like the project amount roles amounts etc" %}
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-700">
-                        <p class="text-xs text-slate-500 mb-2">Active Collaborators</p>
-                        <!-- {%  for role in gig.required_roles.all %}
-                            {% for application in role.applications.all %}
-                                <div class="flex -space-x-2 overflow-hidden">
-                                    <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-cover bg-center" data-alt="Collaborator avatar 1" style='background-image: url("/static/images/user/user-01.jpg");'></div>
-                                    <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-cover bg-center" data-alt="Collaborator avatar 2" style='background-image: url("/static/images/user/user-02.jpg");'></div>
-                                    <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-cover bg-center" data-alt="Collaborator avatar 2" style='background-image: url("/static/images/user/user-03.jpg");'></div>
-                                    <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-cover bg-center" data-alt="Collaborator avatar 2" style='background-image: url("/static/images/user/user-04.jpg");'></div>
-                                    <div class="inline-block size-8 rounded-full ring-2 ring-white dark:ring-slate-800 bg-cover bg-center" data-alt="Collaborator avatar 2" style='background-image: url("/static/images/user/user-05.jpg");'></div>
-                                    <div class="inline-block size-8 rounded-full py-2 px-1.5 
-                                            ring-2 ring-white dark:ring-slate-800 
-                                            bg-slate-200 dark:bg-slate-700 items-center 
-                                            justify-center text-xs font-bold text-slate-500
-                                        ">
-                                        +3
-                                    </div>
-                                </div>
-                            {% empty %}
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full border border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-                                        <span class="material-symbols-outlined text-[16px] text-gray-400">person_add</span>
-                                    </div>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">No applicants yet</span>
-                                </div>
-                            {% endfor %}
-                        {% endfor %} -->
-                        
-                            {% if applications %}
-                                <div class="flex -space-x-2 overflow-hidden">
-                                    {% for applicants in applications|slice:":5" %}
-                                        <div 
-                                            class="inline-block size-8 rounded-full 
-                                                ring-2 ring-white dark:ring-slate-800 
-                                                bg-cover bg-center" 
-                                            data-alt="{{ application.user.get_full_name }} avatar"
-                                            style="background-image: url('{{ applicants.user.avatar_url }}');">
-                                        </div>
-                                    {% endfor %}
-                                    {% if applications|length > 5 %}
-                                        <div class="inline-flex size-8 items-center justify-center
-                                            ring-2 ring-white dark:ring-slate-800 
-                                            bg-slate-200 dark:bg-slate-700 
-                                            text-xs font-bold text-slate-500">
-                                            +{{ applications|length|add:"-5" }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% else %}
-                                <div class="flex items-center gap-2">
-                                    <div class="w-8 h-8 rounded-full border border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-                                        <span class="material-symbols-outlined text-[16px] text-gray-400">person_add</span>
-                                    </div>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">No applicants yet</span>
-                                </div>
-                            {% endif %}
-                    </div>
-                {% endcomment %}
             </div>
         </div>
     </div>
