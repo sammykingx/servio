@@ -33,6 +33,7 @@ handler500 = "core.views.custom_500"
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="index.html"), name="landing-page"),
+    path("lp/", TemplateView.as_view(template_name="lp.html"), name="lp-dark-mode"),
     # path(
     #     "",
     #     RedirectView.as_view(

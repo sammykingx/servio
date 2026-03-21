@@ -5,7 +5,6 @@
 		<meta charset="utf-8" />
 		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport" />
 		<title>Servio - modern solution for everyday needs</title>
-		
 		<!-- Open Graph -->
 		<meta property="og:type" content="website">
 		<meta property="og:site_name" content="Servio">
@@ -18,10 +17,11 @@
 		<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 		<link rel="stylesheet" href="{% static 'css/landing-page-style.css' %}" />
 	</head>
-	<body class="bg-white text-slate-900 font-sans selection:bg-slate-900 selection:text-white overflow-x-hidden">
-		<header class="fixed top-0 z-50 w-full bg-transparent backdrop-blur-md border-b border-white/10">
+	<body class="bg-white text-slate-900 font-sans selection:bg-primary selection:text-white overflow-x-hidden">
+		<header class="bg-charcoal top-0 z-50 w-full backdrop-blur-md border-b border-white/10">
 			<div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
 				<!-- Left: Logo -->
 				<div class="flex items-center gap-2">
@@ -34,9 +34,8 @@
 						class="h-15 w-auto object-contain transition-transform duration-200 hover:scale-105"
 						/>
 				</div>
-
 				<!-- Center: Navigation -->
-				<nav id="nav-links" class="hidden md:flex text-white items-center gap-8 text-sm font-medium">
+				<nav id="nav-links" class="hidden text-white md:flex items-center gap-8 text-sm font-medium">
 					<a class="hover:text-secondary transition-colors" href="#">Overview</a>
 					<a class="hover:text-secondary transition-colors" href="#">Product</a>
 					<a class="hover:text-secondary transition-colors" href="#">Pricing</a>
@@ -44,7 +43,7 @@
 				</nav>
 				<!-- Right: Button -->
 				<div>
-					<a id="nav-cta-button" href="{% url AUTH_URLS.SIGNUP %}" class="bg-secondary text-charcoal text-sm font-bold h-11 px-8 py-4 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all">
+					<a id="nav-cta-button" href="{% url AUTH_URLS.SIGNUP %}" class="bg-secondary text-charcoal text-sm font-semibold h-11 px-8 py-4 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all">
 					Get Started
 					</a>
 				</div>
@@ -52,466 +51,224 @@
 		</header>
 		<main>
 			<!-- BEGIN: Hero Section -->
-			<section id="hero" class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
-				<div class="absolute inset-0 z-0">
+			<section id="hero" class="relative min-h-[92vh] flex items-center overflow-hidden">
+				<!-- Background Image -->
+				<div class="absolute inset-0">
 					<img 
 						src="{% static 'images/cover-images/hero-bg.jpg' %}"
-						alt="Professionals working"
-						class="w-full h-full object-cover opacity-60 scale-105 animate-subtle-zoom"
-					>
-					<div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black"></div>
-					<div class="absolute inset-0 bg-radial-at-t from-transparent via-black/40 to-black/80"></div>
+						alt="Professionals working across different industries"
+						class="w-full h-full object-cover"
+						>
 				</div>
-
-				<div class="relative z-10 w-full max-w-5xl mx-auto px-6 text-center mt-7">
-					
-					<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 animate-fade-in-up">
-						<span class="relative flex h-2 w-2">
-							<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-							<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-						</span>
-						<span class="text-xs font-medium tracking-widest uppercase text-gray-400">The New Standard for Collaboration</span>
-					</div>
-
-					<h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-8">
-						Connect with <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-blue-400">experts</span> <br class="hidden md:block"> 
-						without the bidding wars.
-					</h1>
-
-					<p class="text-lg md:text-xl text-gray-300 leading-relaxed mb-12 max-w-2xl mx-auto">
-						Servio automates the matching process between skilled professionals and ready clients. 
-						One account to hire, work, and collaborate in a unified workspace.
-					</p>
-
-					<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-						<a href="{% url AUTH_URLS.SIGNUP %}"
-							class="group relative w-full sm:w-auto px-8 py-4 bg-secondary text-charcoal rounded-full font-bold text-base transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(var(--secondary-rgb),0.4)]">
-							Get Started for Free
-						</a>
-						<a href="#"
-							class="w-full sm:w-auto px-8 py-4 bg-white/5 backdrop-blur-xl border border-white/10 text-white rounded-full font-semibold text-base hover:bg-white/10 transition-all">
-							See how it works
-						</a>
-					</div>
-
-					<div class="mt-16 pt-8 border-t border-white/5">
-						<p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-4">Trusted by modern teams at</p>
-						<div class="flex flex-wrap justify-center gap-8 opacity-40 grayscale contrast-125">
-							<span class="text-white font-bold tracking-tighter text-xl">STRIPE</span>
-							<span class="text-white font-bold tracking-tighter text-xl">NOTION</span>
-							<span class="text-white font-bold tracking-tighter text-xl">VERCEL</span>
+				<!-- Gradient Overlay -->
+				<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/65 to-black/30"></div>
+				<!-- Bottom Fade -->
+				<div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/70 to-transparent"></div>
+				<div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full">
+					<div class="max-w-3xl py-24 lg:py-32">
+						<!-- Headline -->
+						<h2 
+							data-aos="fade-zoom-in"
+							data-aos-easing="ease-in-sine"
+							
+							data-aos-offset="0" 
+							class="text-3xl lg:text-5xl font-semibold text-white leading-[1.05] tracking-tight mb-6"
+						>
+							Connect with the <span class="text-secondary">right professionals</span> to get work done
+						</h2>
+						<!-- Subtext -->
+						<p 
+							data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="100"
+							class="text-lg text-gray-200 leading-relaxed mb-10 max-w-xl">
+							Servio connects skilled professionals with ready clients. 
+							Get matched to needs that fit your skills automatically, or post one and connect with the right professionals, no bidding wars.
+						</p>
+						<!-- CTA Buttons -->
+						<div class="grid grid-cols-2 gap-3 max-w-md">
+							<a data-aos="fade-in" data-aos-delay="150" href="{% url AUTH_URLS.SIGNUP %}"
+								class="w-full text-center px-5 py-3 bg-secondary text-charcoal rounded-xl font-semibold text-sm md:text-base hover:bg-brand-700 hover:text-white transition shadow-lg shadow-blue-500/25">
+							Join Servio
+							</a>
+							<a href="#"
+								data-aos="fade-in" 
+								data-aos-delay="200"
+								class="w-full text-center px-5 py-3 bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl font-semibold text-sm md:text-base hover:bg-white/20 transition">
+							See How It Works
+							</a>
 						</div>
+						<!-- Supporting Text -->
+						<p data-aos="fade-in" data-aos-easing="ease-in-sine" class="text-sm text-gray-300 mt-6">
+							One account. Find projects. Post projects. Collaborate with professionals.
+						</p>
 					</div>
-				</div>
-
-				<div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-20">
-					<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
 				</div>
 			</section>
 			<!-- END: Hero Section -->
 
 			<!-- BEGIN: Trusted Partners -->
-			<section class="py-24 bg-charcoal overflow-hidden relative border-t border-white/5">
-
-				<div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-secondary/10 blur-[120px] rounded-full pointer-events-none"></div>
-				
-				<div class="max-w-7xl mx-auto px-6 relative z-10">
-					
-					<div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
-						<div>
-							<div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10 mb-6">
-								<span class="text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Global Infrastructure</span>
-							</div>
-							<h2 class="text-3xl md:text-4xl font-semibold text-white tracking-tight mb-6 leading-tight">
-								Powering borderless <br/> 
-								work from <span class="text-gray-400">Lagos to London.</span>
-							</h2>
-							<p class="text-gray-400 text-lg max-w-md">
-								Servio provides the local compliance and secure escrow infrastructure needed to hire and work across four key regions.
-							</p>
+			<section class="py-20 bg-white overflow-hidden relative">
+				<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+				<div class="max-w-7xl mx-auto px-4 relative z-10">
+					<div class="flex flex-col items-center mb-16">
+						<div class="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full border border-blue-100 mb-4">
+							<span class="relative flex h-2 w-2">
+							<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+							<span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+							</span>
+							<span data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Global Network</span>
 						</div>
-
-						<div class="grid grid-cols-2 gap-4">
-							<div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm">
-								<p class="text-secondary font-bold text-xl mb-1">NG / CA</p>
-								<p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Instant Paystack & Stripe Integration</p>
-							</div>
-							<div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm">
-								<p class="text-white font-bold text-xl mb-1">UK / US</p>
-								<p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">Fully Compliant Escrow Services</p>
-							</div>
-						</div>
+						<h2 data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="200" class="text-center text-slate-900 text-xl font-bold">Trusted by the world’s most ambitious teams</h2>
 					</div>
-
-					<div class="relative py-10 border-y border-white/5">
-						<div class="flex overflow-hidden space-x-16 select-none">
-							<div class="animate-marquee flex items-center gap-20 whitespace-nowrap">
-								<img alt="Paystack" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/paystack.svg' %}" />
-								<img alt="Stripe" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/stripe.svg' %}" />
-								<img alt="Vercel" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/vercel.svg' %}" />
-								<img alt="Notion" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/notion.svg' %}" />
-								<img alt="Slack" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/slack.svg' %}" />
-							</div>
-							<div aria-hidden="true" class="animate-marquee flex items-center gap-20 whitespace-nowrap">
-								<img alt="Paystack" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/paystack.svg' %}" />
-								<img alt="Stripe" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/stripe.svg' %}" />
-								<img alt="Vercel" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/vercel.svg' %}" />
-								<img alt="Notion" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/notion.svg' %}" />
-								<img alt="Slack" class="h-6 md:h-8 opacity-40 hover:opacity-100 transition-opacity" src="{% static 'images/logos/slack.svg' %}" />
-							</div>
+					<div class="relative flex overflow-x-hidden">
+						<div class="animate-marquee flex items-center gap-16 py-4 whitespace-nowrap">
+							<img alt="Canva" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz3bFfzbQPcR8deCWQEytNntAmcKE8LdqQgSP2LSncvBMXomLADUP0xJz4qXsXteyhqGs71YRcL8Tuxsru-cbiaAmlSRPD-a0mfMyn9ampGTD9yW9cJrFHXqiwjNEHjeTRti-hHqwEUWVsDjD4EmhA1AS7yHrVYe6Am8bqvQiP09jzZ-stb5m6ewc4dOS6JJQROr0iya_efWGLMuKMxY1PUIFFBeXFK_3YH36v6IB_PPVzclner4TFx3UrtVTPV7k2tRyygTz1vS8" />
+							<img alt="Slack" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmaPxpRgT2EsSxfcuYWArqJzduvCdm9HLK4cluT2ZDv83231j-Bc4S8bISK4gkRpINIVObQ2_kEDH3LEu9sNPSCNnN8jS-CdMdTB_XXAKGMvDVzXx2eargR18TgBg7ZsY6wKDBlHGe3RnJjpgoptJgKP9wFViTQFbDhQQV0maGNZIWiGp2AtYvyNzeJBqbmKVEV7bqDgbGJmvzQwKColugIjINDu21acCSrh7s-8MZQZ2MvojZvGoTbU4WHSR0Acc7y0f-WRieiEE" />
+							<img alt="Microsoft" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc5EDfIqAni9_k75n0z8KB9O0q_Rzt6Fve2Tiul-1UFBj5C1eTye2iOCT8-ByXHpBeXOnE-2EHC53q0p7xWQK6NoWaH-sbotpAAWnfoFkaj5K75UtGyE__xE0euy_M7izOX2DrbhzJkDtEleaq_ytuIPf-4Bn10jqNAJRBcMa3dhKlLfR9w9Or2KPs45NIKMus2MsghrCFm9foBv0bkWsOemHwI1HaiUQsbl87I4j40NKRB1VAgoPncNBdM9S0WfPmzoALwChtDEQ" />
+							<img alt="Notion" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXk2sUGK5kkCVP3eklWzmudpgEgOrNKNb4afI353h3CG5FSet5yu_6704VeLLWeRu0deBJtsEkw-4ZPt-buSzrUkgNCJb5HxMkbAVfl3V7Cqyl-FtPEkOYjfa0-wHu8Pg3Rok_U7h9ivicFj383NSU8TieTVko4d-Fy12PU73HSB6jfqON2kBx4xrqv0x2_AVnyYlMWi9sI98o6QjYxC9mv2udlfuGBWBmpMseQ9ZIiF-kn3QOOnjVmAfp5djQDuxpblNwaRv4Kug" />
+							<img alt="Google" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABpX7bhw2BfgjhTXPbWsIySqMjNpkRHp-SOL7y-UXKovjGmM8eoO8j7YFkdkZ3OQVE8ssjhjpU7vrCdmD0bFayL7_OqFtZYQl_HKho8A6EiGkLD52Vav8Y8uH8oNKzqS9X7J2kMqWkiLgxAgEk0hepuZvQWL6K2fIF_a5s87GSg-nswz08z_pGQ00VPSINAYHRJsysZbTjFC4qPCTLwZwvU8WOBON9Kt5Qx-zcQNg3Z0Z_gx7ECXl8EVCdvjMCIvkp7BdHuwW4aM8" />
+							<img alt="Canva" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz3bFfzbQPcR8deCWQEytNntAmcKE8LdqQgSP2LSncvBMXomLADUP0xJz4qXsXteyhqGs71YRcL8Tuxsru-cbiaAmlSRPD-a0mfMyn9ampGTD9yW9cJrFHXqiwjNEHjeTRti-hHqwEUWVsDjD4EmhA1AS7yHrVYe6Am8bqvQiP09jzZ-stb5m6ewc4dOS6JJQROr0iya_efWGLMuKMxY1PUIFFBeXFK_3YH36v6IB_PPVzclner4TFx3UrtVTPV7k2tRyygTz1vS8" />
+							<img alt="Slack" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmaPxpRgT2EsSxfcuYWArqJzduvCdm9HLK4cluT2ZDv83231j-Bc4S8bISK4gkRpINIVObQ2_kEDH3LEu9sNPSCNnN8jS-CdMdTB_XXAKGMvDVzXx2eargR18TgBg7ZsY6wKDBlHGe3RnJjpgoptJgKP9wFViTQFbDhQQV0maGNZIWiGp2AtYvyNzeJBqbmKVEV7bqDgbGJmvzQwKColugIjINDu21acCSrh7s-8MZQZ2MvojZvGoTbU4WHSR0Acc7y0f-WRieiEE" />
+							<img alt="Microsoft" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc5EDfIqAni9_k75n0z8KB9O0q_Rzt6Fve2Tiul-1UFBj5C1eTye2iOCT8-ByXHpBeXOnE-2EHC53q0p7xWQK6NoWaH-sbotpAAWnfoFkaj5K75UtGyE__xE0euy_M7izOX2DrbhzJkDtEleaq_ytuIPf-4Bn10jqNAJRBcMa3dhKlLfR9w9Or2KPs45NIKMus2MsghrCFm9foBv0bkWsOemHwI1HaiUQsbl87I4j40NKRB1VAgoPncNBdM9S0WfPmzoALwChtDEQ" />
+							<img alt="Notion" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXk2sUGK5kkCVP3eklWzmudpgEgOrNKNb4afI353h3CG5FSet5yu_6704VeLLWeRu0deBJtsEkw-4ZPt-buSzrUkgNCJb5HxMkbAVfl3V7Cqyl-FtPEkOYjfa0-wHu8Pg3Rok_U7h9ivicFj383NSU8TieTVko4d-Fy12PU73HSB6jfqON2kBx4xrqv0x2_AVnyYlMWi9sI98o6QjYxC9mv2udlfuGBWBmpMseQ9ZIiF-kn3QOOnjVmAfp5djQDuxpblNwaRv4Kug" />
+							<img alt="Google" class="h-8 md:h-10 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABpX7bhw2BfgjhTXPbWsIySqMjNpkRHp-SOL7y-UXKovjGmM8eoO8j7YFkdkZ3OQVE8ssjhjpU7vrCdmD0bFayL7_OqFtZYQl_HKho8A6EiGkLD52Vav8Y8uH8oNKzqS9X7J2kMqWkiLgxAgEk0hepuZvQWL6K2fIF_a5s87GSg-nswz08z_pGQ00VPSINAYHRJsysZbTjFC4qPCTLwZwvU8WOBON9Kt5Qx-zcQNg3Z0Z_gx7ECXl8EVCdvjMCIvkp7BdHuwW4aM8" />
 						</div>
-
-						<div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0a0a0c] to-transparent z-10 pointer-events-none"></div>
-						<div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0a0a0c] to-transparent z-10 pointer-events-none"></div>
+						<div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10"></div>
+						<div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
 					</div>
-
 				</div>
 			</section>
 			<!-- END: Trusted Partners -->
 
 			<!-- BEGIN: Category Grid -->
-			<section class="py-24 bg-[#0a0a0c] overflow-hidden relative">
-				<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
-
-				<div class="max-w-7xl mx-auto px-6 relative z-10">
-					<div class="text-center mb-20">
-						<h2 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-							Experts for every <span class="text-secondary">ambition.</span>
-						</h2>
-						<p class="text-gray-400 max-w-xl mx-auto text-lg leading-relaxed">
-							Whether you’re scaling a startup or maintaining a home, Servio maps your needs to the right professional infrastructure.
+			<section class="py-24 bg-white overflow-hidden">
+				<div class="max-w-7xl mx-auto px-4 text-center">
+					<div class="mb-20">
+						<h2 data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Find experts for every type of work</h2>
+						<p data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="200" class="text-slate-500 max-w-xl mx-auto text-lg">
+							From personal needs to business needs, Servio connects you with professionals for anything you can imagine.
 						</p>
 					</div>
-
-					<div class="relative flex justify-center items-center h-[500px] md:h-[700px]">
-						
-						<div class="relative z-30 w-32 h-32 md:w-48 md:h-48 rounded-full p-1 bg-gradient-to-b from-secondary to-transparent shadow-[0_0_50px_rgba(var(--secondary-rgb),0.2)]">
-							<div class="w-full h-full rounded-full border-4 border-[#0a0a0c] overflow-hidden bg-gray-900">
-								<img src="{% static '/images/cover-images/user-center.png' %}" alt="Client" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-							</div>
+					<div class="relative flex justify-center items-center h-[500px] md:h-[600px]">
+						<div class="relative z-20 w-48 h-58 md:w-64 md:h-64 rounded-full border-8 border-white shadow-2xl overflow-hidden ring-1 ring-slate-100">
+							<img src="{% static '/images/cover-images/user-center.png' %}" alt="Client" class="w-full h-full object-cover" />
 						</div>
-
-						<div class="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] border border-white/5 rounded-full"></div>
-
-						<div class="absolute w-[380px] h-[380px] md:w-[600px] md:h-[600px] border border-white/10 rounded-full animate-spin-slow hover:pause">
-							
+						<div class="absolute w-[320px] h-[320px] md:w-[500px] md:h-[500px] animate-spin-slow pause-on-hover">
 							<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
 								<div class="animate-reversespin flex flex-col items-center group">
-									<div class="w-14 h-14 md:w-20 md:h-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center text-secondary shadow-2xl group-hover:border-secondary/50 transition-all">
-										<svg class="w-7 h-7 md:w-9 md:h-9" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+									<div class="w-14 h-14 md:w-16 md:h-16 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 shadow-sm border border-purple-100 group-hover:scale-110 transition-transform">
+										<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+											<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"></path>
 										</svg>
 									</div>
-									<span class="mt-3 text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Tech & Dev</span>
+									<span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Development</span>
 								</div>
 							</div>
-
 							<div class="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2">
 								<div class="animate-reversespin flex flex-col items-center group">
-									<div class="w-14 h-14 md:w-20 md:h-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center text-pink-400 shadow-2xl group-hover:border-pink-400/50 transition-all">
-										<svg class="w-7 h-7 md:w-9 md:h-9" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.53-9.53a2.25 2.25 0 00-3.182-3.182l-9.53 9.53a2.25 2.25 0 003.182 3.182z" />
-											<path stroke-linecap="round" stroke-linejoin="round" d="M14.59 5.41L18.59 9.41M13.59 13.41l4 4" />
+									<div class="w-14 h-14 md:w-16 md:h-16 bg-pink-50 rounded-2xl flex items-center justify-center text-pink-600 shadow-sm border border-pink-100 group-hover:scale-110 transition-transform">
+										<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+											<path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
 										</svg>
 									</div>
-									<span class="mt-3 text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Creative</span>
+									<span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Design</span>
 								</div>
 							</div>
-
 							<div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
 								<div class="animate-reversespin flex flex-col items-center group">
-									<div class="w-14 h-14 md:w-20 md:h-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center text-green-400 shadow-2xl group-hover:border-green-400/50 transition-all">
-										<svg class="w-7 h-7 md:w-9 md:h-9" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+									<div class="w-14 h-14 md:w-16 md:h-16 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 shadow-sm border border-green-100 group-hover:scale-110 transition-transform">
+										<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+											<path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
 										</svg>
 									</div>
-									<span class="mt-3 text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Growth</span>
+									<span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Marketing</span>
 								</div>
 							</div>
-
 							<div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2">
 								<div class="animate-reversespin flex flex-col items-center group">
-									<div class="w-14 h-14 md:w-20 md:h-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center text-orange-400 shadow-2xl group-hover:border-orange-400/50 transition-all">
-										<svg class="w-7 h-7 md:w-9 md:h-9" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18" />
+									<div class="w-14 h-14 md:w-16 md:h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600 shadow-sm border border-orange-100 group-hover:scale-110 transition-transform">
+										<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+											<path d="M3 12l9-9 9 9v9a3 3 0 01-3 3H6a3 3 0 01-3-3v-9z"></path>
 										</svg>
 									</div>
-									<span class="mt-3 text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Business</span>
+									<span class="mt-2 text-xs md:text-sm font-semibold text-slate-700 whitespace-nowrap bg-white/80 px-2 py-1 rounded-full">Home Services</span>
 								</div>
 							</div>
 						</div>
-
-						<div class="absolute w-[500px] h-[500px] md:w-[800px] md:h-[800px] border border-white/[0.03] rounded-full"></div>
+						<div class="absolute w-[320px] h-[320px] md:w-[500px] md:h-[500px] border border-slate-100 rounded-full"></div>
+						<div class="absolute w-[450px] h-[450px] md:w-[700px] md:h-[700px] border border-slate-50 rounded-full hidden sm:block"></div>
 					</div>
 				</div>
 			</section>
 			<!-- END: Category Grid -->
-
+			 
 			<!-- BEGIN: How It Works -->
-			<section class="py-24 bg-charcoal overflow-hidden relative border-t border-white/5">
-    
-				<div class="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-				<div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-green-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-
-				<div class="max-w-7xl mx-auto px-6 relative">
-					<div class="text-center mb-24">
-						<div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10 mb-6 backdrop-blur-sm">
-							<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">The Process</span>
-						</div>
-						<h2 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Built for <span class="text-secondary">clarity.</span></h2>
-						<p class="text-gray-300 max-w-xl mx-auto text-lg leading-relaxed">Your project journey simplified from objectives to automated payment.</p>
+			<section class="py-16 md:py-24 bg-offWhite overflow-hidden">
+				<div class="max-w-7xl mx-auto px-4 relative">
+					<div class="text-center mb-16 md:mb-20">
+						<h2 data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" class="text-3xl md:text-4xl font-bold mb-4">Built for clarity</h2>
+						<p data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="200" class="text-slateCustom max-w-xl mx-auto px-4">Your project journey simplified from objectives to payment.</p>
 					</div>
-
 					<div class="relative">
-						<div class="hidden md:block absolute top-20 left-1/2 -translate-x-1/2 w-full h-[300px] pointer-events-none z-0">
+						<div class="hidden md:block absolute top-10 left-1/2 -translate-x-1/2 w-full h-[80%] pointer-events-none z-0">
 							<svg class="w-full h-full" viewBox="0 0 1000 400" fill="none" preserveAspectRatio="none">
 								<path 
 									d="M 166 40 C 350 40, 350 200, 500 200 C 650 200, 650 360, 833 360" 
-									stroke="url(#premium-gradient)" 
-									stroke-width="2" 
+									stroke="url(#gradient-line)" 
+									stroke-width="4" 
 									stroke-dasharray="12 8"
 									fill="none" 
-									class="opacity-20"
-								/>
+									/>
 								<defs>
-									<linearGradient id="premium-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+									<linearGradient id="gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
 										<stop offset="0%" stop-color="#3b82f6" />
-										<stop offset="50%" stop-color="#7c3aed" />
-										<stop offset="100%" stop-color="#10b981" />
+										<stop offset="50%" stop-color="#a855f7" />
+										<stop offset="100%" stop-color="#22c55e" />
 									</linearGradient>
 								</defs>
 							</svg>
 						</div>
-
-						<div class="flex flex-col gap-20 md:gap-0 md:flex-row items-center md:items-start justify-between relative z-10">
-							
-							<div class="flex flex-col items-center w-full md:w-1/3 group">
-								<div class="w-16 h-16 rounded-2xl bg-slate-900 border border-blue-500/40 text-blue-400 flex items-center justify-center text-2xl font-bold mb-8 shadow-[0_0_20px_rgba(59,130,246,0.2)] group-hover:scale-110 transition-transform duration-500">
-									1
-								</div>
-								<div class="bg-white/[0.04] backdrop-blur-xl p-8 rounded-3xl border border-white/10 text-center max-w-xs mx-auto group-hover:border-white/20 transition-all shadow-2xl">
-									<h3 class="text-white font-bold text-xl mb-3">Post Objectives</h3>
-									<p class="text-gray-400 text-sm leading-relaxed">
-										Define your KPIs and project scope in a structured, professional environment.
+						<div class="absolute left-1/2 -translate-x-1/2 top-10 bottom-10 w-0.5 border-l-2 border-dashed border-slate-300 md:hidden z-0"></div>
+						<div class="flex flex-col gap-16 md:gap-0 md:flex-row items-center md:items-start justify-between relative z-10">
+							<div data-aos="fade-zoom-in" data-aos-easing="ease-in-quad" data-aos-delay="100" class="flex flex-col items-center w-full md:w-1/3 transform transition-all hover:-translate-y-2">
+								<div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl md:text-2xl font-bold mb-6 shadow-xl ring-8 ring-white relative z-10">1</div>
+								<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
+									<h3 class="font-bold text-xl mb-2">Post Objectives</h3>
+									<p class="text-slateCustom text-sm leading-relaxed">
+										Define your KPIs and project scope in our structured environment.
 									</p>
 								</div>
 							</div>
-
-							<div class="flex flex-col items-center w-full md:w-1/3 md:mt-48 group">
-								<div class="w-16 h-16 rounded-2xl bg-slate-900 border border-purple-500/40 text-purple-400 flex items-center justify-center text-2xl font-bold mb-8 shadow-[0_0_20px_rgba(124,58,237,0.2)] group-hover:scale-110 transition-transform duration-500">
-									2
-								</div>
-								<div class="bg-white/[0.04] backdrop-blur-xl p-8 rounded-3xl border border-white/10 text-center max-w-xs mx-auto group-hover:border-white/20 transition-all shadow-2xl">
-									<h3 class="text-white font-bold text-xl mb-3">Match & Negotiate</h3>
-									<p class="text-gray-400 text-sm leading-relaxed">
-										Connect with vetted experts. Preview deliverables before you commit a single cent.
+							<div data-aos="fade-zoom-in" data-aos-easing="ease-in-quad" data-aos-delay="200" class="flex flex-col items-center w-full md:w-1/3 md:pt-40 transform transition-all hover:-translate-y-2">
+								<div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-purple-500 text-white flex items-center justify-center text-xl md:text-2xl font-bold mb-6 shadow-xl ring-8 ring-white relative z-10">2</div>
+								<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
+									<h3 class="font-bold text-xl mb-2">Match & Negotiate</h3>
+									<p class="text-slateCustom text-sm leading-relaxed">
+										Connect with vetted experts. See deliverables before committing.
 									</p>
 								</div>
 							</div>
-
-							<div class="flex flex-col items-center w-full md:w-1/3 md:mt-96 group">
-								<div class="w-16 h-16 rounded-2xl bg-slate-900 border border-green-500/40 text-green-400 flex items-center justify-center text-2xl font-bold mb-8 shadow-[0_0_20px_rgba(16,185,129,0.2)] group-hover:scale-110 transition-transform duration-500">
-									3
-								</div>
-								<div class="bg-white/[0.04] backdrop-blur-xl p-8 rounded-3xl border border-white/10 text-center max-w-xs mx-auto group-hover:border-white/20 transition-all shadow-2xl">
-									<h3 class="text-white font-bold text-xl mb-3">Perform & Pay</h3>
-									<p class="text-gray-400 text-sm leading-relaxed">
-										Funds are secured in escrow and released automatically once deliverables meet your standard.
+							<div data-aos="fade-zoom-in" data-aos-easing="ease-in-quad" data-aos-delay="300" class="flex flex-col items-center w-full md:w-1/3 md:pt-80 transform transition-all hover:-translate-y-2">
+								<div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-green-500 text-white flex items-center justify-center text-xl md:text-2xl font-bold mb-6 shadow-xl ring-8 ring-white relative z-10">3</div>
+								<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center max-w-xs mx-auto">
+									<h3 class="font-bold text-xl mb-2">Perform & Pay</h3>
+									<p class="text-slateCustom text-sm leading-relaxed">
+										Work through deliverables. Funds are released automatically at agreed terms, no stress.
 									</p>
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>
 			</section>
-			{% comment %}
-
-			<!-- How it works -->
-			<section class="py-24 bg-[#0a0a0c] overflow-hidden relative">
-				<div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-green-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-
-				<div class="max-w-7xl mx-auto px-6 relative">
-					<div class="text-center mb-24">
-						<div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10 mb-6">
-							<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">The Process</span>
-						</div>
-						<h2 class="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Built for <span class="text-secondary">clarity.</span></h2>
-						<p class="text-gray-400 max-w-xl mx-auto text-lg">Your project journey simplified from objectives to automated payment.</p>
-					</div>
-
-					<div class="relative">
-						<div class="hidden md:block absolute top-20 left-1/2 -translate-x-1/2 w-full h-[300px] pointer-events-none z-0">
-							<svg class="w-full h-full" viewBox="0 0 1000 400" fill="none" preserveAspectRatio="none">
-								<path 
-									d="M 166 40 C 350 40, 350 200, 500 200 C 650 200, 650 360, 833 360" 
-									stroke="url(#premium-gradient)" 
-									stroke-width="2" 
-									stroke-dasharray="10 10"
-									fill="none" 
-									class="opacity-30"
-								/>
-								<defs>
-									<linearGradient id="premium-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-										<stop offset="0%" stop-color="#3b82f6" />
-										<stop offset="50%" stop-color="#7c3aed" />
-										<stop offset="100%" stop-color="#10b981" />
-									</linearGradient>
-								</defs>
-							</svg>
-						</div>
-
-						<div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/50 via-purple-500/50 to-green-500/50 md:hidden opacity-30"></div>
-
-						<div class="flex flex-col gap-20 md:gap-0 md:flex-row items-center md:items-start justify-between relative z-10">
-							
-							<div class="flex flex-col items-center w-full md:w-1/3 group">
-								<div class="w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-xl border border-blue-500/30 text-blue-400 flex items-center justify-center text-2xl font-bold mb-8 shadow-[0_0_30px_rgba(59,130,246,0.1)] group-hover:scale-110 transition-transform duration-500">
-									1
-								</div>
-								<div class="bg-white/[0.03] backdrop-blur-md p-8 rounded-3xl border border-white/10 text-center max-w-xs mx-auto group-hover:bg-white/[0.05] transition-colors">
-									<h3 class="text-white font-bold text-xl mb-3">Post Objectives</h3>
-									<p class="text-gray-400 text-sm leading-relaxed">
-										Define your KPIs and project scope in a structured, professional environment.
-									</p>
-								</div>
-							</div>
-
-							<div class="flex flex-col items-center w-full md:w-1/3 md:mt-48 group">
-								<div class="w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-xl border border-purple-500/30 text-purple-400 flex items-center justify-center text-2xl font-bold mb-8 shadow-[0_0_30px_rgba(124,58,237,0.1)] group-hover:scale-110 transition-transform duration-500">
-									2
-								</div>
-								<div class="bg-white/[0.03] backdrop-blur-md p-8 rounded-3xl border border-white/10 text-center max-w-xs mx-auto group-hover:bg-white/[0.05] transition-colors">
-									<h3 class="text-white font-bold text-xl mb-3">Match & Negotiate</h3>
-									<p class="text-gray-400 text-sm leading-relaxed">
-										Connect with vetted experts. Preview deliverables before you commit a single cent.
-									</p>
-								</div>
-							</div>
-
-							<div class="flex flex-col items-center w-full md:w-1/3 md:mt-96 group">
-								<div class="w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-xl border border-green-500/30 text-green-400 flex items-center justify-center text-2xl font-bold mb-8 shadow-[0_0_30px_rgba(16,185,129,0.1)] group-hover:scale-110 transition-transform duration-500">
-									3
-								</div>
-								<div class="bg-white/[0.03] backdrop-blur-md p-8 rounded-3xl border border-white/10 text-center max-w-xs mx-auto group-hover:bg-white/[0.05] transition-colors">
-									<h3 class="text-white font-bold text-xl mb-3">Perform & Pay</h3>
-									<p class="text-gray-400 text-sm leading-relaxed">
-										Funds are secured in escrow and released automatically once deliverables meet your standard.
-									</p>
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</section>
-			{% endcomment %}
 			<!-- END: How It Works -->
-
-			<!-- BEGIN: Value Proposition (Bento Box) -->
-			<section class="py-24 bg-[#111827] relative overflow-hidden border-t border-white/5">
-    
-				<div class="absolute top-0 right-0 w-[600px] h-[600px] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
-				<div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 blur-[100px] rounded-full pointer-events-none"></div>
-
-				<div class="max-w-7xl mx-auto px-6 relative z-10">
-					
-					<div class="mb-16">
-						<h2 class="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4">
-							Engineered for <span class="text-secondary">Trust.</span>
-						</h2>
-						<p class="text-gray-400 text-lg max-w-2xl">
-							We’ve eliminated the friction of remote work by building the world’s most secure service intermediary.
-						</p>
-					</div>
-
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[240px]">
-						
-						<div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 p-8 hover:border-secondary/50 transition-all duration-500">
-							<div class="relative z-10 h-full flex flex-col justify-between">
-								<div>
-									<div class="w-12 h-12 bg-secondary/10 border border-secondary/20 rounded-xl flex items-center justify-center mb-6 text-secondary">
-										<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-											<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-										</svg>
-									</div>
-									<h3 class="text-2xl font-bold text-white mb-3">Military-Grade Escrow</h3>
-									<p class="text-gray-400 max-w-sm leading-relaxed">
-										Payments are held securely and only released when you hit your milestones. No more chasing invoices or worrying about non-delivery.
-									</p>
-								</div>
-								<div class="mt-8 flex gap-3">
-									<div class="px-4 py-2 bg-secondary/20 border border-secondary/30 rounded-lg text-secondary text-xs font-mono uppercase tracking-widest">Locked</div>
-									<div class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-gray-500 text-xs font-mono uppercase tracking-widest">Awaiting Verification</div>
-								</div>
-							</div>
-							<div class="absolute -right-20 -bottom-20 w-64 h-64 bg-secondary/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-						</div>
-
-						<div class="relative group overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 p-8 hover:border-purple-500/50 transition-all duration-500">
-							<div class="relative z-10">
-								<h3 class="text-xl font-bold text-white mb-2">Milestone Logic</h3>
-								<p class="text-gray-400 text-sm">
-									Break large projects into digestible, payable stages with clear KPIs.
-								</p>
-							</div>
-							<div class="absolute bottom-8 left-8 right-8">
-								<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-									<div class="h-full w-2/3 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]"></div>
-								</div>
-							</div>
-						</div>
-
-						<div class="relative group overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 p-8 hover:border-blue-500/50 transition-all duration-500">
-							<div class="relative z-10">
-								<h3 class="text-xl font-bold text-white mb-2">Borderless Contracts</h3>
-								<p class="text-gray-400 text-sm">
-									Legally binding service agreements tailored for NG, CA, US, and UK.
-								</p>
-							</div>
-							<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-30 transition-opacity">
-								<svg class="w-32 h-32 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-									<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-								</svg>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 h-auto md:h-[280px]">
-						<div class="relative group overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 p-8 hover:border-green-500/50 transition-all duration-500">
-							<div class="flex items-center gap-6 h-full">
-								<div class="hidden sm:flex w-24 h-24 rounded-full border border-green-500/20 items-center justify-center bg-green-500/5">
-									<svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-										<path d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-									</svg>
-								</div>
-								<div>
-									<h3 class="text-xl font-bold text-white mb-2">Vetted Professional Network</h3>
-									<p class="text-gray-400 text-sm">Every provider on Servio undergoes a strict identity and skill verification process.</p>
-								</div>
-							</div>
-						</div>
-
-						<div class="relative group overflow-hidden rounded-3xl bg-white/[0.03] border border-white/10 p-8 hover:border-orange-500/50 transition-all duration-500">
-							<div class="flex items-center gap-6 h-full">
-								<div>
-									<h3 class="text-xl font-bold text-white mb-2">Real-time Collaboration</h3>
-									<p class="text-gray-400 text-sm">A secure environment to discuss deliverables, share files, and update contract terms instantly.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
 			
-			{% comment %}
+			<!-- BEGIN: Value Proposition (Bento Box) -->
 			<section class="py-24 bg-slate-50">
 				<div class="max-w-7xl mx-auto px-4">
 					<div class="grid grid-cols-12 gap-6">
 						<div class="col-span-12 lg:col-span-8 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-charcoal to-slate-800 p-10 text-white shadow-2xl transition-all duration-500 hover:shadow-indigo-500/20">
-							<div class="relative z-10 flex flex-col justify-between h-full">
-								<div>
+							<div data-aos="fade-zoom-in" data-aos-easing="ease-in-quad" data-aos-delay="100" class="relative z-10 flex flex-col justify-between h-full">
+								<div >
 									<span class="inline-block px-3 py-1 rounded-full bg-white/10 text-xs font-medium tracking-wider uppercase mb-6 backdrop-blur-md border border-white/10">Collaborative Workspace</span>
 									<h3 class="text-4xl font-extrabold mb-4 tracking-tight leading-tight">Build a Team, <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Not Just a Project</span></h3>
 									<p class="text-gray-300 max-w-md text-lg leading-relaxed">Stop hunting for individuals. Assemble a high-performance squad in minutes and manage them under one unified roof.</p>
@@ -532,7 +289,7 @@
 								</svg>
 							</div>
 						</div>
-						<div class="col-span-12 md:col-span-6 lg:col-span-4 rounded-3xl bg-white border border-slate-200 p-8 shadow-sm hover:shadow-xl transition-all duration-300 group">
+						<div data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="150" class="col-span-12 md:col-span-6 lg:col-span-4 rounded-3xl bg-white border border-slate-200 p-8 shadow-sm hover:shadow-xl transition-all duration-300 group">
 							<div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white mb-8 shadow-lg shadow-blue-200 group-hover:rotate-6 transition-transform">
 								<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
@@ -541,7 +298,7 @@
 							<h3 class="text-2xl font-bold mb-3 text-slate-900">Smart AI Matching</h3>
 							<p class="text-slate-600 leading-relaxed">Our neural engine scouts the best talent for your DNA. <span class="text-blue-600 font-semibold italic">No more manual filtering.</span></p>
 						</div>
-						<div class="col-span-12 md:col-span-6 lg:col-span-4 rounded-3xl bg-amber-50/50 border border-amber-100 p-8 shadow-sm hover:shadow-xl transition-all duration-300 group">
+						<div data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="200" class="col-span-12 md:col-span-6 lg:col-span-4 rounded-3xl bg-amber-50/50 border border-amber-100 p-8 shadow-sm hover:shadow-xl transition-all duration-300 group">
 							<div class="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center text-white mb-8 shadow-lg shadow-amber-200 group-hover:-translate-y-1 transition-transform">
 								<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
@@ -550,7 +307,7 @@
 							<h3 class="text-2xl font-bold mb-3 text-slate-900">Zero Price Wars</h3>
 							<p class="text-slate-600 leading-relaxed">We protect your margins. Quality is the only metric that matters here, not the race to the bottom.</p>
 						</div>
-						<div class="col-span-12 lg:col-span-8 rounded-3xl bg-emerald-50/30 border border-emerald-100 p-8 flex flex-col md:flex-row items-center gap-10 hover:bg-emerald-50 transition-colors">
+						<div data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="250" class="col-span-12 lg:col-span-8 rounded-3xl bg-emerald-50/30 border border-emerald-100 p-8 flex flex-col md:flex-row items-center gap-10 hover:bg-emerald-50 transition-colors">
 							<div class="flex-1 text-center md:text-left">
 								<div class="flex items-center justify-center md:justify-start gap-2 mb-4">
 									<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -577,135 +334,14 @@
 					</div>
 				</div>
 			</section>
-			{% endcomment %}
 			<!-- END: Value Proposition -->
 
 			<!-- BEGIN: Testimonials -->
-			<section class="py-24 bg-[#111827] relative overflow-hidden border-t border-white/5">
-				<div class="absolute top-1/2 left-0 w-[400px] h-[400px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-				<div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
-
-				<div class="max-w-7xl mx-auto px-6 relative z-10">
-					
-					<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-						<div class="max-w-2xl">
-							<div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10 mb-6">
-								<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-								<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Live Community</span>
-							</div>
-							<h2 class="text-4xl md:text-5xl font-bold text-white tracking-tight">
-								Trusted by the <br/> <span class="text-secondary">Global Workforce.</span>
-							</h2>
-						</div>
-						<p class="text-gray-400 text-lg max-w-sm">
-							Real providers and clients across 4 countries, building 100+ projects monthly.
-						</p>
-					</div>
-
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-						
-						<div class="group relative p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] hover:border-secondary/30 transition-all duration-500">
-							<div class="flex items-start justify-between mb-8">
-								<div class="flex items-center gap-4">
-									<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-secondary/20 group-hover:border-secondary/50 transition-colors">
-										<img src="{% static 'images/user/user-12.jpg' %}" alt="Provider" class="w-full h-full object-cover">
-									</div>
-									<div>
-										<h4 class="text-white font-bold text-sm">Chidi O.</h4>
-										<p class="text-gray-500 text-xs uppercase tracking-wider">Fullstack Dev • Nigeria</p>
-									</div>
-								</div>
-								<div class="px-2 py-1 rounded bg-secondary/10 border border-secondary/20 text-[10px] text-secondary font-bold">VERIFIED</div>
-							</div>
-
-							<blockquote class="text-gray-300 leading-relaxed mb-8">
-								"Finding clients in Canada and the UK used to be a trust nightmare. Servio's escrow system makes sure I get paid for my milestones instantly. It changed my freelance business."
-							</blockquote>
-
-							<div class="pt-6 border-t border-white/5 flex items-center justify-between">
-								<div class="flex gap-1">
-									<div class="w-3 h-3 bg-secondary rounded-full"></div>
-									<div class="w-3 h-3 bg-secondary rounded-full"></div>
-									<div class="w-3 h-3 bg-secondary rounded-full"></div>
-									<div class="w-3 h-3 bg-secondary rounded-full"></div>
-									<div class="w-3 h-3 bg-secondary/30 rounded-full"></div>
-								</div>
-								<span class="text-[10px] text-gray-500 font-mono italic">14 Projects Completed</span>
-							</div>
-						</div>
-
-						<div class="group relative p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] hover:border-blue-400/30 transition-all duration-500">
-							<div class="flex items-start justify-between mb-8">
-								<div class="flex items-center gap-4">
-									<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400/20 group-hover:border-blue-400/50 transition-colors">
-										<img src="{% static 'images/user/user-22.jpg' %}" alt="Client" class="w-full h-full object-cover">
-									</div>
-									<div>
-										<h4 class="text-white font-bold text-sm">Sarah L.</h4>
-										<p class="text-gray-500 text-xs uppercase tracking-wider">Startup Founder • Canada</p>
-									</div>
-								</div>
-								<div class="px-2 py-1 rounded bg-blue-400/10 border border-blue-400/20 text-[10px] text-blue-400 font-bold">CLIENT</div>
-							</div>
-
-							<blockquote class="text-gray-300 leading-relaxed mb-8">
-								"We needed specialized talent for our Django project. Servio let us review the code and the deliverables in the HUD before we released the funds. Pure transparency."
-							</blockquote>
-
-							<div class="pt-6 border-t border-white/5 flex items-center justify-between">
-								<div class="flex gap-1 text-blue-400 font-bold text-[10px]">
-									<span>FAST RESPONSE</span>
-								</div>
-								<span class="text-[10px] text-gray-500 font-mono italic">8 Experts Hired</span>
-							</div>
-						</div>
-
-						<div class="group relative p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] hover:border-purple-400/30 transition-all duration-500">
-							<div class="flex items-start justify-between mb-8">
-								<div class="flex items-center gap-4">
-									<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-purple-400/20 group-hover:border-purple-400/50 transition-colors">
-										<img src="{% static 'images/user/user-19.jpg' %}" alt="Provider" class="w-full h-full object-cover">
-									</div>
-									<div>
-										<h4 class="text-white font-bold text-sm">James W.</h4>
-										<p class="text-gray-500 text-xs uppercase tracking-wider">UI/UX Designer • UK</p>
-									</div>
-								</div>
-								<div class="px-2 py-1 rounded bg-purple-400/10 border border-purple-400/20 text-[10px] text-purple-400 font-bold">VERIFIED</div>
-							</div>
-
-							<blockquote class="text-gray-300 leading-relaxed mb-8">
-								"The contract automation is world-class. No need for separate legal documents—everything is bound within the proposal. It’s the platform I've been waiting for."
-							</blockquote>
-
-							<div class="pt-6 border-t border-white/5 flex items-center justify-between">
-								<div class="flex gap-1">
-									<div class="w-3 h-3 bg-purple-400 rounded-full"></div>
-									<div class="w-3 h-3 bg-purple-400 rounded-full"></div>
-									<div class="w-3 h-3 bg-purple-400 rounded-full"></div>
-									<div class="w-3 h-3 bg-purple-400 rounded-full"></div>
-									<div class="w-3 h-3 bg-purple-400 rounded-full"></div>
-								</div>
-								<span class="text-[10px] text-gray-500 font-mono italic">22 Projects Completed</span>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="mt-20 flex justify-center">
-						<button class="px-8 py-3 bg-white/5 border border-white/10 rounded-full text-white text-sm font-semibold hover:bg-white/10 hover:border-white/20 transition-all group">
-							Join <span class="text-secondary group-hover:text-white transition-colors">2,400+</span> professionals globally
-						</button>
-					</div>
-				</div>
-			</section>
-
-			{% comment %}
 			<section class="py-24 bg-charcoal text-white">
 				<div id="testimonials" class="max-w-7xl mx-auto px-4">
-					<h2 class="text-4xl font-bold text-center mb-20">Trusted by Global Leaders</h2>
+					<h2 data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="100" class="text-4xl font-bold text-center mb-20">Trusted by Global Leaders</h2>
 					<div class="grid md:grid-cols-3 gap-10">
-						<div class="p-8 rounded-2xl bg-white/5 border border-white/10">
+						<div data-aos="zoom-in-right" data-aos-easing="ease-in-sine" data-aos-delay="90" class="p-8 rounded-2xl bg-white/5 border border-white/10">
 							<p class="text-lg italic mb-8 text-gray-300">"Servio completely changed how we handle our outsourced engineering. The milestone-based payments keep everyone aligned."</p>
 							<div class="flex items-center gap-4">
 								<img alt="Sarah Chen" class="w-12 h-12 rounded-full border border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPdhkHriLCHmAjAvjDy-5gQ4mbfLPd_A9i7gxUr4UW0tp7--C2raLYF-_Zp4oh5tNUaIVjPjPCe3NtiuI35z3K5enNg8-2HAarB0Z7x5CwkY1jqRd3foiIzirq9AB-6UKhIiA9OAPOjKXjwQ-lLFnt7IWj9YjWbpIg8jVutyFc6l880KUGhm8xawLelusCVQZAjCX7x_n05YiEVVt8S5ZbtggxtNw1QEQ6vMEk_k0NVM03dZo56IrZQC9P5fuqON4FYmSgw1Bmpws" />
@@ -715,7 +351,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="p-8 rounded-2xl bg-white/5 border border-white/10">
+						<div data-aos="zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="150" class="p-8 rounded-2xl bg-white/5 border border-white/10">
 							<p class="text-lg italic mb-8 text-gray-300">"The quality of experts is miles ahead of any other platform. It's built for actual business professionals."</p>
 							<div class="flex items-center gap-4">
 								<img alt="Marcus Aurelius" class="w-12 h-12 rounded-full border border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQm9xrknUWO-QCjPD1k7wG_enPwzDOxfWjOazHF7b14gawAfQfLYI-PSczTLbMBA9OGtuo09UtyLwMjG4gIge2FvaJa29Y_76AAqBbOPWBBbrmke8BdXbXKmAmQGuzxDCT-11NcrhT6TO8DZYYbmXr6nm_1U296lLBUUj92cRffw9dNT4qk7AE1_N-ztsxTN0Vj02qZObFujn18tnrSMeCY2mcrsm50sh9I7XxaxbTg1VPYOJ_k6Q1zTZSQ2xR3eFgXcbFZHl5Pog" />
@@ -725,7 +361,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="p-8 rounded-2xl bg-white/5 border border-white/10">
+						<div data-aos="zoom-in-left" data-aos-easing="ease-in-sine" data-aos-delay="200" class="p-8 rounded-2xl bg-white/5 border border-white/10">
 							<p class="text-lg italic mb-8 text-gray-300">"We found our entire go-to-market team here. The negotiation framework is extremely sophisticated."</p>
 							<div class="flex items-center gap-4">
 								<img alt="Elena Rodriguez" class="w-12 h-12 rounded-full border border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVZHg5l4F45_i5TYp9W4qZmWNiUHE5uJQ6VyBoEumpsxKwnTtu3M8BHdjSmadFAOh-89QpwXYAozDFnbMyLWDIzydD5spt6YJQnV80T9_ISJWpX3r3zsdr-D8WiSzVsf4BfLLAgCnk5-j2w9sYdKFZHI6z4BXLAqyUnaBpulFCAUHgRn6LshS7b6NakVOv1Eke1Ha8S39aZrUxLMyyjOu23J3cIX4qNysoV0xmyFmcqiRyON0CBsQ-u09fpBfIWLYbTP04yUj2mWk" />
@@ -738,71 +374,10 @@
 					</div>
 				</div>
 			</section>
-			{% endcomment %}
 			<!-- END: Testimonials -->
 
+
 			<!-- BEGIN: Final CTA -->
-			<section class="py-32 bg-[#0a0a0c] relative overflow-hidden border-t border-white/5">
-				<div class="absolute -bottom-[400px] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-secondary/10 blur-[150px] rounded-full pointer-events-none"></div>
-				<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-secondary/50 to-transparent"></div>
-
-				<div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
-					
-					<div class="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 border border-secondary/30 rounded-full mb-10 animate-bounce-slow">
-						<span class="relative flex h-2 w-2">
-							<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-							<span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-						</span>
-						<span class="text-xs font-bold text-secondary uppercase tracking-[0.3em]">Phase 1 Beta Launching Soon</span>
-					</div>
-
-					<h2 class="text-5xl md:text-7xl font-extrabold text-white tracking-tighter mb-8 leading-[1.1]">
-						The future of work is <br/>
-						<span class="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">already scheduled.</span>
-					</h2>
-
-					<p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
-						Join the elite circle of providers and clients from Nigeria, Canada, the UK, and the US. Secure your spot in the ecosystem.
-					</p>
-
-					<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-						<a href="#" class="group relative px-10 py-5 bg-white text-black font-bold rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
-							<span class="relative z-10">Get Early Access</span>
-							<div class="absolute inset-0 bg-gradient-to-r from-secondary to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-							<div class="absolute inset-0 bg-white group-hover:hidden"></div>
-							<span class="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">Reserve My Spot</span>
-						</a>
-						
-						<a href="#" class="px-10 py-5 bg-white/5 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/10 transition-all backdrop-blur-sm">
-							View Roadmap
-						</a>
-					</div>
-
-					<div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto border-t border-white/5 pt-20">
-						<div>
-							<p class="text-2xl font-bold text-white mb-1">99.9%</p>
-							<p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Uptime SLA</p>
-						</div>
-						<div>
-							<p class="text-2xl font-bold text-white mb-1">AES-256</p>
-							<p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Escrow Encryption</p>
-						</div>
-						<div>
-							<p class="text-2xl font-bold text-white mb-1">24/7</p>
-							<p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Global Support</p>
-						</div>
-						<div>
-							<p class="text-2xl font-bold text-white mb-1">0%</p>
-							<p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Payment Friction</p>
-						</div>
-					</div>
-				</div>
-
-				<div class="absolute top-20 left-10 w-24 h-24 border-l border-t border-white/10 opacity-20 hidden lg:block"></div>
-				<div class="absolute bottom-20 right-10 w-24 h-24 border-r border-b border-white/10 opacity-20 hidden lg:block"></div>
-			</section>
-
-			{% comment %}
 			<section id="final-cta" class="py-24 relative overflow-hidden bg-slate-950">
 				<div class="absolute inset-0 z-0">
 					<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full animate-pulse"></div>
@@ -817,24 +392,24 @@
 							<div class="absolute top-[-8%] left-[90%] w-3 h-3 bg-yellow-400 animate-fall delay-300"></div>
 						</div>
 						<div class="relative z-20">
-							<span class="inline-block py-1 px-4 mb-6 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-sm font-mono tracking-wide uppercase">
-							There’s a better way
+							<span data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" class="inline-block py-1 px-4 mb-6 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-sm font-mono tracking-wide uppercase">
+								There’s a better way
 							</span>
-							<h2 class="text-2xl lg:text-4xl font-extrabold mb-8 tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
+							<h2 data-aos="fade-zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="100" class="text-2xl lg:text-4xl font-extrabold mb-8 tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
 								From big projects to everyday tasks, <br class="hidden md:block" /> 
 								get it done the <span class="text-emerald-500 font-semibold">right way.</span>
 							</h2>
-							<p class="text-sm md:text-lg text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+							<p data-aos="fade-zoom-in" data-aos-easing="ease-out-sine" data-aos-delay="150" class="text-sm md:text-lg text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
 								WhatsApp threads are messy, and <span>freelance platforms create bidding wars</span>. <br>Servio connects you with the right professionals in one organized workspace.
 							</p>
 							<div class="flex flex-col sm:flex-row justify-center items-center gap-6">
 								<a href="{% url AUTH_URLS.SIGNUP %}" class="group relative px-12 py-6 bg-white text-slate-950 rounded-2xl font-bold text-md md:text-lg transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]">
-									<span class="relative z-10">Get Started for Free</span>
+									<span data-aos="fade-up" data-aos-easing="ease-in-sine" data-aos-delay="100" class="relative z-10">Get Started for Free</span>
 									<div class="absolute inset-0 overflow-hidden rounded-2xl">
 										<div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shimmer"></div>
 									</div>
 								</a>
-								<button class="px-12 py-6 bg-transparent text-white rounded-2xl font-bold text-md md:text-xl border border-white/20 hover:bg-white/5 transition-colors">
+								<button data-aos="fade-in" data-aos-easing="ease-in-sine" data-aos-delay="150" class="px-12 py-6 bg-transparent text-white rounded-2xl font-bold text-md md:text-xl border border-white/20 hover:bg-white/5 transition-colors">
 								Contact Sales
 								</button>
 							</div>
@@ -844,197 +419,10 @@
 					</div>
 				</div>
 			</section>
-			{% endcomment %}
 			<!-- END: Final CTA -->
 		</main>
 		<!-- BEGIN: Footer -->
-		 <footer class="relative bg-[#0a0a0c] pt-24 pb-12 overflow-hidden border-t border-white/5">
-    <div class="absolute -top-24 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute top-1/2 right-0 w-64 h-64 bg-secondary/5 rounded-full blur-[80px] pointer-events-none"></div>
-
-    <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 mb-20">
-            
-            <div class="col-span-2 space-y-8">
-                <a class="group inline-block" href="#">
-                    <img 
-                        src="{% static 'images/logo/sidebar-logo-light.png' %}" 
-                        alt="Servio" 
-                        class="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 brightness-110"
-                    >
-                </a>
-                <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
-                    The next-gen ecosystem for high-performance teams. 
-                    <span class="block mt-2 text-secondary font-bold uppercase text-[10px] tracking-[0.2em]">Find • Work • Secure</span>
-                </p>
-                
-                <div class="relative max-w-sm group">
-                    <input type="email" placeholder="Join the newsletter" 
-                        class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-3.5 px-5 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary/50 transition-all backdrop-blur-md">
-                    <button class="absolute right-2 top-2 p-1.5 bg-secondary rounded-xl text-black hover:scale-105 transition-all shadow-lg">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                            <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <div>
-                <h4 class="font-bold text-[11px] mb-8 uppercase tracking-[0.25em] text-gray-500">Platform</h4>
-                <ul class="space-y-4 text-sm font-medium">
-                    <li><a class="text-gray-400 hover:text-white hover:translate-x-1 flex items-center gap-2 transition-all duration-300" href="#">How it Works</a></li>
-                    <li><a class="text-gray-400 hover:text-white hover:translate-x-1 flex items-center gap-2 transition-all duration-300" href="#">For Users</a></li>
-                    <li><a class="text-gray-400 hover:text-white hover:translate-x-1 flex items-center gap-2 transition-all duration-300" href="#">For Agencies</a></li>
-                    <li><a class="text-gray-400 hover:text-white hover:translate-x-1 flex items-center gap-2 transition-all duration-300" href="#">Enterprise</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-bold text-[11px] mb-8 uppercase tracking-[0.25em] text-gray-500">Categories</h4>
-                <ul class="space-y-4 text-sm font-medium text-gray-400">
-                    <li><a class="hover:text-blue-400 transition-colors" href="#">Engineering</a></li>
-                    <li><a class="hover:text-secondary transition-colors" href="#">Design</a></li>
-                    <li><a class="hover:text-amber-400 transition-colors" href="#">Sales</a></li>
-                    <li><a class="hover:text-purple-400 transition-colors" href="#">Marketing</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-bold text-[11px] mb-8 uppercase tracking-[0.25em] text-gray-500">Resources</h4>
-                <ul class="space-y-4 text-sm font-medium text-gray-400">
-                    <li><a class="hover:text-white transition-colors" href="#">Help Center</a></li>
-                    <li><a class="hover:text-white transition-colors" href="#">Guides</a></li>
-                    <li><a class="hover:text-white transition-colors" href="#">Community</a></li>
-                    <li><a class="hover:text-white transition-colors" href="#">API Docs</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="font-bold text-[11px] mb-8 uppercase tracking-[0.25em] text-gray-500">Legal</h4>
-                <ul class="space-y-4 text-sm font-medium text-gray-400">
-                    <li><a class="hover:text-white transition-colors" href="#">Privacy</a></li>
-                    <li><a class="hover:text-white transition-colors" href="#">Terms</a></li>
-                    <li><a class="hover:text-white transition-colors" href="#">Cookies</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-2 px-3 py-1 bg-green-500/5 rounded-full border border-green-500/20">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                    <span class="text-[10px] font-bold text-green-500 uppercase tracking-widest">All Systems Live</span>
-                </div>
-                <p class="text-[11px] font-mono text-gray-600 uppercase tracking-widest">© 2026 Servio Platform</p>
-            </div>
-
-            <div class="flex gap-3">
-                <a class="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-gray-500 hover:bg-white/5 hover:text-white hover:border-white/30 transition-all group" href="#">
-                    <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                    </svg>
-                </a>
-                <a class="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-gray-500 hover:bg-white/5 hover:text-white hover:border-white/30 transition-all group" href="#">
-                    <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </div>
-</footer>
-		<footer class="bg-[#0a0a0c] pt-24 pb-12 border-t border-white/5 relative overflow-hidden">
-			<div class="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-secondary/20 to-transparent"></div>
-
-			<div class="max-w-7xl mx-auto px-6 relative z-10">
-				<div class="grid grid-cols-2 md:grid-cols-12 gap-12 mb-20">
-					
-					<div class="col-span-2 md:col-span-4">
-						<a href="/" class="flex items-center gap-2 mb-6 group">
-							<div class="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(var(--secondary-rgb),0.3)]">
-								<span class="text-black font-black text-xl italic">S</span>
-							</div>
-							<span class="text-2xl font-bold text-white tracking-tighter">SERVIO</span>
-						</a>
-						<p class="text-gray-500 text-sm leading-relaxed max-w-xs mb-8">
-							The premium intermediary infrastructure connecting global talent with ambitious visionaries. Secure, transparent, and borderless.
-						</p>
-						<div class="inline-flex items-center gap-3 px-3 py-1.5 bg-green-500/5 border border-green-500/20 rounded-full">
-							<span class="relative flex h-2 w-2">
-								<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-								<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-							</span>
-							<span class="text-[10px] font-bold text-green-500 uppercase tracking-widest">System Operational</span>
-						</div>
-					</div>
-
-					<div class="col-span-1 md:col-span-2">
-						<h4 class="text-white font-bold text-xs uppercase tracking-[0.2em] mb-6">Platform</h4>
-						<ul class="space-y-4">
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">How it Works</a></li>
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">Escrow Security</a></li>
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">Verified Experts</a></li>
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">Global Reach</a></li>
-						</ul>
-					</div>
-
-					<div class="col-span-1 md:col-span-2">
-						<h4 class="text-white font-bold text-xs uppercase tracking-[0.2em] mb-6">Legal</h4>
-						<ul class="space-y-4">
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">Privacy Policy</a></li>
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">Terms of Service</a></li>
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">Cookie Policy</a></li>
-							<li><a href="#" class="text-gray-500 hover:text-secondary text-sm transition-colors">Dispute Resolution</a></li>
-						</ul>
-					</div>
-
-					<div class="col-span-2 md:col-span-4">
-						<h4 class="text-white font-bold text-xs uppercase tracking-[0.2em] mb-6">Stay Synced</h4>
-						<form class="flex gap-2 mb-8">
-							<input type="email" placeholder="Email address" class="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-secondary/50 w-full transition-all">
-							<button class="px-4 py-2.5 bg-secondary text-black font-bold rounded-xl text-sm hover:scale-105 active:scale-95 transition-all">
-								Join
-							</button>
-						</form>
-						<div class="flex gap-4">
-							<a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-all">
-								<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
-							</a>
-							<a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-all">
-								<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-					<p class="text-[10px] text-gray-600 font-mono tracking-widest uppercase">
-						&copy; 2026 Servio Platform. All protocols reserved.
-					</p>
-					<div class="flex gap-8">
-						<div class="flex items-center gap-2">
-							<span class="w-1 h-1 bg-blue-500 rounded-full"></span>
-							<span class="text-[10px] text-gray-600 font-bold uppercase tracking-widest">NG</span>
-						</div>
-						<div class="flex items-center gap-2">
-							<span class="w-1 h-1 bg-red-500 rounded-full"></span>
-							<span class="text-[10px] text-gray-600 font-bold uppercase tracking-widest">CA</span>
-						</div>
-						<div class="flex items-center gap-2">
-							<span class="w-1 h-1 bg-purple-500 rounded-full"></span>
-							<span class="text-[10px] text-gray-600 font-bold uppercase tracking-widest">UK</span>
-						</div>
-						<div class="flex items-center gap-2">
-							<span class="w-1 h-1 bg-blue-400 rounded-full"></span>
-							<span class="text-[10px] text-gray-600 font-bold uppercase tracking-widest">US</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
-
-		{% comment %}
-		<footer class="relative bg-white pt-24 pb-12 overflow-hidden">
+		<footer data-aos="fade-in" data-aos-easing="ease-in-sine" data-aos-delay="100" class="relative bg-white pt-24 pb-12 overflow-hidden">
 			<div class="absolute -top-24 left-1/4 w-96 h-96 bg-blue-50/50 rounded-full blur-[100px] pointer-events-none"></div>
 			<div class="absolute top-1/2 right-10 w-64 h-64 bg-emerald-50/40 rounded-full blur-[80px] pointer-events-none"></div>
 			<div class="max-w-7xl mx-auto px-4 relative z-10">
@@ -1119,43 +507,15 @@
 				</div>
 			</div>
 		</footer>
-		{% endcomment %}
+		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 		<script>
-			document.addEventListener("DOMContentLoaded", () => {
-				const logo = document.getElementById('navbar-logo');
-				const navButton = document.getElementById('nav-cta-button');
-				const navLinks = document.getElementById('nav-links');
-				const heroSection = document.getElementById('hero');
-				
-				const testimonialsSection = document.getElementById('testimonials');
-				const b2bCoalSection = document.getElementById('b2b-coal');
-				const finalCtaSection = document.getElementById('final-cta');
-				
-				const yellowClasses = ['bg-secondary', 'text-charcoal'];
-				const primaryClasses = ['bg-primary', 'text-white'];
-				
-				const observerOptions = {threshold: 0 };
-				
-				const observer = new IntersectionObserver((entries) => {
-					entries.forEach(entry => {
-						if (entry.isIntersecting) {
-							console.log("is intersecting");
-							
-						} else {
-							console.log("not intersecting");
-							
-						}
-					});
-				}, observerOptions);
-				
-				observer.observe(heroSection);
-				observer.observe(finalCtaSection);
+			AOS.init({
+				duration: 1000, // 1 second animations
+				easing: 'ease-out-quart', // Smooth deceleration
+				once: false,
+				mirror: true,
+				offset: 100, // Start animation 100px before element hits the view
 			});
-			
-			
-			
-			// pageObserver.observe(b2bCoalSection);
-			// pageObserver.observe(testimonialsSection);
-		</script>
+	</script>
 	</body>
 </html>
