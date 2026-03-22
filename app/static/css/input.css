@@ -280,6 +280,42 @@
     .scroll-container-fixed {
         scrollbar-gutter: stable;
     }
+
+  /* Normal scrollbar */
+  .custom-scrollbar {
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #f9fafb transparent;
+  }
+
+  /* Chrome, Edge, and Safari */
+  .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent; /* Keeps the UI clean */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #f59e0b; /* Amber 500 */
+      border-radius: 20px;
+      border: 1px solid transparent; /* Gives it a slight 'floating' padding feel */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: #d97706;
+  }
+
+  /* Dark Mode adjustment */
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(245, 158, 11, 0.4); /* Subtle amber in dark mode */
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(245, 158, 11, 0.7);
+  }
 }
 
 /* Global Custom CSS */

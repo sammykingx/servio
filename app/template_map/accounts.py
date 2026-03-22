@@ -88,7 +88,7 @@ class Accounts:
 
     ACCOUNT_PROFILE = _BASE_FOLDER.base_folder_files("profile.html")
     ACCOUNT_SETTINGS = _BASE_FOLDER.base_folder_files(
-        "new-account-settings.html"
+        "account-settings.html"
     )
     ACCOUNT_EDIT_PROFILE = _BASE_FOLDER.base_folder_files("edit-profile.html")
 
