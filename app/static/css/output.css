@@ -12489,19 +12489,6 @@
       }
     }
   }
-  .dark\:border-orange-100 {
-    &:where(.dark, .dark *) {
-      border-color: var(--color-orange-100);
-    }
-  }
-  .dark\:border-orange-100\/5 {
-    &:where(.dark, .dark *) {
-      border-color: color-mix(in srgb, #ffead5 5%, transparent);
-      @supports (color: color-mix(in lab, red, red)) {
-        border-color: color-mix(in oklab, var(--color-orange-100) 5%, transparent);
-      }
-    }
-  }
   .dark\:border-red-800\/50 {
     &:where(.dark, .dark *) {
       border-color: color-mix(in srgb, oklch(44.4% 0.177 26.899) 50%, transparent);
@@ -13371,35 +13358,6 @@
   .dark\:bg-orange-25 {
     &:where(.dark, .dark *) {
       background-color: var(--color-orange-25);
-    }
-  }
-  .dark\:bg-orange-50 {
-    &:where(.dark, .dark *) {
-      background-color: var(--color-orange-50);
-    }
-  }
-  .dark\:bg-orange-50\/5 {
-    &:where(.dark, .dark *) {
-      background-color: color-mix(in srgb, #fff6ed 5%, transparent);
-      @supports (color: color-mix(in lab, red, red)) {
-        background-color: color-mix(in oklab, var(--color-orange-50) 5%, transparent);
-      }
-    }
-  }
-  .dark\:bg-orange-50\/20 {
-    &:where(.dark, .dark *) {
-      background-color: color-mix(in srgb, #fff6ed 20%, transparent);
-      @supports (color: color-mix(in lab, red, red)) {
-        background-color: color-mix(in oklab, var(--color-orange-50) 20%, transparent);
-      }
-    }
-  }
-  .dark\:bg-orange-100\/20 {
-    &:where(.dark, .dark *) {
-      background-color: color-mix(in srgb, #ffead5 20%, transparent);
-      @supports (color: color-mix(in lab, red, red)) {
-        background-color: color-mix(in oklab, var(--color-orange-100) 20%, transparent);
-      }
     }
   }
   .dark\:bg-orange-900\/20 {
@@ -15751,6 +15709,13 @@
       }
     }
   }
+  .dark\:focus\:border-brand-300 {
+    &:where(.dark, .dark *) {
+      &:focus {
+        border-color: var(--color-brand-300);
+      }
+    }
+  }
   .dark\:focus\:border-brand-400 {
     &:where(.dark, .dark *) {
       &:focus {
@@ -15803,6 +15768,16 @@
     &:where(.dark, .dark *) {
       &:focus {
         border-color: var(--color-warning-200);
+      }
+    }
+  }
+  .dark\:focus\:ring-brand-300\/10 {
+    &:where(.dark, .dark *) {
+      &:focus {
+        --tw-ring-color: color-mix(in srgb, #9990ff 10%, transparent);
+        @supports (color: color-mix(in lab, red, red)) {
+          --tw-ring-color: color-mix(in oklab, var(--color-brand-300) 10%, transparent);
+        }
       }
     }
   }
