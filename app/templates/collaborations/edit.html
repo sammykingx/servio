@@ -5,93 +5,52 @@
 {% block custom_page_css %}
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 {% endblock %}
-{% block browser_title %}Modify Gig/Project{% endblock %}
+{% block browser_title %}Finalize Your Project{% endblock %}
 {% block content %}
-<div class="flex flex-col md:flex-row md:items-center max-w-7xl mx-auto justify-between gap-4 mb-7 md:mb-0">
-    <!-- Left: Title & Breadcrumbs Context -->
-    <div class="flex flex-col gap-1 my-6">
-        <div class="flex items-center gap-3 flex-wrap">
-            <h1 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white truncate max-w-md">
+<div class="max-w-7xl mx-auto mb-10 px-4">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div class="space-y-4">
+            <h2 class="my-3 text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">
                 {{ gig.title|striptags|title }}
-            </h1>
-            <div class="flex items-center gap-2">
-                {% if gig.visibility == 'public' %}
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-500/10 dark:bg-emerald-500/10 text-emerald-500 dark:text-emerald-500 border border-success-500/20 dark:border-emerald-500/20">
-                    <span class="material-symbols-outlined text-[14px] mr-1">public</span>
-                    Public
-                </span>
-                {% else %}
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700 border border-purple-200">
-                    <span class="material-symbols-outlined text-[14px] mr-1">lock</span>
-                    Private
-                </span>
-                {% endif %}
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                    {% if gig.status == 'draft' %}
-                        bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 border border-gray-200
-                    {% elif gig.status == 'pending' %}
-                        bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 border border-amber-200
-                    {% elif gig.status == 'published' %}
-                        bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 border border-indigo-200
-                    {% elif gig.status == 'in_progress' %}
-                        bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border border-emerald-200
-                    {% elif gig.status == 'completed' %}
-                        bg-success-100 text-success-800 dark:bg-success-900 dark:text-success-200 border border-success-200
-                    {% else %}
-                        bg-error-100 text-error-800 dark:bg-error-900 dark:text-error-200 border border-error-200
-                    {% endif %}
-                    ">
-                    {{ gig.status|prettify_status }}
-                </span>
+            </h2>
+            <div class="flex flex-wrap items-center gap-2">
+                <div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 dark:border-white/10 dark:bg-slate-900">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75
+                            {% if gig.status == 'draft' %} bg-slate-400
+                            {% elif gig.status == 'pending' %} bg-amber-400
+                            {% elif gig.status == 'published' %} bg-indigo-400
+                            {% elif gig.status == 'in_progress' %} bg-blue-400
+                            {% elif gig.status == 'completed' %} bg-emerald-400
+                            {% else %} bg-red-400 {% endif %}"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 
+                            {% if gig.status == 'draft' %} bg-slate-500
+                            {% elif gig.status == 'pending' %} bg-amber-500
+                            {% elif gig.status == 'published' %} bg-indigo-600
+                            {% elif gig.status == 'in_progress' %} bg-blue-600
+                            {% elif gig.status == 'completed' %} bg-emerald-600
+                            {% else %} bg-red-600 {% endif %}"></span>
+                    </span>
+                    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 dark:text-slate-400">
+                        {{ gig.status|prettify_status }}
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 dark:border-white/10 dark:bg-slate-900">
+                    <span class="material-symbols-outlined text-[14px] text-slate-400">
+                        {% if gig.visibility == 'public' %}public{% else %}lock{% endif %}
+                    </span>
+                    <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-600 dark:text-slate-400">
+                        {{ gig.visibility|title }}
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- Right: Actions -->
-    <div
-        x-data="{ busy: false }" 
-        class="flex items-center gap-2 self-start md:self-center">
-        <a
-            href="{% url COLLABORATION_URLS.DETAIL_COLLABORATION slug=gig.slug %}"
-            @click="if (busy) return; window.location.href = $el.href"
-            :class="{
-                'pointer-events-none cursor-not-allowed opacity-60': busy
-            }"
-            class="flex items-center justify-center gap-2 px-4 h-10 rounded-lg
-                border border-slate-200 dark:border-slate-700
-                bg-white dark:bg-slate-900
-                text-slate-500 dark:text-slate-200
-                font-medium text-sm
-                hover:border-brand-500 hover:text-brand-500
-                dark:hover:border-brand-300 dark:hover:text-brand-300
-                transition-colors"
-        >
-            <span x-show="!busy" class="material-symbols-outlined text-[18px]">arrow_left_alt</span>
-            <span x-show="busy" class="material-symbols-outlined text-[18px] animate-pulse">hourglass_top</span>
-            
-            <span class="hidden sm:inline" x-show="!busy">Go Back</span>
-            <span class="hidden sm:inline" x-show="busy">Please wait...</span>
-        </a>
 
-        <button 
-            @click="
-                if (busy) return;
-                busy = true;
-                saveChanges().finally(() => busy = false)
-            "
-            :disabled="busy"
-            class="flex items-center justify-center 
-                gap-2 px-6 h-10 rounded-lg bg-brand-500 
-                hover:bg-brand-400 text-white font-medium 
-                text-sm shadow-brand-500/20 
-                transition-all active:scale-95
-                disabled:opacity-60 disabled:cursor-not-allowed
-            "
-        >
-            <span x-show="!busy" class="material-symbols-outlined text-[18px]">save</span>
-            <span x-show="busy" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
-            <span x-show="!busy">Save Changes</span>
-            <span x-show="busy">Saving…</span>
-        </button>
+        <div class="hidden md:flex flex-col items-end gap-1 border-r-2 border-emerald-500 pr-4">
+            <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Engine Intialized</span>
+            <span class="text-sm font-mono uppercase text-slate-900 dark:text-white">ready</span>
+        </div>
     </div>
 </div>
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -104,20 +63,20 @@
         data-start-date="{{ gig.start_date|date:'Y-m-d' }}"
         data-end-date="{{ gig.end_date|date:'Y-m-d' }}" 
         data-endpoint="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" 
-        data-csrf-token="{{ csrf_token }}" 
+        data-csrf-token="{{ csrf_token }}"
+        data-state="{{ gig.status  }}"
         data-status="{{ gig.status }}" 
         class="lg:col-span-8 flex flex-col gap-6"
     >
-        <!--New project engine -->
-        {# comment "project engine v2" #}
-            <section 
-                class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-xl transition-all dark:border-white/10 dark:bg-slate-900/80 shadow-2xl shadow-slate-200/50 dark:shadow-none"
-            >
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 bg-slate-50/40 px-6 py-4 dark:border-white/5 dark:bg-white/[0.02] gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 text-white shadow-lg shadow-brand-500/20">
-                            <span class="material-symbols-outlined text-[22px] animate-pulse">tune</span>
-                            <div v-if="payload.status === 'live'" class="absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-slate-900"></div>
+        
+        <section 
+            class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-xl transition-all dark:border-white/10 dark:bg-slate-900/80 shadow-2xl shadow-slate-200/50 dark:shadow-none"
+        >
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 bg-slate-50/40 px-6 py-4 dark:border-white/5 dark:bg-white/[0.02] gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 text-white shadow-lg shadow-brand-500/20">
+                        <span class="material-symbols-outlined text-[22px] animate-pulse">tune</span>
+                            <div v-if="payload.state === 'publish'" class="absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-slate-900"></div>
                         </div>
                         <div>
                             <h3 class="text-sm font-medium tracking-tight text-gray-900 dark:text-white">Project Engine</h3>
@@ -130,14 +89,15 @@
 
                     <div class="w-full sm:w-auto flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-1.5 dark:border-white/10 dark:bg-slate-800 shadow-inner">
                         <button 
-                            @click="payload.status = 'draft'"
-                            :class="payload.status === 'draft' ? 'bg-slate-800 text-white shadow-lg dark:bg-white dark:text-slate-900' : 'text-slate-400 hover:text-slate-600'"
-                            class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl">
+                            @click="payload.state = 'draft'"
+                            :class="payload.state === 'draft' ? 'bg-slate-800 text-white shadow-lg dark:bg-white dark:text-slate-900' : 'text-slate-400 hover:text-slate-600'"
+                            class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl"
+                        >
                             Draft
                         </button>
                         <button 
-                            @click="payload.status = 'live'"
-                            :class="payload.status === 'live' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'text-slate-400 hover:text-slate-600'"
+                            @click="payload.state = 'publish'"
+                            :class="payload.state === 'publish' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'text-slate-400 hover:text-slate-600'"
                             class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl">
                             Go Live
                         </button>
@@ -175,105 +135,142 @@
                                     <span class="material-symbols-outlined text-[20px]">language</span>
                                     Public
                                 </button>
-                                <button 
-                                    @click="payload.visibility = 'private'"
-                                    class="relative z-10 flex items-center justify-center gap-3 py-4 text-xs transition-all"
-                                    :class="payload.visibility === 'private' ? 'text-brand-600 dark:text-white' : 'text-slate-400'">
-                                    <span class="material-symbols-outlined text-[20px]">encrypted</span>
-                                    Private
-                                </button>
-                                <div 
-                                    class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-white dark:bg-slate-700 rounded-xl shadow-md transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-                                    :style="payload.visibility === 'private' ? 'transform: translateX(100%);' : 'transform: translateX(0%);'">
-                                </div>
+                            <button 
+                                @click="payload.visibility = 'private'"
+                                class="relative z-10 flex items-center justify-center gap-3 py-4 text-xs transition-all"
+                                :class="payload.visibility === 'private' ? 'text-brand-600 dark:text-white' : 'text-slate-400'">
+                                <span class="material-symbols-outlined text-[20px]">encrypted</span>
+                                Private
+                            </button>
+                            <div 
+                                class="absolute top-1.5 bottom-1.5 left-1.5 w-[calc(50%-6px)] bg-white dark:bg-slate-700 rounded-xl shadow-md transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+                                :style="payload.visibility === 'private' ? 'transform: translateX(100%);' : 'transform: translateX(0%);'">
                             </div>
                         </div>
+                    </div>
 
-                        <div class="space-y-4">
-                            <label class="text-[11px] text-slate-400 dark:text-slate-500 uppercase tracking-widest">Financial Allocation</label>
-                            <div class="relative group">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none">
-                                    <span class="text-lg md:text-xl text-slate-300 group-focus-within:text-brand-500 transition-colors">$</span>
-                                </div>
-                                <input 
-                                    x-model="payload.projectBudget" 
-                                    :disabled="budgetLocked" 
-                                    type="number" 
-                                    class="w-full rounded-2xl border-2 border-slate-100 bg-white py-5 pl-12 pr-6 text-xl text-gray-900 outline-none transition-all focus:border-brand-500/20 focus:bg-brand-50/5 dark:border-white/5 dark:bg-white/[0.02] dark:text-white dark:focus:border-brand-500/30" 
-                                    :class="budgetLocked ? 'opacity-40 cursor-not-allowed' : ''" />
-                                <div class="absolute right-4 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-slate-50 dark:bg-white/5 text-[9px] font-medium text-slate-400 uppercase tracking-tighter">
-                                    USD
-                                </div>
+                    <div class="space-y-4">
+                        <label class="text-[11px] text-slate-400 dark:text-slate-500 uppercase tracking-widest">Financial Allocation</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none">
+                                <span class="text-lg md:text-xl text-slate-300 group-focus-within:text-brand-500 dark:group-focus-within:text-brand-300 transition-colors">$</span>
+                            </div>
+                            <input 
+                                :value="getFormattedBudget()"
+                                @input="handleBudgetInput($event)"
+                                :disabled="budgetLocked" 
+                                type="text"
+                                inputmode="decimal"
+                                class="w-full rounded-2xl border-2 border-slate-100 bg-white py-5 pl-12 pr-6 text-xl text-gray-900 outline-none transition-all focus:border-brand-500/20 focus:bg-brand-50/5 dark:border-white/5 dark:bg-white/[0.02] dark:text-white dark:focus:border-brand-500/30" 
+                                :class="budgetLocked ? 'opacity-40 cursor-not-allowed' : ''"
+                            />
+                            <div class="absolute right-4 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-slate-50 dark:bg-white/5 text-[9px] font-medium text-slate-400 uppercase tracking-tighter">
+                                USD
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
                 
-                <div class="px-8 py-4 bg-slate-50/50 dark:bg-white/[0.01] border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+            <div class="px-8 py-4 bg-slate-50/50 dark:bg-white/[0.01] border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
                 <span class="flex items-center gap-2 text-[10px] font-medium text-slate-400 uppercase tracking-widest">
                     <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
                     Engine Synced
                 </span>
-                <p class="text-[10px] text-slate-400 font-medium">Auto-save active</p>
-                </div>
-            </section>
-        {# endcomment #}
-
-        <!--Old engine -->
-        {% comment "old ending" %}
-        <section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <div class="flex items-center gap-2 mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
-                <span class="p-2 bg-brand-50 dark:bg-gray-600 dark:brand-600/30 rounded-lg material-symbols-outlined text-[20px] text-brand-500 dark:text-gray-400">article</span>
-                <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Basic Gig Information</h3>
+                <p class="text-[10px] text-slate-400 font-medium">last state: Draft</p>
             </div>
-            <div class="grid gap-6">
-                <div class="space-y-3">
-                    <label class="block ml-1.5 text-gray-700 dark:text-gray-400 text-sm font-semibold">Gig Title</label>
-                    <input 
-                        x-model="payload.title" 
-                        :disabled="locked" 
-                        class="custom-form-input"
-                        :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''" 
-                        type="text" />
+        </section>
+
+        <!-- Timeline -->
+        <section class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-white/10 dark:bg-slate-900/50">
+            <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-white/5 dark:bg-white/[0.02]">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500 text-white shadow-lg shadow-cyan-500/20">
+                        <span class="material-symbols-outlined text-[20px]">date_range</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Project Lifespan</h3>
+                        <p class="text-[10px] font-medium uppercase tracking-widest text-cyan-600/80">Scheduling Engine</p>
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="block ml-1.5 text-gray-700 dark:text-gray-400 text-sm font-semibold">Visibility</label>
-                        <div class="relative">
-                            <select 
-                                x-model="payload.visibility"
-                                :disabled="locked" 
-                                :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''" 
-                                class="custom-form-input appearance-none">
-                                <option value="public">Public (Visible to everyone)</option>
-                                <option value="private">Private (Invite only)</option>
-                                <!-- <option value="internal">Internal Team Only</option> -->
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
-                                <span class="material-symbols-outlined">expand_more</span>
-                            </div>
+                
+                <div class="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-1.5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5">
+                    <span class="text-[10px] font-medium uppercase tracking-tight text-slate-500 dark:text-slate-400">Total Duration:</span>
+                    <span class="text-[10px] font-medium text-cyan-600 dark:text-cyan-400" x-text="getDurationText()">0 Days</span>
+                </div>
+            </div>
+
+            <div class="p-6 md:p-8">
+                <div class="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex flex-col items-center justify-center h-full z-0 pointer-events-none">
+                        <div class="h-14 w-[2px] bg-slate-100 dark:bg-white/5 relative">
+                            <div class="absolute inset-0 bg-gradient-to-b from-cyan-500 to-cyan-500 transition-all duration-500 h-0 group-focus-within:h-full"></div>
+                        </div>
+                        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-slate-200 dark:bg-slate-800 dark:border-white/10 shadow-sm">
+                            <span class="material-symbols-outlined text-sm text-cyan-500">trending_flat</span>
+                        </div>
+                        <div class="h-14 w-[2px] bg-slate-100 dark:bg-white/5 relative">
+                            <div class="absolute inset-0 bg-gradient-to-b from-cyan-500 to-cyan-500 transition-all duration-500 h-0 group-focus-within:h-full"></div>
                         </div>
                     </div>
 
-                    <!-- Budget -->
-                    <div class="">
-                        <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">Total Project Budget</label>
-                        <div class="mt-1 relative rounded-lg space-y-2">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm font-medium pointer-events-none">
-                                $
-                            </span>
-                            <input 
-                                x-model="payload.projectBudget" :disabled="budgetLocked" :class="budgetLocked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''" type="number" class="custom-form-input pl-6" />
+                    <div class="relative z-10 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 text-[11px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                                <span class="h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
+                                Ignition Date
+                            </label>
+                            <span class="text-[9px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-tighter">Format: MM/DD/YYYY</span>
                         </div>
-                        <!-- <p class="text-xs text-slate-500">excludin platform fees.</p> -->
+                        
+                        <div class="group/input relative flex items-center">
+                            <div class="absolute left-4 flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 text-slate-500 group-focus-within/input:bg-cyan-500 group-focus-within/input:text-white transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">play_circle</span>
+                            </div>
+                            <input 
+                                type="date" 
+                                x-model="payload.startDate" 
+                                class="w-full rounded-2xl border-2 border-slate-100 bg-white py-5 pl-16 pr-4 text-sm font-semibold text-gray-900 outline-none transition-all focus:border-cyan-500/20 focus:bg-cyan-50/5 dark:border-white/5 dark:bg-white/[0.02] dark:text-white dark:focus:border-cyan-500/30" />
+                        </div>
                     </div>
+
+                    <div class="relative z-10 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 text-[11px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                                <span class="h-1.5 w-1.5 rounded-full bg-slate-300 dark:bg-white/20"></span>
+                                Delivery Date
+                            </label>
+                            <span class="text-[9px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-tighter">Format: MM/DD/YYYY</span>
+                        </div>
+                        
+                        <div class="group/input relative flex items-center">
+                            <div class="absolute left-4 flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/5 text-slate-500 group-focus-within/input:bg-cyan-500 group-focus-within/input:text-white transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">stop_circle</span>
+                            </div>
+                            <input 
+                                type="date" 
+                                x-model="payload.endDate" 
+                                class="w-full rounded-2xl border-2 border-slate-100 bg-white py-5 pl-16 pr-4 text-sm font-semibold text-gray-900 outline-none transition-all focus:border-cyan-500/20 focus:bg-cyan-50/5 dark:border-white/5 dark:bg-white/[0.02] dark:text-white dark:focus:border-cyan-500/30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 py-4 bg-slate-50/50 dark:bg-white/[0.01] border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
+                <span class="flex items-center gap-2 text-[9px] font-semibold text-slate-400 uppercase tracking-widest">
+                    <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                    Chronology Validated
+                </span>
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-xs text-slate-300">info</span>
+                    <p class="text-[9px] font-medium text-slate-400 uppercase tracking-tighter" x-text="payload.startDate ? 'Launch set for ' + payload.startDate : 'System standby...'"></p>
                 </div>
             </div>
         </section>
-        {% endcomment %}
 
         <!-- Description Card -->
-        <section class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-white/10 dark:bg-slate-900/50">
+        <section class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white transition-all hover:shadow-md dark:border-white/10 dark:bg-slate-900/50">
             <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-white/5 dark:bg-white/[0.02]">
                 <div class="flex items-center gap-3">
                     <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-fuchsia-500 text-white shadow-lg shadow-fuchsia-500/20">
@@ -355,382 +352,188 @@
             </div>
         </section>
 
-        {% comment "old description" %}
-        <section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <div class="flex items-center gap-2 mb-4">
-                <span class="bg-fuchsia-50 dark:bg-gray-600 rounded-lg p-2 material-symbols-outlined text-fuchsia-500 dark:text-gray-400">description</span>
-                <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Gig Description</h3>
-            </div>
-            <div x-init="initQuill()" class="border border-slate-300 dark:border-slate-600 
-                    rounded-lg overflow-hidden bg-slate-50 dark:bg-slate-900 
-                    focus-within:border-success-300 dark:focus-within:border-warning-200 
-                    focus-within:ring-success-500/10 transition-all">
-                <!-- Toolbar -->
-                <div id="quill-toolbar" class="flex flex-wrap items-center gap-x-2 gap-y-2 p-2 border-b 
-                    border-slate-200 dark:border-slate-700 
-                    bg-slate-100 dark:bg-slate-900">
-                    <!-- Header -->
-                    <div class="relative">
-                        <select class="ql-header">
-                            <option selected value="">small</option>
-                            <option value="2">Big</option>
-                            <option value="3">Medium</option>
-                        </select>
-                    </div>
-
-                    <!-- Buttons -->
-                    <button class="ql-bold quill-btn"><span class="material-symbols-outlined">format_bold</span></button>
-                    <button class="ql-italic quill-btn"><span class="material-symbols-outlined">format_italic</span></button>
-                    <button class="ql-underline quill-btn"><span class="material-symbols-outlined">format_underlined</span></button>
-
-                    <!-- Alignment -->
-                    <button class="ql-align quill-btn" value="">
-                        <span class="material-symbols-outlined">format_align_left</span>
-                    </button>
-                    <button class="ql-align quill-btn" value="center">
-                        <span class="material-symbols-outlined">format_align_center</span>
-                    </button>
-                    <button class="ql-align quill-btn" value="right">
-                        <span class="material-symbols-outlined">format_align_right</span>
-                    </button>
-                    <button class="ql-align quill-btn" value="justify">
-                        <span class="material-symbols-outlined">format_align_justify</span>
-                    </button>
-
-                    <!-- Bullet list-->
-                    <button class="ql-list quill-btn" value="bullet">
-                        <span class="material-symbols-outlined">format_list_bulleted</span>
-                    </button>
-
-                </div>
-                <div id="quill-editor" class="w-full min-h-[200px] p-4 bg-transparent text-gray-800 dark:text-gray-400"></div>
-                <!-- Text Area --
-                <textarea 
-                    x-model="payload.description" 
-                    @input="enforceDescriptionLimit()" 
-                    :disabled="locked" 
-                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''" 
-                    class="w-full border-none bg-transparent p-4 min-h-[160px]
-                        text-gray-800 dark:text-gray-400
-                        placeholder:text-gray-500
-                        focus:outline-none focus:ring-0 
-                        focus:border-transparent"
-                ></textarea> -->
-            </div>
-            <div class="flex justify-end mt-2 text-xs" :class="descriptionCount() >= maxDescriptionLength
-                    ? 'text-red-500'
-                    : 'text-slate-500'">
-                <span x-text="descriptionCount()"></span> /<span x-text="` ${maxDescriptionLength}`"></span>
-                characters
-            </div>
-        </section>
-        {% endcomment %}
-
         <!-- Roles Section -->
-        <section x-data="gigRoles($refs.taxonomy, $refs.paymentOptionsData, $refs.rolesData, locked)" data-gig-roles class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-2">
-                    <span class="bg-amber-50 dark:bg-gray-600 rounded-lg p-2 material-symbols-outlined text-amber-500 dark:text-gray-400">group</span>
-                    <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Required Roles</h3>
+        <section x-data="gigRoles($refs.taxonomy, $refs.paymentOptionsData, $refs.rolesData, locked)" 
+            class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all dark:border-white/10 dark:bg-slate-900/50"
+        >
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 bg-slate-50/50 px-4 py-4 sm:px-6 dark:border-white/5 dark:bg-white/[0.02] gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20">
+                        <span class="material-symbols-outlined text-[20px]">hub</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Resource Allocation</h3>
+                        <p class="text-[10px] font-medium uppercase tracking-widest text-amber-600/80">Human Capital Engine</p>
+                    </div>
                 </div>
-                <button @click="addRole()" class="text-gray-400 hover:text-brand-500 dark:hover:text-gray-300 text-sm font-medium flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[18px]">add</span> Add new role
+                
+                <button @click="addRole()" 
+                        :disabled="locked"
+                        class="group w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-500 hover:text-white dark:text-slate-900 dark:hover:text-white transition-all hover:bg-amber-500 dark:hover:bg-amber-500 disabled:opacity-50 dark:bg-white">
+                    <span class="material-symbols-outlined text-[16px] transition-transform group-hover:rotate-90">add</span>
+                    <span>Add New Role</span>
                 </button>
             </div>
-            <div class="space-y-4">
-                <!-- Role Card 1 (Filled/Lockedish) -->
+
+            <div class="p-4 sm:p-6 space-y-12 sm:space-y-8">
                 <template x-for="(role, index) in roles" :key="index">
-                    <div class="border border-slate-200 dark:border-slate-700 rounded-lg bg-[#fcfcfd] dark:bg-gray-800 p-5 relative group transition-all hover:border-success-500/50">
-                        <!-- Header -->
-                        <div class="absolute top-4 right-4 flex gap-2">
-                            <span
-                                class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
-                                :class="role.isNew
-                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                                    : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'"
-                                x-text="role.isNew ? 'New' : 'Active'"
-                            ></span>
-                            <span
-                                x-show="!role.isNew"
-                                x-transition.opacity
-                                class="inline-flex items-center px-2 py-1 
-                                    rounded text-xs font-medium gap-1.5
-                                    bg-purple-100 text-purple-700 
-                                    dark:bg-purple-900 dark:text-purple-300"
-                            >
-                                slots:<span x-text="role.slots" class="text-xs"></span>
-                            </span>
-                            <button @click="removeRole(index)" class="text-slate-400 hover:text-red-500">
-                                <span class="material-symbols-outlined text-[20px]">delete</span>
-                            </button>
+                    <div class="relative flex flex-col md:flex-row gap-4 md:gap-6 group">
+                        
+                        <div class="flex md:flex-col items-center gap-2 md:w-10">
+                            <div class="flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-[10px] md:text-xs font-medium text-slate-500 transition-colors group-hover:bg-amber-500 group-hover:text-white dark:bg-white/5">
+                                <span x-text="String(index + 1).padStart(2, '0')"></span>
+                            </div>
+                            <div class="hidden md:block w-px flex-grow bg-slate-100 dark:bg-white/5"></div>
+                            <span class="md:hidden text-[10px] font-medium uppercase tracking-widest text-slate-400">Configuration Module</span>
                         </div>
 
-                        <h4 class="text-sm font-semibold text-gray-800 dark:text-white mb-4">
-                            Role No. <span x-text="index + 1"></span>
-                        </h4>
-
-                        <!-- Niche & Professional -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <!-- Niche -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Niche
-                                </label>
-                                <select
-                                    x-model="role.nicheId"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    @change="role.professionalId=''; emitRoles()"
-                                    class="w-full rounded-md border border-[#cfd7e7]
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                        focus:border-success-500 transition"
-                                >
-                                    <option x-text="role.nicheName"></option>
-                                    <template x-for="niche in taxonomy" :key="niche.id">
-                                        <option :value="niche.id" x-text="niche.name"></option>
-                                    </template>
-                                </select>
-                            </div>
-
-                            <!-- Professional -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Specialization
-                                </label>
-
-                                <select
-                                    x-model="role.professionalId"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    @change="emitRoles()"
-                                    class="w-full rounded-md border border-[#cfd7e7]
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                        focus:border-success-500 transition"
-                                >
-                                    <option x-text="role.professionalName"></option>
-                                    <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
-                                        <option :value="pro.id" x-text="pro.name"></option>
-                                    </template>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Budget & Workload -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <!-- Budget -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Allocated Budget
-                                </label>
-
-                                <div class="relative">
-                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 
-                                        text-gray-400 dark:text-gray-500 text-sm font-medium pointer-events-none">
-                                        $
+                        <div class="flex-grow rounded-2xl border border-slate-200 bg-[#fcfcfd] p-4 sm:p-6 transition-all hover:border-amber-500/30 dark:border-white/5 dark:bg-slate-800/50">
+                            
+                            <div class="mb-6 flex items-center justify-between gap-2">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9px] font-medium uppercase tracking-wider"
+                                        :class="role.isNew ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'">
+                                        <span class="h-1 w-1 rounded-full animate-pulse" :class="role.isNew ? 'bg-blue-500' : 'bg-emerald-500'"></span>
+                                        <span x-text="role.isNew ? 'Initialization' : 'Operational'"></span>
                                     </span>
+                                    
+                                    <template x-if="!role.isNew">
+                                        <span class="rounded-full bg-purple-50 px-2.5 py-1 text-[9px] font-semibold text-purple-600 dark:bg-purple-500/10 tracking-widest uppercase">
+                                            Slots: <span x-text="role.slots"></span>
+                                        </span>
+                                    </template>
+                                </div>
 
-                                    <input
-                                        type="number"
-                                        x-model="role.budget"
-                                        @input="emitRoles()"
-                                        min="0"
-                                        :disabled="locked"
-                                        :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                        class="w-full rounded-md border border-[#cfd7e7]
-                                            dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                            text-gray-800 dark:text-gray-400 pl-7 pr-3 py-2.5 text-sm
-                                            focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                            focus:border-success-500"
-                                    />
+                                <button @click="removeRole(index)" class="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-500/10">
+                                    <span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                
+                                <div class="space-y-4">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div class="space-y-1.5">
+                                            <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Industry Niche</label>
+                                            <select x-model="role.nicheId" @change="role.professionalId=''; emitRoles()" 
+                                                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
+                                                <option x-text="role.nicheName"></option>
+                                                <template x-for="niche in taxonomy" :key="niche.id">
+                                                    <option :value="niche.id" x-text="niche.name"></option>
+                                                </template>
+                                            </select>
+                                        </div>
+                                        <div class="space-y-1.5">
+                                            <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Specialization</label>
+                                            <select x-model="role.professionalId" @change="emitRoles()"
+                                                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
+                                                <option x-text="role.professionalName"></option>
+                                                <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
+                                                    <option :value="pro.id" x-text="pro.name"></option>
+                                                </template>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Role Brief</label>
+                                        <textarea x-model="role.description" @input="emitRoles()" rows="6"
+                                            placeholder="Define the scope..."
+                                            rows="5"
+                                            class="custom-scrollbar w-full resize-none rounded-xl border border-slate-200 bg-white p-4 text-sm leading-relaxed focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-slate-300"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="rounded-2xl bg-slate-50 p-4 sm:p-5 dark:bg-black/20 space-y-4">
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Budget Allocation</label>
+                                        <div class="relative">
+                                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400">$</span>
+                                            <input
+                                                type="text" 
+                                                inputmode="decimal"
+                                                :value="formatDisplay(role.budget)"
+                                                @input="updateBudget(role, $event)"
+                                                class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-8 pr-4 text-md tracking-tight 
+                                                    outline-none focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 
+                                                    dark:border-white/10 dark:bg-slate-900 dark:text-white transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Payment Plan</label>
+                                        <select x-model="role.paymentOption" @change="emitRoles()" :key="paymentOptions.length"
+                                                class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs uppercase tracking-widest focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
+                                            <option value="">Select Plan</option>
+                                            <template x-for="mode in paymentOptions" :key="mode.value">
+                                                <option 
+                                                    :value="mode.value" 
+                                                    :selected="role.paymentOption == mode.value"
+                                                    x-text="mode.label"></option>
+                                            </template>
+                                        </select>
+                                    </div>
+
+                                    <div class="mt-4 flex items-start gap-2 rounded-lg bg-amber-500/10 p-3">
+                                        <span class="material-symbols-outlined text-[16px] text-amber-600 mt-0.5">verified</span>
+                                        <span class="text-[9px] font-semibold uppercase text-amber-700 dark:text-amber-500 leading-tight">Resource cost will be factored into project total</span>
+                                    </div>
                                 </div>
                             </div>
-
-                            <!-- Workload -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Payment Options
-                                </label>
-
-                                <select
-                                    x-model="role.paymentOption"
-                                    @change="emitRoles()"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    class="w-full rounded-md border border-[#cfd7e7]
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                        focus:border-success-500 transition"
-                                >
-                                    <option value="">modify options</option>
-                                    <template x-for="mode in paymentOptions" :key="mode.value">
-                                        <option :value="mode.value" x-text="mode.label"></option>
-                                    </template>
-                                </select>
-                            </div>
-
                         </div>
-
-                        <!-- Description -->
-                        <div class="grid grid-cols-1">
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Role Description
-                                </label>
-
-                                <textarea
-                                    rows="6"
-                                    x-model="role.description"
-                                    @input="emitRoles()"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    class="w-full rounded-md border border-[#cfd7e7] leading-relaxed
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900 
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm md:text-base 
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30 
-                                        focus:border-success-500 transition resize-y"
-                                ></textarea>
-                            </div>
-                        </div>
-
                     </div>
                 </template>
-                <!-- Add Role Placeholder -->
-                <button 
-                    @click="addRole()" 
-                    :disabled="locked"
-                    :class="locked 
-                        ? 'opacity-40 cursor-not-allowed pointer-events-none' 
-                        : 'hover:border-brand-500 hover:text-brand-500'"
-                    class="w-full py-4 border-2 border-dashed border-slate-300 
-                        dark:border-slate-700 rounded-lg text-slate-500 
-                        hover:border-brand-500/50 hover:text-brand-500/50
-                        dark:hover:border-gray-400 dark:hover:text-gray-300
-                        hover:bg-brand-500/5 transition-all flex flex-col 
-                        items-center justify-center gap-2 group"
-                >
-                    <div class="p-2 rounded-full bg-slate-100 dark:bg-slate-900 group-hover:bg-brand-500/10 transition-colors">
-                        <span class="material-symbols-outlined group-hover:text-brand-500 transition-colors">add</span>
+
+                <button @click="addRole()" :disabled="locked"
+                        class="group flex w-full flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-slate-200 py-6 sm:py-8 transition-all hover:border-amber-500/50 hover:bg-amber-50/30 dark:border-white/5 dark:hover:bg-amber-500/5">
+                    <div class="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-white/5">
+                        <span class="material-symbols-outlined text-slate-400 group-hover:text-amber-500">add_task</span>
                     </div>
-                    <span class="text-sm font-light">Add another role</span>
+                    <div class="text-center px-4">
+                        <span class="block text-xs sm:text-sm font-medium uppercase tracking-widest text-slate-500 group-hover:text-amber-600">Expand the Team</span>
+                        <span class="text-[9px] sm:text-[10px] font-medium text-slate-400 uppercase">add new role</span>
+                    </div>
                 </button>
             </div>
         </section>
-        <!-- Timeline Section -->
-         
-        <section 
-            class="bg-[#fcfcfd] dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6 relative overflow-hidden"
-        >
-            <!-- Locked Overlay (only when in progress) -->
-            <div 
-                x-show="locked"
-                x-transition.opacity
-                class="absolute top-4 right-4 z-10"
-            >
-                <div class="group relative flex items-center">
-                    <span class="material-symbols-outlined text-slate-400 cursor-help">lock</span>
-
-                    <span class="absolute right-full mr-2 w-48 p-2 bg-slate-800 text-white text-xs rounded 
-                                opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        Dates cannot be changed while gig is In Progress.
-                    </span>
-                </div>
-            </div>
-
-            <!-- Header -->
-            <div class="flex items-center gap-2 mb-6 pb-4 border-b border-slate-200 dark:border-slate-700">
-                <span class="material-symbols-outlined bg-teal-50 dark:bg-gray-600 rounded-lg p-2 text-teal-500 dark:text-gray-400">
-                    calendar_today
-                </span>
-                <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">
-                    Timeline &amp; Milestones
-                </h3>
-            </div>
-
-
-            <!-- Timeline Inputs -->
-            <div 
-                class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                :class="locked ? 'opacity-70' : ''"
-            >
-                <!-- Start Date -->
-                <div class="space-y-2">
-                    <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">
-                        Start Date
-                    </label>
-
-                    <input 
-                        type="date"
-                        x-model="payload.startDate"
-                        :disabled="locked"
-                        :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                        class="w-full rounded-md border border-[#cfd7e7]
-                            dark:border-[#4a5568] bg-white dark:bg-slate-900
-                            text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm md:text-base
-                            focus:outline-none focus:ring-1 focus:ring-success-500/30
-                            focus:border-success-500 transition"
-                    />
-                </div>
-
-                <!-- End Date -->
-                <div class="space-y-2">
-                    <label class="text-gray-700 dark:text-gray-400 text-sm font-semibold">
-                        Estimated End Date
-                    </label>
-
-                    <input 
-                        type="date"
-                        x-model="payload.endDate"
-                        :disabled="locked"
-                        :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                        class="w-full rounded-md border border-[#cfd7e7]
-                            dark:border-[#4a5568] bg-white dark:bg-slate-900
-                            text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm md:text-base
-                            focus:outline-none focus:ring-1 focus:ring-success-500/30
-                            focus:border-success-500 transition"
-                    />
-                </div>
-            </div>
-            <!-- <div class="my-3 text-xs text-red-500" x-text="'Locked: ' + locked"></div> -->
-        </section>
-
     </div>
+
     <!-- Right Column: Sidebar -->
     <div class="lg:col-span-4 space-y-6">
-        {# comment "engine v2" #}
         <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-1 dark:border-white/10 dark:bg-slate-900">
             <div class="rounded-[22px] bg-slate-50/50 p-6 dark:bg-white/[0.02]">
                 <h3 class="mb-6 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
                     <span class="relative flex h-2 w-2">
                         <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-75"></span>
-                        <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+                        <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500 dark:bg-brand-400"></span>
                     </span>
                     Engine Overview
                 </h3>
 
-                <div class="grid grid-cols-2 gap-4 mb-8">
+                <div
+                    x-data="{ total: 0, count: 0 }"
+                    @roles-summary-updated.window="total = $event.detail.totalBudget; count = $event.detail.roleCount" 
+                    class="grid grid-cols-2 gap-4 mb-8"
+                >
                     <div class="space-y-1">
                         <p class="text-[10px] font-medium text-slate-400 uppercase">Allocated Budget</p>
-                        <p class="text-xl font-semibold text-gray-900 dark:text-white transition-all" x-text="'$' + (payload.projectBudget || 0)">
-                            $0
+                        <p class="text-xl font-semibold text-gray-900 dark:text-white transition-all" x-text="'$' + total.toLocaleString()">
+                            
                         </p>
                     </div>
                     <div class="space-y-1">
                         <p class="text-[10px] font-medium text-slate-400 uppercase">Active Roles</p>
-                        <p class="text-xl font-semibold text-gray-900 dark:text-white">
-                            {{ gig.roles_count|default:"0" }}
-                        </p>
+                        <p x-text="count" class="text-xl font-semibold text-gray-900 dark:text-white"></p>
                     </div>
                 </div>
 
-                <button 
-                    @click="saveProject()"
+                <button
+                    id="saveChange"
+                    @click="saveChanges($event)"
                     class="group relative w-full flex items-center justify-center gap-3 overflow-hidden rounded-2xl bg-brand-500 py-4 font-semibold text-white transition-all hover:bg-brand-500/50 hover:shadow-lg hover:shadow-brand-500/20 active:scale-95 dark:bg-white dark:hover:bg-brand-500 dark:text-slate-800 dark:hover:text-white"
                 >
-                    <span class="relative text-sm uppercase tracking-widest">Commit Changes</span>
+                    <span class="relative text-sm uppercase tracking-widest">Save Changes</span>
                     <span class="material-symbols-outlined relative text-[20px] transition-transform group-hover:translate-x-1">save</span>
                     
                     <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full"></div>
@@ -782,7 +585,7 @@
                         </div>
                         <span class="text-[11px] font-medium text-slate-500 uppercase">Last Sync</span>
                     </div>
-                    <span class="text-xs font-semibold text-gray-700 dark:text-slate-300">{{ gig.updated_display }}</span>
+                    <span class="text-xs font-sans text-gray-700 dark:text-slate-300">{{ gig.updated_display }}</span>
                 </div>
 
                 <div class="flex items-center justify-between border-b border-slate-50 pb-4 dark:border-white/5">
@@ -792,78 +595,12 @@
                         </div>
                         <span class="text-[11px] font-medium text-slate-500 uppercase">Engine Init</span>
                     </div>
-                    <span class="text-xs font-semibold text-gray-700 dark:text-slate-300">{{ gig.created_at|date:"M j, Y" }}</span>
+                    <span class="text-xs font-sans text-gray-700 dark:text-slate-300">{{ gig.created_at|date:"M j, Y" }}</span>
                 </div>
                 
                 <div class="mt-2 flex items-center justify-center gap-2 rounded-xl bg-brand-50/50 py-2 dark:bg-brand-500/5">
-                    <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
-                    <span class="text-[10px] font-medium text-brand-600 dark:text-brand-400 uppercase tracking-tight">Infrastructure Secure</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- v2 -->
-        <div class="group relative overflow-hidden rounded-2xl border-2 border-slate-900 bg-slate-900 p-6 shadow-2xl dark:border-brand-500/20 dark:bg-slate-950">
-            <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-brand-500/10 blur-3xl group-hover:bg-brand-500/20 transition-all"></div>
-
-            <div class="relative z-10">
-                <div class="mb-6 flex items-center justify-between">
-                    <span class="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500 dark:text-brand-500/60">System Controller</span>
-                    <span class="flex h-5 items-center rounded-md bg-white/10 px-2 text-[9px] font-medium text-white uppercase tracking-tighter backdrop-blur-md">
-                        v.2.0.4
-                    </span>
-                </div>
-
-                <div class="space-y-6">
-                    <div class="flex items-end justify-between border-b border-white/5 pb-4">
-                        <div>
-                            <p class="text-[10px] font-medium text-slate-500 uppercase tracking-tight">Active Budget</p>
-                            <h4 class="text-2xl font-semibold text-white" x-text="'$' + (payload.projectBudget || 0)">$0</h4>
-                        </div>
-                        <div class="h-8 w-1 bg-brand-500/30 rounded-full overflow-hidden">
-                            <div class="h-1/2 w-full bg-brand-500"></div>
-                        </div>
-                    </div>
-
-                    <div class="flex items-end justify-between border-b border-white/5 pb-4">
-                        <div>
-                            <p class="text-[10px] font-medium text-slate-500 uppercase tracking-tight">Resource Count</p>
-                            <h4 class="text-2xl font-semibold text-white">{{ gig.roles_count|default:"0" }} <span class="text-xs font-medium text-slate-500">Units</span></h4>
-                        </div>
-                        <span class="material-symbols-outlined text-brand-500/40">account_tree</span>
-                    </div>
-                </div>
-
-                <button 
-                    @click="saveProject()"
-                    class="mt-8 flex w-full items-center justify-between rounded-xl bg-brand-500 p-4 transition-all hover:bg-brand-400 hover:ring-4 hover:ring-brand-500/20 active:scale-[0.98]"
-                >
-                    <span class="text-xs font-semibold uppercase tracking-[0.2em] text-white">Deploy Updates</span>
-                    <div class="flex h-6 w-6 items-center justify-center rounded-lg bg-black/20">
-                        <span class="material-symbols-outlined text-sm text-white">double_arrow</span>
-                    </div>
-                </button>
-            </div>
-        </div>
-        {# endcomment #}
-
-        <!-- Activity & Metadata -->
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Activity &amp; Metadata</h3>
-            <div class="space-y-4">
-                <div class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-slate-400 mt-0.5 text-[18px]">history</span>
-                    <div>
-                        <p class="text-xs text-slate-500">Last updated</p>
-                        <p class="text-sm font-medium text-gray-700 dark:text-white">{{ gig.updated_display }}</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-slate-400 mt-0.5 text-[18px]">calendar_add_on</span>
-                    <div>
-                        <p class="text-xs text-slate-500">Created on</p>
-                        <p class="text-sm font-medium text-slate-700 dark:text-white">{{ gig.created_at|date:"M j, Y" }}</p>
-                    </div>
+                    <span class="h-1.5 w-1.5 rounded-full bg-brand-500 dark:bg-brand-300"></span>
+                    <span class="text-[10px] font-mono text-brand-600 dark:text-brand-300 uppercase tracking-tight">servio by Divgm</span>
                 </div>
             </div>
         </div>
@@ -893,9 +630,14 @@
             init() {
                 this.roles = this.roles.map(role => ({
                     ...role,
+                    paymentOption: role.paymentOption ? String(role.paymentOption) : '',
                     isNew: false
                 }));
-                this.emitRoles();
+
+                Alpine.nextTick(() => {
+                    this.emitRoles();
+                });
+                //this.emitRoles();
             },
 
             professionalsFor(nicheId) {
@@ -912,7 +654,7 @@
                     professionalName: '',
                     budget: 0,
                     description: '',
-                    workload: 'flexible',
+                    paymentOption: '',
                     isNew: true,
                 });
 
@@ -949,6 +691,46 @@
                 });
 
                 gig.setRoles(payload);
+
+                window.dispatchEvent(new CustomEvent('roles-summary-updated', {
+                    detail: {
+                        totalBudget: this.totalRolesBudget(),
+                        roleCount: this.roles.length,
+                        // You can even pass the raw payload if needed
+                        roles: payload 
+                    }
+                }));
+            },
+
+            formatCurrency (val) {
+                if (val === undefined || val === null || val === '') return '';
+    
+                let str = String(val).replace(/[^0-9.]/g, '');
+                const parts = str.split('.');
+                if (parts.length > 2) str = parts[0] + '.' + parts.slice(1).join('');
+
+                if (parts[1] && parts[1].length > 2) {
+                    str = parts[0] + '.' + parts[1].substring(0, 2);
+                }
+
+                const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                
+                return parts.length > 1 ? `${integerPart}.${parts[1]}` : integerPart;
+            },
+
+            formatDisplay(value) {
+                return this.formatCurrency(value);
+            },
+
+            updateBudget(role, event) {
+                const input = event.target;
+                const rawValue = input.value.replace(/,/g, '');
+                
+                role.budget = rawValue ? parseFloat(rawValue) : 0;
+                
+                input.value = this.formatCurrency(rawValue);
+                
+                this.emitRoles();
             },
 
             totalRolesBudget() {

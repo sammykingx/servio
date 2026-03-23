@@ -3,14 +3,14 @@ function gigData() {
         payload: {
             title: '',
             description: '',
-            projectBudget: 5000,
+            projectBudget: 1000,
             visibility: 'public',
 
             // composed later
             roles: [],
             startDate: null,
             endDate: null,
-            isNegotiable: false,
+            isNegotiable: true,
         },
 
         budgetLocked: false,
@@ -95,15 +95,15 @@ function gigData() {
                     this.payload.projectBudget = rolesTotal;
 
                     showToast(
-                        'Project budget locked to match the total cost of required roles.',
+                        'Your total role costs exceed the project budget, the budget has been adjusted.',
                         'warning',
-                        'Project Budget Locked'
+                        'Budget Exceeded'
                     );
                 } else {
                     showToast(
-                        'Project Budget is now unlocked for user interaction.',
+                        'Your role costs are within the project budget, please review project budget.',
                         'success',
-                        'Project budget unlocked',
+                        'Budget Verified',
                     );
                 }
             }

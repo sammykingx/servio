@@ -12,7 +12,7 @@ from formatters.pydantic_formatter import format_pydantic_errors
 from registry_utils import get_registered_model
 from template_map.collaboration import Collabs
 from ..exceptions import GigError
-from ..schemas import CreateGigRequest, CreateGigStates
+from ..schemas import CreateGigRequest, GigStates
 from ..schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
 import json, logging
@@ -196,7 +196,6 @@ class EditGigView(LoginRequiredMixin, DetailView):
             )
         
         except ValidationError as e:
-            print(format_pydantic_errors(e))
             return JsonResponse(
                 {
                     "error": "Validation error",
@@ -232,13 +231,11 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 "status": "error",
             }, status=500)
             
-        import time
-        time.sleep(3)
         return JsonResponse(
             {
                 "status": "success",
                 "message": "Project updated successfully.",
-                #"url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
+                "url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
             },
             status=200,
         )
@@ -302,7 +299,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 gig.has_gig_roles = True if data.payload.roles else False
                 gig.status = (
                     GigStatus.PUBLISHED
-                    if data.action == CreateGigStates.PUBLISH
+                    if data.action == GigStates.PUBLISH
                     else GigStatus.DRAFT
                 )
 
@@ -651,8 +648,8 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
                 GigRoleModel.objects.bulk_update(updates, ["budget"])
                 
                 # im still thinking on the side effects
-                # as it affects the proposals providers
-                # sents before the update, it fucks integrity
+                # as it affects the sent providers proposals
+                # before the update, it breaks integrity
                 # for role in updates:
                 #     ProposalRoleModel.objects.filter(
                 #         gig_role=role
@@ -661,7 +658,7 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
                 #     )
                     
                 # emitt a signal to proposal service to notify users
-                # that the role amoun has change if they'll want to
+                # that the role amount has change if they'll want to
                 # update the proposal
                 
                 

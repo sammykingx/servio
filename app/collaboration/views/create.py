@@ -8,7 +8,7 @@ from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
 from formatters.pydantic_formatter import format_pydantic_errors
 from registry_utils import get_registered_model
-from ..schemas import CreateGigRequest, CreateGigStates, get_response_msg
+from ..schemas import CreateGigRequest, GigStates, get_response_msg
 from ..schemas.gig import GigPayload
 from ..schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
@@ -75,6 +75,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
         try:
             payload = json.loads(request.body)
             gig_data = CreateGigRequest(**payload)
+            # print(gig_data.model_dump_json(indent=2))
             gig = self.save_gig_data(gig_data.payload, gig_data.action)
 
         except json.JSONDecodeError:
@@ -88,6 +89,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
 
         except ValidationError as e:
             fields = format_pydantic_errors(e),
+            print(fields)
             return JsonResponse(
                 {
                     "error": "Validation error",
@@ -95,6 +97,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
                 },
                 status=400,
             )
+            
         except IntegrityError as err:
             return JsonResponse(
                 {
@@ -115,8 +118,12 @@ class CreateCollaborationView(LoginRequiredMixin, View):
 
         response = get_response_msg(gig_data.action, gig)
         return JsonResponse(response.model_dump())
+        # return JsonResponse({
+        #     "message": "All done",
+            
+        # }, status=200)
 
-    def save_gig_data(self, payload: GigPayload, action: CreateGigStates) -> Model:
+    def save_gig_data(self, payload: GigPayload, action: GigStates) -> Model:
         """
             Persist gig and associated role data atomically.
 
@@ -154,7 +161,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
                     has_gig_roles=True if payload.roles else False,
                     status=(
                         GigStatus.PUBLISHED
-                        if action == CreateGigStates.PUBLISH
+                        if action == GigStates.PUBLISH
                         else GigStatus.DRAFT
                     ),
                 )

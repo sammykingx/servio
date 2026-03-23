@@ -7,7 +7,7 @@ function updateGigData(el) {
             visibility: el.dataset.visibility || 'public',
             startDate: el.dataset.startDate || '',
             endDate: el.dataset.endDate || '',
-            state: el.dataset.state || draft,
+            state: el.dataset.state || 'draft',
 
             // composed later
             roles: [],
@@ -78,7 +78,7 @@ function updateGigData(el) {
                     );
                 } else {
                     showToast(
-                        'Project Budget is now unlocked for user interaction.',
+                        'Project Budget is now unlocked for user interaction, kindly review.',
                         'success',
                         'Project budget unlocked',
                     );
@@ -178,7 +178,6 @@ async function saveChanges(event) {
     }
 
     const action = gigPayload.state;
-    console.log(action);
 
     const body = { action, payload: gigPayload };
 

@@ -6,7 +6,7 @@ class Collabs:
     LIST_COLLABORATIONS = _BASE_FOLDER.base_folder_files("list.html")
     DETAILS = _BASE_FOLDER.base_folder_files("details.html")
     CREATE = _BASE_FOLDER.base_folder_files("create.html")
-    EDIT =  _BASE_FOLDER.base_folder_files("new-edit.html")
+    EDIT =  _BASE_FOLDER.base_folder_files("edit.html")
     LIVE_EDIT = _BASE_FOLDER.base_folder_files("live-edit.html")
     START_COLLABORATION = _BASE_FOLDER.base_folder_files("start-collaboration.html")
     

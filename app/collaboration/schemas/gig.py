@@ -33,7 +33,7 @@ class VisibilityEnum(str, Enum):
 class GigPayload(BaseModel):
     """Editting gig that is in draft mode"""
     
-    title: str = Field(..., max_length=320)
+    title: str = Field(..., max_length=120)
     description: str = Field(..., max_length=3000)
     projectBudget: Decimal = Field(..., gt=0, max_digits=12, decimal_places=2)
     visibility: VisibilityEnum
