@@ -3005,6 +3005,9 @@
   .border-emerald-300 {
     border-color: var(--color-emerald-300);
   }
+  .border-emerald-500 {
+    border-color: var(--color-emerald-500);
+  }
   .border-emerald-500\/10 {
     border-color: color-mix(in srgb, oklch(69.6% 0.17 162.48) 10%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -9997,6 +10000,14 @@
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
+  .focus\:ring-amber-500\/20 {
+    &:focus {
+      --tw-ring-color: color-mix(in srgb, oklch(76.9% 0.188 70.08) 20%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--color-amber-500) 20%, transparent);
+      }
+    }
+  }
   .focus\:ring-blue-500\/10 {
     &:focus {
       --tw-ring-color: color-mix(in srgb, oklch(62.3% 0.214 259.815) 10%, transparent);
@@ -14698,6 +14709,20 @@
       }
     }
   }
+  .dark\:group-focus-within\:text-brand-300 {
+    &:where(.dark, .dark *) {
+      &:is(:where(.group):focus-within *) {
+        color: var(--color-brand-300);
+      }
+    }
+  }
+  .dark\:group-focus-within\:text-brand-400 {
+    &:where(.dark, .dark *) {
+      &:is(:where(.group):focus-within *) {
+        color: var(--color-brand-400);
+      }
+    }
+  }
   .dark\:group-focus-within\:text-gray-300 {
     &:where(.dark, .dark *) {
       &:is(:where(.group):focus-within *) {
@@ -15771,7 +15796,7 @@
   }
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #f9fafb transparent;
+    scrollbar-color: #98a2b3 transparent;
   }
   .custom-scrollbar::-webkit-scrollbar {
     width: 5px;

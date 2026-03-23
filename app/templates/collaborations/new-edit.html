@@ -47,9 +47,9 @@
             </div>
         </div>
 
-        <div class="hidden md:flex flex-col items-end gap-1 border-r-2 border-amber-500 pr-4">
-            <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Instance Status</span>
-            <span class="text-sm font-medium text-slate-900 dark:text-white">Active Node</span>
+        <div class="hidden md:flex flex-col items-end gap-1 border-r-2 border-emerald-500 pr-4">
+            <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Engine Intialized</span>
+            <span class="text-sm font-mono uppercase text-slate-900 dark:text-white">ready</span>
         </div>
     </div>
 </div>
@@ -63,7 +63,8 @@
         data-start-date="{{ gig.start_date|date:'Y-m-d' }}"
         data-end-date="{{ gig.end_date|date:'Y-m-d' }}" 
         data-endpoint="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" 
-        data-csrf-token="{{ csrf_token }}" 
+        data-csrf-token="{{ csrf_token }}"
+        data-state="{{ gig.status  }}"
         data-status="{{ gig.status }}" 
         class="lg:col-span-8 flex flex-col gap-6"
     >
@@ -75,7 +76,7 @@
                 <div class="flex items-center gap-3">
                     <div class="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 text-white shadow-lg shadow-brand-500/20">
                         <span class="material-symbols-outlined text-[22px] animate-pulse">tune</span>
-                            <div v-if="payload.status === 'live'" class="absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-slate-900"></div>
+                            <div v-if="payload.state === 'publish'" class="absolute -top-1 -right-1 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-slate-900"></div>
                         </div>
                         <div>
                             <h3 class="text-sm font-medium tracking-tight text-gray-900 dark:text-white">Project Engine</h3>
@@ -88,14 +89,15 @@
 
                     <div class="w-full sm:w-auto flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-1.5 dark:border-white/10 dark:bg-slate-800 shadow-inner">
                         <button 
-                            @click="payload.status = 'draft'"
-                            :class="payload.status === 'draft' ? 'bg-slate-800 text-white shadow-lg dark:bg-white dark:text-slate-900' : 'text-slate-400 hover:text-slate-600'"
-                            class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl">
+                            @click="payload.state = 'draft'"
+                            :class="payload.state === 'draft' ? 'bg-slate-800 text-white shadow-lg dark:bg-white dark:text-slate-900' : 'text-slate-400 hover:text-slate-600'"
+                            class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl"
+                        >
                             Draft
                         </button>
                         <button 
-                            @click="payload.status = 'live'"
-                            :class="payload.status === 'live' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'text-slate-400 hover:text-slate-600'"
+                            @click="payload.state = 'publish'"
+                            :class="payload.state === 'publish' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'text-slate-400 hover:text-slate-600'"
                             class="flex-1 sm:flex-none px-6 py-2 text-[11px] font-medium uppercase tracking-tighter transition-all duration-500 rounded-xl">
                             Go Live
                         </button>
@@ -151,12 +153,14 @@
                         <label class="text-[11px] text-slate-400 dark:text-slate-500 uppercase tracking-widest">Financial Allocation</label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none">
-                                <span class="text-lg md:text-xl text-slate-300 group-focus-within:text-brand-500 transition-colors">$</span>
+                                <span class="text-lg md:text-xl text-slate-300 group-focus-within:text-brand-500 dark:group-focus-within:text-brand-300 transition-colors">$</span>
                             </div>
                             <input 
-                                x-model="payload.projectBudget" 
+                                :value="getFormattedBudget()"
+                                @input="handleBudgetInput($event)"
                                 :disabled="budgetLocked" 
-                                type="number" 
+                                type="text"
+                                inputmode="decimal"
                                 class="w-full rounded-2xl border-2 border-slate-100 bg-white py-5 pl-12 pr-6 text-xl text-gray-900 outline-none transition-all focus:border-brand-500/20 focus:bg-brand-50/5 dark:border-white/5 dark:bg-white/[0.02] dark:text-white dark:focus:border-brand-500/30" 
                                 :class="budgetLocked ? 'opacity-40 cursor-not-allowed' : ''"
                             />
@@ -173,7 +177,7 @@
                     <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
                     Engine Synced
                 </span>
-                <p class="text-[10px] text-slate-400 font-medium">Auto-save active</p>
+                <p class="text-[10px] text-slate-400 font-medium">last state: Draft</p>
             </div>
         </section>
 
@@ -192,7 +196,7 @@
                 
                 <div class="flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-1.5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5">
                     <span class="text-[10px] font-medium uppercase tracking-tight text-slate-500 dark:text-slate-400">Total Duration:</span>
-                    <span class="text-[10px] font-medium text-cyan-600 dark:text-cyan-400" x-text="calculateDuration() + ' Days'">0 Days</span>
+                    <span class="text-[10px] font-medium text-cyan-600 dark:text-cyan-400" x-text="getDurationText()">0 Days</span>
                 </div>
             </div>
 
@@ -367,7 +371,7 @@
                         :disabled="locked"
                         class="group w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-500 hover:text-white dark:text-slate-900 dark:hover:text-white transition-all hover:bg-amber-500 dark:hover:bg-amber-500 disabled:opacity-50 dark:bg-white">
                     <span class="material-symbols-outlined text-[16px] transition-transform group-hover:rotate-90">add</span>
-                    <span>Provision New Role</span>
+                    <span>Add New Role</span>
                 </button>
             </div>
 
@@ -395,7 +399,7 @@
                                     
                                     <template x-if="!role.isNew">
                                         <span class="rounded-full bg-purple-50 px-2.5 py-1 text-[9px] font-semibold text-purple-600 dark:bg-purple-500/10 tracking-widest uppercase">
-                                            Units: <span x-text="role.slots"></span>
+                                            Slots: <span x-text="role.slots"></span>
                                         </span>
                                     </template>
                                 </div>
@@ -412,7 +416,7 @@
                                         <div class="space-y-1.5">
                                             <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Industry Niche</label>
                                             <select x-model="role.nicheId" @change="role.professionalId=''; emitRoles()" 
-                                                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
+                                                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
                                                 <option x-text="role.nicheName"></option>
                                                 <template x-for="niche in taxonomy" :key="niche.id">
                                                     <option :value="niche.id" x-text="niche.name"></option>
@@ -422,7 +426,7 @@
                                         <div class="space-y-1.5">
                                             <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Specialization</label>
                                             <select x-model="role.professionalId" @change="emitRoles()"
-                                                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
+                                                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
                                                 <option x-text="role.professionalName"></option>
                                                 <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
                                                     <option :value="pro.id" x-text="pro.name"></option>
@@ -432,7 +436,7 @@
                                     </div>
 
                                     <div class="space-y-1.5">
-                                        <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Role Mandate</label>
+                                        <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Role Brief</label>
                                         <textarea x-model="role.description" @input="emitRoles()" rows="6"
                                             placeholder="Define the scope..."
                                             rows="5"
@@ -445,18 +449,28 @@
                                         <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Budget Allocation</label>
                                         <div class="relative">
                                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400">$</span>
-                                            <input type="number" x-model="role.budget" @input="emitRoles()"
-                                                class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-8 pr-4 text-lg font-medium tracking-tight focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white" />
+                                            <input
+                                                type="text" 
+                                                inputmode="decimal"
+                                                :value="formatDisplay(role.budget)"
+                                                @input="updateBudget(role, $event)"
+                                                class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-8 pr-4 text-md tracking-tight 
+                                                    outline-none focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 
+                                                    dark:border-white/10 dark:bg-slate-900 dark:text-white transition-all"
+                                            />
                                         </div>
                                     </div>
 
                                     <div class="space-y-1.5">
-                                        <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Payment Protocol</label>
-                                        <select x-model="role.paymentOption" @change="emitRoles()"
-                                                class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-widest focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
-                                            <option value="">Select Protocol</option>
+                                        <label class="text-[10px] font-medium uppercase tracking-tighter text-slate-400">Payment Plan</label>
+                                        <select x-model="role.paymentOption" @change="emitRoles()" :key="paymentOptions.length"
+                                                class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs uppercase tracking-widest focus:border-amber-500 dark:border-white/10 dark:bg-slate-900 dark:text-white">
+                                            <option value="">Select Plan</option>
                                             <template x-for="mode in paymentOptions" :key="mode.value">
-                                                <option :value="mode.value" x-text="mode.label"></option>
+                                                <option 
+                                                    :value="mode.value" 
+                                                    :selected="role.paymentOption == mode.value"
+                                                    x-text="mode.label"></option>
                                             </template>
                                         </select>
                                     </div>
@@ -477,209 +491,16 @@
                         <span class="material-symbols-outlined text-slate-400 group-hover:text-amber-500">add_task</span>
                     </div>
                     <div class="text-center px-4">
-                        <span class="block text-xs sm:text-sm font-medium uppercase tracking-widest text-slate-500 group-hover:text-amber-600">Provision Additional Resource</span>
-                        <span class="text-[9px] sm:text-[10px] font-medium text-slate-400 uppercase">Scale the engine's capacity</span>
+                        <span class="block text-xs sm:text-sm font-medium uppercase tracking-widest text-slate-500 group-hover:text-amber-600">Expand the Team</span>
+                        <span class="text-[9px] sm:text-[10px] font-medium text-slate-400 uppercase">add new role</span>
                     </div>
-                </button>
-            </div>
-        </section>
-
-        <section x-data="gigRoles($refs.taxonomy, $refs.paymentOptionsData, $refs.rolesData, locked)" data-gig-roles class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-2">
-                    <span class="bg-amber-50 dark:bg-gray-600 rounded-lg p-2 material-symbols-outlined text-amber-500 dark:text-gray-400">group</span>
-                    <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Required Roles</h3>
-                </div>
-                <button @click="addRole()" class="text-gray-400 hover:text-brand-500 dark:hover:text-gray-300 text-sm font-medium flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[18px]">add</span> Add new role
-                </button>
-            </div>
-            <div class="space-y-4">
-                <!-- Role Card 1 (Filled/Lockedish) -->
-                <template x-for="(role, index) in roles" :key="index">
-                    <div class="border border-slate-200 dark:border-slate-700 rounded-lg bg-[#fcfcfd] dark:bg-gray-800 p-5 relative group transition-all hover:border-success-500/50">
-                        <!-- Header -->
-                        <div class="absolute top-4 right-4 flex gap-2">
-                            <span
-                                class="inline-flex items-center px-2 py-1 rounded text-xs font-medium"
-                                :class="role.isNew
-                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                                    : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'"
-                                x-text="role.isNew ? 'New' : 'Active'"
-                            ></span>
-                            <span
-                                x-show="!role.isNew"
-                                x-transition.opacity
-                                class="inline-flex items-center px-2 py-1 
-                                    rounded text-xs font-medium gap-1.5
-                                    bg-purple-100 text-purple-700 
-                                    dark:bg-purple-900 dark:text-purple-300"
-                            >
-                                slots:<span x-text="role.slots" class="text-xs"></span>
-                            </span>
-                            <button @click="removeRole(index)" class="text-slate-400 hover:text-red-500">
-                                <span class="material-symbols-outlined text-[20px]">delete</span>
-                            </button>
-                        </div>
-
-                        <h4 class="text-sm font-semibold text-gray-800 dark:text-white mb-4">
-                            Role No. <span x-text="index + 1"></span>
-                        </h4>
-
-                        <!-- Niche & Professional -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <!-- Niche -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Niche
-                                </label>
-                                <select
-                                    x-model="role.nicheId"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    @change="role.professionalId=''; emitRoles()"
-                                    class="w-full rounded-md border border-[#cfd7e7]
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                        focus:border-success-500 transition"
-                                >
-                                    <option x-text="role.nicheName"></option>
-                                    <template x-for="niche in taxonomy" :key="niche.id">
-                                        <option :value="niche.id" x-text="niche.name"></option>
-                                    </template>
-                                </select>
-                            </div>
-
-                            <!-- Professional -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Specialization
-                                </label>
-
-                                <select
-                                    x-model="role.professionalId"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    @change="emitRoles()"
-                                    class="w-full rounded-md border border-[#cfd7e7]
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                        focus:border-success-500 transition"
-                                >
-                                    <option x-text="role.professionalName"></option>
-                                    <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
-                                        <option :value="pro.id" x-text="pro.name"></option>
-                                    </template>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Budget & Workload -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <!-- Budget -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Allocated Budget
-                                </label>
-
-                                <div class="relative">
-                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 
-                                        text-gray-400 dark:text-gray-500 text-sm font-medium pointer-events-none">
-                                        $
-                                    </span>
-
-                                    <input
-                                        type="number"
-                                        x-model="role.budget"
-                                        @input="emitRoles()"
-                                        min="0"
-                                        :disabled="locked"
-                                        :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                        class="w-full rounded-md border border-[#cfd7e7]
-                                            dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                            text-gray-800 dark:text-gray-400 pl-7 pr-3 py-2.5 text-sm
-                                            focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                            focus:border-success-500"
-                                    />
-                                </div>
-                            </div>
-
-                            <!-- Workload -->
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Payment Options
-                                </label>
-
-                                <select
-                                    x-model="role.paymentOption"
-                                    @change="emitRoles()"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    class="w-full rounded-md border border-[#cfd7e7]
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                        focus:border-success-500 transition"
-                                >
-                                    <option value="">modify options</option>
-                                    <template x-for="mode in paymentOptions" :key="mode.value">
-                                        <option :value="mode.value" x-text="mode.label"></option>
-                                    </template>
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <!-- Description -->
-                        <div class="grid grid-cols-1">
-                            <div>
-                                <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">
-                                    Role Description
-                                </label>
-
-                                <textarea
-                                    rows="6"
-                                    x-model="role.description"
-                                    @input="emitRoles()"
-                                    :disabled="locked"
-                                    :class="locked ? 'cursor-not-allowed opacity-60 bg-gray-100 dark:bg-gray-800' : ''"
-                                    class="w-full rounded-md border border-[#cfd7e7] leading-relaxed
-                                        dark:border-[#4a5568] bg-white dark:bg-slate-900 
-                                        text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm md:text-base 
-                                        focus:outline-none focus:ring-1 focus:ring-success-500/30 
-                                        focus:border-success-500 transition resize-y"
-                                ></textarea>
-                            </div>
-                        </div>
-
-                    </div>
-                </template>
-                <!-- Add Role Placeholder -->
-                <button 
-                    @click="addRole()" 
-                    :disabled="locked"
-                    :class="locked 
-                        ? 'opacity-40 cursor-not-allowed pointer-events-none' 
-                        : 'hover:border-brand-500 hover:text-brand-500'"
-                    class="w-full py-4 border-2 border-dashed border-slate-300 
-                        dark:border-slate-700 rounded-lg text-slate-500 
-                        hover:border-brand-500/50 hover:text-brand-500/50
-                        dark:hover:border-gray-400 dark:hover:text-gray-300
-                        hover:bg-brand-500/5 transition-all flex flex-col 
-                        items-center justify-center gap-2 group"
-                >
-                    <div class="p-2 rounded-full bg-slate-100 dark:bg-slate-900 group-hover:bg-brand-500/10 transition-colors">
-                        <span class="material-symbols-outlined group-hover:text-brand-500 transition-colors">add</span>
-                    </div>
-                    <span class="text-sm font-light">Add another role</span>
                 </button>
             </div>
         </section>
     </div>
+
     <!-- Right Column: Sidebar -->
     <div class="lg:col-span-4 space-y-6">
-        {# comment "engine v2" #}
         <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-1 dark:border-white/10 dark:bg-slate-900">
             <div class="rounded-[22px] bg-slate-50/50 p-6 dark:bg-white/[0.02]">
                 <h3 class="mb-6 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
@@ -690,26 +511,29 @@
                     Engine Overview
                 </h3>
 
-                <div class="grid grid-cols-2 gap-4 mb-8">
+                <div
+                    x-data="{ total: 0, count: 0 }"
+                    @roles-summary-updated.window="total = $event.detail.totalBudget; count = $event.detail.roleCount" 
+                    class="grid grid-cols-2 gap-4 mb-8"
+                >
                     <div class="space-y-1">
                         <p class="text-[10px] font-medium text-slate-400 uppercase">Allocated Budget</p>
-                        <p class="text-xl font-semibold text-gray-900 dark:text-white transition-all" x-text="'$' + (payload.projectBudget || 0)">
-                            $5,000
+                        <p class="text-xl font-semibold text-gray-900 dark:text-white transition-all" x-text="'$' + total.toLocaleString()">
+                            
                         </p>
                     </div>
                     <div class="space-y-1">
                         <p class="text-[10px] font-medium text-slate-400 uppercase">Active Roles</p>
-                        <p class="text-xl font-semibold text-gray-900 dark:text-white">
-                            {{ gig.roles_count|default:"0" }}
-                        </p>
+                        <p x-text="count" class="text-xl font-semibold text-gray-900 dark:text-white"></p>
                     </div>
                 </div>
 
-                <button 
-                    @click="saveProject()"
+                <button
+                    id="saveChange"
+                    @click="saveChanges($event)"
                     class="group relative w-full flex items-center justify-center gap-3 overflow-hidden rounded-2xl bg-brand-500 py-4 font-semibold text-white transition-all hover:bg-brand-500/50 hover:shadow-lg hover:shadow-brand-500/20 active:scale-95 dark:bg-white dark:hover:bg-brand-500 dark:text-slate-800 dark:hover:text-white"
                 >
-                    <span class="relative text-sm uppercase tracking-widest">Commit Changes</span>
+                    <span class="relative text-sm uppercase tracking-widest">Save Changes</span>
                     <span class="material-symbols-outlined relative text-[20px] transition-transform group-hover:translate-x-1">save</span>
                     
                     <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full"></div>
@@ -806,9 +630,14 @@
             init() {
                 this.roles = this.roles.map(role => ({
                     ...role,
+                    paymentOption: role.paymentOption ? String(role.paymentOption) : '',
                     isNew: false
                 }));
-                this.emitRoles();
+
+                Alpine.nextTick(() => {
+                    this.emitRoles();
+                });
+                //this.emitRoles();
             },
 
             professionalsFor(nicheId) {
@@ -825,7 +654,7 @@
                     professionalName: '',
                     budget: 0,
                     description: '',
-                    workload: 'flexible',
+                    paymentOption: '',
                     isNew: true,
                 });
 
@@ -862,6 +691,46 @@
                 });
 
                 gig.setRoles(payload);
+
+                window.dispatchEvent(new CustomEvent('roles-summary-updated', {
+                    detail: {
+                        totalBudget: this.totalRolesBudget(),
+                        roleCount: this.roles.length,
+                        // You can even pass the raw payload if needed
+                        roles: payload 
+                    }
+                }));
+            },
+
+            formatCurrency (val) {
+                if (val === undefined || val === null || val === '') return '';
+    
+                let str = String(val).replace(/[^0-9.]/g, '');
+                const parts = str.split('.');
+                if (parts.length > 2) str = parts[0] + '.' + parts.slice(1).join('');
+
+                if (parts[1] && parts[1].length > 2) {
+                    str = parts[0] + '.' + parts[1].substring(0, 2);
+                }
+
+                const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                
+                return parts.length > 1 ? `${integerPart}.${parts[1]}` : integerPart;
+            },
+
+            formatDisplay(value) {
+                return this.formatCurrency(value);
+            },
+
+            updateBudget(role, event) {
+                const input = event.target;
+                const rawValue = input.value.replace(/,/g, '');
+                
+                role.budget = rawValue ? parseFloat(rawValue) : 0;
+                
+                input.value = this.formatCurrency(rawValue);
+                
+                this.emitRoles();
             },
 
             totalRolesBudget() {

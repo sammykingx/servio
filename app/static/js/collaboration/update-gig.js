@@ -7,11 +7,11 @@ function updateGigData(el) {
             visibility: el.dataset.visibility || 'public',
             startDate: el.dataset.startDate || '',
             endDate: el.dataset.endDate || '',
+            state: el.dataset.state || draft,
 
             // composed later
             roles: [],
             isNegotiable: false,
-            go_live: false,
         },
         status: el.dataset.status,
         locked: false,
@@ -104,10 +104,65 @@ function updateGigData(el) {
                 ? this.payload.description.length
                 : 0;
         },
+
+        /**
+         * Calculates the difference in days between startDate and endDate
+         * @returns {number|null} Total days, or null if dates are missing/invalid
+         */
+        calculateDuration() {
+            const start = new Date(this.payload.startDate);
+            const end = new Date(this.payload.endDate);
+
+            if (isNaN(start) || isNaN(end)) return 0;
+
+            const diffInMs = end - start;
+
+            if (diffInMs < 0) return 0;
+
+            return Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+        },
+
+        // Helper to check if the project is a "Single Day" or "Multi Day" event
+        getDurationText() {
+            const days = this.calculateDuration();
+            if (days === 0) return 'Invalid Dates';
+            if (days === 1) return '1 Day';
+            return `${days} Days`;
+        },
+
+        formatCurrency(val) {
+            if (val === undefined || val === null || val === '') return '';
+            let str = String(val).replace(/[^0-9.]/g, '');
+            const parts = str.split('.');
+
+            if (parts.length > 2) str = parts[0] + '.' + parts.slice(1).join('');
+            if (parts[1] && parts[1].length > 2) str = parts[0] + '.' + parts[1].substring(0, 2);
+
+            const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.length > 1 ? `${integerPart}.${parts[1]}` : integerPart;
+        },
+
+        // Updated Budget Handler
+        handleBudgetInput(e) {
+            const rawValue = e.target.value.replace(/,/g, '');
+
+            // Update internal numeric payload
+            this.payload.projectBudget = rawValue ? parseFloat(rawValue) : 0;
+
+            // Force the input display to stay formatted
+            e.target.value = this.formatCurrency(rawValue);
+        },
+
+        // Helper for the initial or external value display
+        getFormattedBudget() {
+            return this.formatCurrency(this.payload.projectBudget);
+        }
     };
 }
 
-async function saveChanges() {
+async function saveChanges(event) {
+    const btn = event?.currentTarget || document.getElementById('saveChange');
+
     const context = resolveGigPayload();
     
     if (!context) return;
@@ -122,10 +177,13 @@ async function saveChanges() {
         return;
     }
 
-    const userConfirmed = confirm("Would you like to publish this project now? \n\nClick 'OK' to publish, or 'Cancel' to keep it as a draft.");
-    const action = userConfirmed ? 'publish' : 'draft';
+    const action = gigPayload.state;
+    console.log(action);
 
     const body = { action, payload: gigPayload };
+
+    btn.disabled = true;
+    btn.classList.add('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
     
     try {
         const response = await updateGig(body, endpoint, csrf_token);
@@ -158,6 +216,9 @@ async function saveChanges() {
     } catch (err) {
         // Client-side error (network, fetch blocked, etc.)
         return;
+    } finally {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
     }
 
 }

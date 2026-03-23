@@ -147,7 +147,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 "professionalName": role.role_name,
                 "budget": float(role.budget),
                 "description": role.description,
-                "workload": role.payment_option,
+                "paymentOption": role.payment_option,
                 "slots": role.slots,
             }
             for role in roles
@@ -180,6 +180,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
         try:
             payload = json.loads(request.body)
             gig_data = CreateGigRequest(**payload)
+            print(gig_data.model_dump_json(indent=2))
             self.update_gig_data(gig_slug, gig_data)
             
         except GigModel.DoesNotExist:
@@ -195,6 +196,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
             )
         
         except ValidationError as e:
+            print(format_pydantic_errors(e))
             return JsonResponse(
                 {
                     "error": "Validation error",
@@ -230,11 +232,13 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 "status": "error",
             }, status=500)
             
+        import time
+        time.sleep(3)
         return JsonResponse(
             {
                 "status": "success",
                 "message": "Project updated successfully.",
-                "url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
+                #"url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
             },
             status=200,
         )
