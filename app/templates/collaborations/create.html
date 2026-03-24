@@ -19,17 +19,17 @@
                     <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden">
                         <div class="px-4 py-6 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.02]">
                             <div class="flex items-center gap-4">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-white shadow-lg shadow-amber-500/20">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white shadow-lg shadow-brand-500/20">
                                     <span class="material-symbols-outlined text-[22px]">database</span>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-semibold tracking-tight text-slate-900 dark:text-white uppercase">Primary Manifest</h3>
-                                    <p class="text-[8px] font-medium text-slate-400 uppercase tracking-widest">General Project Identification</p>
+                                    <h3 class="text-lg font-semibold tracking-tight text-slate-900 dark:text-white uppercase">Project Settings</h3>
+                                    <p class="text-[8px] font-medium text-slate-400 uppercase tracking-widest">General Project Infomation</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                                <span class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                                <span class="text-[10px] font-semibold uppercase tracking-tighter text-slate-500 dark:text-slate-400">Live Buffer</span>
+                                <span class="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                                <span class="text-[10px] font-semibold uppercase tracking-tighter text-slate-500 dark:text-slate-400">Editor</span>
                             </div>
                         </div>
 
@@ -38,14 +38,14 @@
                             <div class="flex flex-col gap-3">
                                 <div class="flex justify-between items-end">
                                     <label class="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400">Project Name</label>
-                                    <span class="text-[10px] font-medium text-slate-400" :class="payload.title.length > 100 ? 'text-amber-500' : ''">
+                                    <span class="text-[10px] font-medium text-slate-400" :class="payload.title.length > 100 ? 'text-brand-500' : ''">
                                         <span x-text="payload.title.length">0</span> / 100
                                     </span>
                                 </div>
                                 <input 
                                     x-model="payload.title" 
                                     maxlength="100"
-                                    class="w-full bg-slate-50 dark:bg-white/5 border-1 border-slate-100 dark:border-white/5 rounded-2xl px-6 py-4 text-md font-medium text-slate-700 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 focus:border-amber-500 dark:focus:border-amber-500/50 focus:ring-0 transition-all outline-none"
+                                    class="w-full bg-slate-50 dark:bg-white/5 border-1 border-slate-100 dark:border-white/5 rounded-2xl px-6 py-4 text-md font-medium text-slate-700 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 focus:border-brand-500 dark:focus:border-brand-500/50 focus:ring-0 transition-all outline-none"
                                     placeholder="Enter unique project identifier..." 
                                     type="text" 
                                 />
@@ -56,13 +56,13 @@
                                 <div class="flex flex-col gap-3">
                                     <label class="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400">Allocated Budget (USD)</label>
                                     <div class="relative group">
-                                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-amber-500 font-semibold text-lg">$</span>
+                                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-brand-500 font-semibold text-lg">$</span>
                                         <input 
                                             x-model="payload.projectBudget"
                                             type="number"
                                             step="0.01"
                                             placeholder="0.00"
-                                            class="w-full bg-slate-50 dark:bg-white/5 border-1 border-slate-100 dark:border-white/5 rounded-2xl pl-10 pr-6 py-4 text-lg font-semibold text-slate-700 dark:text-white focus:border-amber-500 transition-all outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            class="w-full bg-slate-50 dark:bg-white/5 border-1 border-slate-100 dark:border-white/5 rounded-2xl pl-10 pr-6 py-4 text-lg font-semibold text-slate-700 dark:text-white focus:border-brand-500 transition-all outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         />
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                                         <button 
                                             @click="payload.isNegotiable = !payload.isNegotiable"
                                             class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none"
-                                            :class="payload.isNegotiable ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-700'"
+                                            :class="payload.isNegotiable ? 'bg-brand-500' : 'bg-slate-300 dark:bg-slate-700'"
                                         >
                                             <span 
                                                 class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
@@ -104,7 +104,7 @@
                             <div class="flex flex-col gap-3">
                                 <label class="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400">Project Brief & Specifications</label>
                             
-                                <div x-init="initQuill()" class="overflow-hidden rounded-3xl border-1 border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-white/5 transition-all focus-within:border-amber-500">
+                                <div x-init="initQuill()" class="overflow-hidden rounded-3xl border-1 border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-white/5 transition-all focus-within:border-brand-500">
                                     <div id="quill-toolbar" class="flex flex-wrap items-center gap-1 p-3 bg-white dark:bg-slate-800/50">
                                         <span class="ql-formats">
                                             <select class="ql-header !h-8 !w-32 !bg-white dark:!bg-slate-900 !rounded-md !border-slate-200 dark:!border-white/10 !text-[10px] font-semibold uppercase tracking-widest text-slate-500">
@@ -144,91 +144,13 @@
                         </div>
                     </div>
 
-                    <!-- <div x-data="gigRoles($refs.taxonomy, $refs.paymentSplitData)" data-gig-roles class="bg-white dark:bg-[#1a202c] rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
-                        <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <div class="p-2 rounded-lg bg-orange-50 dark:bg-orange-900/30 text-orange-600">
-                                    <span class="material-symbols-outlined text-[20px]">group</span>
-                                </div>
-                                <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">Required Professionals</h3>
-                            </div>
-                            <button @click="addRole()" class="text-gray-500 hover:text-brand-500 dark:text-gray-500 dark:hover:text-gray-200 text-sm font-semibold flex items-center gap-1" type="button">
-                                <span class="material-symbols-outlined text-[18px]">add</span>
-                                <span class="hidden sm:inline">Add Role</span>
-                            </button>
-                        </div>
-                        <div class="p-6 flex flex-col gap-6">
-                            <template x-for="(role, index) in roles" :key="index">
-                                <div class="border border-[#cfd7e7] dark:border-[#4a5568] rounded-lg p-5 relative bg-[#fcfcfd] dark:bg-[#232a3b] group hover:border-brand-500/50 transition-colors">
-                                    <button @click="removeRole(index)" class="absolute top-2 right-2 mr-2 text-[#9ca3af] hover:text-red-500 transition-colors p-1">
-                                        <span class="material-symbols-outlined text-[20px]">delete</span>
-                                    </button>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">Niche</label>
-                                            <select 
-                                                x-model="role.nicheId" 
-                                                @change="role.professionalId = ''; emitRoles()" 
-                                                class="w-full rounded-md border border-[#cfd7e7]
-                                                    dark:border-[#4a5568] bg-white dark:bg-[#2d3748]
-                                                    text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm
-                                                    focus:outline-none focus:ring-1 focus:ring-success-500/30
-                                                    focus:border-success-500 transition
-                                                ">
-                                                <option>Select niche</option>
-                                                <template x-for="niche in taxonomy" :key="niche.id">
-                                                    <option :value="niche.id" x-text="niche.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider text-opacity-50">professional</label>
-                                            <select x-model="role.professionalId" @change="emitRoles()" :disabled="!role.nicheId" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
-                                                <option>Select Specialization</option>
-                                                <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
-                                                    <option :value="pro.id" x-text="pro.name"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Budget Allocation</label>
-                                            <div class="relative">
-                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm font-semibold">$</span>
-                                                <input type="number" x-model="role.budget" @change="emitRoles()" placeholder="5000" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 pl-7 pr-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                                        <div class="md:col-span-2 flex flex-col gap-2">
-                                            <label class="text-gray-800 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Role Description</label>
-                                            <input type="text" x-model="role.description" @change="emitRoles()" placeholder="e.g., Enterprise SaaS Redesign for Fintech App" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition" />
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <label class="text-gray-700 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider text-opacity-70">Payment Option</label>
-                                            <select x-model="role.paymentOption" @change="emitRoles()" class="w-full rounded-md border border-[#cfd7e7] dark:border-[#4a5568] bg-white dark:bg-[#2d3748] text-gray-800 dark:text-gray-400 px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-success-500/30 focus:border-success-500 transition">
-                                                <option>Choose payment Option</option>
-                                                <template x-for="option in paymentOptions" :key="option.value">
-                                                    <option :value="option.value" x-text="option.label"></option>
-                                                </template>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-
-                            <button @click="addRole()" class="flex items-center justify-center gap-2 w-full py-3 border-1 border-dashed border-gray-300 dark:border-gray-500 rounded-lg text-gray-400 hover:text-brand-500 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors" type="button">
-                                <span class="material-symbols-outlined text-[20px]">add_circle</span>
-                                Add another role
-                            </button>
-                        </div>
-                    </div> -->
                     <!--New-->
                     <div x-data="gigRoles($refs.taxonomy, $refs.paymentSplitData)" data-gig-roles 
                         class="group/engine bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden transition-all duration-300 shadow-sm">
                         
                         <div class="border-b border-slate-100 dark:border-white/5 px-6 py-5 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.02]">
                             <div class="flex items-center gap-3">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/10 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400">
                                     <span class="material-symbols-outlined text-[22px]">hub</span>
                                 </div>
                                 <div>
@@ -245,7 +167,7 @@
 
                         <div class="p-6 flex flex-col gap-5">
                             <template x-for="(role, index) in roles" :key="index">
-                                <div class="group relative border border-slate-200 dark:border-white/10 rounded-2xl p-6 bg-white dark:bg-slate-800/30 transition-all hover:border-amber-500/50 hover:shadow-xl hover:shadow-amber-500/5">
+                                <div class="group relative border border-slate-200 dark:border-white/10 rounded-2xl p-6 bg-white dark:bg-slate-800/30 transition-all hover:border-brand-500/50 hover:shadow-xl hover:shadow-brand-500/5">
                                     
                                     <button @click="removeRole(index)" 
                                             class="absolute -top-2 -right-2 h-8 w-8 flex items-center justify-center rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-400 hover:text-red-500 hover:border-red-500/50 transition-all shadow-sm z-10">
@@ -257,7 +179,7 @@
                                             <label class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Professional Niche</label>
                                             <select x-model="role.nicheId" 
                                                     @change="role.professionalId = ''; emitRoles()" 
-                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none appearance-none">
+                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none appearance-none">
                                                 <option>Select niche</option>
                                                 <template x-for="niche in taxonomy" :key="niche.id">
                                                     <option :value="niche.id" x-text="niche.name"></option>
@@ -270,7 +192,7 @@
                                             <select x-model="role.professionalId" 
                                                     @change="emitRoles()" 
                                                     :disabled="!role.nicheId" 
-                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none disabled:opacity-50">
+                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none disabled:opacity-50">
                                                 <option>Select Specialization</option>
                                                 <template x-for="pro in professionalsFor(role.nicheId)" :key="pro.id">
                                                     <option :value="pro.id" x-text="pro.name"></option>
@@ -286,7 +208,7 @@
                                                     type="number"
                                                     step="0.5"
                                                     x-model="role.budget" @change="emitRoles()" placeholder="0.00" 
-                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 pl-8 pr-4 py-3 text-sm font-mono focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none" />
+                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 pl-8 pr-4 py-3 text-sm font-mono focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none" />
                                             </div>
                                         </div>
                                     </div>
@@ -296,12 +218,12 @@
                                             <label class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Scope of Work</label>
                                             <input type="text" x-model="role.description" @change="emitRoles()" 
                                                 placeholder="Briefly define the deliverables for this role..." 
-                                                class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none" />
+                                                class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none" />
                                         </div>
                                         <div class="flex flex-col gap-2">
                                             <label class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Payment Milestone</label>
                                             <select x-model="role.paymentOption" @change="emitRoles()" 
-                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all outline-none">
+                                                    class="w-full rounded-xl border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-800 dark:text-slate-200 px-4 py-3 text-sm focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none">
                                                 <option>Payment Option</option>
                                                 <template x-for="option in paymentOptions" :key="option.value">
                                                     <option :value="option.value" x-text="option.label"></option>
@@ -313,7 +235,7 @@
                             </template>
 
                             <button @click="addRole()" 
-                                    class="flex flex-col items-center justify-center gap-3 w-full py-8 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl text-slate-400 hover:text-amber-500 hover:border-amber-500/50 hover:bg-amber-500/[0.02] transition-all group" type="button">
+                                    class="flex flex-col items-center justify-center gap-3 w-full py-8 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl text-slate-400 hover:text-brand-500 hover:border-brand-500/50 hover:bg-brand-500/[0.02] transition-all group" type="button">
                                 <div class="h-10 w-10 rounded-full border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <span class="material-symbols-outlined text-[20px]">add</span>
                                 </div>
@@ -323,7 +245,7 @@
                     </div>
                 </div>
                 <div class="lg:col-span-4 flex flex-col gap-6 lg:sticky lg:top-24">
-                    <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center gap-2">
                             <div class="p-2 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600">
                                 <span class="material-symbols-outlined text-[20px]">calendar_month</span>
@@ -447,7 +369,7 @@
                             {% endcomment %}
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
+                    <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-[#2d3748] overflow-hidden">
                         <div class="border-b border-gray-100 dark:border-[#2d3748] px-6 py-4 flex items-center gap-2">
                             <div class="p-2 rounded-lg bg-green-50 dark:bg-green-900/30 text-green-600">
                                 <span class="material-symbols-outlined text-[20px]">payments</span>

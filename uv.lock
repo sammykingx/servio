@@ -277,6 +277,19 @@ wheels = [
 ]
 
 [[package]]
+name = "django-zxcvbn-password-validator"
+version = "1.5.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "zxcvbn" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b2/2f/1050eceda3bf62c8ecf8561a2e25789343fe69ef6bfe45c3b6f13bd7de33/django_zxcvbn_password_validator-1.5.3.tar.gz", hash = "sha256:7f5fbd2fe0bd5b73079afb3eed878f7bd8eebcebe4ec1c903fcd7979834a829e", size = 58769, upload-time = "2026-01-19T08:22:48.372Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c6/b9/b14e2cf4913418cfeeedee94a80597be3c898a6b8da43705b937cd60b444/django_zxcvbn_password_validator-1.5.3-py3-none-any.whl", hash = "sha256:0a908f5262f8805f54fd908806dd2ae97981ce4cf8b5ed4cdc1d50273bd268b9", size = 149583, upload-time = "2026-01-19T08:22:47.241Z" },
+]
+
+[[package]]
 name = "idna"
 version = "3.11"
 source = { registry = "https://pypi.org/simple" }
@@ -640,6 +653,7 @@ dependencies = [
     { name = "django-autoslug" },
     { name = "django-extensions" },
     { name = "django-htmx" },
+    { name = "django-zxcvbn-password-validator" },
     { name = "mysqlclient" },
     { name = "nanoid" },
     { name = "phonenumbers" },
@@ -661,6 +675,7 @@ requires-dist = [
     { name = "django-autoslug", specifier = ">=1.9.9" },
     { name = "django-extensions", specifier = ">=4.1" },
     { name = "django-htmx", specifier = ">=1.27.0" },
+    { name = "django-zxcvbn-password-validator", specifier = ">=1.5.3" },
     { name = "mysqlclient", specifier = ">=2.2.7" },
     { name = "nanoid", specifier = ">=2.0.0" },
     { name = "phonenumbers", specifier = ">=9.0.23" },
@@ -760,4 +775,13 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/45/ea/b0f8eeb287f8df9066e56e831c7824ac6bab645dd6c7a8f4b2d767944f9b/werkzeug-3.1.4.tar.gz", hash = "sha256:cd3cd98b1b92dc3b7b3995038826c68097dcb16f9baa63abe35f20eafeb9fe5e", size = 864687, upload-time = "2025-11-29T02:15:22.841Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2f/f9/9e082990c2585c744734f85bec79b5dae5df9c974ffee58fe421652c8e91/werkzeug-3.1.4-py3-none-any.whl", hash = "sha256:2ad50fb9ed09cc3af22c54698351027ace879a0b60a3b5edf5730b2f7d876905", size = 224960, upload-time = "2025-11-29T02:15:21.13Z" },
+]
+
+[[package]]
+name = "zxcvbn"
+version = "4.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ae/40/9366940b1484fd4e9423c8decbbf34a73bf52badb36281e082fe02b57aca/zxcvbn-4.5.0.tar.gz", hash = "sha256:70392c0fff39459d7f55d0211151401e79e76fcc6e2c22b61add62900359c7c1", size = 411249, upload-time = "2025-02-19T19:03:02.699Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c2/16/7410f8e714a109d43d17f4e27c8eabb351557653a9b570db1bd7dfdfd822/zxcvbn-4.5.0-py2.py3-none-any.whl", hash = "sha256:2b6eed621612ce6d65e6e4c7455b966acee87d0280e257956b1f06ccc66bd5ff", size = 409397, upload-time = "2025-02-19T19:03:00.521Z" },
 ]

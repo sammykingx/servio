@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from django.utils import timezone
+from datetime import timedelta
 
 
 # Fields from django user models
@@ -69,6 +70,28 @@ class AuthUser(AbstractUser):
             self.save(update_fields=["is_active"])
 
         return True
+    
+    def can_reset_password(self) -> bool:
+        """
+        Returns True if the user is allowed to reset their password,
+        False otherwise (if 10 days haven't passed).
+        """
+        if not self.last_password_reset:
+            return True
+
+        cooldown_period = timedelta(days=10)
+        wait_until = self.last_password_reset + cooldown_period
+
+        return timezone.now() >= wait_until
+    
+    def update_password(self, new_password):
+        """
+        Hashes the new password, updates the reset timestamp, 
+        and saves the instance.
+        """
+        self.set_password(new_password)
+        self.last_password_reset = timezone.now()
+        self.save(update_fields=['password', 'last_password_reset'])
 
     def __str__(self) -> str:
         return (

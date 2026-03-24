@@ -92,6 +92,10 @@ class UserProfile(models.Model):
         return self.user.addresses.filter(label="home").first()
     
     @property
+    def billing_info(self):
+        return self.user.addresses.filter(label="billing").first()
+    
+    @property
     def get_user_niches(self) -> list:
         return self.niches.values_list("id", flat=True)
     

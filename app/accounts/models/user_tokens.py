@@ -50,18 +50,26 @@ class UserTokenManager(models.Manager):
         """
         if user is None:
             raise ValueError("User Object cannot be None or empty")
-
+            
         now = timezone.now()
         lifetime = _TOKEN_LIFETIMES.get(token_type)
+        if token_type == TokenType.PASSWORD_RESET:
+            self.filter(
+                user=user,
+                token_type=token_type,
+                is_valid=True,
+                expires_at__lt=now,
+            ).update(is_valid=False)
+            
         queryset = self.filter(
             user=user, token_type=token_type, is_valid=True
         )
 
-        # if lifetime:
-        #     queryset = queryset.filter(expires_at__gte=now)
+        if token_type == TokenType.PASSWORD_RESET:
+            queryset = queryset.filter(expires_at__gt=now)
 
         existing = queryset.first()
-
+        
         if existing:
             return TokenResult(existing.token, False)
 

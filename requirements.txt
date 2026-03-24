@@ -10,6 +10,7 @@ django-allauth==65.12.1
 django-autoslug==1.9.9
 django-extensions==4.1
 django-htmx==1.27.0
+django-zxcvbn-password-validator==1.5.3
 idna==3.11
 markupsafe==3.0.3
 mysqlclient==2.2.7
@@ -35,3 +36,4 @@ urllib3==2.5.0
 uuid6==2025.0.1
 webencodings==0.5.1
 werkzeug==3.1.4
+zxcvbn==4.5.0

@@ -17,24 +17,27 @@ document.getElementById('requestPasswordReset').addEventListener('submit', async
             body: formData,
         });
 
-        toggleBtnState();
-
+        const data = await response.json();
         if (!response.ok) {
             showAuthAlert(
-                "Email Failed",
-                "Unable to send reset link.",
-                "error");
-            return;
+                data.error || "Email Failed",
+                data.message || "Unable to send reset link.",
+                data.status || "error"
+            );
+
+        } else {
+            showAuthAlert(
+                data.title || "Reset Link Sent",
+                data.message || "We've emailed your reset link.",
+                data.status || "success"
+            );
         }
-        showAuthAlert(
-            "Reset Link Sent",
-            "We've emailed your reset link.",
-            "success"
-        );
-        requestCleanup();
         
     } catch (error) {
         showAuthAlert("Network Error", "Something went wrong. Please try again later.", "error");
+    } finally {
+        toggleBtnState();
+        requestCleanup();
     }
 });
 
@@ -71,8 +74,5 @@ function requestCleanup() {
     const sendBtn = document.getElementById("sendBtn");
     sendBtn.textContent = "Action Successful";
     sendBtn.disabled = true;
-
-    const logintext = document.getElementById("loginText");
-    logintext.classList.toggle("hidden");
 
 }

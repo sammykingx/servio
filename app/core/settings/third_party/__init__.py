@@ -4,6 +4,7 @@ THIRD_PARTY_APPS = [
     # "allauth.account",
     # "allauth.socialaccount",
     "django_htmx",
+    "django_zxcvbn_password_validator",
 ]
 
 THIRD_PARTY_MIDDLEWARES = [

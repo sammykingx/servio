@@ -14,11 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const res = await fetch(form.action, { method: form.method, body: new FormData(form) });
+            const data = await res.json();
             if (res.ok) {
-                showToast("Your password has been updated.", "success", "Update Successful");
+                showToast(
+                    data.message || "Your password has been updated.",
+                    data.status || "success",
+                    data.title || "Update Successful"
+                );
                 updateButton("success");
             } else {
-                showToast("Password could not be updated. Try again.", "info", "Update Failed");
+                showToast(
+                    data.message || "Password could not be updated. Try again.",
+                    data.status || "info",
+                    data.error || "Update Failed"
+                );
                 updateButton("failed");
             }
         } catch {

@@ -10,6 +10,7 @@ dependencies = [
     "django-autoslug>=1.9.9",
     "django-extensions>=4.1",
     "django-htmx>=1.27.0",
+    "django-zxcvbn-password-validator>=1.5.3",
     "mysqlclient>=2.2.7",
     "nanoid>=2.0.0",
     "phonenumbers>=9.0.23",
