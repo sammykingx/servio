@@ -1,0 +1,482 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load django_htmx %}
+{% load custom_filters %}
+{% block browser_title %}Account Settings{% endblock %}
+{% htmx_script %}
+{% block content %}
+{% include "components/breadcrumbs.html" with page_name="Account Settings" %}
+<div
+	class="mt-3 mb-10 rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+	>
+	<div
+		class="rounded-xl border border-gray-200 p-6 dark:border-gray-800"
+		x-data="{ activeTab: 'overview' }"
+		>
+		<div class="flex flex-col gap-6 sm:flex-row sm:gap-14">
+			<div
+				class="overflow-x-auto pb-2 sm:w-[200px] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-100 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5"
+				>
+				<nav class="flex w-full flex-row sm:flex-col sm:space-y-2 whitespace-nowrap">
+					<button
+						class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
+						x-bind:class="activeTab === 'overview' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-on:click="activeTab = 'overview'"
+						>
+					Overview
+					</button>
+					<button
+						class="inline-flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
+						x-bind:class="activeTab === 'passwords' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-on:click="activeTab = 'passwords'"
+						>
+					Passwords
+					</button>
+					<button
+						class="py-2.5å inline-flex items-center rounded-lg px-3 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
+						x-bind:class="activeTab === 'notifications' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-on:click="activeTab = 'notifications'"
+					>
+						Notifications
+					</button>
+					<!-- <button
+						class="py-2.5å inline-flex items-center rounded-lg px-3 text-sm font-medium transition-colors duration-200 ease-in-out sm:p-3"
+						x-bind:class="activeTab === 'privacy' ? ' text-brand-500 dark:bg-brand-400/20 dark:text-gray-200 bg-brand-50 ' : 'bg-transparent text-gray-500 border-transparent  hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+						x-on:click="activeTab = 'privacy'"
+						>
+					Privacy & Safety
+					</button> -->
+				</nav>
+			</div>
+			<div class="flex-1">
+				<div class="ml-0 sm:ml-6">
+					<div x-show="activeTab === 'overview'">
+						<!-- <h3 class="mb-5 text-xl font-medium text-gray-800 dark:text-white/90">
+							Quick Overview
+							</h3> -->
+						<div class="space-y-4">
+							<p class="text-sm md:text-base text-gray-600 dark:text-white/90 flex items-center gap-2">
+								<span class="font-medium">Account Status:</span>
+								<!-- <span class="text-xs md:text-sm">{{ user.email }}</span> -->
+								{% if user.is_active %}
+								<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
+									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+									</svg>
+									active
+								</span>
+								{% else %}
+								<span class="flex items-center gap-1 text-gray-600 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+								In-active
+								</span>
+								{% endif %}
+							</p>
+							<p class="text-sm md:text-base text-gray-600 dark:text-white/90 flex items-center gap-2">
+								<span class="font-medium">Phone:</span>
+								<span class="text-xs md:text-sm">{{ user.profile.mobile_num|default:"N/A"|format_mobile_number }}</span>
+								{% if user.profile.is_business_owner %}
+								<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
+									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+									</svg>
+									verified
+								</span>
+								{% else %}
+								<span class="flex items-center gap-1 text-gray-600 dark:text-gray-300 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+								Not Verified
+								</span>
+								{% endif %}
+							</p>
+							<p class="text-sm md:text-base text-gray-600 dark:text-white/90 flex items-center gap-2">
+								<span class="font-medium">Email:</span>
+								<span class="text-xs md:text-sm">{{ user.email }}</span>
+								{% if user.is_verified %}
+								<span class="flex items-center gap-1 text-green-500 font-medium bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded-full text-xs md:text-sm">
+									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M20 6L9 17L4 12" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+									</svg>
+									verified
+								</span>
+								{% else %}
+								<span class="flex items-center gap-1 text-gray-600 text-xs font-medium bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+								Not Verified
+								</span>
+								{% endif %}
+							</p>							
+						</div>
+					</div>
+					<div x-show="activeTab === 'passwords'">
+						<div class="space-y-2 mb-6">
+							<!-- <h3 class="text-xl font-medium text-gray-800 dark:text-white/90">
+								Password Manager
+								</h3> -->
+							<p class="text-sm text-gray-500 dark:text-gray-400">
+								Update your password to keep your account secure.
+							</p>
+						</div>
+						{% include "partials/accounts/password-change.html" %}
+					</div>
+					<div x-show="activeTab === 'notifications'" class="">
+						<h3 class="mb-3 text-xl font-medium text-gray-800 dark:text-white/90">
+							Notifications Settings
+						</h3>
+						<p class="text-sm text-gray-500 dark:text-gray-400 my-5">
+							Manage communication channels.
+						</p>
+						{% include "partials/accounts/notification-channels.html" %}
+					</div>
+					<!-- <div x-show="activeTab === 'privacy'">
+						<h3 class="mb-3 text-xl font-medium text-gray-800 dark:text-white/90">
+							Privacy Settings
+						</h3>
+						<p class="text-sm text-gray-500 dark:text-gray-400 my-5">
+							Manage your data accross servio.
+						</p>
+						{# include "partials/accounts/privacy-preference.html" #}
+					</div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{# include "partials/accounts/linked-cards.html" #}
+<!-- Adress information -->
+<div class="p-2 my-3 flex flex-col gap-6 xl:flex-row">
+	<div
+		class="rounded-2xl border border-gray-200 bg-white xl:w-2/6 dark:border-gray-800 dark:bg-white/[0.03]"
+		>
+		<div class="px-6 py-5">
+			<h3
+				class="text-base font-medium text-gray-800 dark:text-white/90"
+				>
+				Primary Address
+			</h3>
+		</div>
+		<div
+			class="border-t border-gray-200 p-4 sm:p-6 dark:border-gray-800"
+			>
+			<ul class="divide-y divide-gray-100 dark:divide-gray-800">
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Name</span
+						>
+					<span
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ user.full_name|title }}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Street</span
+						>
+					<span
+						data-address="home" data-field="street"
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ home.street|default:'800 E Elcamino Real, suite #400'|title }}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Street Line 2</span
+						>
+					<span
+						data-address="home" data-field="street_line_2"
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ home.street_line_2|default:'n/a'|title }}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>City/Town</span
+						>
+					<span
+						data-address="home" data-field="city"
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ home.city|default:'N/A'|title }}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>State/Province</span
+						>
+					<span
+						data-address="home" data-field="province"
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ home.province|default:'N/A'|title }}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Country</span
+						>
+					<span
+						data-address="home" data-field="country"
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ home.country|default:'n/a'|title }}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Zip/Postal code</span
+						>
+					<span
+						data-address="home" data-field="postal_code"
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ home.postal_code|default:"n/a"|upper }}</span
+						>
+				</li>
+				<li class="flex items-center gap-5 py-2.5">
+					<span
+						class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+						>Label</span
+						>
+					<span
+						data-address="home" data-field="label"
+						class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+						>{{ home.label|default:"home"|title }}</span
+						>
+				</li>
+			</ul>
+			<div class="mt-10 xl:mt-2 2xl:mt-12">
+				{% if billing_address %}
+					<button
+						@click="isModalOpen = !isModalOpen"
+						type="button"
+						class="shadow-theme-xs flex w-full justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+						>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="21"
+							height="20"
+							viewBox="0 0 21 20"
+							fill="none"
+							>
+							<path
+								d="M12.8861 5.08135L15.4182 7.61345M16.1437 3.59219L16.908 4.35652C17.3962 4.84468 17.3962 5.63613 16.908 6.12429L8.33547 14.6968C8.19039 14.8419 8.01182 14.9491 7.81554 15.0088L4.47461 16.0256L5.49141 12.6847C5.55115 12.4884 5.65829 12.3098 5.80337 12.1647L14.3759 3.59219C14.8641 3.10404 15.6555 3.10404 16.1437 3.59219Z"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								/>
+						</svg>
+						Update Primary Address
+					</button>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div
+		class="rounded-2xl border border-gray-200 bg-white
+			xl:w-2/6 dark:border-gray-800 dark:bg-white/[0.03]"
+	>
+		<div class="px-6 py-5">
+			<h3
+				class="text-base font-medium text-gray-800 dark:text-white/90"
+				>
+				Billing Address
+			</h3>
+		</div>
+		<div
+			class="border-t border-gray-200 p-4 sm:p-6 dark:border-gray-800"
+			>
+			{% if billing %}
+				<ul class="divide-y divide-gray-100 dark:divide-gray-800">
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Name</span
+							>
+						<span
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ user.full_name|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Street</span
+							>
+						<span
+							data-address="billing" data-field="street"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ billing.street|default:'800 E Elcamino Real, suite #400'|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Street Line 2</span
+							>
+						<span
+							data-address="billing" data-field="street_line_2"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ billing.street_line_2|default:'N/A'|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Town/City</span
+							>
+						<span
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							data-address="billing" data-field="city"
+							>{{ billing.city|default:'montreal'|title}}</span>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Province/State</span
+							>
+						<span
+							data-address="billing" data-field="province"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ billing.province|default:'quebec'|title}}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Country</span
+							>
+						<span
+							data-address="billing" data-field="country"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ billing.country|default:'n/a'|title}}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Zip/Postal code</span
+							>
+						<span
+							data-address="billing" data-field="postal_code"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ billing.postal_code|default:'ert 1234'|upper }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Label</span
+							>
+						<span
+							data-address="billing" data-field="label"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ billing.label|default:'home'|title }}</span
+							>
+					</li>
+				</ul>
+			{% else %}
+				<ul class="divide-y divide-gray-100 dark:divide-gray-800">
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Name</span
+							>
+						<span
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ user.full_name|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Street</span
+							>
+						<span
+							data-address="home" data-field="street"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ home.street|default:'800 E Elcamino Real, suite #400'|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Street Line 2</span
+							>
+						<span
+							data-address="home" data-field="street_line_2"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ home.street_line_2|default:'N/A'|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>City/Town</span
+							>
+						<span
+							data-address="home" data-field="city"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ home.city|default:'N/A'|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>State/Province</span
+							>
+						<span
+							data-address="home" data-field="province"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ home.province|default:'N/A'|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Country</span
+							>
+						<span
+							data-address="home" data-field="country"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ home.country|default:'n/a'|title }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Zip/Postal code</span
+							>
+						<span
+							data-address="home" data-field="postal_code"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ home.postal_code|default:"n/a"|upper }}</span
+							>
+					</li>
+					<li class="flex items-center gap-5 py-2.5">
+						<span
+							class="w-1/2 text-sm text-gray-500 sm:w-1/3 dark:text-gray-400"
+							>Label</span
+							>
+						<span
+							data-address="home" data-field="label"
+							class="w-1/2 text-sm font-medium text-gray-700 sm:w-2/3 dark:text-gray-400"
+							>{{ home.label|default:"home"|title }}</span
+							>
+					</li>
+				</ul>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block custom_page_js %}
+<script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
+<script src="{% static 'js/utils/getCountryList.js' %}"></script>
+<script src="{% static 'js/authentication/change-password.js' %}"></script>
+<script src="{% static 'js/utils/validateAddress.js' %}"></script>
+<script src="{% static 'js/accounts/update-address.js' %}"></script>
+<script>
+	
+</script>
+{% endblock %}
