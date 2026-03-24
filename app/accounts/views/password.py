@@ -112,8 +112,7 @@ class NewPasswordView(View):
     http_method_names = ["get", "post"]
 
     def get(self, request: HttpRequest, *args, **kwargs):
-        # context = self.build_context(kwargs.get("token"))
-        context = {"token": kwargs.get("token")}
+        context = self.build_context(kwargs.get("token"))
         return render(request, Accounts.Auth.PASSWORD_RESET, context)
 
     def post(self, request, *args, **kwargs):
