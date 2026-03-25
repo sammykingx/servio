@@ -141,7 +141,7 @@
 									</div>
 									<div class="min-w-0">
 										<p class="text-[10px] font-bold uppercase tracking-widest text-amber-700 dark:text-amber-500">Action Required</p>
-										<p class="mt-0.5 truncate font-semibold text-gray-900 dark:text-white">{{ user.profile.mobile_num|default:"No Number Linked" }}</p>
+										<p class="mt-0.5 truncate font-semibold text-gray-900 dark:text-white">{{ user.profile.mobile_num|format_mobile_number|default:"No Number Linked" }}</p>
 										<p class="mt-0.5 text-sm text-amber-800/80 dark:text-amber-200/60">Verify your mobile to enable 2FA.</p>
 									</div>
 								</div>

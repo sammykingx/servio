@@ -269,7 +269,7 @@
                         {% for role in proposal.roles.all %} 
                             <div class="group relative px-6 py-8 md:py-6 border-b last:border-0 border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
                                 {% if role.status == 'accepted' %}
-                                    <a href="{% url COLLABORATION_URLS.COMPLETE_COLLABORATION proposal.id role.gig_role.id %}" target="_blanck" class="absolute inset-0 z-10 cursor-pointer" aria-label="Begin Collaboration"></a>
+                                    <a href="{% url COLLABORATION_URLS.START_COLLABORATION proposal.id role.gig_role.id %}" target="_blanck" class="absolute inset-0 z-10 cursor-pointer" aria-label="Begin Collaboration"></a>
                                 {% endif %}
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 items-center">  
                                     <div class="col-span-1 md:col-span-5">
