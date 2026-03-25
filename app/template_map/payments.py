@@ -6,6 +6,7 @@ class Payments:
     SUMMARY = _BASE_FOLDER.base_folder_files("transactions.html")
     SUBSCRIPTION = _BASE_FOLDER.base_folder_files("subcriptions.html")
     
+    
     class GigPayments:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("gig-payment-flows")
         
@@ -20,4 +21,9 @@ class Payments:
         
         OVERVIEW = f"{__SUB_FOLDER}/overview.html"
         DETAILS = f"{__SUB_FOLDER}/details.html"
+        
+    class Checkouts:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("checkouts")
+        
+        SUBSCRIPTION_CHECKOUT_CURRENCY = f"{__SUB_FOLDER}/subcription-checkout-currency.html"
         

@@ -106,6 +106,7 @@ class ContractURLS:
 class PaymentURLS:
     USER_PAYMENT_SUMMARY = "payment_summary"
     PAY_SUBSCRIPTION = "pay_subscriptions"
+    SUBSCRIPTION_CHECKOUT_OPTION = "subscription_checkout_option"
     GIG_PAYMENT_SUMMARY = "gig_payment_summary"
     SELECT_GIG_PAYMENT_METHOD = "process_gig_payment"
     GIG_CARD_PAYMENT = "gig_card_payment"
