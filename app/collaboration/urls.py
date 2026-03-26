@@ -1,4 +1,5 @@
 from django.urls import path, include, reverse_lazy
+from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView, TemplateView
 from core.url_names import CollaborationURLS, ContractURLS
 from .views.list import CollaborationListView
@@ -42,7 +43,7 @@ urlpatterns = [
          name=CollaborationURLS.DELETE_COLLABORATION,
     ),
     path("view-agreement/",
-         TemplateView.as_view(template_name=Collabs.Contracts.VIEW_CONTRACT),
+         login_required(TemplateView.as_view(template_name=Collabs.Contracts.VIEW_CONTRACT)),
          name=ContractURLS.PREVIEW_CONTRACT,
      ),
     path("contact/<uuid:proposal_id>/<uuid:role_id>/",
