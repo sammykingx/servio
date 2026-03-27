@@ -13,3 +13,4 @@ THIRD_PARTY_MIDDLEWARES = [
 ]
 
 from .all_auth import *
+from .firebase import *

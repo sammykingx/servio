@@ -54,3 +54,19 @@ def app_urlnames(request):
         "UserRole": UserRole,
         "SUBSCRIPTION_FEE": APP_SUBSCRIPTION_FEE,
     }
+
+def firebase_settings(request):
+    from django.conf import settings
+    
+    return {
+        "FIREBASE_CONFIG": {
+            "apiKey": settings.FIREBASE_API_KEY,
+            "authDomain": settings.FIREBASE_AUTH_DOMAIN,
+            "projectId": settings.FIREBASE_PROJECT_ID,
+            "storageBucket": settings.FIREBASE_STORAGE_BUCKET,
+            "messagingSenderId": settings.FIREBASE_STORAGE_BUCKET,
+            "appId": settings.FIREBASE_APP_ID,
+            "measurementId": settings.FIREBASE_MEASUREMENT_ID,
+        }
+    }
+    
