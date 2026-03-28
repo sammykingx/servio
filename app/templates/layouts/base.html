@@ -235,10 +235,14 @@
 	{% if toast %}
 		{{ toast|json_script:"toast-data" }}
 	{% endif %}
+	{{ FIREBASE_VAPID_KEY|json_script:"firebase-vapid-key" }}
+	{{ FIREBASE_CONFIG|json_script:"firebase-config" }}
+	<script defer type="module" src="{% static 'js/vendors/firebase/init-firebase.js' %}"></script>
 
 	<script>
 		// Auto-update year dynamically
 		// document.getElementById("year").textContent = new Date().getFullYear();
+
 		document.addEventListener("DOMContentLoaded", () => {
 			const el = document.getElementById("toast-data");
 			if (!el) return;
@@ -246,6 +250,7 @@
 			const toast = JSON.parse(el.textContent);
 			showToast(toast.message, toast.type, toast.title);
 		})
+
 		window.addEventListener("online", () => {
 			showToast("Internet connection is back ✅", "success", "Connection Restored");
 		});

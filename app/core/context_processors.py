@@ -59,6 +59,7 @@ def firebase_settings(request):
     from django.conf import settings
     
     return {
+        "FIREBASE_VAPID_KEY": settings.FIREBASE_VAPID_KEY,
         "FIREBASE_CONFIG": {
             "apiKey": settings.FIREBASE_API_KEY,
             "authDomain": settings.FIREBASE_AUTH_DOMAIN,

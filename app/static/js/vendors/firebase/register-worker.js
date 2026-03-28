@@ -1,1 +1,0 @@
-navigator.serviceWorker.register('/static/js/firebase/firebase-messaging-sw.js')

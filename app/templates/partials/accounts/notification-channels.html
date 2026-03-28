@@ -8,7 +8,7 @@
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Email</p>
-                <p class="text-xs text-gray-500">Payments, proposals, and account activity</p>
+                <p class="text-[10px] text-gray-500">Payments, proposals, and account activity</p>
             </div>
         </div>
         <label class="relative inline-flex cursor-pointer items-center">
@@ -21,7 +21,8 @@
         </label>
     </div>
 
-    <div x-data="{ on: {{ user.notification_channels.web_push|yesno:'true,false' }} }" 
+    <!-- PUSH WEB -->
+    <!-- <div x-data="{ on: {{ user.notification_channels.web_push|yesno:'true,false' }} }" 
          :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
          class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300">
         <div class="flex items-center gap-4">
@@ -30,7 +31,7 @@
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Push</p>
-                <p class="text-[11px] text-gray-500">Instant updates even when offline</p>
+                <p class="text-[11px] text-gray-500">Instant live updates even when offline</p>
             </div>
         </div>
         <label class="relative inline-flex cursor-pointer items-center">
@@ -41,8 +42,46 @@
             <div class="block h-6 w-11 rounded-full transition-colors duration-300" :class="on ? 'bg-brand-500 dark:bg-brand-400' : 'bg-gray-200 dark:bg-gray-700'"></div>
             <div class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300" :class="on ? 'translate-x-5' : 'translate-x-0'"></div>
         </label>
+    </div> -->
+
+    <div 
+        x-data="pushNotificationToggle({
+            initialState: {{ user.notification_channels.web_push|yesno:'true,false' }},
+            endpoint: '{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}',
+            csrfToken: '{{ csrf_token }}'
+        })"
+        :class="on 
+            ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' 
+            : 'border-gray-100 dark:border-gray-800'"
+        class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300"
+    >
+        <div class="flex items-center gap-4">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+            </div>
+
+            <div>
+                <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Push</p>
+                <p class="text-[11px] text-gray-500">Instant live updates even when offline</p>
+            </div>
+        </div>
+
+        <button 
+            @click="togglePush"
+            class="relative inline-flex h-6 w-11 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none"
+            :class="on ? 'bg-brand-500 dark:bg-brand-400' : 'bg-gray-200 dark:bg-gray-700'"
+        >
+            <span 
+                class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300"
+                :class="on ? 'translate-x-5' : 'translate-x-0'"
+            ></span>
+        </button>
     </div>
 
+    <!-- SMS -->
     <div x-data="{ on: {{ user.notification_channels.sms|yesno:'true,false' }} }" 
          :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
          class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300">
@@ -52,7 +91,7 @@
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">SMS</p>
-                <p class="text-xs text-gray-500">Critical security updates</p>
+                <p class="text-[11px] text-gray-500">Critical security updates</p>
             </div>
         </div>
         <label class="relative inline-flex cursor-pointer items-center">
@@ -74,7 +113,7 @@
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">WhatsApp</p>
-                <p class="text-xs text-gray-500">Booking confirmations</p>
+                <p class="text-[11px] text-gray-500">Booking confirmations</p>
             </div>
         </div>
         <label class="relative inline-flex cursor-pointer items-center">

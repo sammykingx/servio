@@ -18,9 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
+from core.url_names import AuthURLNames, ReviewURLS
 from template_map.accounts import Accounts
 from template_map.reviews import Reviews
-from core.url_names import AuthURLNames, ReviewURLS
+from notifications.views import service_worker
 import accounts.urls
 import business_accounts.urls
 import collaboration.urls
@@ -52,6 +53,7 @@ urlpatterns = [
         TemplateView.as_view(template_name=Reviews.BUSINESS_REVIEWS),
         name=ReviewURLS.OVERVIEW
     ),
+    path("firebase-messaging-sw.js", service_worker, name="firebase-service-worker"),
     # path(
     #     "client/",
     #     TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
