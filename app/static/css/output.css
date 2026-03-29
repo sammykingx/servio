@@ -2402,6 +2402,9 @@
   .cursor-text {
     cursor: text;
   }
+  .cursor-wait {
+    cursor: wait;
+  }
   .resize-none {
     resize: none;
   }

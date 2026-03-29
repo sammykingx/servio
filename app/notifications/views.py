@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from registry_utils import get_registered_model
+from .channels.push.push_manager import PushManager
 
 
 @login_required
@@ -17,20 +19,15 @@ def toggle_notification_channel(request):
 
     if channel not in {"email", "web_push", "sms", "in_app", "whatsapp"}:
         return HttpResponseBadRequest("Invalid channel")
-
-    prefs = request.user.notification_channels
-    setattr(prefs, channel, value)
-    prefs.save(update_fields=[channel])
     
-    WebPushDeviceToken = get_registered_model("notifications", "WebPushDeviceToken")
-    
-    WebPushDeviceToken.objects.update_or_create(
-        token=token,
-        defaults={
-            "user": request.user,
-            "is_active": True
-        }
-    )
+    with transaction.atomic():
+        prefs = request.user.notification_channels
+        setattr(prefs, channel, value)
+        prefs.save(update_fields=[channel])
+        
+        if channel == "web_push" and value and token:
+            push_manager = PushManager(request.user)
+            push_manager.create_object(channel, token)
 
     return HttpResponse(status=204)
 

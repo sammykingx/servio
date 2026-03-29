@@ -273,7 +273,7 @@
 {% block custom_page_js %}
 <script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
 <script src="{% static 'js/authentication/change-password.js' %}"></script>
-<script src="{% static 'js/accounts/pushNotification.js' %}"></script>
+<script type="module" src="{% static 'js/accounts/pushNotification.js' %}"></script>
 <script src="{% static 'js/utils/validateAddress.js' %}"></script> <!--don't need this no longer-->
 <script src="{% static 'js/accounts/update-address.js' %}"></script>
 {% endblock %}

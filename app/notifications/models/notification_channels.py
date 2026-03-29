@@ -44,30 +44,17 @@ class WebPushDeviceToken(models.Model):
 
     token = models.TextField(unique=True)
 
-    device_name = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True
-    )
-
-    browser = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True
-    )
-
     is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    last_used_at = models.DateTimeField(
-        blank=True,
-        null=True
-    )
 
     class Meta:
         db_table = "web_push_device_tokens"
         indexes = [
             models.Index(fields=["user", "is_active"]),
         ]
+        
+    def deactivate(self):
+        self.is_active = False
+        self.save(update_fields=["is_active"])

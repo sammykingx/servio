@@ -25,10 +25,8 @@ const pushNotificationToggle = function ({ initialState, endpoint, csrfToken }) 
                 const registration = await navigator.serviceWorker.register(
                     "/firebase-messaging-sw.js"
                 );
-                console.log("fcm-sw successful: ", registration);
 
                 const permission = await Notification.requestPermission();
-                console.log('Notification permission result:', permission);
 
                 if (permission !== "granted") {
                     showToast("Notifications stayed off. We'll keep things updated manually for now.", "info", "Preference Saved");
@@ -49,22 +47,22 @@ const pushNotificationToggle = function ({ initialState, endpoint, csrfToken }) 
                     return;
                 }
 
-                // const response = await fetch(endpoint, {
-                //     method: "POST",
-                //     headers: {
-                //         "Content-Type": "application/json",
-                //         "X-CSRFToken": csrfToken
-                //     },
-                //     body: JSON.stringify({
-                //         channel: "web_push",
-                //         value: true,
-                //         token: token
-                //     })
-                // });
+                const response = await fetch(endpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({
+                        channel: "web_push",
+                        value: true,
+                        token: token
+                    })
+                });
 
-                // if (!response.ok) {
-                //     throw new Error("Failed to save preference");
-                // }
+                if (!response.ok) {
+                    throw new Error("Failed to save preference");
+                }
 
                 this.on = true;
                 showToast(
@@ -114,3 +112,5 @@ const pushNotificationToggle = function ({ initialState, endpoint, csrfToken }) 
     };
 };
 
+
+// window.pushNotificationToggle = pushNotificationToggle;
