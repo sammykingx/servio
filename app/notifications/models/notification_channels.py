@@ -54,6 +54,12 @@ class WebPushDeviceToken(models.Model):
         indexes = [
             models.Index(fields=["user", "is_active"]),
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'token'], 
+                name='unique_user_device_token'
+            )
+        ]
         
     def deactivate(self):
         self.is_active = False

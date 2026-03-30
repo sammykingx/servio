@@ -1,128 +1,146 @@
-<div class="grid gap-4 sm:grid-cols-2">
-    <div x-data="{ on: {{ user.notification_channels.email|yesno:'true,false' }} }" 
-         :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
-         class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300">
+<div x-data="{ globalLoading: false }"
+    class="grid gap-4 sm:grid-cols-2 transition-all duration-500 relative"
+    :class="globalLoading ? 'opacity-60 blur-[1px] pointer-events-none' : ''"
+>
+    <div class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5">
         <div class="flex items-center gap-4">
             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+               <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
+
             <div>
-                <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Email</p>
+                <div class="flex items-center gap-2">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Email</p>
+                    <span class="text-[9px] uppercase tracking-wider text-brand-600 dark:text-brand-300 bg-brand-100 dark:bg-brand-900/30 px-1.5 py-0.5 rounded">Required</span>
+                </div>
                 <p class="text-[10px] text-gray-500">Payments, proposals, and account activity</p>
             </div>
         </div>
-        <label class="relative inline-flex cursor-pointer items-center">
-            <input type="checkbox" class="sr-only" :checked="on" @change="on = $event.target.checked" 
-                   hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}" hx-trigger="change" 
-                   hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' 
-                   hx-vals="js:{ channel: 'email', value: this.checked }" hx-swap="none" />
-            <div class="block h-6 w-11 rounded-full transition-colors duration-300" :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'"></div>
-            <div class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300" :class="on ? 'translate-x-5' : 'translate-x-0'"></div>
-        </label>
-    </div>
 
-    <!-- PUSH WEB -->
-    <!-- <div x-data="{ on: {{ user.notification_channels.web_push|yesno:'true,false' }} }" 
-         :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
-         class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300">
-        <div class="flex items-center gap-4">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-            </div>
-            <div>
-                <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Push</p>
-                <p class="text-[11px] text-gray-500">Instant live updates even when offline</p>
-            </div>
+        <div class="relative inline-flex h-6 w-11 items-center opacity-50 cursor-not-allowed">
+            <div class="h-6 w-11 rounded-full bg-brand-500 transition-colors"></div>
+            <div class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white translate-x-5 transition-transform"></div>
         </div>
-        <label class="relative inline-flex cursor-pointer items-center">
-            <input type="checkbox" class="sr-only" :checked="on" @change="on = $event.target.checked" 
-                   hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}" hx-trigger="change" 
-                   hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' 
-                   hx-vals="js:{ channel: 'web_push', value: this.checked }" hx-swap="none" />
-            <div class="block h-6 w-11 rounded-full transition-colors duration-300" :class="on ? 'bg-brand-500 dark:bg-brand-400' : 'bg-gray-200 dark:bg-gray-700'"></div>
-            <div class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300" :class="on ? 'translate-x-5' : 'translate-x-0'"></div>
-        </label>
-    </div> -->
+    </div>
+    {% comment "when email can be toggled back on, re-enable this block and remove the comment tags" %}
+        <div x-data="{ on: {{ user.notification_channels.email|yesno:'true,false' }} }" 
+            :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
+            class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300">
+            <div class="flex items-center gap-4">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Email</p>
+                    <p class="text-[10px] text-gray-500">Payments, proposals, and account activity</p>
+                </div>
+            </div>
+            <label class="relative inline-flex cursor-pointer items-center">
+                <input type="checkbox" class="sr-only" :checked="on" @change="on = $event.target.checked" 
+                    hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}" hx-trigger="change" 
+                    hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' 
+                    hx-vals="js:{ channel: 'email', state: this.checked }" hx-swap="none" />
+                <div class="block h-6 w-11 rounded-full transition-colors duration-300" :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'"></div>
+                <div class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300" :class="on ? 'translate-x-5' : 'translate-x-0'"></div>
+            </label>
+        </div>
+    {% endcomment %}
 
     <div 
-        x-data="pushNotificationToggle({
-            initialState: {{ user.notification_channels.web_push|yesno:'true,false' }},
-            endpoint: '{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}',
-            csrfToken: '{{ csrf_token }}'
-        })"
-        :class="on 
-            ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' 
-            : 'border-gray-100 dark:border-gray-800'"
+        x-data="{ 
+            on: {{ user.notification_channels.web_push|yesno:'true,false' }}, 
+            channel: 'web_push'
+        }"
+        @notification-updated.window="
+            if($event.detail.channel === channel) on = $event.detail.state; 
+            globalLoading = false;
+        "
+        :class="on ? 'border-brand-500/50 bg-brand-50/30' : 'border-gray-100 dark:border-gray-800'"
         class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300"
     >
         <div class="flex items-center gap-4">
             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                 </svg>
             </div>
-
             <div>
                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Push</p>
-                <p class="text-[11px] text-gray-500">Instant live updates even when offline</p>
+                <p class="text-[11px] text-gray-500">Instant live updates</p>
             </div>
         </div>
 
         <button 
-            @click="togglePush"
-            class="relative inline-flex h-6 w-11 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none"
-            :class="on ? 'bg-brand-500 dark:bg-brand-400' : 'bg-gray-200 dark:bg-gray-700'"
+            @click="globalLoading = true; $dispatch('toggle-notification', { channel: channel, state: !on })"
+            class="relative inline-flex h-6 w-11 rounded-full transition-colors duration-300 focus:outline-none"
+            :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'"
         >
-            <span 
-                class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300"
-                :class="on ? 'translate-x-5' : 'translate-x-0'"
-            ></span>
+            <span class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300"
+                  :class="on ? 'translate-x-5' : 'translate-x-0'"></span>
         </button>
     </div>
 
     <!-- SMS -->
-    <div x-data="{ on: {{ user.notification_channels.sms|yesno:'true,false' }} }" 
-         :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
-         class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300">
+    <div 
+        x-data="{ 
+            on: {{ user.notification_channels.sms|yesno:'true,false' }}, 
+            channel: 'sms' 
+        }"
+        @notification-updated.window="if($event.detail.channel === channel) on = $event.detail.state; globalLoading = false"
+        :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
+        class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300"
+    >
         <div class="flex items-center gap-4">
             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                </svg>
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">SMS</p>
                 <p class="text-[11px] text-gray-500">Critical security updates</p>
             </div>
         </div>
-        <label class="relative inline-flex cursor-pointer items-center">
-            <input type="checkbox" class="sr-only" :checked="on" @change="on = $event.target.checked" 
-                   hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}" hx-trigger="change" 
-                   hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' 
-                   hx-vals="js:{ channel: 'sms', value: this.checked }" hx-swap="none" />
-            <div class="block h-6 w-11 rounded-full transition-colors duration-300" :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'"></div>
-            <div class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300" :class="on ? 'translate-x-5' : 'translate-x-0'"></div>
-        </label>
+
+        <button 
+            @click="globalLoading = true; $dispatch('toggle-notification', { channel: channel, state: !on })"
+            class="relative inline-flex h-6 w-11 rounded-full transition-colors duration-300 focus:outline-none"
+            :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'"
+        >
+            <span class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300"
+                :class="on ? 'translate-x-5' : 'translate-x-0'"></span>
+        </button>
     </div>
 
-    <div x-data="{ on: {{ user.notification_channels.whatsapp|yesno:'true,false' }} }" 
-         :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
-         class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300">
+    <!-- Whatsapp -->
+    <div 
+        x-data="{ 
+            on: {{ user.notification_channels.whatsapp|yesno:'true,false' }}, 
+            channel: 'whatsapp' 
+        }"
+        @notification-updated.window="if($event.detail.channel === channel) on = $event.detail.state; globalLoading = false"
+        :class="on ? 'border-brand-500/50 dark:border-brand-300/50 bg-brand-50/30 dark:bg-brand-500/5' : 'border-gray-100 dark:border-gray-800'"
+        class="relative flex items-center justify-between p-4 rounded-2xl border transition-all duration-300"
+    >
         <div class="flex items-center gap-4">
             <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
-                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+                </svg>
             </div>
             <div>
                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">WhatsApp</p>
                 <p class="text-[11px] text-gray-500">Booking confirmations</p>
             </div>
         </div>
-        <label class="relative inline-flex cursor-pointer items-center">
-            <input type="checkbox" class="sr-only" :checked="on" @change="on = $event.target.checked" 
-                   hx-post="{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}" hx-trigger="change" 
-                   hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' 
-                   hx-vals="js:{ channel: 'whatsapp', value: this.checked }" hx-swap="none" />
-            <div class="block h-6 w-11 rounded-full transition-colors duration-300" :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'"></div>
-            <div class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300" :class="on ? 'translate-x-5' : 'translate-x-0'"></div>
-        </label>
+
+        <button 
+            @click="globalLoading = true; $dispatch('toggle-notification', { channel: channel, state: !on })"
+            class="relative inline-flex h-6 w-11 rounded-full transition-colors duration-300 focus:outline-none"
+            :class="on ? 'bg-brand-500' : 'bg-gray-200 dark:bg-gray-700'"
+        >
+            <span class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform duration-300"
+                  :class="on ? 'translate-x-5' : 'translate-x-0'"></span>
+        </button>
     </div>
 </div>

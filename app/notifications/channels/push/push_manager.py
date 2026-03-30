@@ -6,7 +6,7 @@ class PushManager:
         self.user = user
         self.model = get_registered_model("notifications", "WebPushDeviceToken")
         
-    def create_object(self, channel_name, fcm_token):
+    def create_object(self, channel_name, fcm_token, state=True):
         if channel_name != "web_push":
             raise ValueError("Invalid channel for PushManager")
         
@@ -14,7 +14,7 @@ class PushManager:
             token=fcm_token,
             defaults={
                 "user": self.user,
-                "is_active": True
+                "is_active": state
             }
         )
         

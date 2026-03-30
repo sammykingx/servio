@@ -1,34 +1,31 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from registry_utils import get_registered_model
 from .channels.push.push_manager import PushManager
+from .domain.schemas import NotificationChannels, NotificationPayload
+from pydantic import ValidationError
+import json
 
 
 @login_required
 def toggle_notification_channel(request):
-    if not request.htmx or request.method != "POST":
-        return HttpResponseBadRequest("Invalid request")
-
-    channel = request.POST.get("channel")
-    value = request.POST.get("value") == "true"
-    token = request.POST.get("token", None)
-    print(f"Received toggle for channel: {channel}, value: {value}, token: {token}")
-
-    if channel not in {"email", "web_push", "sms", "in_app", "whatsapp"}:
-        return HttpResponseBadRequest("Invalid channel")
-    
-    with transaction.atomic():
-        prefs = request.user.notification_channels
-        setattr(prefs, channel, value)
-        prefs.save(update_fields=[channel])
+    try:
+        data = NotificationPayload(**json.loads(request.body))
+        toggle_notification_channels(data, request.user)
         
-        if channel == "web_push" and value and token:
-            push_manager = PushManager(request.user)
-            push_manager.create_object(channel, token)
-
+    except json.JSONDecodeError:
+        return HttpResponse(status=400, content="Invalid JSON payload")
+        
+    except ValidationError as e:
+        from formatters.pydantic_formatter import format_pydantic_errors
+        formatted_errors = format_pydantic_errors(e.errors())
+        return HttpResponse(status=400, content=str(e))
+    
+    except Exception:
+        return HttpResponse(status=500, content="An unexpected error occurred")
+        
     return HttpResponse(status=204)
 
 @csrf_exempt
@@ -50,3 +47,16 @@ def service_worker(request):
     )
 
     return HttpResponse(content, content_type="application/javascript")
+
+
+def toggle_notification_channels(payload: NotificationPayload, user):
+    with transaction.atomic():
+        prefs = user.notification_channels
+        setattr(prefs, payload.channel, payload.state)
+        prefs.save(update_fields=[payload.channel])
+        
+        if payload.channel == NotificationChannels.WEB_PUSH and payload.token:
+            push_manager = PushManager(user)
+            push_manager.create_object(payload.channel, payload.token, payload.state)
+            
+    

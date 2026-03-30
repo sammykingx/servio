@@ -273,7 +273,188 @@
 {% block custom_page_js %}
 <script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
 <script src="{% static 'js/authentication/change-password.js' %}"></script>
-<script type="module" src="{% static 'js/accounts/pushNotification.js' %}"></script>
+<script type="module" src="{% static 'js/accounts/managers/pushNotification.js' %}"></script>
 <script src="{% static 'js/utils/validateAddress.js' %}"></script> <!--don't need this no longer-->
 <script src="{% static 'js/accounts/update-address.js' %}"></script>
+<script type="module">
+	import WebPushManager from "{% static 'js/accounts/managers/pushNotification.js' %}";
+
+	const successLibrary = {
+		"web_push": {
+			on: { 
+				message: "You're all set! Live updates will now arrive even when you're offline.", 
+				type: "success", 
+				title: "Live Sync Active" 
+			},
+			off: { 
+				message: "Push notifications disabled. You'll still see updates when you refresh the page.", 
+				type: "info", 
+				title: "Notifications Off" 
+			}
+		},
+		"email": {
+			on: { 
+				message: "We'll send activity summaries and proposals to your inbox.", 
+				type: "success", 
+				title: "Email Alerts On" 
+			},
+			off: { 
+				message: "Email notifications paused. Check your dashboard for the latest updates.", 
+				type: "info", 
+				title: "Email Alerts Off" 
+			}
+		},
+		"sms": {
+			on: { 
+				message: "Critical security alerts will now be sent to your phone.", 
+				type: "success", 
+				title: "SMS Sync Active" 
+			},
+			off: { 
+				message: "SMS alerts disabled. Ensure you check your account activity regularly.", 
+				type: "info", 
+				title: "SMS Disabled" 
+			}
+		},
+		"whatsapp": {
+			on: { 
+				message: "Booking and order confirmations will now sent via WhatsApp.", 
+				type: "success", 
+				title: "WhatsApp Linked" 
+			},
+			off: { 
+				message: "WhatsApp updates disabled.", 
+				type: "info", 
+				title: "WhatsApp Off" 
+			}
+		}
+	};
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const CHANNEL_MAP = {
+			'web_push': WebPushManager,
+			// 'email': StandardChannelManager,
+			// 'sms': StandardChannelManager,
+			// 'whatsapp': StandardChannelManager,
+		};
+
+		window.addEventListener('toggle-notification', async (event) => {
+			const { channel, state } = event.detail;
+			const manager = CHANNEL_MAP[channel] || null;
+			const endpoint = "{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}";
+
+			if (!manager) {
+				showToast("Unknown channel", "error");
+				return;
+			}
+			
+			try {
+				const result = state ? await manager.enable() : await manager.disable();
+				console.log("Manager Result:", result);
+				
+				const response = await fetch(endpoint, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-CSRFToken": '{{ csrf_token }}'
+					},
+					body: JSON.stringify({
+						channel: channel,
+						state: state,
+						token: result.token
+					})
+				});
+
+				if (!response.ok) {
+					// Handle 400 Validation Errors
+					if (response.status === 400) throw new Error("VALIDATION_ERROR");
+					
+					// Handle 401/403 Auth Errors
+					if (response.status === 401 || response.status === 403) throw new Error("UNAUTHORIZED");
+					
+					// Handle 500+ Server Errors
+					if (response.status >= 500) throw new Error("SERVER_CRASH");
+
+					// Generic Fallback
+					throw new Error("BACKEND_ERROR");
+				}
+				
+				// 3. Success Feedback
+				window.dispatchEvent(new CustomEvent('notification-updated', {
+					detail: { channel, state }
+				}));
+
+				const config = successLibrary[channel]?.[state] || {
+					message: `${channel.replace('_', ' ')} preferences updated.`,
+					type: "success",
+					title: "Settings Saved"
+				};
+
+				showToast(config.message, config.type, config.title);
+
+			} catch (error) {
+				// Revert UI state on failure
+				window.dispatchEvent(new CustomEvent('notification-updated', {
+					detail: { channel, state: !state }
+				}));
+
+				const errorLibrary = {
+					"PERMISSION_BLOCKED_BY_BROWSER": {
+						message: "Notifications are blocked by your browser. Please click the lock icon in your address bar to allow them.",
+						type: "warning",
+						title: "Further Action Required"
+					},
+					"PERMISSION_DENIED": {
+						message: "Notifications stayed off. We'll keep things updated manually for now.",
+						type: "info",
+						title: "Preference Saved"
+					},
+					"TOKEN_GENERATION_FAILED": {
+						message: "We couldn't generate a unique sync ID. Please check your connection or reload.",
+						type: "error",
+						title: "Connection Timeout"
+					},
+					"API_FAILURE": {
+						message: "We couldn't sync with the server. Please try again in a moment.",
+						type: "warning",
+						title: "Connection Interrupted"
+					},
+					"VALIDATION_ERROR": {
+						message: "We couldn't process this specific update. Please try refreshing the page.",
+						type: "warning",
+						title: "Sync Mismatch"
+					},
+					"BACKEND_ERROR": {
+						message: "We couldn't save your preferences to the cloud. Please check your connection.",
+						type: "error",
+						title: "Sync Failed"
+					},
+					"UNAUTHORIZED": {
+						message: "Your session may have expired. Please refresh the page and try again.",
+						type: "warning",
+						title: "Session Timeout"
+					},
+					"SERVER_CRASH": {
+						message: "Our sync server is having a moment. Please try again in a few minutes.",
+						type: "error",
+						title: "System Hiccup"
+					},
+				};
+
+				const toastConfig = errorLibrary[error.message] || {
+					message: "Something went wrong while updating your preferences.",
+					type: "error",
+					title: "Update Failed"
+				};
+
+				showToast(toastConfig.message, toastConfig.type, toastConfig.title);
+			} finally {
+				// cleanup loading states, if any
+				// document.querySelector('[x-data]').__x.$data.globalLoading = false;
+				return;
+				// Optionally, you could also trigger a refresh of the notification settings here to ensure
+			}
+		});
+	});
+</script>
 {% endblock %}
