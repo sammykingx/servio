@@ -43,6 +43,10 @@ class WebPushDeviceToken(models.Model):
     )
 
     token = models.TextField(unique=True)
+    user_agent = models.TextField()
+    platform = models.CharField(max_length=20)
+    browser = models.CharField(max_length=20)
+    device = models.CharField(max_length=15)
 
     is_active = models.BooleanField(default=True)
 

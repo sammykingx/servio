@@ -1,6 +1,6 @@
 from django.urls import path, reverse_lazy
 from django.views.generic import RedirectView
-from .views import toggle_notification_channel
+from .views import ToggleNotifications
 from core.url_names import AuthURLNames
 from core.url_names import NotificationsURLNames
 
@@ -14,7 +14,7 @@ urlpatterns = [
     ),
     path(
         "toggle/",
-        toggle_notification_channel,
+        ToggleNotifications.as_view(),
         name=NotificationsURLNames.TOGGLE_NOTIFICATION_CHANNELS
     ),
 ]

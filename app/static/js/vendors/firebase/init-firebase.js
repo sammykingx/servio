@@ -20,7 +20,6 @@ function initializeFirebase() {
     const firebaseConfig = JSON.parse(configElement.textContent);
     const vapidKey = JSON.parse(vapidKeyElement.textContent);
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const messaging = getMessaging(app);

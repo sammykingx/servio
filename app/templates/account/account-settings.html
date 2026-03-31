@@ -343,14 +343,30 @@
 			const manager = CHANNEL_MAP[channel] || null;
 			const endpoint = "{% url NOTIFICATION_URLS.TOGGLE_NOTIFICATION_CHANNELS %}";
 
-			if (!manager) {
+			if (channel === 'web_push' &&  !manager) {
 				showToast("Unknown channel", "error");
 				return;
 			}
 			
 			try {
-				const result = state ? await manager.enable() : await manager.disable();
-				console.log("Manager Result:", result);
+				let browser = "Unknown";
+				let result = null;
+
+				if (manager) {
+					result = state ? await manager.enable() : await manager.disable();
+				}
+
+				if (navigator.userAgent.includes("Chrome")) browser = "Chrome";
+				else if (navigator.userAgent.includes("Firefox")) browser = "Firefox";
+				else if (navigator.userAgent.includes("Safari")) browser = "Safari";
+				else if (navigator.userAgent.includes("Edge")) browser = "Edge";
+
+				const DeviceInfo = {
+					userAgent: navigator.userAgent,
+					platform: navigator.platform,
+					device: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop",
+					browser: browser,
+				};
 				
 				const response = await fetch(endpoint, {
 					method: "POST",
@@ -361,7 +377,8 @@
 					body: JSON.stringify({
 						channel: channel,
 						state: state,
-						token: result.token
+						token: manager ? result.token : null,
+						deviceMeta: DeviceInfo,
 					})
 				});
 
@@ -384,7 +401,9 @@
 					detail: { channel, state }
 				}));
 
-				const config = successLibrary[channel]?.[state] || {
+				const stateKey = state ? "on" : "off";
+
+				const config = successLibrary[channel]?.[stateKey] || {
 					message: `${channel.replace('_', ' ')} preferences updated.`,
 					type: "success",
 					title: "Settings Saved"
@@ -414,19 +433,14 @@
 						type: "error",
 						title: "Connection Timeout"
 					},
-					"API_FAILURE": {
-						message: "We couldn't sync with the server. Please try again in a moment.",
-						type: "warning",
-						title: "Connection Interrupted"
-					},
 					"VALIDATION_ERROR": {
 						message: "We couldn't process this specific update. Please try refreshing the page.",
 						type: "warning",
 						title: "Sync Mismatch"
 					},
 					"BACKEND_ERROR": {
-						message: "We couldn't save your preferences to the cloud. Please check your connection.",
-						type: "error",
+						message: "We couldn't sync with the server. Please try again in a moment.",
+						type: "warning",
 						title: "Sync Failed"
 					},
 					"UNAUTHORIZED": {
