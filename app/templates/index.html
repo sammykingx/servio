@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="light" lang="en">
-	{% load static %}
+{% load static %}
 	<head>
 		<meta charset="utf-8" />
 		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport" />
@@ -43,8 +43,13 @@
 				</nav>
 				<!-- Right: Button -->
 				<div>
-					<a id="nav-cta-button" href="{% url AUTH_URLS.SIGNUP %}" class="bg-secondary text-charcoal text-sm font-semibold h-11 px-8 py-4 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all">
-					Get Started
+					<a 
+						id="nav-cta-button" 
+						href="{% url AUTH_URLS.SIGNUP %}" 
+						class="bg-secondary text-charcoal text-sm font-semibold h-11 
+							px-8 py-4 rounded-full shadow-lg hover:bg-[#ffeb8a] transition-all"
+					>
+						Get Started
 					</a>
 				</div>
 			</div>
@@ -86,8 +91,8 @@
 						<!-- CTA Buttons -->
 						<div class="grid grid-cols-2 gap-3 max-w-md">
 							<a data-aos="fade-in" data-aos-delay="150" href="{% url AUTH_URLS.SIGNUP %}"
-								class="w-full text-center px-5 py-3 bg-secondary text-charcoal rounded-xl font-semibold text-sm md:text-base hover:bg-brand-700 hover:text-white transition shadow-lg shadow-blue-500/25">
-							Join Servio
+								class="w-full text-center px-5 py-3 bg-secondary hover:bg-[#ffeb8a] hover:-translate-y-0.5 text-charcoal rounded-xl font-semibold text-sm md:text-base transition shadow-lg shadow-blue-500/25">
+								Join Servio
 							</a>
 							<a href="#"
 								data-aos="fade-in" 
@@ -106,6 +111,7 @@
 			<!-- END: Hero Section -->
 
 			<!-- BEGIN: Trusted Partners -->
+			{% comment 'showcase partners like local agencies that will post their services on the platform, and big companies that use the platform to get work done' %}
 			<section class="py-20 bg-white overflow-hidden relative">
 				<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
 				<div class="max-w-7xl mx-auto px-4 relative z-10">
@@ -137,6 +143,7 @@
 					</div>
 				</div>
 			</section>
+			{% endcomment %}
 			<!-- END: Trusted Partners -->
 
 			<!-- BEGIN: Category Grid -->
@@ -354,7 +361,7 @@
 						<div data-aos="zoom-in" data-aos-easing="ease-in-sine" data-aos-delay="150" class="p-8 rounded-2xl bg-white/5 border border-white/10">
 							<p class="text-lg italic mb-8 text-gray-300">"The quality of experts is miles ahead of any other platform. It's built for actual business professionals."</p>
 							<div class="flex items-center gap-4">
-								<img alt="Marcus Aurelius" class="w-12 h-12 rounded-full border border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQm9xrknUWO-QCjPD1k7wG_enPwzDOxfWjOazHF7b14gawAfQfLYI-PSczTLbMBA9OGtuo09UtyLwMjG4gIge2FvaJa29Y_76AAqBbOPWBBbrmke8BdXbXKmAmQGuzxDCT-11NcrhT6TO8DZYYbmXr6nm_1U296lLBUUj92cRffw9dNT4qk7AE1_N-ztsxTN0Vj02qZObFujn18tnrSMeCY2mcrsm50sh9I7XxaxbTg1VPYOJ_k6Q1zTZSQ2xR3eFgXcbFZHl5Pog" />
+								<img alt="Marcus Aurelius" class="w-12 h-12 rounded-full border border-white/20" src="{% static 'images/user/user-10.jpg' %}" />
 								<div>
 									<p class="font-bold">Marcus Thorne</p>
 									<p class="text-sm text-gray-500">Founder, Pillar Group</p>

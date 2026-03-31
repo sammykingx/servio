@@ -124,7 +124,7 @@ class ProposalService:
             ProposalValidator.validate(payload, gig)
 
             proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
-            # self.notifications_flow(gig)
+            self.notifications_flow(gig)
 
         except ProposalPermissionDenied as e:
             if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
