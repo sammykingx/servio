@@ -80,7 +80,7 @@ class ToggleNotifications(LoginRequiredMixin, View):
             
             if payload.channel == NotificationChannels.WEB_PUSH and payload.token:
                 push_manager = PushManager(user=self.request.user)
-                push_manager.create_object(payload)
+                push_manager.handle_token_state(payload)
                 
         except Exception as e:
             raise NotificationChannelError(str(e))
