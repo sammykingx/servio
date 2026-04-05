@@ -28,7 +28,7 @@ urlpatterns = [
     
     path(
         "all-payments/", 
-         TemplateView.as_view(template_name=Payments.SUMMARY), 
+         login_required(TemplateView.as_view(template_name=Payments.SUMMARY)), 
          name=PaymentURLS.USER_PAYMENT_SUMMARY
     ),
     path(
@@ -57,5 +57,3 @@ urlpatterns = [
         name=PaymentURLS.GIG_PAYMENT_COMPLETE
     )
 ]
-
-# 

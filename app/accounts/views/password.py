@@ -45,6 +45,7 @@ class PasswordResetEmailView(View):
                 )
                 
                 resp = self.send_reset_link(user, token_obj.token)
+                print("Token obj: ",token_obj.token)
                 if not resp:
                     return JsonResponse({
                         "message": "Failed to send password reset email, the mail server took too long to respond.",
@@ -131,8 +132,16 @@ class NewPasswordView(View):
             self.change_password(data.password1, token_obj)
             if data.auto_login:
                 self.login_user(self.request.user.email, data.password1)
-                return JsonResponse({"redirect": True, "url": reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD)}, status=200)
-                # return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
+                return JsonResponse(
+                    {
+                        "title": "You're all set!",
+                        "message": "All set! We’re logging you in and heading to the dashboard...",
+                        "status": "success",
+                        "redirect": True, 
+                        "url": reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD),
+                    }, status=200
+                )
+                
         except PydanticError as err:
             from formatters.pydantic_formatter import format_pydantic_errors
             e = format_pydantic_errors(err)
@@ -157,15 +166,11 @@ class NewPasswordView(View):
                 "status": "error"
                 }, status=500)
             
-        # return render(request, Accounts.Auth.PASSWORD_RESET, context)
         return JsonResponse(
             {
                 "status": "success",
                 "title": "Password Reset Complete",
                 "message": "Your password has been updated successfully. You can now log in with your new credentials.",
-                "data": {
-                    "redirect_url": reverse_lazy(AuthURLNames.LOGIN)
-                }
             }, status=200)
 
     def build_context(self, token: str) -> dict:

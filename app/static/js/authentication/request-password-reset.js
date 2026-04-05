@@ -72,7 +72,7 @@ function toggleBtnState() {
 
 function requestCleanup() {
     const sendBtn = document.getElementById("sendBtn");
-    sendBtn.textContent = "Action Successful";
+    sendBtn.textContent = "Action Complete";
     sendBtn.disabled = true;
 
 }

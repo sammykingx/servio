@@ -1,3 +1,23 @@
+/**
+ * Modern Busy State Handler
+ * Blurs the button, reduces opacity, and prevents clicks
+ */
+function setBusyState(isBusy) {
+    const btn = document.getElementById("submitBtn");
+    if (!btn) return;
+
+    if (isBusy) {
+        btn.disabled = true;
+        btn.classList.add("opacity-50", "blur-[1.5px]", "pointer-events-none", "cursor-not-allowed");
+        btn.dataset.originalText = btn.textContent;
+        btn.textContent = "Updating...";
+    } else {
+        btn.disabled = false;
+        btn.classList.remove("opacity-50", "blur-[1.5px]", "pointer-events-none", "cursor-not-allowed");
+        btn.textContent = btn.dataset.originalText || "Update Password";
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const form = document.getElementById("requestPasswordReset");
@@ -53,10 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("auto_login", autoLoginValue);
 
         const csrfToken = document.querySelector("input[name='csrfmiddlewaretoken']").value;
-        const submitBtn = document.getElementById("submitBtn");
 
-        toggleBtnState();
-
+        setBusyState(true);
         try {
             const response = await fetch(form.action, {
                 method: "POST",
@@ -67,57 +85,33 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             const data = await response.json();
 
-
             if (!response.ok) {
                 showAuthAlert(
                     data.error || "Password reset failed",
                     data.message || "we couldn't reset your password at this time, kindly check back later cheers.",
                     data.status || "info"
                 );
+                return;
             }
-            
+
+            showAuthAlert(
+                data.title || "Password reset complete",
+                data.message || "Your password has been updated, you're account is waiting for you",
+                data.status || "success"
+            );
+
+
             if (data?.redirect && data?.url) {
-                window.location.href(data.url);
-            } else {
-                showAuthAlert(
-                    data.title || "Password reset complete",
-                    data.message || "Your password has been updated, you're account is waiting for you",
-                    data.status || "success"
-                );
+                setTimeout(() => {
+                    window.location.assign(data.url);
+                }, 1700);
             }
-
-
-            submitBtn.textContent = "Reset Completed";
-            submitBtn.disabled = true;
-
-            const processingText = document.getElementById("processingText");
-            processingText.textContent = "redirecting";
-
-
-            // setTimeout(() => {
-            //     toggleBtnState();
-            //     if (response.redirected) {
-            //         window.location.href = response.url;
-            //     } else {
-            //         const loginUrl = document.getElementById("login-url").dataset.loginUrl;
-            //         window.location.href = loginUrl;
-            //     }
-            // }, 3000);
             
 
         } catch (error) {
             showAuthAlert("Network Error", "Something went wrong. Please try again later.", "error");
         } finally {
-            toggleBtnState()
+            setBusyState(false);
         }
     });
 });
-
-function toggleBtnState() {
-    const submitBtn = document.getElementById("submitBtn");
-    const processingBtn = document.getElementById("processingBtn");
-
-    submitBtn.classList.toggle("hidden");
-    processingBtn.classList.toggle("hidden");
-
-}
