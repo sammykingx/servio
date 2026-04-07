@@ -22,6 +22,11 @@ urlpatterns = [
         ),
     ),
     path(
+        "select-type/", 
+        login_required(TemplateView.as_view(template_name=Collabs.SELECT_TYPE)), 
+        name=CollaborationURLS.SELECT_COLLABORATION_TYPE
+    ),
+    path(
         "all-collaborations/", 
          CollaborationListView.as_view(), 
          name=CollaborationURLS.LIST_COLLABORATIONS

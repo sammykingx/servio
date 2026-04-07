@@ -11,15 +11,23 @@
 <div class="min-h-screen w-full max-w-[1380px] flex flex-col gap-6">
     <div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
     <!-- Header Section -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-            <h1 class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">Gigs</h1>
-            <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Manage your active projects and collaborations.</p>
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 py-5 border-b border-gray-100 dark:border-white/5">
+        <div class="space-y-1">
+            <h1 class="text-2xl md:text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">
+                Projects
+            </h1>
+            <p class="text-sm md:text-base text-slate-500 dark:text-slate-400 font-medium">
+                Manage your active projects and collaborations.
+            </p>
         </div>
-        <!-- Mobile only brand-500 button -->
-        <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="sm:hidden flex w-full cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-brand-500 text-white text-sm font-semibold">
-            <span>+ Create Gig</span>
-        </a>
+
+        <div class="w-full sm:w-auto">
+            <a href="{% url COLLABORATION_URLS.SELECT_COLLABORATION_TYPE %}" 
+            class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl h-11 md:h-12 px-6 bg-brand-500 hover:bg-brand-600 dark:bg-brand-600 dark:hover:bg-brand-500 text-white text-sm font-bold transition-all duration-200 shadow-lg shadow-brand-500/20 active:scale-95">
+                <span class="material-symbols-outlined text-lg">add</span>
+                <span>Create Project</span>
+            </a>
+        </div>
     </div>
     <!-- Controls: Search, Tabs & Filters -->
     <div class="flex flex-col gap-4 space-y-2">
@@ -51,6 +59,32 @@
                             dark:bg-gray-700 dark:text-gray-300
                             text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
                             {{ gig_status_counts.total }}
+                        </span>
+                    </a>
+
+                    <a
+                        href="{% if gig_status_counts.draft %}?project_status=draft{% else %}#{% endif %}"
+                        class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
+                        {% if active_tab == 'draft' %}
+                            border-b-2 border-brand-500
+                        {% else %}
+                            border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600
+                        {% endif %}
+                        "
+                    >
+                        <span class="{% if active_tab == 'draft' %}text-brand-500{% else %}text-gray-500{% endif %}
+                            dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
+                            Draft{{ gig_status_counts.draft|pluralize:"s" }}
+                        </span>
+                        <span class="flex items-center justify-center
+                            {% if active_tab == 'draft' %}
+                                bg-brand-500/10 text-brand-500
+                            {% else %}
+                                bg-gray-100 text-gray-500
+                            {% endif %}
+                            dark:bg-gray-700 dark:text-gray-300
+                            text-xs font-semibold rounded-full h-5 px-1.5 min-w-[20px]">
+                            {{ gig_status_counts.draft }}
                         </span>
                     </a>
 
@@ -163,14 +197,6 @@
 
             <!-- Project Filters -->
             <div class="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-3 no-scrollbar">
-                <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="hidden sm:flex h-8 shrink-0 items-center justify-center gap-x-2
-                            rounded-md bg-transparent dark:bg-gray-800
-                            border border-brand-200 dark:border-gray-700
-                            hover:bg-gray-50 dark:hover:bg-gray-700
-                            pl-3 pr-2 transition-colors shadow-sm">
-                    <span class="text-gray-700 dark:text-gray-400 text-xs font-semibold">add new</span>
-                    <span class="material-symbols-outlined text-gray-500 text-[18px]">add</span>
-                </a>
                 <button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 pl-3 pr-2 transition-colors shadow-sm">
                     <span class="text-gray-700 dark:text-gray-400 text-xs font-semibold">Budget</span>
                     <span class="material-symbols-outlined text-gray-500 text-[18px]">keyboard_arrow_down</span>

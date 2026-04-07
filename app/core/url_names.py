@@ -71,6 +71,7 @@ class BusinessURLS:
     
 class CollaborationURLS:
     LIST_COLLABORATIONS = "list_collaborations"
+    SELECT_COLLABORATION_TYPE = "select_collaboration_type"
     CREATE_COLLABORATION = "create_collaboration"
     DETAIL_COLLABORATION = "view_collaboration"
     EDIT_COLLABORATION = "edit_collaboration"

@@ -86,6 +86,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
             self.request.user.gigs
             .aggregate(
                 total=Count("id"),
+                draft=Count("id", filter=Q(status=GigStatus.DRAFT)),
                 published=Count("id", filter=Q(status=GigStatus.PUBLISHED)),
                 pending=Count("id", filter=Q(status=GigStatus.PENDING)),
                 in_progress=Count("id", filter=Q(status=GigStatus.IN_PROGRESS)),
