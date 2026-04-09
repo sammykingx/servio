@@ -13,6 +13,7 @@ dependencies = [
     "django-zxcvbn-password-validator>=1.5.3",
     "mysqlclient>=2.2.7",
     "nanoid>=2.0.0",
+    "paystack-sdk>=1.0.1",
     "phonenumbers>=9.0.23",
     "pillow>=12.0.0",
     "pycountry>=24.6.1",

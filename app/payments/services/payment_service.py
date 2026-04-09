@@ -1,4 +1,4 @@
-# Core orchestration logic for processing payments.
+# Core orchestration logic for processing payments regradless of gateway.
 
 
 from payments.infrastructure.registry import GATEWAYS
@@ -21,6 +21,7 @@ class PaymentService:
 
             gateway_class = GATEWAYS[provider]
             self.gateway = gateway_class()
+            self.charge_url
             
         except ValueError:
             raise DomainException(
@@ -30,6 +31,7 @@ class PaymentService:
             )
 
     def charge(self, amount, currency, reference, metadata):
+        """Orchestrates the payment creation process."""
 
         return self.gateway.create_payment(
             amount,
