@@ -39,6 +39,7 @@ class PaymentService:
             reference,
             metadata
         )
+        # create customer if they don't exist
 
     def verify(self, reference):
 
