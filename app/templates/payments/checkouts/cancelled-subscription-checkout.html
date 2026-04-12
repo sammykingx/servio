@@ -1,0 +1,55 @@
+{% extends "layouts/base-checkout.html" %}
+{% load static %}
+{% block browser_title %}Account activation cancelled{% endblock %}
+{% block body_content %}
+<main class="relative max-w-4xl mx-auto px-6 py-12 lg:py-18">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-slate-500/5 dark:bg-white/5 blur-[100px] pointer-events-none"></div>
+    <div class="relative z-10 text-center">
+        <div class="mb-10 animate-in fade-in zoom-in duration-700">
+            <div class="size-20 md:size-24 rounded-[2.5rem] bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-8 border border-slate-200 dark:border-white/10 shadow-xl shadow-slate-500/5">
+                <span class="material-symbols-outlined text-4xl md:text-5xl font-light text-slate-400">shopping_cart_checkout</span>
+            </div>
+            
+            <h1 class="text-2xl md:text-4xl font-semibold text-slate-900 dark:text-white mb-6 tracking-tight">
+                Change of <span class="italic font-light">plans?</span>
+            </h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+                No worries, your checkout was canceled and you weren’t charged. You can resume anytime where you left off.
+            </p>
+        </div>
+
+        <div class="max-w-md mx-auto bg-white dark:bg-[#0A0A0A] border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl mb-12">
+            <div class="space-y-6">
+                <button onclick="window.history.back()" 
+                        class="w-full flex items-center justify-center gap-3 py-5 bg-brand-500 hover:bg-brand-600 text-white rounded-2xl font-medium text-base transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-brand-500/20">
+                    <span class="material-symbols-outlined">payments</span>
+                    Resume Payment
+                </button>
+                
+                <div class="grid grid-cols-1 gap-3">
+                    <a href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}" 
+                       class="flex items-center justify-center gap-2 py-4 text-slate-600 dark:text-slate-400 font-semibold text-sm hover:text-slate-900 dark:hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-lg">folder_open</span>
+                        Return to dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto opacity-70">
+            <div class="flex flex-col items-center gap-2 text-gray-500 dark:text-gray-400">
+                <span class="material-symbols-outlined text-slate-400">lock_reset</span>
+                <span class="text-[11px] font-medium uppercase tracking-widest">Safe & Secure</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 border-x border-slate-200 dark:border-white/10 px-4 text-gray-500 dark:text-gray-400">
+                <span class="material-symbols-outlined text-slate-400">history</span>
+                <span class="text-[11px] font-medium uppercase tracking-widest">Saved for 24h</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 text-gray-500 dark:text-gray-400">
+                <span class="material-symbols-outlined text-slate-400">support_agent</span>
+                <span class="text-[11px] font-medium uppercase tracking-widest">Need Help?</span>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

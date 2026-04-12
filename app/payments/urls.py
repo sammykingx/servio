@@ -5,7 +5,7 @@ from core.url_names import PaymentURLS
 from template_map.payments import Payments
 from .escrow import urls as escrow_urls
 from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, SelectGigPaymentMethodView, GigCardInfoView, GigPaymentComplete
-
+from .views.account_activation import AccountActivationView
 
 urlpatterns = [
     path("escrow/", include(escrow_urls)),
@@ -25,7 +25,16 @@ urlpatterns = [
         TemplateView.as_view(template_name=Payments.Checkouts.SUBSCRIPTION_CHECKOUT_CURRENCY), 
         name=PaymentURLS.SUBSCRIPTION_CHECKOUT_OPTION
     ),
-    
+    path(
+        "user-subscription/checkout/<str:gateway>/",
+        AccountActivationView.as_view(),
+        name=PaymentURLS.SUBSCRIPTION_CHECKOUT,
+    ),
+    path(
+        "cancelled/",
+        TemplateView.as_view(template_name=Payments.Checkouts.SUBSCRIPTION_CHECKOUT_CANCELLED),
+        name=PaymentURLS.CANCELLED_PAYMENT_CHECKOUT,
+    ),
     path(
         "all-payments/", 
          login_required(TemplateView.as_view(template_name=Payments.SUMMARY)), 

@@ -27,8 +27,8 @@ class PaymentRequest(BaseModel):
     """
     email: EmailStr = Field(..., description="Customer's email address")
     amount: int = Field(..., gt=0, description="Amount in smallest unit (e.g kobo, cents)")
-    reference: str = Field(..., min_length=15, max_length=15, description="Unique reference for the transaction")
+    reference: str = Field(..., min_length=19, max_length=19, description="Unique reference for the transaction")
     # idm_key: str = Field(..., description="Idempotency key to prevent double charging")
     currency: str = Field(default="USD", min_length=3, max_length=3)
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    # metadata: Dict[str, Any] = Field(default_factory=dict)
     

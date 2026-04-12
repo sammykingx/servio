@@ -1,9 +1,14 @@
 # Paystack gateway adapter implementing PaymentGateway contract.
 
+from django.urls import reverse_lazy
 from payments.domain.contracts import PaymentGateway
 from payments.schemas.payments import PaymentRequest
+from payments.domain.exceptions import PaymentGatewayError
+from payments.domain.errors import PaymentFailure
+from core.url_names import PaymentURLS
 from decouple import config
-import requests
+from requests.exceptions import Timeout, RequestException
+import json, requests
 
 
 class PaystackAdapter(PaymentGateway):
@@ -29,26 +34,51 @@ class PaystackAdapter(PaymentGateway):
         return headers
     
     def create_payment(self, payload: PaymentRequest):
-
-        response = requests.post(
-            self.create_payment_endpoint,
-            headers=self._get_headers(),
-            json={
-                "amount": payload.amount,
-                "reference": payload.reference,
-                "metadata": payload.metadata,
-                "currency": payload.currency
-            },
-        )
-       
-
-        return response.json()
+        data = PaymentRequest.model_dump(payload)
+        data["callback_url"] = self.callback_url
+        data["metadata"] = {"cancel_action": reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT)}
+        # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
+        
+        try:
+            response = requests.post(
+                self.create_payment_endpoint,
+                headers=self._get_headers(),
+                json=json.loads(json.dumps(data, default=str)),
+                timeout=(5, 13),
+            )
+            response.raise_for_status()
+            return response.json()
+        
+        except Timeout:
+            raise PaymentGatewayError(
+                "Payment service timed out. Please try again later.",
+                code=PaymentFailure.GATEWAY_TIMEOUT.code,
+                title=PaymentFailure.GATEWAY_TIMEOUT.title,
+                type="warning"
+            )
+        
+        except RequestException as e:
+            raise PaymentGatewayError(
+                f"Connection error: {str(e)}",
+                code=PaymentFailure.GATEWAY_ERROR.code,
+                title=PaymentFailure.GATEWAY_ERROR.title,
+                type="error"
+            )
+        # {
+            # 'status': True, 
+            # 'message': 'Authorization URL created', 
+            # 'data': {
+                # 'authorization_url': 'https://checkout.paystack.com/cirt0f31hcl7seo', 
+                # 'access_code': 'cirt0f31hcl7seo', 
+                # 'reference': 'SRV-ChkiHvUa0WrbWlY'
+                # }
+            # }
 
     def verify_payment(self, reference):
 
         response = requests.get(
             self.verify_payment_endpoint.format(reference=reference),
-            headers={"Authorization": f"Bearer {self.secret_key}"}
+            headers=self._get_headers(),
         )
 
         return response.json()

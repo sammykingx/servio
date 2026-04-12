@@ -63,7 +63,7 @@
             <button
                 onclick="guessClientLocation(event)"
                 data-ngn-checkout="{% url PAYMENT_URLS.SUBSCRIPTION_CHECKOUT_OPTION %}"
-                data-usd-checkout="#"
+                data-usd-checkout="{% url PAYMENT_URLS.SUBSCRIPTION_CHECKOUT 'stripe' %}"
                 
                 class="relative w-full group/btn overflow-hidden bg-slate-900 dark:bg-white text-white dark:text-slate-800 py-6 rounded-2xl text-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg shadow-brand-500/20">
                 <div class="absolute inset-0 bg-brand-500 dark:bg-warning-300 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>

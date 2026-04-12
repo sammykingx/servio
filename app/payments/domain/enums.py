@@ -18,6 +18,15 @@ class PaymentType(str, Enum):
     def choices(cls):
         return [(item.value, item.name) for item in cls]
     
+class PaymentPurpose(str, Enum):
+    ACTIVATION_FEE = "activation_fee"
+    SERVICE_PAYMENT = "service_payment"
+    WALLET_FUNDING = "wallet_funding"
+    
+    @classmethod
+    def choices(cls):
+        return [(item.value, item.name) for item in cls]
+    
 class PaymentStatus(str, Enum):
     INITIATED = "initiated"
     PENDING = "pending"

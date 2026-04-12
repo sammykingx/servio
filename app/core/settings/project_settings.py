@@ -15,6 +15,7 @@ LOCAL_APPS = [
     "business_accounts.apps.BusinessAccountsConfig",
     "business_services.apps.BusinessServicesConfig",
     "collaboration.apps.CollaborationConfig",
+    "payments.apps.PaymentsConfig",
 ]
 
 LOCAL_MIDDLEWARES = [

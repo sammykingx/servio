@@ -21,3 +21,19 @@ class PaymentFailure:
     PROVIDER_NOT_CONFIGURED = FailureDetail(
         "PROVIDER_NOT_CONFIGURED", "Gateway Configuration Missing"
     )
+    GATEWAY_TIMEOUT = FailureDetail(
+        "GATEWAY_TIMEOUT", "Payment Gateway Timed Out"
+    )
+    GATEWAY_ERROR = FailureDetail(
+        "GATEWAY_ERROR", "Payment Gateway Temporarily Unavailable"
+    )
+    INVALID_PAYMENT_DATA = FailureDetail(
+        "INVALID_PAYMENT_DATA", 
+        "Incomplete Payment Information"
+    )
+    ALREADY_PROCESSED = FailureDetail(
+        "ALREADY_PROCESSED", "Payment Already Received"
+    )
+    AUTHENTICATION_REQUIRED = FailureDetail(
+        "AUTHENTICATION_REQUIRED", "User Session Invalid"
+    )
