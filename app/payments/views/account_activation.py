@@ -8,6 +8,7 @@ from payments.domain.enums import RegisteredPaymentProvider
 from payments.domain.exceptions import DomainException
 from payments.schemas.payments import PaymentRequest
 from template_map.payments import Payments
+from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.gateways.paystack.adapter import PaystackAdapter
 from constants import USD_TO_NGN_RATE
 
@@ -17,6 +18,12 @@ class AccountActivationView(LoginRequiredMixin, View):
     template_name = Payments.Checkouts.SUBSCRIPTION_CHECKOUT
     
     def get(self, request, *args, **kwargs):
+        provider = kwargs.get("gateway")
+        if provider not in GATEWAYS.keys():
+            return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
+        return render(request, self.template_name)
+    
+    def post(self, request, *args, **kwargs):
         try:
             provider = kwargs.get("gateway")
             payment_service = PaymentService(provider, self.request.user)
@@ -24,6 +31,8 @@ class AccountActivationView(LoginRequiredMixin, View):
             if provider == RegisteredPaymentProvider.PAYSTACK.value:
                 checkout_url = resp["data"]["authorization_url"]
                 return redirect(checkout_url)
+                # https://checkout.paystack.com/u4j84p5z4jd6krf
+                # try to cancell and see if it will resume again
 
         except DomainException as e:
             print(e)

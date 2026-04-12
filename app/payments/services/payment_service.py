@@ -88,7 +88,6 @@ class PaymentService:
         return APP_SUBSCRIPTION_FEE, int(APP_SUBSCRIPTION_FEE * 100)
     
     def get_or_create_activation_payment(self):
-
         existing = Payment.objects.filter(
             user=self.user,
             payment_purpose=PaymentPurpose.ACTIVATION_FEE,

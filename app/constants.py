@@ -3,7 +3,7 @@ from decimal import Decimal, ROUND_HALF_UP
 APP_NAME = "servio"
 APP_VERSION = "v1.2"
 
-APP_SUBSCRIPTION_FEE = 40
+APP_SUBSCRIPTION_FEE = 20
 USD_TO_NGN_RATE = Decimal("1400")
 
 DECIMAL_PLACE = 0.01

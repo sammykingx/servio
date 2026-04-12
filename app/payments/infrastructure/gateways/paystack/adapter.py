@@ -12,17 +12,25 @@ import json, requests
 
 
 class PaystackAdapter(PaymentGateway):
-    create_payment_endpoint = "https://api.paystack.co/transaction/initialize"
-    verify_payment_endpoint = "https://api.paystack.co/transaction/verify/{reference}"
+    BASE_URL = "https://api.paystack.co"
 
     def __init__(self):
         self.secret_key = config("PAYSTACK_TEST_SECRET_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_SECRET_KEY")
         self.public_key = config("PAYSTACK_TEST_PUBLIC_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_PUBLIC_KEY")
         self.callback_url = config("PAYSTACK_CALLBACK_URL")
+        self.timeout = (5, 17) # (Connect Timeout, Read Timeout)
 
         if not all([self.secret_key, self.public_key, self.callback_url]):
             raise ValueError("Paystack configuration is incomplete. Please check your environment variables.")
 
+    @property
+    def create_payment_endpoint(self) -> str:
+        return f"{self.BASE_URL}/transaction/initialize"
+
+    @property
+    def verify_payment_endpoint(self) -> str:
+        return f"{self.BASE_URL}/transaction/verify/{{reference}}"
+    
     def _get_headers(self):
         """Helper method to construct headers for Paystack API requests."""
         
@@ -44,7 +52,7 @@ class PaystackAdapter(PaymentGateway):
                 self.create_payment_endpoint,
                 headers=self._get_headers(),
                 json=json.loads(json.dumps(data, default=str)),
-                timeout=(5, 13),
+                timeout=self.timeout,
             )
             response.raise_for_status()
             return response.json()
@@ -74,13 +82,12 @@ class PaystackAdapter(PaymentGateway):
                 # }
             # }
 
-    def verify_payment(self, reference):
-
+    def verify_payment(self, reference: str):
         response = requests.get(
             self.verify_payment_endpoint.format(reference=reference),
             headers=self._get_headers(),
+            timeout=self.timeout,
         )
-
         return response.json()
 
     def refund(self, reference, amount):

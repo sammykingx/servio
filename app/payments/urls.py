@@ -22,7 +22,7 @@ urlpatterns = [
     ),
     path(
         "user-subscription/switch-currency/", 
-        TemplateView.as_view(template_name=Payments.Checkouts.SUBSCRIPTION_CHECKOUT_CURRENCY), 
+        TemplateView.as_view(template_name=Payments.Checkouts.SUBSCRIPTION_CHECKOUT_CURRENCY),
         name=PaymentURLS.SUBSCRIPTION_CHECKOUT_OPTION
     ),
     path(

@@ -1,5 +1,6 @@
 {% extends "layouts/base-checkout.html" %}
 {% load static %}
+{% load humanize %}
 {% block browser_title %}Select Checkout Currency{% endblock %}
 {% block body_content %}
     <main class="max-w-4xl mx-auto px-6 py-12 lg:py-18">
@@ -38,7 +39,7 @@
                     
                     <div class="mt-auto">
                         <div class="text-3xl font-bold text-gray-800 dark:text-white mb-1">
-                            ₦62,000.00 <span class="text-sm font-normal text-gray-500">NGN</span>
+                            ₦{{ NGN_SUBSCRIPTION_FEE|intcomma }} <span class="text-sm font-normal text-gray-500">NGN</span>
                         </div>
                         <p class="text-[10px] text-gray-400 uppercase tracking-tighter mb-6">Converted from $40.00 USD</p>
                         
