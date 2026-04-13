@@ -8,6 +8,7 @@ from payments.domain.errors import PaymentFailure
 from core.url_names import PaymentURLS
 from decouple import config
 from requests.exceptions import Timeout, RequestException
+from core.url_names import PaymentURLS
 import json, requests
 
 
@@ -17,7 +18,7 @@ class PaystackAdapter(PaymentGateway):
     def __init__(self):
         self.secret_key = config("PAYSTACK_TEST_SECRET_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_SECRET_KEY")
         self.public_key = config("PAYSTACK_TEST_PUBLIC_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_PUBLIC_KEY")
-        self.callback_url = config("PAYSTACK_CALLBACK_URL")
+        self.callback_url = reverse_lazy(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
         self.timeout = (5, 17) # (Connect Timeout, Read Timeout)
 
         if not all([self.secret_key, self.public_key, self.callback_url]):
@@ -55,6 +56,7 @@ class PaystackAdapter(PaymentGateway):
                 timeout=self.timeout,
             )
             response.raise_for_status()
+            print(response.json())
             return response.json()
         
         except Timeout:

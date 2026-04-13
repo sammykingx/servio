@@ -98,6 +98,7 @@ class PaymentService:
         ).first()
         # if status is pending then verify
         if existing:
+            print("exisiting")
             return existing
         
         self.amount_in_decimal, self.amount_in_minor_units = self.get_subscription_fee()

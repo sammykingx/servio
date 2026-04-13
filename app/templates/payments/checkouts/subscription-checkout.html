@@ -81,6 +81,7 @@
     </div>
 </main>
 {% endcomment %}
+
 <main class="relative max-w-4xl mx-auto px-6 py-12 lg:py-18 overflow-hidden" x-data="{ status: 'Initializing secure connection...' }">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-brand-500/5 dark:bg-brand-500/10 blur-[120px] pointer-events-none"></div>
 
@@ -116,7 +117,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full space-y-6 text-center">
+                    <div id="payment-container" data-reference="{{ reference }}" data-provider="{{ provider }}" data-enpoint="{% url PAYMENT_URLS.SUBSCRIPTION_CHECKOUT provider %}" data-verifcationURL="{% url PAYMENT_URLS.PAYMENT_VERIFICATION gateway=provider %}" class="w-full space-y-6 text-center">
                         <div class="space-y-2">
                             <p class="text-sm font-medium text-slate-900 dark:text-white transition-all duration-500" x-text="status">
                                 Authenticating session...
@@ -127,19 +128,25 @@
                         </div>
 
                         <div class="bg-slate-50 dark:bg-black/20 rounded-2xl p-4 border border-slate-100 dark:border-white/5">
+                            {% csrf_token %}
                             <div class="flex flex-col gap-2">
                                 <div class="flex items-center justify-between text-[10px] font-medium uppercase tracking-widest opacity-50">
                                     <span class="text-gray-600 dark:text-gray-300">Network Log</span>
                                     <span class="text-green-500 dark:text-emerald-400">Live</span>
                                 </div>
-                                <div class="text-[10px] font-mono text-slate-400 text-left space-y-1">
+                                <!-- <div class="text-[10px] font-mono text-slate-400 text-left space-y-1">
                                     <p class="flex items-center gap-2">
                                         <span class="text-emerald-500">●</span> POST /api/v1/initialize ... 200 OK
                                     </p>
                                     <p class="flex items-center gap-2 animate-pulse">
                                         <span class="text-brand-500">●</span> Requesting access_code from Paystack...
                                     </p>
-                                </div>
+                                </div> -->
+                                <div 
+                                    id="network-log" 
+                                    class="text-[10px] font-mono text-slate-400 text-left 
+                                        space-y-1 max-h-32 overflow-y-auto"
+                                ></div>
                             </div>
                         </div>
                     </div>
@@ -170,4 +177,29 @@
         100% { width: 100%; transform: translateX(100%); }
     }
 </style>
+{% endblock %}
+{% block js_files %}
+<script src="https://js.paystack.co/v2/inline.js"></script>
+<script src="{% static 'js/gateways/paystack.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById("payment-container");
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+        const config = {
+            reference: container.dataset.reference,
+            provider: container.dataset.provider,
+            endpoint: container.dataset.endpoint,
+            verifcationURL: container.dataset.verifcationURL,
+            logContainer: document.getElementById('network-log'),
+            csrfToken,
+        };
+
+        if (config.reference && config.csrfToken && config.endpoint && config.verifcationURL && config.logContainer) {
+            new PaystackOrchestrator(config);
+        }
+    });
+    const popup = new PaystackPop()
+    // popup.resumeTransaction(access_code)
+   
+</script>
 {% endblock %}

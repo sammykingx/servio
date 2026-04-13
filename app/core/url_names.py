@@ -109,6 +109,7 @@ class PaymentURLS:
     PAY_SUBSCRIPTION = "pay_subscriptions"
     SUBSCRIPTION_CHECKOUT_OPTION = "subscription_checkout_option"
     SUBSCRIPTION_CHECKOUT = "subscription_checkout"
+    PAYMENT_VERIFICATION = "payment_verification"
     CANCELLED_PAYMENT_CHECKOUT = "cancelled_payment_checkout"
     GIG_PAYMENT_SUMMARY = "gig_payment_summary"
     SELECT_GIG_PAYMENT_METHOD = "process_gig_payment"

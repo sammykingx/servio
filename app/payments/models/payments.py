@@ -22,6 +22,26 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    def to_dict(self) -> dict:
+        return {
+            "id": str(self.id),
+            "user": self.user.email if self.user else None,
+            "reference": self.reference,
+            "gateway_reference": self.gateway_reference,
+            "amount_decimal": str(self.amount_decimal),
+            "amount_in_minor_units": self.amount_in_minor_units,
+            "currency": self.currency,
+            "payment_type": self.payment_type,
+            "payment_purpose": self.payment_purpose,
+            "status": self.status,
+            "gateway": self.gateway,
+            "gateway_response": self.gateway_response,
+            "is_processed": self.is_processed,
+            "metadata": self.metadata,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
+    
     class Meta:
         db_table = "payments_ledger"
         verbose_name = "Payment Ledger"

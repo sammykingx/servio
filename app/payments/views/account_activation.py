@@ -1,16 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http.response import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import View
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from core.url_names import AuthURLNames,PaymentURLS
-from payments.services.payment_service import PaymentService
+from formatters.pydantic_formatter import format_pydantic_errors
 from payments.domain.enums import RegisteredPaymentProvider
 from payments.domain.exceptions import DomainException
-from payments.schemas.payments import PaymentRequest
-from template_map.payments import Payments
 from payments.infrastructure.registry import GATEWAYS
-from payments.infrastructure.gateways.paystack.adapter import PaystackAdapter
-from constants import USD_TO_NGN_RATE
+from payments.schemas.paystack import InitializePaymentPayload, PaystackInitializeAPIResponse
+from payments.services.payment_service import PaymentService
+from template_map.payments import Payments
+from pydantic import ValidationError
+import json
 
 
 
@@ -21,62 +23,64 @@ class AccountActivationView(LoginRequiredMixin, View):
         provider = kwargs.get("gateway")
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
-        return render(request, self.template_name)
+        payment_obj = PaymentService(provider, self.request.user).get_or_create_activation_payment()
+        context = {
+            "provider": payment_obj.gateway,
+            "reference": payment_obj.reference,
+        }
+        return render(request, self.template_name, context=context)
     
     def post(self, request, *args, **kwargs):
         try:
-            provider = kwargs.get("gateway")
-            payment_service = PaymentService(provider, self.request.user)
+            payload = InitializePaymentPayload(**json.loads(request.body))
+            payment_service = PaymentService(payload.provider, self.request.user)
             resp = payment_service.process_one_time_payment()
-            if provider == RegisteredPaymentProvider.PAYSTACK.value:
-                checkout_url = resp["data"]["authorization_url"]
-                return redirect(checkout_url)
+            if payload.provider == RegisteredPaymentProvider.PAYSTACK.value:
+                response_data = PaystackInitializeAPIResponse(
+                    status=resp.get("status", True),
+                    title=resp.get("messge", "Checkout URL ready"),
+                    message="Payment initialized successfully",
+                    data=resp.get("data", {})
+                )
+                return JsonResponse(response_data.model_dump(), status=200)
                 # https://checkout.paystack.com/u4j84p5z4jd6krf
                 # try to cancell and see if it will resume again
 
+        except json.JSONDecodeError:
+            err = PaystackInitializeAPIResponse(
+                status=False,
+                title="Invalid JSON payload",
+                message="Invalid data format",
+                response_type="warning",
+            )
+            return JsonResponse(err.model_dump(), status=400)
+        
+        except ValidationError as e:
+            fields = format_pydantic_errors(e),
+            print(fields)
+            err = PaystackInitializeAPIResponse(
+                status=False,
+                title="Validation error",
+                message="Some required information is missing or invalid.",
+                response_type="warning",
+            )
+            return JsonResponse(err.model_dump(), status=400)
+                
         except DomainException as e:
-            print(e)
-            # Handle domain exceptions gracefully
-            toast = {
-                "toast": {
-                "message": e.message,
-                "code": e.code,
-                "title": e.title,
-                "type": e.type or "error"
-                }
-            }
-            return render(request, self.template_name, context=toast)
+            err = PaystackInitializeAPIResponse(
+                status=False,
+                title=e.title,
+                message=e.message,
+                response_type=e.type,
+            )
+            return JsonResponse(err.model_dump(), status=400)
         
         except Exception as e:
-            # Handle unexpected exceptions
             print(f"Unexpected error during payment processing: {str(e)}")
-            toast = {
-                "toast": {
-                "message": "An unexpected error occurred while processing your payment. Please try again later.",
-                "code": "unexpected_error",
-                "title": "Payment Error",
-                "type": "error"
-                }
-            }
-            return render(request, self.template_name, context=toast)
-        # payment service intiailize the getway based 
-        # on the users location and currency default to usd
-        print("succes")
-        
-        return render(request, self.template_name)
-    
-    # def post(self, request, *args, **kwargs):
-    #     pass
-    
-    # def dispatch(self, request, *args, **kwargs):
-    #     if not request.user.is_authenticated:
-    #         return redirect(reverse_lazy(AuthURLNames.LOGIN))
-    #     return super().dispatch(self, request,)
-    
-    # def amount_in_minor_units(self, amount, gateway: str):
-    #     """Converts a decimal amount to minor units based on the currency."""
-    #     if gateway == RegisteredPaymentProvider.PAYSTACK.value:
-    #         ngn_amount = amount * USD_TO_NGN_RATE
-    #         return int(ngn_amount * 100)
-    #     return int(amount * 100)
-            
+            err = PaystackInitializeAPIResponse(
+                status=False,
+                title="Payment Error",
+                message="An unexpected error occurred while processing your payment. Please try again later.",
+                response_type="error",
+            )
+            return JsonResponse(err.model_dump(), status=500)

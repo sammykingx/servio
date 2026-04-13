@@ -29,4 +29,5 @@ class Payments:
         SUBSCRIPTION_CHECKOUT = f"{__SUB_FOLDER}/subscription-checkout.html"
         SUBSCRIPTION_CHECKOUT_CANCELLED = f"{__SUB_FOLDER}/cancelled-subscription-checkout.html"
         UNREGISTERED_GATEWAY = f"{__SUB_FOLDER}/unregistered-gateway.html"
+        PAYMENT_VERIFICATION = f"{__SUB_FOLDER}/payment-verification.html"
         

@@ -58,9 +58,6 @@
 		{% endblock %}
 	</body>
 	<script src="{% static 'js/center-alert.js' %}"></script>
-	{% if toast %}
-		{{ toast|json_script:"toast-data" }}
-	{% endif %}
 	<script>
 		const themeToggleBtn = document.getElementById('theme-toggle');
 		const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -102,14 +99,6 @@
 				}
 			}
 		});
-	</script>
-	<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			const el = document.getElementById("toast-data");
-			if (!el) return;
-			const toast = JSON.parse(el.textContent);
-			showToast(toast.message, toast.type, toast.title);
-		})
 	</script>
 	{% block js_files %}{% endblock %}
 </html>
