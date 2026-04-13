@@ -5,7 +5,7 @@ from typing import Dict, Any
 from decimal import Decimal
 
 
-class PaymentRequest(BaseModel):
+class PaymentGatewayRequest(BaseModel):
     """
     Standardized schema for payment initialization across all gateways.
 
@@ -22,12 +22,9 @@ class PaymentRequest(BaseModel):
         idm_key (str): A unique idempotency key. Used to ensure that 
             retried requests do not result in duplicate charges.
         currency (str): The ISO 4217 three-letter currency code. Defaults to "USD".
-        metadata (Dict[str, Any]): A flexible dictionary for gateway-specific 
-            parameters or additional context (e.g., custom cart data).
     """
     email: EmailStr = Field(..., description="Customer's email address")
     amount: int = Field(..., gt=0, description="Amount in smallest unit (e.g kobo, cents)")
     reference: str = Field(..., min_length=19, max_length=19, description="Unique reference for the transaction")
-    # idm_key: str = Field(..., description="Idempotency key to prevent double charging")
     currency: str = Field(default="USD", min_length=3, max_length=3)
     

@@ -2,11 +2,11 @@
 
 class DomainException(Exception):
     """Base class for all business logic errors."""
-    def __init__(self, message: str,*, code: str, title: str, type: str = "warning"):
+    def __init__(self, message: str,*, code: str, title: str, err_type: str = "warning"):
         self.message = message
         self.code = code
         self.title = title
-        self.type = type
+        self.err_type = err_type
         super().__init__(self.message)
 
 class PolicyViolationError(DomainException):

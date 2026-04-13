@@ -2,7 +2,7 @@
 
 from django.urls import reverse_lazy
 from payments.domain.contracts import PaymentGateway
-from payments.schemas.payments import PaymentRequest
+from payments.schemas.payments import PaymentGatewayRequest
 from payments.domain.exceptions import PaymentGatewayError
 from payments.domain.errors import PaymentFailure
 from core.url_names import PaymentURLS
@@ -42,8 +42,8 @@ class PaystackAdapter(PaymentGateway):
         
         return headers
     
-    def create_payment(self, payload: PaymentRequest):
-        data = PaymentRequest.model_dump(payload)
+    def create_payment(self, payload: PaymentGatewayRequest):
+        data = PaymentGatewayRequest.model_dump(payload)
         data["callback_url"] = self.callback_url
         data["metadata"] = {"cancel_action": reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT)}
         # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
@@ -64,7 +64,6 @@ class PaystackAdapter(PaymentGateway):
                 "Payment service timed out. Please try again later.",
                 code=PaymentFailure.GATEWAY_TIMEOUT.code,
                 title=PaymentFailure.GATEWAY_TIMEOUT.title,
-                type="warning"
             )
         
         except RequestException as e:
@@ -72,7 +71,7 @@ class PaystackAdapter(PaymentGateway):
                 f"Connection error: {str(e)}",
                 code=PaymentFailure.GATEWAY_ERROR.code,
                 title=PaymentFailure.GATEWAY_ERROR.title,
-                type="error"
+                err_type="error"
             )
         # {
             # 'status': True, 

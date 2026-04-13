@@ -25,11 +25,14 @@ class PaymentFailure:
         "GATEWAY_TIMEOUT", "Payment Gateway Timed Out"
     )
     GATEWAY_ERROR = FailureDetail(
-        "GATEWAY_ERROR", "Payment Gateway Temporarily Unavailable"
+        "GATEWAY_ERROR", "Gateway Temporarily Unavailable"
     )
     INVALID_PAYMENT_DATA = FailureDetail(
         "INVALID_PAYMENT_DATA", 
         "Incomplete Payment Information"
+    )
+    INVALID_REFERENCE = FailureDetail(
+        "INVALID_REFERENCE", "Invalid Payment Reference"
     )
     ALREADY_PROCESSED = FailureDetail(
         "ALREADY_PROCESSED", "Payment Already Received"

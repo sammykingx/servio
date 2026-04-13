@@ -4,17 +4,18 @@
  */
 class PaystackOrchestrator {
     constructor(config) {
+        this.status = config.status,
         this.reference = config.reference;
         this.provider = config.provider;
         this.csrfToken = config.csrfToken;
         this.backendURL = config.endpoint;
-        this.verifcationURL = config.verifcationURL,
+        this.verifcationURL = config.verifcationURL;
+        this.summaryURL = config.summaryURL;
         this.logContainer = config.logContainer || document.getElementById('network-log');
 
         this.init();
     }
 
-    // Helper to update the UI "Network Log"
     updateLog(message, status = 'pending') {
         const p = document.createElement('p');
         p.className = 'flex items-center gap-2 transition-all duration-300';
@@ -32,6 +33,11 @@ class PaystackOrchestrator {
 
     async init() {
         this.updateLog(`Starting checkout for ${this.provider}...`, 'success');
+        if (this.status === "success") {
+            this.updateLog(`Checkout complete for ${this.provider}...`, 'success');
+            window.location.assign(this.summaryURL);
+            return;
+        }
 
         try {
             this.updateLog(`POST /api/v1/initialize ... requesting access_code`, 'pending');

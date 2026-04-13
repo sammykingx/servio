@@ -23,10 +23,11 @@ class AccountActivationView(LoginRequiredMixin, View):
         provider = kwargs.get("gateway")
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
-        payment_obj = PaymentService(provider, self.request.user).get_or_create_activation_payment()
+        payment_obj = PaymentService(provider, self.request.user).get_or_initiate_activation_payment()
         context = {
             "provider": payment_obj.gateway,
             "reference": payment_obj.reference,
+            "status": payment_obj.status,
         }
         return render(request, self.template_name, context=context)
     
@@ -34,7 +35,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         try:
             payload = InitializePaymentPayload(**json.loads(request.body))
             payment_service = PaymentService(payload.provider, self.request.user)
-            resp = payment_service.process_one_time_payment()
+            resp = payment_service.process_one_time_payment(payload.reference)
             if payload.provider == RegisteredPaymentProvider.PAYSTACK.value:
                 response_data = PaystackInitializeAPIResponse(
                     status=resp.get("status", True),
@@ -71,7 +72,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 status=False,
                 title=e.title,
                 message=e.message,
-                response_type=e.type,
+                response_type=e.err_type,
             )
             return JsonResponse(err.model_dump(), status=400)
         
