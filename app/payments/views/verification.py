@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic import View
 from payments.infrastructure.registry import GATEWAYS
@@ -6,7 +5,7 @@ from payments.services.payment_service import PaymentService
 from template_map.payments import Payments
 
 
-class PaymentVerificationView(LoginRequiredMixin, View):
+class PaymentVerificationView(View):
     template_name = Payments.Checkouts.PAYMENT_VERIFICATION
     
     def get(self, request, *args, **kwargs):

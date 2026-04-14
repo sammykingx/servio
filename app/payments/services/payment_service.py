@@ -118,6 +118,8 @@ class PaymentService:
 
         if existing_payment:
             return existing_payment
+        
+        # can continue failed or cancelled payments so long it's within 6h
 
         amount_in_decimal, amount_in_minor_units = self.get_subscription_fee()
         payment_reference = self.generate_payment_reference()

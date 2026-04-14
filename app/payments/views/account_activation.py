@@ -2,10 +2,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from core.url_names import AuthURLNames,PaymentURLS
 from formatters.pydantic_formatter import format_pydantic_errors
-from payments.domain.enums import RegisteredPaymentProvider
+from payments.domain.enums import RegisteredPaymentProvider, PaymentStatus
 from payments.domain.exceptions import DomainException
 from payments.infrastructure.registry import GATEWAYS
 from payments.schemas.paystack import InitializePaymentPayload, PaystackInitializeAPIResponse
@@ -27,8 +27,9 @@ class AccountActivationView(LoginRequiredMixin, View):
         context = {
             "provider": payment_obj.gateway,
             "reference": payment_obj.reference,
-            "status": payment_obj.status,
         }
+        if payment_obj.status == PaymentStatus.SUCCESS:
+            return redirect(reverse_lazy(PaymentURLS.CHECKOUT_COMPLETE, kwargs=context))
         return render(request, self.template_name, context=context)
     
     def post(self, request, *args, **kwargs):

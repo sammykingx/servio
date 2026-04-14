@@ -27,7 +27,8 @@ class Payments:
         
         SUBSCRIPTION_CHECKOUT_CURRENCY = f"{__SUB_FOLDER}/subcription-checkout-currency.html"
         SUBSCRIPTION_CHECKOUT = f"{__SUB_FOLDER}/subscription-checkout.html"
-        SUBSCRIPTION_CHECKOUT_CANCELLED = f"{__SUB_FOLDER}/cancelled-subscription-checkout.html"
+        CHECKOUT_CANCELLED = f"{__SUB_FOLDER}/cancelled-checkout.html"
         UNREGISTERED_GATEWAY = f"{__SUB_FOLDER}/unregistered-gateway.html"
         PAYMENT_VERIFICATION = f"{__SUB_FOLDER}/payment-verification.html"
+        PAYMENT_RESULT = f"{__SUB_FOLDER}/payment-result.html"
         

@@ -4,7 +4,19 @@
  */
 class PaystackOrchestrator {
     constructor(config) {
-        this.status = config.status,
+        const requiredFields = ['status', 'reference', 'provider', 'csrfToken', 'endpoint', 'verifcationURL', 'summaryURL'];
+        const missing = requiredFields.filter(field => !config[field]);
+
+        if (missing.length > 0) {
+            showToast(
+                'Missing required initialization data fields',
+                'warning',
+                'Config Error',
+            );
+            return;
+        }
+
+        this.status = config.status;
         this.reference = config.reference;
         this.provider = config.provider;
         this.csrfToken = config.csrfToken;
@@ -17,6 +29,8 @@ class PaystackOrchestrator {
     }
 
     updateLog(message, status = 'pending') {
+        if (!this.logContainer) return;
+
         const p = document.createElement('p');
         p.className = 'flex items-center gap-2 transition-all duration-300';
 
