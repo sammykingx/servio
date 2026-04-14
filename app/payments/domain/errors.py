@@ -16,7 +16,7 @@ class FailureDetail(NamedTuple):
   
 class PaymentFailure:
     UNSUPPORTED_PROVIDER = FailureDetail(
-        "UNSUPPORTED_PROVIDER", "Payment Method Not Supported"
+        "UNSUPPORTED_PROVIDER", "Payment Gateway Not Supported"
     )
     PROVIDER_NOT_CONFIGURED = FailureDetail(
         "PROVIDER_NOT_CONFIGURED", "Gateway Configuration Missing"
@@ -26,6 +26,10 @@ class PaymentFailure:
     )
     GATEWAY_ERROR = FailureDetail(
         "GATEWAY_ERROR", "Gateway Temporarily Unavailable"
+    )
+    INITIATION_SYNC_FAILED = FailureDetail(
+        code="CHECKOUT_SYNC_ISSUE",
+        title="Checkout Sync Issue"
     )
     INVALID_PAYMENT_DATA = FailureDetail(
         "INVALID_PAYMENT_DATA", 
@@ -40,3 +44,7 @@ class PaymentFailure:
     AUTHENTICATION_REQUIRED = FailureDetail(
         "AUTHENTICATION_REQUIRED", "User Session Invalid"
     )
+    
+    # ------ DB RELATED ------
+    SERVER_BUSY = FailureDetail("PROCESSING_IN_PROGRESS", "Processing in Progress")
+    DATA_SYNC_CONFLICT = FailureDetail("SYNC_CONFLICT", "Sync Conflict")

@@ -4,7 +4,7 @@
  */
 class PaystackOrchestrator {
     constructor(config) {
-        const requiredFields = ['status', 'reference', 'provider', 'csrfToken', 'endpoint', 'verifcationURL', 'summaryURL'];
+        const requiredFields = ['status', 'reference', 'provider', 'csrfToken', 'endpoint', 'verificationURL', 'summaryURL'];
         const missing = requiredFields.filter(field => !config[field]);
 
         if (missing.length > 0) {
@@ -21,7 +21,7 @@ class PaystackOrchestrator {
         this.provider = config.provider;
         this.csrfToken = config.csrfToken;
         this.backendURL = config.endpoint;
-        this.verifcationURL = config.verifcationURL;
+        this.verificationURL = config.verificationURL;
         this.summaryURL = config.summaryURL;
         this.logContainer = config.logContainer || document.getElementById('network-log');
 
@@ -55,6 +55,7 @@ class PaystackOrchestrator {
 
         try {
             this.updateLog(`POST /api/v1/initialize ... requesting access_code`, 'pending');
+
             const response = await fetch(this.backendURL, {
                 method: 'POST',
                 headers: {
@@ -70,7 +71,15 @@ class PaystackOrchestrator {
             const data = await response.json();
 
             if (response.ok && data.access_code) {
+                this.updateLog(`200 OK: ${data.message}`, 'success');
+                await sleep(1000); // 1 second pause
+
                 this.updateLog('200 OK: Access code received, preparing ...', 'success');
+                await sleep(1000);
+
+                this.updateLog(`200 OK: ${data.title}`, 'success');
+                await sleep(1000);
+
                 this.launchPopup(data.access_code);
             } else {
                 showToast(
@@ -87,80 +96,19 @@ class PaystackOrchestrator {
     }
 
     launchPopup(access_code) {
-        this.updateLog(`Launching Paystack Secure Popup...`, 'success');
+        this.updateLog(`Starting Paystack Checkout...`, 'success');
 
         const popup = new PaystackPop();
         popup.resumeTransaction(access_code, {
             onSuccess: (transaction) => {
                 this.updateLog(`Payment Successful! Ref: ${transaction.reference}`, 'success');
                 // Redirect to a success page or refresh
-                window.location.href = `${this.verifcationURL}?trxref=${transaction.reference}`;
+                window.location.href = `${this.verificationURL}?trxref=${transaction.reference}`;
             },
             onCancel: () => {
+                console.log("User cancelled session");
                 this.updateLog(`User cancelled payment session.`, 'error');
             }
         });
     }
 }
-
-
-
-// class PaystackOrchestrator {
-//     constructor(config) {
-//         this.reference = config.reference;
-//         this.provider = config.provider;
-//         this.backendURL = config.backendURL; // Your backend POST endpoint
-//         this.csrfToken = config.csrfToken;
-
-//         // State for UI tracking
-//         this.status = 'idle'; // idle, initializing, ready, failed
-//         this.error = null;
-//         this.accessCode = null;
-
-//         // Callback for UI updates (ideal for Alpine.js)
-//         this.onStateChange = config.onStateChange || (() => { });
-//     }
-
-//     updateState(newState, extra = {}) {
-//         this.status = newState;
-//         if (extra.error) this.error = extra.error;
-//         if (extra.accessCode) this.accessCode = extra.accessCode;
-//         this.onStateChange(this);
-//     }
-
-//     async initializePayment() {
-//         this.updateState('initializing');
-
-//         try {
-//             const response = await fetch(this.backendURL, {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'X-CSRFToken': this.csrfToken,
-//                 },
-//                 body: JSON.stringify({
-//                     reference: this.reference,
-//                     provider: this.provider,
-//                     // Add other data you decide on later here
-//                 })
-//             });
-
-//             const data = await response.json();
-
-//             if (response.ok && data.access_code) {
-//                 this.updateState('ready', { accessCode: data.access_code });
-//                 this.launchPopup(data.access_code);
-//             } else {
-//                 throw new Error(data.message || 'Initialization failed');
-//             }
-//         } catch (err) {
-//             this.updateState('failed', { error: err.message });
-//             console.error("Paystack Init Error:", err);
-//         }
-//     }
-
-//     launchPopup(accessCode) {
-//         const popup = new PaystackPop();
-//         popup.resumeTransaction(accessCode);
-//     }
-// }

@@ -117,7 +117,7 @@
                         </div>
                     </div>
 
-                    <div id="payment-container" data-status="{{ status }}" data-reference="{{ reference }}" data-provider="{{ provider }}" data-enpoint="{% url PAYMENT_URLS.SUBSCRIPTION_CHECKOUT provider %}" data-verifcationURL="{% url PAYMENT_URLS.PAYMENT_VERIFICATION gateway=provider %}" data-summaryURL="{% PAYMENT_URLS.USER_PAYMENT_SUMMARY %}" class="w-full space-y-6 text-center">
+                    <div id="payment-container" data-status="{{ status }}" data-reference="{{ reference }}" data-provider="{{ provider }}" data-endpoint="{% url PAYMENT_URLS.SUBSCRIPTION_CHECKOUT provider %}" data-verification-URL="{% url PAYMENT_URLS.PAYMENT_VERIFICATION gateway=provider %}" data-summary-URL="{% url PAYMENT_URLS.USER_PAYMENT_SUMMARY %}" class="w-full space-y-6 text-center">
                         <div class="space-y-2">
                             <p class="text-sm font-medium text-slate-900 dark:text-white transition-all duration-500" x-text="status">
                                 Authenticating session...
@@ -190,17 +190,23 @@
             reference: container.dataset.reference,
             provider: container.dataset.provider,
             endpoint: container.dataset.endpoint,
-            verifcationURL: container.dataset.verifcationURL,
-            summaryURL: container.dataset.summaryURL,
+            verificationURL: container.dataset.verificationUrl,
+            summaryURL: container.dataset.summaryUrl,
             logContainer: document.getElementById('network-log'),
             csrfToken,
         };
 
-        if (config.reference && config.csrfToken && config.endpoint && config.verifcationURL && config.summaryURL && config.logContainer) {
+        if (config.reference && config.csrfToken && config.endpoint && config.verificationURL && config.summaryURL && config.logContainer) {
             new PaystackOrchestrator(config);
+        } else {
+            showToast(
+                "The checkout page didn't load all the necessary details.",
+                "warning",
+                "Page Config Error",
+            );
         }
     });
-    const popup = new PaystackPop()
+    // const popup = new PaystackPop()
     // popup.resumeTransaction(access_code)
    
 </script>

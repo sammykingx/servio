@@ -1,10 +1,10 @@
 # Core orchestration logic for processing payments regradless of gateway.
 
-from django.http import HttpResponseRedirect
 from django.contrib.auth.models import AbstractUser
+from django.db import transaction, IntegrityError, OperationalError
 from payments.infrastructure.registry import GATEWAYS
 from payments.domain.enums import RegisteredPaymentProvider, PaymentPurpose, PaymentStatus, PaymentType
-from payments.domain.exceptions import DomainException, PolicyViolationError
+from payments.domain.exceptions import DomainException, PolicyViolationError, PaymentPersistenceError
 from payments.domain.errors import PaymentFailure
 from payments.domain.policies import PaymentPolicy
 from payments.models.payments import Payment
@@ -12,6 +12,10 @@ from payments.schemas.payments import PaymentGatewayRequest
 from nanoid import generate
 from pydantic import ValidationError
 from typing import Dict, Union
+import logging
+
+
+logger = logging.getLogger("app_file")
 
 
 class PaymentService:
@@ -55,6 +59,33 @@ class PaymentService:
                 title=PaymentFailure.INVALID_PAYMENT_DATA.title,
             )
             
+    def _get_gateway_data(self, gateway_name: str, gw_resp: dict) -> Dict[str, str]:
+        """
+        Private helper to normalize gateway responses into a standard format.
+        """
+        extractors = {
+            RegisteredPaymentProvider.PAYSTACK: lambda resp: {
+                "ref": resp.get("data", {}).get("access_code"),
+                "msg": resp.get("message"),
+            },
+            
+            # RegisteredPaymentProvider.STRIPE: lambda resp: {
+            #     "ref": resp.get("id"),
+            #     "msg": resp.get("status")
+            # },
+        }
+
+        extractor = extractors.get(gateway_name)
+        if not extractor:
+            raise DomainException(
+                "This payment provider is not supported at the moment. Please try a different provider.",
+                code=PaymentFailure.UNSUPPORTED_PROVIDER.code,
+                title=PaymentFailure.UNSUPPORTED_PROVIDER.title,
+                err_type="error",
+            )
+            
+        return extractor(gw_resp)
+            
     def generate_payment_reference(self) -> str:
         safe_characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         ref_id = f"SRV-{generate(safe_characters, 15)}"
@@ -81,21 +112,51 @@ class PaymentService:
         """Retrieves a payment or returns None using filter/first for brevity."""
         return Payment.objects.filter(user=self.user, reference=reference).first()
 
-    def sync_gateway_with_payment(self, ref: str) -> None:
+    def resolve_gateway_provider(self, payment_obj:Payment) -> None:
         """
             Synchronizes the active gateway instance with the provider stored in the payment record.
             
             If the payment exists and its gateway differs from the current provider, 
             it re-initializes self.gateway to the correct provider class.
         """
-        payment_obj = self.get_payment_obj(ref)
-        if not payment_obj:
-            return
-        
         if payment_obj.gateway != self.provider:
             gateway_class = GATEWAYS.get(payment_obj.gateway)
             if gateway_class:
                 self.gateway = gateway_class()
+                
+    @transaction.atomic            
+    def sync_gateway_data(self, payment: Payment, gw_resp: dict):
+        """
+        Synchronizes the local Payment record with the response from the provider.
+        """
+        
+        try:
+            payment = Payment.objects.select_for_update().get(pk=payment.pk)
+            data = self._get_gateway_data(payment.gateway, gw_resp)
+
+            payment.gateway_reference = data.get("ref")
+            payment.gateway_response = data.get("msg")
+            payment.metadata = gw_resp
+                
+            payment.save(update_fields=["gateway_reference", "gateway_response", "metadata", "updated_at"])
+          
+        except OperationalError:
+            raise PaymentPersistenceError(
+                "We're still finishing up your previous request. Please wait a moment while we sync your checkout details.",
+                code=PaymentFailure.SERVER_BUSY.code,
+                title=PaymentFailure.SERVER_BUSY.title,
+            )
+          
+        except IntegrityError:
+            raise PaymentPersistenceError(
+                "We’re having trouble syncing gateway response to our system. No funds have been moved, please try again or contact support.",
+                code=PaymentFailure.DATA_SYNC_CONFLICT.code,
+                title=PaymentFailure.DATA_SYNC_CONFLICT.title,
+            )
+        
+        except Exception as err:
+            logger.error(err)
+            raise err  
     
     def get_or_initiate_activation_payment(self) -> Payment:
         """
@@ -136,11 +197,20 @@ class PaymentService:
         )
 
     def process_one_time_payment(self, reference: str) -> Dict[str, str]:
+        print("json")
         payment_obj = self.get_payment_obj(reference)
+        print("json 1")
         PaymentPolicy.validate_for_checkout(payment_obj)
+        print("json 2")
         payload = self._prepare_gateway_payload(payment_obj)
-        self.sync_gateway_with_payment()
-        return self.gateway.create_payment(payload)
+        print("json 3")
+        self.resolve_gateway_provider(payment_obj)
+        print("json 4")
+        resp = self.gateway.create_payment(payload)
+        print("json 5")
+        self.sync_gateway_data(payment_obj, resp)
+        print("json 6")
+        return resp
         # returns the checkout url
 
     def verify(self, reference):

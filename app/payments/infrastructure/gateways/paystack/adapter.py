@@ -19,7 +19,7 @@ class PaystackAdapter(PaymentGateway):
         self.secret_key = config("PAYSTACK_TEST_SECRET_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_SECRET_KEY")
         self.public_key = config("PAYSTACK_TEST_PUBLIC_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_PUBLIC_KEY")
         self.callback_url = reverse_lazy(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
-        self.timeout = (5, 17) # (Connect Timeout, Read Timeout)
+        self.timeout = (7, 30) # (Connect Timeout, Read Timeout)
 
         if not all([self.secret_key, self.public_key, self.callback_url]):
             raise ValueError("Paystack configuration is incomplete. Please check your environment variables.")
@@ -49,13 +49,16 @@ class PaystackAdapter(PaymentGateway):
         # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
         
         try:
+            print("starting request ",  self.create_payment_endpoint)
             response = requests.post(
                 self.create_payment_endpoint,
                 headers=self._get_headers(),
                 json=json.loads(json.dumps(data, default=str)),
                 timeout=self.timeout,
             )
+            print("resp")
             response.raise_for_status()
+            print("respopp")
             print(response.json())
             return response.json()
         

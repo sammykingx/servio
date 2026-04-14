@@ -23,13 +23,17 @@ class AccountActivationView(LoginRequiredMixin, View):
         provider = kwargs.get("gateway")
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
+        
         payment_obj = PaymentService(provider, self.request.user).get_or_initiate_activation_payment()
         context = {
             "provider": payment_obj.gateway,
             "reference": payment_obj.reference,
+            "status": payment_obj.status,
         }
+        
         if payment_obj.status == PaymentStatus.SUCCESS:
             return redirect(reverse_lazy(PaymentURLS.CHECKOUT_COMPLETE, kwargs=context))
+        
         return render(request, self.template_name, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -37,7 +41,8 @@ class AccountActivationView(LoginRequiredMixin, View):
             payload = InitializePaymentPayload(**json.loads(request.body))
             payment_service = PaymentService(payload.provider, self.request.user)
             resp = payment_service.process_one_time_payment(payload.reference)
-            if payload.provider == RegisteredPaymentProvider.PAYSTACK.value:
+            print("json last")
+            if payload.provider == RegisteredPaymentProvider.PAYSTACK:
                 response_data = PaystackInitializeAPIResponse(
                     status=resp.get("status", True),
                     title=resp.get("messge", "Checkout URL ready"),
@@ -46,6 +51,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 )
                 return JsonResponse(response_data.model_dump(), status=200)
                 # https://checkout.paystack.com/u4j84p5z4jd6krf
+                # SRV-jSCgCj9KZ0NehGo
                 # try to cancell and see if it will resume again
 
         except json.JSONDecodeError:

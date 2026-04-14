@@ -16,3 +16,7 @@ class PolicyViolationError(DomainException):
 class PaymentGatewayError(DomainException):
     """Raised for errors related to payment gateway interactions."""
     pass
+
+class PaymentPersistenceError(DomainException):
+    """Raised when the database fails to save or lock payment records."""
+    pass
