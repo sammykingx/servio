@@ -91,14 +91,16 @@
             </div>
         </div>
 
-        <div class="mt-8 md:mt-12 text-center space-y-4 opacity-40">
-            <p class="text-[10px] font-medium uppercase tracking-[0.3em] text-slate-400">A receipt has been sent to your email</p>
-            <div class="flex justify-center gap-6">
-                <button class="hover:text-slate-900 dark:hover:text-white transition-colors"><span class="material-symbols-outlined">print</span></button>
-                <button class="hover:text-slate-900 dark:hover:text-white transition-colors"><span class="material-symbols-outlined">share</span></button>
-                <button class="hover:text-slate-900 dark:hover:text-white transition-colors"><span class="material-symbols-outlined">download</span></button>
+        {% if status == "success" %}
+            <div class="mt-8 md:mt-12 text-center space-y-4 opacity-40">
+                <p class="text-[10px] font-medium uppercase tracking-[0.3em] text-slate-400">A receipt has been sent to your email</p>
+                <div class="flex justify-center gap-6">
+                    <button class="hover:text-slate-900 dark:hover:text-white transition-colors"><span class="material-symbols-outlined">print</span></button>
+                    <button class="hover:text-slate-900 dark:hover:text-white transition-colors"><span class="material-symbols-outlined">share</span></button>
+                    <button class="hover:text-slate-900 dark:hover:text-white transition-colors"><span class="material-symbols-outlined">download</span></button>
+                </div>
             </div>
-        </div>
+        {% endblock %}
     </div>
 </main>
 {% endblock %}

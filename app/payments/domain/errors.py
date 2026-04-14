@@ -21,6 +21,9 @@ class PaymentFailure:
     PROVIDER_NOT_CONFIGURED = FailureDetail(
         "PROVIDER_NOT_CONFIGURED", "Gateway Configuration Missing"
     )
+    DUPLICATE_PAYMENT_REFERENCE = FailureDetail(
+        "DUPLICATE_PAYMENT_REFERENCE", "Checkout Already Started"
+    )
     GATEWAY_TIMEOUT = FailureDetail(
         "GATEWAY_TIMEOUT", "Payment Gateway Timed Out"
     )
@@ -28,8 +31,7 @@ class PaymentFailure:
         "GATEWAY_ERROR", "Gateway Temporarily Unavailable"
     )
     INITIATION_SYNC_FAILED = FailureDetail(
-        code="CHECKOUT_SYNC_ISSUE",
-        title="Checkout Sync Issue"
+        "CHECKOUT_SYNC_ISSUE", "Checkout Sync Issue"
     )
     INVALID_PAYMENT_DATA = FailureDetail(
         "INVALID_PAYMENT_DATA", 

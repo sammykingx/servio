@@ -119,11 +119,11 @@
 
                     <div id="payment-container" data-status="{{ status }}" data-reference="{{ reference }}" data-provider="{{ provider }}" data-endpoint="{% url PAYMENT_URLS.SUBSCRIPTION_CHECKOUT provider %}" data-verification-URL="{% url PAYMENT_URLS.PAYMENT_VERIFICATION gateway=provider %}" data-summary-URL="{% url PAYMENT_URLS.USER_PAYMENT_SUMMARY %}" class="w-full space-y-6 text-center">
                         <div class="space-y-2">
-                            <p class="text-sm font-medium text-slate-900 dark:text-white transition-all duration-500" x-text="status">
-                                Authenticating session...
+                            <p id="payment-status-text" class="text-sm font-medium text-slate-900 dark:text-white transition-all duration-500" x-text="status">
+                                Preparing session...
                             </p>
                             <div class="w-full h-1.5 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden max-w-xs mx-auto">
-                                <div class="h-full bg-brand-500 dark:bg-brand-400 rounded-full animate-[progress_3s_ease-in-out_infinite]" style="width: 40%;"></div>
+                                <div id="payment-progress-bar" class="h-full bg-brand-500 dark:bg-brand-400 rounded-full animate-[progress_3s_ease-in-out_infinite]" style="width: 40%;"></div>
                             </div>
                         </div>
 
@@ -134,14 +134,6 @@
                                     <span class="text-gray-600 dark:text-gray-300">Network Log</span>
                                     <span class="text-green-500 dark:text-emerald-400">Live</span>
                                 </div>
-                                <!-- <div class="text-[10px] font-mono text-slate-400 text-left space-y-1">
-                                    <p class="flex items-center gap-2">
-                                        <span class="text-emerald-500">●</span> POST /api/v1/initialize ... 200 OK
-                                    </p>
-                                    <p class="flex items-center gap-2 animate-pulse">
-                                        <span class="text-brand-500">●</span> Requesting access_code from Paystack...
-                                    </p>
-                                </div> -->
                                 <div 
                                     id="network-log" 
                                     class="text-[10px] font-mono text-slate-400 text-left 
@@ -193,6 +185,8 @@
             verificationURL: container.dataset.verificationUrl,
             summaryURL: container.dataset.summaryUrl,
             logContainer: document.getElementById('network-log'),
+            statusTextEl: document.getElementById('payment-status-text'),
+            progessBarEl: document.getElementById(''),
             csrfToken,
         };
 

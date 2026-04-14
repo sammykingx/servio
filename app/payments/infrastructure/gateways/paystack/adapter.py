@@ -7,7 +7,7 @@ from payments.domain.exceptions import PaymentGatewayError
 from payments.domain.errors import PaymentFailure
 from core.url_names import PaymentURLS
 from decouple import config
-from requests.exceptions import Timeout, RequestException
+from requests.exceptions import HTTPError, Timeout, RequestException
 from core.url_names import PaymentURLS
 import json, requests
 
@@ -19,7 +19,7 @@ class PaystackAdapter(PaymentGateway):
         self.secret_key = config("PAYSTACK_TEST_SECRET_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_SECRET_KEY")
         self.public_key = config("PAYSTACK_TEST_PUBLIC_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_PUBLIC_KEY")
         self.callback_url = reverse_lazy(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
-        self.timeout = (7, 30) # (Connect Timeout, Read Timeout)
+        self.timeout = (5, 17) # (Connect Timeout, Read Timeout)
 
         if not all([self.secret_key, self.public_key, self.callback_url]):
             raise ValueError("Paystack configuration is incomplete. Please check your environment variables.")
@@ -49,18 +49,24 @@ class PaystackAdapter(PaymentGateway):
         # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
         
         try:
-            print("starting request ",  self.create_payment_endpoint)
             response = requests.post(
                 self.create_payment_endpoint,
                 headers=self._get_headers(),
                 json=json.loads(json.dumps(data, default=str)),
                 timeout=self.timeout,
             )
-            print("resp")
             response.raise_for_status()
-            print("respopp")
-            print(response.json())
             return response.json()
+            # data = {
+            #     'status': True, 
+            #     'message': 'Authorization URL created', 
+            #     'data': {
+            #         'authorization_url': 'https://checkout.paystack.com/u4j84p5z4jd6krf', 
+            #         'access_code': 'u4j84p5z4jd6krf', 
+            #         'reference': 'SRV-jSCgCj9KZ0NehGo'
+            #     }
+            # }
+            # return data
         
         except Timeout:
             raise PaymentGatewayError(
@@ -68,8 +74,24 @@ class PaystackAdapter(PaymentGateway):
                 code=PaymentFailure.GATEWAY_TIMEOUT.code,
                 title=PaymentFailure.GATEWAY_TIMEOUT.title,
             )
-        
+        except HTTPError as e:
+            print("HTTP ERROR EXCEPTION BLOCK")
+            if e.response.status_code == 401:
+                raise PaymentGatewayError(
+                    "",
+                    code=PaymentFailure.PROVIDER_NOT_CONFIGURED.code,
+                    title=PaymentFailure.PROVIDER_NOT_CONFIGURED.title,
+                )
+            # 400
+            raise PaymentGatewayError(
+                "Prevented a duplicate initialization to protect against double-charging.",
+                code=PaymentFailure.DUPLICATE_PAYMENT_REFERENCE.code,
+                title=PaymentFailure.DUPLICATE_PAYMENT_REFERENCE.title,
+                err_type="warning"
+            )
+            
         except RequestException as e:
+            print(e)
             raise PaymentGatewayError(
                 f"Connection error: {str(e)}",
                 code=PaymentFailure.GATEWAY_ERROR.code,

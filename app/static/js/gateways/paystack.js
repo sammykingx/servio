@@ -24,8 +24,30 @@ class PaystackOrchestrator {
         this.verificationURL = config.verificationURL;
         this.summaryURL = config.summaryURL;
         this.logContainer = config.logContainer || document.getElementById('network-log');
+        this.statusTextEl = config.statusTextEl || document.getElementById('payment-status-text');
+        this.progressBarEl = config.progressBarEl || document.getElementById('payment-progress-bar');
 
         this.init();
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    /**
+     * Updates the main UI status text and progress bar width
+     */
+    updateUI(message, percentage) {
+        if (this.statusTextEl) {
+            this.statusTextEl.innerText = message;
+        }
+        if (this.progressBarEl) {
+            this.progressBarEl.style.width = `${percentage}%`;
+
+            if (percentage >= 100) {
+                this.progressBarEl.classList.remove('animate-[progress_3s_ease-in-out_infinite]');
+            }
+        }
     }
 
     updateLog(message, status = 'pending') {
@@ -46,8 +68,10 @@ class PaystackOrchestrator {
     }
 
     async init() {
+        this.updateUI(`Initializing ${this.provider}...`, 20);
         this.updateLog(`Starting checkout for ${this.provider}...`, 'success');
         if (this.status === "success") {
+            this.updateUI("Redirecting to summary...", 100);
             this.updateLog(`Checkout complete for ${this.provider}...`, 'success');
             window.location.assign(this.summaryURL);
             return;
@@ -68,26 +92,24 @@ class PaystackOrchestrator {
                 })
             });
 
-            const data = await response.json();
+            const resp_data = await response.json();
 
-            if (response.ok && data.access_code) {
-                this.updateLog(`200 OK: ${data.message}`, 'success');
-                await sleep(1000); // 1 second pause
+            if (response.ok && resp_data.data.access_code) {
+                this.updateUI("Finalizing ...", 70);
+                this.updateLog(`200 OK: ${resp_data.message}`, 'success');
+                this.updateLog(`200 OK: ${resp_data.title}`, 'success');
 
-                this.updateLog('200 OK: Access code received, preparing ...', 'success');
-                await sleep(1000);
+                await this.sleep(1500);
 
-                this.updateLog(`200 OK: ${data.title}`, 'success');
-                await sleep(1000);
-
-                this.launchPopup(data.access_code);
+                this.updateLog('200 OK: Handing over to secure payment portal ...', 'success');
+                this.launchPopup(resp_data.data.access_code);
             } else {
                 showToast(
-                    data.message,
-                    data.type || "error",
-                    data.title || "Checkout Incomplete",
+                    resp_data.message,
+                    resp_data.response_type || "error",
+                    resp_data.title || "Checkout Incomplete",
                 );
-                throw new Error(data.title || 'Initialization failed');
+                throw new Error(resp_data.title || 'Initialization failed');
             }
 
         } catch (error) {
@@ -96,17 +118,19 @@ class PaystackOrchestrator {
     }
 
     launchPopup(access_code) {
-        this.updateLog(`Starting Paystack Checkout...`, 'success');
+        this.updateLog(`Starting Paystack Checkout Modal...`, 'success');
 
         const popup = new PaystackPop();
         popup.resumeTransaction(access_code, {
             onSuccess: (transaction) => {
+                this.updateUI("Payment Complete!", 100);
                 this.updateLog(`Payment Successful! Ref: ${transaction.reference}`, 'success');
+                this.updateLog(`verification started...: ${transaction.reference}`, 'pending');
                 // Redirect to a success page or refresh
                 window.location.href = `${this.verificationURL}?trxref=${transaction.reference}`;
             },
             onCancel: () => {
-                console.log("User cancelled session");
+                this.updateUI("Payment Cancelled!", 100);
                 this.updateLog(`User cancelled payment session.`, 'error');
             }
         });

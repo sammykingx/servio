@@ -13,10 +13,10 @@ class CheckoutCompleteView(TemplateView):
         context = super().get_context_data(**kwargs)
         reference = self.request.GET.get(reference)
         provider = self.request.GET.get(provider)
-        # # Add your logic here
-        # context['status'] = "failed"
-        # context["amount"] = "$30.00"
-        # context["reference"] = "SERRV-wsdhfjtu7ivh"
+
+        context['status'] = "failed"
+        context["amount"] = "$30.00"
+        context["reference"] = "SERRV-wsdhfjtu7ivh"
         # http 404 for invalid refor gateway
         # add the user that paid, the amount add others
         # with paid stamp

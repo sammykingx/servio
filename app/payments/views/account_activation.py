@@ -41,18 +41,19 @@ class AccountActivationView(LoginRequiredMixin, View):
             payload = InitializePaymentPayload(**json.loads(request.body))
             payment_service = PaymentService(payload.provider, self.request.user)
             resp = payment_service.process_one_time_payment(payload.reference)
-            print("json last")
             if payload.provider == RegisteredPaymentProvider.PAYSTACK:
                 response_data = PaystackInitializeAPIResponse(
                     status=resp.get("status", True),
                     title=resp.get("messge", "Checkout URL ready"),
                     message="Payment initialized successfully",
-                    data=resp.get("data", {})
+                    data=resp.get("data", {}),
+                    response_type=PaymentStatus.SUCCESS
                 )
                 return JsonResponse(response_data.model_dump(), status=200)
                 # https://checkout.paystack.com/u4j84p5z4jd6krf
                 # SRV-jSCgCj9KZ0NehGo
                 # try to cancell and see if it will resume again
+                # http://localhost:8000/payments/checkout/paystack/verify/?trxref=SRV-jSCgCj9KZ0NehGo
 
         except json.JSONDecodeError:
             err = PaystackInitializeAPIResponse(

@@ -197,19 +197,16 @@ class PaymentService:
         )
 
     def process_one_time_payment(self, reference: str) -> Dict[str, str]:
-        print("json")
         payment_obj = self.get_payment_obj(reference)
-        print("json 1")
         PaymentPolicy.validate_for_checkout(payment_obj)
-        print("json 2")
+        if payment_obj.gateway == RegisteredPaymentProvider.PAYSTACK and payment_obj.gateway_reference:
+            # to resume transaction
+            return payment_obj.metadata
+        
         payload = self._prepare_gateway_payload(payment_obj)
-        print("json 3")
         self.resolve_gateway_provider(payment_obj)
-        print("json 4")
         resp = self.gateway.create_payment(payload)
-        print("json 5")
         self.sync_gateway_data(payment_obj, resp)
-        print("json 6")
         return resp
         # returns the checkout url
 
