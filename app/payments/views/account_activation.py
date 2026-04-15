@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from core.url_names import AuthURLNames,PaymentURLS
 from formatters.pydantic_formatter import format_pydantic_errors
-from payments.domain.enums import RegisteredPaymentProvider, PaymentStatus
+from payments.domain.enums import RegisteredPaymentProvider, PaymentStatus, PaymentType, PaymentPurpose, PaymentPhase
 from payments.domain.exceptions import DomainException
 from payments.infrastructure.registry import GATEWAYS
 from payments.schemas.paystack import InitializePaymentPayload, PaystackInitializeAPIResponse
@@ -24,7 +24,13 @@ class AccountActivationView(LoginRequiredMixin, View):
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
         
-        payment_obj = PaymentService(provider, self.request.user).get_or_initiate_activation_payment()
+        payment_obj = PaymentService(
+            gateway_name=provider,
+            phase=PaymentPhase.INITIALIZATION, 
+            user=self.request.user
+        ).get_or_create_payment_record(
+            payment_type=PaymentType.ONE_TIME, payment_purpose=PaymentPurpose.ACTIVATION_FEE
+        )
         context = {
             "provider": payment_obj.gateway,
             "reference": payment_obj.reference,
@@ -39,12 +45,16 @@ class AccountActivationView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         try:
             payload = InitializePaymentPayload(**json.loads(request.body))
-            payment_service = PaymentService(payload.provider, self.request.user)
-            resp = payment_service.process_one_time_payment(payload.reference)
+            payment_service = PaymentService(
+                gateway_name=payload.provider, 
+                phase=PaymentPhase.INITIALIZATION, 
+                user=self.request.user
+            )
+            resp = payment_service.process_payment(payload.reference)
             if payload.provider == RegisteredPaymentProvider.PAYSTACK:
                 response_data = PaystackInitializeAPIResponse(
                     status=resp.get("status", True),
-                    title=resp.get("messge", "Checkout URL ready"),
+                    title=resp.get("message", "Checkout URL ready"),
                     message="Payment initialized successfully",
                     data=resp.get("data", {}),
                     response_type=PaymentStatus.SUCCESS
@@ -53,7 +63,6 @@ class AccountActivationView(LoginRequiredMixin, View):
                 # https://checkout.paystack.com/u4j84p5z4jd6krf
                 # SRV-jSCgCj9KZ0NehGo
                 # try to cancell and see if it will resume again
-                # http://localhost:8000/payments/checkout/paystack/verify/?trxref=SRV-jSCgCj9KZ0NehGo
 
         except json.JSONDecodeError:
             err = PaystackInitializeAPIResponse(

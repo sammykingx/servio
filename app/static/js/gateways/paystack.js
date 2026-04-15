@@ -95,13 +95,10 @@ class PaystackOrchestrator {
             const resp_data = await response.json();
 
             if (response.ok && resp_data.data.access_code) {
-                this.updateUI("Finalizing ...", 70);
+                this.updateUI("Finalizing ...", 75);
                 this.updateLog(`200 OK: ${resp_data.message}`, 'success');
                 this.updateLog(`200 OK: ${resp_data.title}`, 'success');
-
                 await this.sleep(1500);
-
-                this.updateLog('200 OK: Handing over to secure payment portal ...', 'success');
                 this.launchPopup(resp_data.data.access_code);
             } else {
                 showToast(
@@ -123,15 +120,23 @@ class PaystackOrchestrator {
         const popup = new PaystackPop();
         popup.resumeTransaction(access_code, {
             onSuccess: (transaction) => {
-                this.updateUI("Payment Complete!", 100);
-                this.updateLog(`Payment Successful! Ref: ${transaction.reference}`, 'success');
-                this.updateLog(`verification started...: ${transaction.reference}`, 'pending');
+                showToast("Verifying payment, Almost there", "info", "Payment Processing");
+
+                this.updateLog(`user completed checkout! Ref: ${transaction.reference}`, 'success');
+                this.updateUI('Payment Verification ...', 90);
+                this.updateLog('verification started ...', 'success');
+                this.updateLog('servio is verifying payments ...', 'pending');
                 // Redirect to a success page or refresh
                 window.location.href = `${this.verificationURL}?trxref=${transaction.reference}`;
             },
             onCancel: () => {
                 this.updateUI("Payment Cancelled!", 100);
                 this.updateLog(`User cancelled payment session.`, 'error');
+                showToast("Transaction cancelled by user.", "warning", "Payment Update");
+            },
+            onError: (error) => {
+                this.updateLog(error.message, 'error');
+                showToast(error.message, "error", "Payment Steup Error");
             }
         });
     }

@@ -1,11 +1,13 @@
 # Business rules like Paymentpolicy, EscrowReleasePolicy, RefundPolicy.
 
 from django.contrib.auth.models import AbstractUser
-from payments.domain.enums import PaymentStatus
+from django.utils import timezone
+from payments.domain.enums import PaymentStatus, PaymentPhase, RegisteredPaymentProvider
 from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import PolicyViolationError
 from payments.infrastructure.registry import GATEWAYS
 from payments.models.payments import Payment
+from datetime import timedelta
 
 
 class PaymentPolicy:
@@ -14,7 +16,7 @@ class PaymentPolicy:
     """
 
     @classmethod
-    def validate_for_checkout(cls, payment_obj: Payment | None):
+    def ensure_payment_is_processable(cls, payment_obj: Payment | None, phase: PaymentPhase = PaymentPhase.INITIALIZATION):
         """
         Ensures a payment is in a valid state to proceed with gateway operations.
         """
@@ -26,11 +28,19 @@ class PaymentPolicy:
             )
             
         if payment_obj.status == PaymentStatus.SUCCESS:
+            msg = (
+                "Payment already verified. Your transaction was completed successfully."
+                if phase == PaymentPhase.VERIFICATION else
+                "This payment has already been completed. We've blocked this attempt to ensure you aren't charged twice."
+            )
             raise PolicyViolationError(
-                "We've blocked this extra attempt to ensure you aren't charged twice. You're all set!",
+                msg,
                 code=PaymentFailure.ALREADY_PROCESSED.code,
                 title=PaymentFailure.ALREADY_PROCESSED.title,
             )
+            
+        if phase == PaymentPhase.INITIALIZATION:
+            cls._ensure_session_is_not_stale(payment_obj)
             
     @staticmethod
     def is_authenticated_user(user):
@@ -47,10 +57,23 @@ class PaymentPolicy:
     def is_valid_gateway_configuration(provider: str):
         """Ensures the selected payment provider is correctly mapped to an adapter."""
         if provider not in GATEWAYS:
-            # Note: This is often a DomainException because it's a dev-config error,
-            # but we catch it here to prevent system crashes.
             raise PolicyViolationError(
                 message=f"The payment provider '{provider}' is currently unavailable.",
                 code=PaymentFailure.PROVIDER_NOT_CONFIGURED.code,
                 title=PaymentFailure.PROVIDER_NOT_CONFIGURED.title
             )
+    
+    @staticmethod
+    def _ensure_session_is_not_stale(payment_obj: Payment):
+        """
+        Validates that the gateway session (e.g., Paystack access_code) hasn't expired.
+        Currently enforces a 5-hour limit for Paystack.
+        """
+        if payment_obj.gateway == RegisteredPaymentProvider.PAYSTACK:
+            expiry_limit = timezone.now() - timedelta(hours=4)
+            if payment_obj.created_at < expiry_limit:
+                raise PolicyViolationError(
+                    "This payment session has expired. Please refresh the page to start a new transaction.",
+                    code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
+                    title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
+                )

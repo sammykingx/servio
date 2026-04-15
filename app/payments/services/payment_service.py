@@ -3,7 +3,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import transaction, IntegrityError, OperationalError
 from payments.infrastructure.registry import GATEWAYS
-from payments.domain.enums import RegisteredPaymentProvider, PaymentPurpose, PaymentStatus, PaymentType
+from payments.infrastructure.repositories import PaymentRepository
+from payments.domain.enums import RegisteredPaymentProvider, PaymentPurpose, PaymentStatus, PaymentType, PaymentPhase
 from payments.domain.exceptions import DomainException, PolicyViolationError, PaymentPersistenceError
 from payments.domain.errors import PaymentFailure
 from payments.domain.policies import PaymentPolicy
@@ -20,7 +21,7 @@ logger = logging.getLogger("app_file")
 
 class PaymentService:
 
-    def __init__(self, gateway_name: RegisteredPaymentProvider, user: AbstractUser):
+    def __init__(self, gateway_name: RegisteredPaymentProvider, phase: PaymentPhase, user: Union[AbstractUser, None] = None):
         try:
             self.provider = RegisteredPaymentProvider(gateway_name)
             if self.provider not in GATEWAYS:
@@ -29,10 +30,13 @@ class PaymentService:
                     code=PaymentFailure.PROVIDER_NOT_CONFIGURED.code,
                     title=PaymentFailure.PROVIDER_NOT_CONFIGURED.title
                 )
-            PaymentPolicy.is_authenticated_user(user)
+            if phase == PaymentPhase.INITIALIZATION:
+                PaymentPolicy.is_authenticated_user(user)
+                
             gateway_class = GATEWAYS[self.provider]
             self.user = user
             self.gateway = gateway_class()
+            self.repo = PaymentRepository(self.user)
             self.currency = "NGN" if self.provider == RegisteredPaymentProvider.PAYSTACK else "USD"
             
         except ValueError:
@@ -58,7 +62,25 @@ class PaymentService:
                 code=PaymentFailure.INVALID_PAYMENT_DATA.code,
                 title=PaymentFailure.INVALID_PAYMENT_DATA.title,
             )
-            
+    def _create_payment_record(self, payment_type:PaymentType, purpose: PaymentPurpose) -> Payment:
+        """
+            Private helper to handle the actual DB insertion.
+            Should not be called directly outside of initiation logic (self.get_or_create_record).
+        """
+        amount_in_decimal, amount_in_minor_units = self.get_subscription_fee()
+        payment_reference = self.generate_payment_reference()
+        
+        return Payment.objects.create(
+            user=self.user,
+            reference=payment_reference,
+            amount_decimal=amount_in_decimal,
+            amount_in_minor_units=amount_in_minor_units,
+            currency=self.currency,
+            payment_type=payment_type,
+            payment_purpose=purpose,
+            gateway=self.provider,
+        )
+             
     def _get_gateway_data(self, gateway_name: str, gw_resp: dict) -> Dict[str, str]:
         """
         Private helper to normalize gateway responses into a standard format.
@@ -109,7 +131,7 @@ class PaymentService:
         return APP_SUBSCRIPTION_FEE, int(APP_SUBSCRIPTION_FEE * 100)
     
     def get_payment_obj(self, reference: str) -> Union[Payment, None]:
-        """Retrieves a payment or returns None using filter/first for brevity."""
+        """Retrieves an exisiting payment obj by reference or returns None using filter/first for brevity."""
         return Payment.objects.filter(user=self.user, reference=reference).first()
 
     def resolve_gateway_provider(self, payment_obj:Payment) -> None:
@@ -127,18 +149,18 @@ class PaymentService:
     @transaction.atomic            
     def sync_gateway_data(self, payment: Payment, gw_resp: dict):
         """
-        Synchronizes the local Payment record with the response from the provider.
+            Synchronizes the local Payment record with the response from the provider during
+            initializiation phase of the payment flow.
         """
-        
         try:
-            payment = Payment.objects.select_for_update().get(pk=payment.pk)
+            payment = Payment.objects.select_for_update(nowait=True).get(pk=payment.pk)
             data = self._get_gateway_data(payment.gateway, gw_resp)
 
             payment.gateway_reference = data.get("ref")
             payment.gateway_response = data.get("msg")
             payment.metadata = gw_resp
                 
-            payment.save(update_fields=["gateway_reference", "gateway_response", "metadata", "updated_at"])
+            payment.save(update_fields=["gateway_reference", "gateway_response", "metadata"])
           
         except OperationalError:
             raise PaymentPersistenceError(
@@ -158,18 +180,23 @@ class PaymentService:
             logger.error(err)
             raise err  
     
-    def get_or_initiate_activation_payment(self) -> Payment:
+    def get_or_create_payment_record(self, payment_type: PaymentType, payment_purpose:PaymentPurpose) -> Payment:
         """
-            Retrieves an existing valid activation payment or creates a new one.
-            
-            Checks for an existing payment with INITIATED, PENDING, or SUCCESS status.
-            If found, returns the existing record to prevent duplicate billings.
-            Otherwise, generates a new payment reference and creates a fresh 
-            activation record.
+            Retrieves a valid payment or initializes a new record.
+
+            Logic Flow:
+                1. Returns an existing SUCCESS record to prevent double-billing.
+                2. Reuses active INITIATED/PENDING records if they pass the freshness policy.
+                3. If an existing record is stale (expired), marks it EXPIRED in the DB 
+                and falls back to creating a fresh record.
+
+            Raises:
+                PolicyViolationError: If a successful payment already exists (ALREADY_PROCESSED) or Payment record is stale
+                maening it didn't pass the freshness test.
         """
         existing_payment = Payment.objects.filter(
             user=self.user,
-            payment_purpose=PaymentPurpose.ACTIVATION_FEE,
+            payment_purpose=payment_purpose,
             status__in=[
                 PaymentStatus.INITIATED,
                 PaymentStatus.PENDING,
@@ -178,27 +205,25 @@ class PaymentService:
         ).first()
 
         if existing_payment:
-            return existing_payment
-        
-        # can continue failed or cancelled payments so long it's within 6h
+            try:
+                PaymentPolicy.ensure_payment_is_processable(existing_payment, phase=PaymentPhase.INITIALIZATION)
+                return existing_payment
 
-        amount_in_decimal, amount_in_minor_units = self.get_subscription_fee()
-        payment_reference = self.generate_payment_reference()
-        
-        return Payment.objects.create(
-            user=self.user,
-            reference=payment_reference,
-            amount_decimal=amount_in_decimal,
-            amount_in_minor_units=amount_in_minor_units,
-            currency=self.currency,
-            payment_type=PaymentType.ONE_TIME,
-            payment_purpose=PaymentPurpose.ACTIVATION_FEE,
-            gateway=self.provider,
-        )
+            except PolicyViolationError as err:
+                if err.code == PaymentFailure.ALREADY_PROCESSED.code:
+                    raise err
+                
+                if err.code == PaymentFailure.PAYMENT_SESSION_EXPIRED.code:
+                    # stale payment
+                    existing_payment.status = PaymentStatus.EXPIRED
+                    existing_payment.gateway_response = f"Policy invalidate: {err.message}"
+                    existing_payment.save(update_fields=["status", "gateway_response"])
 
-    def process_one_time_payment(self, reference: str) -> Dict[str, str]:
+        return self._create_payment_record(payment_type, payment_purpose)
+
+    def process_payment(self, reference: str) -> Dict[str, str]:
         payment_obj = self.get_payment_obj(reference)
-        PaymentPolicy.validate_for_checkout(payment_obj)
+        PaymentPolicy.ensure_payment_is_processable(payment_obj, phase=PaymentPhase.INITIALIZATION)
         if payment_obj.gateway == RegisteredPaymentProvider.PAYSTACK and payment_obj.gateway_reference:
             # to resume transaction
             return payment_obj.metadata
@@ -208,8 +233,14 @@ class PaymentService:
         resp = self.gateway.create_payment(payload)
         self.sync_gateway_data(payment_obj, resp)
         return resp
-        # returns the checkout url
 
     def verify(self, reference):
-
-        return self.gateway.verify_payment(reference)
+        """
+        Unified verification logic for both Webhooks and Active Views.
+        """
+        payment_entity = self.repo.get_by_reference(reference, lock=True)
+        PaymentPolicy.ensure_payment_is_processable(payment_entity, phase=PaymentPhase.VERIFICATION)
+        self.resolve_gateway_provider(payment_entity)
+        gateway_resp = self.gateway.verify_payment(reference)
+        # update db record
+        return gateway_resp

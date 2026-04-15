@@ -46,6 +46,9 @@ class PaymentFailure:
     AUTHENTICATION_REQUIRED = FailureDetail(
         "AUTHENTICATION_REQUIRED", "User Session Invalid"
     )
+    PAYMENT_SESSION_EXPIRED = FailureDetail(
+        "PAYMENT_SESSION_EXPIRED", "Payment Session Expired"
+    )
     
     # ------ DB RELATED ------
     SERVER_BUSY = FailureDetail("PROCESSING_IN_PROGRESS", "Processing in Progress")

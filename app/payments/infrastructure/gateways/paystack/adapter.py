@@ -9,7 +9,10 @@ from core.url_names import PaymentURLS
 from decouple import config
 from requests.exceptions import HTTPError, Timeout, RequestException
 from core.url_names import PaymentURLS
-import json, requests
+import json, logging, requests
+
+
+logger = logging.getLogger("app_file")
 
 
 class PaystackAdapter(PaymentGateway):
@@ -75,10 +78,9 @@ class PaystackAdapter(PaymentGateway):
                 title=PaymentFailure.GATEWAY_TIMEOUT.title,
             )
         except HTTPError as e:
-            print("HTTP ERROR EXCEPTION BLOCK")
             if e.response.status_code == 401:
                 raise PaymentGatewayError(
-                    "",
+                    "Invalid initialization data for gateway - paystack",
                     code=PaymentFailure.PROVIDER_NOT_CONFIGURED.code,
                     title=PaymentFailure.PROVIDER_NOT_CONFIGURED.title,
                 )
@@ -90,35 +92,57 @@ class PaystackAdapter(PaymentGateway):
                 err_type="warning"
             )
             
-        except RequestException as e:
-            print(e)
+        except RequestException as err:
+            logger.error(err)
             raise PaymentGatewayError(
                 f"Connection error: {str(e)}",
                 code=PaymentFailure.GATEWAY_ERROR.code,
                 title=PaymentFailure.GATEWAY_ERROR.title,
                 err_type="error"
             )
-        # {
-            # 'status': True, 
-            # 'message': 'Authorization URL created', 
-            # 'data': {
-                # 'authorization_url': 'https://checkout.paystack.com/cirt0f31hcl7seo', 
-                # 'access_code': 'cirt0f31hcl7seo', 
-                # 'reference': 'SRV-ChkiHvUa0WrbWlY'
-                # }
-            # }
-
+        
     def verify_payment(self, reference: str):
-        response = requests.get(
-            self.verify_payment_endpoint.format(reference=reference),
-            headers=self._get_headers(),
-            timeout=self.timeout,
-        )
-        return response.json()
+        try:
+            # try for an invalid ref
+            response = requests.get(
+                self.verify_payment_endpoint.format(reference=reference),
+                headers=self._get_headers(),
+                timeout=self.timeout,
+            )
+            response.raise_for_status()
+            print(response.json())
+            return response.json()
+        
+        except Timeout:
+            raise PaymentGatewayError(
+                "Payment service took too long to respond during verification session. Please try again later.",
+                code=PaymentFailure.GATEWAY_TIMEOUT.code,
+                title=PaymentFailure.GATEWAY_TIMEOUT.title,
+            )
+
+        except HTTPError as e:
+            raise PaymentGatewayError(
+                "The transaction reference provided is invalid or could not be found.",
+                code=PaymentFailure.INVALID_REFERENCE.code,
+                title=PaymentFailure.INVALID_REFERENCE.title,
+                err_type="warning"
+            )
+            
+        except RequestException as e:
+            logger.error(e)
+            raise PaymentGatewayError(
+                f"Connection error: {str(e)}",
+                code=PaymentFailure.GATEWAY_ERROR.code,
+                title=PaymentFailure.GATEWAY_ERROR.title,
+                err_type="error"
+            )
 
     def refund(self, reference, amount):
         pass
 
     def transfer(self, recipient, amount):
+        pass
+    
+    def charge_backs(self, reference):
         pass
     

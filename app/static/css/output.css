@@ -3847,9 +3847,6 @@
   .bg-brand-800 {
     background-color: var(--color-brand-800);
   }
-  .bg-brand-900 {
-    background-color: var(--color-brand-900);
-  }
   .bg-brand-950 {
     background-color: var(--color-brand-950);
   }
@@ -6115,9 +6112,6 @@
   }
   .text-\[8px\] {
     font-size: 8px;
-  }
-  .text-\[9\.5px\] {
-    font-size: 9.5px;
   }
   .text-\[9px\] {
     font-size: 9px;
@@ -12558,11 +12552,6 @@
       padding-block: calc(var(--spacing) * 32);
     }
   }
-  .lg\:py-219 {
-    @media (width >= 64rem) {
-      padding-block: calc(var(--spacing) * 219);
-    }
-  }
   .lg\:pb-0 {
     @media (width >= 64rem) {
       padding-bottom: calc(var(--spacing) * 0);
@@ -13340,11 +13329,6 @@
   .dark\:bg-\[\#232a3b\] {
     &:where(.dark, .dark *) {
       background-color: #232a3b;
-    }
-  }
-  .dark\:bg-\[\#080808\] {
-    &:where(.dark, .dark *) {
-      background-color: #080808;
     }
   }
   .dark\:bg-\[\#121826\] {
