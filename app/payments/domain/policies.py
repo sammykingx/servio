@@ -3,10 +3,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from payments.domain.enums import PaymentStatus, PaymentPhase, RegisteredPaymentProvider
+from payments.domain.entities import PaymentEntity
 from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import PolicyViolationError
 from payments.infrastructure.registry import GATEWAYS
-from payments.models.payments import Payment
 from datetime import timedelta
 
 
@@ -16,18 +16,18 @@ class PaymentPolicy:
     """
 
     @classmethod
-    def ensure_payment_is_processable(cls, payment_obj: Payment | None, phase: PaymentPhase = PaymentPhase.INITIALIZATION):
+    def ensure_entity_is_processable(cls, payment_entity: PaymentEntity | None, phase: PaymentPhase = PaymentPhase.INITIALIZATION):
         """
-        Ensures a payment is in a valid state to proceed with gateway operations.
+        Ensures a payment enetity is in a valid state to proceed with gateway operations.
         """
-        if not payment_obj:
+        if not payment_entity:
             raise PolicyViolationError(
                 message="We couldn't find a record for this payment. Please check your reference number or try again.",
                 code=PaymentFailure.INVALID_REFERENCE.code,
                 title=PaymentFailure.INVALID_REFERENCE.title,
             )
             
-        if payment_obj.status == PaymentStatus.SUCCESS:
+        if payment_entity.status == PaymentStatus.SUCCESS:
             msg = (
                 "Payment already verified. Your transaction was completed successfully."
                 if phase == PaymentPhase.VERIFICATION else
@@ -40,7 +40,7 @@ class PaymentPolicy:
             )
             
         if phase == PaymentPhase.INITIALIZATION:
-            cls._ensure_session_is_not_stale(payment_obj)
+            cls._ensure_session_is_not_stale(payment_entity)
             
     @staticmethod
     def is_authenticated_user(user):
@@ -64,16 +64,23 @@ class PaymentPolicy:
             )
     
     @staticmethod
-    def _ensure_session_is_not_stale(payment_obj: Payment):
+    def _ensure_session_is_not_stale(payment_entity: PaymentEntity):
         """
         Validates that the gateway session (e.g., Paystack access_code) hasn't expired.
-        Currently enforces a 5-hour limit for Paystack.
+        Currently enforces a 4-hour limit for Paystack.
         """
-        if payment_obj.gateway == RegisteredPaymentProvider.PAYSTACK:
-            expiry_limit = timezone.now() - timedelta(hours=4)
-            if payment_obj.created_at < expiry_limit:
-                raise PolicyViolationError(
-                    "This payment session has expired. Please refresh the page to start a new transaction.",
-                    code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
-                    title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
-                )
+        if payment_entity.is_stale():
+            raise PolicyViolationError(
+                "This payment session has expired. Please refresh the page to start a new transaction.",
+                code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
+                title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
+            )
+    
+        # if payment_entity.gateway == RegisteredPaymentProvider.PAYSTACK:
+        #     expiry_limit = timezone.now() - timedelta(hours=4)
+        #     if payment_entity.created_at < expiry_limit:
+        #         raise PolicyViolationError(
+        #             "This payment session has expired. Please refresh the page to start a new transaction.",
+        #             code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
+        #             title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
+        #         )

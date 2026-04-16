@@ -11,6 +11,13 @@ class RegisteredPaymentProvider(str, Enum):
         return [(item.value, item.name) for item in cls]
 
 class PaymentType(str, Enum):
+    """
+    Defines the structural nature of a transaction.
+
+    Attributes:
+        ONE_TIME: A standalone, non-recurring transaction (e.g., a single purchase).
+        SERVICE: A recurring or utility-based payment linked to ongoing access.
+    """
     ONE_TIME = "one_time"
     SERVICE = "service"
     
@@ -71,3 +78,4 @@ class EscrowStatus(str, Enum):
     @classmethod
     def choices(cls):
         return [(item.value, item.name) for item in cls]
+

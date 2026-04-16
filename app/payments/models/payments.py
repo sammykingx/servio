@@ -66,10 +66,19 @@ class Payment(models.Model):
         ]
         
         indexes = [
-            # Fast activation payment lookup
             models.Index(
-                fields=["user", "payment_purpose", "status"],
+                fields=["user", "payment_type", "payment_purpose", "status"],
                 name="idx_user_purpose_status"
+            ),
+            
+            models.Index(
+                fields=["reference"],
+                name="idx_payment_reference",
+            ),
+            
+            models.Index(
+                fields=["user", "reference"],
+                name="idx_user_payment_reference",
             ),
 
             # Webhook processing safety
@@ -79,24 +88,21 @@ class Payment(models.Model):
             ),
 
             # Dashboard / analytics queries
-            models.Index(
-                fields=["status"],
-                name="idx_status"
-            ),
+            # models.Index(
+            #     fields=["status"],
+            #     name="idx_status"
+            # ),
 
             # Gateway-based filtering (useful later)
-            models.Index(
-                fields=["gateway", "status"],
-                name="idx_gateway_status"
-            ),
+            # models.Index(
+            #     fields=["gateway", "status"],
+            #     name="idx_gateway_status"
+            # ),
 
-            # Sorting recent payments fast
+            # Sorting recent completed payments by status fast
             models.Index(
-                fields=["-created_at"],
-                name="idx_created_desc"
+                fields=["status", "-paid_at"],
+                name="idx_completed_payment_desc"
             ),
         ]
     
-    @property
-    def get_gateway(self):
-        return RegisteredPaymentProvider(self.gateway)

@@ -12,6 +12,8 @@ from payments.schemas.payments import ActivePaymentSession, PaymentRedirectManif
 from payments.services.payment_service import PaymentService
 from template_map.payments import Payments
 from pydantic import ValidationError
+from decimal import Decimal
+from constants import APP_SUBSCRIPTION_FEE
 import json
 
 
@@ -20,24 +22,26 @@ class AccountActivationView(LoginRequiredMixin, View):
     template_name = Payments.Checkouts.SUBSCRIPTION_CHECKOUT
     
     def get(self, request, *args, **kwargs):
-        provider = kwargs.get("gateway")
+        provider:str = kwargs.get("gateway")
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
-        
-        payment_obj = PaymentService(
+        amount = Decimal(str(APP_SUBSCRIPTION_FEE))
+        entity = PaymentService(
             gateway_name=provider,
             phase=PaymentPhase.INITIALIZATION, 
             user=self.request.user
-        ).get_or_create_payment_record(
-            payment_type=PaymentType.ONE_TIME, payment_purpose=PaymentPurpose.ACTIVATION_FEE
+        ).initiate_payment(
+            amount=amount,
+            payment_type=PaymentType.ONE_TIME, 
+            payment_purpose=PaymentPurpose.ACTIVATION_FEE
         )
         context = {
-            "provider": payment_obj.gateway,
-            "reference": payment_obj.reference,
-            "status": payment_obj.status,
+            "provider": entity.gateway,
+            "reference": entity.reference,
+            "status": entity.status,
         }
         
-        if payment_obj.status == PaymentStatus.SUCCESS:
+        if entity.status == PaymentStatus.SUCCESS:
             return redirect(reverse_lazy(PaymentURLS.CHECKOUT_COMPLETE, kwargs=context))
         
         return render(request, self.template_name, context=context)
@@ -68,7 +72,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 status=False,
                 title="Invalid JSON payload",
                 message="Invalid data format",
-                response_type="warning",
+                ui_intent="warning",
             )
             return JsonResponse(err.model_dump(), status=400)
         
@@ -79,7 +83,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 status=False,
                 title="Validation error",
                 message="Some required information is missing or invalid.",
-                response_type="warning",
+                ui_intent="warning",
             )
             return JsonResponse(err.model_dump(), status=400)
                 
@@ -88,7 +92,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 status=False,
                 title=e.title,
                 message=e.message,
-                response_type=e.err_type,
+                ui_intent=e.err_type,
             )
             return JsonResponse(err.model_dump(), status=400)
         
@@ -98,6 +102,6 @@ class AccountActivationView(LoginRequiredMixin, View):
                 status=False,
                 title="Payment Error",
                 message="An unexpected error occurred while processing your payment. Please try again later.",
-                response_type="error",
+                ui_intent="error",
             )
             return JsonResponse(err.model_dump(), status=500)
