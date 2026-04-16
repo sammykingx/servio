@@ -1,25 +1,23 @@
-from pydantic import BaseModel, Field
-from typing import Any, Dict, Optional
+from pydantic import BaseModel, HttpUrl
 
 
-class InitializePaymentPayload(BaseModel):
+class PaystackInitializationData(BaseModel):
+    """The actual payload containing checkout details."""
+    authorization_url: HttpUrl
+    access_code: str
     reference: str
-    provider: str
-    
-class PaystackInitializeAPIResponse(BaseModel):
-    status: bool
-    title: str
+
+class PaystackInitializationResponseSchema(BaseModel):
+    """The full API response structure from Paystack initialization API."""
     message: str
-    response_type: str
-    data: Dict[str, Any] = Field(default_factory=dict)
+    data: PaystackInitializationData
     
-#   "status": true,
+# {
+#   "status": True,
 #   "message": "Authorization URL created",
 #   "data": {
 #     "authorization_url": "https://checkout.paystack.com/3ni8kdavz62431k",
 #     "access_code": "3ni8kdavz62431k",
 #     "reference": "re4lyvq3s3"
 #   }
-
-# no access code
-# gateway took too long
+# }

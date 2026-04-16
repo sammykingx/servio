@@ -36,7 +36,6 @@ class PaymentRepository:
         try:
             queryset = Payment.objects.filter(reference=reference)
             if lock:
-                # Critical for preventing race conditions between Webhook and View
                 queryset = queryset.select_for_update(nowait=True)
             
             db_payment = queryset.first()
@@ -80,7 +79,7 @@ class PaymentRepository:
         )
         return self._map_to_entity(db_obj)
 
-    def update_status(self, reference: str, status: PaymentStatus, gateway_response: str):
+    def update_status(self, reference: str, status: PaymentStatus, gateway_response: dict):
         """Specifically updates the status and message."""
         Payment.objects.filter(reference=reference).update(
             status=status,
@@ -106,18 +105,24 @@ class PaymentRepository:
 
     def _map_to_entity(self, model: Payment) -> PaymentEntity:
         """
-        Converts a Django Model instance into a Domain Entity.
+        Converts a Django Model instance into a Payment Domain Entity.
         """
         return PaymentEntity(
             id=model.id,
-            user_email=model.user,
+            user=model.user,
             reference=model.reference,
+            status=model.status,
             amount_decimal=model.amount_decimal,
             amount_in_minor_units=model.amount_in_minor_units,
-            status=model.status,
+            currency=model.currency,
             gateway=model.gateway,
+            payment_type=model.payment_type,
+            payment_purpose=model.payment_purpose,
             gateway_reference=model.gateway_reference,
             gateway_response=model.gateway_response,
+            gateway_order_id=model.gateway_order_id,
             metadata=model.metadata,
-            created_at=model.created_at
+            created_at=model.created_at,
+            paid_at=model.paid_at,
+            is_processed=model.is_processed,
         )

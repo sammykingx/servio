@@ -5,6 +5,7 @@ from django.db import transaction, IntegrityError, OperationalError
 from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.repositories import PaymentRepository
 from payments.domain.enums import RegisteredPaymentProvider, PaymentPurpose, PaymentStatus, PaymentType, PaymentPhase
+from payments.domain.entities import GatewayInitializationResult, PaymentEntity
 from payments.domain.exceptions import DomainException, PolicyViolationError, PaymentPersistenceError
 from payments.domain.errors import PaymentFailure
 from payments.domain.policies import PaymentPolicy
@@ -46,22 +47,19 @@ class PaymentService:
                 title=PaymentFailure.UNSUPPORTED_PROVIDER.title
             )
 
-    def _prepare_gateway_payload(self, payment_obj:Payment) -> PaymentGatewayRequest:
-        try:
-            payload = PaymentGatewayRequest(
-                email=self.user.email,
-                amount=payment_obj.amount_in_minor_units,
-                reference=payment_obj.reference,
-                currency=self.currency
-            )
-            return payload
-        
-        except ValidationError as err:
-            raise PolicyViolationError(
-                "The payment information provided is invalid or incomplete.",
-                code=PaymentFailure.INVALID_PAYMENT_DATA.code,
-                title=PaymentFailure.INVALID_PAYMENT_DATA.title,
-            )
+    def _resolve_gateway_provider(self, payment_obj:Payment) -> None:
+        """
+            Synchronizes the active gateway instance with the provider stored in the payment record.
+            
+            If the payment exists and its gateway differs from the current provider, 
+            it re-initializes self.gateway to the correct provider class.
+        """
+        if payment_obj.gateway != self.provider:
+            gateway_class = GATEWAYS.get(payment_obj.gateway)
+            if gateway_class:
+                self.gateway = gateway_class()
+    
+    # outsourced to repo      
     def _create_payment_record(self, payment_type:PaymentType, purpose: PaymentPurpose) -> Payment:
         """
             Private helper to handle the actual DB insertion.
@@ -107,6 +105,24 @@ class PaymentService:
             )
             
         return extractor(gw_resp)
+    
+    def prepare_gateway_entity(self, entity:PaymentEntity) -> PaymentGatewayRequest:
+        try:
+            gw_entity = PaymentGatewayRequest(
+                email=self.user.email,
+                amount=entity.amount_in_minor_units,
+                reference=entity.reference,
+                currency=entity.currency
+            )
+            self._resolve_gateway_provider(entity)
+            return gw_entity
+        
+        except ValidationError as err:
+            raise PolicyViolationError(
+                "The payment information provided is invalid or incomplete.",
+                code=PaymentFailure.INVALID_PAYMENT_DATA.code,
+                title=PaymentFailure.INVALID_PAYMENT_DATA.title,
+            )
             
     def generate_payment_reference(self) -> str:
         safe_characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -134,17 +150,6 @@ class PaymentService:
         """Retrieves an exisiting payment obj by reference or returns None using filter/first for brevity."""
         return Payment.objects.filter(user=self.user, reference=reference).first()
 
-    def resolve_gateway_provider(self, payment_obj:Payment) -> None:
-        """
-            Synchronizes the active gateway instance with the provider stored in the payment record.
-            
-            If the payment exists and its gateway differs from the current provider, 
-            it re-initializes self.gateway to the correct provider class.
-        """
-        if payment_obj.gateway != self.provider:
-            gateway_class = GATEWAYS.get(payment_obj.gateway)
-            if gateway_class:
-                self.gateway = gateway_class()
                 
     @transaction.atomic            
     def sync_gateway_data(self, payment: Payment, gw_resp: dict):
@@ -221,26 +226,35 @@ class PaymentService:
 
         return self._create_payment_record(payment_type, payment_purpose)
 
-    def process_payment(self, reference: str) -> Dict[str, str]:
-        payment_obj = self.get_payment_obj(reference)
-        PaymentPolicy.ensure_payment_is_processable(payment_obj, phase=PaymentPhase.INITIALIZATION)
-        if payment_obj.gateway == RegisteredPaymentProvider.PAYSTACK and payment_obj.gateway_reference:
+    def process_payment(self, reference: str) -> GatewayInitializationResult:
+        payment_entity = self.repo.get_by_reference(reference)
+        PaymentPolicy.ensure_payment_is_processable(payment_entity, phase=PaymentPhase.INITIALIZATION)
+        if payment_entity.gateway == RegisteredPaymentProvider.PAYSTACK and payment_entity.gateway_reference:
             # to resume transaction
-            return payment_obj.metadata
+            return payment_entity.metadata
         
-        payload = self._prepare_gateway_payload(payment_obj)
-        self.resolve_gateway_provider(payment_obj)
-        resp = self.gateway.create_payment(payload)
-        self.sync_gateway_data(payment_obj, resp)
-        return resp
+        payload = self.prepare_gateway_entity(payment_entity)
+        resp_entity = self.gateway.create_payment(payload)
+        
+        # contnue
+        self.sync_gateway_data(payment_entity, resp_entity)
+        # get response json
+        return resp_entity
 
     def verify(self, reference):
         """
-        Unified verification logic for both Webhooks and Active Views.
+            Unified verification logic for both Webhooks and Active Views.
         """
-        payment_entity = self.repo.get_by_reference(reference, lock=True)
-        PaymentPolicy.ensure_payment_is_processable(payment_entity, phase=PaymentPhase.VERIFICATION)
-        self.resolve_gateway_provider(payment_entity)
-        gateway_resp = self.gateway.verify_payment(reference)
-        # update db record
+        try:
+            payment_entity = self.repo.get_by_reference(reference, lock=True)
+            PaymentPolicy.ensure_payment_is_processable(payment_entity, phase=PaymentPhase.VERIFICATION)
+            self.resolve_gateway_provider(payment_entity)
+            gateway_resp = self.gateway.verify_payment(reference)
+            # update db record
+        except OperationalError:
+            raise PaymentPersistenceError(
+                "Your payment is currently being processed. Please wait a moment before trying again.",
+                code=PaymentFailure.SERVER_BUSY.code,
+                title=PaymentFailure.SERVER_BUSY.title,
+            )
         return gateway_resp

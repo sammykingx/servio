@@ -1,14 +1,16 @@
 # Paystack gateway adapter implementing PaymentGateway contract.
 
 from django.urls import reverse_lazy
+from requests.exceptions import HTTPError, Timeout, RequestException
 from payments.domain.contracts import PaymentGateway
-from payments.schemas.payments import PaymentGatewayRequest
-from payments.domain.exceptions import PaymentGatewayError
+from payments.domain.enums import RegisteredPaymentProvider
+from payments.domain.entities import GatewayInitializationResult
 from payments.domain.errors import PaymentFailure
+from payments.domain.exceptions import PaymentGatewayError
+from payments.schemas.payments import PaymentGatewayRequest
+from payments.schemas.paystack import PaystackInitializationResponseSchema
 from core.url_names import PaymentURLS
 from decouple import config
-from requests.exceptions import HTTPError, Timeout, RequestException
-from core.url_names import PaymentURLS
 import json, logging, requests
 
 
@@ -45,8 +47,8 @@ class PaystackAdapter(PaymentGateway):
         
         return headers
     
-    def create_payment(self, payload: PaymentGatewayRequest):
-        data = PaymentGatewayRequest.model_dump(payload)
+    def create_payment(self, payload: PaymentGatewayRequest) -> GatewayInitializationResult:
+        data = PaymentGatewayRequest.model_dump(payload, mode='json')
         data["callback_url"] = self.callback_url
         data["metadata"] = {"cancel_action": reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT)}
         # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
@@ -55,11 +57,20 @@ class PaystackAdapter(PaymentGateway):
             response = requests.post(
                 self.create_payment_endpoint,
                 headers=self._get_headers(),
-                json=json.loads(json.dumps(data, default=str)),
+                json=data,
                 timeout=self.timeout,
             )
             response.raise_for_status()
-            return response.json()
+            json_data:dict = response.json()
+            # what if response was succeful but paystack changed the params of resonse
+            paystack_res = PaystackInitializationResponseSchema(**json_data)
+            return GatewayInitializationResult(
+                gateway=RegisteredPaymentProvider.PAYSTACK,
+                message=paystack_res.message,
+                data=paystack_res.data
+            )
+        
+            # Actual return object from paystack
             # data = {
             #     'status': True, 
             #     'message': 'Authorization URL created', 

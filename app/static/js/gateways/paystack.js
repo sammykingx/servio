@@ -103,7 +103,7 @@ class PaystackOrchestrator {
             } else {
                 showToast(
                     resp_data.message,
-                    resp_data.response_type || "error",
+                    resp_data.ui_intent || "error",
                     resp_data.title || "Checkout Incomplete",
                 );
                 throw new Error(resp_data.title || 'Initialization failed');

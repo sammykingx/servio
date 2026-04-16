@@ -5,8 +5,8 @@ from payments.domain.enums import RegisteredPaymentProvider, PaymentPhase
 from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import DomainException, PolicyViolationError, PaymentPersistenceError
 from payments.services.payment_service import PaymentService
-from
 import json
+
 
 def payment_webhook(request):
     payload = json.loads(request.body)

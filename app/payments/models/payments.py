@@ -30,6 +30,7 @@ class Payment(models.Model):
     gateway_response = models.CharField(max_length=200, null=True, blank=True)
     is_processed = models.BooleanField(default=False)
     metadata = models.JSONField(default=dict)
+    paid_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

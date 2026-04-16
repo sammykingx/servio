@@ -3,12 +3,12 @@ from django.http.response import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from core.url_names import AuthURLNames,PaymentURLS
+from core.url_names import PaymentURLS
 from formatters.pydantic_formatter import format_pydantic_errors
-from payments.domain.enums import RegisteredPaymentProvider, PaymentStatus, PaymentType, PaymentPurpose, PaymentPhase
+from payments.domain.enums import PaymentStatus, PaymentType, PaymentPurpose, PaymentPhase
 from payments.domain.exceptions import DomainException
 from payments.infrastructure.registry import GATEWAYS
-from payments.schemas.paystack import InitializePaymentPayload, PaystackInitializeAPIResponse
+from payments.schemas.payments import ActivePaymentSession, PaymentRedirectManifest
 from payments.services.payment_service import PaymentService
 from template_map.payments import Payments
 from pydantic import ValidationError
@@ -44,28 +44,27 @@ class AccountActivationView(LoginRequiredMixin, View):
     
     def post(self, request, *args, **kwargs):
         try:
-            payload = InitializePaymentPayload(**json.loads(request.body))
+            payload = ActivePaymentSession(**json.loads(request.body))
             payment_service = PaymentService(
                 gateway_name=payload.provider, 
                 phase=PaymentPhase.INITIALIZATION, 
                 user=self.request.user
             )
             resp = payment_service.process_payment(payload.reference)
-            if payload.provider == RegisteredPaymentProvider.PAYSTACK:
-                response_data = PaystackInitializeAPIResponse(
-                    status=resp.get("status", True),
-                    title=resp.get("message", "Checkout URL ready"),
-                    message="Payment initialized successfully",
-                    data=resp.get("data", {}),
-                    response_type=PaymentStatus.SUCCESS
-                )
-                return JsonResponse(response_data.model_dump(), status=200)
-                # https://checkout.paystack.com/u4j84p5z4jd6krf
-                # SRV-jSCgCj9KZ0NehGo
-                # try to cancell and see if it will resume again
+            response_data = PaymentRedirectManifest(
+                status=resp.get("status", True),
+                title=resp.get("message", "Checkout URL ready"),
+                message="Payment initialized successfully",
+                data=resp.get("data", {}),
+                ui_intent=PaymentStatus.SUCCESS
+            )
+            return JsonResponse(response_data.model_dump(), status=200)
+            # https://checkout.paystack.com/u4j84p5z4jd6krf
+            # SRV-jSCgCj9KZ0NehGo
+            # try to cancell and see if it will resume again
 
         except json.JSONDecodeError:
-            err = PaystackInitializeAPIResponse(
+            err = PaymentRedirectManifest(
                 status=False,
                 title="Invalid JSON payload",
                 message="Invalid data format",
@@ -76,7 +75,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         except ValidationError as e:
             fields = format_pydantic_errors(e),
             print(fields)
-            err = PaystackInitializeAPIResponse(
+            err = PaymentRedirectManifest(
                 status=False,
                 title="Validation error",
                 message="Some required information is missing or invalid.",
@@ -85,7 +84,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             return JsonResponse(err.model_dump(), status=400)
                 
         except DomainException as e:
-            err = PaystackInitializeAPIResponse(
+            err = PaymentRedirectManifest(
                 status=False,
                 title=e.title,
                 message=e.message,
@@ -95,7 +94,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         
         except Exception as e:
             print(f"Unexpected error during payment processing: {str(e)}")
-            err = PaystackInitializeAPIResponse(
+            err = PaymentRedirectManifest(
                 status=False,
                 title="Payment Error",
                 message="An unexpected error occurred while processing your payment. Please try again later.",

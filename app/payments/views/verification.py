@@ -16,9 +16,10 @@ import json
 class PaymentVerificationView(View):
     template_name = Payments.Checkouts.PAYMENT_VERIFICATION
     # http://localhost:8000/payments/checkout/paystack/verify/?trxref=SRV-jSCgCj9KZ0NehGo
+    
     def get(self, request, *args, **kwargs):
         provider = kwargs.get("gateway")
-        reference = request.GET.get("txref")
+        reference = request.GET.get("trxref")
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
         context = {
