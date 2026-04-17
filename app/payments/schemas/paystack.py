@@ -1,5 +1,6 @@
-from pydantic import BaseModel, HttpUrl
-
+from pydantic import BaseModel, Field, HttpUrl
+from datetime import datetime
+from typing import Any, Dict
 
 class PaystackInitializationData(BaseModel):
     """The actual payload containing checkout details."""
@@ -21,3 +22,17 @@ class PaystackInitializationResponseSchema(BaseModel):
 #     "reference": "re4lyvq3s3"
 #   }
 # }
+
+
+class PaystackVerificationResponseData(BaseModel):
+    id: int
+    reference: str
+    gateway_response: str
+    amount:  int
+    paid_at: datetime
+
+
+class PaystackVerificationResponseSchema(BaseModel):
+    message: str
+    data: PaystackVerificationResponseData
+    metadata: Dict[str, Any] = Field(default_factory=dict)

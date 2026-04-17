@@ -12,7 +12,7 @@ from uuid import UUID
 
 
 @dataclass(frozen=True)
-class GatewayInitializationResult:
+class GatewayInitializationResultEntity:
     """
     Normalized response from a payment gateway.
 
@@ -31,6 +31,11 @@ class GatewayInitializationResult:
     def __post_init__(self):
         if not self.gateway or not self.data:
             raise ValueError("Gateway result must include both a provider and response data.")
+        
+@dataclass(frozen=True)
+class GatewayVerificationResultEntity:
+    gateway: RegisteredPaymentProvider
+    data: dict
             
 @dataclass
 class PaymentEntity:
@@ -91,7 +96,7 @@ class PaymentEntity:
             self.paid_at=datetime.now()
             self.is_processed = True
             
-    def sync_gateway_checkout_session(self, result: GatewayInitializationResult):
+    def sync_gateway_checkout_session(self, result: GatewayInitializationResultEntity):
         """
             Synchronizes the entity with the gateway's checkout response to enable session persistence.
             

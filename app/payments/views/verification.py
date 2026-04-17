@@ -40,7 +40,7 @@ class PaymentVerificationView(View):
                 gateway_name=payload.provider, 
                 phase=PaymentPhase.VERIFICATION
             ).verify(payload.reference)
-            return JsonResponse(payload.model_dump(), status=200)
+            return JsonResponse(resp, status=200)
             
             
         except json.JSONDecodeError:

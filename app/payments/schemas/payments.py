@@ -100,3 +100,7 @@ class PaymentRedirectManifest(BaseModel):
         }
     )
     
+
+class PaymentVerificationResponse(BaseModel):
+    pass
+    

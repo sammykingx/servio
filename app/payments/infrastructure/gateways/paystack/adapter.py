@@ -6,11 +6,11 @@ from django.urls import reverse_lazy
 from requests.exceptions import HTTPError, Timeout, RequestException
 from payments.domain.contracts import PaymentGateway
 from payments.domain.enums import RegisteredPaymentProvider
-from payments.domain.entities import GatewayInitializationResult
+from payments.domain.entities import GatewayInitializationResultEntity
 from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import PaymentGatewayError
 from payments.schemas.payments import PaymentGatewayRequest
-from payments.schemas.paystack import PaystackInitializationResponseSchema
+from payments.schemas.paystack import PaystackInitializationResponseSchema, PaystackVerificationResponseSchema
 
 
 import json, logging, requests
@@ -49,7 +49,7 @@ class PaystackAdapter(PaymentGateway):
         
         return headers
     
-    def create_payment(self, payload: PaymentGatewayRequest) -> GatewayInitializationResult:
+    def create_payment(self, payload: PaymentGatewayRequest) -> GatewayInitializationResultEntity:
         data = PaymentGatewayRequest.model_dump(payload, mode='json')
         data["callback_url"] = self.callback_url
         data["metadata"] = {"cancel_action": reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT)}
@@ -65,7 +65,7 @@ class PaystackAdapter(PaymentGateway):
             response.raise_for_status()
             json_data:dict = response.json()
             paystack_res = PaystackInitializationResponseSchema(**json_data)
-            return GatewayInitializationResult(
+            return GatewayInitializationResultEntity(
                 gateway=RegisteredPaymentProvider.PAYSTACK,
                 message=paystack_res.message,
                 data=paystack_res.data
@@ -124,6 +124,12 @@ class PaystackAdapter(PaymentGateway):
                 timeout=self.timeout,
             )
             response.raise_for_status()
+            json_data:dict = response.json()
+            paystack_res = PaystackInitializationResponseSchema(
+                message=json_data.get("message"),
+                data=json_data.get("data"),
+                metadata=json_data
+            )
             print(response.json())
             return response.json()
         

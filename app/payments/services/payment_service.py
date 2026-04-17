@@ -5,7 +5,7 @@ from django.db import transaction, IntegrityError, OperationalError
 from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.repositories import PaymentRepository
 from payments.domain.enums import RegisteredPaymentProvider, PaymentPurpose, PaymentStatus, PaymentType, PaymentPhase
-from payments.domain.entities import GatewayInitializationResult, PaymentEntity
+from payments.domain.entities import GatewayInitializationResultEntity, PaymentEntity
 from payments.domain.exceptions import DomainException, PolicyViolationError, PaymentPersistenceError
 from payments.domain.errors import PaymentFailure
 from payments.domain.policies import PaymentPolicy
@@ -59,9 +59,9 @@ class PaymentService:
             if gateway_class:
                 self.gateway = gateway_class()
     
-    def _build_response(self, payment_entity: PaymentEntity) -> GatewayInitializationResult:
+    def _build_response(self, payment_entity: PaymentEntity) -> GatewayInitializationResultEntity:
         """Helper to format the final UI response."""
-        return GatewayInitializationResult(
+        return GatewayInitializationResultEntity(
            gateway=payment_entity.gateway,
            message=payment_entity.gateway_response,
            data=payment_entity.metadata,
@@ -107,7 +107,7 @@ class PaymentService:
 
         return self.repo.create_record(amount, self.currency, payment_type, payment_purpose, self.provider)
 
-    def process_payment(self, reference: str) -> GatewayInitializationResult:
+    def process_payment(self, reference: str) -> GatewayInitializationResultEntity:
         payment_entity = self.repo.get_by_reference(reference)
         PaymentPolicy.ensure_entity_is_processable(payment_entity, phase=PaymentPhase.INITIALIZATION)
         if not payment_entity.is_session_expired:
@@ -125,7 +125,7 @@ class PaymentService:
         try:
             payment_entity = self.repo.get_by_reference(reference, lock=True)
             PaymentPolicy.ensure_entity_is_processable(payment_entity, phase=PaymentPhase.VERIFICATION)
-            gateway_resp = self.gateway.verify_payment(reference)
+            gateway_resp = {'status': True, 'message': 'Verification successful', 'data': {'id': 6029033797, 'domain': 'test', 'status': 'success', 'reference': 'SRV-jSCgCj9KZ0NehGo', 'receipt_number': None, 'amount': 5600000, 'message': "Can't requery test transaction", 'gateway_response': 'Approved', 'paid_at': '2026-04-14T21:35:20.000Z', 'created_at': '2026-04-12T00:42:43.000Z', 'channel': 'bank_transfer', 'currency': 'NGN', 'ip_address': '102.89.85.44', 'metadata': {'cancel_action': '/payments/cancelled/'}, 'log': {'start_time': 1775954798, 'time_spent': 26, 'attempts': 0, 'errors': 0, 'success': True, 'mobile': True, 'input': [], 'history': [{'type': 'action', 'message': 'Set payment method to: bank_transfer', 'time': 61}, {'type': 'action', 'message': 'Set payment method to: card', 'time': 66}, {'type': 'action', 'message': 'Set payment method to: bank_transfer', 'time': 8}, {'type': 'action', 'message': 'Set payment method to: card', 'time': 10}, {'type': 'action', 'message': 'Set payment method to: bank_transfer', 'time': 18}, {'type': 'success', 'message': 'Successfully paid with bank_transfer', 'time': 26}]}, 'fees': 94000, 'fees_split': None, 'authorization': {'authorization_code': 'AUTH_gcpa7yd6xr', 'bin': '123XXX', 'last4': 'X890', 'exp_month': '04', 'exp_year': '2026', 'channel': 'bank_transfer', 'card_type': 'transfer', 'bank': None, 'country_code': 'NG', 'brand': 'Managed Account', 'reusable': False, 'signature': None, 'account_name': None, 'sender_bank': None, 'sender_country': 'NG', 'sender_bank_account_number': 'XXXXXXX890', 'sender_name': 'TEST PAYER', 'narration': 'Test transaction', 'receiver_bank_account_number': None, 'receiver_bank': None}, 'customer': {'id': 355100918, 'first_name': None, 'last_name': None, 'email': 'dylar77@anhmaybietchoi.com', 'customer_code': 'CUS_ge21z2zt8xncvzr', 'phone': None, 'metadata': None, 'risk_action': 'default', 'international_format_phone': None}, 'plan': None, 'split': {}, 'order_id': None, 'paidAt': '2026-04-14T21:35:20.000Z', 'createdAt': '2026-04-12T00:42:43.000Z', 'requested_amount': 5600000, 'pos_transaction_data': None, 'source': None, 'fees_breakdown': None, 'connect': None, 'transaction_date': '2026-04-12T00:42:43.000Z', 'plan_object': {}, 'subaccount': {}}} # self.gateway.verify_payment(reference)
             # update db record
         except OperationalError:
             raise PaymentPersistenceError(
