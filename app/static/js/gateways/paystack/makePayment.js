@@ -1,6 +1,7 @@
 /**
  * PaystackOrchestrator
  * Handles the flow from Backend Initialization to Frontend Popup
+ * for making user paymnents
  */
 class PaystackOrchestrator {
     constructor(config) {

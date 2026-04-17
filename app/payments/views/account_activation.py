@@ -19,7 +19,7 @@ import json
 
 
 class AccountActivationView(LoginRequiredMixin, View):
-    template_name = Payments.Checkouts.SUBSCRIPTION_CHECKOUT
+    template_name = Payments.Checkouts.PAYSTACK_CHECKOUT
     
     def get(self, request, *args, **kwargs):
         provider:str = kwargs.get("gateway")

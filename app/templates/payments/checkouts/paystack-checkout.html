@@ -172,7 +172,7 @@
 {% endblock %}
 {% block js_files %}
 <script src="https://js.paystack.co/v2/inline.js"></script>
-<script src="{% static 'js/gateways/paystack.js' %}"></script>
+<script src="{% static 'js/gateways/paystack/makePayment.js' %}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById("payment-container");

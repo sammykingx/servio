@@ -2,12 +2,12 @@
 {% load static %}
 {% block browser_title %}Payment Checkout Verification{% endblock %}
 {% block body_content %}
-<main class="relative max-w-4xl mx-auto px-6 py-12 lg:py-18 overflow-hidden">
+<main class="relative max-w-4xl mx-auto px-6 py-10 lg:py-16 overflow-hidden">
     
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-64 bg-emerald-500/5 dark:bg-brand-500/10 blur-[120px] pointer-events-none"></div>
 
-    <div class="relative z-10">
-        <div class="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div class="relative">
+        <div class="text-center mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/30 mb-6">
                 <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -27,9 +27,8 @@
         <div class="relative group max-w-2xl mx-auto">
             <div class="absolute -inset-px bg-gradient-to-r from-emerald-200 to-brand-200 dark:from-white/10 dark:to-white/5 rounded-[2.5rem]"></div>
             
-            <div class="relative bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+            <!-- <div class="relative bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl">
                 <div class="flex flex-col items-center">
-                    
                     <div class="relative size-24 mb-10">
                         <svg class="absolute inset-0 size-full -rotate-90">
                             <circle cx="48" cy="48" r="44" stroke="currentColor" stroke-width="4" fill="transparent" class="text-slate-100 dark:text-white/5" />
@@ -83,7 +82,65 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+
+            <div class="relative bg-white dark:bg-black border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl">
+                <div id="payment-container" data-reference="{{ reference }}" data-provider="{{ provider }}" data-endpoint="{{ verificationUrl }}" class="flex flex-col items-center">
+                    <div class="relative size-24 mb-10">
+                        <svg class="absolute inset-0 size-full -rotate-90">
+                            <circle cx="48" cy="48" r="44" stroke="currentColor" stroke-width="4" fill="transparent" class="text-slate-100 dark:text-white/5" />
+                            <circle id="verification-svg-circle" cx="48" cy="48" r="44" stroke="currentColor" stroke-width="4" fill="transparent" stroke-dasharray="276" stroke-dashoffset="69" class="text-emerald-500 animate-[dash_2s_ease-in-out_infinite]" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="verification-main-icon" class="material-symbols-outlined text-4xl text-emerald-500 transition-all duration-500">
+                                published_with_changes
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="w-full space-y-8">
+                        <div class="text-center space-y-3">
+                            <p id="verification-status-text" class="text-sm font-semibold text-slate-900 dark:text-white tracking-wide">
+                                Awaiting confirmation...
+                            </p>
+                            <div class="w-full h-1.5 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden max-w-xs mx-auto">
+                                <div id="verification-progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-500" style="width: 10%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 dark:bg-white/5 rounded-3xl p-6 border border-slate-100 dark:border-white/5">
+                            <div class="grid grid-cols-2 gap-y-4">
+                                <div>
+                                    <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Provider</p>
+                                    <p class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ provider|title }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Status</p>
+                                    <p id="verification-badge" class="text-[9px] sm:text-xs md:text-sm font-medium text-amber-500">Processing</p>
+                                </div>
+                                <div class="col-span-2 pt-4 border-t border-slate-200/50 dark:border-white/5">
+                                    <p class="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Transaction Ref</p>
+                                    <p class="text-xs font-mono text-slate-600 dark:text-slate-400">{{ reference }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-black/90 rounded-2xl p-4 shadow-inner">
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="flex gap-1">
+                                    <div class="size-2 rounded-full bg-red-500/50"></div>
+                                    <div class="size-2 rounded-full bg-amber-500/50"></div>
+                                    <div class="size-2 rounded-full bg-emerald-500/50"></div>
+                                </div>
+                                <span class="text-[9px] font-mono text-slate-500 uppercase tracking-widest">Verification Node</span>
+                            </div>
+                            <div id="verification-terminal" class="text-[11px] font-mono text-emerald-500/80 space-y-1">
+                                </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
 
         <p class="mt-8 text-center text-xs text-slate-400 dark:text-slate-600">
@@ -104,4 +161,28 @@
         100% { width: 0%; margin-left: 100%; }
     }
 </style>
+{% endblock %}
+{% block js_files %}
+    <script src="{% static 'js/gateways/paystack/verifyPayment.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById("payment-container");
+
+            const config = {
+                reference: container.dataset.reference,
+                provider: container.dataset.provider,
+                endpoint: container.dataset.endpoint,
+            };
+
+            if (config.reference && config.endpoint && config.provider) {
+                new PaystackVerificationOrchestrator(config);
+            } else {
+                showToast(
+                    "The verifcation page didn't load all the necessary details.",
+                    "warning",
+                    "Page Config Error",
+                );
+            }
+        });
+    </script>
 {% endblock %}

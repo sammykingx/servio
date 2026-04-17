@@ -6,6 +6,7 @@ from datetime import datetime
 from payments.domain.enums import PaymentStatus, RegisteredPaymentProvider
 from payments.schemas.paystack import PaystackInitializationData
 from payments.schemas.stripe import StripeInitializationData
+from datetime import timedelta
 from typing import Any, Dict, Union
 from uuid import UUID
 
@@ -59,6 +60,22 @@ class PaymentEntity:
     
     def is_successful(self) -> bool:
         return self.status == PaymentStatus.SUCCESS
+    
+    @property
+    def is_session_expired(self) -> bool:
+        """
+        Determines if the payment session has exceeded the gateway's validity window.
+        """
+        now = datetime.now()
+        duration = now - self.created_at
+        
+        expiry_map = {
+            RegisteredPaymentProvider.PAYSTACK: 4,
+            RegisteredPaymentProvider.STRIPE: 24,
+        }
+        
+        limit_hours = expiry_map.get(self.gateway, 2)
+        return duration > timedelta(hours=limit_hours)
         
     def mark_as_expired(self, reason: str):
         """Domain logic for transitioning to expired state."""
@@ -68,12 +85,18 @@ class PaymentEntity:
     def mark_as_successful(self, reason: str, metadata:dict):
         if not self.is_successful():
             self.status = PaymentStatus.SUCCESS
+            self.gateway_response=reason,
+            self.gateway_order_id="",
+            self.metadata=metadata,
             self.paid_at=datetime.now()
+            self.is_processed = True
             
-    def sync_initialization(self, result: GatewayInitializationResult):
+    def sync_gateway_checkout_session(self, result: GatewayInitializationResult):
         """
-        Handles syncing for the START of a payment.
-        Focus: Extracting access codes/URLs to get the user to the gateway.
+            Synchronizes the entity with the gateway's checkout response to enable session persistence.
+            
+            This ensures the user can resume the same checkout process if they leave, 
+            preventing redundant transaction calls for the same payment intent.
         """
         self.gateway_response = result.message
         self.metadata = result.data.model_dump()

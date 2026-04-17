@@ -69,18 +69,11 @@ class PaymentPolicy:
         Validates that the gateway session (e.g., Paystack access_code) hasn't expired.
         Currently enforces a 4-hour limit for Paystack.
         """
-        if payment_entity.is_stale():
-            raise PolicyViolationError(
-                "This payment session has expired. Please refresh the page to start a new transaction.",
-                code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
-                title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
-            )
-    
-        # if payment_entity.gateway == RegisteredPaymentProvider.PAYSTACK:
-        #     expiry_limit = timezone.now() - timedelta(hours=4)
-        #     if payment_entity.created_at < expiry_limit:
-        #         raise PolicyViolationError(
-        #             "This payment session has expired. Please refresh the page to start a new transaction.",
-        #             code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
-        #             title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
-        #         )
+        if payment_entity.gateway == RegisteredPaymentProvider.PAYSTACK:
+            exp_time = timezone.now() - payment_entity.created_at
+            if exp_time > timedelta(hours=4):
+                raise PolicyViolationError(
+                    "This payment session has expired. Please refresh the page to start a new transaction.",
+                    code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
+                    title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
+                )

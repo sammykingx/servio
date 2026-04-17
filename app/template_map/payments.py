@@ -26,7 +26,7 @@ class Payments:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("checkouts")
         
         SUBSCRIPTION_CHECKOUT_CURRENCY = f"{__SUB_FOLDER}/subcription-checkout-currency.html"
-        SUBSCRIPTION_CHECKOUT = f"{__SUB_FOLDER}/subscription-checkout.html"
+        PAYSTACK_CHECKOUT = f"{__SUB_FOLDER}/paystack-checkout.html"
         CHECKOUT_CANCELLED = f"{__SUB_FOLDER}/cancelled-checkout.html"
         UNREGISTERED_GATEWAY = f"{__SUB_FOLDER}/unregistered-gateway.html"
         PAYMENT_VERIFICATION = f"{__SUB_FOLDER}/payment-verification.html"

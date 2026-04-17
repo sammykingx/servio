@@ -74,7 +74,7 @@ class PaymentRepository:
         db_obj = self.model.objects.filter(user=self.user, reference=reference).first()
         return self._map_to_entity(db_obj) if db_obj else None
 
-    def find_user_active_payment(self, payment_type: PaymentType, purpose: PaymentPurpose) -> PaymentEntity | None:
+    def find_user_active_payment(self, payment_type: PaymentType, purpose: PaymentPurpose) -> Union[PaymentEntity, None]:
         """
             Finds a unique payment record for the user context and maps it to a Domain Entity.
 
@@ -145,7 +145,9 @@ class PaymentRepository:
         
     def update_as_expired(self, entity: PaymentEntity) -> None:
         """Persists the transition to an EXPIRED state."""
-        self.model.objects.filter(user=entity.user, reference=entity.reference).update(
+        self.model.objects.filter(
+            user=entity.user, reference=entity.reference
+        ).update(
             status=entity.status,
             gateway_response=entity.gateway_response,
         )
@@ -155,10 +157,12 @@ class PaymentRepository:
         
         self.model.objects.filter(reference=entity.reference).update(
             status=entity.status,
+            gateway_order_id=entity.gateway_order_id,
             gateway_reference=entity.gateway_reference,
-            
+            gateway_response=entity.gateway_response,
             metadata=entity.metadata,
             paid_at=entity.paid_at,
+            is_processed=entity.is_processed
         )
     
     def update_as_initialized(self, entity: PaymentEntity) -> None:

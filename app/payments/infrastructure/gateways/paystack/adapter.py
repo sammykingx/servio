@@ -1,5 +1,7 @@
 # Paystack gateway adapter implementing PaymentGateway contract.
 
+from core.url_names import PaymentURLS
+from django.conf import settings
 from django.urls import reverse_lazy
 from requests.exceptions import HTTPError, Timeout, RequestException
 from payments.domain.contracts import PaymentGateway
@@ -9,8 +11,8 @@ from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import PaymentGatewayError
 from payments.schemas.payments import PaymentGatewayRequest
 from payments.schemas.paystack import PaystackInitializationResponseSchema
-from core.url_names import PaymentURLS
-from decouple import config
+
+
 import json, logging, requests
 
 
@@ -21,8 +23,8 @@ class PaystackAdapter(PaymentGateway):
     BASE_URL = "https://api.paystack.co"
 
     def __init__(self):
-        self.secret_key = config("PAYSTACK_TEST_SECRET_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_SECRET_KEY")
-        self.public_key = config("PAYSTACK_TEST_PUBLIC_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_PUBLIC_KEY")
+        self.secret_key = settings.PAYSTACK_SECRET_KEY
+        self.public_key = settings.PAYSTACK_PUBLIC_KEY
         self.callback_url = reverse_lazy(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
         self.timeout = (5, 17) # (Connect Timeout, Read Timeout)
 
@@ -62,7 +64,6 @@ class PaystackAdapter(PaymentGateway):
             )
             response.raise_for_status()
             json_data:dict = response.json()
-            # what if response was succeful but paystack changed the params of resonse
             paystack_res = PaystackInitializationResponseSchema(**json_data)
             return GatewayInitializationResult(
                 gateway=RegisteredPaymentProvider.PAYSTACK,
@@ -88,6 +89,7 @@ class PaystackAdapter(PaymentGateway):
                 code=PaymentFailure.GATEWAY_TIMEOUT.code,
                 title=PaymentFailure.GATEWAY_TIMEOUT.title,
             )
+
         except HTTPError as e:
             if e.response.status_code == 401:
                 raise PaymentGatewayError(
@@ -95,6 +97,7 @@ class PaystackAdapter(PaymentGateway):
                     code=PaymentFailure.PROVIDER_NOT_CONFIGURED.code,
                     title=PaymentFailure.PROVIDER_NOT_CONFIGURED.title,
                 )
+
             # 400
             raise PaymentGatewayError(
                 "Prevented a duplicate initialization to protect against double-charging.",

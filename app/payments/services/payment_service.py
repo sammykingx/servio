@@ -86,6 +86,12 @@ class PaymentService:
             ) 
     
     def initiate_payment(self, amount: Decimal, payment_type: PaymentType, payment_purpose:PaymentPurpose) -> PaymentEntity:
+        """
+            Registers the user's payment intent by retrieving a valid existing session or creating a fresh one.
+
+            This internal orchestration ensures idempotency by reusing active records, expiring stale sessions, 
+            and preventing duplicate billing before any external gateway handshake occurs.
+        """
         existing_entity = self.repo.find_user_active_payment(payment_type, payment_purpose)
         if existing_entity:
             try:
@@ -104,14 +110,12 @@ class PaymentService:
     def process_payment(self, reference: str) -> GatewayInitializationResult:
         payment_entity = self.repo.get_by_reference(reference)
         PaymentPolicy.ensure_entity_is_processable(payment_entity, phase=PaymentPhase.INITIALIZATION)
-        if payment_entity.gateway == RegisteredPaymentProvider.PAYSTACK and payment_entity.gateway_reference:
-            # to resume transaction
+        if not payment_entity.is_session_expired:
             return self._build_response(payment_entity)
         
         payload = self.prepare_gateway_entity(payment_entity)
         gw_entity = self.gateway.create_payment(payload)
-        payment_entity.sync_initialization(gw_entity)
-        # get response json
+        payment_entity.sync_gateway_checkout_session(gw_entity)
         return gw_entity
 
     def verify(self, reference):
@@ -121,7 +125,6 @@ class PaymentService:
         try:
             payment_entity = self.repo.get_by_reference(reference, lock=True)
             PaymentPolicy.ensure_entity_is_processable(payment_entity, phase=PaymentPhase.VERIFICATION)
-            self.resolve_gateway_provider(payment_entity)
             gateway_resp = self.gateway.verify_payment(reference)
             # update db record
         except OperationalError:

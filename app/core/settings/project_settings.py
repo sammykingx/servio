@@ -1,7 +1,7 @@
 # project related settings
 
 from core.url_names import AuthURLNames
-
+from decouple import config
 
 # custom user model
 AUTH_USER_MODEL = "accounts.AuthUser"
@@ -34,3 +34,6 @@ CACHES = {
         "LOCATION": "django_cache_table",
     }
 }
+
+PAYSTACK_SECRET_KEY = config("PAYSTACK_TEST_SECRET_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_SECRET_KEY")
+PAYSTACK_PUBLIC_KEY = config("PAYSTACK_TEST_PUBLIC_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_PUBLIC_KEY")
