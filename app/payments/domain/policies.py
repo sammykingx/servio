@@ -68,8 +68,11 @@ class PaymentPolicy:
     @staticmethod
     def _ensure_session_is_not_stale(payment_entity: PaymentEntity):
         """
-        Validates that the gateway session (e.g., Paystack access_code) hasn't expired.
-        Currently enforces a 4-hour limit for Paystack.
+        Enforces time-to-live (TTL) constraints on existing gateway sessions.
+
+        Prevents 'Duplicate Reference' errors by ensuring that any existing 
+        provider handshake is still within the gateway's acceptance window. 
+        If expired, it mandates a full transaction restart.
         """
         if payment_entity.gateway == RegisteredPaymentProvider.PAYSTACK:
             exp_time = timezone.now() - payment_entity.created_at

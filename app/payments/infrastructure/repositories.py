@@ -77,11 +77,9 @@ class PaymentRepository:
             Guards:
                 - Validates that self.user is an authenticated AbstractUser instance.
                 - Filters by non-terminal and successful statuses to ensure idempotency.
-
             Args:
                 payment_type (PaymentType): The type of payment to be made as defined in the PaymentType class.
                 purpose (PaymentPurpose): The intent/target of the payment.
-
             Returns:
                 Optional[PaymentEntity]: A mapped entity or None if no record matches 
                 the specific intent and active status.
@@ -94,6 +92,7 @@ class PaymentRepository:
                 PaymentStatus.INITIATED,
                 PaymentStatus.PENDING,
                 PaymentStatus.SUCCESS,
+                PaymentStatus.INCOMPLETE,
             ]
         ).first()
         return self._map_to_entity(db_obj) if db_obj else None

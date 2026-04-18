@@ -35,6 +35,8 @@ class AccountActivationView(LoginRequiredMixin, View):
             payment_type=PaymentType.ONE_TIME, 
             payment_purpose=PaymentPurpose.ACTIVATION_FEE
         )
+        print("entity gotten", entity.reference)
+        
         context = {
             "provider": entity.gateway,
             "reference": entity.reference,
@@ -42,7 +44,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         }
         
         if entity.status == PaymentStatus.SUCCESS:
-            return redirect(reverse_lazy(PaymentURLS.CHECKOUT_COMPLETE, kwargs=context))
+            return redirect(reverse_lazy(PaymentURLS.CHECKOUT_COMPLETE))
         
         return render(request, self.template_name, context=context)
     
@@ -56,7 +58,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             )
             resp = payment_service.process_payment(payload.reference)
             response_data = PaymentManifest(
-                status=resp.get("status", True),
+                status=PaymentStatus.SUCCESS,
                 title=resp.get("message", "Checkout URL ready"),
                 message="Payment initialized successfully",
                 data=resp.get("data", {}),
@@ -69,7 +71,7 @@ class AccountActivationView(LoginRequiredMixin, View):
 
         except json.JSONDecodeError:
             err = PaymentManifest(
-                status=False,
+                status=PaymentStatus.FAILED,
                 title="Invalid JSON payload",
                 message="Invalid data format",
                 ui_intent="warning",
@@ -80,7 +82,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             fields = format_pydantic_errors(e),
             print(fields)
             err = PaymentManifest(
-                status=False,
+                status=PaymentStatus.FAILED,
                 title="Validation error",
                 message="Some required information is missing or invalid.",
                 ui_intent="warning",
@@ -89,7 +91,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 
         except DomainException as e:
             err = PaymentManifest(
-                status=False,
+                status=PaymentStatus.FAILED,
                 title=e.title,
                 message=e.message,
                 ui_intent=e.err_type,
@@ -99,7 +101,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         except Exception as e:
             print(f"Unexpected error during payment processing: {str(e)}")
             err = PaymentManifest(
-                status=False,
+                status=PaymentStatus.FAILED,
                 title="Payment Error",
                 message="An unexpected error occurred while processing your payment. Please try again later.",
                 ui_intent="error",

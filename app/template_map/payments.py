@@ -30,5 +30,5 @@ class Payments:
         CHECKOUT_CANCELLED = f"{__SUB_FOLDER}/cancelled-checkout.html"
         UNREGISTERED_GATEWAY = f"{__SUB_FOLDER}/unregistered-gateway.html"
         PAYMENT_VERIFICATION = f"{__SUB_FOLDER}/payment-verification.html"
-        PAYMENT_RESULT = f"{__SUB_FOLDER}/payment-result.html"
+        CHECKOUT_COMPLETE = f"{__SUB_FOLDER}/checkout-complete.html"
         

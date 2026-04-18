@@ -30,27 +30,33 @@ class PaymentEntity:
     gateway_order_id: int = None
     paid_at: datetime = None
     
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)    
     
     @property
-    def is_session_expired(self) -> bool:
-        """
-        Determines if the payment session has exceeded the gateway's validity window.
-        """
-        now = datetime.now()
-        duration = now - self.created_at
-        
-        expiry_map = {
-            RegisteredPaymentProvider.PAYSTACK: 4,
-            RegisteredPaymentProvider.STRIPE: 24,
-        }
-        
-        limit_hours = expiry_map.get(self.gateway, 2)
-        return duration > timedelta(hours=limit_hours)
+    def has_active_gateway_session(self) -> bool:
+        """Returns True only if the handshake has already occurred (gateway_reference is set)"""
+        return bool(self.gateway_reference)
     
     @property
     def is_successful(self) -> bool:
         return self.status == PaymentStatus.SUCCESS
+    
+    # def is_session_valid(self) -> bool:
+    # noneed since policy ensures it's withing the gateway specific
+    # time windowk
+    #     """
+    #     Determines if the payment session has exceeded the gateway's validity window.
+    #     """
+    #     now = datetime.now()
+    #     duration = now - self.created_at
+        
+    #     expiry_map = {
+    #         RegisteredPaymentProvider.PAYSTACK: 4,
+    #         RegisteredPaymentProvider.STRIPE: 24,
+    #     }
+        
+    #     limit_hours = expiry_map.get(self.gateway, 4)
+    #     return duration < timedelta(hours=limit_hours)
     
     def _transition_to_terminal_failure(self, status: PaymentStatus, reason: str):
         """Private helper to handle shared terminal state logic."""
@@ -86,7 +92,7 @@ class PaymentEntity:
 
             This method acts as the final state transition, updating the internal 
             reference, capturing gateway metadata, and marking the transaction 
-            as successful.
+            as successful or incomplete.
         """
         if self.amount_in_minor_units != gw_entity.data.amount:
             self.status = PaymentStatus.INCOMPLETE

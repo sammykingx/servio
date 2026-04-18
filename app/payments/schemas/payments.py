@@ -1,5 +1,6 @@
 # payments/schemas/payment.py
 
+from payments.domain.enums import PaymentStatus
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from typing import Any, Dict, Literal
 
@@ -55,7 +56,7 @@ class PaymentManifest(BaseModel):
     This object encapsulates the gateway's response (like the checkout URL) 
     and provides UI hints for the frontend notification system.
     """
-    status: str
+    status: Literal[PaymentStatus.SUCCESS, PaymentStatus.FAILED]
     title: str
     message: str
     data: Dict[str, Any] = Field(
