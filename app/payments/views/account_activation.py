@@ -35,7 +35,6 @@ class AccountActivationView(LoginRequiredMixin, View):
             payment_type=PaymentType.ONE_TIME, 
             payment_purpose=PaymentPurpose.ACTIVATION_FEE
         )
-        print("entity gotten", entity.reference)
         
         context = {
             "provider": entity.gateway,
@@ -80,7 +79,6 @@ class AccountActivationView(LoginRequiredMixin, View):
         
         except ValidationError as e:
             fields = format_pydantic_errors(e),
-            print(fields)
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title="Validation error",
@@ -99,7 +97,6 @@ class AccountActivationView(LoginRequiredMixin, View):
             return JsonResponse(err.model_dump(), status=400)
         
         except Exception as e:
-            print(f"Unexpected error during payment processing: {str(e)}")
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title="Payment Error",
