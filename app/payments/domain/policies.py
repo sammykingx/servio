@@ -3,11 +3,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from payments.domain.enums import PaymentStatus, PaymentPhase, RegisteredPaymentProvider
-from payments.domain.entities import PaymentEntity
+from payments.domain.entities.gateway import GatewayVerifyResponse
+from payments.domain.entities.payments import PaymentEntity
 from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import PolicyViolationError
 from payments.infrastructure.registry import GATEWAYS
 from datetime import timedelta
+from decimal import Decimal
 
 
 class PaymentPolicy:
@@ -22,16 +24,16 @@ class PaymentPolicy:
         """
         if not payment_entity:
             raise PolicyViolationError(
-                message="We couldn't find a record for this payment. Please check your reference number or try again.",
+                message="We couldn't find a record for this payment. Please check your reference number and try again.",
                 code=PaymentFailure.INVALID_REFERENCE.code,
                 title=PaymentFailure.INVALID_REFERENCE.title,
             )
             
-        if payment_entity.status == PaymentStatus.SUCCESS:
+        if payment_entity.status in {PaymentStatus.SUCCESS, PaymentStatus.INCOMPLETE}:
             msg = (
                 "Payment already verified. Your transaction was completed successfully."
                 if phase == PaymentPhase.VERIFICATION else
-                "This payment has already been completed. We've blocked this attempt to ensure you aren't charged twice."
+                "This payment has already been processed. We've blocked this attempt to ensure you aren't charged twice."
             )
             raise PolicyViolationError(
                 msg,
@@ -77,3 +79,16 @@ class PaymentPolicy:
                     code=PaymentFailure.PAYMENT_SESSION_EXPIRED.code,
                     title=PaymentFailure.PAYMENT_SESSION_EXPIRED.title,
                 )
+                
+    @staticmethod
+    def validate_paid_amount(payment_entity: PaymentEntity, gw_entity: GatewayVerifyResponse):
+        """Ensures the final captured amount matches the processed amount by gateway."""
+        if gw_entity.gateway == RegisteredPaymentProvider.PAYSTACK:
+            actual_paid_decimal = Decimal(gw_entity.data.amount) / Decimal(100)
+            payment_entity.amount_decimal != actual_paid_decimal
+            raise PolicyViolationError(
+                f"Amount mismatch: Expected {payment_entity.currency}{payment_entity.amount_decimal:.2f}, "
+                f"but gateway reported {payment_entity.currency}{actual_paid_decimal:.2f}.",
+                code=PaymentFailure.PAYMENT_INCOMPLETE.code,
+                title=PaymentFailure.PAYMENT_INCOMPLETE.title
+            )

@@ -2,16 +2,16 @@ from pydantic import BaseModel, Field, HttpUrl
 from datetime import datetime
 from typing import Any, Dict
 
-class PaystackInitializationData(BaseModel):
+class PaystackInitData(BaseModel):
     """The actual payload containing checkout details."""
     authorization_url: HttpUrl
     access_code: str
     reference: str
 
-class PaystackInitializationResponseSchema(BaseModel):
+class PaystackInitResponseSchema(BaseModel):
     """The full API response structure from Paystack initialization API."""
     message: str
-    data: PaystackInitializationData
+    data: PaystackInitData
     
 # {
 #   "status": True,
@@ -24,15 +24,9 @@ class PaystackInitializationResponseSchema(BaseModel):
 # }
 
 
-class PaystackVerificationResponseData(BaseModel):
+class PaystackVerificationData(BaseModel):
     id: int
-    reference: str
-    gateway_response: str
+    status: str
     amount:  int
     paid_at: datetime
-
-
-class PaystackVerificationResponseSchema(BaseModel):
-    message: str
-    data: PaystackVerificationResponseData
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    paystack_metadata: Dict[str, Any] = Field(default_factory=dict)

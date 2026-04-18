@@ -8,3 +8,6 @@ class StripeInitializationResponseSchema(BaseModel):
     
 class StripeInitializationData(BaseModel):
     pass
+
+class StripeVerificationData(BaseModel):
+    pass

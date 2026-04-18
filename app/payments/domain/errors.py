@@ -49,6 +49,9 @@ class PaymentFailure:
     PAYMENT_SESSION_EXPIRED = FailureDetail(
         "PAYMENT_SESSION_EXPIRED", "Payment Session Expired"
     )
+    PAYMENT_INCOMPLETE = FailureDetail(
+        "PAYMENT_INCOMPLETE", "Incomplete Payment",
+    )
     
     # ------ DB RELATED ------
     SERVER_BUSY = FailureDetail("PROCESSING_IN_PROGRESS", "Processing in Progress")

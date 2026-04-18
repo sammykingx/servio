@@ -6,14 +6,14 @@ from django.urls import reverse_lazy
 from requests.exceptions import HTTPError, Timeout, RequestException
 from payments.domain.contracts import PaymentGateway
 from payments.domain.enums import RegisteredPaymentProvider
-from payments.domain.entities import GatewayInitializationResultEntity
+from payments.domain.entities.gateway import GatewayInitResponse, GatewayVerifyResponse
 from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import PaymentGatewayError
-from payments.schemas.payments import PaymentGatewayRequest
-from payments.schemas.paystack import PaystackInitializationResponseSchema, PaystackVerificationResponseSchema
+from payments.schemas.payments import PaymentGatewayPayload
+from payments.schemas.paystack import PaystackInitResponseSchema, PaystackVerificationData
 
 
-import json, logging, requests
+import logging, requests
 
 
 logger = logging.getLogger("app_file")
@@ -49,8 +49,8 @@ class PaystackAdapter(PaymentGateway):
         
         return headers
     
-    def create_payment(self, payload: PaymentGatewayRequest) -> GatewayInitializationResultEntity:
-        data = PaymentGatewayRequest.model_dump(payload, mode='json')
+    def create_payment(self, payload: PaymentGatewayPayload) -> GatewayInitResponse:
+        data = PaymentGatewayPayload.model_dump(payload, mode='json')
         data["callback_url"] = self.callback_url
         data["metadata"] = {"cancel_action": reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT)}
         # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
@@ -64,8 +64,8 @@ class PaystackAdapter(PaymentGateway):
             )
             response.raise_for_status()
             json_data:dict = response.json()
-            paystack_res = PaystackInitializationResponseSchema(**json_data)
-            return GatewayInitializationResultEntity(
+            paystack_res = PaystackInitResponseSchema(**json_data)
+            return GatewayInitResponse(
                 gateway=RegisteredPaymentProvider.PAYSTACK,
                 message=paystack_res.message,
                 data=paystack_res.data
@@ -115,23 +115,28 @@ class PaystackAdapter(PaymentGateway):
                 err_type="error"
             )
         
-    def verify_payment(self, reference: str):
+    def verify_payment(self, reference: str) -> GatewayVerifyResponse:
         try:
-            # try for an invalid ref
             response = requests.get(
                 self.verify_payment_endpoint.format(reference=reference),
                 headers=self._get_headers(),
                 timeout=self.timeout,
             )
+            
             response.raise_for_status()
             json_data:dict = response.json()
-            paystack_res = PaystackInitializationResponseSchema(
-                message=json_data.get("message"),
-                data=json_data.get("data"),
-                metadata=json_data
+            paystack_res = PaystackVerificationData(
+                paystack_metadata=json_data,
+                **json_data.get("data"),
             )
-            print(response.json())
-            return response.json()
+            
+            gw_entity = GatewayVerifyResponse(
+                gateway=RegisteredPaymentProvider.PAYSTACK,
+                message=json_data.get("message"),
+                was_successful=json_data.get("status"),
+                data=paystack_res,
+            )
+            return gw_entity
         
         except Timeout:
             raise PaymentGatewayError(
@@ -140,7 +145,7 @@ class PaystackAdapter(PaymentGateway):
                 title=PaymentFailure.GATEWAY_TIMEOUT.title,
             )
 
-        except HTTPError as e:
+        except HTTPError:
             raise PaymentGatewayError(
                 "The transaction reference provided is invalid or could not be found.",
                 code=PaymentFailure.INVALID_REFERENCE.code,

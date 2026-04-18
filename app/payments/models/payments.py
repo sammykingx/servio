@@ -22,6 +22,7 @@ class Payment(models.Model):
     )
     amount_decimal = models.DecimalField(max_digits=12, decimal_places=2)
     amount_in_minor_units = models.BigIntegerField()
+    paid_amount_in_minor = models.BigIntegerField(blank=True, null=True)
     currency = models.CharField(max_length=10)
     payment_type = models.CharField(max_length=30, choices=PaymentType.choices())
     payment_purpose = models.CharField(max_length=30, choices=PaymentPurpose.choices())

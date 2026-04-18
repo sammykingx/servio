@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field
 from typing import Any, Dict, Literal
 
 
-class PaymentGatewayRequest(BaseModel):
+class PaymentGatewayPayload(BaseModel):
     """
     Standardized schema for payment initialization across all gateways.
 
@@ -47,7 +47,7 @@ class ActivePaymentSession(BaseModel):
     reference: str
     provider: str
     
-class PaymentRedirectManifest(BaseModel):
+class PaymentManifest(BaseModel):
     """
     The final response returned to the view when a payment is successfully initialized 
     with a provider and the user is ready to be redirected to the checkout.
@@ -100,7 +100,4 @@ class PaymentRedirectManifest(BaseModel):
         }
     )
     
-
-class PaymentVerificationResponse(BaseModel):
-    pass
     

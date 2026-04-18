@@ -1,16 +1,16 @@
 # Repositories to abstract database access for payments and transactions.
 
 from django.contrib.auth.models import AbstractUser
-from django.db import transaction, OperationalError
+from django.db import OperationalError
+from django.utils.timezone import now
 from payments.models.payments import Payment
-from payments.domain.entities import PaymentEntity
+from payments.domain.entities.payments import PaymentEntity
 from payments.domain.enums import PaymentStatus, PaymentType, PaymentPurpose, RegisteredPaymentProvider
-from payments.domain.exceptions import PaymentPersistenceError
-from payments.domain.errors import PaymentFailure
 from payments.domain.policies import PaymentPolicy
 from decimal import Decimal, ROUND_HALF_UP
 from nanoid import generate
 from typing import Union, Tuple
+
 
 class PaymentRepository:
     """
@@ -62,12 +62,8 @@ class PaymentRepository:
             self.user = db_payment.user 
             return self._map_to_entity(db_payment)
 
-        except OperationalError:
-            raise PaymentPersistenceError(
-                "This transaction is currently being processed. Please wait.",
-                code=PaymentFailure.SERVER_BUSY.code,
-                title=PaymentFailure.SERVER_BUSY.title
-            )
+        except OperationalError as err:
+            raise err
     
     def get_by_reference_for_user(self, reference: str) -> PaymentEntity | None:
         """Retrieves a specific payment for the initialized user."""
@@ -143,26 +139,34 @@ class PaymentRepository:
         )
         return self._map_to_entity(db_obj)
         
-    def update_as_expired(self, entity: PaymentEntity) -> None:
-        """Persists the transition to an EXPIRED state."""
+    def update_status(self, entity: PaymentEntity) -> None:
+        """Persists terminal state transitions (Failed, Expired).
+        Note: Manually refreshes `updated_at` to bypass ORM update limitations.
+        """
         self.model.objects.filter(
             user=entity.user, reference=entity.reference
         ).update(
             status=entity.status,
             gateway_response=entity.gateway_response,
+            updated_at=now()
         )
-
-    def update_as_successful(self, entity: PaymentEntity) -> None:
-        """Persists the transition to a SUCCESS state after verification."""
         
-        self.model.objects.filter(reference=entity.reference).update(
+    def update_as_successful(self, entity: PaymentEntity) -> None:
+        """Persists the transition to a SUCCESS or IN-COMPLETE state after verification.
+        Note: Manually refreshes `updated_at` to bypass ORM update limitations.
+        """
+        
+        self.model.objects.filter(
+            user=entity.user, reference=entity.reference
+        ).update(
             status=entity.status,
+            paid_amount_in_minor=entity.paid_amount_in_minor,
             gateway_order_id=entity.gateway_order_id,
-            gateway_reference=entity.gateway_reference,
             gateway_response=entity.gateway_response,
             metadata=entity.metadata,
             paid_at=entity.paid_at,
-            is_processed=entity.is_processed
+            is_processed=entity.is_processed,
+            updated_at=now()
         )
     
     def update_as_initialized(self, entity: PaymentEntity) -> None:
@@ -189,6 +193,7 @@ class PaymentRepository:
             status=model.status,
             amount_decimal=model.amount_decimal,
             amount_in_minor_units=model.amount_in_minor_units,
+            paid_amount_in_minor=model.paid_amount_in_minor,
             currency=model.currency,
             gateway=model.gateway,
             payment_type=model.payment_type,

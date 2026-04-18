@@ -8,7 +8,7 @@ from formatters.pydantic_formatter import format_pydantic_errors
 from payments.domain.enums import PaymentStatus, PaymentType, PaymentPurpose, PaymentPhase
 from payments.domain.exceptions import DomainException
 from payments.infrastructure.registry import GATEWAYS
-from payments.schemas.payments import ActivePaymentSession, PaymentRedirectManifest
+from payments.schemas.payments import ActivePaymentSession, PaymentManifest
 from payments.services.payment_service import PaymentService
 from template_map.payments import Payments
 from pydantic import ValidationError
@@ -55,7 +55,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 user=self.request.user
             )
             resp = payment_service.process_payment(payload.reference)
-            response_data = PaymentRedirectManifest(
+            response_data = PaymentManifest(
                 status=resp.get("status", True),
                 title=resp.get("message", "Checkout URL ready"),
                 message="Payment initialized successfully",
@@ -68,7 +68,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             # try to cancell and see if it will resume again
 
         except json.JSONDecodeError:
-            err = PaymentRedirectManifest(
+            err = PaymentManifest(
                 status=False,
                 title="Invalid JSON payload",
                 message="Invalid data format",
@@ -79,7 +79,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         except ValidationError as e:
             fields = format_pydantic_errors(e),
             print(fields)
-            err = PaymentRedirectManifest(
+            err = PaymentManifest(
                 status=False,
                 title="Validation error",
                 message="Some required information is missing or invalid.",
@@ -88,7 +88,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             return JsonResponse(err.model_dump(), status=400)
                 
         except DomainException as e:
-            err = PaymentRedirectManifest(
+            err = PaymentManifest(
                 status=False,
                 title=e.title,
                 message=e.message,
@@ -98,7 +98,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         
         except Exception as e:
             print(f"Unexpected error during payment processing: {str(e)}")
-            err = PaymentRedirectManifest(
+            err = PaymentManifest(
                 status=False,
                 title="Payment Error",
                 message="An unexpected error occurred while processing your payment. Please try again later.",

@@ -25,7 +25,7 @@ class PaystackVerificationOrchestrator {
     }
 
     async init() {
-        this.log("INFO", `Hooking ${this.config.provider} gateway...`);
+        this.log("INFO", `Syncing with ${this.config.provider} gateway...`);
         this.updateUI("Awaiting confirmation...", 30);
 
         await this.sleep(1500);
@@ -57,12 +57,17 @@ class PaystackVerificationOrchestrator {
                 this.handleFailure(result);
             }
         } catch (error) {
-            this.handleFailure({ message: "Network connection lost" });
+            const err = {
+                title: "Network connection lost",
+                message: "We couldn't complete the request. Please try again.",
+            }
+            this.handleFailure(err);
         }
     }
 
     handleSuccess(result) {
-        this.log("DONE", "Transaction verification complete.");
+        this.log("DONE", "Transaction verification complete 🥳!");
+        this.log('DONE', result.message);
         this.updateUI("Payment Confirmed", 100);
 
         // Update Badge and Icon
@@ -79,8 +84,9 @@ class PaystackVerificationOrchestrator {
     }
 
     handleFailure(result) {
-        this.log("FAIL", result.message || "Verification failed");
-        this.updateUI("Payment Failed", 100, "bg-red-500");
+        this.log("FAIL", result.title);
+        this.log("REASON", result.message);
+        this.updateUI("Verification Failed", 100, "bg-red-500");
 
         if (this.statusBadge) {
             this.statusBadge.innerText = "Failed";
