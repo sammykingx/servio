@@ -52,18 +52,22 @@ class PaystackAdapter(PaymentGateway):
     def create_payment(self, payload: PaymentGatewayPayload) -> GatewayInitResponse:
         data = PaymentGatewayPayload.model_dump(payload, mode='json')
         data["callback_url"] = self.callback_url
-        data["metadata"] = {"cancel_action": reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT)}
+        data["metadata"] = {"cancel_action": str(reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT))}
+        print("complete data: ", data)
         # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
         
         try:
+            print("start request")
             response = requests.post(
                 self.create_payment_endpoint,
                 headers=self._get_headers(),
                 json=data,
                 timeout=self.timeout,
             )
+            print("raw paystack response: ",response.json())
             response.raise_for_status()
             json_data:dict = response.json()
+            print("response from paystack: ", json_data)
             paystack_res = PaystackInitResponseSchema(**json_data)
             return GatewayInitResponse(
                 gateway=RegisteredPaymentProvider.PAYSTACK,

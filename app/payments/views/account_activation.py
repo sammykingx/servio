@@ -35,9 +35,10 @@ class AccountActivationView(LoginRequiredMixin, View):
             payment_type=PaymentType.ONE_TIME, 
             payment_purpose=PaymentPurpose.ACTIVATION_FEE
         )
-        
+        print(entity.gateway, type(entity.gateway))
         context = {
-            "provider": entity.gateway,
+            # "provider": entity.gateway.value if hasattr(entity.gateway, 'value') else entity.gateway,
+            "provider": entity.gateway.value,
             "reference": entity.reference,
             "status": entity.status,
         }
@@ -50,11 +51,13 @@ class AccountActivationView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         try:
             payload = ActivePaymentSession(**json.loads(request.body))
+            print(payload)
             payment_service = PaymentService(
                 gateway_name=payload.provider, 
                 phase=PaymentPhase.INITIALIZATION, 
                 user=self.request.user
             )
+            print("service obj ready")
             resp = payment_service.process_payment(payload.reference)
             response_data = PaymentManifest(
                 status=PaymentStatus.SUCCESS,
@@ -63,7 +66,7 @@ class AccountActivationView(LoginRequiredMixin, View):
                 data=resp.get("data", {}),
                 ui_intent=PaymentStatus.SUCCESS
             )
-            return JsonResponse(response_data.model_dump(), status=200)
+            return JsonResponse(response_data.model_dump(mode="json"), status=200)
             # https://checkout.paystack.com/u4j84p5z4jd6krf
             # SRV-jSCgCj9KZ0NehGo
             # try to cancell and see if it will resume again
@@ -88,19 +91,21 @@ class AccountActivationView(LoginRequiredMixin, View):
             return JsonResponse(err.model_dump(), status=400)
                 
         except DomainException as e:
+            print(e)
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title=e.title,
                 message=e.message,
                 ui_intent=e.err_type,
             )
-            return JsonResponse(err.model_dump(), status=400)
+            return JsonResponse(err.model_dump(mode="json"), status=400)
         
         except Exception as e:
+            print(e)
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title="Payment Error",
                 message="An unexpected error occurred while processing your payment. Please try again later.",
                 ui_intent="error",
             )
-            return JsonResponse(err.model_dump(), status=500)
+            return JsonResponse(err.model_dump(mode="json"), status=500)

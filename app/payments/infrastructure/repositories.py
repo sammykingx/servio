@@ -194,7 +194,7 @@ class PaymentRepository:
             amount_in_minor_units=model.amount_in_minor_units,
             paid_amount_in_minor=model.paid_amount_in_minor,
             currency=model.currency,
-            gateway=model.gateway,
+            gateway=RegisteredPaymentProvider(model.gateway),
             payment_type=model.payment_type,
             payment_purpose=model.payment_purpose,
             gateway_reference=model.gateway_reference,
