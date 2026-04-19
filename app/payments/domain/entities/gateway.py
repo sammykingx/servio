@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from payments.domain.enums import RegisteredPaymentProvider
 from payments.schemas.paystack import PaystackInitData, PaystackVerificationData
 from payments.schemas.stripe import StripeInitializationData, StripeVerificationData
-from typing import Union
+from typing import Any, Dict, Union
 
 
 @dataclass(frozen=True)
@@ -17,7 +17,7 @@ class GatewayInitResponse:
         message: Status message returned by the gateway.
         data: The actual payload/metadata from the gateway response.
     """
-    gateway: RegisteredPaymentProvider
+    gateway: Union[RegisteredPaymentProvider, str]
     message: str
     data: Union[
         PaystackInitData, 
@@ -27,6 +27,20 @@ class GatewayInitResponse:
     def __post_init__(self):
         if not self.gateway or not self.data:
             raise ValueError("Gateway result must include both a provider and response data.")
+        
+    def payload(self) -> Dict[str, Any]:
+        """
+        Standardizes the output for views/JSON responses.
+        Ensures 'data' is always a raw dictionary.
+        """
+        normalized_data = self.data
+        if hasattr(self.data, "model_dump"):
+            normalized_data = self.data.model_dump()
+        return {
+            "gateway": self.gateway.value,
+            "message": self.message,
+            "data": normalized_data
+        }
  
         
 @dataclass(frozen=True)

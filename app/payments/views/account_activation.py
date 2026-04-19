@@ -35,7 +35,6 @@ class AccountActivationView(LoginRequiredMixin, View):
             payment_type=PaymentType.ONE_TIME, 
             payment_purpose=PaymentPurpose.ACTIVATION_FEE
         )
-        print(entity.gateway, type(entity.gateway))
         context = {
             # "provider": entity.gateway.value if hasattr(entity.gateway, 'value') else entity.gateway,
             "provider": entity.gateway.value,
@@ -43,7 +42,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             "status": entity.status,
         }
         
-        if entity.status == PaymentStatus.SUCCESS:
+        if entity.status in {PaymentStatus.SUCCESS, PaymentStatus.INCOMPLETE}:
             return redirect(reverse_lazy(PaymentURLS.CHECKOUT_COMPLETE))
         
         return render(request, self.template_name, context=context)
@@ -51,19 +50,17 @@ class AccountActivationView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         try:
             payload = ActivePaymentSession(**json.loads(request.body))
-            print(payload)
             payment_service = PaymentService(
                 gateway_name=payload.provider, 
                 phase=PaymentPhase.INITIALIZATION, 
                 user=self.request.user
             )
-            print("service obj ready")
-            resp = payment_service.process_payment(payload.reference)
+            resp:dict = payment_service.process_payment(payload.reference)
             response_data = PaymentManifest(
                 status=PaymentStatus.SUCCESS,
-                title=resp.get("message", "Checkout URL ready"),
-                message="Payment initialized successfully",
-                data=resp.get("data", {}),
+                title="Checkout URL ready",
+                message=resp.get("message"),
+                data=resp.get("data"),
                 ui_intent=PaymentStatus.SUCCESS
             )
             return JsonResponse(response_data.model_dump(mode="json"), status=200)
@@ -81,7 +78,8 @@ class AccountActivationView(LoginRequiredMixin, View):
             return JsonResponse(err.model_dump(), status=400)
         
         except ValidationError as e:
-            fields = format_pydantic_errors(e),
+            fields = format_pydantic_errors(e)
+            print(fields)
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title="Validation error",

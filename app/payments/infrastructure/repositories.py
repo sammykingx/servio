@@ -137,6 +137,21 @@ class PaymentRepository:
             gateway=provider,
         )
         return self._map_to_entity(db_obj)
+    
+    def persist_checkout_session(self, entity:PaymentEntity) -> None:
+        """
+        Persists gateway-specific session data to an existing payment record.
+        
+        This saves the provider's reference, response and metadata so that 
+        subsequent checkout attempts reuse the existing gateway session 
+        instead of creating a new one.
+        """
+        self.model.objects.filter(user=entity.user, reference=entity.reference).update(
+            gateway_reference=entity.gateway_reference,
+            gateway_response=entity.gateway_response,
+            metadata=entity.metadata,
+            updated_at=now() 
+        )
         
     def update_status(self, entity: PaymentEntity) -> None:
         """Persists terminal state transitions (Failed, Expired).

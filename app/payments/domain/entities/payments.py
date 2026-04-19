@@ -79,7 +79,7 @@ class PaymentEntity:
             preventing redundant transaction calls for the same payment intent.
         """
         self.gateway_response = result.message
-        self.metadata = result.data.model_dump()
+        self.metadata = result.data.model_dump(mode="json")
         if self.gateway == RegisteredPaymentProvider.PAYSTACK:
             self.gateway_reference = result.data.access_code
             

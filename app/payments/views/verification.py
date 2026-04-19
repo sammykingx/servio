@@ -24,7 +24,7 @@ class PaymentVerificationView(View):
     
     def get(self, request, *args, **kwargs):
         provider:str = kwargs.get("gateway")
-        reference:str = request.GET.get("trxref")
+        reference:str = request.GET.get("reference")
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
         context = {

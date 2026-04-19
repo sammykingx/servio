@@ -79,7 +79,7 @@ class PaystackOrchestrator {
         }
 
         try {
-            this.updateLog(`POST /api/v1/initialize ... requesting access_code`, 'pending');
+            this.updateLog('POST /api/v1/initialize ... requesting access_code', 'pending');
 
             const response = await fetch(this.backendURL, {
                 method: 'POST',
@@ -94,13 +94,17 @@ class PaystackOrchestrator {
             });
 
             const resp_data = await response.json();
+            console.log(resp_data.data);
 
             if (response.ok && resp_data.data.access_code) {
                 this.updateUI("Finalizing ...", 75);
                 this.updateLog(`200 OK: ${resp_data.message}`, 'success');
                 this.updateLog(`200 OK: ${resp_data.title}`, 'success');
                 await this.sleep(1500);
-                this.launchPopup(resp_data.data.access_code);
+                this.launchPopup(
+                    resp_data.data.access_code,
+                    resp_data.data.authorization_url
+                );
             } else {
                 showToast(
                     resp_data.message,
@@ -115,8 +119,9 @@ class PaystackOrchestrator {
         }
     }
 
-    launchPopup(access_code) {
+    launchPopup(access_code, authorization_url) {
         this.updateLog(`Starting Paystack Checkout Modal...`, 'success');
+        showToast('please wait for approx. 3 secs', "suuccess", "Starting Checkout Modal");
 
         const popup = new PaystackPop();
         popup.resumeTransaction(access_code, {
@@ -128,7 +133,7 @@ class PaystackOrchestrator {
                 this.updateLog('verification started ...', 'success');
                 this.updateLog('servio is verifying payments ...', 'pending');
                 // Redirect to a success page or refresh
-                window.location.href = `${this.verificationURL}?trxref=${transaction.reference}`;
+                window.location.href = `${this.verificationURL}?reference=${transaction.reference}`;
             },
             onCancel: () => {
                 this.updateUI("Payment Cancelled!", 100);
@@ -140,5 +145,18 @@ class PaystackOrchestrator {
                 showToast(error.message, "error", "Payment Steup Error");
             }
         });
+        setTimeout(() => {
+            const checkoutIframe = document.querySelector('iframe[id^="inline-checkout-"]');
+            const isCorrectSrc = checkoutIframe?.src.includes("checkout.paystack.com");
+            conxole.log(checkoutIframe, isCorrectSrc);
+
+            if (!checkoutIframe || !isCorrectSrc) {
+                this.updateLog("Checkout iframe not detected. Redirecting to backup...", "warning");
+                window.location.assign(authorization_url);
+            } else {
+                this.updateLog("Checkout modal is active.", "success");
+                console.log("user user");
+            }
+        }, 2000);
     }
 }

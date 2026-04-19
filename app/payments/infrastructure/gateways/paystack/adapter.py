@@ -2,7 +2,7 @@
 
 from core.url_names import PaymentURLS
 from django.conf import settings
-from django.urls import reverse_lazy
+from django.urls import reverse
 from requests.exceptions import HTTPError, Timeout, RequestException
 from payments.domain.contracts import PaymentGateway
 from payments.domain.enums import RegisteredPaymentProvider
@@ -11,8 +11,6 @@ from payments.domain.errors import PaymentFailure
 from payments.domain.exceptions import PaymentGatewayError
 from payments.schemas.payments import PaymentGatewayPayload
 from payments.schemas.paystack import PaystackInitResponseSchema, PaystackVerificationData
-
-
 import logging, requests
 
 
@@ -25,7 +23,7 @@ class PaystackAdapter(PaymentGateway):
     def __init__(self):
         self.secret_key = settings.PAYSTACK_SECRET_KEY
         self.public_key = settings.PAYSTACK_PUBLIC_KEY
-        self.callback_url = reverse_lazy(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
+        self.callback_url = reverse(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
         self.timeout = (5, 17) # (Connect Timeout, Read Timeout)
 
         if not all([self.secret_key, self.public_key, self.callback_url]):
@@ -50,24 +48,21 @@ class PaystackAdapter(PaymentGateway):
         return headers
     
     def create_payment(self, payload: PaymentGatewayPayload) -> GatewayInitResponse:
-        data = PaymentGatewayPayload.model_dump(payload, mode='json')
+        data = payload.model_dump(mode="json")
         data["callback_url"] = self.callback_url
-        data["metadata"] = {"cancel_action": str(reverse_lazy(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT))}
-        print("complete data: ", data)
+        data["metadata"] = {"cancel_action": reverse(PaymentURLS.CANCELLED_PAYMENT_CHECKOUT)}
+        
         # data["channels"] = ["card", "bank", "apple_pay", "ussd", "qr", "mobile_money", "bank_transfer", "eft", "capitec_pay", "payattitude"]
         
         try:
-            print("start request")
             response = requests.post(
                 self.create_payment_endpoint,
                 headers=self._get_headers(),
                 json=data,
                 timeout=self.timeout,
             )
-            print("raw paystack response: ",response.json())
             response.raise_for_status()
             json_data:dict = response.json()
-            print("response from paystack: ", json_data)
             paystack_res = PaystackInitResponseSchema(**json_data)
             return GatewayInitResponse(
                 gateway=RegisteredPaymentProvider.PAYSTACK,
@@ -76,16 +71,15 @@ class PaystackAdapter(PaymentGateway):
             )
         
             # Actual return object from paystack
-            # data = {
-            #     'status': True, 
-            #     'message': 'Authorization URL created', 
-            #     'data': {
-            #         'authorization_url': 'https://checkout.paystack.com/u4j84p5z4jd6krf', 
-            #         'access_code': 'u4j84p5z4jd6krf', 
-            #         'reference': 'SRV-jSCgCj9KZ0NehGo'
-            #     }
+            # {
+            #   'status': True, 
+            #   'message': 'Authorization URL created', 
+            #   'data': {
+            #      'authorization_url': 'https://checkout.paystack.com/u4j84p5z4jd6krf', 
+            #      'access_code': 'u4j84p5z4jd6krf', 
+            #      'reference': 'SRV-jSCgCj9KZ0NehGo'
+            #   }
             # }
-            # return data
         
         except Timeout:
             raise PaymentGatewayError(

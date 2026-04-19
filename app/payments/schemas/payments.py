@@ -19,8 +19,6 @@ class PaymentGatewayPayload(BaseModel):
             (e.g., kobo for NGN, cents for USD). Must be greater than 0.
         reference (str): A unique, 12-character string used to identify and 
             reconcile the transaction in internal systems.
-        idm_key (str): A unique idempotency key. Used to ensure that 
-            retried requests do not result in duplicate charges.
         currency (str): The ISO 4217 three-letter currency code. Defaults to "USD".
     """
     email: EmailStr = Field(..., description="Customer's email address")
