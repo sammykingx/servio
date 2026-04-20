@@ -42,12 +42,13 @@ class PaymentPurpose(str, Enum):
         return [(item.value, item.name) for item in cls]
     
 class PaymentStatus(str, Enum):
+    ABANDONED = "abandoned" # never paid and trying to verify
     INITIATED = "initiated" # newly created
     PENDING = "pending" # payment not verified neither is the amount veririfed
     SUCCESS = "success"
     FAILED = "failed"
     CANCELLED = "cancelled"
-    INCOMPLETE = "incomplete"
+    UNDERPAID = "underpaid" # paid but value is below espected amount
     EXPIRED = "expired"
     REFUNDED = "refunded"
     

@@ -40,8 +40,8 @@ class PaymentFailure:
     INVALID_REFERENCE = FailureDetail(
         "INVALID_REFERENCE", "Invalid Payment Reference"
     )
-    ALREADY_PROCESSED = FailureDetail(
-        "ALREADY_PROCESSED", "Payment Already Received"
+    ALREADY_VERIFIED = FailureDetail(
+        "ALREADY_VERIFIED", "Payment Already Verified"
     )
     AUTHENTICATION_REQUIRED = FailureDetail(
         "AUTHENTICATION_REQUIRED", "User Session Invalid"

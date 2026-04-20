@@ -29,7 +29,7 @@ class PaymentPolicy:
                 title=PaymentFailure.INVALID_REFERENCE.title,
             )
             
-        if payment_entity.status in {PaymentStatus.SUCCESS, PaymentStatus.INCOMPLETE}:
+        if payment_entity.status in {PaymentStatus.SUCCESS, PaymentStatus.UNDERPAID}:
             msg = (
                 "Payment already verified. Your transaction was completed successfully."
                 if phase == PaymentPhase.VERIFICATION else
@@ -37,8 +37,8 @@ class PaymentPolicy:
             )
             raise PolicyViolationError(
                 msg,
-                code=PaymentFailure.ALREADY_PROCESSED.code,
-                title=PaymentFailure.ALREADY_PROCESSED.title,
+                code=PaymentFailure.ALREADY_VERIFIED.code,
+                title=PaymentFailure.ALREADY_VERIFIED.title,
             )
             
         if phase == PaymentPhase.INITIALIZATION:
@@ -95,3 +95,26 @@ class PaymentPolicy:
                 code=PaymentFailure.PAYMENT_INCOMPLETE.code,
                 title=PaymentFailure.PAYMENT_INCOMPLETE.title
             )
+            
+    def ensure_is_not_terminal(entity: PaymentEntity):
+        """
+        Ensures the payment isn't already locked into a failure/abandoned state.
+        
+        Raises:
+            PolicyViolationError: If the transaction was already definitively verified.
+        """
+        terminal_statuses = {
+            PaymentStatus.FAILED, 
+            PaymentStatus.ABANDONED, 
+        }
+        
+        if bool(entity.gateway_reference) and entity.status in terminal_statuses:
+            raise PolicyViolationError(
+                message=(
+                    f"This transaction was verified as {entity.status}. "
+                    "No further action is required."
+                ),
+                code=PaymentFailure.ALREADY_VERIFIED.code,
+                title="Verification Completed"
+            )
+            

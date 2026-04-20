@@ -3,7 +3,6 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from payments.domain.enums import PaymentStatus, RegisteredPaymentProvider
 from payments.schemas.paystack import PaystackVerificationData
-from datetime import timedelta
 from typing import Any, Dict
 from uuid import UUID
 from .gateway import GatewayInitResponse, GatewayVerifyResponse
@@ -63,6 +62,11 @@ class PaymentEntity:
         self.status = status
         self.gateway_response = reason
         
+    def mark_as_abandoned(self, reason:str, metadata:dict):
+        self.status = PaymentStatus.ABANDONED
+        self.gateway_response = reason
+        self.metadata = metadata
+        
     def mark_as_expired(self, reason: str):
         """Domain logic for transitioning to an expired state."""
         self._transition_to_terminal_failure(PaymentStatus.EXPIRED, f"Platform Policy Violation: {reason}")
@@ -95,7 +99,7 @@ class PaymentEntity:
             as successful or incomplete.
         """
         if self.amount_in_minor_units != gw_entity.data.amount:
-            self.status = PaymentStatus.INCOMPLETE
+            self.status = PaymentStatus.UNDERPAID
         else:
             self.status = PaymentStatus.SUCCESS
             

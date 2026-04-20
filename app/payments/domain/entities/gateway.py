@@ -54,16 +54,17 @@ class GatewayVerifyResponse:
     Attributes:
         gateway: The specific provider (e.g., Paystack) that processed the transaction.
         message: The descriptive status message returned by the provider's API.
-        is_successful: Indicates if the transaction reached a terminal success state 
+        was_successful: Indicates if the transaction reached a terminal success state 
             on the gateway's end.
         data: Raw, provider-specific payload containing granular transaction details 
             (e.g., amount in minor units, gateway/receipt id etc).
     """
     gateway: RegisteredPaymentProvider
+    status: str
     message: str
     was_successful: bool
     data: Union[
         PaystackVerificationData, 
         StripeVerificationData,
-    ] = field(default_factory=dict)      
+    ] = field(default_factory=dict)
         

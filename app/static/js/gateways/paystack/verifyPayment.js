@@ -51,7 +51,6 @@ class PaystackVerificationOrchestrator {
             const result = await response.json();
 
             if (response.ok && result.status) {
-                console.log(JSON.stringify(response,null,2));
                 this.handleSuccess(result);
             } else {
                 this.handleFailure(result);
@@ -68,7 +67,7 @@ class PaystackVerificationOrchestrator {
     handleSuccess(result) {
         this.log("DONE", "Transaction verification complete 🥳!");
         this.log('DONE', result.message);
-        this.updateUI("Payment Confirmed", 100);
+        this.updateUI("Verification Complete", 100);
 
         // Update Badge and Icon
         if (this.statusBadge) {

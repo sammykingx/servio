@@ -54,7 +54,7 @@ class PaymentManifest(BaseModel):
     This object encapsulates the gateway's response (like the checkout URL) 
     and provides UI hints for the frontend notification system.
     """
-    status: Literal[PaymentStatus.SUCCESS, PaymentStatus.FAILED]
+    status: PaymentStatus
     title: str
     message: str
     data: Dict[str, Any] = Field(

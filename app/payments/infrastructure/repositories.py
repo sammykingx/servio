@@ -92,7 +92,7 @@ class PaymentRepository:
                 PaymentStatus.INITIATED,
                 PaymentStatus.PENDING,
                 PaymentStatus.SUCCESS,
-                PaymentStatus.INCOMPLETE,
+                PaymentStatus.UNDERPAID,
             ]
         ).first()
         return self._map_to_entity(db_obj) if db_obj else None
@@ -180,6 +180,19 @@ class PaymentRepository:
             metadata=entity.metadata,
             paid_at=entity.paid_at,
             is_processed=entity.is_processed,
+            updated_at=now()
+        )
+    
+    def update_as_abandoned(self, entity: PaymentEntity) -> None:
+        """
+        Persists the abandoned state of a payment.
+        """
+        self.model.objects.filter(
+            user=entity.user, reference=entity.reference
+        ).update(
+            status=entity.status,
+            gateway_response=entity.gateway_response,
+            metadata=entity.metadata,
             updated_at=now()
         )
     

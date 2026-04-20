@@ -4,7 +4,13 @@ from django.contrib.auth.models import AbstractUser
 from django.db import OperationalError
 from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.repositories import PaymentRepository
-from payments.domain.enums import RegisteredPaymentProvider, PaymentPurpose, PaymentType, PaymentPhase
+from payments.domain.enums import (
+    RegisteredPaymentProvider, 
+    PaymentPurpose, 
+    PaymentType, 
+    PaymentPhase, 
+    PaymentStatus
+)
 from payments.domain.entities.gateway import GatewayInitResponse, GatewayVerifyResponse
 from payments.domain.entities.payments import PaymentEntity
 from payments.domain.exceptions import DomainException, PolicyViolationError, PaymentPersistenceError
@@ -101,7 +107,7 @@ class PaymentService:
                 PaymentPolicy.ensure_entity_is_processable(existing_entity, phase=PaymentPhase.INITIALIZATION)
                 return existing_entity
             except PolicyViolationError as err:
-                if err.code == PaymentFailure.ALREADY_PROCESSED.code:
+                if err.code == PaymentFailure.ALREADY_VERIFIED.code:
                     # for success or incomplete payment status forsame payment intent
                     return existing_entity
                 if err.code == PaymentFailure.PAYMENT_SESSION_EXPIRED.code:
@@ -166,6 +172,7 @@ class PaymentService:
         try:
             payment = self.repo.get_by_reference(reference, lock=True)
             PaymentPolicy.ensure_entity_is_processable(payment, phase=PaymentPhase.VERIFICATION)
+            PaymentPolicy.ensure_is_not_terminal(payment)
             self._resolve_gateway_provider(payment)
             gw_result = self.gateway.verify_payment(reference)
             self._finalize_verification(payment, gw_result)
@@ -183,10 +190,26 @@ class PaymentService:
     def _finalize_verification(self, payment: PaymentEntity, gw_result: GatewayVerifyResponse):
         """Handles the state transition logic based on gateway success"""
         if not gw_result.was_successful:
-            payment.mark_as_failed(gw_result.message)
-            return self.repo.update_status(payment)
-            
-        payment.finalize_from_gateway(gw_result)
-        self.repo.update_as_successful(payment)
+            return self._handle_payment_failure(payment, gw_result)
         
-# {'status': True, 'message': 'Verification successful', 'data': {'id': 6029033797, 'domain': 'test', 'status': 'success', 'reference': 'SRV-jSCgCj9KZ0NehGo', 'receipt_number': None, 'amount': 5600000, 'message': "Can't requery test transaction", 'gateway_response': 'Approved', 'paid_at': '2026-04-14T21:35:20.000Z', 'created_at': '2026-04-12T00:42:43.000Z', 'channel': 'bank_transfer', 'currency': 'NGN', 'ip_address': '102.89.85.44', 'metadata': {'cancel_action': '/payments/cancelled/'}, 'log': {'start_time': 1775954798, 'time_spent': 26, 'attempts': 0, 'errors': 0, 'success': True, 'mobile': True, 'input': [], 'history': [{'type': 'action', 'message': 'Set payment method to: bank_transfer', 'time': 61}, {'type': 'action', 'message': 'Set payment method to: card', 'time': 66}, {'type': 'action', 'message': 'Set payment method to: bank_transfer', 'time': 8}, {'type': 'action', 'message': 'Set payment method to: card', 'time': 10}, {'type': 'action', 'message': 'Set payment method to: bank_transfer', 'time': 18}, {'type': 'success', 'message': 'Successfully paid with bank_transfer', 'time': 26}]}, 'fees': 94000, 'fees_split': None, 'authorization': {'authorization_code': 'AUTH_gcpa7yd6xr', 'bin': '123XXX', 'last4': 'X890', 'exp_month': '04', 'exp_year': '2026', 'channel': 'bank_transfer', 'card_type': 'transfer', 'bank': None, 'country_code': 'NG', 'brand': 'Managed Account', 'reusable': False, 'signature': None, 'account_name': None, 'sender_bank': None, 'sender_country': 'NG', 'sender_bank_account_number': 'XXXXXXX890', 'sender_name': 'TEST PAYER', 'narration': 'Test transaction', 'receiver_bank_account_number': None, 'receiver_bank': None}, 'customer': {'id': 355100918, 'first_name': None, 'last_name': None, 'email': 'dylar77@anhmaybietchoi.com', 'customer_code': 'CUS_ge21z2zt8xncvzr', 'phone': None, 'metadata': None, 'risk_action': 'default', 'international_format_phone': None}, 'plan': None, 'split': {}, 'order_id': None, 'paidAt': '2026-04-14T21:35:20.000Z', 'createdAt': '2026-04-12T00:42:43.000Z', 'requested_amount': 5600000, 'pos_transaction_data': None, 'source': None, 'fees_breakdown': None, 'connect': None, 'transaction_date': '2026-04-12T00:42:43.000Z', 'plan_object': {}, 'subaccount': {}}}
+        # success and underpaid transaction verification
+        if not payment.is_processed:
+            payment.finalize_from_gateway(gw_result)
+            self.repo.update_as_successful(payment)
+        
+    def _handle_payment_failure(self, payment: PaymentEntity, gw_result: GatewayVerifyResponse):
+        """
+        Branches failure logic between 'Abandoned' and 'Failed' states.
+        """
+        
+        if gw_result.status == PaymentStatus.ABANDONED:
+            payment.mark_as_abandoned(
+                reason=gw_result.message, 
+                metadata=gw_result.data.model_dump(mode="json")
+            )
+            return self.repo.update_as_abandoned(payment)
+        
+        payment.mark_as_failed(gw_result.message)
+        return self.repo.update_status(payment)
+        
+# {'status': True, 'message': 'Verification successful', 'data': {'id': 6056669528, 'domain': 'test', 'status': 'success', 'reference': 'SRV-WY0Fnw10r4dwcvl', 'receipt_number': None, 'amount': 2800000, 'message': None, 'gateway_response': 'Successful', 'paid_at': '2026-04-19T23:38:10.000Z', 'created_at': '2026-04-19T23:37:16.000Z', 'channel': 'card', 'currency': 'NGN', 'ip_address': '102.89.46.38', 'metadata': {'cancel_action': '/payments/checkout/cancelled/'}, 'log': {'start_time': 1776641842, 'time_spent': 48, 'attempts': 1, 'errors': 0, 'success': True, 'mobile': True, 'input': [], 'history': [{'type': 'action', 'message': 'Set payment method to: card', 'time': 29}, {'type': 'action', 'message': 'Attempted to pay with card', 'time': 48}, {'type': 'success', 'message': 'Successfully paid with card', 'time': 48}]}, 'fees': 52000, 'fees_split': None, 'authorization': {'authorization_code': 'AUTH_wdu0om86xy', 'bin': '408408', 'last4': '4081', 'exp_month': '12', 'exp_year': '2030', 'channel': 'card', 'card_type': 'visa ', 'bank': 'TEST BANK', 'country_code': 'NG', 'brand': 'visa', 'reusable': True, 'signature': 'SIG_o6DImVqfL5I3m8UjPD3p', 'account_name': None, 'receiver_bank_account_number': None, 'receiver_bank': None}, 'customer': {'id': 355100918, 'first_name': None, 'last_name': None, 'email': 'dylar77@anhmaybietchoi.com', 'customer_code': 'CUS_ge21z2zt8xncvzr', 'phone': None, 'metadata': None, 'risk_action': 'default', 'international_format_phone': None}, 'plan': None, 'split': {}, 'order_id': None, 'paidAt': '2026-04-19T23:38:10.000Z', 'createdAt': '2026-04-19T23:37:16.000Z', 'requested_amount': 2800000, 'pos_transaction_data': None, 'source': None, 'fees_breakdown': None, 'connect': None, 'transaction_date': '2026-04-19T23:37:16.000Z', 'plan_object': {}, 'subaccount': {}}}

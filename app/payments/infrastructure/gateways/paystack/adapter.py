@@ -114,6 +114,9 @@ class PaystackAdapter(PaymentGateway):
             )
         
     def verify_payment(self, reference: str) -> GatewayVerifyResponse:
+        """
+        Queries Paystack to confirm the final status of a transaction.
+        """
         try:
             response = requests.get(
                 self.verify_payment_endpoint.format(reference=reference),
@@ -122,16 +125,20 @@ class PaystackAdapter(PaymentGateway):
             )
             
             response.raise_for_status()
-            json_data:dict = response.json()
-            paystack_res = PaystackVerificationData(
-                paystack_metadata=json_data,
-                **json_data.get("data"),
-            )
+            resp_data:dict = response.json()
+            data:dict = resp_data.get("data", {})
+            status:str = data.get("status")
+            is_successful = status == "success"
             
+            paystack_res = PaystackVerificationData(
+                paystack_metadata=resp_data,
+                **data,
+            )
             gw_entity = GatewayVerifyResponse(
                 gateway=RegisteredPaymentProvider.PAYSTACK,
-                message=json_data.get("message"),
-                was_successful=json_data.get("status"),
+                status=status,
+                message=data.get("gateway_response"),
+                was_successful=is_successful,
                 data=paystack_res,
             )
             return gw_entity

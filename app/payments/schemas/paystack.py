@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, HttpUrl
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 class PaystackInitData(BaseModel):
     """The actual payload containing checkout details."""
@@ -17,5 +17,5 @@ class PaystackVerificationData(BaseModel):
     id: int
     status: str
     amount:  int
-    paid_at: datetime
+    paid_at: Union[datetime, None]
     paystack_metadata: Dict[str, Any] = Field(default_factory=dict)

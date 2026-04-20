@@ -42,7 +42,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             "status": entity.status,
         }
         
-        if entity.status in {PaymentStatus.SUCCESS, PaymentStatus.INCOMPLETE}:
+        if entity.status in {PaymentStatus.SUCCESS, PaymentStatus.UNDERPAID}:
             return redirect(reverse_lazy(PaymentURLS.CHECKOUT_COMPLETE))
         
         return render(request, self.template_name, context=context)
