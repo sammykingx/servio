@@ -60,17 +60,19 @@ class PaymentPhase(str, Enum):
     INITIALIZATION = "initialization"
     VERIFICATION = "verification"
     
+   
+# Not in use 
+# class ChargeStatus(str, Enum):
+#     PENDING = "pending"
+#     SUCCESS = "success"
+#     FAILED = "failed"
     
-class ChargeStatus(str, Enum):
-    PENDING = "pending"
-    SUCCESS = "success"
-    FAILED = "failed"
+#     @classmethod
+#     def choices(cls):
+#         return [(item.value, item.name) for item in cls]
     
-    @classmethod
-    def choices(cls):
-        return [(item.value, item.name) for item in cls]
-    
-    
+
+# Escrow not settled  
 class EscrowStatus(str, Enum):
     HELD = "held"
     RELEASED = "released"

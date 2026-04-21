@@ -14,7 +14,7 @@ from payments.schemas.paystack import PaystackInitResponseSchema, PaystackVerifi
 import logging, requests
 
 
-logger = logging.getLogger("app_file")
+logger = logging.getLogger(__name__)
 
 
 class PaystackAdapter(PaymentGateway):
@@ -105,7 +105,7 @@ class PaystackAdapter(PaymentGateway):
             )
             
         except RequestException as err:
-            logger.error(err)
+            logger.exception(err)
             raise PaymentGatewayError(
                 f"Connection error: {str(e)}",
                 code=PaymentFailure.GATEWAY_ERROR.code,
@@ -159,7 +159,7 @@ class PaystackAdapter(PaymentGateway):
             )
             
         except RequestException as e:
-            logger.error(e)
+            logger.exception(e)
             raise PaymentGatewayError(
                 f"Connection error: {str(e)}",
                 code=PaymentFailure.GATEWAY_ERROR.code,

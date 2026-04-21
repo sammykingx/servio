@@ -6,6 +6,7 @@ from template_map.payments import Payments
 from .escrow import urls as escrow_urls
 from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, SelectGigPaymentMethodView, GigCardInfoView, GigPaymentComplete
 from .views.account_activation import AccountActivationView
+from .views.webhooks import PaystackWebhookView
 from .views.verification import PaymentVerificationView
 
 
@@ -52,6 +53,14 @@ urlpatterns = [
          login_required(TemplateView.as_view(template_name=Payments.SUMMARY)), 
          name=PaymentURLS.USER_PAYMENT_SUMMARY
     ),
+    
+    # WEBHOOKS URLS
+    path(
+        "webhook/paystack", 
+        PaystackWebhookView.as_view(), 
+        name=PaymentURLS.PAYSTACK_WEBHOOK,
+    ),
+    
     path(
         "gig-payments/<uuid:gig_id>", 
         GigPaymentSummaryView.as_view(),

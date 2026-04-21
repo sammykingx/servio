@@ -1,12 +1,13 @@
 # Every payment gateway must implement this.
 
 from abc import ABC, abstractmethod
+from payments.schemas.payments import PaymentGatewayPayload
 
 
 class PaymentGateway(ABC):
 
     @abstractmethod
-    def create_payment(self, amount, currency, reference, metadata):
+    def create_payment(self, payload:PaymentGatewayPayload):
         pass
 
     @abstractmethod

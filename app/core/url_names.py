@@ -118,6 +118,10 @@ class PaymentURLS:
     GIG_PAYMENT_RESPONSE = "gig_payment_response"
     GIG_PAYMENT_COMPLETE = "gig_payment_complete"
     
+    # WEBHOOKS
+    PAYSTACK_WEBHOOK = "paytack_webhook"
+    STRIPE_WEBHOOK = "stripe_webhook"
+    
     
 class EscrowURLS:
     OVERVIEW = "escrow_overview"

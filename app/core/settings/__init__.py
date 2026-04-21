@@ -30,6 +30,7 @@ LOGGING = {
         "verbose": {
             "format": (
                 "[{asctime}] {levelname} "
+                "[{module}.{funcName}] "
                 "{name}:{lineno} "
                 "{message}"
             ),
@@ -69,6 +70,20 @@ LOGGING = {
             "encoding": "utf-8",
             "delay": True,
         },
+        
+        # -------------------
+        # WEB HOOK FOR PAYMENTS
+        # -------------------
+        "webhook_file": {
+            "level": "INFO",
+            "class": "logging.handlers.RotatingFileHandler",
+            "maxBytes": 1024 * 1024 * 50, # 50MB (Webhooks can get bulky)
+            "backupCount": 10,
+            "filename": LOG_DIR / "webhooks.log",
+            "formatter": "verbose",
+            "encoding": "utf-8",
+            "delay": True,
+        },
 
         # -------------------
         # CONSOLE / PASSENGER
@@ -93,6 +108,13 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
+        
+        # Logger for Payments webhooks
+        "payments": {
+            "handlers": ["webhook_file", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
     
      # Everything else
@@ -101,5 +123,3 @@ LOGGING = {
         "level": "ERROR",
     },
 }
-
-

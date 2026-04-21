@@ -77,6 +77,40 @@ class PaymentService:
         )
         return resp.payload()
     
+    def _finalize_verification(self, payment: PaymentEntity, gw_result: GatewayVerifyResponse):
+        """Handles the state transition logic based on gateway success"""
+        if not gw_result.was_successful:
+            return self._handle_payment_failure(payment, gw_result)
+        
+        # success and underpaid transaction verification
+        if not payment.is_processed:
+            payment.finalize_from_gateway(gw_result)
+            self.repo.update_as_successful(payment)
+        
+    def _handle_payment_failure(self, payment: PaymentEntity, gw_result: GatewayVerifyResponse):
+        """
+        Branches failure logic between 'Abandoned' and 'Failed' states.
+        """
+        
+        if gw_result.status == PaymentStatus.ABANDONED:
+            payment.mark_as_abandoned(
+                reason=gw_result.message, 
+                metadata=gw_result.data.model_dump(mode="json")
+            )
+            return self.repo.update_as_abandoned(payment)
+        
+        payment.mark_as_failed(gw_result.message)
+        return self.repo.update_status(payment)
+    
+    def set_user(self, user: AbstractUser) -> None:
+        """
+        Assigns a user to the service session if one isn't already present.
+        Also re-initializes the repository to ensure it has the correct user context.
+        """
+        if self.user is None and user is not None:
+            self.user = user
+            self.repo = PaymentRepository(self.user)
+    
     def prepare_gateway_entity(self, entity:PaymentEntity) -> PaymentGatewayPayload:
         """
         Transforms the domain PaymentEntity into a standardized gateway payload.
@@ -186,30 +220,22 @@ class PaymentService:
             )
         except PolicyViolationError as err:
             raise err
+        
+    def handle_webhook(self, refernce:str):
+        """
+            Coordinates the domain-level response to an external payment provider's webhook.
 
-    def _finalize_verification(self, payment: PaymentEntity, gw_result: GatewayVerifyResponse):
-        """Handles the state transition logic based on gateway success"""
-        if not gw_result.was_successful:
-            return self._handle_payment_failure(payment, gw_result)
-        
-        # success and underpaid transaction verification
-        if not payment.is_processed:
-            payment.finalize_from_gateway(gw_result)
-            self.repo.update_as_successful(payment)
-        
-    def _handle_payment_failure(self, payment: PaymentEntity, gw_result: GatewayVerifyResponse):
+            To ensure security, this method does not trust the webhook payload blindly. 
+            Instead, it:
+            1. Re-hydrates the user session from the existing PaymentEntity.
+            2. Executes a pessimistic lock via the verification pipeline.
+            3. Performs an outbound API call to the gateway to confirm the final status.
+            4. Updates the local domain model to a terminal state (Success/Failure).
         """
-        Branches failure logic between 'Abandoned' and 'Failed' states.
-        """
-        
-        if gw_result.status == PaymentStatus.ABANDONED:
-            payment.mark_as_abandoned(
-                reason=gw_result.message, 
-                metadata=gw_result.data.model_dump(mode="json")
-            )
-            return self.repo.update_as_abandoned(payment)
-        
-        payment.mark_as_failed(gw_result.message)
-        return self.repo.update_status(payment)
+        # either itrigger the verify method from here that makes 
+        # another API call to gateway or i trust the payload 
+        # and call finalize method
+        pass
+
         
 # {'status': True, 'message': 'Verification successful', 'data': {'id': 6056669528, 'domain': 'test', 'status': 'success', 'reference': 'SRV-WY0Fnw10r4dwcvl', 'receipt_number': None, 'amount': 2800000, 'message': None, 'gateway_response': 'Successful', 'paid_at': '2026-04-19T23:38:10.000Z', 'created_at': '2026-04-19T23:37:16.000Z', 'channel': 'card', 'currency': 'NGN', 'ip_address': '102.89.46.38', 'metadata': {'cancel_action': '/payments/checkout/cancelled/'}, 'log': {'start_time': 1776641842, 'time_spent': 48, 'attempts': 1, 'errors': 0, 'success': True, 'mobile': True, 'input': [], 'history': [{'type': 'action', 'message': 'Set payment method to: card', 'time': 29}, {'type': 'action', 'message': 'Attempted to pay with card', 'time': 48}, {'type': 'success', 'message': 'Successfully paid with card', 'time': 48}]}, 'fees': 52000, 'fees_split': None, 'authorization': {'authorization_code': 'AUTH_wdu0om86xy', 'bin': '408408', 'last4': '4081', 'exp_month': '12', 'exp_year': '2030', 'channel': 'card', 'card_type': 'visa ', 'bank': 'TEST BANK', 'country_code': 'NG', 'brand': 'visa', 'reusable': True, 'signature': 'SIG_o6DImVqfL5I3m8UjPD3p', 'account_name': None, 'receiver_bank_account_number': None, 'receiver_bank': None}, 'customer': {'id': 355100918, 'first_name': None, 'last_name': None, 'email': 'dylar77@anhmaybietchoi.com', 'customer_code': 'CUS_ge21z2zt8xncvzr', 'phone': None, 'metadata': None, 'risk_action': 'default', 'international_format_phone': None}, 'plan': None, 'split': {}, 'order_id': None, 'paidAt': '2026-04-19T23:38:10.000Z', 'createdAt': '2026-04-19T23:37:16.000Z', 'requested_amount': 2800000, 'pos_transaction_data': None, 'source': None, 'fees_breakdown': None, 'connect': None, 'transaction_date': '2026-04-19T23:37:16.000Z', 'plan_object': {}, 'subaccount': {}}}

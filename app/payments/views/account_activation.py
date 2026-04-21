@@ -14,9 +14,10 @@ from template_map.payments import Payments
 from pydantic import ValidationError
 from decimal import Decimal
 from constants import APP_SUBSCRIPTION_FEE
-import json
+import json, logging
 
 
+logger = logging.getLogger(__name__)
 
 class AccountActivationView(LoginRequiredMixin, View):
     template_name = Payments.Checkouts.PAYSTACK_CHECKOUT
@@ -89,7 +90,6 @@ class AccountActivationView(LoginRequiredMixin, View):
             return JsonResponse(err.model_dump(), status=400)
                 
         except DomainException as e:
-            print(e)
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title=e.title,
@@ -99,7 +99,7 @@ class AccountActivationView(LoginRequiredMixin, View):
             return JsonResponse(err.model_dump(mode="json"), status=400)
         
         except Exception as e:
-            print(e)
+            logger.exception(e)
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title="Payment Error",

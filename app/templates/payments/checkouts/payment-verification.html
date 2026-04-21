@@ -163,6 +163,7 @@
 </style>
 {% endblock %}
 {% block js_files %}
+{% if provider == 'paystack' %}
     <script src="{% static 'js/gateways/paystack/verifyPayment.js' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -185,4 +186,5 @@
             }
         });
     </script>
+{% endif %}
 {% endblock %}

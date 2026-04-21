@@ -1,7 +1,7 @@
 # Registry to resolve which payment gateway to use.
 
-from payments.infrastructure.gateways.paystack.adapter import PaystackAdapter
-# from payments.infrastructure.gateways.stripe.adapter import StripeAdapter
+from payments.infrastructure.gateways.adapters.paystack import PaystackAdapter
+# from payments.infrastructure.gateways.adapter.stripe import StripeAdapter
 
 
 GATEWAYS = {

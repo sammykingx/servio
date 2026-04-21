@@ -14,7 +14,10 @@ from payments.infrastructure.registry import GATEWAYS
 from payments.services.payment_service import PaymentService
 from template_map.payments import Payments
 from pydantic import ValidationError
-import json
+import json, logging
+
+
+logger = logging.getLogger(__name__)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -83,7 +86,7 @@ class PaymentVerificationView(View):
             return JsonResponse(err.model_dump(), status=400)
         
         except Exception as e:
-            print(e)
+            logger.exception(e)
             err = PaymentManifest(
                 status=PaymentStatus.FAILED,
                 title="Payment Verification Incomplete",
