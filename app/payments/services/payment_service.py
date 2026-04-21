@@ -171,6 +171,7 @@ class PaymentService:
         try:
             payment_entity = self.repo.get_by_reference(reference)
             PaymentPolicy.ensure_entity_is_processable(payment_entity, phase=PaymentPhase.INITIALIZATION)
+            PaymentPolicy.validate_minimum_amount(payment_entity.amount_decimal, payment_entity.currency)
             if payment_entity.has_active_gateway_session:
                 return self._build_response(payment_entity)
             

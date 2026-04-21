@@ -16,6 +16,9 @@ class PaymentPolicy:
     """
     Enforces business rules regarding payment states and transitions.
     """
+    
+    MIN_NGN = Decimal("5000.00")
+    MIN_USD = Decimal("20.00")
 
     @classmethod
     def ensure_entity_is_processable(cls, payment_entity: PaymentEntity | None, phase: PaymentPhase = PaymentPhase.INITIALIZATION):
@@ -95,6 +98,30 @@ class PaymentPolicy:
                 code=PaymentFailure.PAYMENT_INCOMPLETE.code,
                 title=PaymentFailure.PAYMENT_INCOMPLETE.title
             )
+            
+    @classmethod
+    def validate_minimum_amount(cls, amount: Decimal, currency: str):
+        currency = currency.upper()
+
+        if currency == "NGN":
+            if amount < cls.MIN_NGN:
+                raise PolicyViolationError(
+                    f"Minimum NGN payment is ₦{cls.MIN_NGN:,.2f}",
+                    code=PaymentFailure.AMOUNT_TOO_LOW.code,
+                    title=PaymentFailure.AMOUNT_TOO_LOW.title
+                )
+        
+        elif currency == "USD":
+            if amount < cls.MIN_USD:
+                raise PolicyViolationError(
+                    f"Minimum USD payment is ${cls.MIN_USD:,.2f}",
+                    code=PaymentFailure.AMOUNT_TOO_LOW.code,
+                    title=PaymentFailure.AMOUNT_TOO_LOW.title
+                )
+
+        else:
+            raise PolicyViolationError(f"Currency {currency} is not supported.")
+        
             
     def ensure_is_not_terminal(entity: PaymentEntity):
         """
