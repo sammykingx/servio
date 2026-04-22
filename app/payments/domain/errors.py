@@ -52,6 +52,9 @@ class PaymentFailure:
     PAYMENT_INCOMPLETE = FailureDetail(
         "PAYMENT_INCOMPLETE", "Incomplete Payment",
     )
+    AMOUNT_TOO_LOW = FailureDetail(
+        "AMOUNT_TOO_LOW", "Amount too Low"
+    )
     
     # ------ DB RELATED ------
     SERVER_BUSY = FailureDetail("PROCESSING_IN_PROGRESS", "Processing in Progress")
