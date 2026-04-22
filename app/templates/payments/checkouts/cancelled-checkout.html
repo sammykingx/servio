@@ -20,11 +20,13 @@
 
         <div class="max-w-md mx-auto bg-white dark:bg-[#0A0A0A] border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl mb-12">
             <div class="space-y-6">
+                {% comment "find a way to resume the checkout" %}
                 <button onclick="window.history.back()" 
                         class="w-full flex items-center justify-center gap-3 py-5 bg-brand-500 hover:bg-brand-600 text-white rounded-2xl font-medium text-base transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-brand-500/20">
                     <span class="material-symbols-outlined">payments</span>
                     Resume Payment
                 </button>
+                {% endcomment %}
                 
                 <div class="grid grid-cols-1 gap-3">
                     <a href="{% url AUTH_URLS.ACCOUNT_DASHBOARD %}" 
@@ -43,7 +45,7 @@
             </div>
             <div class="flex flex-col items-center gap-2 border-x border-slate-200 dark:border-white/10 px-4 text-gray-500 dark:text-gray-400">
                 <span class="material-symbols-outlined text-slate-400">history</span>
-                <span class="text-[9px] md:text-[11px] font-medium uppercase tracking-widest">Saved for 6h</span>
+                <span class="text-[9px] md:text-[11px] font-medium uppercase tracking-widest">Saved for 4h</span>
             </div>
             <div class="flex flex-col items-center gap-2 text-gray-500 dark:text-gray-400">
                 <span class="material-symbols-outlined text-slate-400">support_agent</span>

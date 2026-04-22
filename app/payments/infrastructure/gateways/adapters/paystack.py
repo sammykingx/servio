@@ -145,7 +145,7 @@ class PaystackAdapter(PaymentGateway):
         
         except Timeout:
             raise PaymentGatewayError(
-                "Payment service took too long to respond during verification session. Please try again later.",
+                "Payment service took too long to respond during verification session. Please refresh or try again later.",
                 code=PaymentFailure.GATEWAY_TIMEOUT.code,
                 title=PaymentFailure.GATEWAY_TIMEOUT.title,
             )

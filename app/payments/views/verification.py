@@ -45,7 +45,6 @@ class PaymentVerificationView(View):
                 gateway_name=payload.provider, 
                 phase=PaymentPhase.VERIFICATION
             ).verify(payload.reference)
-            # return HttpResponse(status=200)
         
             resp = PaymentManifest(
                 status=result.data.status,

@@ -86,6 +86,16 @@ class PaymentService:
         if not payment.is_processed:
             payment.finalize_from_gateway(gw_result)
             self.repo.update_as_successful(payment)
+            
+            if payment.payment_type == PaymentType.ONE_TIME and payment.payment_purpose == PaymentPurpose.ACTIVATION_FEE:
+                self._activate_user_profile()
+                    
+    def _activate_user_profile(self):
+        """
+        Retrieves the user profile and marks the one-time fee as paid.
+        """
+        if hasattr(self.user, 'profile'):
+            self.user.profile.paid_one_time_fee()
         
     def _handle_payment_failure(self, payment: PaymentEntity, gw_result: GatewayVerifyResponse):
         """
@@ -208,6 +218,7 @@ class PaymentService:
             payment = self.repo.get_by_reference(reference, lock=True)
             PaymentPolicy.ensure_entity_is_processable(payment, phase=PaymentPhase.VERIFICATION)
             PaymentPolicy.ensure_is_not_terminal(payment)
+            self.set_user(payment.user)
             self._resolve_gateway_provider(payment)
             gw_result = self.gateway.verify_payment(reference)
             self._finalize_verification(payment, gw_result)

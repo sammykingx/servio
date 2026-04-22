@@ -101,3 +101,8 @@ class UserProfile(models.Model):
     
     def all_user_niches(self):
         return self.niches.all()
+    
+    def paid_one_time_fee(self):
+        if not self.has_paid_onetime_fee:
+            self.has_paid_onetime_fee = True
+            self.save(update_fields=["has_paid_onetime_fee"])

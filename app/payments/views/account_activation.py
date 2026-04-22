@@ -26,6 +26,9 @@ class AccountActivationView(LoginRequiredMixin, View):
         provider:str = kwargs.get("gateway")
         if provider not in GATEWAYS.keys():
             return render(request, Payments.Checkouts.UNREGISTERED_GATEWAY, context={"provider" : provider.lower()})
+        if self.user.profile.has_paid_onetime_fee:
+            return redirect(PaymentURLS.USER_PAYMENT_SUMMARY)
+        
         amount = Decimal(str(APP_SUBSCRIPTION_FEE))
         entity = PaymentService(
             gateway_name=provider,
@@ -65,9 +68,6 @@ class AccountActivationView(LoginRequiredMixin, View):
                 ui_intent=PaymentStatus.SUCCESS
             )
             return JsonResponse(response_data.model_dump(mode="json"), status=200)
-            # https://checkout.paystack.com/u4j84p5z4jd6krf
-            # SRV-jSCgCj9KZ0NehGo
-            # try to cancell and see if it will resume again
 
         except json.JSONDecodeError:
             err = PaymentManifest(
