@@ -1,0 +1,342 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Payment Summary{% endblock %}
+{% block content %}
+
+{% if not transactions %}
+    {% include "components/empty-states/no-payments.html" %}
+{% else %}
+<section class="space-y-8 max-w-7xl mx-auto transition-colors duration-300 py-5 px-2">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 px-3">
+        <div>
+            <h1 class="text-2xl md:text-4xl font-semibold tracking-tight text-gray-800 dark:text-white">Payment Activity</h1>
+            <p class="text-gray-500 text-sm md:text-base dark:text-gray-400 mt-1">Manage your financial operations and real-time settlements.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <button class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">file_download</span>
+                Export
+            </button>
+            <button class="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-all shadow-[0_1px_2px_0_rgba(0,0,0,0.05),0_0_0_1px_rgba(79,70,229,1)]">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                New Payment
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+        <div class="group relative p-5 rounded-[2.5rem] bg-sky-50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/30 transition-all hover:shadow-2xl hover:shadow-sky-500/10">
+            <div class="relative flex flex-col gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-white dark:bg-sky-900/40 shadow-sm flex items-center justify-center text-sky-600 dark:text-sky-400">
+                    <span class="material-symbols-outlined font-fill">payments</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-sky-600/80 dark:text-sky-400/80 mb-1">All Payments</p>
+                    <h3 class="text-2xl md:text-3xl font-medium text-sky-950 dark:text-sky-50">${{ stats.all }}
+                </div>
+            </div>
+            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-sky-400/10 rounded-full blur-3xl group-hover:bg-sky-400/20 transition-all"></div>
+        </div>
+
+        <!--Card 2-->
+        <div class="group relative p-5 rounded-[2.5rem] bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 transition-all hover:shadow-2xl hover:shadow-emerald-500/10">
+            <div class="relative flex flex-col gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-white dark:bg-emerald-900/40 shadow-sm flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                    <span class="material-symbols-outlined font-fill">check_circle</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-emerald-600/80 dark:text-emerald-400/80 mb-1">Completed</p>
+                    <h3 class="text-2xl md:text-3xl font-medium text-emerald-950 dark:text-emerald-50">${{ stats.completed }}
+                </div>
+            </div>
+        </div>
+
+        <div class="group relative p-5 rounded-[2.5rem] bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 transition-all hover:shadow-2xl hover:shadow-amber-500/10">
+            <div class="relative  flex flex-col gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-white dark:bg-amber-900/40 shadow-sm flex items-center justify-center text-amber-600 dark:text-amber-400">
+                    <span class="material-symbols-outlined animate-spin-slow">sync</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-amber-600/80 dark:text-amber-400/80 mb-1">Pending</p>
+                    <h3 class="text-2xl md:text-3xl font-medium text-amber-950 dark:text-amber-50">${{ stats.pending }}
+                </div>
+            </div>
+        </div>
+
+        <div class="group relative p-5 rounded-[2.5rem] bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 transition-all hover:shadow-2xl hover:shadow-rose-500/10">
+            <div class="relative flex flex-col gap-6">
+                <div class="w-12 h-12 rounded-2xl bg-white dark:bg-rose-900/40 shadow-sm flex items-center justify-center text-rose-600 dark:text-rose-400">
+                    <span class="material-symbols-outlined">heart_broken</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-medium uppercase tracking-[0.15em] text-rose-600/80 dark:text-rose-400/80 mb-1">Abandoned</p>
+                    <h3 class="text-2xl md:text-3xl font-medium text-rose-950 dark:text-rose-50">${{ stats.abandoned }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table listing -->
+    <div class="mt-8 relative">
+        <div class="overflow-hidden rounded-[2rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+            
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/50 dark:bg-slate-900/40 border-b border-slate-200 dark:border-slate-800">
+                            <th class="px-6 py-5 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 whitespace-nowrap">Recipient</th>
+                            <th class="px-6 py-5 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 whitespace-nowrap">Classification</th>
+                            <th class="px-6 py-5 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 whitespace-nowrap">Gateway</th>
+                            <th class="px-6 py-5 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 whitespace-nowrap">Status</th>
+                            <th class="px-6 py-5 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 whitespace-nowrap text-right">Amount</th>
+                            <th class="px-6 py-5 text-[10px] font-medium uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
+                        {% for tx in transactions %}
+                            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-900/50 transition-all group">
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <div class="flex items-center gap-4">
+                                        <div class="relative">
+                                            {% if tx.payment_purpose == 'activation_fee' %}
+                                                <div class="h-10 w-10 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 text-xs font-semibold">
+                                                    SP
+                                                </div>
+                                            {% else %}
+                                            <div class="h-10 w-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold">
+                                                {{ tx.beneficiary.first_name|title }}{{ tx.beneficiary.last_name|title }}
+                                            </div>
+                                            {% endif %}
+                                            {% if tx.status == 'pending' %}
+                                                <div class="absolute -bottom-1 -right-1 h-3 w-3 bg-amber-500 
+                                                    border-2 border-white dark:border-slate-950 rounded-full"
+                                                ></div>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-slate-800 dark:text-slate-100 leading-none">{{ tx.display_recipient_name|title }}</p>
+                                            <p class="text-[10px] text-slate-400 mt-1.5 font-medium tracking-wide">{{ tx.reference }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                {% if tx.payment_purpose == 'activation_fee' %}
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
+                                            <span class="material-symbols-outlined text-[14px] text-slate-500">sell</span>
+                                            <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400">Activation Fee</span>
+                                        </div>
+                                    </td>
+                                {% elif tx.payment_purpose == 'wallet_funding' %}
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
+                                            <span class="material-symbols-outlined text-[14px] text-slate-500">account_balance_wallet</span>
+                                            <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400">Wallet Funding</span>
+                                        </div>
+                                    </td>
+                                {% elif tx.payment_purpose == 'service_payment' %}
+                                    <td class="px-6 py-5 whitespace-nowrap">
+                                        <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
+                                            <span class="material-symbols-outlined text-[14px] text-slate-500">bolt</span>
+                                            <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400">Service Payment</span>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    {% if tx.gateway == 'flutterwave' %}
+                                        <span class="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                            <img src="{% static 'images/gateways/flutterwave.ico' %}" class="w-4 h-4 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="">
+                                            Flutterwave
+                                        </span>
+                                    {% elif tx.gateway == 'paystack' %}
+                                        <span class="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                            <img src="{% static 'images/gateways/paystack.ico' %}" class="w-4 h-4 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="">
+                                            Paystack
+                                        </span>
+                                    {% else %}
+                                        <span class="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                            <img src="{% static 'images/gateways/stripe.ico' %}" class="w-4 h-4 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="">
+                                            Stripe
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    {% if tx.status == 'success' %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100/60 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-medium uppercase tracking-widest border border-emerald-200/50 dark:border-emerald-800/50">
+                                            Settled
+                                        </span>
+
+                                    {% elif tx.status == 'pending' or tx.status == 'initiated' %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100/60 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-[10px] font-medium uppercase tracking-widest border border-amber-200/50 dark:border-amber-800/50">
+                                            {{ tx.status }}
+                                        </span>
+
+                                    {% elif tx.status == 'underpaid' %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-100/60 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 text-[10px] font-medium uppercase tracking-widest border border-indigo-200/50 dark:border-indigo-800/50">
+                                            Underpaid
+                                        </span>
+
+                                    {% elif tx.status == 'refunded' %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-sky-100/60 dark:bg-sky-900/20 text-sky-600 dark:text-sky-400 text-[10px] font-medium uppercase tracking-widest border border-sky-200/50 dark:border-sky-800/50">
+                                            Refunded
+                                        </span>
+
+                                    {% elif tx.status == 'abandoned' or tx.status == 'failed' or tx.status == 'cancelled' or tx.status == 'expired' %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-100/60 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 text-[10px] font-medium uppercase tracking-widest border border-rose-200/50 dark:border-rose-800/50">
+                                            {{ tx.status }}
+                                        </span>
+
+                                    {% else %}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100/60 dark:bg-slate-900/20 text-slate-600 dark:text-slate-400 text-[10px] font-medium uppercase tracking-widest border border-slate-200/50 dark:border-slate-800/50">
+                                            {{ tx.status }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap text-right">
+                                    <p class="font-mono font-medium text-slate-900 dark:text-white {% if tx.status == 'expired' %}line-through opacity-60{% endif %} text-sm md:text-base">{% if tx.currency == 'NGN' %}₦{% else %}${% endif %}{{ tx.amount_decimal|floatformat:2|intcomma }}</p>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        {% if tx.status == 'pending' %}
+                                            <button class="px-4 py-2 bg-brand-500 dark:bg-white text-white dark:text-slate-950 text-[10px] font-medium uppercase rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md">
+                                                Re-verify
+                                            </button>
+                                        {% endif %}
+                                        <button class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        {% comment %}
+                            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-900/50 transition-all group">
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <div class="flex items-center gap-4">
+                                        <div class="h-10 w-10 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 text-xs font-semibold">
+                                            SA
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-slate-900 dark:text-slate-100 leading-none">Sarah Ahmed</p>
+                                            <p class="text-[10px] text-slate-400 mt-1.5 font-medium tracking-wide">SRV-NTXqg5O8slts3KP</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
+                                        <span class="material-symbols-outlined text-[14px] text-slate-500">account_balance_wallet</span>
+                                        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-400">Wallet Funding</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <span class="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                        <img src="{% static 'images/gateways/paystack.ico' %}" class="w-4 h-4 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="">
+                                        Paystack
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100/60 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-medium uppercase tracking-wider border border-emerald-200/50 dark:border-emerald-800/50">
+                                        Settled
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap text-right">
+                                    <p class="font-mono font-medium text-slate-900 dark:text-white text-base">$15,000.00</p>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap text-right">
+                                    <button class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                                        <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-900/50 transition-all group">
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <div class="flex items-center gap-4">
+                                        <div class="h-10 w-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 text-xs font-bold">JD</div>
+                                        <div>
+                                            <p class="font-semibold text-slate-900 dark:text-slate-100 leading-none">James David</p>
+                                            <p class="text-[10px] text-slate-400 mt-1.5 font-medium tracking-wide">ID: #9901-22</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
+                                        <span class="material-symbols-outlined text-[14px] text-slate-500">bolt</span>
+                                        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-400">Service Payment</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                        <img src="{% static 'images/gateways/stripe.ico' %}" class="w-4 h-4 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="">
+                                        Stripe
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-100/60 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 text-[10px] font-medium uppercase tracking-wider border border-rose-200/50 dark:border-rose-800/50">
+                                        Abandoned
+                                    </span>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap text-right">
+                                    <p class="font-mono font-medium text-slate-400 dark:text-slate-500 text-base line-through opacity-60">$85.00</p>
+                                </td>
+                                <td class="px-6 py-5 whitespace-nowrap text-right">
+                                    <button class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                                        <span class="material-symbols-outlined text-[20px]">open_in_new</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endcomment %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="px-6 py-5 bg-slate-50/50 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <span class="text-[11px] font-normal text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }}
+                </span>
+                
+                <div class="flex items-center gap-1.5 bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" class="p-2 rounded-xl text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">west</span>
+                        </a>
+                    {% else %}
+                        <button class="p-2 rounded-xl text-slate-200 dark:text-slate-800 cursor-not-allowed" disabled>
+                            <span class="material-symbols-outlined text-[16px]">west</span>
+                        </button>
+                    {% endif %}
+
+                    <div class="h-4 w-[1px] bg-slate-100 dark:bg-slate-800 mx-1"></div>
+
+                    {% for num in paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <button class="w-8 h-8 flex items-center justify-center rounded-xl bg-brand-500 text-white text-xs font-medium shadow-md">
+                                {{ num }}
+                            </button>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}" class="w-8 h-8 flex items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold transition-all">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="h-4 w-[1px] bg-slate-100 dark:bg-slate-800 mx-1"></div>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="p-2 rounded-xl text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">east</span>
+                        </a>
+                    {% else %}
+                        <button class="p-2 rounded-xl text-slate-200 dark:text-slate-800 cursor-not-allowed" disabled>
+                            <span class="material-symbols-outlined text-[16px]">east</span>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

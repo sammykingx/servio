@@ -12,6 +12,7 @@ from .gateway import GatewayInitResponse, GatewayVerifyResponse
 class PaymentEntity:
     id: UUID
     user: AbstractUser
+    beneficiary: AbstractUser
     reference: str
     status: PaymentStatus
     amount_in_minor_units: int
@@ -84,6 +85,7 @@ class PaymentEntity:
         """
         self.gateway_response = result.message
         self.metadata = result.data.model_dump(mode="json")
+        self.status = PaymentStatus.PENDING
         if self.gateway == RegisteredPaymentProvider.PAYSTACK:
             self.gateway_reference = result.data.access_code
             

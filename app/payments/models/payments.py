@@ -7,6 +7,14 @@ from uuid6 import uuid7
 class Payment(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid7)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, to_field="email", related_name="payments", on_delete=models.CASCADE)
+    beneficiary = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        to_field="email", 
+        related_name="earnings", 
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     reference = models.CharField(max_length=35, unique=True)
     gateway_reference = models.CharField(
         max_length=100, 
@@ -107,3 +115,8 @@ class Payment(models.Model):
             ),
         ]
     
+    @property
+    def display_recipient_name(self):
+        if self.payment_purpose == PaymentPurpose.ACTIVATION_FEE:
+            return "Servio Platform"
+        return self.user.full_name or self.user.email

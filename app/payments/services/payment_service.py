@@ -138,7 +138,13 @@ class PaymentService:
         self._resolve_gateway_provider(entity)
         return gw_entity
     
-    def initiate_payment(self, amount: Decimal, payment_type: PaymentType, payment_purpose:PaymentPurpose) -> PaymentEntity:
+    def initiate_payment(
+        self, 
+        amount: Decimal, 
+        payment_type: PaymentType, 
+        payment_purpose:PaymentPurpose, 
+        beneficiary: Union[AbstractUser, None] = None
+    ) -> PaymentEntity:
         """
             Registers the user's payment intent by retrieving a valid existing session or creating a fresh one.
 
@@ -152,14 +158,21 @@ class PaymentService:
                 return existing_entity
             except PolicyViolationError as err:
                 if err.code == PaymentFailure.ALREADY_VERIFIED.code:
-                    # for success or incomplete payment status forsame payment intent
+                    # for success or incomplete payment status for same payment intent
                     return existing_entity
                 if err.code == PaymentFailure.PAYMENT_SESSION_EXPIRED.code:
                     # stale payment
                     existing_entity.mark_as_expired(err.message)
                     self.repo.update_status(existing_entity)
 
-        return self.repo.create_record(amount, self.currency, payment_type, payment_purpose, self.provider)
+        return self.repo.create_record(
+            amount, 
+            self.currency, 
+            payment_type, 
+            payment_purpose, 
+            self.provider, 
+            beneficiary
+        )
 
     def process_payment(self, reference: str) -> Dict[str, Any]:
         """

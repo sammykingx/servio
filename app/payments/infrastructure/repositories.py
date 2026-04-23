@@ -104,6 +104,7 @@ class PaymentRepository:
         payment_type: PaymentType, 
         purpose: PaymentPurpose, 
         provider:RegisteredPaymentProvider,
+        beneficiary: Union[AbstractUser, None] = None
     ) -> PaymentEntity:
         """
         Persists a new transaction after validating user context and converting currency.
@@ -135,6 +136,7 @@ class PaymentRepository:
             payment_type=payment_type,
             payment_purpose=purpose,
             gateway=provider,
+            beneficiary=beneficiary,
         )
         return self._map_to_entity(db_obj)
     
@@ -149,6 +151,7 @@ class PaymentRepository:
         self.model.objects.filter(user=entity.user, reference=entity.reference).update(
             gateway_reference=entity.gateway_reference,
             gateway_response=entity.gateway_response,
+            status=entity.status,
             metadata=entity.metadata,
             updated_at=now() 
         )
@@ -211,12 +214,13 @@ class PaymentRepository:
 
     def _map_to_entity(self, model: Payment) -> PaymentEntity:
         """
-        Converts a Django Model instance into a Payment Domain Entity.
+            Converts a Django Model instance into a Payment Domain Entity.
         """
         return PaymentEntity(
             id=model.id,
             user=model.user,
             reference=model.reference,
+            beneficiary=model.beneficiary,
             status=model.status,
             amount_decimal=model.amount_decimal,
             amount_in_minor_units=model.amount_in_minor_units,

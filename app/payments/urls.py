@@ -8,6 +8,7 @@ from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, Se
 from .views.account_activation import AccountActivationView
 from .views.webhooks import PaystackWebhookView
 from .views.verification import PaymentVerificationView
+from .views.listings import UserPaymentsListView
 
 
 urlpatterns = [
@@ -49,9 +50,9 @@ urlpatterns = [
         name=PaymentURLS.CHECKOUT_COMPLETE,
     ),
     path(
-        "all-payments/", 
-         login_required(TemplateView.as_view(template_name=Payments.SUMMARY)), 
-         name=PaymentURLS.USER_PAYMENT_SUMMARY
+        "summary/", 
+        UserPaymentsListView.as_view(), 
+        name=PaymentURLS.USER_PAYMENT_SUMMARY
     ),
     
     # WEBHOOKS URLS

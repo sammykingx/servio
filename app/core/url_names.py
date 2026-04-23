@@ -105,7 +105,7 @@ class ContractURLS:
     
     
 class PaymentURLS:
-    USER_PAYMENT_SUMMARY = "payment_summary"
+    USER_PAYMENT_SUMMARY = "user_payment_summary"
     PAY_SUBSCRIPTION = "pay_subscriptions"
     SUBSCRIPTION_CHECKOUT_OPTION = "subscription_checkout_option"
     SUBSCRIPTION_CHECKOUT = "subscription_checkout"
