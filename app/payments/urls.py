@@ -57,7 +57,7 @@ urlpatterns = [
     
     # WEBHOOKS URLS
     path(
-        "webhook/paystack", 
+        "webhook/paystack/", 
         PaystackWebhookView.as_view(), 
         name=PaymentURLS.PAYSTACK_WEBHOOK,
     ),
