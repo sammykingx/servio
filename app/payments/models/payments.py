@@ -48,6 +48,7 @@ class Payment(models.Model):
             "id": str(self.id),
             "user": self.user.email if self.user else None,
             "reference": self.reference,
+            "beneficiary": self.beneficiary,
             "gateway_reference": self.gateway_reference,
             "amount_decimal": str(self.amount_decimal),
             "amount_in_minor_units": self.amount_in_minor_units,
