@@ -93,3 +93,4 @@ class PaymentVerificationView(View):
                 ui_intent="error",
             )
             return JsonResponse(err.model_dump(), status=500)
+        

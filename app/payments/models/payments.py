@@ -2,7 +2,7 @@ from django.conf  import settings
 from django.db import models
 from payments.domain.enums import RegisteredPaymentProvider, PaymentStatus, PaymentType, PaymentPurpose
 from uuid6 import uuid7
-
+from constants import APP_NAME
 
 class Payment(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid7)
@@ -119,5 +119,5 @@ class Payment(models.Model):
     @property
     def display_recipient_name(self):
         if self.payment_purpose == PaymentPurpose.ACTIVATION_FEE:
-            return "Servio Platform"
+            return f"{APP_NAME.title()} Platform"
         return self.user.full_name or self.user.email
