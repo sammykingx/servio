@@ -90,11 +90,15 @@
 								class="w-full text-center px-6 py-3.5 bg-secondary hover:bg-[#ffeb8a] hover:-translate-y-0.5 text-charcoal rounded-xl font-bold text-base transition shadow-lg">
 								Join Servio
 							</a>
-							<a href="#"
+							<button onclick="toggleVideoModal(true)"
 								data-aos="fade-up" data-aos-delay="200"
-								class="w-full text-center px-6 py-3.5 bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl font-semibold text-base hover:bg-white/20 transition">
-								Discover servio
-							</a>
+								class="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl font-semibold text-base hover:bg-white/20 transition group">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-5 h-5 text-secondary group-hover:scale-110 transition-transform" viewBox="0 0 16 16">
+									<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+									<path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+								</svg>
+								Discover Servio
+							</button>
 						</div>
 
 						<p data-aos="fade-in" data-aos-delay="300" class="text-xs md:text-sm text-gray-400 mt-6 md:mt-8">
@@ -104,6 +108,24 @@
 				</div>
 			</section>
 			<!-- END: Hero Section -->
+
+			<!-- Video Modal -->
+			<div id="videoModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+				<div onclick="toggleVideoModal(false)" class="absolute inset-0"></div>
+
+				<div class="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 z-10">
+					<button onclick="toggleVideoModal(false)" class="absolute top-4 right-4 z-20 text-white/70 hover:text-white bg-black/50 p-2 rounded-full transition">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
+					
+					<video id="heroVideo" class="w-full h-full" controls disablePictureInPicture controlsList="nodownload">
+						<source src="{% static 'videos/discover_servio.mp4' %}" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+				</div>
+			</div>
 
 			<!-- BEGIN: Trusted Partners -->
 			{% comment 'showcase partners like local agencies that will post their services on the platform, and big companies that use the platform to get work done' %}
@@ -411,9 +433,11 @@
 										<div class="absolute top-0 -inset-full h-full w-1/2 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shimmer"></div>
 									</div>
 								</a>
-								<button data-aos="fade-in" data-aos-easing="ease-in-sine" data-aos-delay="150" class="px-12 py-6 bg-transparent text-white rounded-2xl font-bold text-md md:text-xl border border-white/20 hover:bg-white/5 transition-colors">
-								Contact Sales
-								</button>
+								{% comment "additional action" %}
+									<button data-aos="fade-in" data-aos-easing="ease-in-sine" data-aos-delay="150" class="px-12 py-6 bg-transparent text-white rounded-2xl font-bold text-md md:text-xl border border-white/20 hover:bg-white/5 transition-colors">
+									Contact Sales
+									</button>
+								{% endcomment %}
 							</div>
 						</div>
 						<div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
@@ -518,6 +542,32 @@
 				mirror: true,
 				offset: 100, // Start animation 100px before element hits the view
 			});
-	</script>
+		</script>
+		<script>
+			function toggleVideoModal(show) {
+				const modal = document.getElementById('videoModal');
+				const video = document.getElementById('heroVideo');
+
+				if (show) {
+					modal.classList.remove('hidden');
+					modal.classList.add('flex');
+					video.play();
+					document.body.style.overflow = 'hidden'; // Stop background scrolling
+				} else {
+					modal.classList.add('hidden');
+					modal.classList.remove('flex');
+					video.pause();
+					video.currentTime = 0; // Reset video to start
+					document.body.style.overflow = 'auto'; // Restore scrolling
+				}
+			}
+
+			// Optional: Close modal on 'Escape' key press
+			document.addEventListener('keydown', function(e) {
+				if (e.key === "Escape") {
+					toggleVideoModal(false);
+				}
+			});
+		</script>
 	</body>
 </html>

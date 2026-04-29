@@ -11,7 +11,7 @@ const ProposalManager = (() => {
         const container = document.querySelector(selectors[0]);
         const hasButtons = !!document.querySelector(selectors[1]);
         const hasData = container && attrs.every(a => container.dataset[a]);
-
+        console.log(container, hasButtons, hasData);
         if (!container || !hasButtons || !hasData) {
             setTimeout(() => {
                 showToast(

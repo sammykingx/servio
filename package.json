@@ -5,8 +5,8 @@
   },
   "scripts": {
     "dev:app": "npx @tailwindcss/cli -i ./app/static/css/input.css -o ./app/static/css/output.css --watch",
-    "dev:landing": "npx @tailwindcss/cli -i ./app/static/css/landing-page.css -o ./app/static/css/landing-page-style.css --watch",
+    "dev:index": "npx @tailwindcss/cli -i ./app/static/css/landing-page.css -o ./app/static/css/landing-page-style.css --watch",
     "build:app": "npx @tailwindcss/cli -i ./app/static/css/input.css -o ./app/static/css/output.css --minify",
-    "build:landing": "npx @tailwindcss/cli -i ./app/static/css/landing-page.css -o ./app/static/css/landing-page-style.css --minify"
+    "build:index": "npx @tailwindcss/cli -i ./app/static/css/landing-page.css -o ./app/static/css/landing-page-style.css --minify"
   }
 }
