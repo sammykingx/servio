@@ -121,3 +121,4 @@ class Payment(models.Model):
         if self.payment_purpose == PaymentPurpose.ACTIVATION_FEE:
             return f"{APP_NAME.title()} Platform"
         return self.user.full_name or self.user.email
+    
