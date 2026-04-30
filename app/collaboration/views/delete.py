@@ -20,15 +20,18 @@ class DeleteGigView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         gig_slug = kwargs.get("slug")
-        # slug = kwargs.get("slug")
-
         try:
-            status, message = self.delete_gig(gig_slug)
+            self.delete_gig(gig_slug)
+            return JsonResponse({
+                "status": "success",
+                "message": "Project has been deleted successfully.",
+                "redirect": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
+            }, status=200)
 
         except GigModel.DoesNotExist:
             return JsonResponse({
                 "error": "Not found",
-                "message": "Could not locate gig, check and try again.",
+                "message": "Could not locate project, check and try again.",
             }, status=404)
             
         except GigError as err:
@@ -41,63 +44,57 @@ class DeleteGigView(LoginRequiredMixin, View):
 
         except IntegrityError as err:
             return JsonResponse({
-                "error": "Gig Conflict",
+                "error": "Project Conflict",
                 "message": str(err),
             }, status=409)
-
-        return JsonResponse({
-            "status": status,
-            "message": message,
-            "redirect": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
-        }, status=200)
         
-    def delete_gig(self, gig_slug):
+    def delete_gig(self, gig_slug, soft_delete=True):
         try:
             with transaction.atomic():
                 gig = (
                     GigModel.objects
                     .select_for_update()
-                    .prefetch_related("required_roles__proposals")
+                    .prefetch_related("required_roles", "proposals")
                     .get(slug=gig_slug, creator=self.request.user)
                 )
-                roles = gig.required_roles.all()
-                has_proposals = any(
-                    role.proposals.exists()
-                    for role in roles
-                )
-
-                if gig.status in [GigStatus.DRAFT, GigStatus.PENDING]:
-                    if roles:
-                        roles.delete()
-                        
-                    gig.delete()
-                    return "deleted", "Gig deleted successfully."
-
-                if gig.status == GigStatus.PUBLISHED and not has_proposals:
-                    if roles:
-                        roles.delete()
-                        
-                    gig.delete()
-                    return "deleted", "Gig deleted successfully."
-
-                if has_proposals:
-                    gig.status = GigStatus.ARCHIVED
-                    gig.is_active = False
-                    gig.save(update_fields=["status", "is_active"])
-
-                    return "archived", "Gig has proposals and was archived instead."
-
-                raise GigError(
-                    message="This gig can no longer be deleted because it has active proposals.",
-                    status_code=409,
-                    code="gig_has_proposals"
-                )
                 
-        except GigModel.DoesNotExist:
-            raise
-        
-        except IntegrityError as err:
+                if soft_delete:
+                    if gig.status == GigStatus.ARCHIVED:
+                        return
+                    
+                    gig.status = GigStatus.ARCHIVED
+                    gig.is_gig_active = False
+                    gig.save(update_fields=["status", "is_gig_active"])
+                    return
+                
+                self._handle_hard_delete(gig)
+                
+        except IntegrityError:
             import traceback
             traceback.print_exc()
-            raise IntegrityError("This gig is currently being modified. Try again.")
+            raise IntegrityError("This project is currently being modified. Try again.")
 
+    def _handle_hard_delete(self, gig):
+        """
+        Performs a permanent deletion of the gig and its dependencies.
+        Only executes if no proposals have been submitted.
+        """
+        has_proposals = gig.proposals.exists()
+        if has_proposals:
+            raise GigError(
+                message="This project has active proposals and cannot be deleted in its current state.",
+                status_code=409,
+                code="GIG_DELETE_RESTRICTED"
+            )
+            
+        can_hard_delete = (
+            gig.status in [GigStatus.DRAFT, GigStatus.PENDING] or 
+            (gig.status == GigStatus.PUBLISHED and not has_proposals)
+        )
+        
+        if not has_proposals and can_hard_delete:
+            if gig.has_gig_roles:
+                gig.required_roles.all().delete()
+                
+            gig.delete()
+            return

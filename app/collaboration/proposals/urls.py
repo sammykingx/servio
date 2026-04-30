@@ -5,7 +5,7 @@ from collaboration.proposals.views import (
     RecievedProposalListView,
     ProposalRoleListView,
     SentProposalListView,
-    UpdateProposalStatusView,
+    UpdateProposalStateView,
     RenderProposalDeliverablesView
 )
 from template_map.collaboration import Collabs
@@ -24,7 +24,7 @@ urlpatterns = [
         name=ProposalURLS.RECEIVED_PROPOSALS,
     ),
     path("update-proposals/",
-         UpdateProposalStatusView.as_view(),
+         UpdateProposalStateView.as_view(),
          name=ProposalURLS.UPDATE_PROPOSAL_STATUS,
     ),
     path("sent/", SentProposalListView.as_view(), name=ProposalURLS.SENT_PROPOSALS),

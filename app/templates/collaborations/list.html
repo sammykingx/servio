@@ -249,6 +249,7 @@
 {% endif %}
 {% endblock %}
 {% block custom_page_js %}
+<script src="{% static 'js/collaboration/delete-gigs.js' %}"></script>
 <script>
     document.body.addEventListener('htmx:afterSwap', () => {
         const button = document.getElementById('load-more-btn');

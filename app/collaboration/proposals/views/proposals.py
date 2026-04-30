@@ -131,8 +131,8 @@ class SentProposalListView(LoginRequiredMixin, ListView):
         )
         return qs
     
-class UpdateProposalStatusView(LoginRequiredMixin, View):
-    """Accepts service provider proposal"""
+class UpdateProposalStateView(LoginRequiredMixin, View):
+    """Updates the state of a service provider proposal"""
     
     allowed_http_names = ["PATCH"]
     

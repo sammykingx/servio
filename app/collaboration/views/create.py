@@ -75,7 +75,6 @@ class CreateCollaborationView(LoginRequiredMixin, View):
         try:
             payload = json.loads(request.body)
             gig_data = CreateGigRequest(**payload)
-            # print(gig_data.model_dump_json(indent=2))
             gig = self.save_gig_data(gig_data.payload, gig_data.action)
 
         except json.JSONDecodeError:

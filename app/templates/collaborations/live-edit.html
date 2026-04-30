@@ -51,7 +51,7 @@
                 <div class="grid grid-cols-2 gap-8">
                     <div class="space-y-2">
                         <label for="start-date" class="text-[11px] font-medium text-gray-400 uppercase tracking-wider ml-1" for="start-date">Start date</label>
-                        <input class="w-full px-5 py-3.5 border border-gray-100 dark:border-gray-700 rounded-xl 
+                        <input class="w-full px-4 md:px-5 py-3.5 border border-gray-100 dark:border-gray-700 rounded-xl 
                             focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 
                             text-sm font-normal text-gray-700 dark:text-gray-400 outline-none" 
                             id="start-date" type="date" value="{{ gig.start_date|date:'Y-m-d' }}"
@@ -59,7 +59,7 @@
                     </div>
                     <div class="space-y-2">
                         <label for="end-date" class="text-[11px] font-medium text-gray-400 uppercase tracking-wider ml-1" for="end-date">Est. Due date</label>
-                        <input class="w-full px-5 py-3.5 border border-gray-100 dark:border-gray-700 rounded-xl 
+                        <input class="w-full px-4 md:px-5 py-3.5 border border-gray-100 dark:border-gray-700 rounded-xl 
                             focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 
                             text-sm font-normal text-gray-700 dark:text-gray-400 outline-none" 
                             id="end-date" type="date" value="{{ gig.end_date|date:'Y-m-d' }}" 
@@ -211,7 +211,7 @@
 
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center gap-1.5">
-                                    <span class="text-[11px] text-gray-500">In Escrow</span>
+                                    <span class="text-[11px] text-gray-500">Locked Amount</span>
                                     <span class="material-symbols-outlined text-[8px] text-warning-500">lock</span>
                                 </div>
                                 <span class="text-xs font-bold text-warning-600 dark:text-warning-400">
@@ -269,12 +269,14 @@
                     </div>
                 </div>
 
+                {% comment %}
                 <div class="flex gap-4 p-4 rounded-xl bg-orange-25 border border-orange-100">
                     <span class="material-symbols-outlined text-orange-500 text-xl">gavel</span>
                     <p class="text-[11px] leading-relaxed text-orange-800 font-medium">
                         Budget shifts exceeding 15% require <strong>Stakeholder Approval</strong> and an automated Escrow Audit.
                     </p>
                 </div>
+                {% endcomment %}
             </div>
         </aside>
     </div>

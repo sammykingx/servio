@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Count, Sum, F, Q, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
+from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
 
@@ -19,6 +20,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
     """
     
     template_name = Collabs.LIST_COLLABORATIONS
+    model = get_registered_model("collaboration", "Gig")
     context_object_name = "gigs"
     paginate_by = 16
 
@@ -47,7 +49,9 @@ class CollaborationListView(LoginRequiredMixin, ListView):
             to_attr="prefetched_proposals"
         )
         queryset =  (
-            self.request.user.gigs
+            super().get_queryset()
+            .filter(creator=self.request.user)
+            .exclude(status=GigStatus.ARCHIVED)
             .prefetch_related(proposal_prefetch)
             .annotate(total_proposals=Count("proposals"))
             .only(
@@ -83,7 +87,9 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         gig_status_counts = (
-            self.request.user.gigs
+            super().get_queryset()
+            .filter(creator=self.request.user)
+            .exclude(status=GigStatus.ARCHIVED)
             .aggregate(
                 total=Count("id"),
                 draft=Count("id", filter=Q(status=GigStatus.DRAFT)),
