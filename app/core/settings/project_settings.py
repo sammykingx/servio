@@ -7,6 +7,7 @@ from decouple import config
 AUTH_USER_MODEL = "accounts.AuthUser"
 
 LOGIN_URL = AuthURLNames.LOGIN
+LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
 LOGIN_REDIRECT_URL = AuthURLNames.ACCOUNT_DASHBOARD
 
 LOCAL_APPS = [
