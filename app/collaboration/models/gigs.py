@@ -95,6 +95,7 @@ class Gig(models.Model):
         indexes = [
             models.Index(fields=["status", "visibility"]),
             models.Index(fields=["creator"]),
+            models.Index(fields=["status", "visibility", "is_gig_active"])
         ]
 
     def __str__(self):

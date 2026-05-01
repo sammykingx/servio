@@ -11,12 +11,11 @@ from registry_utils import get_registered_model
 from ..exceptions import GigError
 
 
-GigModel = get_registered_model("collaboration", "Gig")
-ProposalModel = get_registered_model("collaboration", "Proposal")
-
 
 class DeleteGigView(LoginRequiredMixin, View):
     allowed_http_methods = ["POST"]
+    model = get_registered_model("collaboration", "Gig")
+    proposal_model = get_registered_model("collaboration", "Proposal")
 
     def post(self, request, *args, **kwargs):
         gig_slug = kwargs.get("slug")
@@ -28,7 +27,7 @@ class DeleteGigView(LoginRequiredMixin, View):
                 "redirect": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
             }, status=200)
 
-        except GigModel.DoesNotExist:
+        except self.model.DoesNotExist:
             return JsonResponse({
                 "error": "Not found",
                 "message": "Could not locate project, check and try again.",
@@ -52,43 +51,50 @@ class DeleteGigView(LoginRequiredMixin, View):
         try:
             with transaction.atomic():
                 gig = (
-                    GigModel.objects
+                    self.model.objects
                     .select_for_update()
                     .prefetch_related("required_roles", "proposals")
                     .get(slug=gig_slug, creator=self.request.user)
                 )
                 
-                if soft_delete:
-                    if gig.status == GigStatus.ARCHIVED:
-                        return
-                    
-                    gig.status = GigStatus.ARCHIVED
-                    gig.is_gig_active = False
-                    gig.save(update_fields=["status", "is_gig_active"])
-                    return
+                has_proposals = gig.proposals.exists()
+                if has_proposals:
+                    raise GigError(
+                        message="This project has active proposals and cannot be deleted in its current state.",
+                        status_code=409,
+                        code="GIG_DELETE_RESTRICTED"
+                    )
                 
-                self._handle_hard_delete(gig)
+                if not soft_delete:
+                    self._handle_hard_delete(gig, has_proposals=has_proposals)
+                    
+                self._handle_soft_delete(gig)   
                 
         except IntegrityError:
             import traceback
             traceback.print_exc()
             raise IntegrityError("This project is currently being modified. Try again.")
 
-    def _handle_hard_delete(self, gig):
+    def _handle_soft_delete(self, gig):
+        """
+        Marks the gig as archived without deleting records.
+        Preserves data integrity and allows for potential restoration.
+        """
+        if gig.status == GigStatus.ARCHIVED:
+            return
+        
+        gig.status = GigStatus.ARCHIVED
+        gig.is_gig_active = False
+        gig.save(update_fields=["status", "is_gig_active"])
+        
+    def _handle_hard_delete(self, gig, has_proposals=False):
         """
         Performs a permanent deletion of the gig and its dependencies.
         Only executes if no proposals have been submitted.
         """
-        has_proposals = gig.proposals.exists()
-        if has_proposals:
-            raise GigError(
-                message="This project has active proposals and cannot be deleted in its current state.",
-                status_code=409,
-                code="GIG_DELETE_RESTRICTED"
-            )
-            
+                    
         can_hard_delete = (
-            gig.status in [GigStatus.DRAFT, GigStatus.PENDING] or 
+            gig.status in {GigStatus.DRAFT, GigStatus.PENDING} or 
             (gig.status == GigStatus.PUBLISHED and not has_proposals)
         )
         
