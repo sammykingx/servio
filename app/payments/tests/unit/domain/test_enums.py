@@ -68,5 +68,5 @@ class TestPaymentEnumContracts:
     def test_enum_choices_integrity(self, enum_cls):
         """Ensure the .choices() method generates the correct Django format."""
         assert enum_cls.choices() == [
-            (item.value, item.name) for item in enum_cls
+            (item.value, item.name.replace("_", " ").title()) for item in enum_cls
         ]
