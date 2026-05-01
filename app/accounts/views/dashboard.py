@@ -35,7 +35,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["gigs"] = self.fetch_gig_info()
         context["proposals"] = self.fetch_recent_proposals()
-
+        context["recent_payments"] = self.fetch_recent_payments()
         user = self.request.user
 
         if not user.is_verified:
@@ -75,6 +75,14 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             #     "sender__username",
             # )
             .order_by("-created_at")[:4]
+        )
+    def fetch_recent_payments(self):
+        PaymentModel = get_registered_model("payments", "Payment")
+        return (
+            PaymentModel.objects
+            .filter(user=self.request.user)
+            .select_related("beneficiary")
+            .order_by("-created_at")[:3]
         )
 
 

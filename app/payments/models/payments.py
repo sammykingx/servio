@@ -4,6 +4,7 @@ from payments.domain.enums import RegisteredPaymentProvider, PaymentStatus, Paym
 from uuid6 import uuid7
 from constants import APP_NAME
 
+
 class Payment(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid7)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, to_field="email", related_name="payments", on_delete=models.CASCADE)

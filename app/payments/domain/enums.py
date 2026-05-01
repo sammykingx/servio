@@ -8,7 +8,7 @@ class RegisteredPaymentProvider(str, Enum):
     
     @classmethod
     def choices(cls):
-        return [(item.value, item.name) for item in cls]
+        return [(item.value, item.name.replace("_", " ").title()) for item in cls]
 
 class PaymentType(str, Enum):
     """
@@ -23,7 +23,7 @@ class PaymentType(str, Enum):
     
     @classmethod
     def choices(cls):
-        return [(item.value, item.name) for item in cls]
+        return [(item.value, item.name.replace("_", " ").title()) for item in cls]
     
 class PaymentPurpose(str, Enum):
     """
@@ -39,7 +39,7 @@ class PaymentPurpose(str, Enum):
     
     @classmethod
     def choices(cls):
-        return [(item.value, item.name) for item in cls]
+        return [(item.value, item.name.replace("_", " ").title()) for item in cls]
     
 class PaymentStatus(str, Enum):
     ABANDONED = "abandoned" # never paid and trying to verify
@@ -54,7 +54,7 @@ class PaymentStatus(str, Enum):
     
     @classmethod
     def choices(cls):
-        return [(item.value, item.name) for item in cls]
+        return [(item.value, item.name.replace("_", " ").title()) for item in cls]
     
 class PaymentPhase(str, Enum):
     INITIALIZATION = "initialization"
@@ -80,5 +80,5 @@ class EscrowStatus(str, Enum):
     
     @classmethod
     def choices(cls):
-        return [(item.value, item.name) for item in cls]
+        return [(item.value, item.name.replace("_", " ").title()) for item in cls]
 

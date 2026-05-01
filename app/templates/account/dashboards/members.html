@@ -9,7 +9,7 @@
 <section class="flex-1 flex flex-col h-full overflow-hidden relative">
     <div class="flex-1 overflow-y-auto p-2 md:p-4">
         <div class="max-w-[1400px] mx-auto flex flex-col gap-8">
-            
+
             <div class="flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
                 <div class="flex flex-col gap-1">
                     <h2 class="text-2xl md:text-3xl font-semibold  dark:text-white tracking-tight">{{ user.greeting }} 👋</h2>
@@ -31,8 +31,7 @@
                     <div class="relative rounded-2xl p-6 
                         bg-white/80 dark:bg-slate-900/60 backdrop-blur 
                         border border-slate-200/50 dark:border-slate-700/60
-                        ring-1 ring-black/5 dark:ring-white/5 shadow-sm"
-                    >
+                        ring-1 ring-black/5 dark:ring-white/5 shadow-sm">
                         <!-- Header -->
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="text-md md:text-lg font-semibold tracking-tight dark:text-white">
@@ -47,142 +46,140 @@
                         <!-- Gig List -->
                         <div class="space-y-3">
                             <!-- Gig Row -->
-                             {% for gig in gigs %}
-                                <div class="group relative overflow-hidden rounded-xl p-4
+                            {% for gig in gigs %}
+                            <div class="group relative overflow-hidden rounded-xl p-4
                                     bg-white/70 dark:bg-slate-900/50 ring-1
                                     ring-slate-200/40 dark:ring-slate-700/40
                                     shadow-[0_8px_30px_-12px_rgba(0,0,0,0.15)]
                                     transition-all duration-300 hover:ring-brand-500/40
-                                    hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.25)]"
-                                >
-                                    <!-- Base ambient glow -->
-                                    <div class="pointer-events-none absolute inset-0 opacity-70">
-                                        <div class="absolute -top-24 -right-24 size-64
+                                    hover:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.25)]">
+                                <!-- Base ambient glow -->
+                                <div class="pointer-events-none absolute inset-0 opacity-70">
+                                    <div class="absolute -top-24 -right-24 size-64
                                             bg-gradient-to-br from-brand-500/10 via-brand-500/5
-                                            to-transparent blur-3xl"
-                                        ></div>
-                                    </div>
+                                            to-transparent blur-3xl"></div>
+                                </div>
 
-                                    <!-- Ambient hover wash -->
-                                    <div class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
-                                        <div class="absolute -left-24 top-1/2 size-48 -translate-y-1/2
+                                <!-- Ambient hover wash -->
+                                <div class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
+                                    <div class="absolute -left-24 top-1/2 size-48 -translate-y-1/2
                                                 bg-gradient-to-r from-brand-500/12 to-brand-500/8 blur-3xl">
-                                        </div>
-                                    </div>
-
-                                    <div class="relative flex flex-col gap-3">
-
-                                        <!-- Title + Status -->
-                                        <div class="flex items-start justify-between gap-4">
-
-                                            <div class="min-w-0">
-                                                <h4 class="font-medium truncate dark:text-white">
-                                                    {{ gig.title|truncatechars:40 }}
-                                                </h4>
-
-                                                <p class="text-xs text-slate-500">
-                                                    {% if gig.status == 'draft' %}
-                                                        Draft Mode · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
-                                                    {% elif gig.status == 'pending' %}
-                                                        AR Pending · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
-                                                    {% elif gig.status == 'completed' %}
-                                                        Completed on {{ gig.end_date|date:"M d" }}
-                                                    {% elif gig.status == 'published' %}
-                                                        RFP open · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
-                                                    {% elif gig.status == 'in_progress' %}
-                                                        Ongoing· {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
-                                                    {% else %}
-                                                        {{ gig.status|capfirst }} · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
-                                                    {% endif %}
-                                                </p>
-                                            </div>
-
-                                            {% if gig.status == 'draft' %}
-                                                <span class="px-3 py-1 rounded-full text-[11px] font-medium
-                                                    bg-slate-400/10 text-slate-600 dark:text-slate-400
-                                                    ring-1 ring-slate-400/20">
-                                                    Draft
-                                                </span>
-                                            {% elif gig.status == 'pending' %}
-                                                <span class="px-3 py-1 rounded-full text-[11px] font-medium
-                                                    bg-amber-400/10 text-amber-600 dark:text-amber-400
-                                                    ring-1 ring-amber-500/20">
-                                                    Pending
-                                                </span>
-                                            {% elif gig.status == 'completed' %}
-                                                <span class="px-3 py-1 rounded-full text-[11px] font-medium
-                                                    bg-emerald-500/10 text-emerald-600 dark:text-emerald-400
-                                                    ring-1 ring-emerald-500/20">
-                                                    Completed
-                                                </span>
-                                            {% elif gig.status == 'published' %}
-                                                <span class="px-3 py-1 rounded-full text-[11px] font-medium
-                                                    bg-blue-500/10 text-blue-600 dark:text-blue-400
-                                                    ring-1 ring-blue-500/20">
-                                                    Open
-                                                </span>
-                                            {% elif gig.status == 'in_progress' %}
-                                                <span class="px-3 py-1 rounded-full text-[11px] font-medium
-                                                    bg-brand-500/10 text-brand-600 dark:text-brand-400
-                                                    ring-1 ring-brand-500/20">
-                                                    Ongoing
-                                                </span>
-                                            {% else %}
-                                                <span class="px-3 py-1 rounded-full text-[11px] font-medium
-                                                    bg-error-400/10 text-error-600 dark:text-error-400
-                                                    ring-1 ring-error-500/20">
-                                                    Cancelled
-                                                </span>
-                                            {% endif %}
-                                        </div>
-
-                                        <!-- Meta Row -->
-                                        <div class="flex flex-wrap items-center gap-2 text-[11px]">
-
-                                            <!-- Budget -->
-                                            <span class="px-2.5 py-1 rounded-full
-                                                bg-slate-100 dark:bg-slate-800
-                                                text-slate-600 dark:text-slate-400">
-                                                ${{ gig.total_budget|intcomma }}
-                                            </span>
-
-                                            {% if gig.has_gig_roles %}
-                                                <!-- Roles -->
-                                                <span class="px-2.5 py-1 rounded-full
-                                                    bg-brand-50 dark:bg-brand-900/30
-                                                    text-brand-600 dark:text-brand-400">
-                                                    {{ gig.role_count }} role{{ gig.role_count|pluralize }}
-                                                </span>
-                                            {% endif %}
-
-                                            <!-- Negotiable -->
-                                            {% if gig.is_negotiable %}
-                                                <span class="px-2.5 py-1 rounded-full
-                                                    bg-fuchsia-50 dark:bg-fuchsia-900/30
-                                                    text-fuchsia-600 dark:text-fuchsia-400">
-                                                    Negotiatible
-                                                </span>
-                                            {% else %}
-                                                <span class="px-2.5 py-1 rounded-full
-                                                    bg-sky-100 dark:bg-sky-800
-                                                    text-sky-600 dark:text-sky-400">
-                                                    Fixed Price
-                                                </span>
-                                            {% endif %}
-
-                                            <!-- Escrow -->
-                                            {% if gig.escrowed_amount > 0 %}
-                                                <span class="px-2.5 py-1 rounded-full
-                                                    bg-emerald-50 dark:bg-emerald-900/30
-                                                    text-emerald-600 dark:text-emerald-400">
-                                                    Funds in escrow
-                                                </span>
-                                            {% endif %}
-
-                                        </div>
-
                                     </div>
                                 </div>
+
+                                <div class="relative flex flex-col gap-3">
+
+                                    <!-- Title + Status -->
+                                    <div class="flex items-start justify-between gap-4">
+
+                                        <div class="min-w-0">
+                                            <h4 class="font-medium truncate dark:text-white">
+                                                {{ gig.title|truncatechars:40 }}
+                                            </h4>
+
+                                            <p class="text-xs text-slate-500">
+                                                {% if gig.status == 'draft' %}
+                                                Draft Mode · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
+                                                {% elif gig.status == 'pending' %}
+                                                AR Pending · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
+                                                {% elif gig.status == 'completed' %}
+                                                Completed on {{ gig.end_date|date:"M d" }}
+                                                {% elif gig.status == 'published' %}
+                                                RFP open · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
+                                                {% elif gig.status == 'in_progress' %}
+                                                Ongoing· {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
+                                                {% else %}
+                                                {{ gig.status|capfirst }} · {{ gig.start_date|date:"M d" }} → {{ gig.end_date|date:"M d" }}
+                                                {% endif %}
+                                            </p>
+                                        </div>
+
+                                        {% if gig.status == 'draft' %}
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                                    bg-slate-400/10 text-slate-600 dark:text-slate-400
+                                                    ring-1 ring-slate-400/20">
+                                            Draft
+                                        </span>
+                                        {% elif gig.status == 'pending' %}
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                                    bg-amber-400/10 text-amber-600 dark:text-amber-400
+                                                    ring-1 ring-amber-500/20">
+                                            Pending
+                                        </span>
+                                        {% elif gig.status == 'completed' %}
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                                    bg-emerald-500/10 text-emerald-600 dark:text-emerald-400
+                                                    ring-1 ring-emerald-500/20">
+                                            Completed
+                                        </span>
+                                        {% elif gig.status == 'published' %}
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                                    bg-blue-500/10 text-blue-600 dark:text-blue-400
+                                                    ring-1 ring-blue-500/20">
+                                            Open
+                                        </span>
+                                        {% elif gig.status == 'in_progress' %}
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                                    bg-brand-500/10 text-brand-600 dark:text-brand-400
+                                                    ring-1 ring-brand-500/20">
+                                            Ongoing
+                                        </span>
+                                        {% else %}
+                                        <span class="px-3 py-1 rounded-full text-[11px] font-medium
+                                                    bg-error-400/10 text-error-600 dark:text-error-400
+                                                    ring-1 ring-error-500/20">
+                                            Cancelled
+                                        </span>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Meta Row -->
+                                    <div class="flex flex-wrap items-center gap-2 text-[11px]">
+
+                                        <!-- Budget -->
+                                        <span class="px-2.5 py-1 rounded-full
+                                                bg-slate-100 dark:bg-slate-800
+                                                text-slate-600 dark:text-slate-400">
+                                            ${{ gig.total_budget|intcomma }}
+                                        </span>
+
+                                        {% if gig.has_gig_roles %}
+                                        <!-- Roles -->
+                                        <span class="px-2.5 py-1 rounded-full
+                                                    bg-brand-50 dark:bg-brand-900/30
+                                                    text-brand-600 dark:text-brand-400">
+                                            {{ gig.role_count }} role{{ gig.role_count|pluralize }}
+                                        </span>
+                                        {% endif %}
+
+                                        <!-- Negotiable -->
+                                        {% if gig.is_negotiable %}
+                                        <span class="px-2.5 py-1 rounded-full
+                                                    bg-fuchsia-50 dark:bg-fuchsia-900/30
+                                                    text-fuchsia-600 dark:text-fuchsia-400">
+                                            Negotiatible
+                                        </span>
+                                        {% else %}
+                                        <span class="px-2.5 py-1 rounded-full
+                                                    bg-sky-100 dark:bg-sky-800
+                                                    text-sky-600 dark:text-sky-400">
+                                            Fixed Price
+                                        </span>
+                                        {% endif %}
+
+                                        <!-- Escrow -->
+                                        {% if gig.escrowed_amount > 0 %}
+                                        <span class="px-2.5 py-1 rounded-full
+                                                    bg-emerald-50 dark:bg-emerald-900/30
+                                                    text-emerald-600 dark:text-emerald-400">
+                                            Funds in escrow
+                                        </span>
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -191,89 +188,80 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Proposals & Negotiations -->
                         {% if proposals %}
-                            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6
                                 ring-1 ring-gray-100 dark:ring-gray-800
                                 flex flex-col h-full bg-white dark:bg-transparent
-                                backdrop-blur-sm relative overflow-hidden"
-                            >
-                                <!-- ===== Ambient Wash ===== -->
-                                <div class="pointer-events-none absolute inset-0
+                                backdrop-blur-sm relative overflow-hidden">
+                            <!-- ===== Ambient Wash ===== -->
+                            <div class="pointer-events-none absolute inset-0
                                     bg-gradient-to-br from-brand-500/5 via-brand-500/5 to-transparent">
-                                </div>
+                            </div>
 
-                                <!-- ===== Header ===== -->
-                                <div class="relative flex items-center justify-between mb-5">
+                            <!-- ===== Header ===== -->
+                            <div class="relative flex items-center justify-between mb-5">
 
-                                    <h3 class="text-base font-semibold dark:text-white">
-                                        Proposals
-                                    </h3>
+                                <h3 class="text-base font-semibold dark:text-white">
+                                    Proposals
+                                </h3>
 
-                                    <a 
-                                        href="{% url PROPOSALS.RECEIVED_PROPOSALS %}"
-                                        class="text-brand-500 dark:text-brand-400 hover:text-brand-600 dark:hover:text-brand-300 transition"
-                                    >
-                                        <span class="material-symbols-outlined">arrow_outward</span>
-                                    </a>
+                                <a href="{% url PROPOSALS.RECEIVED_PROPOSALS %}" class="text-brand-500 dark:text-brand-400 hover:text-brand-600 dark:hover:text-brand-300 transition">
+                                    <span class="material-symbols-outlined">arrow_outward</span>
+                                </a>
 
-                                </div>
+                            </div>
 
-                                <!-- ===== Proposal Rows ===== -->
-                                <div class="relative flex flex-col gap-4">
+                            <!-- ===== Proposal Rows ===== -->
+                            <div class="relative flex flex-col gap-4">
 
-                                    {% for proposal in proposals %}
-                                    <div class="group flex items-start gap-3 pb-4 border-b
+                                {% for proposal in proposals %}
+                                <div class="group flex items-start gap-3 pb-4 border-b
                                         border-gray-200 dark:border-gray-800 last:border-0
                                         hover:bg-slate-50/50 dark:hover:bg-slate-800/40
-                                        rounded-xl p-2 transition"
-                                    >
+                                        rounded-xl p-2 transition">
 
-                                        <!-- Avatar -->
-                                        {% if proposal.sender.profile.avatar %}
-                                            <img 
-                                                src="{{ proposal.sender.profile.avatar.url }}"
-                                                alt="{{ proposal.sender.get_full_name }}"
-                                                class="size-10 rounded-full object-cover
-                                                    ring-2 ring-white dark:ring-slate-800 shadow-sm"
-                                            >
-                                        {% else %}
-                                            <div class="size-10 rounded-full flex items-center justify-center
+                                    <!-- Avatar -->
+                                    {% if proposal.sender.profile.avatar %}
+                                    <img src="{{ proposal.sender.profile.avatar.url }}" alt="{{ proposal.sender.get_full_name }}" class="size-10 rounded-full object-cover
+                                                    ring-2 ring-white dark:ring-slate-800 shadow-sm">
+                                    {% else %}
+                                    <div class="size-10 rounded-full flex items-center justify-center
                                                         bg-gradient-to-br from-brand-500 to-brand-600
                                                         text-white text-sm font-semibold uppercase
                                                         ring-2 ring-white dark:ring-slate-800 shadow-sm">
-                                                
-                                                {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
 
-                                            </div>
-                                        {% endif %}
+                                        {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
 
-                                        <!-- Content -->
-                                        <div class="flex-1 min-w-0">
-                                            <!-- Top Row -->
-                                            <div class="flex items-center justify-between">
-                                                <h4 class="text-sm font-medium text-slate-900 dark:text-white truncate">
-                                                    {{ proposal.sender.get_full_name|title }}
-                                                </h4>
+                                    </div>
+                                    {% endif %}
 
-                                                <span class="text-xs text-slate-400 dark:text-slate-500">
-                                                    {{ proposal.created_at|timesince }} ago
-                                                </span>
-                                            </div>
+                                    <!-- Content -->
+                                    <div class="flex-1 min-w-0">
+                                        <!-- Top Row -->
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="text-sm font-medium text-slate-900 dark:text-white truncate">
+                                                {{ proposal.sender.get_full_name|title }}
+                                            </h4>
 
-                                            <!-- Message -->
-                                            <p class="text-sm text-slate-500 dark:text-slate-400 truncate font-light">
-                                                Sent you a proposal for 
-                                                <span class="font-medium text-slate-700 dark:text-slate-300">
-                                                    {{ proposal.gig.title }}
-                                                </span>
-                                            </p>
+                                            <span class="text-xs text-slate-400 dark:text-slate-500">
+                                                {{ proposal.created_at|timesince }} ago
+                                            </span>
                                         </div>
 
-                                        <!-- Unread Dot -->
-                                        {% if not proposal.is_read %}
-                                            <div class="size-1 rounded-full bg-brand-500 dark:bg-brand-400 
-                                                mt-2 animate-ping [animation-duration:3s]"></div>
-                                        {% endif %}
+                                        <!-- Message -->
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 truncate font-light">
+                                            Sent you a proposal for
+                                            <span class="font-medium text-slate-700 dark:text-slate-300">
+                                                {{ proposal.gig.title }}
+                                            </span>
+                                        </p>
                                     </div>
+
+                                    <!-- Unread Dot -->
+                                    {% if not proposal.is_read %}
+                                    <div class="size-1 rounded-full bg-brand-500 dark:bg-brand-400 
+                                                mt-2 animate-ping [animation-duration:3s]"></div>
+                                    {% endif %}
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
@@ -281,8 +269,7 @@
                         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-6
                             shadow-sm ring-1 ring-gray-100 dark:ring-gray-800
                             flex flex-col h-full bg-white/80 dark:bg-[#121826]/90
-                            backdrop-blur-sm relative overflow-hidden"
-                        >
+                            backdrop-blur-sm relative overflow-hidden">
                             <!-- ===== Ambient Wash ===== -->
                             <div class="pointer-events-none absolute inset-0
                                         bg-gradient-to-br from-brand-500/5 via-brand-500/5 to-transparent">
@@ -491,98 +478,127 @@
                         </div>
                     </div>
                     <!-- Transactions List -->
-                    {% if not transactions %}
-                        <div class="relative overflow-hidden rounded-2xl p-6
+                    {% if not recent_payments %}
+                    <div class="relative overflow-hidden rounded-2xl p-6
                             bg-white/70 dark:bg-slate-900/60 backdrop-blur
                             border border-dashed border-slate-200/60 dark:border-slate-700/60
                             ring-1 ring-black/5 dark:ring-white/5">
 
-                            <!-- Ambient glow -->
-                            <div class="pointer-events-none absolute inset-0">
-                                <div class="absolute -top-24 -right-24 size-72
+                        <!-- Ambient glow -->
+                        <div class="pointer-events-none absolute inset-0">
+                            <div class="absolute -top-24 -right-24 size-72
                                     bg-gradient-to-br from-brand-500/10 via-brand-500/10 to-cyan-500/10
                                     blur-3xl opacity-70">
-                                </div>
                             </div>
+                        </div>
 
-                            <div class="relative flex flex-col items-center text-center gap-3 py-10">
+                        <div class="relative flex flex-col items-center text-center gap-3 py-10">
 
-                                <!-- Soft orb -->
-                                <div class="size-14 rounded-full
+                            <!-- Soft orb -->
+                            <div class="size-14 rounded-full
                                     bg-gradient-to-br from-slate-100 to-white
                                     dark:from-slate-800 dark:to-slate-900
                                     ring-1 ring-slate-200/60 dark:ring-slate-700/60
                                     shadow-inner
                                     flex items-center justify-center">
 
-                                    <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-[26px]">
-                                        payments
-                                    </span>
+                                <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-[26px]">
+                                    payments
+                                </span>
+                            </div>
+
+                            <h4 class="font-semibold dark:text-white">
+                                No transactions yet
+                            </h4>
+
+                            <p class="text-xs text-slate-500 max-w-xs">
+                                When payments are made or refunded, they’ll appear here with real-time status updates.
+                            </p>
+
+                            <!-- Skeleton preview -->
+                            <div class="mt-4 w-full space-y-3 opacity-70">
+
+                                <div class="flex items-center justify-between animate-pulse">
+                                    <div class="flex items-center gap-3">
+                                        <div class="size-9 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-3 w-28 rounded bg-slate-200 dark:bg-slate-700"></div>
+                                            <div class="h-2 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
+                                        </div>
+                                    </div>
+                                    <div class="h-3 w-14 rounded bg-slate-200 dark:bg-slate-700"></div>
                                 </div>
 
-                                <h4 class="font-semibold dark:text-white">
-                                    No transactions yet
-                                </h4>
-
-                                <p class="text-xs text-slate-500 max-w-xs">
-                                    When payments are made or refunded, they’ll appear here with real-time status updates.
-                                </p>
-
-                                <!-- Skeleton preview -->
-                                <div class="mt-4 w-full space-y-3 opacity-70">
-
-                                    <div class="flex items-center justify-between animate-pulse">
-                                        <div class="flex items-center gap-3">
-                                            <div class="size-9 rounded-full bg-slate-200 dark:bg-slate-700"></div>
-                                            <div class="space-y-2">
-                                                <div class="h-3 w-28 rounded bg-slate-200 dark:bg-slate-700"></div>
-                                                <div class="h-2 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
-                                            </div>
+                                <div class="flex items-center justify-between animate-pulse">
+                                    <div class="flex items-center gap-3">
+                                        <div class="size-9 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                                        <div class="space-y-2">
+                                            <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700"></div>
+                                            <div class="h-2 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
                                         </div>
-                                        <div class="h-3 w-14 rounded bg-slate-200 dark:bg-slate-700"></div>
                                     </div>
-
-                                    <div class="flex items-center justify-between animate-pulse">
-                                        <div class="flex items-center gap-3">
-                                            <div class="size-9 rounded-full bg-slate-200 dark:bg-slate-700"></div>
-                                            <div class="space-y-2">
-                                                <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700"></div>
-                                                <div class="h-2 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
-                                            </div>
-                                        </div>
-                                        <div class="h-3 w-12 rounded bg-slate-200 dark:bg-slate-700"></div>
-                                    </div>
+                                    <div class="h-3 w-12 rounded bg-slate-200 dark:bg-slate-700"></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     {% else %}
-                    <div class="rounded-2xl p-6 shadow-sm ring-1 ring-gray-100 dark:ring-gray-800">
-                        <h3 class="text-lg font-semibold  dark:text-white mb-4">Recent Transactions</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="size-10 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center text-red-600">
-                                        <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-semibold  dark:text-white">Payment Sent</p>
-                                        <p class="text-xs ">Web Design Gig</p>
+                    <div class="rounded-2xl p-6 shadow-sm ring-1 ring-slate-200/60 dark:ring-slate-800 bg-white dark:bg-slate-900/40">
+                        <!-- Header -->
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-sm font-semibold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">Recent Transactions</h3>
+                            <a href="{% url PAYMENT_URLS.USER_PAYMENT_SUMMARY %}" class="text-[10px] font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 hover:opacity-70 transition-opacity">
+                                View All
+                            </a>
+                        </div>
+
+                        <div class="space-y-6">
+                            {% for tx in recent_payments %}
+                            <div class="flex items-center justify-between group transition-all">
+
+                                <!-- Left Side: Purpose & Ref -->
+                                <div class="flex flex-col gap-1">
+                                    <p class="text-sm font-medium text-slate-900 dark:text-white leading-none capitalize">
+                                        {{ tx.get_payment_purpose_display|lower }}
+                                    </p>
+                                    <p class="text-[10px] font-medium text-slate-400 dark:text-slate-500 tracking-tight">
+                                        ID: <span class="font-mono">{{ tx.reference }}</span>
+                                    </p>
+                                </div>
+
+                                <!-- Right Side: Amount & Status -->
+                                <div class="flex flex-col items-end gap-1.5">
+                                    <p class="text-sm font-mono text-slate-800 dark:text-white leading-none">
+                                        {% if tx.currency == 'NGN' %}₦{% else %}${% endif %}{{ tx.amount_decimal|floatformat:2|intcomma }}
+                                    </p>
+
+                                    <!-- Modern Status Badge (Compact) -->
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="size-1.5 rounded-full 
+                                                {% if tx.status == 'success' %}bg-emerald-500
+                                                {% elif tx.status == 'underpaid' %}bg-lime-500
+                                                {% elif tx.status == 'pending' %}bg-amber-500
+                                                {% elif tx.status == 'initiated' %}bg-blue-500
+                                                {% else %}bg-rose-500{% endif %}">
+                                        </span>
+                                        <p class="text-[9px] font-medium uppercase tracking-widest
+                                                {% if tx.status == 'success' %}text-emerald-600 dark:text-emerald-400
+                                                {% elif tx.status == 'pending' %}text-amber-600 dark:text-amber-400
+                                                {% elif tx.status == 'initiated' %}text-blue-600 dark:text-blue-400
+                                                {% elif tx.status == 'underpaid' %}text-lime-600 dark:text-lime-400
+                                                {% else %}text-rose-600 dark:text-rose-400{% endif %}">
+                                            {{ tx.status }}
+                                        </p>
                                     </div>
                                 </div>
-                                <span class="text-sm font-semibold  dark:text-white">-$850.00</span>
+
                             </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="size-10 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center text-green-600">
-                                        <span class="material-symbols-outlined text-[20px]">arrow_downward</span>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-semibold  dark:text-white">Refund</p>
-                                        <p class="text-xs ">Project Cancelled</p>
-                                    </div>
-                                </div>
-                                <span class="text-sm font-semibold text-green-600">+$200.00</span>
+                            {% empty %}
+                            <div class="py-10 text-center border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-2xl">
+                                <span class="material-symbols-outlined text-slate-300 dark:text-slate-700 mb-2">payments</span>
+                                <p class="text-[11px] text-slate-400 font-medium uppercase tracking-widest">No history yet</p>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                     {% endif %}
@@ -666,7 +682,6 @@
 
                         <!-- Ghost Reviews -->
                         <div class="space-y-3 opacity-40">
-
                             <div class="rounded-xl p-4 bg-slate-100 dark:bg-slate-800/40 space-y-2">
                                 <div class="h-3 w-3/4 bg-slate-300 dark:bg-slate-600 rounded"></div>
                                 <div class="h-3 w-2/3 bg-slate-200 dark:bg-slate-700 rounded"></div>
@@ -686,12 +701,12 @@
                     <!-- Help / Support Mini Card -->
                     <div class="group relative overflow-hidden bg-brand-25 dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:shadow-md transition-all duration-300">
                         <div class="absolute -right-4 -top-4 size-24 bg-brand-500/10 blur-3xl group-hover:bg-brand-500/20 transition-colors"></div>
-                        
+
                         <div class="flex items-start gap-4 relative z-10">
                             <div class="size-10 shrink-0 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-lg shadow-brand-200 dark:shadow-none">
                                 <span class="material-symbols-outlined text-[20px]">support_agent</span>
                             </div>
-                            
+
                             <div class="flex flex-col gap-1">
                                 <p class="text-sm font-semibold text-slate-900 dark:text-white leading-tight">
                                     Stuck on something?
@@ -700,7 +715,7 @@
                                     Our team of engineers and specialists are ready to assist.
                                 </p>
                                 <a href="mailto:support@divgm.com" class="inline-flex items-center text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 gap-1 group/link">
-                                    Contact Support 
+                                    Contact Support
                                     <span class="material-symbols-outlined text-[14px] transition-transform group-hover/link:translate-x-1">arrow_forward</span>
                                 </a>
                             </div>
