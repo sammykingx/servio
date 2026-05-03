@@ -1,5 +1,5 @@
 from core.url_names import (
-    AuthURLNames, BusinessURLS, CollaborationURLS,  EscrowURLS,
+    AuthURLNames, BusinessURLS, CollaborationURLS,  SmartReleaseURLS,
     NotificationsURLNames, OnboardingURLS, OppurtunitiesURLS,
     ProposalURLS, ReviewURLS, PaymentURLS,
 )
@@ -44,7 +44,7 @@ def app_urlnames(request):
         "AUTH_URLS": AuthURLNames,
         "BIZ_URLS": BusinessURLS,
         "COLLABORATION_URLS": CollaborationURLS,
-        "ESCROW": EscrowURLS,
+        "SMART_RELEASE": SmartReleaseURLS,
         "NOTIFICATION_URLS": NotificationsURLNames,
         "OPPURTUNITIES": OppurtunitiesURLS,
         "PAYMENT_URLS": PaymentURLS,

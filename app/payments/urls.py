@@ -1,9 +1,8 @@
-from django.urls import include, path, reverse_lazy
+from django.urls import path, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from core.url_names import PaymentURLS
 from template_map.payments import Payments
-from .escrow import urls as escrow_urls
 from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, SelectGigPaymentMethodView, GigCardInfoView, GigPaymentComplete
 from .views.account_activation import AccountActivationView
 from .views.webhooks import PaystackWebhookView
@@ -12,7 +11,6 @@ from .views.listings import UserPaymentsListView
 
 
 urlpatterns = [
-    path("escrow/", include(escrow_urls)),
     path(
         "",
         RedirectView.as_view(
@@ -21,11 +19,11 @@ urlpatterns = [
     ),
     path(
         "user-subscription/", 
-        login_required(TemplateView.as_view(template_name=Payments.SUBSCRIPTION)),
+        login_required(TemplateView.as_view(template_name=Payments.ANNUAL_SUBSCRIPTION)),
         name=PaymentURLS.PAY_SUBSCRIPTION
     ),
     path(
-        "user-subscription/switch-currency/", 
+        "user-subscription/confirm-currency/", 
         TemplateView.as_view(template_name=Payments.Checkouts.SUBSCRIPTION_CHECKOUT_CURRENCY),
         name=PaymentURLS.SUBSCRIPTION_CHECKOUT_OPTION
     ),

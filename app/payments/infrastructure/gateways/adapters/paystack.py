@@ -170,9 +170,6 @@ class PaystackAdapter(PaymentGateway):
     def refund(self, reference, amount):
         pass
 
-    def transfer(self, recipient, amount):
-        pass
-    
     def charge_backs(self, reference):
         pass
     

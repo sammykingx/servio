@@ -18,8 +18,4 @@ class PaymentGateway(ABC):
     @abstractmethod
     def refund(self, reference, amount):
         pass
-
-    @abstractmethod
-    def transfer(self, recipient, amount):
-        pass
     

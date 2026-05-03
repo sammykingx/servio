@@ -123,7 +123,7 @@ class PaymentURLS:
     STRIPE_WEBHOOK = "stripe_webhook"
     
     
-class EscrowURLS:
+class SmartReleaseURLS:
     OVERVIEW = "escrow_overview"
     DETAILS = "escrow_details"
     

@@ -12,7 +12,6 @@ GATEWAY_PAYLOAD_CLASS = PaymentGatewayPayload
 GATEWAY_INIT_RESPONSE = GatewayInitResponse
 GATEWAY_VERIFY_RESPONSE = GatewayVerifyResponse
 GATEWAY_REFUND_RESPONSE = None
-GATEWAY_TRANSFER_RESPONSE = None
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Sentinel — used to detect that a placeholder hasn't been replaced yet.
@@ -45,10 +44,28 @@ class TypeEnforcingGateway(PaymentGateway):
     """
     
     def __init__(self):
-        self._create_payment_response = GATEWAY_INIT_RESPONSE
-        self._verify_payment_response = GATEWAY_VERIFY_RESPONSE
-        self._refund_response = MagicMock()
-        self._transfer_response = MagicMock()
+        self._create_payment_response = _make_instance(
+            GATEWAY_INIT_RESPONSE,
+            gateway="test_gateway",
+            message="Mocked gateway response for create_payment",
+            data={"auth_url": "https://example.com/checkout", "access_code": "TEST123"}
+        ) if _response_class_defined(GATEWAY_INIT_RESPONSE) else MagicMock()
+        
+        self._verify_payment_response = _make_instance(
+            GATEWAY_VERIFY_RESPONSE,
+            gateway="test_gateway",
+            status="success",
+            was_successful=True,
+            message="Mocked gateway response for verify_payment",
+            data={"status": "success"}
+        ) if _response_class_defined(GATEWAY_VERIFY_RESPONSE) else MagicMock()
+        
+        # self._refund_response = _make_instance(
+        #     GATEWAY_REFUND_RESPONSE,
+        #     gateway="test_gateway",
+        #     message="Mocked gateway response for refund",
+        #     data={"status": "success"}
+        # ) if _response_class_defined(GATEWAY_REFUND_RESPONSE) else MagicMock()
 
     def create_payment(self, payload: GATEWAY_PAYLOAD_CLASS):
         if not isinstance(payload, GATEWAY_PAYLOAD_CLASS):
@@ -64,9 +81,6 @@ class TypeEnforcingGateway(PaymentGateway):
     def refund(self, reference: str, amount):
         return self._refund_response
 
-    def transfer(self, recipient, amount):
-        return self._transfer_response
-
 
 class FullyImplementedGateway(PaymentGateway):
     """A minimal but complete implementation that satisfies every abstract method."""
@@ -80,32 +94,20 @@ class FullyImplementedGateway(PaymentGateway):
     def refund(self, reference: str, amount):
         return MagicMock(spec=GATEWAY_REFUND_RESPONSE) if _response_class_defined(GATEWAY_REFUND_RESPONSE) else MagicMock()
 
-    def transfer(self, recipient, amount):
-        return MagicMock(spec=GATEWAY_TRANSFER_RESPONSE) if _response_class_defined(GATEWAY_TRANSFER_RESPONSE) else MagicMock()
-
 
 class MissingCreatePayment(PaymentGateway):
     def verify_payment(self, reference): pass
     def refund(self, reference, amount): pass
-    def transfer(self, recipient, amount): pass
 
 
 class MissingVerifyPayment(PaymentGateway):
     def create_payment(self, payload: GATEWAY_PAYLOAD_CLASS): pass
     def refund(self, reference, amount): pass
-    def transfer(self, recipient, amount): pass
 
 
 class MissingRefund(PaymentGateway):
     def create_payment(self, payload: GATEWAY_PAYLOAD_CLASS): pass
     def verify_payment(self, reference): pass
-    def transfer(self, recipient, amount): pass
-
-
-class MissingTransfer(PaymentGateway):
-    def create_payment(self, payload: GATEWAY_PAYLOAD_CLASS): pass
-    def verify_payment(self, reference): pass
-    def refund(self, reference, amount): pass
 
 
 class MissingAllMethods(PaymentGateway):
@@ -128,11 +130,11 @@ class TestPaymentGatewayIsAbstract:
         with pytest.raises(TypeError):
             PaymentGateway()
 
-    def test_contract_declares_four_abstract_methods(self):
+    def test_contract_declares_all_abstract_methods(self):
         """The contract must expose exactly the four required abstract methods."""
         abstract_methods = PaymentGateway.__abstractmethods__
         assert abstract_methods == frozenset(
-            {"create_payment", "verify_payment", "refund", "transfer"}
+            {"create_payment", "verify_payment", "refund"}
         )
 
 
@@ -157,10 +159,6 @@ class TestIncompleteImplementationsAreRejected:
     def test_missing_refund_raises(self):
         with pytest.raises(TypeError, match="refund"):
             MissingRefund()
-
-    def test_missing_transfer_raises(self):
-        with pytest.raises(TypeError, match="transfer"):
-            MissingTransfer()
 
     def test_missing_all_methods_raises(self):
         with pytest.raises(TypeError):
@@ -193,11 +191,6 @@ class TestCompleteImplementationIsAccepted:
     #     result = self.gateway.refund("REF-001", 5000)
     #     assert result is not None
 
-    # def test_transfer_is_callable(self):
-    #     gateway = FullyImplementedGateway()
-    #     result = self.gateway.transfer("recipient-id", 10000)
-    #     assert result is not None
-
 
 # ─────────────────────────────────────────────
 # Method signatures — argument shape is part of the contract
@@ -225,13 +218,6 @@ class TestContractMethodSignatures:
     #     params = sig.parameters
     #     assert "reference" in params
     #     assert "amount" in params
-
-    # def test_transfer_accepts_recipient_and_amount(self):
-    #     sig = inspect.signature(self.gateway.transfer)
-    #     params = sig.parameters
-    #     assert "recipient" in params
-    #     assert "amount" in params
-
 
 # ─────────────────────────────────────────────
 # Polymorphism — the contract enables interchangeable gateways
@@ -355,7 +341,6 @@ class TestGatewayReturnTypeContract:
         )
 
     # ── create_payment ──
-
     @pytest.mark.skipif(
         not _response_class_defined(GATEWAY_INIT_RESPONSE),
         reason="GATEWAY_INIT_RESPONSE placeholder not replaced yet"
@@ -365,7 +350,7 @@ class TestGatewayReturnTypeContract:
         result = self.gateway.create_payment(self.valid_payload)
         assert isinstance(result, GATEWAY_INIT_RESPONSE), (
             f"create_payment must return {GATEWAY_INIT_RESPONSE.__name__}, "
-            f"got {type(result).__name__}"
+            f"got {result}"
         )
 
     @pytest.mark.skipif(
@@ -392,7 +377,6 @@ class TestGatewayReturnTypeContract:
         assert hints["return"] is GATEWAY_INIT_RESPONSE
 
     # ── verify_payment ──
-
     @pytest.mark.skipif(
         not _response_class_defined(GATEWAY_VERIFY_RESPONSE),
         reason="GATEWAY_VERIFY_RESPONSE placeholder not replaced yet"
@@ -436,31 +420,7 @@ class TestGatewayReturnTypeContract:
     #     assert "return" in hints
     #     assert hints["return"] is GATEWAY_REFUND_RESPONSE
 
-    # # ── transfer ──
-
-    # @pytest.mark.skipif(
-    #     not _response_class_defined(GATEWAY_TRANSFER_RESPONSE),
-    #     reason="GATEWAY_TRANSFER_RESPONSE placeholder not replaced yet"
-    # )
-    # def test_transfer_returns_gateway_transfer_response(self):
-    #     """transfer must return an instance of GATEWAY_TRANSFER_RESPONSE."""
-    #     result = self.gateway.transfer("recipient-id", 10000)
-    #     assert isinstance(result, GATEWAY_TRANSFER_RESPONSE), (
-    #         f"transfer must return {GATEWAY_TRANSFER_RESPONSE.__name__}, "
-    #         f"got {type(result).__name__}"
-    #     )
-
-    # @pytest.mark.skipif(
-    #     not _response_class_defined(GATEWAY_TRANSFER_RESPONSE),
-    #     reason="GATEWAY_TRANSFER_RESPONSE placeholder not replaced yet"
-    # )
-    # def test_return_type_annotation_on_contract_for_transfer(self):
-    #     hints = PaymentGateway.transfer.__annotations__
-    #     assert "return" in hints
-    #     assert hints["return"] is GATEWAY_TRANSFER_RESPONSE
-
     # ── cross-adapter consistency ──
-
     @pytest.mark.skipif(
         not _response_class_defined(GATEWAY_INIT_RESPONSE),
         reason="GATEWAY_INIT_RESPONSE placeholder not replaced yet"
@@ -495,9 +455,8 @@ class TestGatewayReturnTypeContract:
             def create_payment(self, payload):   return real_response_b
             def verify_payment(self, reference): return MagicMock()
             def refund(self, reference, amount): return MagicMock()
-            def transfer(self, recipient, amount): return MagicMock()
  
-        gw_a = TypeEnforcingGateway(create_payment_response=real_response_a)
+        gw_a = TypeEnforcingGateway()
         gw_b = AnotherGateway()
  
         result_a = gw_a.create_payment(self.valid_payload)

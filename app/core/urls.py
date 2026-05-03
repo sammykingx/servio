@@ -27,6 +27,7 @@ import business_accounts.urls
 import collaboration.urls
 import notifications.urls
 import payments.urls
+import smart_release.urls
 
 
 handler404 = "core.views.custom_404"
@@ -34,13 +35,6 @@ handler500 = "core.views.custom_500"
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="index.html"), name="landing-page"),
-    path("lp/", TemplateView.as_view(template_name="lp.html"), name="lp-dark-mode"),
-    # path(
-    #     "",
-    #     RedirectView.as_view(
-    #         url=reverse_lazy(AuthURLNames.LOGIN), permanent=True
-    #     ),
-    # ),
     # path("admin/", admin.site.urls),
     # path("allauth/", include("allauth.urls")),
     path("accounts/", include(accounts.urls)),
@@ -48,6 +42,7 @@ urlpatterns = [
     path("collaboration/", include(collaboration.urls)),
     path("notifications/", include(notifications.urls)),
     path("payments/", include(payments.urls)),
+    path("smart-release/", include(smart_release.urls)),
     path(
         "reviews/",
         TemplateView.as_view(template_name=Reviews.BUSINESS_REVIEWS),

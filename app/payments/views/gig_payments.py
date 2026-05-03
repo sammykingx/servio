@@ -16,7 +16,7 @@ class GigPaymentSummaryView(
     GigPaymentMixin,
     TemplateView
 ):
-    template_name = Payments.GigPayments.GIG_OVERVIEW
+    template_name = Payments.ServicePayments.GIG_OVERVIEW
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,7 +29,7 @@ class SelectGigPaymentMethodView(
     GigPaymentMixin,
     TemplateView
 ):
-    template_name = Payments.GigPayments.SELECT_PAYMENT_METHOD
+    template_name = Payments.ServicePayments.SELECT_PAYMENT_METHOD
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,7 +38,7 @@ class SelectGigPaymentMethodView(
 
 
 class GigCardInfoView(LoginRequiredMixin, GigPaymentMixin, TemplateView):
-    template_name = Payments.GigPayments.CARD_DETAILS
+    template_name = Payments.ServicePayments.CARD_DETAILS
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -51,7 +51,7 @@ class ProcessGigPaymentView(
     GigPaymentMixin,
     TemplateView
 ):
-    template_name = Payments.GigPayments.GIG_CHECKOUT_RESPONSE
+    template_name = Payments.ServicePayments.GIG_CHECKOUT_RESPONSE
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,7 +76,7 @@ class ProcessGigPaymentView(
         
 
 class GigPaymentComplete(LoginRequiredMixin, GigPaymentMixin, TemplateView):
-    template_name = Payments.GigPayments.GIG_PAYMENT_COMPLETE
+    template_name = Payments.ServicePayments.GIG_PAYMENT_COMPLETE
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

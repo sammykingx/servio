@@ -13,9 +13,9 @@ class GatewayInitResponse:
     Normalized response from a payment gateway.
 
     Attributes:
-        gateway: The provider that handled the request.
-        message: Status message returned by the gateway.
-        data: The actual payload/metadata from the gateway response.
+        gateway (Union[RegisteredPaymentProvider, str]): The provider that handled the request.
+        message (str): Status message returned by the gateway.
+        data (Union[PaystackInitData, StripeInitializationData]): The actual payload/metadata from the gateway response.
     """
     gateway: Union[RegisteredPaymentProvider, str]
     message: str
@@ -52,11 +52,12 @@ class GatewayVerifyResponse:
     for the service layer to perform state transitions and integrity checks.
 
     Attributes:
-        gateway: The specific provider (e.g., Paystack) that processed the transaction.
-        message: The descriptive status message returned by the provider's API.
-        was_successful: Indicates if the transaction reached a terminal success state 
+        gateway (RegisteredPaymentProvider): The specific provider (e.g., Paystack) that processed the transaction.
+        status (str): The status of the verification.
+        message (str): The descriptive status message returned by the provider's API.
+        was_successful (bool): Indicates if the transaction reached a terminal success state 
             on the gateway's end.
-        data: Raw, provider-specific payload containing granular transaction details 
+        data (Union[PaystackVerificationData, StripeVerificationData]): Raw, provider-specific payload containing granular transaction details 
             (e.g., amount in minor units, gateway/receipt id etc).
     """
     gateway: RegisteredPaymentProvider
