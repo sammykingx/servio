@@ -62,8 +62,6 @@ class ProposalRole(models.Model):
         default=ProposalRoleStatus.SUBMITTED,
     )
     
-    # has_gig_role = models.BooleanField() 
-    
     class Meta:
         db_table = "proposal_roles"
         verbose_name = "Proposal Role"

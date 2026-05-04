@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Servio | The Future of Service Execution</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f2f4f6",
+                        "on-surface": "#191c1e",
+                        "on-primary-container": "#bbbeff",
+                        "tertiary-fixed": "#ffdad4",
+                        "surface-container": "#eceef0",
+                        "primary": "#0900c6",
+                        "tertiary-fixed-dim": "#ffb4a7",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#920600",
+                        "on-primary-fixed-variant": "#0d00ee",
+                        "on-background": "#191c1e",
+                        "primary-fixed-dim": "#bfc2ff",
+                        "inverse-primary": "#bfc2ff",
+                        "on-secondary-fixed": "#001f28",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#b7eaff",
+                        "on-primary-fixed": "#02006d",
+                        "tertiary": "#790400",
+                        "primary-fixed": "#e0e0ff",
+                        "on-tertiary-container": "#ffafa1",
+                        "on-secondary-container": "#005266",
+                        "tertiary-container": "#a40800",
+                        "surface-tint": "#373cff",
+                        "surface-dim": "#d8dadc",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e6e8ea",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-surface-variant": "#454557",
+                        "on-tertiary-fixed": "#400100",
+                        "secondary": "#00677f",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c6c4db",
+                        "surface": "#f7f9fb",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2d3133",
+                        "background": "#f7f9fb",
+                        "outline": "#757589",
+                        "secondary-container": "#00ccf9",
+                        "surface-variant": "#e0e3e5",
+                        "primary-container": "#1b17ff",
+                        "secondary-fixed-dim": "#4cd6ff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#004e60"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "display": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+
+        .grainy-bg {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+        }
+    </style>
+</head>
+
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-primary">
+    <!-- Texture overlay -->
+    <div class="fixed inset-0 pointer-events-none grainy-bg z-50"></div>
+    <!-- Navigation (Hidden for high-focus landing page but available via shell) -->
+    <nav class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur-xl px-8 h-20 flex justify-between items-center">
+        <div class="text-xl font-bold tracking-tight text-primary font-headline">Servio</div>
+        <div class="hidden md:flex space-x-8 text-sm font-medium">
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="#problem">The Problem</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="#solution">Our Solution</a>
+            <a class="text-on-surface-variant hover:text-primary transition-colors" href="#how-it-works">Process</a>
+        </div>
+        <a class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-semibold hover:translate-y-[-2px] transition-transform shadow-[0_10px_20px_rgba(9,0,198,0.15)]" href="#waitlist">Join Waitlist</a>
+    </nav>
+    <main>
+        <!-- Hero Section -->
+        <section class="relative pt-16 pb-32 px-8 overflow-hidden">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="z-10">
+                    <span class="inline-block py-1 px-3 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-widest mb-6">Introducing Servio</span>
+                    <h1 class="font-headline font-extrabold text-5xl md:text-7xl text-on-surface leading-[1.1] mb-6 tracking-tight">
+                        Stop chasing services across <span class="text-primary italic">WhatsApp.</span>
+                    </h1>
+                    <p class="font-headline text-xl md:text-2xl text-on-surface-variant leading-relaxed mb-8 max-w-xl">
+                        Servio brings clients and providers into one structured system—so work gets done without chaos.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            <p class="text-on-surface-variant">No more scattered chats or lost messages.</p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            <p class="text-on-surface-variant">No more unreliable execution and guessing progress.</p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            <p class="text-on-surface-variant">Just clear requests, tracked progress, and secure payments.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative" id="waitlist">
+                    <div class="absolute -inset-4 bg-primary-fixed/20 blur-3xl rounded-full"></div>
+                    <div class="relative glass-card border border-outline-variant/15 p-8 md:p-12 rounded-xl shadow-[0_40px_80px_rgba(9,0,198,0.08)]">
+                        <!-- Hourglass Timer -->
+                        <div class="flex flex-col items-center mb-10">
+                            <div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-4 text-primary animate-bounce">
+                                <span class="material-symbols-outlined text-3xl">hourglass_empty</span>
+                            </div>
+                            <div class="flex space-x-6 text-center">
+                                <div>
+                                    <div class="text-3xl font-headline font-bold text-on-surface">04</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Days</div>
+                                </div>
+                                <div class="text-3xl font-headline font-light text-outline-variant">:</div>
+                                <div>
+                                    <div class="text-3xl font-headline font-bold text-on-surface">12</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Hours</div>
+                                </div>
+                                <div class="text-3xl font-headline font-light text-outline-variant">:</div>
+                                <div>
+                                    <div class="text-3xl font-headline font-bold text-on-surface">45</div>
+                                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Mins</div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-center font-headline font-bold text-2xl mb-8">Join the Private Beta</h3>
+                        <form class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">Email Address</label>
+                                <input class="w-full h-14 px-6 bg-surface-container-low rounded-xl border-none focus:ring-2 focus:ring-primary text-lg transition-all" placeholder="you@example.com" type="email" />
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">I am a...</label>
+                                <select class="w-full h-14 px-6 bg-surface-container-low rounded-xl border-none focus:ring-2 focus:ring-primary text-lg transition-all appearance-none">
+                                    <option>Client (Hiring Services)</option>
+                                    <option>Service Provider (Offering Skills)</option>
+                                </select>
+                            </div>
+                            <button class="w-full h-16 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-full font-bold text-lg hover:translate-y-[-2px] hover:shadow-2xl transition-all" type="submit">
+                                Join the Waitlist
+                            </button>
+                        </form>
+                        <p class="mt-6 text-center text-xs text-on-surface-variant">Limited spots available for early access. No spam, ever.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Problem Section -->
+        <section class="py-24 px-8 bg-surface-container-low" id="problem">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-20">
+                    <h2 class="font-headline font-bold text-4xl md:text-5xl tracking-tight mb-4">Hiring shouldn’t feel this messy.</h2>
+                    <p class="text-on-surface-variant text-lg max-w-2xl mx-auto">Current tools focus on chatting. We focus on getting the work done.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
+                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined">forum</span>
+                        </div>
+                        <h4 class="font-headline font-bold text-xl mb-3">Endless WhatsApp threads</h4>
+                        <p class="text-on-surface-variant leading-relaxed">Critical project details get buried in thousands of messages with no clear structure or searchable milestones.</p>
+                    </div>
+                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
+                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined">group_off</span>
+                        </div>
+                        <h4 class="font-headline font-bold text-xl mb-3">Too many providers, no comparison</h4>
+                        <p class="text-on-surface-variant leading-relaxed">Spending hours vetting individuals manually without a standard framework to compare quality, price, or past reliability.</p>
+                    </div>
+                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
+                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined">release_alert</span>
+                        </div>
+                        <h4 class="font-headline font-bold text-xl mb-3">Unreliable execution</h4>
+                        <p class="text-on-surface-variant leading-relaxed">Deadlines missed and expectations unmet because there is no formal agreement or accountability built into the flow.</p>
+                    </div>
+                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
+                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined">payments</span>
+                        </div>
+                        <h4 class="font-headline font-bold text-xl mb-3">No tracking or payment security</h4>
+                        <p class="text-on-surface-variant leading-relaxed">Sending money upfront into the void, or providers working without knowing if the client will ever actually pay.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Solution Section -->
+        <section class="py-32 px-8" id="solution">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col lg:flex-row gap-16 items-center mb-24">
+                    <div class="lg:w-1/2">
+                        <h2 class="font-headline font-extrabold text-4xl md:text-6xl tracking-tight mb-8">One platform. Total execution clarity.</h2>
+                        <div class="space-y-12">
+                            <div class="flex gap-6">
+                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">1</div>
+                                <div>
+                                    <h5 class="font-headline font-bold text-xl mb-2">Structured Requests</h5>
+                                    <p class="text-on-surface-variant">Stop writing essays. Fill out smart prompts that capture exactly what you need, so providers can bid accurately.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">2</div>
+                                <div>
+                                    <h5 class="font-headline font-bold text-xl mb-2">Precision Matching</h5>
+                                    <p class="text-on-surface-variant">Our system matches your request to verified providers based on skill weight, availability, and execution history.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">3</div>
+                                <div>
+                                    <h5 class="font-headline font-bold text-xl mb-2">Real-time Execution Tracking</h5>
+                                    <p class="text-on-surface-variant">Visual milestones show you exactly where the work stands. No more asking "Is it done yet?" every morning.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">4</div>
+                                <div>
+                                    <h5 class="font-headline font-bold text-xl mb-2">Escrow Protected Payments</h5>
+                                    <p class="text-on-surface-variant">Funds are held securely by Servio and only released when the milestone is verified and approved by you.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2 w-full">
+                        <div class="relative rounded-xl overflow-hidden shadow-2xl">
+                            <img class="w-full object-cover aspect-[4/3]" data-alt="A clean, minimalist dashboard interface for a service execution platform. The image shows a progress tracker with vibrant indigo accents, showing a sequence of steps from request to payment release. The lighting is soft and bright, creating a premium professional feel with deep indigo and white tones." src="https://lh3.googleusercontent.com/aida/ADBb0ug0P2B1SMasM1pyxFEUEB18u0UsfcKCNISdlMR5RY3EUmi4h1N6uov1-Sb_q7FWd5L0-toDDspfCnbFqKSF3QGEomX4ATwBckbb_or7-ob91GFZCLd16XXiczFZg39g4wYFWroU86a66mZX7U1SqjAu29eZ6usANIklG2PEltYbtPl1_3Z7GDEGAegpuZVDmvl2lOfhY-BiAIOJbfy4oc7S48Q5zpFn2DKxxNKrHCzSnJaio15UZ9R9agZZ8oX3yuUBfjZB1bfn_A" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Visual Flow -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 pt-12 border-t border-outline-variant/15">
+                    <div class="text-center group">
+                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined text-3xl">note_add</span>
+                        </div>
+                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Request</div>
+                    </div>
+                    <div class="text-center group">
+                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined text-3xl">handshake</span>
+                        </div>
+                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Match</div>
+                    </div>
+                    <div class="text-center group">
+                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined text-3xl">terminal</span>
+                        </div>
+                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Execute</div>
+                    </div>
+                    <div class="text-center group">
+                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined text-3xl">verified_user</span>
+                        </div>
+                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Pay</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- How It Works Section -->
+        <section class="py-32 px-8 bg-on-surface text-surface" id="how-it-works">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-20">
+                    <h2 class="font-headline font-bold text-4xl md:text-5xl mb-6">Simple, structured, effective.</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                    <div class="relative">
+                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">01</div>
+                        <div class="relative z-10">
+                            <h4 class="font-headline font-bold text-xl mb-4">Create a request</h4>
+                            <p class="text-surface-variant/80">Input your needs into our structured templates. No more guessing the scope.</p>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">02</div>
+                        <div class="relative z-10">
+                            <h4 class="font-headline font-bold text-xl mb-4">Get matched</h4>
+                            <p class="text-surface-variant/80">Top-tier providers review your request and submit execution plans instantly.</p>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">03</div>
+                        <div class="relative z-10">
+                            <h4 class="font-headline font-bold text-xl mb-4">Track execution</h4>
+                            <p class="text-surface-variant/80">Watch progress unfold through a live dashboard of milestones and proofs.</p>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">04</div>
+                        <div class="relative z-10">
+                            <h4 class="font-headline font-bold text-xl mb-4">Release payment</h4>
+                            <p class="text-surface-variant/80">Funds move only when you sign off on the final deliverables.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Social Proof / CTA -->
+        <section class="py-32 px-8 overflow-hidden">
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-primary rounded-xl relative overflow-hidden px-8 py-20 md:p-24 text-center shadow-[0_40px_100px_rgba(9,0,198,0.2)]">
+                    <!-- Background Image for CTA -->
+                    <div class="absolute inset-0 opacity-20">
+                        <img class="w-full h-full object-cover" data-alt="A professional atmosphere showing a modern workspace with sleek computer monitors and high-end tech equipment. The lighting is focused and clean, using a palette of deep indigo and soft white to convey institutional trust and high-end technological advancement in a service marketplace context." src="https://lh3.googleusercontent.com/aida/ADBb0uijUC_UEa9unA9XyN36mr4MleYXdrRqAxNfV3an9XZ4rmUAuD6mu8MRFEjt6YkFMMKX3IPFD_qCfdkN73eo16Wh1j2xIrTIGNuermInEF0-HjxQC2To16NpAJj2-In0EZGgjPHeX3PwTqVkjcbwHPYRobEdESgPNBRx9CTO1Nqm2va2mHE99CJBdhrOmchL_AQrgGv2sX0iQnGTm5geR-ja7iE7Xz4YjQUahPPjB9rdSSxqX2BrE-fEuoPB6QjmQSz_P6gGaDrxOg" />
+                    </div>
+                    <div class="relative z-10">
+                        <h2 class="font-headline font-extrabold text-3xl md:text-5xl text-on-primary mb-8 leading-tight">
+                            Be among the first to experience <br class="hidden md:block" /> structured service execution.
+                        </h2>
+                        <p class="text-on-primary-container text-lg mb-12 max-w-2xl mx-auto">
+                            Over 2,000+ service providers and clients have already signed up for the private beta. Don't get left in the chaos.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <a class="h-16 px-10 bg-white text-primary rounded-full font-bold text-lg flex items-center justify-center hover:scale-105 transition-transform shadow-xl" href="#waitlist">
+                                Join the Waitlist Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="py-12 px-8 border-t border-outline-variant/15">
+        <div class="max-w-7xl mx-auto flex flex-col md:row justify-between items-center gap-8">
+            <div class="text-2xl font-bold tracking-tight text-primary font-headline">Servio</div>
+            <div class="flex space-x-8">
+                <a class="text-sm text-on-surface-variant hover:text-primary" href="#">Twitter</a>
+                <a class="text-sm text-on-surface-variant hover:text-primary" href="#">LinkedIn</a>
+                <a class="text-sm text-on-surface-variant hover:text-primary" href="#">Contact Support</a>
+            </div>
+            <p class="text-xs text-on-surface-variant">© 2024 Servio by Divgm. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from .choices import AssignmentStatus
+# from .choices import AssignmentStatus
 from uuid6 import uuid7
 
 
@@ -58,12 +58,12 @@ class GigAssignment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_withdrawn = models.BooleanField(default=False)
-    status = models.CharField(
-        max_length=20,
-        choices=AssignmentStatus.choices,
-        default=AssignmentStatus.ONGOING,
-        help_text="Current status of the assignment"
-    )
+    # status = models.CharField(
+    #     max_length=20,
+    #     choices=AssignmentStatus.choices,
+    #     default=AssignmentStatus.ONGOING,
+    #     help_text="Current status of the assignment"
+    # )
 
     class Meta:
         db_table = "gig_assignments"
