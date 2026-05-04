@@ -1,15 +1,28 @@
 <!DOCTYPE html>
-
 <html class="scroll-smooth" lang="en">
-
+{% load static %}
 <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hiring Services Is Broken. Servio Fixes It." />
+	<meta property="og:description" content="No more scattered chats, long conversation threads, unclear pricing, or payment drama. Servio structures the entire workflow from request to proposal to payments for any service." />
+	<meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{% static 'images/cover-images/og-image.png' %}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Servio" />
+    <meta property="og:locale" content="en_CA" />
+
     <title>Servio | The Future of Service Execution</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+	<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+	<!-- <link rel="stylesheet" href="{% static 'css/index.css' %}" /> -->
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -70,12 +83,7 @@
                         "xl": "3rem",
                         "full": "9999px"
                     },
-                    "fontFamily": {
-                        "headline": ["Plus Jakarta Sans"],
-                        "display": ["Plus Jakarta Sans"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
+                    
                 }
             }
         }
