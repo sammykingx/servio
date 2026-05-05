@@ -37,14 +37,15 @@
                 class="h-10 w-auto object-contain transition-transform duration-200 hover:scale-105"
             />
             <!-- Optional: Adding a "Beta" tag to match the premium feel -->
-            <span class="px-1.5 py-0.5 text-[10px] font-medium bg-emerald/20 text-emerald-500 border border-emerald/30 rounded uppercase tracking-tighter">Beta</span>
+            <span class="px-1.5 py-0.5 text-[10px] font-medium bg-emerald/20 text-emerald-500 border border-emerald/30 rounded tracking-tighter">v.1.1</span>
         </div>
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex items-center space-x-10 text-sm font-semibold tracking-wide">
+            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#objectives">Objectives</a>
             <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#problem">The Problem</a>
             <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#solution">Our Solution</a>
-            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#workflow">Workflow</a>
+            
         </div>
 
         <!-- CTA Button -->
@@ -158,13 +159,13 @@
                                 <svg class="w-6 h-6 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-white tracking-tight">Private Beta Access</h3>
+                                <h3 class="text-xl font-bold text-white tracking-tight">Gain Early Access</h3>
                                 <p class="text-sm text-slateCustom font-medium">Work begins with clarity, payment flows with <span class="text-amber-500/80">certainty.</span></p>
                             </div>
                         </div>
                         
                         <!-- Timer with "Amber-Accent" blocks -->
-                        <div data-aos="fade-in" data-aos-delay="1600" class="flex space-x-3 items-center">
+                        <div data-countdown="{{ launch_date|date:'c' }}" data-aos="fade-in" data-aos-delay="1600" class="flex space-x-3 items-center">
                             <div class="flex flex-col bg-black/40 backdrop-blur-md border border-white/5 rounded-xl px-4 py-2 min-w-[64px]">
                                 <div class="text-2xl font-black text-white tabular-nums">60</div>
                                 <div class="text-[8px] uppercase tracking-[0.2em] text-amber-500 font-bold mt-1">Days</div>
@@ -231,6 +232,185 @@
                     </div>
                 </div>
 
+            </div>
+        </section>
+
+        <!-- Section: Servio Logic (Who it's for) -->
+        <section class="relative py-28 bg-charcoal font-sans overflow-hidden">
+            <div class="max-w-7xl mx-auto px-5">
+                
+                <!-- Minimalist Header -->
+                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-20 border-b border-white/5 pb-10">
+                    <div data-aos="fade-right" data-aos-duration="1500" data-aos-easing="ease-out-cubic">
+                        <h2 class="text-white text-2xl md:text-4xl font-light tracking-tighter uppercase">
+                            The <span class="font-black text-emerald-500 italic">Alignment</span>
+                        </h2>
+                        <p class="text-slateCustom mt-4 max-w-sm text-lg font-medium">
+                            Servio is a professional protocol designed to eliminate the friction of execution.
+                        </p>
+                    </div>
+                    <div data-aos="fade-left" data-aos-duration="1500" class="hidden md:block">
+                        <span class="text-[10px] tracking-[0.4em] text-white/30 uppercase font-black">Ref: SRV-2026 / SYS</span>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-0 relative">
+                    
+                    <!-- Vertical Divider (Desktop Only) -->
+                    <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-white/10 via-white/5 to-transparent"></div>
+
+                    <!-- Left: THE DISTRACTION (What it's NOT) -->
+                    <div class="pr-0 md:pr-20 pb-20 md:pb-0" data-aos="fade-up" data-aos-duration="1600" data-aos-easing="ease-out-cubic">
+                        <div class="flex items-center gap-3 mb-8">
+                            <div class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.6)]"></div>
+                            <span class="text-xs font-black uppercase tracking-[0.3em] text-rose-500/80">Out of Scope</span>
+                        </div>
+                        
+                        <h3 class="text-white/40 text-3xl font-bold mb-8">Not for the <br/>"Content Economy."</h3>
+                        
+                        <div class="space-y-12">
+                            <p class="text-slateCustom leading-relaxed font-medium">
+                                We aren't a marketplace for digital vanity. Servio bypasses the noise of social selling and creator-led platforms.
+                            </p>
+                            
+                            <ul class="space-y-6">
+                                <li class="group flex items-start gap-4">
+                                    <span class="text-white/10 font-mono text-lg group-hover:text-rose-500/30 transition-colors">01</span>
+                                    <div>
+                                        <span class="block text-white/60 font-bold text-sm uppercase tracking-widest">Digital Products</span>
+                                        <p class="text-xs text-slateCustom/50 mt-1">No courses, e-books, or gated content downloads.</p>
+                                    </div>
+                                </li>
+                                <li class="group flex items-start gap-4">
+                                    <span class="text-white/10 font-mono text-lg group-hover:text-rose-500/30 transition-colors">02</span>
+                                    <div>
+                                        <span class="block text-white/60 font-bold text-sm uppercase tracking-widest">Online Coaching</span>
+                                        <p class="text-xs text-slateCustom/50 mt-1">Not built for lifestyle advice or "discovery" calls.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right: THE EXECUTION (Who it IS for) -->
+                    <div class="pl-0 md:pl-20 pt-20 md:pt-0 border-t md:border-t-0 border-white/5" data-aos="fade-up" data-aos-duration="1600" data-aos-delay="300" data-aos-easing="ease-out-cubic">
+                        <div class="flex items-center gap-3 mb-8">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]"></div>
+                            <span class="text-xs font-black uppercase tracking-[0.3em] text-emerald-500">Service Infrastructure</span>
+                        </div>
+
+                        <h3 class="text-white text-3xl font-bold mb-8">For the <br/>Utility Professionals.</h3>
+
+                        <div class="space-y-12">
+                            <p class="text-slateCustom leading-relaxed font-medium">
+                                Designed for individuals and teams who trade in <strong>outcomes</strong>. If your business requires a scope, a timeline, and a signature—you belong here.
+                            </p>
+
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Digital Services -->
+                                <div class="p-6 bg-white/[0.03] rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-all duration-500">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Digital Service Layer</span>
+                                        <svg class="w-4 h-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                    </div>
+                                    <p class="text-white font-bold text-sm">Developers, Video Editors, Designers</p>
+                                    <p class="text-xs text-slateCustom/60 mt-2 italic">Structured milestones for remote execution.</p>
+                                </div>
+
+                                <!-- On-the-ground Services -->
+                                <div class="p-6 bg-white/[0.03] rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-all duration-500">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">On-Site Service Layer</span>
+                                        <svg class="w-4 h-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    </div>
+                                    <p class="text-white font-bold text-sm">Cleaners, Event Planners, Physical Techs</p>
+                                    <p class="text-xs text-slateCustom/60 mt-2 italic">Standardized billing for real-world labor.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: The Target Audience / Manifesto -->
+        <section id="objectives" class="relative py-20 bg-charcoal overflow-hidden">
+            <div class="max-w-6xl mx-auto px-5">
+                
+                <!-- Header: The "Not for" vs "Built for" Logic -->
+                <div class="text-center mb-18">
+                    <h2 class="text-secondary uppercase tracking-[0.3em] text-sm font-bold mb-4" data-aos="fade-up">The Execution Layer</h2>
+                    <p class="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight" data-aos="fade-up" data-aos-delay="200">
+                        Not a marketplace.<br/> 
+                        <span class="text-slateCustom/40 italic">An Execution system.</span>
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-stretch">
+                    <!-- Left Side: Who it's NOT for (The "Gap") -->
+                    <div class="p-6 md:p-10 rounded-[2rem] bg-white/[0.02] border border-white/5 flex flex-col justify-between" 
+                        data-aos="fade-right" data-aos-duration="1500">
+                        <div>
+                            <h4 class="text-rose-400 font-bold uppercase tracking-widest text-xs mb-6">What we are not</h4>
+                            <h3 class="text-2xl text-white font-bold mb-6">We aren't here for the <br/>"Content Economy."</h3>
+                            <p class="text-slateCustom leading-relaxed mb-8">
+                                Servio isn't for selling courses, digital downloads, or coaching calls. We aren't competing with marketplaces that focus on "discovery." We are fixing the <strong>execution gap</strong>—the messy space between finding a professional and actually getting the job done.
+                            </p>
+                        </div>
+                        
+                        <ul class="space-y-4 opacity-50">
+                            <li class="flex items-center gap-3 text-slateCustom line-through text-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                Digital Product Sellers
+                            </li>
+                            <li class="flex items-center gap-3 text-slateCustom line-through text-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                Online Life Coaches
+                            </li>
+                            <li class="flex items-center gap-3 text-slateCustom line-through text-sm">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                Influencers & Creators
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Right Side: Who it's BUILT FOR (The Solution) -->
+                    <div class="p-6 md:p-10 rounded-[2rem] bg-emerald-500/[0.03] border border-emerald-500/20 flex flex-col justify-between relative overflow-hidden" 
+                        data-aos="fade-left" data-aos-duration="1500" data-aos-delay="200">
+                        
+                        <div class="absolute top-0 right-0 p-6 opacity-10">
+                            <svg class="w-32 h-32 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                        </div>
+
+                        <div>
+                            <h4 class="text-emerald-400 font-bold uppercase tracking-widest text-xs mb-6">Who we serve</h4>
+                            <h3 class="text-2xl text-white font-bold mb-6">Built for those who <br/>deliver real value.</h3>
+                            <p class="text-slateCustom leading-relaxed mb-8">
+                                Servio is the meeting point for high-stakes service delivery. Whether your work happens in a code editor or on-site at a venue, we provide the <strong>structured environment</strong> you need to facilitate business safely.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                                <span class="block text-white font-bold text-sm mb-1">Digital Pros</span>
+                                <span class="text-[10px] text-slateCustom uppercase tracking-tight">Devs, Editors, Designers</span>
+                            </div>
+                            <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                                <span class="block text-white font-bold text-sm mb-1">On-the-Ground</span>
+                                <span class="text-[10px] text-slateCustom uppercase tracking-tight">Planners, Cleaners, Techs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- The "Meeting Point" Tagline -->
+                <div class="mt-20 text-center" data-aos="fade-up" data-aos-delay="400">
+                    <p class="text-lg text-slateCustom italic">
+                        "Where clients who value quality meet professionals who value structure."
+                    </p>
+                </div>
             </div>
         </section>
 
@@ -335,7 +515,7 @@
                     <h2 class="text-white font-extrabold text-3xl md:text-6xl tracking-tight mb-8 leading-none">
                         Done. <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Not discussed.</span>
                     </h2>
-                    <p class="text-slateCustom text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+                    <p class="text-slateCustom text-base md:text-md max-w-2xl mx-auto font-light leading-relaxed">
                         Servio is the professional infrastructure for those who value <span class="text-white border-b border-emerald-500/50">results over conversation.</span>
                     </p>
                 </div>
@@ -365,7 +545,7 @@
                 </div>
 
                 <!-- Feature Bento: High-End Minimalism -->
-                <div id="workflow" data-aos="fade-up" data-aos-delay="100"class="grid grid-cols-1 md:grid-cols-3 gap-1px rounded-3xl overflow-hidden border border-white/10 shadow-2xl mb-24">
+                <div data-aos="fade-up" data-aos-delay="100"class="grid grid-cols-1 md:grid-cols-3 gap-1px rounded-3xl overflow-hidden border border-white/10 shadow-2xl mb-24">
                     
                     <!-- Logic 01 -->
                     <div data-aos="fade-up" data-aos-delay="100" class="bg-charcoal p-12 group hover:bg-white/[0.02] transition-colors">
@@ -390,27 +570,6 @@
                 </div>
 
                 <!-- The "Final Lock": Join Waiting List -->
-                <!-- <div data-aos="zoom-in" data-aos-duration="1000" class="bg-gradient-to-b from-white/[0.05] to-transparent p-12 md:p-20 rounded-[3rem] border border-white/10 text-center">
-                    <h3 class="text-white text-2xl md:text-4xl font-bold mb-8 tracking-tight">Ready to stop managing <br/>and start executing?</h3>
-                    
-                    <div data-aos="fade-up" data-aos-delay="200" class="max-w-md mx-auto relative group">
-                        <input type="email" placeholder="Enter your business email" 
-                            class="w-full bg-white/5 border border-white/10 rounded-full py-5 px-8 text-white focus:outline-none focus:border-emerald-500/50 transition-all placeholder:text-slateCustom">
-                        <button class="absolute right-2 top-2 bottom-2 px-6 rounded-full bg-emerald-500 text-charcoal font-black text-sm uppercase tracking-tighter hover:bg-white transition-all">
-                            Join Waiting List
-                        </button>
-                    </div>
-                    
-                    <div data-aos="fade" data-aos-delay="400" class="mt-8 flex justify-center items-center gap-6 text-slateCustom">
-                        <div class="flex -space-x-3">
-                            <div class="w-8 h-8 rounded-full border-2 border-charcoal bg-slate-700"></div>
-                            <div class="w-8 h-8 rounded-full border-2 border-charcoal bg-slate-600"></div>
-                            <div class="w-8 h-8 rounded-full border-2 border-charcoal bg-slate-500"></div>
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-widest">+400 companies in queue</span>
-                    </div>
-                </div> -->
-                <!-- The "Final Lock": Join Waiting List -->
                 <div data-aos="fade-up" data-aos-duration="1500" data-aos-easing="ease-out-cubic" 
                     class="relative overflow-hidden bg-gradient-to-b from-white/[0.03] to-transparent p-10 md:p-24 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 text-center">
                     
@@ -421,7 +580,7 @@
                         Ready to stop managing <br class="hidden md:block"/>and start <span class="text-emerald-400 italic">executing?</span>
                     </h3>
                     <p class="text-slateCustom mb-12 text-base md:text-lg max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="300">
-                        Join the private beta. We're onboarding teams manually to ensure the highest service standard.
+                        Gain early access. We're onboarding teams manually to ensure the highest service standard.
                     </p>
                     
                     <!-- Responsive Form Container -->
@@ -450,7 +609,7 @@
 
                             <!-- Submit Button -->
                             <button class="w-full md:w-auto px-10 py-4 rounded-2xl md:rounded-full bg-emerald-500 text-charcoal font-black text-sm uppercase tracking-wider hover:bg-white hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                                Access Beta
+                                Gain Early Access
                             </button>
                         </form>
                     </div>
@@ -461,7 +620,7 @@
                             <img src="https://i.pravatar.cc/100?u=1" class="w-9 h-9 rounded-full border-2 border-charcoal object-cover" />
                             <img src="https://i.pravatar.cc/100?u=2" class="w-9 h-9 rounded-full border-2 border-charcoal object-cover" />
                             <img src="https://i.pravatar.cc/100?u=3" class="w-9 h-9 rounded-full border-2 border-charcoal object-cover" />
-                            <div class="w-9 h-9 rounded-full border-2 border-charcoal bg-white/10 flex items-center justify-center text-[10px] font-bold text-white backdrop-blur-sm">+400</div>
+                            <div class="w-9 h-9 rounded-full border-2 border-charcoal bg-white/10 flex items-center justify-center text-[10px] font-bold text-white backdrop-blur-sm">+50</div>
                         </div>
                         <span class="text-xs font-bold uppercase tracking-[0.2em] text-slateCustom/60">Global companies in queue</span>
                     </div>
@@ -534,6 +693,7 @@
     </footer>
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{% static 'js/waitlist.js' %}"></script>
     <script>
         AOS.init({
             duration: 1000,
