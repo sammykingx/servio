@@ -18,365 +18,548 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
 	<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
-	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
-	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
 	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-	<!-- <link rel="stylesheet" href="{% static 'css/index.css' %}" /> -->
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-error-container": "#93000a",
-                        "surface-container-low": "#f2f4f6",
-                        "on-surface": "#191c1e",
-                        "on-primary-container": "#bbbeff",
-                        "tertiary-fixed": "#ffdad4",
-                        "surface-container": "#eceef0",
-                        "primary": "#0900c6",
-                        "tertiary-fixed-dim": "#ffb4a7",
-                        "on-tertiary": "#ffffff",
-                        "on-tertiary-fixed-variant": "#920600",
-                        "on-primary-fixed-variant": "#0d00ee",
-                        "on-background": "#191c1e",
-                        "primary-fixed-dim": "#bfc2ff",
-                        "inverse-primary": "#bfc2ff",
-                        "on-secondary-fixed": "#001f28",
-                        "surface-bright": "#f7f9fb",
-                        "on-secondary": "#ffffff",
-                        "secondary-fixed": "#b7eaff",
-                        "on-primary-fixed": "#02006d",
-                        "tertiary": "#790400",
-                        "primary-fixed": "#e0e0ff",
-                        "on-tertiary-container": "#ffafa1",
-                        "on-secondary-container": "#005266",
-                        "tertiary-container": "#a40800",
-                        "surface-tint": "#373cff",
-                        "surface-dim": "#d8dadc",
-                        "error-container": "#ffdad6",
-                        "surface-container-high": "#e6e8ea",
-                        "inverse-on-surface": "#eff1f3",
-                        "on-primary": "#ffffff",
-                        "surface-container-highest": "#e0e3e5",
-                        "on-surface-variant": "#454557",
-                        "on-tertiary-fixed": "#400100",
-                        "secondary": "#00677f",
-                        "surface-container-lowest": "#ffffff",
-                        "outline-variant": "#c6c4db",
-                        "surface": "#f7f9fb",
-                        "error": "#ba1a1a",
-                        "inverse-surface": "#2d3133",
-                        "background": "#f7f9fb",
-                        "outline": "#757589",
-                        "secondary-container": "#00ccf9",
-                        "surface-variant": "#e0e3e5",
-                        "primary-container": "#1b17ff",
-                        "secondary-fixed-dim": "#4cd6ff",
-                        "on-error": "#ffffff",
-                        "on-secondary-fixed-variant": "#004e60"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                    
-                }
-            }
-        }
-    </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-        }
-
-        .grainy-bg {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.02;
-        }
-    </style>
+	<link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    
 </head>
-
-<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-primary">
-    <!-- Texture overlay -->
-    <div class="fixed inset-0 pointer-events-none grainy-bg z-50"></div>
-    <!-- Navigation (Hidden for high-focus landing page but available via shell) -->
-    <nav class="sticky top-0 w-full z-40 bg-white/80 backdrop-blur-xl px-8 h-20 flex justify-between items-center">
-        <div class="text-xl font-bold tracking-tight text-primary font-headline">Servio</div>
-        <div class="hidden md:flex space-x-8 text-sm font-medium">
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="#problem">The Problem</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="#solution">Our Solution</a>
-            <a class="text-on-surface-variant hover:text-primary transition-colors" href="#how-it-works">Process</a>
+<body class="selection:text-white selection:bg-primary/90">
+    <!-- Navigation -->
+    <nav class="sticky top-0 w-full z-50 bg-charcoal backdrop-blur-xl border-b border-white/5 px-6 md:px-12 h-20 flex justify-between items-center transition-all">
+        <!-- Logo Area -->
+        <div class="flex items-center gap-2">
+            <img 
+                id="navbar-logo"
+                src="{% static 'images/logo/sidebar-logo-dark.png' %}" 
+                alt="Servio" 
+                class="h-10 w-auto object-contain transition-transform duration-200 hover:scale-105"
+            />
+            <!-- Optional: Adding a "Beta" tag to match the premium feel -->
+            <span class="px-1.5 py-0.5 text-[10px] font-medium bg-emerald/20 text-emerald-500 border border-emerald/30 rounded uppercase tracking-tighter">Beta</span>
         </div>
-        <a class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-semibold hover:translate-y-[-2px] transition-transform shadow-[0_10px_20px_rgba(9,0,198,0.15)]" href="#waitlist">Join Waitlist</a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-10 text-sm font-semibold tracking-wide">
+            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#problem">The Problem</a>
+            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#solution">Our Solution</a>
+            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#workflow">Workflow</a>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="flex items-center gap-4">
+            <a class="relative group" href="#waitlist">
+                <!-- Glow Effect for Button -->
+                <div class="absolute -inset-1 bg-secondary/40 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-300"></div>
+                <button class="relative bg-secondary text-charcoal px-7 py-2.5 rounded-full font-bold text-sm hover:-translate-y-0.5 transition-all duration-300 shadow-2xl active:scale-95">
+                    Join Waitlist
+                </button>
+            </a>
+        </div>
     </nav>
+
+    <!-- Optional: Subtle Progress Bar for the Landing Page -->
+    <!-- <div class="fixed top-20 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent z-40"></div> -->
     <main>
-        <!-- Hero Section -->
-        <section class="relative pt-16 pb-32 px-8 overflow-hidden">
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="z-10">
-                    <span class="inline-block py-1 px-3 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-widest mb-6">Introducing Servio</span>
-                    <h1 class="font-headline font-extrabold text-5xl md:text-7xl text-on-surface leading-[1.1] mb-6 tracking-tight">
-                        Stop chasing services across <span class="text-primary italic">WhatsApp.</span>
-                    </h1>
-                    <p class="font-headline text-xl md:text-2xl text-on-surface-variant leading-relaxed mb-8 max-w-xl">
-                        Servio brings clients and providers into one structured system—so work gets done without chaos.
-                    </p>
-                    <div class="space-y-4">
-                        <div class="flex items-start space-x-3">
-                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                            <p class="text-on-surface-variant">No more scattered chats or lost messages.</p>
+        <!-- Hero Section: Dark Mode Premium -->
+        <section class="relative bg-charcoal min-h-screen flex items-center pt-32 pb-24 overflow-hidden font-sans">
+            
+            <!-- Infrastructure Grid Lines (Subtle Background) -->
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px)] bg-[size:10%_100%] md:bg-[size:8%_100%] pointer-events-none"></div>
+            
+            <!-- Magical Bottom Glow (Using your primary color) -->
+            <div data-aos="fade-up" data-aos-duration="2000" class="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[120%] md:w-3/4 h-96 bg-primary blur-[150px] rounded-[100%] opacity-40 pointer-events-none animate-pulse-slow"></div>
+
+            <div class="max-w-6xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+                
+                <!-- Social Proof / Beta Badge -->
+                <div data-aos="fade-down" data-aos-delay="200" class="flex items-center gap-3 px-2 py-1.5 pr-5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-10 shadow-lg">
+                    <div class="flex -space-x-2">
+                        <img class="w-7 h-7 rounded-full border-2 border-charcoal" src="{% static 'images/user/user-16.jpg' %}" alt="User">
+                        <img class="w-7 h-7 rounded-full border-2 border-charcoal" src="{% static 'images/user/user-10.jpg' %}" alt="User">
+                        <img class="w-7 h-7 rounded-full border-2 border-charcoal" src="{% static 'images/user/user-04.jpg' %}" alt="User">
+                    </div>
+                    <span class="text-xs font-semibold text-offWhite tracking-wide">Trusted by <span class="text-secondary">30+</span> early professionals</span>
+                </div>
+
+                <!-- Headline -->
+                <h1 data-aos="fade-up" data-aos-duration="1500" class="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.1] mb-6">
+                    Hiring services is <span class="text-rose-400">broken</span> <br class="hidden md:block" />
+                    <span class="text-secondary italic">servio</span> fixes it.
+                </h1>
+                
+                <!-- Subheadline -->
+                <p data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000" class="text-md md:text-lg text-slateCustom max-w-2xl mb-16 leading-relaxed">
+                    Servio is the execution and payment layer that replaces scattered chats with structured proposals, automated contracts, and controlled payments.
+                </p>
+
+                <!-- Feature Icons Row (Vibrant Infrastructure Style) -->
+                <div class="flex flex-wrap justify-center gap-8 md:gap-16 mb-16 w-full">
+                    
+                    <!-- Feature 1: Structured Scope (Amber/Logic) -->
+                    <div data-aos="zoom-in" data-aos-delay="800" class="flex flex-col items-center group cursor-default">
+                        <div class="relative w-16 h-16 rounded-2xl bg-amber-500/5 border border-amber-500/10 flex items-center justify-center mb-4 group-hover:border-amber-500/50 group-hover:bg-amber-500/10 transition-all duration-500">
+                            <!-- Background Glow -->
+                            <div class="absolute inset-0 bg-amber-500/5 blur-xl group-hover:bg-amber-500/20 transition-all duration-500 rounded-full"></div>
+                            <svg class="w-7 h-7 text-amber-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                            </svg>
                         </div>
-                        <div class="flex items-start space-x-3">
-                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                            <p class="text-on-surface-variant">No more unreliable execution and guessing progress.</p>
+                        <span class="text-xs md:text-sm font-bold tracking-wide text-slateCustom group-hover:text-white transition-colors duration-300">Structured Scope</span>
+                    </div>
+
+                    <!-- Feature 2: Auto-Contracts (Emerald/Growth) -->
+                    <div data-aos="zoom-in" data-aos-delay="900" class="flex flex-col items-center group cursor-default">
+                        <div class="relative w-16 h-16 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:border-emerald-500/50 group-hover:bg-emerald-500/10 transition-all duration-500">
+                            <div class="absolute inset-0 bg-emerald-500/5 blur-xl group-hover:bg-emerald-500/20 transition-all duration-500 rounded-full"></div>
+                            <svg class="w-7 h-7 text-emerald-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
                         </div>
-                        <div class="flex items-start space-x-3">
-                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                            <p class="text-on-surface-variant">Just clear requests, tracked progress, and secure payments.</p>
+                        <span class="text-xs md:text-sm font-bold tracking-wide text-slateCustom group-hover:text-white transition-colors duration-300">Auto-Contracts</span>
+                    </div>
+
+                    <!-- Feature 3: Milestone Pay (Indigo/Trust) -->
+                    <div data-aos="zoom-in" data-aos-delay="1000" class="flex flex-col items-center group cursor-default">
+                        <div class="relative w-16 h-16 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-center justify-center mb-4 group-hover:border-indigo-500/50 group-hover:bg-indigo-500/10 transition-all duration-500">
+                            <div class="absolute inset-0 bg-indigo-500/5 blur-xl group-hover:bg-indigo-500/20 transition-all duration-500 rounded-full"></div>
+                            <svg class="w-7 h-7 text-indigo-400 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
                         </div>
+                        <span class="text-xs md:text-sm font-bold tracking-wide text-slateCustom group-hover:text-white transition-colors duration-300">Milestone Pay</span>
+                    </div>
+
+                    <!-- Feature 4: Clear Timelines (Rose/Urgency) -->
+                    <div data-aos="zoom-in" data-aos-delay="1100" class="flex flex-col items-center group cursor-default">
+                        <div class="relative w-16 h-16 rounded-2xl bg-rose-500/5 border border-rose-500/10 flex items-center justify-center mb-4 group-hover:border-rose-500/50 group-hover:bg-rose-500/10 transition-all duration-500">
+                            <div class="absolute inset-0 bg-rose-500/5 blur-xl group-hover:bg-rose-500/20 transition-all duration-500 rounded-full"></div>
+                            <svg class="w-7 h-7 text-rose-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xs md:text-sm font-bold tracking-wide text-slateCustom group-hover:text-white transition-colors duration-300">Clear Timelines</span>
                     </div>
                 </div>
-                <div class="relative" id="waitlist">
-                    <div class="absolute -inset-4 bg-primary-fixed/20 blur-3xl rounded-full"></div>
-                    <div class="relative glass-card border border-outline-variant/15 p-8 md:p-12 rounded-xl shadow-[0_40px_80px_rgba(9,0,198,0.08)]">
-                        <!-- Hourglass Timer -->
-                        <div class="flex flex-col items-center mb-10">
-                            <div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-4 text-primary animate-bounce">
-                                <span class="material-symbols-outlined text-3xl">hourglass_empty</span>
+
+                <!-- Waitlist Form (Vibrant Infrastructure Aesthetic) -->
+                <div data-aos="fade-up" data-aos-delay="1300" data-aos-duration="1200" class="w-full max-w-4xl bg-white/[0.02] border border-white/5 backdrop-blur-3xl rounded-3xl p-8 md:p-10 shadow-[0_0_100px_rgba(251,191,36,0.05)] relative group">
+                    
+                    <!-- Multi-Tone Animated Gradient Border (Amber to Rose) -->
+                    <div class="absolute inset-0 rounded-3xl p-[1px] bg-gradient-to-br from-amber-500/30 via-transparent to-rose-500/30 -z-10 opacity-70"></div>
+                    
+                    <!-- Horizontal Header/Timer -->
+                    <div class="flex flex-wrap items-center justify-between border-b border-white/5 pb-8 mb-8 gap-6">
+                        <div class="flex items-center gap-4 text-left">
+                            <!-- Icon with soft Amber/Orange glow -->
+                            <div class="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500 relative">
+                                <div class="absolute inset-0 bg-amber-500/20 blur-lg rounded-full"></div>
+                                <svg class="w-6 h-6 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             </div>
-                            <div class="flex space-x-6 text-center">
-                                <div>
-                                    <div class="text-3xl font-headline font-bold text-on-surface">04</div>
-                                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Days</div>
-                                </div>
-                                <div class="text-3xl font-headline font-light text-outline-variant">:</div>
-                                <div>
-                                    <div class="text-3xl font-headline font-bold text-on-surface">12</div>
-                                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Hours</div>
-                                </div>
-                                <div class="text-3xl font-headline font-light text-outline-variant">:</div>
-                                <div>
-                                    <div class="text-3xl font-headline font-bold text-on-surface">45</div>
-                                    <div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Mins</div>
-                                </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white tracking-tight">Private Beta Access</h3>
+                                <p class="text-sm text-slateCustom font-medium">Work begins with clarity, payment flows with <span class="text-amber-500/80">certainty.</span></p>
                             </div>
                         </div>
-                        <h3 class="text-center font-headline font-bold text-2xl mb-8">Join the Private Beta</h3>
-                        <form class="space-y-6">
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">Email Address</label>
-                                <input class="w-full h-14 px-6 bg-surface-container-low rounded-xl border-none focus:ring-2 focus:ring-primary text-lg transition-all" placeholder="you@example.com" type="email" />
+                        
+                        <!-- Timer with "Amber-Accent" blocks -->
+                        <div data-aos="fade-in" data-aos-delay="1600" class="flex space-x-3 items-center">
+                            <div class="flex flex-col bg-black/40 backdrop-blur-md border border-white/5 rounded-xl px-4 py-2 min-w-[64px]">
+                                <div class="text-2xl font-black text-white tabular-nums">60</div>
+                                <div class="text-[8px] uppercase tracking-[0.2em] text-amber-500 font-bold mt-1">Days</div>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2 ml-1">I am a...</label>
-                                <select class="w-full h-14 px-6 bg-surface-container-low rounded-xl border-none focus:ring-2 focus:ring-primary text-lg transition-all appearance-none">
-                                    <option>Client (Hiring Services)</option>
-                                    <option>Service Provider (Offering Skills)</option>
+                            <div class="text-xl font-light text-white/10">:</div>
+                            <div class="flex flex-col bg-black/40 backdrop-blur-md border border-white/5 rounded-xl px-4 py-2 min-w-[64px]">
+                                <div class="text-2xl font-black text-white tabular-nums">18</div>
+                                <div class="text-[8px] uppercase tracking-[0.2em] text-emerald-500 font-bold mt-1">Hrs</div>
+                            </div>
+                            <div class="text-xl font-light text-white/10">:</div>
+                            <div class="flex flex-col bg-black/40 backdrop-blur-md border border-white/5 rounded-xl px-4 py-2 min-w-[64px]">
+                                <div class="text-2xl font-black text-white tabular-nums">57</div>
+                                <div class="text-[8px] uppercase tracking-[0.2em] text-rose-500 font-bold mt-1">Mins</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inline Form -->
+                    <form class="flex flex-col md:flex-row gap-4">
+                        <!-- Email Input with Amber Glow -->
+                        <div class="flex-[1.5] relative group/input">
+                            <input 
+                                class="w-full h-14 px-6 rounded-xl border border-white/10 bg-white/[0.03] text-white transition-all duration-500 
+                                placeholder:text-slateCustom focus:outline-none focus:border-amber-500/40 focus:bg-white/[0.05] focus:ring-0 peer" 
+                                placeholder="Enter your professional email" 
+                                type="email" 
+                                required 
+                            />
+                            <!-- Sharp thin glow -->
+                            <div class="absolute inset-0 rounded-xl bg-amber-500/10 blur-xl opacity-0 peer-focus:opacity-100 transition-opacity duration-500 -z-10"></div>
+                        </div>
+                        
+                        <!-- Select Input with Emerald Glow -->
+                        <div class="flex-1 relative group/input">
+                            <select class="w-full h-14 px-6 rounded-xl border border-white/10 bg-white/[0.03] text-white transition-all duration-500 
+                                focus:outline-none focus:border-emerald-500/40 focus:bg-white/[0.05] appearance-none cursor-pointer peer">
+                                <option value="" disabled selected hidden>I am a...</option>
+                                <option value="client" class="bg-charcoal text-white">Client</option>
+                                <option value="provider" class="bg-charcoal text-white">Service Provider</option>
+                                <option value="both" class="bg-charcoal text-white">Both</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-5 text-slateCustom peer-focus:text-emerald-500 transition-colors">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <!-- Emerald Bloom -->
+                            <div class="absolute inset-0 rounded-xl bg-emerald-500/10 blur-xl opacity-0 peer-focus:opacity-100 transition-opacity duration-500 -z-10"></div>
+                        </div>
+
+                        <!-- Submit Button (Amber Gradient) -->
+                        <button class="relative h-14 px-10 bg-gradient-to-r from-amber-400 to-orange-400 text-charcoal rounded-xl font-black text-base overflow-hidden group/btn transition-all duration-300 hover:shadow-[0_0_40px_rgba(251,191,36,0.3)] hover:-translate-y-0.5 active:scale-95" type="submit">
+                            <!-- Shimmer -->
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/btn:animate-shimmer"></div>
+                            <span class="relative">Join Waitlist</span>
+                        </button>
+                    </form>
+
+                    <!-- Trust Text with Rose-to-Amber line -->
+                    <div class="mt-6 flex items-center justify-center gap-4">
+                        <div class="h-[1px] w-12 bg-gradient-to-r from-transparent to-white/10"></div>
+                        <p class="text-[10px] uppercase tracking-[0.3em] text-slateCustom font-bold">
+                            Secure <span class="text-rose-400">0.1%</span> Early Access
+                        </p>
+                        <div class="h-[1px] w-12 bg-gradient-to-l from-transparent to-white/10"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Problem Section: The Chaos of Unstructured Hiring -->
+        <section class="py-26 px-5 md:px-8 bg-charcoal relative overflow-hidden" id="problem">
+            
+            <!-- Top Border Glow -->
+            <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-rose-500/30 to-transparent"></div>
+
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="max-w-4xl mb-22" data-aos="fade-up" data-aos-duration="1200">
+                    <h2 class="text-white font-black text-4xl md:text-6xl tracking-tighter mb-6 leading-[0.9]">
+                        Chaos is expensive<span class="text-rose-500">.</span>
+                    </h2>
+                    <p class="text-slateCustom text-base md:text-xl font-light leading-relaxed">
+                        Hiring on WhatsApp, Twitter, or Upwork isn't just slow, it's a liability. 
+                        When your infrastructure is built on <span class="text-white">fragmented DMs</span>, execution becomes a game of luck.
+                    </p>
+                </div>
+
+                <!-- The Friction Gallery (Custom Card Layout) -->
+                <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                    
+                    <!-- Card 1: The WhatsApp Mess -->
+                    <div data-aos="fade-right" data-aos-delay="100" data-aos-duration="1400" class="flex-1 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light italic">chat_bubble_outline</span>
+                            </div>
+                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">The DM Grave</h4>
+                            <p class="text-slateCustom text-sm leading-relaxed font-medium">
+                                Critical specs buried under "seen" receipts and voice notes. If you can't search it in 2 seconds, you've already lost time.
+                            </p>
+                        </div>
+                        <!-- Subtle Background Icon -->
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">whatsapp</span>
+                    </div>
+
+                    <!-- Card 2: The Vetting Grind (Slightly Offset for Desktop) -->
+                    <div data-aos="fade-up" data-aos-delay="200" class="flex-1 md:mt-12 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">person_search</span>
+                            </div>
+                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">Twitter Lotto</h4>
+                            <p class="text-slateCustom text-sm leading-relaxed font-medium">
+                                Vetting via "portfolio links" and vibes. You spend 40 hours a month filtering noise instead of building product.
+                            </p>
+                        </div>
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">grid_view</span>
+                    </div>
+
+                    <!-- Card 3: The Upwork Fees -->
+                    <div data-aos="fade-up" data-aos-delay="300" class="flex-1 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">payments</span>
+                            </div>
+                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">Platform Tax</h4>
+                            <p class="text-slateCustom text-sm leading-relaxed font-medium">
+                                Losing 10-20% on every transaction to legacy platforms that provide zero actual project management or security.
+                            </p>
+                        </div>
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">monetization_on</span>
+                    </div>
+
+                    <!-- Card 4: The Ghosting (Slightly Offset for Desktop) -->
+                    <div data-aos="fade-left" data-aos-delay="400" data-aos-duration="1400" class="flex-1 md:mt-12 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">ghost</span>
+                            </div>
+                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">Ghosting by Default</h4>
+                            <p class="text-slateCustom text-sm leading-relaxed font-medium">
+                                The "I'll have it tomorrow" trap. Without escrowed milestones, accountability is just a suggestion, not a contract.
+                            </p>
+                        </div>
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">air</span>
+                    </div>
+
+                </div>
+
+                <!-- The Transition -->
+                <div class="mt-22 flex flex-col items-center" data-aos="zoom-in" data-aos-anchor-placement="top-bottom">
+                    <p class="text-slateCustom uppercase tracking-[0.4em] text-[10px] font-black mb-6">Stop the bleeding</p>
+                    <div class="w-px h-24 bg-gradient-to-b from-rose-500 via-emerald-500 to-transparent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Section: The Platinum Execution Layer -->
+        <section class="py-26 px-5 md:px-10 bg-charcoal relative overflow-hidden" id="solution">
+            <!-- Ultra-Minimal Background Accents -->
+            <div class="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+            <div class="absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+
+            <div class="max-w-7xl mx-auto relative z-10">
+                
+                <!-- Header Section: The High-End Hook -->
+                <div class="mb-20 text-center" data-aos="fade-down" data-aos-duration="1200">
+                    <h2 class="text-white font-extrabold text-3xl md:text-6xl tracking-tight mb-8 leading-none">
+                        Done. <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Not discussed.</span>
+                    </h2>
+                    <p class="text-slateCustom text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+                        Servio is the professional infrastructure for those who value <span class="text-white border-b border-emerald-500/50">results over conversation.</span>
+                    </p>
+                </div>
+
+                <!-- The Video Masterpiece: The "Proof" -->
+                <div class="max-w-5xl mx-auto mb-32 group" data-aos="fade-up" data-aos-offset="300" data-aos-duration="1800">
+                    <div class="relative aspect-video rounded-[2rem] overflow-hidden bg-black shadow-[0_0_80px_rgba(0,0,0,0.4)] border border-white/10">
+                        <!-- Thumbnail -->
+                        <img id="video-poster-new" 
+                            src="{% static 'images/cover-images/video-thumbnail.png' %}" 
+                            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                            alt="Servio System Preview">
+                        
+                        <!-- Video Element -->
+                        <video id="servio-video-new" class="w-full h-full object-cover">
+                            <source src="{% static 'videos/servio-short-vid.mp4' %}" type="video/mp4">
+                        </video>
+
+                        <!-- Minimalist Play Overlay -->
+                        <div id="play-button-new" class="absolute inset-0 flex items-center justify-center cursor-pointer bg-charcoal/20 group-hover:bg-transparent transition-colors duration-500">
+                            <div class="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-md group-hover:bg-emerald-500 group-hover:border-emerald-500 transition-all duration-500">
+                                <span class="material-symbols-outlined text-4xl text-white group-hover:text-charcoal transition-colors">play_arrow</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-center mt-6 text-xs tracking-[0.3em] uppercase text-slateCustom font-semibold">play to witness the engine</p>
+                </div>
+
+                <!-- Feature Bento: High-End Minimalism -->
+                <div id="workflow" data-aos="fade-up" data-aos-delay="100"class="grid grid-cols-1 md:grid-cols-3 gap-1px rounded-3xl overflow-hidden border border-white/10 shadow-2xl mb-24">
+                    
+                    <!-- Logic 01 -->
+                    <div data-aos="fade-up" data-aos-delay="100" class="bg-charcoal p-12 group hover:bg-white/[0.02] transition-colors">
+                        <span class="text-emerald-500 font-mono text-sm tracking-tighter mb-4 block">01 / Scoping</span>
+                        <h4 class="text-white text-2xl font-bold mb-4">Zero Ambiguity</h4>
+                        <p class="text-slateCustom leading-relaxed font-light">Eliminate "Scope Creep" with automated milestone structuring. We define the finish line before you start.</p>
+                    </div>
+
+                    <!-- Logic 02 -->
+                    <div data-aos="fade-up" data-aos-delay="200" class="bg-charcoal p-12 group hover:bg-white/[0.02] transition-colors">
+                        <span class="text-indigo-400 font-mono text-sm tracking-tighter mb-4 block">02 / Trust</span>
+                        <h4 class="text-white text-2xl font-bold mb-4">Capital Security</h4>
+                        <p class="text-slateCustom leading-relaxed font-light">Escrow-backed transactions ensure you only release funds when execution meets the standard.</p>
+                    </div>
+
+                    <!-- Logic 03 -->
+                    <div data-aos="fade-up" data-aos-delay="300" class="bg-charcoal p-12 group hover:bg-white/[0.02] transition-colors">
+                        <span class="text-rose-400 font-mono text-sm tracking-tighter mb-4 block">03 / Speed</span>
+                        <h4 class="text-white text-2xl font-bold mb-4">Instant Matching</h4>
+                        <p class="text-slateCustom leading-relaxed font-light">Our engine weights providers by verified delivery speed, not just subjective reviews.</p>
+                    </div>
+                </div>
+
+                <!-- The "Final Lock": Join Waiting List -->
+                <!-- <div data-aos="zoom-in" data-aos-duration="1000" class="bg-gradient-to-b from-white/[0.05] to-transparent p-12 md:p-20 rounded-[3rem] border border-white/10 text-center">
+                    <h3 class="text-white text-2xl md:text-4xl font-bold mb-8 tracking-tight">Ready to stop managing <br/>and start executing?</h3>
+                    
+                    <div data-aos="fade-up" data-aos-delay="200" class="max-w-md mx-auto relative group">
+                        <input type="email" placeholder="Enter your business email" 
+                            class="w-full bg-white/5 border border-white/10 rounded-full py-5 px-8 text-white focus:outline-none focus:border-emerald-500/50 transition-all placeholder:text-slateCustom">
+                        <button class="absolute right-2 top-2 bottom-2 px-6 rounded-full bg-emerald-500 text-charcoal font-black text-sm uppercase tracking-tighter hover:bg-white transition-all">
+                            Join Waiting List
+                        </button>
+                    </div>
+                    
+                    <div data-aos="fade" data-aos-delay="400" class="mt-8 flex justify-center items-center gap-6 text-slateCustom">
+                        <div class="flex -space-x-3">
+                            <div class="w-8 h-8 rounded-full border-2 border-charcoal bg-slate-700"></div>
+                            <div class="w-8 h-8 rounded-full border-2 border-charcoal bg-slate-600"></div>
+                            <div class="w-8 h-8 rounded-full border-2 border-charcoal bg-slate-500"></div>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-widest">+400 companies in queue</span>
+                    </div>
+                </div> -->
+                <!-- The "Final Lock": Join Waiting List -->
+                <div data-aos="fade-up" data-aos-duration="1500" data-aos-easing="ease-out-cubic" 
+                    class="relative overflow-hidden bg-gradient-to-b from-white/[0.03] to-transparent p-10 md:p-24 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 text-center">
+                    
+                    <!-- Subtle Background Glow -->
+                    <div class="absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+                    <h3 class="text-white text-3xl md:text-5xl font-bold mb-4 tracking-tight" data-aos="fade-up" data-aos-delay="200">
+                        Ready to stop managing <br class="hidden md:block"/>and start <span class="text-emerald-400 italic">executing?</span>
+                    </h3>
+                    <p class="text-slateCustom mb-12 text-base md:text-lg max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="300">
+                        Join the private beta. We're onboarding teams manually to ensure the highest service standard.
+                    </p>
+                    
+                    <!-- Responsive Form Container -->
+                    <div data-aos="fade-up" data-aos-delay="400" class="max-w-3xl mx-auto">
+                        <form class="flex flex-col md:flex-row items-center gap-4 p-2 bg-white/[0.02] border border-white/5 rounded-3xl md:rounded-full backdrop-blur-sm">
+                            
+                            <!-- Email Input -->
+                            <div class="w-full md:flex-[1.5] relative">
+                                <input type="email" placeholder="Enter your business email" 
+                                    class="w-full bg-transparent py-4 px-6 text-white focus:outline-none placeholder:text-slateCustom border-b md:border-b-0 md:border-r border-white/10" required>
+                            </div>
+
+                            <!-- Role Selector -->
+                            <div class="w-full md:flex-1 relative">
+                                <select class="w-full bg-transparent py-4 px-6 text-white focus:outline-none appearance-none cursor-pointer font-medium">
+                                    <option value="" disabled selected class="bg-charcoal">I am a...</option>
+                                    <option value="client" class="bg-charcoal">Client</option>
+                                    <option value="provider" class="bg-charcoal">Service Provider</option>
+                                    <option value="both" class="bg-charcoal">Both</option>
                                 </select>
+                                <!-- Custom Arrow Icon -->
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slateCustom">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
                             </div>
-                            <button class="w-full h-16 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-full font-bold text-lg hover:translate-y-[-2px] hover:shadow-2xl transition-all" type="submit">
-                                Join the Waitlist
+
+                            <!-- Submit Button -->
+                            <button class="w-full md:w-auto px-10 py-4 rounded-2xl md:rounded-full bg-emerald-500 text-charcoal font-black text-sm uppercase tracking-wider hover:bg-white hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                                Access Beta
                             </button>
                         </form>
-                        <p class="mt-6 text-center text-xs text-on-surface-variant">Limited spots available for early access. No spam, ever.</p>
                     </div>
-                </div>
-            </div>
-        </section>
-        <!-- Problem Section -->
-        <section class="py-24 px-8 bg-surface-container-low" id="problem">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-20">
-                    <h2 class="font-headline font-bold text-4xl md:text-5xl tracking-tight mb-4">Hiring shouldn’t feel this messy.</h2>
-                    <p class="text-on-surface-variant text-lg max-w-2xl mx-auto">Current tools focus on chatting. We focus on getting the work done.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
-                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
-                            <span class="material-symbols-outlined">forum</span>
+                    
+                    <!-- Social Proof -->
+                    <div data-aos="fade-in" data-aos-delay="700" class="mt-12 flex flex-col md:flex-row justify-center items-center gap-4 text-slateCustom">
+                        <div class="flex -space-x-3">
+                            <img src="https://i.pravatar.cc/100?u=1" class="w-9 h-9 rounded-full border-2 border-charcoal object-cover" />
+                            <img src="https://i.pravatar.cc/100?u=2" class="w-9 h-9 rounded-full border-2 border-charcoal object-cover" />
+                            <img src="https://i.pravatar.cc/100?u=3" class="w-9 h-9 rounded-full border-2 border-charcoal object-cover" />
+                            <div class="w-9 h-9 rounded-full border-2 border-charcoal bg-white/10 flex items-center justify-center text-[10px] font-bold text-white backdrop-blur-sm">+400</div>
                         </div>
-                        <h4 class="font-headline font-bold text-xl mb-3">Endless WhatsApp threads</h4>
-                        <p class="text-on-surface-variant leading-relaxed">Critical project details get buried in thousands of messages with no clear structure or searchable milestones.</p>
+                        <span class="text-xs font-bold uppercase tracking-[0.2em] text-slateCustom/60">Global companies in queue</span>
                     </div>
-                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
-                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
-                            <span class="material-symbols-outlined">group_off</span>
-                        </div>
-                        <h4 class="font-headline font-bold text-xl mb-3">Too many providers, no comparison</h4>
-                        <p class="text-on-surface-variant leading-relaxed">Spending hours vetting individuals manually without a standard framework to compare quality, price, or past reliability.</p>
-                    </div>
-                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
-                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
-                            <span class="material-symbols-outlined">release_alert</span>
-                        </div>
-                        <h4 class="font-headline font-bold text-xl mb-3">Unreliable execution</h4>
-                        <p class="text-on-surface-variant leading-relaxed">Deadlines missed and expectations unmet because there is no formal agreement or accountability built into the flow.</p>
-                    </div>
-                    <div class="bg-surface-container-lowest p-10 rounded-lg hover:shadow-xl transition-shadow group">
-                        <div class="w-12 h-12 bg-error-container text-on-error-container rounded-lg flex items-center justify-center mb-6">
-                            <span class="material-symbols-outlined">payments</span>
-                        </div>
-                        <h4 class="font-headline font-bold text-xl mb-3">No tracking or payment security</h4>
-                        <p class="text-on-surface-variant leading-relaxed">Sending money upfront into the void, or providers working without knowing if the client will ever actually pay.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Solution Section -->
-        <section class="py-32 px-8" id="solution">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex flex-col lg:flex-row gap-16 items-center mb-24">
-                    <div class="lg:w-1/2">
-                        <h2 class="font-headline font-extrabold text-4xl md:text-6xl tracking-tight mb-8">One platform. Total execution clarity.</h2>
-                        <div class="space-y-12">
-                            <div class="flex gap-6">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">1</div>
-                                <div>
-                                    <h5 class="font-headline font-bold text-xl mb-2">Structured Requests</h5>
-                                    <p class="text-on-surface-variant">Stop writing essays. Fill out smart prompts that capture exactly what you need, so providers can bid accurately.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-6">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">2</div>
-                                <div>
-                                    <h5 class="font-headline font-bold text-xl mb-2">Precision Matching</h5>
-                                    <p class="text-on-surface-variant">Our system matches your request to verified providers based on skill weight, availability, and execution history.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-6">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">3</div>
-                                <div>
-                                    <h5 class="font-headline font-bold text-xl mb-2">Real-time Execution Tracking</h5>
-                                    <p class="text-on-surface-variant">Visual milestones show you exactly where the work stands. No more asking "Is it done yet?" every morning.</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-6">
-                                <div class="flex-shrink-0 w-12 h-12 bg-primary text-on-primary rounded-full flex items-center justify-center font-bold">4</div>
-                                <div>
-                                    <h5 class="font-headline font-bold text-xl mb-2">Escrow Protected Payments</h5>
-                                    <p class="text-on-surface-variant">Funds are held securely by Servio and only released when the milestone is verified and approved by you.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 w-full">
-                        <div class="relative rounded-xl overflow-hidden shadow-2xl">
-                            <img class="w-full object-cover aspect-[4/3]" data-alt="A clean, minimalist dashboard interface for a service execution platform. The image shows a progress tracker with vibrant indigo accents, showing a sequence of steps from request to payment release. The lighting is soft and bright, creating a premium professional feel with deep indigo and white tones." src="https://lh3.googleusercontent.com/aida/ADBb0ug0P2B1SMasM1pyxFEUEB18u0UsfcKCNISdlMR5RY3EUmi4h1N6uov1-Sb_q7FWd5L0-toDDspfCnbFqKSF3QGEomX4ATwBckbb_or7-ob91GFZCLd16XXiczFZg39g4wYFWroU86a66mZX7U1SqjAu29eZ6usANIklG2PEltYbtPl1_3Z7GDEGAegpuZVDmvl2lOfhY-BiAIOJbfy4oc7S48Q5zpFn2DKxxNKrHCzSnJaio15UZ9R9agZZ8oX3yuUBfjZB1bfn_A" />
-                        </div>
-                    </div>
-                </div>
-                <!-- Visual Flow -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 pt-12 border-t border-outline-variant/15">
-                    <div class="text-center group">
-                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined text-3xl">note_add</span>
-                        </div>
-                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Request</div>
-                    </div>
-                    <div class="text-center group">
-                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined text-3xl">handshake</span>
-                        </div>
-                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Match</div>
-                    </div>
-                    <div class="text-center group">
-                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined text-3xl">terminal</span>
-                        </div>
-                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Execute</div>
-                    </div>
-                    <div class="text-center group">
-                        <div class="mb-4 inline-flex items-center justify-center w-16 h-16 rounded-xl bg-surface-container text-on-surface-variant group-hover:bg-primary group-hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined text-3xl">verified_user</span>
-                        </div>
-                        <div class="font-headline font-bold text-sm tracking-widest uppercase">Pay</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- How It Works Section -->
-        <section class="py-32 px-8 bg-on-surface text-surface" id="how-it-works">
-            <div class="max-w-7xl mx-auto">
-                <div class="mb-20">
-                    <h2 class="font-headline font-bold text-4xl md:text-5xl mb-6">Simple, structured, effective.</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-                    <div class="relative">
-                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">01</div>
-                        <div class="relative z-10">
-                            <h4 class="font-headline font-bold text-xl mb-4">Create a request</h4>
-                            <p class="text-surface-variant/80">Input your needs into our structured templates. No more guessing the scope.</p>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">02</div>
-                        <div class="relative z-10">
-                            <h4 class="font-headline font-bold text-xl mb-4">Get matched</h4>
-                            <p class="text-surface-variant/80">Top-tier providers review your request and submit execution plans instantly.</p>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">03</div>
-                        <div class="relative z-10">
-                            <h4 class="font-headline font-bold text-xl mb-4">Track execution</h4>
-                            <p class="text-surface-variant/80">Watch progress unfold through a live dashboard of milestones and proofs.</p>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <div class="text-6xl font-headline font-black text-primary/30 absolute -top-8 -left-4">04</div>
-                        <div class="relative z-10">
-                            <h4 class="font-headline font-bold text-xl mb-4">Release payment</h4>
-                            <p class="text-surface-variant/80">Funds move only when you sign off on the final deliverables.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Social Proof / CTA -->
-        <section class="py-32 px-8 overflow-hidden">
-            <div class="max-w-5xl mx-auto">
-                <div class="bg-primary rounded-xl relative overflow-hidden px-8 py-20 md:p-24 text-center shadow-[0_40px_100px_rgba(9,0,198,0.2)]">
-                    <!-- Background Image for CTA -->
-                    <div class="absolute inset-0 opacity-20">
-                        <img class="w-full h-full object-cover" data-alt="A professional atmosphere showing a modern workspace with sleek computer monitors and high-end tech equipment. The lighting is focused and clean, using a palette of deep indigo and soft white to convey institutional trust and high-end technological advancement in a service marketplace context." src="https://lh3.googleusercontent.com/aida/ADBb0uijUC_UEa9unA9XyN36mr4MleYXdrRqAxNfV3an9XZ4rmUAuD6mu8MRFEjt6YkFMMKX3IPFD_qCfdkN73eo16Wh1j2xIrTIGNuermInEF0-HjxQC2To16NpAJj2-In0EZGgjPHeX3PwTqVkjcbwHPYRobEdESgPNBRx9CTO1Nqm2va2mHE99CJBdhrOmchL_AQrgGv2sX0iQnGTm5geR-ja7iE7Xz4YjQUahPPjB9rdSSxqX2BrE-fEuoPB6QjmQSz_P6gGaDrxOg" />
-                    </div>
-                    <div class="relative z-10">
-                        <h2 class="font-headline font-extrabold text-3xl md:text-5xl text-on-primary mb-8 leading-tight">
-                            Be among the first to experience <br class="hidden md:block" /> structured service execution.
-                        </h2>
-                        <p class="text-on-primary-container text-lg mb-12 max-w-2xl mx-auto">
-                            Over 2,000+ service providers and clients have already signed up for the private beta. Don't get left in the chaos.
-                        </p>
-                        <div class="flex flex-col sm:flex-row justify-center gap-4">
-                            <a class="h-16 px-10 bg-white text-primary rounded-full font-bold text-lg flex items-center justify-center hover:scale-105 transition-transform shadow-xl" href="#waitlist">
-                                Join the Waitlist Now
-                            </a>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </section>
     </main>
-    <footer class="py-12 px-8 border-t border-outline-variant/15">
-        <div class="max-w-7xl mx-auto flex flex-col md:row justify-between items-center gap-8">
-            <div class="text-2xl font-bold tracking-tight text-primary font-headline">Servio</div>
-            <div class="flex space-x-8">
-                <a class="text-sm text-on-surface-variant hover:text-primary" href="#">Twitter</a>
-                <a class="text-sm text-on-surface-variant hover:text-primary" href="#">LinkedIn</a>
-                <a class="text-sm text-on-surface-variant hover:text-primary" href="#">Contact Support</a>
+
+    <!-- Footer: The Executive Horizon -->
+    <footer class="bg-charcoal py-24 px-8 border-t border-white/5 relative overflow-hidden">
+        <!-- Subtle Ambient Glow -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[100px] bg-emerald-500/5 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-16 mb-20">
+                
+                <!-- Brand Identity -->
+                <div class="space-y-6">
+                    <div class="text-3xl font-black tracking-tighter text-white uppercase italic">
+                        <img 
+							src="{% static 'images/logo/sidebar-logo-dark.png' %}" 
+							alt="Servio" 
+							class="h-15 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+							>
+						</a>
+                    </div>
+                    <p class="text-slateCustom max-w-xs text-sm leading-relaxed font-light">
+                        The infrastructure for high-velocity execution. Moving business from conversation to completion.
+                    </p>
+                </div>
+
+                <!-- Navigation Columns -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-24">
+                    <div class="flex flex-col gap-4">
+                        <span class="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold">Network</span>
+                        <a href="#" class="text-sm text-slateCustom hover:text-emerald-400 transition-colors duration-300">Twitter / X</a>
+                        <a href="#" class="text-sm text-slateCustom hover:text-emerald-400 transition-colors duration-300">LinkedIn</a>
+                    </div>
+                    
+                    <div class="flex flex-col gap-4">
+                        <span class="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold">Inquiry</span>
+                        <a href="mailto:support@servio.com" class="text-sm text-slateCustom hover:text-emerald-400 transition-colors duration-300">Support</a>
+                        <a href="#" class="text-sm text-slateCustom hover:text-emerald-400 transition-colors duration-300">Documentation</a>
+                    </div>
+
+                    <div class="flex flex-col gap-4 col-span-2 md:col-span-1">
+                        <span class="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold">Status</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <span class="text-xs text-white/70 font-mono">Systems Operational</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="text-xs text-on-surface-variant">© 2024 Servio by Divgm. All rights reserved.</p>
+
+            <!-- Bottom Bar -->
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 gap-6">
+                <p class="text-[10px] text-white/20 uppercase tracking-widest font-medium">
+                    © 2026 Servio by <a href="#" class="hover:text-white transition-colors">Divgm</a>. All rights reserved.
+                </p>
+                
+                <!-- Subtle Legal Links -->
+                <div class="flex gap-8">
+                    <a href="#" class="text-[10px] text-white/20 uppercase tracking-widest hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="text-[10px] text-white/20 uppercase tracking-widest hover:text-white transition-colors">Terms</a>
+                </div>
+            </div>
         </div>
     </footer>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-out-cubic',
+            once: false,
+            mirror: true,
+            offset: 50,
+        });
+
+        const playBtnNew = document.getElementById('play-button-new');
+        const videoNew = document.getElementById('servio-video-new');
+        const posterNew = document.getElementById('video-poster-new');
+
+        playBtnNew.addEventListener('click', () => {
+            videoNew.play();
+            videoNew.controls = true;
+            
+            playBtnNew.style.opacity = '0';
+            posterNew.style.opacity = '0';
+            
+            setTimeout(() => {
+                playBtnNew.style.display = 'none';
+                posterNew.style.display = 'none';
+            }, 500);
+        });
+    </script>
 </body>
 
 </html>
