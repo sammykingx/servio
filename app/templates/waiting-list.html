@@ -64,7 +64,7 @@
     <!-- <div class="fixed top-20 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent z-40"></div> -->
     <main>
         <!-- Hero Section: Dark Mode Premium -->
-        <section class="relative bg-charcoal min-h-screen flex items-center pt-32 pb-24 overflow-hidden font-sans">
+        <section id="countdown-timer" data-launch-date="{{ launch_date|date:'c' }}" class="relative bg-charcoal min-h-screen flex items-center pt-32 pb-24 overflow-hidden font-sans">
             
             <!-- Infrastructure Grid Lines (Subtle Background) -->
             <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px)] bg-[size:10%_100%] md:bg-[size:8%_100%] pointer-events-none"></div>
@@ -165,26 +165,26 @@
                         </div>
                         
                         <!-- Timer with "Amber-Accent" blocks -->
-                        <div data-countdown="{{ launch_date|date:'c' }}" data-aos="fade-in" data-aos-delay="1600" class="flex space-x-3 items-center">
+                        <div data-aos="fade-in" data-aos-delay="1600" class="flex space-x-3 items-center">
                             <div class="flex flex-col bg-black/40 backdrop-blur-md border border-white/5 rounded-xl px-4 py-2 min-w-[64px]">
-                                <div class="text-2xl font-black text-white tabular-nums">60</div>
+                                <div id="days" class="text-2xl font-black text-white tabular-nums">60</div>
                                 <div class="text-[8px] uppercase tracking-[0.2em] text-amber-500 font-bold mt-1">Days</div>
                             </div>
                             <div class="text-xl font-light text-white/10">:</div>
                             <div class="flex flex-col bg-black/40 backdrop-blur-md border border-white/5 rounded-xl px-4 py-2 min-w-[64px]">
-                                <div class="text-2xl font-black text-white tabular-nums">18</div>
+                                <div id="hours" class="text-2xl font-black text-white tabular-nums">18</div>
                                 <div class="text-[8px] uppercase tracking-[0.2em] text-emerald-500 font-bold mt-1">Hrs</div>
                             </div>
                             <div class="text-xl font-light text-white/10">:</div>
                             <div class="flex flex-col bg-black/40 backdrop-blur-md border border-white/5 rounded-xl px-4 py-2 min-w-[64px]">
-                                <div class="text-2xl font-black text-white tabular-nums">57</div>
+                                <div id="minutes" class="text-2xl font-black text-white tabular-nums">57</div>
                                 <div class="text-[8px] uppercase tracking-[0.2em] text-rose-500 font-bold mt-1">Mins</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Inline Form -->
-                    <form class="flex flex-col md:flex-row gap-4">
+                    <form class="waitlist-form flex flex-col md:flex-row gap-4">
                         <!-- Email Input with Amber Glow -->
                         <div class="flex-[1.5] relative group/input">
                             <input 
@@ -192,7 +192,8 @@
                                 placeholder:text-slateCustom focus:outline-none focus:border-amber-500/40 focus:bg-white/[0.05] focus:ring-0 peer" 
                                 placeholder="Enter your professional email" 
                                 type="email" 
-                                required 
+                                required
+                                name="email"
                             />
                             <!-- Sharp thin glow -->
                             <div class="absolute inset-0 rounded-xl bg-amber-500/10 blur-xl opacity-0 peer-focus:opacity-100 transition-opacity duration-500 -z-10"></div>
@@ -200,7 +201,7 @@
                         
                         <!-- Select Input with Emerald Glow -->
                         <div class="flex-1 relative group/input">
-                            <select class="w-full h-14 px-6 rounded-xl border border-white/10 bg-white/[0.03] text-white transition-all duration-500 
+                            <select name="role" class="w-full h-14 px-6 rounded-xl border border-white/10 bg-white/[0.03] text-white transition-all duration-500 
                                 focus:outline-none focus:border-emerald-500/40 focus:bg-white/[0.05] appearance-none cursor-pointer peer">
                                 <option value="" disabled selected hidden>I am a...</option>
                                 <option value="client" class="bg-charcoal text-white">Client</option>
@@ -570,7 +571,7 @@
                 </div>
 
                 <!-- The "Final Lock": Join Waiting List -->
-                <div data-aos="fade-up" data-aos-duration="1500" data-aos-easing="ease-out-cubic" 
+                <div id="waitlist" data-aos="fade-up" data-aos-duration="1500" data-aos-easing="ease-out-cubic" 
                     class="relative overflow-hidden bg-gradient-to-b from-white/[0.03] to-transparent p-10 md:p-24 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 text-center">
                     
                     <!-- Subtle Background Glow -->
@@ -585,17 +586,17 @@
                     
                     <!-- Responsive Form Container -->
                     <div data-aos="fade-up" data-aos-delay="400" class="max-w-3xl mx-auto">
-                        <form class="flex flex-col md:flex-row items-center gap-4 p-2 bg-white/[0.02] border border-white/5 rounded-3xl md:rounded-full backdrop-blur-sm">
+                        <form class="waitlist-form flex flex-col md:flex-row items-center gap-4 p-2 bg-white/[0.02] border border-white/5 rounded-3xl md:rounded-full backdrop-blur-sm">
                             
                             <!-- Email Input -->
                             <div class="w-full md:flex-[1.5] relative">
-                                <input type="email" placeholder="Enter your business email" 
+                                <input type="email" name="email" placeholder="Enter your business email" required
                                     class="w-full bg-transparent py-4 px-6 text-white focus:outline-none placeholder:text-slateCustom border-b md:border-b-0 md:border-r border-white/10" required>
                             </div>
 
                             <!-- Role Selector -->
                             <div class="w-full md:flex-1 relative">
-                                <select class="w-full bg-transparent py-4 px-6 text-white focus:outline-none appearance-none cursor-pointer font-medium">
+                                <select name="role" required class="w-full bg-transparent py-4 px-6 text-white focus:outline-none appearance-none cursor-pointer font-medium">
                                     <option value="" disabled selected class="bg-charcoal">I am a...</option>
                                     <option value="client" class="bg-charcoal">Client</option>
                                     <option value="provider" class="bg-charcoal">Service Provider</option>
@@ -608,7 +609,7 @@
                             </div>
 
                             <!-- Submit Button -->
-                            <button class="w-full md:w-auto px-10 py-4 rounded-2xl md:rounded-full bg-emerald-500 text-charcoal font-black text-sm uppercase tracking-wider hover:bg-white hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                            <button type="submit" class="w-full md:w-auto px-10 py-4 rounded-2xl md:rounded-full bg-emerald-500 text-charcoal font-black text-sm uppercase tracking-wider hover:bg-white hover:scale-[1.02] active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
                                 Gain Early Access
                             </button>
                         </form>
@@ -628,6 +629,7 @@
                 </div>
             </div>
         </section>
+        <div id="toast-container" class="fixed bottom-10 right-6 z-[100] flex flex-col gap-4 pointer-events-none"></div>
     </main>
 
     <!-- Footer: The Executive Horizon -->

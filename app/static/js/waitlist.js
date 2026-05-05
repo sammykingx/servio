@@ -1,149 +1,154 @@
 /**
- * Countdown Timer
- * Reads target date from a data attribute so Django can inject it server-side.
- * Usage: <div data-countdown="2025-09-01T00:00:00"></div>
+ * Servio Infrastructure Core
+ * Modules: ToastManager, CountdownTimer, WaitlistUI
  */
-class Countdown {
-    constructor(selector) {
-        this.targets = document.querySelectorAll(selector);
-        if (!this.targets.length) return;
 
-        this.endDate = new Date(this.targets[0].dataset.countdown).getTime();
-        if (isNaN(this.endDate)) {
-            console.warn("Countdown: invalid date on", this.targets[0]);
-            return;
-        }
-
-        this._tick();
-        this._interval = setInterval(() => this._tick(), 1000);
+class ToastManager {
+    constructor(containerId = 'toast-container') {
+        this.container = document.getElementById(containerId);
+        this.config = {
+            success: { color: 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400', icon: 'check_circle' },
+            error: { color: 'border-rose-500/50 bg-rose-500/10 text-rose-400', icon: 'error' }
+        };
     }
 
-    _tick() {
-        const delta = this.endDate - Date.now();
+    show(message, type = 'success') {
+        const settings = this.config[type];
+        const toast = document.createElement('div');
 
-        if (delta <= 0) {
-            clearInterval(this._interval);
-            this._render(0, 0, 0, 0);
-            return;
-        }
+        toast.className = `pointer-events-auto flex items-center gap-3 px-6 py-4 rounded-2xl border backdrop-blur-xl shadow-2xl transition-all duration-500 translate-x-full opacity-0 ${settings.color}`;
+        toast.innerHTML = `
+            <span class="material-symbols-outlined text-xl">${settings.icon}</span>
+            <p class="text-sm font-bold tracking-wide">${message}</p>
+        `;
 
-        const days = Math.floor(delta / 864e5);
-        const hours = Math.floor((delta % 864e5) / 36e5);
-        const minutes = Math.floor((delta % 36e5) / 6e4);
-        const seconds = Math.floor((delta % 6e4) / 1e3);
+        this.container.appendChild(toast);
 
-        this._render(days, hours, minutes, seconds);
-    }
-
-    _render(d, h, m, s) {
-        this.targets.forEach(el => {
-            // Expects children with [data-unit="days|hrs|mins|secs"]
-            const set = (unit, val) => {
-                const node = el.querySelector(`[data-unit="${unit}"]`);
-                if (node) node.textContent = String(val).padStart(2, "0");
-            };
-            set("days", d);
-            set("hrs", h);
-            set("mins", m);
-            set("secs", s);
+        // Trigger Animation
+        requestAnimationFrame(() => {
+            toast.classList.replace('translate-x-full', 'translate-x-0');
+            toast.classList.replace('opacity-0', 'opacity-100');
         });
+
+        // Self-Destruct
+        setTimeout(() => this.hide(toast), 5000);
+    }
+
+    hide(toast) {
+        toast.classList.replace('translate-x-0', 'translate-x-full');
+        toast.classList.replace('opacity-100', 'opacity-0');
+        setTimeout(() => toast.remove(), 500);
     }
 }
 
+class CountdownTimer {
+    constructor(elementId) {
+        this.el = document.getElementById(elementId);
+        if (!this.el) return;
 
-/**
- * Waitlist Form Handler
- * Handles AJAX submission for any number of forms matching the selector.
- */
-class WaitlistForm {
-    constructor(selector, options = {}) {
-        this.forms = document.querySelectorAll(selector);
-        this.options = {
-            endpoint: "/waiting-list/",
-            onSuccess: this._defaultSuccess.bind(this),
-            onError: this._defaultError.bind(this),
-            ...options,
+        this.targetDate = new Date(this.el.dataset.launchDate).getTime();
+        this.elements = {
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours'),
+            minutes: document.getElementById('minutes')
         };
 
-        this.forms.forEach(form => this._bind(form));
+        this.init();
     }
 
-    /** Returns Django's CSRF token from the cookie. */
-    _csrf() {
-        return document.cookie
-            .split("; ")
-            .find(row => row.startsWith("csrftoken="))
-            ?.split("=")[1] ?? "";
+    init() {
+        this.update();
+        setInterval(() => this.update(), 1000);
     }
 
-    _bind(form) {
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+    update() {
+        const distance = this.targetDate - new Date().getTime();
+        if (distance < 0) return;
 
-            const btn = form.querySelector("[type=submit]");
-            const originalText = btn.textContent.trim();
+        this.render({
+            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        });
+    }
 
-            this._setLoading(btn, true);
-
-            try {
-                const res = await fetch(this.options.endpoint, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": this._csrf(),
-                        "X-Requested-With": "XMLHttpRequest",
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(Object.fromEntries(new FormData(form))),
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    this.options.onSuccess(form, data);
-                } else {
-                    this.options.onError(form, data);
-                }
-            } catch (err) {
-                this.options.onError(form, { message: "Network error. Please try again." });
-                console.error("Waitlist submission failed:", err);
-            } finally {
-                this._setLoading(btn, false, originalText);
+    render(data) {
+        Object.keys(data).forEach(unit => {
+            if (this.elements[unit]) {
+                this.elements[unit].innerText = data[unit].toString().padStart(2, '0');
             }
         });
     }
+}
 
-    _setLoading(btn, isLoading, originalText = "") {
-        btn.disabled = isLoading;
-        btn.textContent = isLoading ? "Joining…" : originalText;
-        btn.classList.toggle("opacity-60", isLoading);
-        btn.classList.toggle("cursor-not-allowed", isLoading);
+class WaitlistManager {
+    constructor(toastManager) {
+        this.forms = document.querySelectorAll('.waitlist-form');
+        this.toast = toastManager;
+        this.endpoint = window.location.href;
+        this.init();
     }
 
-    _defaultSuccess(form, data) {
-        // Replace the form with a confirmation message styled to match
-        const msg = document.createElement("p");
-        msg.className = "text-center text-emerald-400 font-semibold py-4 tracking-wide";
-        msg.textContent = data.message ?? "You're on the list! We'll be in touch.";
-        form.replaceWith(msg);
+    init() {
+        this.forms.forEach(form => {
+            form.addEventListener('submit', (e) => this.handleSubmit(e));
+        });
     }
 
-    _defaultError(form, data) {
-        // Show inline error beneath the form
-        let err = form.querySelector(".js-form-error");
-        if (!err) {
-            err = document.createElement("p");
-            err.className = "js-form-error text-rose-400 text-sm mt-3 text-center";
-            form.appendChild(err);
+    setLoading(form, isLoading) {
+        const btn = form.querySelector('button[type="submit"]');
+        if (isLoading) {
+            form.dataset.originalContent = btn.innerHTML;
+            form.classList.add('pointer-events-none', 'blur-[2px]', 'opacity-60');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="animate-pulse">Processing...</span>`;
+        } else {
+            form.classList.remove('pointer-events-none', 'blur-[2px]', 'opacity-60');
+            btn.disabled = false;
+            btn.innerHTML = form.dataset.originalContent;
         }
-        err.textContent = data.message ?? "Something went wrong. Please try again.";
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        this.setLoading(form, true);
+
+        try {
+            const response = await fetch(this.endpoint, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-CSRFToken': this.getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.status === 'success') {
+                this.toast.show(result.message);
+                form.reset();
+            } else {
+                this.toast.show(result.message || 'Validation failed.', 'error');
+            }
+        } catch (err) {
+            this.toast.show('Network error. Check your connection.', 'error');
+        } finally {
+            this.setLoading(form, false);
+        }
+    }
+
+    getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
     }
 }
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Countdown — targets every [data-countdown] block on the page
-    new Countdown("[data-countdown]");
-
-    // Waitlist forms — targets both the hero form and the CTA form
-    new WaitlistForm(".js-waitlist-form");
+// Initialization
+document.addEventListener('DOMContentLoaded', () => {
+    const toast = new ToastManager();
+    new CountdownTimer('countdown-timer');
+    new WaitlistManager(toast);
 });

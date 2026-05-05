@@ -22,6 +22,7 @@ app/*.txt
 # django files
 *.sqlite3
 app/media/*
+app/private_data/*
 app/staticfiles/*
 app/**/migrations/
 app/logs/*
