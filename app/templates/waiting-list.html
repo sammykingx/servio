@@ -28,35 +28,37 @@
 <body class="selection:text-white selection:bg-primary/90">
     <!-- Navigation -->
     <nav class="sticky top-0 w-full z-50 bg-charcoal backdrop-blur-xl border-b border-white/5 px-6 md:px-12 h-20 flex justify-between items-center transition-all">
-        <!-- Logo Area -->
-        <div class="flex items-center gap-2">
-            <img 
-                id="navbar-logo"
-                src="{% static 'images/logo/sidebar-logo-dark.png' %}" 
-                alt="Servio" 
-                class="h-10 w-auto object-contain transition-transform duration-200 hover:scale-105"
-            />
-            <!-- Optional: Adding a "Beta" tag to match the premium feel -->
-            <span class="px-1.5 py-0.5 text-[10px] font-medium bg-emerald/20 text-emerald-500 border border-emerald/30 rounded tracking-tighter">v.1.1</span>
-        </div>
+        <div class="max-w-7xl mx-auto w-full flex justify-between items-center">
+            <!-- Logo Area -->
+            <div class="flex items-center gap-2">
+                <img 
+                    id="navbar-logo"
+                    src="{% static 'images/logo/sidebar-logo-dark.png' %}" 
+                    alt="Servio" 
+                    class="h-10 w-auto object-contain transition-transform duration-200 hover:scale-105"
+                />
+                <!-- Optional: Adding a "Beta" tag to match the premium feel -->
+                <span class="px-1.5 py-0.5 text-[10px] font-medium bg-emerald/20 text-emerald-500 border border-emerald/30 rounded tracking-tighter">v.1.1</span>
+            </div>
 
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex items-center space-x-10 text-sm font-semibold tracking-wide">
-            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#objectives">Objectives</a>
-            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#problem">The Problem</a>
-            <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#solution">Our Solution</a>
-            
-        </div>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-10 text-sm font-semibold tracking-wide">
+                <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#objectives">Objectives</a>
+                <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#problem">The Problem</a>
+                <a class="text-slateCustom hover:text-secondary transition-colors duration-300" href="#solution">Our Solution</a>
+                
+            </div>
 
-        <!-- CTA Button -->
-        <div class="flex items-center gap-4">
-            <a class="relative group" href="#waitlist">
-                <!-- Glow Effect for Button -->
-                <div class="absolute -inset-1 bg-secondary/40 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-300"></div>
-                <button class="relative bg-secondary text-charcoal px-7 py-2.5 rounded-full font-bold text-sm hover:-translate-y-0.5 transition-all duration-300 shadow-2xl active:scale-95">
-                    Join Waitlist
-                </button>
-            </a>
+            <!-- CTA Button -->
+            <div class="flex items-center gap-4">
+                <a class="relative group" href="#waitlist">
+                    <!-- Glow Effect for Button -->
+                    <div class="absolute -inset-1 bg-secondary/40 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-300"></div>
+                    <button class="relative bg-secondary text-charcoal px-7 py-2.5 rounded-full font-bold text-sm hover:-translate-y-0.5 transition-all duration-300 shadow-2xl active:scale-95">
+                        Join Waitlist
+                    </button>
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -92,7 +94,7 @@
                 
                 <!-- Subheadline -->
                 <p data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000" class="text-md md:text-lg text-slateCustom max-w-2xl mb-16 leading-relaxed">
-                    Servio is the execution and payment layer that replaces scattered chats with structured proposals, automated contracts, and controlled payments.
+                    Servio is a service execution and payment system designed to remove the chaos from sourcing, negotiating, contracting, and paying for services.
                 </p>
 
                 <!-- Feature Icons Row (Vibrant Infrastructure Style) -->
@@ -237,9 +239,8 @@
         </section>
 
         <!-- Section: Servio Logic (Who it's for) -->
-        <section class="relative py-28 bg-charcoal font-sans overflow-hidden">
-            <div class="max-w-7xl mx-auto px-5">
-                
+        <section id="objectives" class="relative py-28 bg-charcoal font-sans overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6">
                 <!-- Minimalist Header -->
                 <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-20 border-b border-white/5 pb-10">
                     <div data-aos="fade-right" data-aos-duration="1500" data-aos-easing="ease-out-cubic">
@@ -247,7 +248,7 @@
                             The <span class="font-black text-emerald-500 italic">Alignment</span>
                         </h2>
                         <p class="text-slateCustom mt-4 max-w-sm text-lg font-medium">
-                            Servio is a professional protocol designed to eliminate the friction of execution.
+                            Rather than competing, it fixes how work is initiated, agreed on, and paid in unstructured environments.
                         </p>
                     </div>
                     <div data-aos="fade-left" data-aos-duration="1500" class="hidden md:block">
@@ -256,7 +257,6 @@
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-0 relative">
-                    
                     <!-- Vertical Divider (Desktop Only) -->
                     <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-white/10 via-white/5 to-transparent"></div>
 
@@ -278,15 +278,32 @@
                                 <li class="group flex items-start gap-4">
                                     <span class="text-white/10 font-mono text-lg group-hover:text-rose-500/30 transition-colors">01</span>
                                     <div>
-                                        <span class="block text-white/60 font-bold text-sm uppercase tracking-widest">Digital Products</span>
-                                        <p class="text-xs text-slateCustom/50 mt-1">No courses, e-books, or gated content downloads.</p>
+                                        <span class="block text-white/60 font-bold text-sm uppercase tracking-widest">Product Sellers</span>
+                                        <p class="text-xs text-slateCustom/50 mt-1">Physical/digital goods. We're built for execution, not transactions.</p>
                                     </div>
                                 </li>
+
                                 <li class="group flex items-start gap-4">
                                     <span class="text-white/10 font-mono text-lg group-hover:text-rose-500/30 transition-colors">02</span>
                                     <div>
                                         <span class="block text-white/60 font-bold text-sm uppercase tracking-widest">Online Coaching</span>
                                         <p class="text-xs text-slateCustom/50 mt-1">Not built for lifestyle advice or "discovery" calls.</p>
+                                    </div>
+                                </li>
+
+                                <li class="group flex items-start gap-4">
+                                    <span class="text-white/10 font-mono text-lg group-hover:text-rose-500/30 transition-colors">03</span>
+                                    <div>
+                                        <span class="block text-white/60 font-bold text-sm uppercase tracking-widest">Influencer Deals</span>
+                                        <p class="text-xs text-slateCustom/50 mt-1">Servio isn’t built for attention-based transactions.</p>
+                                    </div>
+                                </li>
+
+                                <li class="group flex items-start gap-4">
+                                    <span class="text-white/10 font-mono text-lg group-hover:text-rose-500/30 transition-colors">04</span>
+                                    <div>
+                                        <span class="block text-white/60 font-bold text-sm uppercase tracking-widest">Vague Service Offers</span>
+                                        <p class="text-xs text-slateCustom/50 mt-1">Every job starts with clear deliverables, pricing, and timelines.</p>
                                     </div>
                                 </li>
                             </ul>
@@ -297,120 +314,174 @@
                     <div class="pl-0 md:pl-20 pt-20 md:pt-0 border-t md:border-t-0 border-white/5" data-aos="fade-up" data-aos-duration="1600" data-aos-delay="300" data-aos-easing="ease-out-cubic">
                         <div class="flex items-center gap-3 mb-8">
                             <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]"></div>
-                            <span class="text-xs font-black uppercase tracking-[0.3em] text-emerald-500">Service Infrastructure</span>
+                            <span class="text-xs font-mono uppercase tracking-[0.3em] text-emerald-500">Execution Infrastructure</span>
                         </div>
 
-                        <h3 class="text-white text-3xl font-bold mb-8">For the <br/>Utility Professionals.</h3>
+                        <h3 class="text-white text-3xl font-bold mb-8">
+                            For People Who<br/>Work With Clarity.
+                        </h3>
 
                         <div class="space-y-12">
                             <p class="text-slateCustom leading-relaxed font-medium">
-                                Designed for individuals and teams who trade in <strong>outcomes</strong>. If your business requires a scope, a timeline, and a signature—you belong here.
+                                Servio is built for those who don’t deal in “let’s discuss.”  
+                                If your work can be <strong>defined, priced, and delivered</strong>, you belong here.
                             </p>
 
                             <div class="grid grid-cols-1 gap-6">
-                                <!-- Digital Services -->
+                                
+                                <!-- Structured Digital Execution -->
                                 <div class="p-6 bg-white/[0.03] rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-all duration-500">
                                     <div class="flex justify-between items-start mb-4">
-                                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Digital Service Layer</span>
-                                        <svg class="w-4 h-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Structured Digital Execution</span>
+                                        <svg class="w-4 h-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                        </svg>
                                     </div>
-                                    <p class="text-white font-bold text-sm">Developers, Video Editors, Designers</p>
-                                    <p class="text-xs text-slateCustom/60 mt-2 italic">Structured milestones for remote execution.</p>
+                                    <p class="text-white font-bold text-sm">Developers, Designers, Editors</p>
+                                    <p class="text-xs text-slateCustom/60 mt-2 italic">
+                                        Clear deliverables. Fixed timelines. No back-and-forth.
+                                    </p>
                                 </div>
 
-                                <!-- On-the-ground Services -->
+                                <!-- Real-World Service Execution -->
                                 <div class="p-6 bg-white/[0.03] rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-all duration-500">
                                     <div class="flex justify-between items-start mb-4">
-                                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">On-Site Service Layer</span>
-                                        <svg class="w-4 h-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                        <span class="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Real-World Service Execution</span>
+                                        <svg class="w-4 h-4 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
                                     </div>
-                                    <p class="text-white font-bold text-sm">Cleaners, Event Planners, Physical Techs</p>
-                                    <p class="text-xs text-slateCustom/60 mt-2 italic">Standardized billing for real-world labor.</p>
+                                    <p class="text-white font-bold text-sm">Cleaners, Technicians, Service Teams</p>
+                                    <p class="text-xs text-slateCustom/60 mt-2 italic">
+                                        Defined scope. Structured pricing. Work without chaos.
+                                    </p>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <!-- Section: The Target Audience / Manifesto -->
-        <section id="objectives" class="relative py-20 bg-charcoal overflow-hidden">
-            <div class="max-w-6xl mx-auto px-5">
-                
-                <!-- Header: The "Not for" vs "Built for" Logic -->
-                <div class="text-center mb-18">
-                    <h2 class="text-secondary uppercase tracking-[0.3em] text-sm font-bold mb-4" data-aos="fade-up">The Execution Layer</h2>
-                    <p class="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight" data-aos="fade-up" data-aos-delay="200">
-                        Not a marketplace.<br/> 
-                        <span class="text-slateCustom/40 italic">An Execution system.</span>
-                    </p>
-                </div>
+        <!-- Section: Servio Visual Architecture (PCB Imagery) -->
+        <section class="relative py-14 md:py-22 bg-charcoal overflow-hidden">
+            <!-- Technical Background -->
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none" 
+                style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
+            
+            <!-- Ambient Glows -->
+            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none"></div>
 
-                <div class="grid md:grid-cols-2 gap-12 items-stretch">
-                    <!-- Left Side: Who it's NOT for (The "Gap") -->
-                    <div class="p-6 md:p-10 rounded-[2rem] bg-white/[0.02] border border-white/5 flex flex-col justify-between" 
-                        data-aos="fade-right" data-aos-duration="1500">
-                        <div>
-                            <h4 class="text-rose-400 font-bold uppercase tracking-widest text-xs mb-6">What we are not</h4>
-                            <h3 class="text-2xl text-white font-bold mb-6">We aren't here for the <br/>"Content Economy."</h3>
-                            <p class="text-slateCustom leading-relaxed mb-8">
-                                Servio isn't for selling courses, digital downloads, or coaching calls. We aren't competing with marketplaces that focus on "discovery." We are fixing the <strong>execution gap</strong>—the messy space between finding a professional and actually getting the job done.
-                            </p>
-                        </div>
-                        
-                        <ul class="space-y-4 opacity-50">
-                            <li class="flex items-center gap-3 text-slateCustom line-through text-sm">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                Digital Product Sellers
-                            </li>
-                            <li class="flex items-center gap-3 text-slateCustom line-through text-sm">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                Online Life Coaches
-                            </li>
-                            <li class="flex items-center gap-3 text-slateCustom line-through text-sm">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                Influencers & Creators
-                            </li>
-                        </ul>
+            <div class="max-w-4xl mx-auto px-4 relative" data-aos="fade-up" data-aos-duration="1500">
+                <!-- The "Moderate" sized high-end container -->
+                <div class="relative bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-6 md:p-12 backdrop-blur-xl shadow-2xl overflow-hidden group">
+                    
+                    <!-- Technical Metadata Decor -->
+                    <div class="absolute top-6 left-10 flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <span class="text-[9px] font-mono text-emerald-500/60 uppercase tracking-[0.3em]">System: Active</span>
                     </div>
 
-                    <!-- Right Side: Who it's BUILT FOR (The Solution) -->
-                    <div class="p-6 md:p-10 rounded-[2rem] bg-emerald-500/[0.03] border border-emerald-500/20 flex flex-col justify-between relative overflow-hidden" 
-                        data-aos="fade-left" data-aos-duration="1500" data-aos-delay="200">
+                    <svg viewBox="0 0 680 750" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+                        <style>
+                            :root { 
+                                --engine: #10b981;  /* Emerald */
+                                --process: #a78bfa; /* Purple */
+                                --execution: #fbbf24; /* Amber */
+                                --bg-chip: #161515;
+                            }
+                            
+                            /* Text Styles */
+                            .label-main { fill: #ffffff; font-family: 'Inter', sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+                            .label-sub { fill: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; }
+                            
+                            /* Trace Animations */
+                            .path-engine { stroke: var(--engine); stroke-dasharray: 100; stroke-dashoffset: 100; animation: traceFlow 3s linear infinite; opacity: 0.7; }
+                            .path-execution { stroke: var(--execution); stroke-dasharray: 100; stroke-dashoffset: 100; animation: traceFlow 3s linear infinite; opacity: 0.6; }
+                            
+                            @keyframes traceFlow {
+                                to { stroke-dashoffset: -100; }
+                            }
+
+                            /* Floating Nodes */
+                            .node-float { animation: float 6s ease-in-out infinite; }
+                            @keyframes float {
+                                0%, 100% { transform: translateY(0); }
+                                50% { transform: translateY(-5px); }
+                            }
+                        </style>
+
+                        <!-- 1. THE ENGINE (CPU) -->
+                        <g class="node-float">
+                            <rect x="240" y="40" width="200" height="140" rx="16" fill="var(--bg-chip)" stroke="var(--engine)" stroke-width="1.5"/>
+                            <rect x="255" y="55" width="170" height="110" rx="8" fill="#000" opacity="0.3"/>
+                            <text class="label-main" x="340" y="105" text-anchor="middle" font-size="20">SERVIO</text>
+                            <text class="label-sub" x="340" y="130" text-anchor="middle" font-size="8" opacity="0.5">Core Engine</text>
+                        </g>
+
+                        <!-- 2. ENGINE TO PROCESS TRACES (Emerald) -->
+                        <path class="path-engine" d="M340 180 V240 H100 V270" fill="none" stroke-width="1.5"/>
+                        <path class="path-engine" d="M340 180 V240 H260 V270" fill="none" stroke-width="1.5" style="animation-delay: 0.5s;"/>
+                        <path class="path-engine" d="M340 180 V240 H420 V270" fill="none" stroke-width="1.5" style="animation-delay: 1s;"/>
+                        <path class="path-engine" d="M340 180 V240 H580 V270" fill="none" stroke-width="1.5" style="animation-delay: 1.5s;"/>
+
+                        <!-- 3. PROCESS NODES (Purple) -->
+                        <g transform="translate(0, 270)">
+                            <rect x="40" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
+                            <text class="label-sub" x="100" y="30" text-anchor="middle" font-size="9" fill="#fff">Request</text>
+
+                            <rect x="200" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
+                            <text class="label-sub" x="260" y="30" text-anchor="middle" font-size="9" fill="#fff">Proposal</text>
+
+                            <rect x="360" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
+                            <text class="label-sub" x="420" y="30" text-anchor="middle" font-size="9" fill="#fff">Contract</text>
+
+                            <rect x="520" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
+                            <text class="label-sub" x="580" y="30" text-anchor="middle" font-size="9" fill="#fff">Payment</text>
+                        </g>
+
+                        <!-- 4. PROCESS TO WORKER BUS (Amber) -->
+                        <!-- Convergence Bus -->
+                        <path d="M100 320 V380 H580 V320" stroke="var(--execution)" stroke-width="0.5" opacity="0.3"/>
                         
-                        <div class="absolute top-0 right-0 p-6 opacity-10">
-                            <svg class="w-32 h-32 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-                        </div>
+                        <!-- Animated Execution Traces -->
+                        <path class="path-execution" d="M100 320 V450 H180 V480" fill="none" stroke-width="1.5"/>
+                        <path class="path-execution" d="M340 320 V450 H340 V480" fill="none" stroke-width="1.5" style="animation-delay: 0.7s;"/>
+                        <path class="path-execution" d="M580 320 V450 H500 V480" fill="none" stroke-width="1.5" style="animation-delay: 1.4s;"/>
 
-                        <div>
-                            <h4 class="text-emerald-400 font-bold uppercase tracking-widest text-xs mb-6">Who we serve</h4>
-                            <h3 class="text-2xl text-white font-bold mb-6">Built for those who <br/>deliver real value.</h3>
-                            <p class="text-slateCustom leading-relaxed mb-8">
-                                Servio is the meeting point for high-stakes service delivery. Whether your work happens in a code editor or on-site at a venue, we provide the <strong>structured environment</strong> you need to facilitate business safely.
-                            </p>
-                        </div>
+                        <!-- 5. WORKER NODES (Final Execution) -->
+                        <g transform="translate(0, 480)">
+                            <!-- Digital Worker -->
+                            <rect x="120" y="0" width="120" height="70" rx="12" fill="rgba(251, 191, 36, 0.05)" stroke="var(--execution)" stroke-width="1" stroke-dasharray="4 4"/>
+                            <text class="label-sub" x="180" y="35" text-anchor="middle" font-size="9">Digital</text>
+                            <text class="label-sub" x="180" y="50" text-anchor="middle" font-size="7" opacity="0.4">Experts</text>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white/5 rounded-xl p-4 border border-white/5">
-                                <span class="block text-white font-bold text-sm mb-1">Digital Pros</span>
-                                <span class="text-[10px] text-slateCustom uppercase tracking-tight">Devs, Editors, Designers</span>
-                            </div>
-                            <div class="bg-white/5 rounded-xl p-4 border border-white/5">
-                                <span class="block text-white font-bold text-sm mb-1">On-the-Ground</span>
-                                <span class="text-[10px] text-slateCustom uppercase tracking-tight">Planners, Cleaners, Techs</span>
-                            </div>
-                        </div>
+                            <!-- Physical Worker -->
+                            <rect x="440" y="0" width="120" height="70" rx="12" fill="rgba(251, 191, 36, 0.05)" stroke="var(--execution)" stroke-width="1" stroke-dasharray="4 4"/>
+                            <text class="label-sub" x="500" y="35" text-anchor="middle" font-size="9">Physical</text>
+                            <text class="label-sub" x="500" y="50" text-anchor="middle" font-size="7" opacity="0.4">Specialists</text>
+
+                            <!-- Central Protocol -->
+                            <circle cx="340" cy="35" r="30" fill="var(--bg-chip)" stroke="var(--engine)" stroke-width="1"/>
+                            <text class="label-main" x="340" y="40" text-anchor="middle" font-size="8">S-v1</text>
+                        </g>
+                        
+                        <!-- Connection Junctions -->
+                        <circle cx="100" cy="320" r="3" fill="var(--process)"/>
+                        <circle cx="340" cy="320" r="3" fill="var(--process)"/>
+                        <circle cx="580" cy="320" r="3" fill="var(--process)"/>
+                    </svg>
+
+                    <!-- Bottom Detail -->
+                    <div class="mt-8 flex justify-between items-center opacity-30">
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                        <span class="px-4 font-mono text-[8px] text-white tracking-[0.4em] uppercase">End-to-End Execution Infrastructure</span>
+                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                     </div>
-
-                </div>
-
-                <!-- The "Meeting Point" Tagline -->
-                <div class="mt-20 text-center" data-aos="fade-up" data-aos-delay="400">
-                    <p class="text-lg text-slateCustom italic">
-                        "Where clients who value quality meet professionals who value structure."
-                    </p>
                 </div>
             </div>
         </section>
@@ -428,8 +499,7 @@
                         Chaos is expensive<span class="text-rose-500">.</span>
                     </h2>
                     <p class="text-slateCustom text-base md:text-xl font-light leading-relaxed">
-                        Hiring on WhatsApp, Twitter, or Upwork isn't just slow, it's a liability. 
-                        When your infrastructure is built on <span class="text-white">fragmented DMs</span>, execution becomes a game of luck.
+                        A single request turns into scattered chats, uneven pricing, and unclear decisions, <span class="text-rose-500 tracking-[0.2em]">execution becomes luck.</span>
                     </p>
                 </div>
 
@@ -439,58 +509,60 @@
                     <!-- Card 1: The WhatsApp Mess -->
                     <div data-aos="fade-right" data-aos-delay="100" data-aos-duration="1400" class="flex-1 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
                         <div class="relative z-10">
-                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
+                            <div class="text-rose-500 mb-10 group-hover:-translate-y-2 transition-transform duration-500">
                                 <span class="material-symbols-outlined text-5xl font-light italic">chat_bubble_outline</span>
                             </div>
-                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">The DM Grave</h4>
+                            <h4 class="text-white font-bold text-2xl mb-5 tracking-tight">Scattered Conversations</h4>
                             <p class="text-slateCustom text-sm leading-relaxed font-medium">
-                                Critical specs buried under "seen" receipts and voice notes. If you can't search it in 2 seconds, you've already lost time.
+                                One request turns into messages across WhatsApp, Twitter, and everywhere else. Nothing is structured, nothing is easy to compare.
                             </p>
                         </div>
-                        <!-- Subtle Background Icon -->
-                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">whatsapp</span>
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">forum</span>
                     </div>
 
-                    <!-- Card 2: The Vetting Grind (Slightly Offset for Desktop) -->
+
+                    <!-- Card 2: No Clear Way to Decide -->
                     <div data-aos="fade-up" data-aos-delay="200" class="flex-1 md:mt-12 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
                         <div class="relative z-10">
-                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
-                                <span class="material-symbols-outlined text-5xl font-light">person_search</span>
+                            <div class="text-rose-500 mb-10 group-hover:-translate-y-2 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">compare_arrows</span>
                             </div>
-                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">Twitter Lotto</h4>
+                            <h4 class="text-white font-bold text-2xl mb-5 tracking-tight">No Clear Way to Decide</h4>
                             <p class="text-slateCustom text-sm leading-relaxed font-medium">
-                                Vetting via "portfolio links" and vibes. You spend 40 hours a month filtering noise instead of building product.
+                                Everyone quotes differently. Different scopes, different prices. You’re left guessing who actually makes sense.
                             </p>
                         </div>
-                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">grid_view</span>
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">balance</span>
                     </div>
 
-                    <!-- Card 3: The Upwork Fees -->
+
+                    <!-- Card 3: Price vs Value Breakdown -->
                     <div data-aos="fade-up" data-aos-delay="300" class="flex-1 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
                         <div class="relative z-10">
-                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
+                            <div class="text-rose-500 mb-10 group-hover:-translate-y-2 transition-transform duration-500">
                                 <span class="material-symbols-outlined text-5xl font-light">payments</span>
                             </div>
-                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">Platform Tax</h4>
+                            <h4 class="text-white font-bold text-2xl mb-5 tracking-tight">Price Becomes the Game</h4>
                             <p class="text-slateCustom text-sm leading-relaxed font-medium">
-                                Losing 10-20% on every transaction to legacy platforms that provide zero actual project management or security.
+                                A $300 job gets posted for $50 and still gets flooded with proposals. Value disappears, and quality becomes a gamble for stars.
                             </p>
                         </div>
-                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">monetization_on</span>
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">trending_down</span>
                     </div>
 
-                    <!-- Card 4: The Ghosting (Slightly Offset for Desktop) -->
+
+                    <!-- Card 4: Trust & Payment Uncertainty -->
                     <div data-aos="fade-left" data-aos-delay="400" data-aos-duration="1400" class="flex-1 md:mt-12 group relative p-10 rounded-[2.5rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5 hover:border-rose-500/40 transition-all duration-700 overflow-hidden">
                         <div class="relative z-10">
-                            <div class="text-rose-500 mb-20 group-hover:-translate-y-2 transition-transform duration-500">
-                                <span class="material-symbols-outlined text-5xl font-light">ghost</span>
+                            <div class="text-rose-500 mb-10 group-hover:-translate-y-2 transition-transform duration-500">
+                                <span class="material-symbols-outlined text-5xl font-light">verified</span>
                             </div>
-                            <h4 class="text-white font-bold text-2xl mb-4 tracking-tight">Ghosting by Default</h4>
+                            <h4 class="text-white font-bold text-2xl mb-5 tracking-tight">Trust Is Uncertain</h4>
                             <p class="text-slateCustom text-sm leading-relaxed font-medium">
-                                The "I'll have it tomorrow" trap. Without escrowed milestones, accountability is just a suggestion, not a contract.
+                                Clients don’t know what they’ll get. Providers don’t know if they’ll get paid. Work starts without real guarantees.
                             </p>
                         </div>
-                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">air</span>
+                        <span class="absolute -bottom-4 -right-4 material-symbols-outlined text-9xl text-white/[0.02] group-hover:text-rose-500/5 transition-colors">gpp_maybe</span>
                     </div>
 
                 </div>
@@ -498,7 +570,7 @@
                 <!-- The Transition -->
                 <div class="mt-22 flex flex-col items-center" data-aos="zoom-in" data-aos-anchor-placement="top-bottom">
                     <p class="text-slateCustom uppercase tracking-[0.4em] text-[10px] font-black mb-6">Stop the bleeding</p>
-                    <div class="w-px h-24 bg-gradient-to-b from-rose-500 via-emerald-500 to-transparent"></div>
+                    <div class="w-px h-26 bg-gradient-to-b from-rose-500 via-emerald-500 to-transparent"></div>
                 </div>
             </div>
         </section>
@@ -545,30 +617,39 @@
                     <p class="text-center mt-6 text-xs tracking-[0.3em] uppercase text-slateCustom font-semibold">play to witness the engine</p>
                 </div>
 
-                <!-- Feature Bento: High-End Minimalism -->
-                <div data-aos="fade-up" data-aos-delay="100"class="grid grid-cols-1 md:grid-cols-3 gap-1px rounded-3xl overflow-hidden border border-white/10 shadow-2xl mb-24">
+                <!-- Feature Bento: Gains That Actually Matter -->
+                <div data-aos="fade-up" data-aos-delay="100" class="grid grid-cols-1 md:grid-cols-3 gap-1px rounded-3xl overflow-hidden border border-white/10 shadow-2xl mb-22">
                     
-                    <!-- Logic 01 -->
+                    <!-- Gain 01 -->
                     <div data-aos="fade-up" data-aos-delay="100" class="bg-charcoal p-12 group hover:bg-white/[0.02] transition-colors">
-                        <span class="text-emerald-500 font-mono text-sm tracking-tighter mb-4 block">01 / Scoping</span>
-                        <h4 class="text-white text-2xl font-bold mb-4">Zero Ambiguity</h4>
-                        <p class="text-slateCustom leading-relaxed font-light">Eliminate "Scope Creep" with automated milestone structuring. We define the finish line before you start.</p>
+                        <span class="text-emerald-500 font-mono text-sm tracking-tighter mb-4 block">01 / Clarity</span>
+                        <h4 class="text-white text-2xl font-bold mb-4">Know What You’re Getting</h4>
+                        <p class="text-slateCustom leading-relaxed font-light">
+                            Every proposal comes with clear deliverables, pricing, and timelines so you can compare and decide without guesswork.
+                        </p>
                     </div>
 
-                    <!-- Logic 02 -->
+                    <!-- Gain 02 -->
                     <div data-aos="fade-up" data-aos-delay="200" class="bg-charcoal p-12 group hover:bg-white/[0.02] transition-colors">
-                        <span class="text-indigo-400 font-mono text-sm tracking-tighter mb-4 block">02 / Trust</span>
-                        <h4 class="text-white text-2xl font-bold mb-4">Capital Security</h4>
-                        <p class="text-slateCustom leading-relaxed font-light">Escrow-backed transactions ensure you only release funds when execution meets the standard.</p>
+                        <span class="text-indigo-400 font-mono text-sm tracking-tighter mb-4 block">02 / Structure</span>
+                        <h4 class="text-white text-2xl font-bold mb-4">Start Work With Confidence</h4>
+                        <p class="text-slateCustom leading-relaxed font-light">
+                            No back-and-forth. No vague agreements. Every job begins with a clear contract and aligned expectations.
+                        </p>
                     </div>
 
-                    <!-- Logic 03 -->
+                    <!-- Gain 03 -->
                     <div data-aos="fade-up" data-aos-delay="300" class="bg-charcoal p-12 group hover:bg-white/[0.02] transition-colors">
-                        <span class="text-rose-400 font-mono text-sm tracking-tighter mb-4 block">03 / Speed</span>
-                        <h4 class="text-white text-2xl font-bold mb-4">Instant Matching</h4>
-                        <p class="text-slateCustom leading-relaxed font-light">Our engine weights providers by verified delivery speed, not just subjective reviews.</p>
-                    </div>
+                        <span class="text-rose-400 font-mono text-sm tracking-tighter mb-4 block">03 / Payments</span>
+                        <h4 class="text-white text-2xl font-bold mb-4">No Payment Uncertainty</h4>
+                        <p class="text-slateCustom leading-relaxed font-light">
+                            Clients stay in control of releases, and providers know exactly when they get paid; no chasing, no surprises.
+                        </p>
+                    </div> 
                 </div>
+                <p class="text-center text-xs text-white/40 my-12 italic tracking-[0.2em]" data-aos="fade-up" data-aos-delay="400">
+                    Clarity before work. Structure during work. Certainty after work.
+                </p>
 
                 <!-- The "Final Lock": Join Waiting List -->
                 <div id="waitlist" data-aos="fade-up" data-aos-duration="1500" data-aos-easing="ease-out-cubic" 
@@ -588,13 +669,11 @@
                     <div data-aos="fade-up" data-aos-delay="400" class="max-w-3xl mx-auto">
                         <form class="waitlist-form flex flex-col md:flex-row items-center gap-4 p-2 bg-white/[0.02] border border-white/5 rounded-3xl md:rounded-full backdrop-blur-sm">
                             
-                            <!-- Email Input -->
                             <div class="w-full md:flex-[1.5] relative">
                                 <input type="email" name="email" placeholder="Enter your business email" required
                                     class="w-full bg-transparent py-4 px-6 text-white focus:outline-none placeholder:text-slateCustom border-b md:border-b-0 md:border-r border-white/10" required>
                             </div>
 
-                            <!-- Role Selector -->
                             <div class="w-full md:flex-1 relative">
                                 <select name="role" required class="w-full bg-transparent py-4 px-6 text-white focus:outline-none appearance-none cursor-pointer font-medium">
                                     <option value="" disabled selected class="bg-charcoal">I am a...</option>
@@ -602,7 +681,6 @@
                                     <option value="provider" class="bg-charcoal">Service Provider</option>
                                     <option value="both" class="bg-charcoal">Both</option>
                                 </select>
-                                <!-- Custom Arrow Icon -->
                                 <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slateCustom">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </div>

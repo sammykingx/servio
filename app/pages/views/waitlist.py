@@ -5,9 +5,9 @@ from django.http import JsonResponse, HttpRequest
 from datetime import datetime
 import json, os
 
+
 class WaitingListView(View):
     template_name = "waiting-list.html"
-    STORAGE_PATH = os.path.join(settings.BASE_DIR, 'data', 'waitlist.json')
 
     def get(self, request: HttpRequest):
         launch_date = datetime(2026, 7, 15, 11, 50, 59)
