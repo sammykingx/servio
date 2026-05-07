@@ -36,6 +36,11 @@ class ProposalDeliverable(models.Model):
         default=0,
         help_text="Defines the display sequence to preserve the order in which deliverables were entered.",
     )
+    release_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        help_text="Percentage of agreed_amount released upon approval of this deliverable. All deliverables on a role must sum to 100."
+    )
     
     class Meta:
         db_table="deliverables"
