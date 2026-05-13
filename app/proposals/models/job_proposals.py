@@ -4,7 +4,7 @@ from django.db.models.functions import Coalesce
 from django.conf import settings
 from django.utils import timezone
 from uuid6 import uuid7
-from .choices import ProposalStatus
+from ...collaboration.models.choices import ProposalStatus
 
 
 class Proposal(models.Model):

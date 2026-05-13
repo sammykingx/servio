@@ -8,12 +8,10 @@ from .views.modify import EditGigView, LiveEditCollaborationView
 from .views.detail import GigDetailView
 from .views.delete import DeleteGigView
 from .views.start_collaboration import StartCollaborationView
-from .proposals import urls as proposal_urls
 from .oppurtunities import urls as oppurtunity_urls
 from template_map.collaboration import Collabs
 
 urlpatterns = [
-     path("proposals/", include(proposal_urls)),
      path("oppurtunities/", include(oppurtunity_urls)),
      path(
         "",

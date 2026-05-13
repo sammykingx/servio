@@ -5,9 +5,9 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
 from collaboration.models.choices import GigStatus, GigVisibility, ProposalStatus
-from collaboration.proposals.exceptions import ProposalError
-from collaboration.proposals.services import ProposalService
-from collaboration.schemas.modify_proposal_state import ModifyProposalState
+from ..domain.exceptions import ProposalError
+from ..application.services import ProposalService
+from ..application.dto.modify_proposal_state import ModifyProposalState
 from core.url_names import CollaborationURLS
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
@@ -99,7 +99,7 @@ class SentProposalListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.SENT_PROPOSALS
     context_object_name = "proposals"
     paginate_by = 7
-    model = get_registered_model("collaboration", "Proposal")
+    model = object #get_registered_model("collaboration", "Proposal")
 
     def get_queryset(self):
         qs = (

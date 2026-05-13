@@ -10,7 +10,7 @@ from template_map.collaboration import Collabs
 
 
 class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
-    model = get_registered_model("collaboration", "Proposal")
+    model = object # get_registered_model("collaboration", "Proposal")
     template_name = Collabs.Proposals.VIEW_DELIEVERABLES
     context_object_name = "proposal"
     pk_url_kwarg = "proposal_id"

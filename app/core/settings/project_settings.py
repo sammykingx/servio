@@ -16,6 +16,7 @@ LOCAL_APPS = [
     "business_accounts.apps.BusinessAccountsConfig",
     "business_services.apps.BusinessServicesConfig",
     "collaboration.apps.CollaborationConfig",
+    "proposals.apps.ProposalConfig",
     "payments.apps.PaymentsConfig",
 ]
 

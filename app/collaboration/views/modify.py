@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 GigCategory = get_registered_model("collaboration", "GigCategory")
 GigModel = get_registered_model("collaboration", "Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
-ProposalModel = get_registered_model("collaboration", "Proposal")
+# ProposalModel = get_registered_model("proposals", "Proposal")
 
 
 class EditGigView(LoginRequiredMixin, DetailView):
@@ -487,19 +487,19 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         gig = self.object
-        proposals = (
-            ProposalModel.objects
-            .filter(gig=gig)
-            .select_related("sender__profile")
-            .order_by("-created_at")
-            .only(
-                "sender__first_name", 
-                "sender__last_name", 
-                "sender__profile__avatar_url"
-            )
-        )
+        # proposals = (
+        #     ProposalModel.objects
+        #     .filter(gig=gig)
+        #     .select_related("sender__profile")
+        #     .order_by("-created_at")
+        #     .only(
+        #         "sender__first_name", 
+        #         "sender__last_name", 
+        #         "sender__profile__avatar_url"
+        #     )
+        # )
         
-        context["proposals"] = proposals
+        context["proposals"] = None #proposals
 
         return context
     

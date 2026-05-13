@@ -4,7 +4,6 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
-from collaboration.models.choices import GigStatus, GigVisibility
 from core.url_names import CollaborationURLS
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
@@ -14,7 +13,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.PROPOSAL_LIST
     context_object_name = "applications"
     paginate_by = 18
-    model = get_registered_model("collaboration", "Proposal")
+    model = object # get_registered_model("collaboration", "Proposal")
 
     def dispatch(self, request, *args, **kwargs):
         """

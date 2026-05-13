@@ -17,7 +17,7 @@ NON-GOALS:
 - Orchestration (e.g., Sending emails or updating state).
 """
 
-from collaboration.schemas.send_proposal import AppliedRoles, SendProposal
+from proposals.application.dto.send_proposal import AppliedRoles, SendProposal
 from constants import SERVICE_FEE, DECIMAL_PLACE
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure

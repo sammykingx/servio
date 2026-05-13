@@ -29,20 +29,20 @@ from django.urls import reverse_lazy
 from django.db import transaction, IntegrityError, OperationalError
 from core.url_names import PaymentURLS
 from collaboration.models.choices import ProposalRoleStatus
-from collaboration.schemas.send_proposal import (
+from proposals.application.dto.send_proposal import (
     AppliedRoles,
     DeliverablesPayload,
     SendProposal,
 )
-from collaboration.schemas.modify_proposal_state import ModifyProposalState
+from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from constants import SERVICE_FEE, DECIMAL_PLACE
 from registry_utils import get_registered_model
 from services.email_service import EmailService
 from template_map.emails import ProposalMails
-from .exceptions import ProposalError, ProposalPermissionDenied
-from .polices import ProposalPolicy
-from .status_codes import PolicyFailure
-from .validators import ProposalValidator
+from ..domain.exceptions import ProposalError, ProposalPermissionDenied
+from ..domain.polices import ProposalPolicy
+from ..domain.status_codes import PolicyFailure
+from ..domain.validators import ProposalValidator
 from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 from uuid import UUID
@@ -55,9 +55,9 @@ GigModel = get_registered_model("collaboration", "Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
 GigCategoryModel = get_registered_model("collaboration", "Gigcategory")
 
-Proposal = get_registered_model("collaboration", "Proposal")
-ProposalRole = get_registered_model("collaboration", "ProposalRole")
-ProposalDeliverable = get_registered_model("collaboration", "ProposalDeliverable")
+Proposal = object #get_registered_model("collaboration", "Proposal")
+ProposalRole = object #get_registered_model("collaboration", "ProposalRole")
+ProposalDeliverable = object #get_registered_model("collaboration", "ProposalDeliverable")
 
 
 def get_error_redirect(code: str, context: dict = None) -> str:

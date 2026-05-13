@@ -12,7 +12,7 @@ from registry_utils import get_registered_model
 
 GigModel = get_registered_model("collaboration","Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
-ProposalModel = get_registered_model("collaboration", "Proposal")
+ProposalModel = object#get_registered_model("collaboration", "Proposal")
 
 class OppurtuniyDetailView(LoginRequiredMixin, DetailView):
     model = GigModel

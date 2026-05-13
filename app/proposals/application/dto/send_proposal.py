@@ -1,4 +1,4 @@
-from ..models.choices import PaymentOption
+from collaboration.models.choices import PaymentOption
 from pydantic import BaseModel, Field, field_validator, model_validator
 from datetime import date, datetime
 from decimal import Decimal

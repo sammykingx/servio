@@ -1,7 +1,7 @@
 from django.urls import path, include, reverse_lazy
 from django.views.generic import RedirectView
 from core.url_names import ProposalURLS
-from collaboration.proposals.views import (
+from proposals.views import (
     RecievedProposalListView,
     ProposalRoleListView,
     SentProposalListView,

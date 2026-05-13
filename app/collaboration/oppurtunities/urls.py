@@ -3,7 +3,7 @@ from core.url_names import OppurtunitiesURLS
 from django.views.generic import RedirectView
 from .views.list import OppurtunityListView
 from .views.detail import OppurtuniyDetailView
-from .views.accept_offer import AcceptOppurtuniyDetailView
+from .views.send_service_request import AcceptOppurtuniyDetailView
 
 
 urlpatterns = [

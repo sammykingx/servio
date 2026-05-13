@@ -1,5 +1,5 @@
 from django.db import models
-from .choices import PaymentOption, ProposalRoleStatus
+from ...collaboration.models.choices import PaymentOption, ProposalRoleStatus
 from constants import DECIMAL_PLACE, SERVICE_FEE
 from decimal import Decimal, ROUND_HALF_UP
 

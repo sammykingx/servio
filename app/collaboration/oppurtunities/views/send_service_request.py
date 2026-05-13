@@ -4,10 +4,10 @@ from django.shortcuts import redirect
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from collaboration.models.choices import GigStatus, PaymentOption
-from collaboration.proposals.exceptions import ProposalError
-from collaboration.proposals.services import ProposalService
+from proposals.domain.exceptions import ProposalError
+from proposals.application.services import ProposalService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
-from collaboration.schemas.send_proposal import SendProposal
+from proposals.application.dto.send_proposal import SendProposal
 from core.url_names import OppurtunitiesURLS, ProposalURLS
 from template_map.collaboration import Collabs
 from registry_utils import get_registered_model
@@ -37,6 +37,13 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         except Http404:
             return redirect(reverse_lazy(OppurtunitiesURLS.ALL))
+        
+    def user_can_apply_for_role(self, user, role) -> bool:
+        if not user.is_authenticated:
+            return False
+
+        user_niches = set(user.profile.get_user_niches)
+        return role.role_id in user_niches
     
     def get_context_data(self, **kwargs):
         context =super().get_context_data(**kwargs)
@@ -47,7 +54,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
         role_payment_plan = {}
         if roles:
             for role in roles:
-                role.can_apply = user_can_apply_for_role(self.request.user, role)
+                role.can_apply = self.user_can_apply_for_role(self.request.user, role)
                 payment_value = role.payment_option
 
                 is_split = PaymentOption.is_split(payment_value)
@@ -128,9 +135,4 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
         })
     
 
-def user_can_apply_for_role(user, role) -> bool:
-    if not user.is_authenticated:
-        return False
 
-    user_niches = set(user.profile.get_user_niches)
-    return role.role_id in user_niches

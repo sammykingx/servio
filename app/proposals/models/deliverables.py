@@ -30,7 +30,7 @@ class ProposalDeliverable(models.Model):
     )
 
     duration_value = models.PositiveIntegerField()
-    due_date = models.DateField()
+    # due_date = models.DateField()
     is_completed = models.BooleanField(default=False)
     order = models.PositiveIntegerField(
         default=0,

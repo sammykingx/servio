@@ -20,7 +20,6 @@ class WaitingListView(View):
         email = request.POST.get('email', '').strip().lower()
         role = request.POST.get('role', '').strip().lower()
         valid_roles = ['client', 'provider', 'both']
-        invalid_email_ext = {"@example.com", "@test.com", "@invalid.com", "@fake.com", "@demo.com"}
 
         if not email or role not in valid_roles:
             return JsonResponse({

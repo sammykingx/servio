@@ -25,6 +25,7 @@ from notifications.views import service_worker
 import accounts.urls
 import business_accounts.urls
 import collaboration.urls
+import proposals.urls
 import notifications.urls
 import payments.urls
 import smart_release.urls
@@ -35,13 +36,16 @@ handler404 = "core.views.custom_404"
 handler500 = "core.views.custom_500"
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="index.html"), name="index-page"),
-    path("waiting-list/", WaitingListView.as_view(), name="waiting-list-page"),
+    # IN-ACTIVE URLS
     # path("admin/", admin.site.urls),
     # path("allauth/", include("allauth.urls")),
-    path("accounts/", include(accounts.urls)),
     # path("business/", include(business_accounts.urls)),
+    
+    path("", TemplateView.as_view(template_name="index.html"), name="index-page"),
+    path("waiting-list/", WaitingListView.as_view(), name="waiting-list-page"),
+    path("accounts/", include(accounts.urls)),
     path("collaboration/", include(collaboration.urls)),
+    path("proposals/", include(proposals.urls)),
     path("notifications/", include(notifications.urls)),
     path("payments/", include(payments.urls)),
     path("smart-release/", include(smart_release.urls)),
@@ -51,6 +55,7 @@ urlpatterns = [
         name=ReviewURLS.OVERVIEW
     ),
     path("firebase-messaging-sw.js", service_worker, name="firebase-service-worker"),
+    
     # path(
     #     "client/",
     #     TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
