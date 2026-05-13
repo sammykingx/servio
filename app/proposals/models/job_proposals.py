@@ -4,22 +4,22 @@ from django.db.models.functions import Coalesce
 from django.conf import settings
 from django.utils import timezone
 from uuid6 import uuid7
-from ...collaboration.models.choices import ProposalStatus
+from .choices import ProposalStatus
 
 
 class Proposal(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
-
     gig = models.ForeignKey(
         "collaboration.Gig",
         on_delete=models.PROTECT,
         related_name="proposals",
     )
 
-    sender = models.ForeignKey(
+    provider = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
         related_name="proposals",
+        help_text="A service provider sending the proposal object"
     )
 
     status = models.CharField(
@@ -28,13 +28,13 @@ class Proposal(models.Model):
         default=ProposalStatus.SENT,
     )
 
-    total_cost = models.DecimalField(
+    total_value = models.DecimalField(
         max_digits=12,
         decimal_places=2,
         null=True,
         blank=True,
         help_text=(
-            "The worth of the user's proposal (summation of role amounts). "
+            "The worth of the provider's proposal (summation of role amounts). "
             "This is filled during and after the proposal creation or accepted."
         )
     )
@@ -52,14 +52,14 @@ class Proposal(models.Model):
         ordering = ["-created_at"]
         constraints = [
             models.UniqueConstraint(
-                fields=["gig", "sender"],
-                name="unique_sender_proposal_per_gig",
+                fields=["gig", "provider"],
+                name="unique_provider_proposal_per_gig",
             )
         ]
         indexes = [
-            models.Index(fields=['sender', 'status'], name='proposal_sender_status_idx'),
+            models.Index(fields=['provider', 'status'], name='proposal_provider_status_idx'),
             models.Index(fields=['gig', 'status'], name='proposal_gig_status_idx'),
-            models.Index(fields=['sender', 'gig'], name='proposal_sender_gig_idx'),
+            models.Index(fields=['provider', 'gig'], name='provider_proposal__gig_idx'),
         ]
     
     def calculate_total_role_cost(self):

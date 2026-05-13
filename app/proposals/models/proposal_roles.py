@@ -1,12 +1,13 @@
 from django.db import models
-from ...collaboration.models.choices import PaymentOption, ProposalRoleStatus
+from collaboration.models.choices import PaymentOption
+from .choices import ProposalRoleStatus
 from constants import DECIMAL_PLACE, SERVICE_FEE
 from decimal import Decimal, ROUND_HALF_UP
 
 
 class ProposalRole(models.Model):
     proposal = models.ForeignKey(
-        "collaboration.Proposal",
+        "Proposal",
         on_delete=models.CASCADE,
         related_name="roles",
     )
@@ -38,13 +39,6 @@ class ProposalRole(models.Model):
     )
 
     proposed_amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        null=True,
-        blank=True,
-    )
-
-    final_amount = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         null=True,

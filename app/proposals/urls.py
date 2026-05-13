@@ -1,14 +1,13 @@
 from django.urls import path, include, reverse_lazy
 from django.views.generic import RedirectView
 from core.url_names import ProposalURLS
-from proposals.views import (
+from .views import (
     RecievedProposalListView,
     ProposalRoleListView,
     SentProposalListView,
     UpdateProposalStateView,
     RenderProposalDeliverablesView
 )
-from template_map.collaboration import Collabs
 
 
 urlpatterns = [

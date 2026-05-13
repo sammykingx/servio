@@ -15,7 +15,7 @@ from ..exceptions import GigError
 class DeleteGigView(LoginRequiredMixin, View):
     allowed_http_methods = ["POST"]
     model = get_registered_model("collaboration", "Gig")
-    proposal_model = object #get_registered_model("collaboration", "Proposal")
+    proposal_model = get_registered_model("proposals", "Proposal")
 
     def post(self, request, *args, **kwargs):
         gig_slug = kwargs.get("slug")

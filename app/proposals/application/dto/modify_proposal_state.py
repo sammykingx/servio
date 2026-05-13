@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from collaboration.models.choices import ProposalRoleStatus
+from proposals.models.choices import ProposalRoleStatus
 from uuid import UUID
 
 

@@ -28,7 +28,7 @@ from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 from django.db import transaction, IntegrityError, OperationalError
 from core.url_names import PaymentURLS
-from collaboration.models.choices import ProposalRoleStatus
+from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.send_proposal import (
     AppliedRoles,
     DeliverablesPayload,
@@ -55,9 +55,9 @@ GigModel = get_registered_model("collaboration", "Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
 GigCategoryModel = get_registered_model("collaboration", "Gigcategory")
 
-Proposal = object #get_registered_model("collaboration", "Proposal")
-ProposalRole = object #get_registered_model("collaboration", "ProposalRole")
-ProposalDeliverable = object #get_registered_model("collaboration", "ProposalDeliverable")
+Proposal = get_registered_model("proposals", "Proposal")
+ProposalRole = get_registered_model("proposals", "ProposalRole")
+ProposalDeliverable = get_registered_model("proposals", "ProposalDeliverable")
 
 
 def get_error_redirect(code: str, context: dict = None) -> str:

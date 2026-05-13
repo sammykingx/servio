@@ -19,7 +19,8 @@ NON-GOALS:
 """
 
 from django.utils import timezone
-from collaboration.models.choices import GigStatus, RoleStatus, ProposalRoleStatus
+from collaboration.models.choices import GigStatus, RoleStatus
+from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from .exceptions import ProposalPermissionDenied
 from .status_codes import PolicyFailure

@@ -1,15 +1,11 @@
 from django.db import models
 from django.conf import settings
+from .choices import DurationUnit
 
-
-class DurationUnit(models.TextChoices):
-    DAYS = "days", "Days"
-    WEEKS = "weeks", "Weeks"
-    MONTHS = "months", "Months"
 
 class ProposalDeliverable(models.Model):
-    proposal = models.ForeignKey(
-        "collaboration.Proposal",
+    proposal_role = models.ForeignKey(
+        "ProposalRole",
         on_delete=models.CASCADE,
         related_name="deliverables",
     )

@@ -4,7 +4,8 @@ from django.db.models.functions import Coalesce
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
-from collaboration.models.choices import GigStatus, GigVisibility, ProposalStatus
+from collaboration.models.choices import GigStatus, GigVisibility
+from proposals.models.choices import ProposalStatus
 from ..domain.exceptions import ProposalError
 from ..application.services import ProposalService
 from ..application.dto.modify_proposal_state import ModifyProposalState
@@ -24,7 +25,7 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
     model = get_registered_model("collaboration", "Gig")
 
     def get_queryset(self):
-        Proposal = get_registered_model("collaboration", "Proposal")
+        Proposal = get_registered_model("proposals", "Proposal")
         proposals = Proposal.objects.filter(gig=OuterRef("pk"))
         base_qs = (
             super()
@@ -56,8 +57,8 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        Proposal = get_registered_model("collaboration", "Proposal")
-        ProposalRole = get_registered_model("collaboration", "ProposalRole")
+        Proposal = get_registered_model("proposals", "Proposal")
+        ProposalRole = get_registered_model("proposals", "ProposalRole")
 
         gig_filter = Q(
             creator=self.request.user,
@@ -99,13 +100,13 @@ class SentProposalListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.SENT_PROPOSALS
     context_object_name = "proposals"
     paginate_by = 7
-    model = object #get_registered_model("collaboration", "Proposal")
+    model = get_registered_model("proposals", "Proposal")
 
     def get_queryset(self):
         qs = (
             super()
             .get_queryset()
-            .filter(sender=self.request.user)
+            .filter(provider=self.request.user)
             .select_related(
                 "gig",
             )

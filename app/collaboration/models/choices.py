@@ -49,35 +49,8 @@ class PaymentOption(models.TextChoices):
             self.SPLIT_40_30_30: "40% / 30% / 30%",
             self.SPLIT_50_30_20: "50% / 30% / 20%",
         }[self]
-
+        
 class RoleStatus(models.TextChoices):
     ASSIGNED = "assigned", "Assigned"
     OPEN = "open", "Open"
     COMPLETED = "completed", "Completed"
-
-class ProposalStatus(models.TextChoices):
-    # Initial Stages (what providers see)
-    SENT = "sent", "Sent"
-    
-    # Engagement Tracking
-    REVIEWING = "reviewing", "In Review" # when the cretor opens the proposal to see deliverables, not done yet
-    
-    # Active Discussion (not implemented)
-    NEGOTIATING = "negotiating", "Negotiation"
-      
-    # Final Outcomes
-    ACCEPTED = "accepted", "Accepted"
-    REJECTED = "rejected", "Rejected"
-    WITHDRAWN = "withdrawn", "Withdrawn" # providers can withdraw their proposal
-    
-class ProposalRoleStatus(models.TextChoices):
-    SUBMITTED = "submitted", "Submitted"
-    ACCEPTED = "accepted", "Accepted"
-    REJECTED = "rejected", "Rejected"
-    WITHDRAWN = "withdrawn", "Withdrawn"
-    
-# class AssignmentStatus(models.TextChoices):
-#     ONGOING = "ongoing", "Ongoing"
-#     COMPLETED = "completed", "Completed"
-#     WITHDRAWN = "withdrawn", "Withdrawn"
-#     REVISIONS_PENDING = "revisions_pending", "Revisions Requested"

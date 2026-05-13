@@ -40,7 +40,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         Returns:
             QuerySet: A filtered and annotated queryset of user-owned gigs.
         """
-        ProposalModel = get_registered_model("collaboration", "Proposal")
+        ProposalModel = get_registered_model("proposals", "Proposal")
         proposal_prefetch = Prefetch(
             "proposals",
             queryset=ProposalModel.objects.select_related("sender").only(
@@ -117,5 +117,3 @@ class CollaborationListView(LoginRequiredMixin, ListView):
             return render(self.request, htmx_response, context)
         
         return super().render_to_response(context, **response_kwargs)
-
-

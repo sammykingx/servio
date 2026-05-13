@@ -12,8 +12,8 @@ from registry_utils import get_registered_model
 
 GigModel = get_registered_model("collaboration","Gig")
 GigRoleModel = get_registered_model("collaboration", "GigRole")
-ProposalModel = object #get_registered_model("proposals", "Proposal")
-ProposalRoleModel = object #get_registered_model("collaboration", "ProposalRole")
+ProposalModel = get_registered_model("proposals", "Proposal")
+ProposalRoleModel = get_registered_model("proposals", "ProposalRole")
 
 
 class GigDetailView(LoginRequiredMixin, DetailView):
