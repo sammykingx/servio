@@ -27,6 +27,7 @@ Services orchestrate. Domain modules decide and validate.
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 from django.db import transaction, IntegrityError, OperationalError
+from core.model_registry import registry
 from core.url_names import PaymentURLS
 from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.send_proposal import (
@@ -36,7 +37,6 @@ from proposals.application.dto.send_proposal import (
 )
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from constants import SERVICE_FEE, DECIMAL_PLACE
-from registry_utils import get_registered_model
 from services.email_service import EmailService
 from template_map.emails import ProposalMails
 from ..domain.exceptions import ProposalError, ProposalPermissionDenied
@@ -51,13 +51,13 @@ import logging
 
 logger = logging.getLogger("app_file")
 
-GigModel = get_registered_model("collaboration", "Gig")
-GigRoleModel = get_registered_model("collaboration", "GigRole")
-GigCategoryModel = get_registered_model("collaboration", "Gigcategory")
+GigModel = registry.Gig
+GigRoleModel = registry.GigRole
+GigCategoryModel = registry.GigCategory
 
-Proposal = get_registered_model("proposals", "Proposal")
-ProposalRole = get_registered_model("proposals", "ProposalRole")
-ProposalDeliverable = get_registered_model("proposals", "ProposalDeliverable")
+Proposal = registry.Proposal
+ProposalRole = registry.ProposalRole
+ProposalDeliverable = registry.ProposalDeliverable
 
 
 def get_error_redirect(code: str, context: dict = None) -> str:
@@ -225,7 +225,6 @@ class ProposalService:
             raise err
 
     def _get_role_object(self, gig, role_id):
-        GigRoleModel = get_registered_model("collaboration", "GigRole")
         try:
             return gig.required_roles.get(role_id=role_id)
         except GigRoleModel.DoesNotExist:

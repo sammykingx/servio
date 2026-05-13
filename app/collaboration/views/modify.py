@@ -7,9 +7,9 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from collaboration.models.choices import GigStatus
 from collaboration.schemas.modify_gig import ModifyLiveGig
+from core.model_registry import registry
 from core.url_names import CollaborationURLS
 from formatters.pydantic_formatter import format_pydantic_errors
-from registry_utils import get_registered_model
 from template_map.collaboration import Collabs
 from ..exceptions import GigError
 from ..schemas import CreateGigRequest, GigStates
@@ -21,10 +21,9 @@ import json, logging
 logger = logging.getLogger(__name__)
 
 
-GigCategory = get_registered_model("collaboration", "GigCategory")
-GigModel = get_registered_model("collaboration", "Gig")
-GigRoleModel = get_registered_model("collaboration", "GigRole")
-# ProposalModel = get_registered_model("proposals", "Proposal")
+GigCategory = registry.GigCategory
+GigModel = registry.Gig
+GigRoleModel = registry.GigRole
 
 
 class EditGigView(LoginRequiredMixin, DetailView):
@@ -435,7 +434,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
 
 class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
     template_name = Collabs.LIVE_EDIT
-    model = get_registered_model("collaboration", "Gig")
+    model = GigModel
     slug_field = "slug"
     slug_url_kwarg = "slug"
     context_object_name = "gig"
@@ -607,7 +606,7 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
         from django.db import OperationalError, IntegrityError
         from django.db.models import F
         
-        ProposalRoleModel = get_registered_model("collaboration", "ProposalRole")
+        ProposalRoleModel = registry.ProposalRole
         
         try:
             gig = (

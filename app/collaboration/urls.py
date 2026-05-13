@@ -49,7 +49,7 @@ urlpatterns = [
          login_required(TemplateView.as_view(template_name=Collabs.Contracts.VIEW_CONTRACT)),
          name=ContractURLS.PREVIEW_CONTRACT,
      ),
-    path("contact/<uuid:proposal_id>/<uuid:role_id>/",
+    path("contract/<uuid:proposal_id>/<uuid:role_id>/",
          StartCollaborationView.as_view(),
          name=CollaborationURLS.START_COLLABORATION,
      ),

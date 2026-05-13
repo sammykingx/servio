@@ -7,7 +7,7 @@ from django.views.generic import View
 from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
 from formatters.pydantic_formatter import format_pydantic_errors
-from registry_utils import get_registered_model
+from core.model_registry import registry
 from ..schemas import CreateGigRequest, GigStates, get_response_msg
 from ..schemas.gig import GigPayload
 from ..schemas.gig_role import PAYMENT_OPTIONS
@@ -15,26 +15,26 @@ from pydantic import ValidationError
 import json
 
 
-GigCategory = get_registered_model("collaboration", "GigCategory")
-GigModel = get_registered_model("collaboration", "Gig")
-GigRoleModel = get_registered_model("collaboration", "GigRole")
+GigCategory = registry.GigCategory
+GigModel = registry.Gig
+GigRoleModel = registry.GigRole
 
 
 class CreateCollaborationView(LoginRequiredMixin, View):
     """
-    Handles the creation of collaboration gigs/projects.
+        Handles the creation of collaboration gigs/projects.
 
-    This view supports rendering the collaboration creation page and
-    processing gig creation requests submitted via JSON payloads.
+        This view supports rendering the collaboration creation page and
+        processing gig creation requests submitted via JSON payloads.
 
-    Responsibilities:
-    - Renders the gig creation form with required taxonomy and payment data.
-    - Accepts and validates JSON payloads for creating gigs.
-    - Persists gig and associated role data atomically.
-    - Handles draft and publish workflows based on the requested action.
-    - Returns structured JSON responses for success and error cases.
+        Responsibilities:
+        - Renders the gig creation form with required taxonomy and payment data.
+        - Accepts and validates JSON payloads for creating gigs.
+        - Persists gig and associated role data atomically.
+        - Handles draft and publish workflows based on the requested action.
+        - Returns structured JSON responses for success and error cases.
 
-    Access is restricted to authenticated users.
+        Access is restricted to authenticated users.
     """
 
     http_method_names = ["get", "post"]
@@ -87,8 +87,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
             )
 
         except ValidationError as e:
-            fields = format_pydantic_errors(e),
-            print(fields)
+            fields = format_pydantic_errors(e)
             return JsonResponse(
                 {
                     "error": "Validation error",

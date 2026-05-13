@@ -43,8 +43,8 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         ProposalModel = get_registered_model("proposals", "Proposal")
         proposal_prefetch = Prefetch(
             "proposals",
-            queryset=ProposalModel.objects.select_related("sender").only(
-                "id", "sender__id", "sender__profile__avatar_url"
+            queryset=ProposalModel.objects.select_related("provider").only(
+                "id", "provider__id", "provider__profile__avatar_url"
             ),
             to_attr="prefetched_proposals"
         )

@@ -5,14 +5,14 @@ from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.address import AddressType
 from collaboration.models.choices import GigStatus, PaymentOption
+from core.model_registry import registry
 from core.url_names import OppurtunitiesURLS
 from template_map.collaboration import Collabs
-from registry_utils import get_registered_model
 
 
-GigModel = get_registered_model("collaboration","Gig")
-GigRoleModel = get_registered_model("collaboration", "GigRole")
-ProposalModel = object#get_registered_model("collaboration", "Proposal")
+GigModel = registry.Gig
+GigRoleModel = registry.GigRole
+ProposalModel = registry.Proposal
 
 class OppurtuniyDetailView(LoginRequiredMixin, DetailView):
     model = GigModel

@@ -8,16 +8,16 @@ from proposals.domain.exceptions import ProposalError
 from proposals.application.services import ProposalService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
 from proposals.application.dto.send_proposal import SendProposal
+from core.model_registry import registry
 from core.url_names import OppurtunitiesURLS, ProposalURLS
 from template_map.collaboration import Collabs
-from registry_utils import get_registered_model
 from pydantic import ValidationError
 import json
 
 
-GigCategoryModel = get_registered_model("collaboration", "GigCategory")
-GigModel = get_registered_model("collaboration","Gig")
-GigRoleModel = get_registered_model("collaboration", "GigRole")
+GigCategoryModel = registry.GigCategory
+GigModel = registry.Gig
+GigRoleModel = registry.GigRole
 
 
 class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):

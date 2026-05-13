@@ -2,13 +2,14 @@ from django.shortcuts import render
 from django.db.models import Exists, Q, OuterRef, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
+from core.model_registry import registry
 from collaboration.models.choices import GigStatus, GigVisibility, RoleStatus
 from template_map.collaboration import Collabs
-from registry_utils import get_registered_model
 
 
-GigsModel = get_registered_model("collaboration", "Gig")
-GigRole = get_registered_model("collaboration", "GigRole")
+GigsModel = registry.Gig
+GigRole = registry.GigRole
+Proposal = registry.Proposal
 
 
 class OppurtunityListView(LoginRequiredMixin, ListView):
@@ -56,11 +57,9 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
         user_niches = profile.get_user_niches
         user_niche_count = len(user_niches)
         
-        Proposal = get_registered_model("collaboration", "Proposal")
-        
         user_proposals = Proposal.objects.filter(
             gig=OuterRef("pk"),
-            sender=user
+            provider=user
         )
         
         base_qs = (

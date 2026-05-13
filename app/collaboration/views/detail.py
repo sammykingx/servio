@@ -4,16 +4,16 @@ from django.shortcuts import redirect
 from django.db.models import Prefetch
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from core.model_registry import registry
 from core.url_names import CollaborationURLS
 from collaboration.models.choices import PaymentOption
 from template_map.collaboration import Collabs
-from registry_utils import get_registered_model
 
 
-GigModel = get_registered_model("collaboration","Gig")
-GigRoleModel = get_registered_model("collaboration", "GigRole")
-ProposalModel = get_registered_model("proposals", "Proposal")
-ProposalRoleModel = get_registered_model("proposals", "ProposalRole")
+GigModel = registry.Gig
+GigRoleModel = registry.GigRole
+ProposalModel = registry.Proposal
+ProposalRoleModel = registry.ProposalRole
 
 
 class GigDetailView(LoginRequiredMixin, DetailView):
@@ -120,13 +120,13 @@ class GigDetailView(LoginRequiredMixin, DetailView):
         preview_roles = (
             ProposalRoleModel.objects
             .filter(proposal__gig=gig)
-            .select_related("proposal__sender__profile", "gig_role")
+            .select_related("proposal__provider__profile", "gig_role")
             .only(
                 "role_amount",
                 "proposed_amount",
                 "gig_role__role_name",
-                "proposal__sender__profile__avatar_url",
-                "proposal__sender__profile__headline",
+                "proposal__provider__profile__avatar_url",
+                "proposal__provider__profile__headline",
                 "proposal__status",
                 "proposal__sent_at",
             )

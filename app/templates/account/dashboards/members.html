@@ -220,8 +220,8 @@
                                         rounded-xl p-2 transition">
 
                                     <!-- Avatar -->
-                                    {% if proposal.sender.profile.avatar %}
-                                    <img src="{{ proposal.sender.profile.avatar.url }}" alt="{{ proposal.sender.get_full_name }}" class="size-10 rounded-full object-cover
+                                    {% if proposal.provider.profile.avatar %}
+                                    <img src="{{ proposal.provider.profile.avatar.url }}" alt="{{ proposal.provider.get_full_name }}" class="size-10 rounded-full object-cover
                                                     ring-2 ring-white dark:ring-slate-800 shadow-sm">
                                     {% else %}
                                     <div class="size-10 rounded-full flex items-center justify-center
@@ -229,7 +229,7 @@
                                                         text-white text-sm font-semibold uppercase
                                                         ring-2 ring-white dark:ring-slate-800 shadow-sm">
 
-                                        {{ proposal.sender.first_name|first }}{{ proposal.sender.last_name|first }}
+                                        {{ proposal.provider.first_name|first }}{{ proposal.provider.last_name|first }}
 
                                     </div>
                                     {% endif %}
@@ -239,7 +239,7 @@
                                         <!-- Top Row -->
                                         <div class="flex items-center justify-between">
                                             <h4 class="text-sm font-medium text-slate-900 dark:text-white truncate">
-                                                {{ proposal.sender.get_full_name|title }}
+                                                {{ proposal.provider.get_full_name|title }}
                                             </h4>
 
                                             <span class="text-xs text-slate-400 dark:text-slate-500">

@@ -4,18 +4,18 @@ from django.views.generic import View
 from django.http.response import JsonResponse
 from django.db import transaction, IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
+from core.model_registry import registry
 from core.url_names import CollaborationURLS
 from template_map.collaboration import Collabs
 from collaboration.models.choices import GigStatus
-from registry_utils import get_registered_model
-from ..exceptions import GigError
 
+from ..exceptions import GigError
 
 
 class DeleteGigView(LoginRequiredMixin, View):
     allowed_http_methods = ["POST"]
-    model = get_registered_model("collaboration", "Gig")
-    proposal_model = get_registered_model("proposals", "Proposal")
+    model = registry.Gig
+    proposal_model = registry.Proposal
 
     def post(self, request, *args, **kwargs):
         gig_slug = kwargs.get("slug")

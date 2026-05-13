@@ -168,18 +168,18 @@
                                 {% if proposals %}
                                     <div class="flex -space-x-2">
                                         {% for proposal in proposals|slice:":3" %}
-                                            {% if proposal.sender.profile.avatar_url %}
+                                            {% if proposal.provider.profile.avatar_url %}
                                                 <div 
                                                     class="size-8 rounded-full border-2 border-white dark:border-gray-900 bg-cover bg-center"
-                                                    title="{{ proposal.sender.first_name }} {{ proposal.sender.last_name }}"
-                                                    style='background-image:url("{{ proposal.sender.profile.avatar_url.url }}")'>
+                                                    title="{{ proposal.provider.first_name }} {{ proposal.provider.last_name }}"
+                                                    style='background-image:url("{{ proposal.provider.profile.avatar_url.url }}")'>
                                                 </div>
                                             {% else %}
                                                 <div 
                                                     class="size-8 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-900 bg-brand-500 dark:bg-brand-400 text-white text-xs font-bold"
-                                                    title="{{ proposal.sender.first_name }} {{ proposal.sender.last_name }}"
+                                                    title="{{ proposal.provider.first_name }} {{ proposal.provider.last_name }}"
                                                 >
-                                                    {{ proposal.sender.first_name|slice:":1"|upper }}{{ proposal.sender.last_name|slice:":1"|upper }}
+                                                    {{ proposal.provider.first_name|slice:":1"|upper }}{{ proposal.provider.last_name|slice:":1"|upper }}
 
                                                 </div>
                                             {% endif %}

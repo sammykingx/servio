@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from accounts.models.profile import UserRole
 from accounts.models.address import AddressType
 from template_map.accounts import Accounts
-from registry_utils import get_registered_model
+from core.model_registry import registry
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -61,11 +61,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         )
         
     def fetch_recent_proposals(self):
-        ProposalModel = get_registered_model("collaboration", "Proposal")
+        ProposalModel = registry.Proposal
         return (
             ProposalModel.objects
             .filter(gig__creator=self.request.user)
-            .select_related("sender", "gig")
+            .select_related("provider", "gig")
             # .only(
             #     "id",
             #     "status",
@@ -76,8 +76,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             # )
             .order_by("-created_at")[:4]
         )
+    
     def fetch_recent_payments(self):
-        PaymentModel = get_registered_model("payments", "Payment")
+        PaymentModel = registry.Payment
         return (
             PaymentModel.objects
             .filter(user=self.request.user)
