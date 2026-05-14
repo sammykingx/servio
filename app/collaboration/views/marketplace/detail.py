@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.address import AddressType
 from collaboration.models.choices import GigStatus, PaymentOption
 from core.model_registry import registry
-from core.url_names import OppurtunitiesURLS
+from core.url_names import MarketplaceURLS
 from template_map.collaboration import Collabs
 
 
@@ -35,7 +35,7 @@ class OppurtuniyDetailView(LoginRequiredMixin, DetailView):
         try:
             return super().dispatch(request, *args, **kwargs)
         except Http404:
-            return redirect(reverse_lazy(OppurtunitiesURLS.ALL))
+            return redirect(reverse_lazy(MarketplaceURLS.ALL))
 
     def get_context_data(self, **kwargs):
         context =super().get_context_data(**kwargs)

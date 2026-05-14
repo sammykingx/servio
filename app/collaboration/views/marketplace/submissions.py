@@ -9,7 +9,7 @@ from proposals.application.services import ProposalService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
 from proposals.application.dto.send_proposal import SendProposal
 from core.model_registry import registry
-from core.url_names import OppurtunitiesURLS, ProposalURLS
+from core.url_names import MarketplaceURLS, ProposalURLS
 from template_map.collaboration import Collabs
 from pydantic import ValidationError
 import json
@@ -20,9 +20,9 @@ GigModel = registry.Gig
 GigRoleModel = registry.GigRole
 
 
-class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
+class SubmitProjectEngagementView(LoginRequiredMixin, DetailView):
     model = GigModel
-    template_name = Collabs.Marketplace.ACCEPT_OFFER
+    template_name = Collabs.Marketplace.ENGAGEMENT_SUBMISSION
     context_object_name = "gig"
     slug_field = "slug"
     slug_url_kwarg = "slug"
@@ -36,7 +36,7 @@ class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
         try:
             return super().dispatch(request, *args, **kwargs)
         except Http404:
-            return redirect(reverse_lazy(OppurtunitiesURLS.ALL))
+            return redirect(reverse_lazy(MarketplaceURLS.ALL))
         
     def user_can_apply_for_role(self, user, role) -> bool:
         if not user.is_authenticated:

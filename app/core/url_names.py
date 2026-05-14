@@ -81,10 +81,10 @@ class CollaborationURLS:
     START_COLLABORATION = "start_collaboration"
     
     
-class OppurtunitiesURLS:
+class MarketplaceURLS:
     ALL = "all_oppurtunities"
     DETAIL = "oppurtunity_detail"
-    ACCEPT_OFFER = "accept_oppurtunity_offer"
+    SUBMIT_PROJECT_ENGAGEMENT = "project_engegement_submission"
   
     
 class ProposalURLS:

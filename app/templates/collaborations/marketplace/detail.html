@@ -278,11 +278,11 @@
 						<span class="text-xs font-semibold text-success-600 uppercase tracking-tight">Secured by Servio Escrow</span>
 					</div>
 					<div class="flex flex-col gap-3">
-						<a href="{% url OPPURTUNITIES.ACCEPT_OFFER slug=gig.slug %}" class="w-full py-4 bg-brand-500 text-white rounded-xl font-semibold text-base shadow-lg shadow-brand-500/30 hover:bg-brand-400/90 transition-all text-center">
+						<a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_ENGAGEMENT slug=gig.slug %}" class="w-full py-4 bg-brand-500 text-white rounded-xl font-semibold text-base shadow-lg shadow-brand-500/30 hover:bg-brand-400/90 transition-all text-center">
 							Accept Terms
 						</a>
 						{% if gig.has_gig_roles %}
-							<a href="{% url OPPURTUNITIES.ACCEPT_OFFER slug=gig.slug %}?negotiating=true" class="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold text-base text-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+							<a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_ENGAGEMENT slug=gig.slug %}?negotiating=true" class="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold text-base text-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
 								Send Counteroffer
 							</a>
 						{% endif %}

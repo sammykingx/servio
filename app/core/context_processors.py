@@ -1,6 +1,6 @@
 from core.url_names import (
     AuthURLNames, BusinessURLS, CollaborationURLS,  SmartReleaseURLS,
-    NotificationsURLNames, OnboardingURLS, OppurtunitiesURLS,
+    NotificationsURLNames, OnboardingURLS, MarketplaceURLS,
     ProposalURLS, ReviewURLS, PaymentURLS,
 )
 from notifications.models.notification_channels import NotificationChannels
@@ -46,7 +46,7 @@ def app_urlnames(request):
         "COLLABORATION_URLS": CollaborationURLS,
         "SMART_RELEASE": SmartReleaseURLS,
         "NOTIFICATION_URLS": NotificationsURLNames,
-        "OPPURTUNITIES": OppurtunitiesURLS,
+        "OPPURTUNITIES": MarketplaceURLS,
         "PAYMENT_URLS": PaymentURLS,
         "PROPOSALS": ProposalURLS,
         "REVIEWS": ReviewURLS,
