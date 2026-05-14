@@ -4,13 +4,13 @@ from django.db.models import Prefetch, Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
+from core.model_registry import registry
 from core.url_names import AuthURLNames
-from registry_utils import get_registered_model
 from template_map.collaboration import Collabs
 
 
 class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
-    model = object # get_registered_model("collaboration", "Proposal")
+    model = registry.Proposal
     template_name = Collabs.Proposals.VIEW_DELIEVERABLES
     context_object_name = "proposal"
     pk_url_kwarg = "proposal_id"
@@ -22,15 +22,15 @@ class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
             return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
         
     def get_queryset(self):
-        ProposalRole = get_registered_model("collaboration", "ProposalRole")
-        ProposalDeliverable = get_registered_model("collaboration", "ProposalDeliverable")
+        ProposalRole = registry.ProposalRole
+        ProposalDeliverable = registry.ProposalDeliverable
         
         qs = (
             super().get_queryset()
-            .select_related("gig", "sender", "sender__profile")
+            .select_related("gig", "provider", "provider__profile")
             .only(
                 "gig__has_gig_roles", "gig__title", "gig__description", "gig__total_budget",
-                "sender__first_name", "sender__last_name", "sender__is_verified", "sender__profile__headline"
+                "provider__first_name", "provider__last_name", "provider__is_verified", "provider__profile__headline"
             )
             .prefetch_related(
                 Prefetch(
@@ -49,7 +49,7 @@ class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
                 )
             )
             .filter(
-                Q(sender=self.request.user) | Q(gig__creator=self.request.user)
+                Q(provider=self.request.user) | Q(gig__creator=self.request.user)
             )
             
         )

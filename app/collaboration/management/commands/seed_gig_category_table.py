@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.apps import apps
-from collaboration.data.gig_roles_categories import GIGS_ROLES_CATEGORIES
+from collaboration.data.taxonomy import GIGS_ROLES_CATEGORIES
+from core.model_registry import registry
 
 
-GigCategory = apps.get_model("collaboration", "GigCategory")
+GigCategory = registry.GigCategory
 
 
 class Command(BaseCommand):

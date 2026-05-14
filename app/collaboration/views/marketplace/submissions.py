@@ -22,7 +22,7 @@ GigRoleModel = registry.GigRole
 
 class AcceptOppurtuniyDetailView(LoginRequiredMixin, DetailView):
     model = GigModel
-    template_name = Collabs.Oppurtunities.ACCEPT_OFFER
+    template_name = Collabs.Marketplace.ACCEPT_OFFER
     context_object_name = "gig"
     slug_field = "slug"
     slug_url_kwarg = "slug"

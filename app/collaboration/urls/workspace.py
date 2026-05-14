@@ -1,18 +1,18 @@
-from django.urls import path, include, reverse_lazy
+from django.urls import path, reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView, TemplateView
 from core.url_names import CollaborationURLS, ContractURLS
-from .views.list import CollaborationListView
-from .views.create import CreateCollaborationView
-from .views.modify import EditGigView, LiveEditCollaborationView
-from .views.detail import GigDetailView
-from .views.delete import DeleteGigView
-from .views.start_collaboration import StartCollaborationView
-from .oppurtunities import urls as oppurtunity_urls
+from collaboration.views.workspace import (
+     CollaborationListView, CreateCollaborationView, GigDetailView,
+     EditGigView, LiveEditCollaborationView, DeleteGigView
+)
+
+from collaboration.views.start_collaboration import StartCollaborationView
 from template_map.collaboration import Collabs
+from template_map.contracts import Contract
+
 
 urlpatterns = [
-     path("oppurtunities/", include(oppurtunity_urls)),
      path(
         "",
         RedirectView.as_view(
@@ -20,12 +20,12 @@ urlpatterns = [
         ),
     ),
     path(
-        "select-type/", 
-        login_required(TemplateView.as_view(template_name=Collabs.SELECT_TYPE)), 
+        "project-type/", 
+        login_required(TemplateView.as_view(template_name=Collabs.Workspace.PROJECT_TYPE)), 
         name=CollaborationURLS.SELECT_COLLABORATION_TYPE
     ),
     path(
-        "all-collaborations/", 
+        "projects/", 
          CollaborationListView.as_view(), 
          name=CollaborationURLS.LIST_COLLABORATIONS
     ),
@@ -39,14 +39,14 @@ urlpatterns = [
          LiveEditCollaborationView.as_view(),
          name=CollaborationURLS.LIVE_COLLABORATION_EDIT,
     ),
-    path("new-collaborations", CreateCollaborationView.as_view(),
+    path("new-project", CreateCollaborationView.as_view(),
          name=CollaborationURLS.CREATE_COLLABORATION,
     ),
     path("delete/<slug:slug>", DeleteGigView.as_view(),
          name=CollaborationURLS.DELETE_COLLABORATION,
     ),
     path("view-agreement/",
-         login_required(TemplateView.as_view(template_name=Collabs.Contracts.VIEW_CONTRACT)),
+         login_required(TemplateView.as_view(template_name=Contract.VIEW_CONTRACT)),
          name=ContractURLS.PREVIEW_CONTRACT,
      ),
     path("contract/<uuid:proposal_id>/<uuid:role_id>/",

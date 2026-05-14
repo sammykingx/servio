@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.db.models import Count, Sum, F, Q, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
+from core.model_registry import registry
 from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
-from registry_utils import get_registered_model
 
 
 class CollaborationListView(LoginRequiredMixin, ListView):
@@ -19,8 +19,8 @@ class CollaborationListView(LoginRequiredMixin, ListView):
     - Partial rendering for HTMX-based UI updates
     """
     
-    template_name = Collabs.LIST_COLLABORATIONS
-    model = get_registered_model("collaboration", "Gig")
+    template_name = Collabs.Workspace.ALL_PROJECTS
+    model = registry.Gig
     context_object_name = "gigs"
     paginate_by = 16
 
@@ -40,7 +40,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         Returns:
             QuerySet: A filtered and annotated queryset of user-owned gigs.
         """
-        ProposalModel = get_registered_model("proposals", "Proposal")
+        ProposalModel = registry.Proposal
         proposal_prefetch = Prefetch(
             "proposals",
             queryset=ProposalModel.objects.select_related("provider").only(

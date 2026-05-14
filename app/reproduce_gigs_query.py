@@ -14,7 +14,7 @@ from collaboration.models.gigs import Gig
 from collaboration.models.gigrole import GigRole
 from collaboration.models.gig_category import GigCategory
 from collaboration.models.choices import GigStatus, GigVisibility, RoleStatus
-from collaboration.oppurtunities.views.list import OppurtunityListView
+from collaboration.views.marketplace.list import OppurtunityListView
 from django.test import RequestFactory
 from django.db.models import Exists, OuterRef, Prefetch, Q
 

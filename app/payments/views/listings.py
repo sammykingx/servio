@@ -1,15 +1,15 @@
+from core.model_registry import registry
 from constants import CURRENCY_SYMBOL_MAP, USD_TO_NGN_RATE
 from decimal import Decimal
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum, F, Q, Case, When, DecimalField
 from django.views.generic import ListView
 from payments.domain.enums import PaymentStatus
-from registry_utils import get_registered_model
 from template_map.payments import Payments as PaymentTemplates
 
 
 class UserPaymentsListView(LoginRequiredMixin, ListView):
-    model = get_registered_model("payments", "Payment")
+    model = registry.Payment
     template_name = PaymentTemplates.PAYMENT_SUMMARY
     context_object_name = "transactions"
     paginate_by = 7

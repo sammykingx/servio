@@ -4,16 +4,17 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
+from core.model_registry import registry
 from core.url_names import CollaborationURLS
 from template_map.collaboration import Collabs
-from registry_utils import get_registered_model
+
 
 
 class ProposalRoleListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.PROPOSAL_LIST
     context_object_name = "applications"
     paginate_by = 18
-    model = object # get_registered_model("collaboration", "Proposal")
+    model = registry.Proposal
 
     def dispatch(self, request, *args, **kwargs):
         """
@@ -39,7 +40,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
         gig_slug = self.kwargs.get("gig_slug")
         proposal_status = self.request.GET.get("proposal_status")
 
-        ProposalRole = get_registered_model("collaboration", "ProposalRole")
+        ProposalRole = registry.ProposalRole
 
         qs = (
             super()
@@ -92,7 +93,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
 
     def _fetch_gig(self):
         gig_slug = self.kwargs.get("gig_slug")
-        GigModel = get_registered_model("collaboration", "Gig")
+        GigModel = registry.Gig
         gig_obj = GigModel.objects.only(
             "title", "total_budget", "start_date", "end_date"
         ).get(slug=gig_slug)

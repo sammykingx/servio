@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction, IntegrityError, OperationalError
-from django.db.models import Model, Prefetch
+from django.db.models import Model, Prefetch, QuerySet
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -11,9 +11,9 @@ from core.model_registry import registry
 from core.url_names import CollaborationURLS
 from formatters.pydantic_formatter import format_pydantic_errors
 from template_map.collaboration import Collabs
-from ..exceptions import GigError
-from ..schemas import CreateGigRequest, GigStates
-from ..schemas.gig_role import PAYMENT_OPTIONS
+from ...exceptions import GigError
+from ...schemas import CreateGigRequest, GigStates
+from ...schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
 import json, logging
 
@@ -78,14 +78,13 @@ class EditGigView(LoginRequiredMixin, DetailView):
     This view is designed to be safe, transactional, and frontend-friendly,
     making it suitable for asynchronous editing workflows.
     """
-    # allowed_http_methods = ["GET", "POST"]
-    template_name = Collabs.EDIT
+    template_name = Collabs.Workspace.EDIT_PROJECT
     model = GigModel
     context_object_name = "gig"
     slug_field = "slug"
     slug_url_kwarg = "slug"
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         """
         Returns a queryset of gigs owned by the current user with all required
         related data eagerly loaded.
@@ -179,7 +178,6 @@ class EditGigView(LoginRequiredMixin, DetailView):
         try:
             payload = json.loads(request.body)
             gig_data = CreateGigRequest(**payload)
-            print(gig_data.model_dump_json(indent=2))
             self.update_gig_data(gig_slug, gig_data)
             
         except GigModel.DoesNotExist:
@@ -433,14 +431,14 @@ class EditGigView(LoginRequiredMixin, DetailView):
 
 
 class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
-    template_name = Collabs.LIVE_EDIT
+    template_name = Collabs.Workspace.LIVE_PROJECT_EDIT
     model = GigModel
     slug_field = "slug"
     slug_url_kwarg = "slug"
     context_object_name = "gig"
     
     # from django internals, get_object calls get_queryset
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return (
             super()
             .get_queryset()
@@ -489,12 +487,12 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
         # proposals = (
         #     ProposalModel.objects
         #     .filter(gig=gig)
-        #     .select_related("sender__profile")
+        #     .select_related("provider__profile")
         #     .order_by("-created_at")
         #     .only(
-        #         "sender__first_name", 
-        #         "sender__last_name", 
-        #         "sender__profile__avatar_url"
+        #         "provider__first_name", 
+        #         "provider__last_name", 
+        #         "provider__profile__avatar_url"
         #     )
         # )
         

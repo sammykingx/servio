@@ -71,7 +71,7 @@
                 </button>
                 {% if gig.status in editable_statuses %}
                     <a href="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-xl h-11 px-3 md:px-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-gray-800 dark:text-white text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
-                        <span class="material-symbols-outlined mr-2">edit</span> Edit Gig
+                        <span class="material-symbols-outlined mr-2">edit</span> Edit Project
                     </a>
                 {% else %}
                 <a 
@@ -82,7 +82,7 @@
                         text-white text-sm font-medium hover:bg-brand-400 transition-all
                     "
                 >
-                    <span class="material-symbols-outlined mr-2">edit</span> Edit Gig
+                    <span class="material-symbols-outlined mr-2">edit</span> Edit Project
                 </a>
                 {% endif %}
             </div>

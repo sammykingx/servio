@@ -26,7 +26,7 @@ class GigDetailView(LoginRequiredMixin, DetailView):
     efficient rendering.
     """
     model = GigModel
-    template_name = Collabs.DETAILS
+    template_name = Collabs.Workspace.DETAILS
     context_object_name = "gig"
     slug_field = "slug"
     slug_url_kwarg = "slug"

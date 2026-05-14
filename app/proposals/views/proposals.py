@@ -5,28 +5,31 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
 from collaboration.models.choices import GigStatus, GigVisibility
-from proposals.models.choices import ProposalStatus
+from ..models.choices import ProposalStatus
 from ..domain.exceptions import ProposalError
 from ..application.services import ProposalService
 from ..application.dto.modify_proposal_state import ModifyProposalState
+from core.model_registry import registry
 from core.url_names import CollaborationURLS
 from template_map.collaboration import Collabs
-from registry_utils import get_registered_model
 from decimal import Decimal
 from pydantic import ValidationError
 from formatters.pydantic_formatter import format_pydantic_errors
 import json
 
 
+ProposalModel = registry.Proposal
+ProposalRoleModel = registry.ProposalRole
+
+    
 class RecievedProposalListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.RECEIVED_PROPOSALS
     context_object_name = "gigs"
     paginate_by = 7
-    model = get_registered_model("collaboration", "Gig")
+    model = registry.Gig
 
     def get_queryset(self):
-        Proposal = get_registered_model("proposals", "Proposal")
-        proposals = Proposal.objects.filter(gig=OuterRef("pk"))
+        proposals = ProposalModel.objects.filter(gig=OuterRef("pk"))
         base_qs = (
             super()
             .get_queryset()
@@ -57,16 +60,14 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        Proposal = get_registered_model("proposals", "Proposal")
-        ProposalRole = get_registered_model("proposals", "ProposalRole")
-
+        
         gig_filter = Q(
             creator=self.request.user,
             status=GigStatus.PUBLISHED,
             is_gig_active=True,
         )
 
-        proposal_exists = Proposal.objects.filter(gig=OuterRef("pk"))
+        proposal_exists = ProposalModel.objects.filter(gig=OuterRef("pk"))
 
         total_budget = (
             self.model.objects.filter(gig_filter)
@@ -82,7 +83,7 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
             proposal__gig__is_gig_active=True,
         )
 
-        metrics = ProposalRole.objects.filter(proposal_filter).aggregate(
+        metrics = ProposalRoleModel.objects.filter(proposal_filter).aggregate(
             negotiating_worth=Coalesce(
                 Sum("proposed_amount", filter=Q(proposal__is_negotiating=True)),
                 Decimal("0.00"),
@@ -96,11 +97,12 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
         context.update(metrics, gig_total_budget=total_budget)
         return context
 
+
 class SentProposalListView(LoginRequiredMixin, ListView):
     template_name = Collabs.Proposals.SENT_PROPOSALS
     context_object_name = "proposals"
     paginate_by = 7
-    model = get_registered_model("proposals", "Proposal")
+    model = ProposalModel
 
     def get_queryset(self):
         qs = (

@@ -8,9 +8,9 @@ from collaboration.models.choices import GigStatus
 from template_map.collaboration import Collabs
 from formatters.pydantic_formatter import format_pydantic_errors
 from core.model_registry import registry
-from ..schemas import CreateGigRequest, GigStates, get_response_msg
-from ..schemas.gig import GigPayload
-from ..schemas.gig_role import PAYMENT_OPTIONS
+from ...schemas import CreateGigRequest, GigStates, get_response_msg
+from ...schemas.gig import GigPayload
+from ...schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
 import json
 
@@ -38,6 +38,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
     """
 
     http_method_names = ["get", "post"]
+    template_name = Collabs.Workspace.CREATE_PROJECT
 
     def get(self, request) -> HttpResponse:
         """
@@ -53,7 +54,7 @@ class CreateCollaborationView(LoginRequiredMixin, View):
             "gig_taxonomy": GigCategory.objects.get_taxonomy_json(),
             "payment_options": json.dumps(PAYMENT_OPTIONS),
         }
-        return render(request, Collabs.CREATE, context)
+        return render(request, self.template_name, context)
 
     def post(self, request) -> JsonResponse:
         """

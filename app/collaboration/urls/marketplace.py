@@ -1,9 +1,9 @@
 from django.urls import path, reverse_lazy
 from core.url_names import OppurtunitiesURLS
 from django.views.generic import RedirectView
-from .views.list import OppurtunityListView
-from .views.detail import OppurtuniyDetailView
-from .views.send_service_request import AcceptOppurtuniyDetailView
+from collaboration.views.marketplace import (
+    OppurtunityListView, OppurtuniyDetailView, AcceptOppurtuniyDetailView
+)
 
 
 urlpatterns = [

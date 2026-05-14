@@ -26,7 +26,7 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
         range, priority label) to improve relevance ranking and presentation.
     """
     model = GigsModel
-    template_name = Collabs.Oppurtunities.LIST
+    template_name = Collabs.Marketplace.LIST
     context_object_name = "gigs"
     paginate_by = 12
 

@@ -16,18 +16,17 @@ NON-GOALS:
 - Infrastructure (e.g., Schema/Form validation).
 - Orchestration (e.g., Sending emails or updating state).
 """
-
-from proposals.application.dto.send_proposal import AppliedRoles, SendProposal
+from core.model_registry import registry
 from constants import SERVICE_FEE, DECIMAL_PLACE
+from proposals.application.dto.send_proposal import AppliedRoles, SendProposal
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure
-from registry_utils import get_registered_model
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 
 
-GigCategory = get_registered_model("collaboration", "GigCategory")
+GigCategory = registry.GigCategory
 
 
 class ProposalValidator:

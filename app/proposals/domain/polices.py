@@ -19,15 +19,16 @@ NON-GOALS:
 """
 
 from django.utils import timezone
+from core.model_registry import registry
 from collaboration.models.choices import GigStatus, RoleStatus
 from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from .exceptions import ProposalPermissionDenied
 from .status_codes import PolicyFailure
-from registry_utils import get_registered_model
 
-GigsModel = get_registered_model("collaboration", "Gig")
-GigRole = get_registered_model("collaboration", "GigRole")
+
+GigsModel = registry.Gig
+GigRole = registry.GigRole
 
 
 class ProposalPolicy:

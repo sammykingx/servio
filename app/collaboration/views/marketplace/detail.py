@@ -16,7 +16,7 @@ ProposalModel = registry.Proposal
 
 class OppurtuniyDetailView(LoginRequiredMixin, DetailView):
     model = GigModel
-    template_name = Collabs.Oppurtunities.DETAIL
+    template_name = Collabs.Marketplace.DETAIL
     context_object_name = "gig"
     slug_field = "slug"
     slug_url_kwarg = "slug"

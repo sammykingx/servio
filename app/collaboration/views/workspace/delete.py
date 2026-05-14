@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.urls import reverse_lazy
 from django.views.generic import View
 from django.http.response import JsonResponse
@@ -6,10 +5,9 @@ from django.db import transaction, IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
-from template_map.collaboration import Collabs
 from collaboration.models.choices import GigStatus
 
-from ..exceptions import GigError
+from ...exceptions import GigError
 
 
 class DeleteGigView(LoginRequiredMixin, View):

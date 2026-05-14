@@ -1,11 +1,11 @@
 from notifications.domain.schemas import DeviceMeta, NotificationChannels, NotificationPayload
-from registry_utils import get_registered_model
+from core.model_registry import registry
 
 
 class PushManager:
     def __init__(self, user):
         self.user = user
-        self.model = get_registered_model("notifications", "WebPushDeviceToken")
+        self.model = registry.WebPushDeviceToken
      
     def handle_token_state(self, data: NotificationPayload):
         """

@@ -44,25 +44,29 @@ class ModelRegistry:
     _registry: dict[str, tuple[str, str]] = {
         # "ModelName": ("app_label", "ModelName")
 
-        # --- Accounts App -------
+        # ACCOUNTS APP
         "Address": ("accounts", "Address"),
         "Profile": ("accounts", "Profile"),
         "SocialLink": ("accounts", "SocialLink"),
         "Tokentype": ("accounts", "Tokentype"),
         "UserOnboardingIntent": ("accounts", "UserOnboardingIntent"),
 
-        # --- Collaboration App ---
+        # GIG/PROJECTS/SERVICE REQUEST APP
         "Gig": ("collaboration", "Gig"),
         "GigRole": ("collaboration", "GigRole"),
         "GigCategory": ("collaboration", "GigCategory"),
         
-        # --- Contracts App ------
+        # CONTRACTS APP
         "Contract": ("contracts", "Contract"),
+        
+        # NOTIFICATIONS APP
+        "NotificationChannels": ("notifications", "NotificationChannels"),
+        "WebPushDeviceToken": ("notifications", "WebPushDeviceToken"),
 
-        # --- Payments App -----
+        # PAYMENTS APP
         "Payment": ("payments", "Payment"),
 
-        # ---- Proposals App -----
+        # PROPOSAL APP
         "Proposal": ("proposals", "Proposal"),
         "ProposalRole": ("proposals", "ProposalRole"),
         "ProposalDeliverable": ("proposals", "ProposalDeliverable"),

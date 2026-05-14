@@ -3,14 +3,19 @@ from . import TemplateRegistryBase
 _BASE_FOLDER = TemplateRegistryBase("collaborations")
 
 class Collabs:
-    LIST_COLLABORATIONS = _BASE_FOLDER.base_folder_files("list.html")
-    SELECT_TYPE = _BASE_FOLDER.base_folder_files("select-type.html")
-    DETAILS = _BASE_FOLDER.base_folder_files("details.html")
-    CREATE = _BASE_FOLDER.base_folder_files("create.html")
-    EDIT =  _BASE_FOLDER.base_folder_files("edit.html")
-    LIVE_EDIT = _BASE_FOLDER.base_folder_files("live-edit.html")
+    
     START_COLLABORATION = _BASE_FOLDER.base_folder_files("start-collaboration.html")
     
+    class Workspace:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("projects")
+        
+        ALL_PROJECTS = f"{__SUB_FOLDER}/list.html"
+        PROJECT_TYPE = f"{__SUB_FOLDER}/project-type.html"
+        DETAILS = f"{__SUB_FOLDER}/details.html"
+        CREATE_PROJECT = f"{__SUB_FOLDER}/create.html"
+        EDIT_PROJECT =  f"{__SUB_FOLDER}/edit.html"
+        LIVE_PROJECT_EDIT = f"{__SUB_FOLDER}/live-edit.html"
+        
     class Proposals:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("proposals")
         
@@ -20,16 +25,11 @@ class Collabs:
         DETAILS = f"{__SUB_FOLDER}/detail.html"
         VIEW_DELIEVERABLES = f"{__SUB_FOLDER}/view-delieverables.html"
         
-    class Oppurtunities:
-        __SUB_FOLDER = _BASE_FOLDER.subfolder("oppurtunities")
+    class Marketplace:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("marketplace")
         
         LIST = f"{__SUB_FOLDER}/list.html"
         DETAIL = f"{__SUB_FOLDER}/detail.html"
         ACCEPT_OFFER = f"{__SUB_FOLDER}/accept-offer.html"
         
-    class Contracts:
-        __SUB_FOLDER = _BASE_FOLDER.subfolder("contracts")
-        
-        BUILD_CONTRACT = f"{__SUB_FOLDER}/contract-builder.html"
-        VIEW_CONTRACT = f"{__SUB_FOLDER}/view-contract.html"
         
