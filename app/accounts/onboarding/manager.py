@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.apps import apps
 from django.urls import reverse_lazy
 from accounts.models.profile import UserRole
+from core.model_registry import registry
 from core.url_names import AuthURLNames, OnboardingURLS
 
 
@@ -10,7 +10,7 @@ def resolve_onboarding_manager(user):
         return UserOnboardingManager(user)
 
     if user.groups.filter(name=UserRole.PROVIDERS).exists():
-        return ProviderOnboardingManager(user)
+        return BusinessOnboardingManager(user)
 
     return None
 
@@ -62,12 +62,13 @@ class UserOnboardingManager:
         return self.next_step_url()
     
     
-class ProviderOnboardingManager:
-    model = apps.get_model("business_accounts", "BusinessAccount")
-    total_steps = 5
+class BusinessOnboardingManager:
+    # model = registry.BusinessAccount
+    # total_steps = 5
     
-    def __init__(self, user):
-        self.business = user
+    # def __init__(self, user):
+    #     self.business = user
         
-    def is_complete(self):
-        return True
+    # def is_complete(self):
+    #     return True
+    pass

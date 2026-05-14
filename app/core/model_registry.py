@@ -50,6 +50,9 @@ class ModelRegistry:
         "SocialLink": ("accounts", "SocialLink"),
         "Tokentype": ("accounts", "Tokentype"),
         "UserOnboardingIntent": ("accounts", "UserOnboardingIntent"),
+        
+        # BUSINESS APP
+        "BusinessAccounts": ("business_accounts", "BusinessAccounts"),
 
         # GIG/PROJECTS/SERVICE REQUEST APP
         "Gig": ("collaboration", "Gig"),

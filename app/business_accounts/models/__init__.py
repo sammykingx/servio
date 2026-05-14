@@ -1,1 +1,1 @@
-from .business import BusinessAccount
+from .business_accounts import BusinessAccount

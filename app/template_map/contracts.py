@@ -1,5 +1,6 @@
 from . import TemplateRegistryBase
 
+
 _BASE_FOLDER = TemplateRegistryBase("contracts")
 
 class Contract:

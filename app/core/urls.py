@@ -25,6 +25,7 @@ from notifications.views import service_worker
 import accounts.urls
 import business_accounts.urls
 import collaboration.urls
+import contracts.urls
 import proposals.urls
 import notifications.urls
 import payments.urls
@@ -45,6 +46,7 @@ urlpatterns = [
     path("waiting-list/", WaitingListView.as_view(), name="waiting-list-page"),
     path("accounts/", include(accounts.urls)),
     path("collaboration/", include(collaboration.urls)),
+    path("contracts/", include(contracts.urls)),
     path("proposals/", include(proposals.urls)),
     path("notifications/", include(notifications.urls)),
     path("payments/", include(payments.urls)),
