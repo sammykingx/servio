@@ -40,7 +40,7 @@ class PolicyFailure:
     constraints, or subscription-level permissions.
     """
 
-    # Format: FailureDetail(CODE, HUMAN_READABLE_TITLE)
+    INVALID_OBJECT = FailureDetail("INVALID_OBJECT", "Invalid Reference object")
     CANNOT_APPLY_TO_OWN_PROJECT = FailureDetail(
         "CANNOT_APPLY_TO_OWN_GIG", "Self-Application Restricted"
     )

@@ -31,7 +31,7 @@ from ...domain.entities import ProjectEntity
 
 GigsModel = registry.Gig
 GigRole = registry.GigRole
-
+Proposal = registry.Proposal
 
 class ProposalPolicy:
     """
@@ -39,7 +39,7 @@ class ProposalPolicy:
     """
     
     @staticmethod
-    def check_gig_eligibility(project: ProjectEntity, actor: AbstractUser):
+    def check_project_state(project: ProjectEntity, actor: AbstractUser):
         """Validates if the project is in a state to accept proposals."""
         if project.creator == actor:
             raise ProposalPermissionDenied(
@@ -76,7 +76,7 @@ class ProposalPolicy:
 
     @staticmethod
     def check_user_eligibility(profile, project: ProjectEntity):
-        """Validates if the user is qualified for this specific gig."""
+        """Validates if the user is qualified for this specific project."""
 
         if not profile.user.is_verified:
             raise ProposalPermissionDenied(
@@ -99,11 +99,6 @@ class ProposalPolicy:
                     code=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.code,
                     title=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.title,
                 )
-                
-    @staticmethod
-    def chack_max_proposals(project):
-        """Ensures the user is not floded with more proposals than they can handle"""
-        pass
 
     @staticmethod
     def check_financial_status(profile):
@@ -122,8 +117,8 @@ class ProposalPolicy:
         If any fail, they raise a ProposalPermissionDenied with a specific message.
         """
         cls.check_user_eligibility(actor.profile, project)
-        cls.check_gig_eligibility(actor, project)
-        cls.check_financial_status(actor.profile)
+        cls.check_project_state(actor, project)
+        # cls.check_financial_status(actor.profile)
         
     
     # ---- Accepting proposal workflow ------------

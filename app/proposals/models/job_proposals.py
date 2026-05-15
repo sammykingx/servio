@@ -9,7 +9,7 @@ from .choices import ProposalStatus
 
 class Proposal(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
-    gig = models.ForeignKey(
+    project = models.ForeignKey(
         "collaboration.Gig",
         on_delete=models.PROTECT,
         related_name="proposals",
@@ -18,14 +18,9 @@ class Proposal(models.Model):
     provider = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
+        to_field="email",
         related_name="proposals",
         help_text="A service provider sending the proposal object"
-    )
-
-    status = models.CharField(
-        max_length=20,
-        choices=ProposalStatus.choices,
-        default=ProposalStatus.SENT,
     )
 
     total_value = models.DecimalField(
@@ -38,10 +33,13 @@ class Proposal(models.Model):
             "This is filled during and after the proposal creation or accepted."
         )
     )
-    
-    is_negotiating = models.BooleanField(default=False)
+    currency = models.CharField(max_length=10)
+    status = models.CharField(
+        max_length=20,
+        choices=ProposalStatus.choices,
+        default=ProposalStatus.SENT,
+    )
     sent_at = models.DateTimeField()
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

@@ -1,12 +1,14 @@
 from dataclasses import dataclass
 from django.contrib.auth.models import AbstractUser
 from collaboration.models.choices import ProjectStatus, ProjectVisibility, PaymentOption
+from proposals.models.choices import ProposalStatus
 from datetime import datetime
 from uuid import UUID
 from decimal import Decimal
+from typing import Union
 
 
-@dataclass
+@dataclass(frozen=True)
 class ProjectEntity:
     id: UUID
     title: str
@@ -20,8 +22,9 @@ class ProjectEntity:
     status: ProjectStatus
     start_date: datetime
     end_date: datetime
-    
-@dataclass
+   
+
+@dataclass(frozen=True) 
 class RoleEntity:
     id: UUID
     project: ProjectEntity
@@ -35,3 +38,14 @@ class RoleEntity:
     start_date: datetime
     end_date: datetime
     
+    
+@dataclass(frozen=True)
+class ProposalEntity:
+    id: UUID
+    project: ProjectEntity
+    provider: AbstractUser
+    total_value: Decimal
+    currency: str
+    status: ProposalStatus
+    sent_at: datetime
+    created_at: datetime

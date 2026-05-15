@@ -40,7 +40,8 @@ from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from constants import SERVICE_FEE, DECIMAL_PLACE
 from services.email_service import EmailService
 from template_map.emails import ProposalMails
-from proposals.domain.exceptions import ProposalError, ProposalPermissionDenied
+from proposals.domain.entities import ProjectEntity
+from proposals.domain.exceptions import ProposalError, ProposalPermissionDenied, ProposalPersistenceError
 from proposals.domain.policies.proposal_rules import ProposalPolicy
 from proposals.domain.status_codes import PolicyFailure
 from proposals.domain.validators import ProposalValidator
@@ -100,15 +101,13 @@ class ProposalOrchestrationService:
         # self.deliverable_repository = ProposalDeliverableRepository()
 
     def submit_proposal(self, payload: ProposalSubmissionPayload, is_negotiating: bool):
-        
-        project = self.project_repository.get_by_id(project_id=payload.project_id)
-        # apply the project rules
-        # apply the proposal rules
         try:
+            project = self.project_repository.get_by_id(project_id=payload.project_id)
             ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
+            # validate if the roles belong to the project
 
-            proposal = self.create_proposal_bundle(project, payload, is_negotiating)
+            proposal = self.create_proposal_bundle(payload)
             self.notifications_flow(project)
 
         except ProposalPermissionDenied as e:
@@ -116,75 +115,27 @@ class ProposalOrchestrationService:
                 e.redirect_url = get_error_redirect(e.code)
             raise e
 
+        except ProposalError:
+            raise
+
         except Exception as e:
-            import traceback
-            traceback.print_exc()
+            # import traceback
+            # traceback.print_exc()
             raise
 
         return proposal
-
-    def modify_proposal_state(self, payload:ModifyProposalState):
-        """User in this context is the project/gig creator"""
-
-        try:
-            proposal_role = self._get_proposal_role(payload.proposal_id, payload.role_id)
-            proposal_obj = proposal_role.proposal
-            ProposalPolicy.should_modify_state(self.actor, proposal_obj, payload)
-            self._transition_proposal_status(payload)
-
-        except ProposalPermissionDenied as e:
-            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
-                e.redirect_url = get_error_redirect(e.code, {"gig_id": proposal_obj.gig})
-            raise e
-    
-    def _get_proposal_role(self, proposal_id:UUID, proposal_role_id:UUID):
-        proposal_role = (
-            ProposalRole.objects
-            .select_related("proposal", "proposal__gig")
-            .filter(
-                gig_role_id=proposal_role_id,
-                proposal_id=proposal_id,
-                proposal__gig__creator=self.actor
-            )
-            .first()
-        )
-
-        if not proposal_role:
-            raise ProposalPermissionDenied(
-                message="We couldn't find that specific proposal in your project records. Please make sure you're accessing the correct link.",
-                code=PolicyFailure.APPLICATION_RESTRICTED.code,
-                title=PolicyFailure.APPLICATION_RESTRICTED.title
-            )
-        
-        return proposal_role
         
     @transaction.atomic
-    def create_proposal_bundle(self, gig, payload: ProposalSubmissionPayload, is_negotiating: bool):
-        gig = GigModel.objects.get(id=gig.id)
-        proposal = self._create_proposal(
-            gig, payload.total_value, payload.sent_at, is_negotiating
-        )
-        self._create_proposal_roles(gig, proposal, payload.applied_roles)
-        self._create_deliverables(proposal, payload.deliverables)
-
-    def _create_proposal(self, gig, proposal_value, sent_at, is_negotiating):
-        service_fee_rate = Decimal(str(SERVICE_FEE))
-        precision = Decimal(str(DECIMAL_PLACE))
-
-        excl_service_fee = (proposal_value / (Decimal('1') + service_fee_rate)).quantize(
-            precision, rounding=ROUND_HALF_UP
-        )
-        
+    def create_proposal_bundle(self, payload: ProposalSubmissionPayload):
         try:
-            proposal = Proposal.objects.create(
-                gig=gig,
-                sender=self.actor,
-                total_cost=excl_service_fee,
-                sent_at=sent_at,
-                is_negotiating=is_negotiating,
+            project = self.project_repository.get_by_id(project_id=payload.project_id, with_lock=True)
+            proposal = self.proposal_repository.create_proposal(
+                project=project,
+                provider=self.actor,
+                value=payload.total_value,
+                currency=payload.currency,
+                sent_at=payload.sent_at
             )
-            return proposal
-
         except IntegrityError as err:
             if getattr(err.__cause__, "args", None):
                 db_error_code = err.__cause__.args[0]
@@ -204,10 +155,13 @@ class ProposalOrchestrationService:
                 "Unexpected IntegrityError during proposal creation",
                 extra={
                     "user_id": str(self.actor.id),
-                    "gig_id": str(gig.id),
+                    "gig_id": str(project.id),
                 },
             )
             raise err
+        
+        self._create_proposal_roles(project, proposal, payload.applied_roles)
+        self._create_deliverables(proposal, payload.deliverables)
 
     def _get_role_object(self, gig, role_id):
         try:
@@ -336,26 +290,26 @@ class ProposalOrchestrationService:
         self._notify_creator_by_mail(gig)
         self._in_app_notifications(gig.creator)
 
-    def _notify_creator_by_mail(self, gig) -> bool:
+    def _notify_creator_by_mail(self, project: ProjectEntity) -> bool:
         from core.url_names import ProposalURLS
         
-        if not gig.creator.is_verified:
+        if not project.creator.is_verified:
             return False
 
         context = {
             "host": self.request.build_absolute_uri("/"),
-            "project_title": gig.title,
+            "project_title": project.title,
             "project_proposal_url": self.request.build_absolute_uri(
                 reverse_lazy(
                     ProposalURLS.PROPOSAL_LISTINGS,
-                    kwargs={"gig_slug": gig.slug},
+                    kwargs={"project_slug": project.slug},
                 )
             ),
-            "num_of_proposals": gig.active_proposals_count,
+            "num_of_proposals": project.active_proposals_count,
         }
 
         resp = (
-            EmailService(gig.creator.email)
+            EmailService(project.creator.email)
                 .set_subject(ProposalMails.Subjects.PROPOSAL_RECEIVED)
                 .use_template(ProposalMails.PROPOSAL_RECEIVED)
                 .with_context(**context)
@@ -366,5 +320,82 @@ class ProposalOrchestrationService:
 
     def _in_app_notifications(self, creator: AbstractUser) -> None:
         """creates in-app notifications for both providers and creators"""
-        # notify the both gig creator and service providers
+        # notify the both project creator and service providers
         return None
+    
+    def modify_proposal_state(self, payload:ModifyProposalState):
+        """User in this context is the project/project creator"""
+
+        try:
+            proposal_role = self._get_proposal_role(payload.proposal_id, payload.role_id)
+            proposal_obj = proposal_role.proposal
+            ProposalPolicy.should_modify_state(self.actor, proposal_obj, payload)
+            self._transition_proposal_status(payload)
+
+        except ProposalPermissionDenied as e:
+            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
+                e.redirect_url = get_error_redirect(e.code, {"gig_id": proposal_obj.gig})
+            raise e
+    
+    def _get_proposal_role(self, proposal_id:UUID, proposal_role_id:UUID):
+        proposal_role = (
+            ProposalRole.objects
+            .select_related("proposal", "proposal__gig")
+            .filter(
+                gig_role_id=proposal_role_id,
+                proposal_id=proposal_id,
+                proposal__gig__creator=self.actor
+            )
+            .first()
+        )
+
+        if not proposal_role:
+            raise ProposalPermissionDenied(
+                message="We couldn't find that specific proposal in your project records. Please make sure you're accessing the correct link.",
+                code=PolicyFailure.APPLICATION_RESTRICTED.code,
+                title=PolicyFailure.APPLICATION_RESTRICTED.title
+            )
+        
+        return proposal_role
+    
+    # -------------------------------
+    # def _create_proposal(self, gig, proposal_value, sent_at, is_negotiating):
+    #     service_fee_rate = Decimal(str(SERVICE_FEE))
+    #     precision = Decimal(str(DECIMAL_PLACE))
+
+    #     excl_service_fee = (proposal_value / (Decimal('1') + service_fee_rate)).quantize(
+    #         precision, rounding=ROUND_HALF_UP
+    #     )
+        
+    #     try:
+    #         proposal = Proposal.objects.create(
+    #             gig=gig,
+    #             provider=self.actor,
+    #             total_cost=excl_service_fee,
+    #             sent_at=sent_at,
+    #         )
+    #         return proposal
+
+    #     except IntegrityError as err:
+    #         if getattr(err.__cause__, "args", None):
+    #             db_error_code = err.__cause__.args[0]
+    #             # MYSQL 1st then sqlite
+    #             if db_error_code == 1062 or "UNIQUE constraint failed" in db_error_code:
+    #                 message = (
+    #                     "It looks like you’ve already shared your "
+    #                     "vision for this project!. Sit tight whilst "
+    #                     "the previous proposal is been reviewed."
+    #                 )
+    #                 raise ProposalPermissionDenied(
+    #                     message,
+    #                     code=PolicyFailure.DUPLICATE_APPLICATION.code,
+    #                     title=PolicyFailure.DUPLICATE_APPLICATION.title,
+    #                 )
+    #         logger.error(
+    #             "Unexpected IntegrityError during proposal creation",
+    #             extra={
+    #                 "user_id": str(self.actor.id),
+    #                 "gig_id": str(gig.id),
+    #             },
+    #         )
+    #         raise err

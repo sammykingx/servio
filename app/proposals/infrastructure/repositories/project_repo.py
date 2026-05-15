@@ -17,6 +17,8 @@ Responsibilities:
 
 from core.model_registry import registry
 from proposals.domain.entities import ProjectEntity
+from proposals.domain.exceptions import ProposalPersistenceError
+from proposals.domain.status_codes import PolicyFailure
 from typing import Optional
 from uuid import UUID
 
@@ -26,7 +28,7 @@ class ProjectRepository:
         self.model = registry.Gig
         
         
-    def get_by_id(self, project_id: UUID) -> Optional[ProjectEntity]:
+    def get_by_id(self, project_id: UUID, with_lock:bool=False) -> Optional[ProjectEntity]:
         """
         Retrieves a single project by its unique identifier.
 
@@ -39,13 +41,19 @@ class ProjectRepository:
                 otherwise None.
         """
         try:
-            project = (
-                self.model.objects
-                .select_related("creator")
-                .get(id=project_id)
-            )
+            project = None
+            queryset = self.model.objects.filter(id=project_id).select_related("creator")
+            if with_lock:
+                project = queryset.select_for_update(nowait=True).first
+            else:
+                project = queryset.first()
+                
         except self.model.DoesNotExist:
-            return None
+            raise ProposalPersistenceError(
+                "Invalid referenced project",
+                code=PolicyFailure.INVALID_OBJECT.code,
+                title=PolicyFailure.INVALID_OBJECT.title
+            )
 
         return self._to_entity(project)
     
@@ -67,7 +75,11 @@ class ProjectRepository:
                 .get(slug=slug)
             )
         except self.model.DoesNotExist:
-            return None
+            raise ProposalPersistenceError(
+                "Invalid referenced project",
+                code=PolicyFailure.INVALID_OBJECT.code,
+                title=PolicyFailure.INVALID_OBJECT.title
+            )
 
         return self._to_entity(project)
 
