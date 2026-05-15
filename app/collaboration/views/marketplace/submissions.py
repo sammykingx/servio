@@ -5,22 +5,23 @@ from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from collaboration.models.choices import ProjectStatus, PaymentOption
 from proposals.domain.exceptions import ProposalError
-from proposals.application.services import ProposalService
+from proposals.application.services import ProposalOrchestrationService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
-from proposals.application.dto.send_proposal import ProjectEngagementPayload
+from proposals.application.dto.send_proposal import ProposalSubmissionPayload
 from core.model_registry import registry
 from core.url_names import MarketplaceURLS, ProposalURLS
 from template_map.collaboration import Collabs
 from pydantic import ValidationError
 import json
 
+from proposals.domain.constants import MOCK_PROPOSAL_PAYLOAD, MALFORMED_PROPOSAL_PAYLOAD
 
 GigCategoryModel = registry.GigCategory
 GigModel = registry.Gig
 GigRoleModel = registry.GigRole
 
 
-class SubmitProjectEngagementView(LoginRequiredMixin, DetailView):
+class ProposalSubmissionView(LoginRequiredMixin, DetailView):
     model = GigModel
     template_name = Collabs.Marketplace.ENGAGEMENT_SUBMISSION
     context_object_name = "gig"
@@ -82,9 +83,9 @@ class SubmitProjectEngagementView(LoginRequiredMixin, DetailView):
         self.object = self.get_object()
         is_negotiating = request.GET.get("negotiating", None) == "true"
         try:
-            payload = json.loads(request.body)
-            data = ProjectEngagementPayload(**payload)
-            ProposalService(request.user, request).send_proposal(self.object, data, is_negotiating)
+            # payload = json.loads(request.body)
+            data = ProposalSubmissionPayload.model_validate(MOCK_PROPOSAL_PAYLOAD, strict=True) # ProposalSubmissionPayload.model_validate_json(payload, strict=True)
+            ProposalOrchestrationService(request.user, request).submit_proposal(self.object, data, is_negotiating)
             
         except json.JSONDecodeError:
             return JsonResponse(

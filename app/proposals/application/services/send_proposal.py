@@ -32,9 +32,9 @@ from core.model_registry import registry
 from core.url_names import PaymentURLS
 from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.send_proposal import (
-    AppliedRoles,
-    DeliverablesPayload,
-    ProjectEngagementPayload,
+    ProposedRole,
+    ProposalDeliverable,
+    ProposalSubmissionPayload,
 )
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from constants import SERVICE_FEE, DECIMAL_PLACE
@@ -44,6 +44,7 @@ from proposals.domain.exceptions import ProposalError, ProposalPermissionDenied
 from proposals.domain.policies.proposal_rules import ProposalPolicy
 from proposals.domain.status_codes import PolicyFailure
 from proposals.domain.validators import ProposalValidator
+from proposals.infrastructure.repositories import ProjectRepository, ProposalRepository
 from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 from uuid import UUID
@@ -80,7 +81,7 @@ def get_error_redirect(code: str, context: dict = None) -> str:
     return mapping.get(code)
 
 
-class ProposalService:
+class ProposalOrchestrationService:
     """
     Domain Service for orchestrating the Proposal lifecycle.
 
@@ -90,42 +91,25 @@ class ProposalService:
     constraints are satisfied.
     """
 
-    def __init__(self, user: AbstractUser, request: HttpRequest):
-        self.user = user
+    def __init__(self, actor: AbstractUser, request: HttpRequest):
+        self.actor = actor
         self.request = request
-        if not all([self.user, self.request]):
-            raise Exception(
-                f"Initialization failed: Both 'user' and 'request' are required. "
-                f"Received: user={type(user).__name__}, request={type(request).__name__}"
-            )
+        self.project_repository = ProjectRepository()
+        self.proposal_repository = ProposalRepository()
+        # self.role_repository = ProposalRoleRepository()
+        # self.deliverable_repository = ProposalDeliverableRepository()
 
-    def send_proposal(self, gig, payload: ProjectEngagementPayload, is_negotiating: bool):
-        """
-        Executes the end-to-end proposal submission process.
-
-        Workflow:
-        1. Eligibility: Check Policy rules (User/Gig context).
-        2. Integrity: Validate Payload invariants (Data logic).
-        3. Persistence: Create the GigApplication record.
-        4. Side Effects: Trigger notifications/activity logs (Future).
-
-        Args:
-            gig (Gig): The target Aggregate being applied to.
-            payload (ProposalDTO/Object): The validated pydantic data for the proposal.
-
-        Returns:
-            GigApplication: The newly created proposal instance.
-
-        Raises:
-            ProposalPermissionDenied: If policy checks fail.
-            ProposalValidationError: If data integrity checks fail.
-        """
+    def submit_proposal(self, payload: ProposalSubmissionPayload, is_negotiating: bool):
+        
+        project = self.project_repository.get_by_id(project_id=payload.project_id)
+        # apply the project rules
+        # apply the proposal rules
         try:
-            ProposalPolicy.ensure_can_apply(self.user, gig)
-            ProposalValidator.validate(payload, gig)
+            ProposalPolicy.ensure_can_apply(self.actor, project)
+            ProposalValidator.validate(payload, project)
 
-            proposal = self.create_proposal_bundle(gig, payload, is_negotiating)
-            self.notifications_flow(gig)
+            proposal = self.create_proposal_bundle(project, payload, is_negotiating)
+            self.notifications_flow(project)
 
         except ProposalPermissionDenied as e:
             if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
@@ -145,7 +129,7 @@ class ProposalService:
         try:
             proposal_role = self._get_proposal_role(payload.proposal_id, payload.role_id)
             proposal_obj = proposal_role.proposal
-            ProposalPolicy.should_modify_state(self.user, proposal_obj, payload)
+            ProposalPolicy.should_modify_state(self.actor, proposal_obj, payload)
             self._transition_proposal_status(payload)
 
         except ProposalPermissionDenied as e:
@@ -160,7 +144,7 @@ class ProposalService:
             .filter(
                 gig_role_id=proposal_role_id,
                 proposal_id=proposal_id,
-                proposal__gig__creator=self.user
+                proposal__gig__creator=self.actor
             )
             .first()
         )
@@ -175,10 +159,10 @@ class ProposalService:
         return proposal_role
         
     @transaction.atomic
-    def create_proposal_bundle(self, gig, payload: ProjectEngagementPayload, is_negotiating: bool):
+    def create_proposal_bundle(self, gig, payload: ProposalSubmissionPayload, is_negotiating: bool):
         gig = GigModel.objects.get(id=gig.id)
         proposal = self._create_proposal(
-            gig, payload.proposal_value, payload.sent_at, is_negotiating
+            gig, payload.total_value, payload.sent_at, is_negotiating
         )
         self._create_proposal_roles(gig, proposal, payload.applied_roles)
         self._create_deliverables(proposal, payload.deliverables)
@@ -194,7 +178,7 @@ class ProposalService:
         try:
             proposal = Proposal.objects.create(
                 gig=gig,
-                sender=self.user,
+                sender=self.actor,
                 total_cost=excl_service_fee,
                 sent_at=sent_at,
                 is_negotiating=is_negotiating,
@@ -219,7 +203,7 @@ class ProposalService:
             logger.error(
                 "Unexpected IntegrityError during proposal creation",
                 extra={
-                    "user_id": str(self.user.id),
+                    "user_id": str(self.actor.id),
                     "gig_id": str(gig.id),
                 },
             )
@@ -241,7 +225,7 @@ class ProposalService:
                 title=PolicyFailure.INVALID_ROLE.title,
             )
 
-    def _create_proposal_roles(self, gig, proposal, applied_roles: List[AppliedRoles]):
+    def _create_proposal_roles(self, gig, proposal, applied_roles: list):
         role_instances = []
         role_obj = None
 
@@ -289,11 +273,11 @@ class ProposalService:
         if gig.has_gig_roles:
             ProposalRole.objects.bulk_create(role_instances)
 
-    def _create_deliverables(self, proposal, deliverables: List[DeliverablesPayload]):
+    def _create_deliverables(self, proposal, deliverables: list):
         deliverable_instances = [
             ProposalDeliverable(
                 proposal=proposal,
-                sender=self.user,
+                sender=self.actor,
                 title=d.title,
                 description=d.description,
                 duration_unit=d.duration_unit,

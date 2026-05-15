@@ -84,7 +84,7 @@ class CollaborationURLS:
 class MarketplaceURLS:
     ALL = "all_oppurtunities"
     DETAIL = "oppurtunity_detail"
-    SUBMIT_PROJECT_ENGAGEMENT = "project_engegement_submission"
+    SUBMIT_PROJECT_PROPOSAL = "project_proposal_submission"
   
     
 class ProposalURLS:

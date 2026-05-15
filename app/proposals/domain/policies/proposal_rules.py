@@ -18,6 +18,7 @@ NON-GOALS:
 - Side Effects (No emails, notifications, or state mutations).
 """
 
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from core.model_registry import registry
 from collaboration.models.choices import ProjectStatus, ProjectRoleStatus
@@ -25,6 +26,7 @@ from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from ..exceptions import ProposalPermissionDenied
 from ..status_codes import PolicyFailure
+from ...domain.entities import ProjectEntity
 
 
 GigsModel = registry.Gig
@@ -37,43 +39,43 @@ class ProposalPolicy:
     """
     
     @staticmethod
-    def check_gig_eligibility(gig, user):
-        """Validates if the Gig is in a state to accept proposals."""
-        if gig.creator == user:
+    def check_gig_eligibility(project: ProjectEntity, actor: AbstractUser):
+        """Validates if the project is in a state to accept proposals."""
+        if project.creator == actor:
             raise ProposalPermissionDenied(
                 "You cannot apply to your own projects.",
-                code=PolicyFailure.CANNOT_APPLY_TO_OWN_GIG.code,
-                title=PolicyFailure.CANNOT_APPLY_TO_OWN_GIG.title,
+                code=PolicyFailure.CANNOT_APPLY_TO_OWN_PROJECT.code,
+                title=PolicyFailure.CANNOT_APPLY_TO_OWN_PROJECT.title,
             )
 
-        if gig.status == ProjectStatus.IN_PROGRESS:
+        if project.status == ProjectStatus.IN_PROGRESS:
             raise ProposalPermissionDenied(
                 "Applications for this project are closed as the project has already commenced.",
                 code=PolicyFailure.GIG_ALREADY_STARTED.code,
                 title=PolicyFailure.GIG_ALREADY_STARTED.title,
             )
 
-        if gig.status != ProjectStatus.PUBLISHED:
+        if project.status != ProjectStatus.PUBLISHED:
             raise ProposalPermissionDenied(
                 "This project is no longer accepting applications.",
-                code=PolicyFailure.GIG_NOT_PUBLISHED.code,
-                title=PolicyFailure.GIG_NOT_PUBLISHED.title,
+                code=PolicyFailure.PROJECT_NOT_PUBLISHED.code,
+                title=PolicyFailure.PROJECT_NOT_PUBLISHED.title,
             )
 
-        if gig.start_date and timezone.now().date() > gig.start_date:
+        if project.start_date and timezone.now().date() > project.start_date:
             raise ProposalPermissionDenied(
                 "The application window for this project has closed as the start date has passed.",
-                code=PolicyFailure.GIG_START_DATE_PASSED.code,
-                title=PolicyFailure.GIG_START_DATE_PASSED.title,
+                code=PolicyFailure.PROJECT_START_DATE_PASSED.code,
+                title=PolicyFailure.PROJECT_START_DATE_PASSED.title,
             )
             
     @staticmethod
-    def check_role_eligibility(gig):
+    def check_role_eligibility(project):
         # if gig has roles, and the role is assigned prevent from applying
         pass
 
     @staticmethod
-    def check_user_eligibility(profile, gig):
+    def check_user_eligibility(profile, project: ProjectEntity):
         """Validates if the user is qualified for this specific gig."""
 
         if not profile.user.is_verified:
@@ -83,12 +85,12 @@ class ProposalPolicy:
                 title=PolicyFailure.EMAIL_NOT_VERIFIED.title,
             )
 
-        if gig.has_gig_roles:
+        if project.has_gig_roles:
             is_qualified = GigRole.objects.filter(
                 status=ProjectRoleStatus.OPEN,
                 niche_id=profile.industry_id,
                 role_id__in=profile.get_user_niches,
-                gig=gig,
+                gig=project.id,
             ).exists()
 
             if not is_qualified:
@@ -99,7 +101,7 @@ class ProposalPolicy:
                 )
                 
     @staticmethod
-    def chack_max_proposals(gig):
+    def chack_max_proposals(project):
         """Ensures the user is not floded with more proposals than they can handle"""
         pass
 
@@ -114,24 +116,24 @@ class ProposalPolicy:
             )
             
     @classmethod
-    def ensure_can_apply(cls, user, gig) -> None:
+    def ensure_can_apply(cls, actor: AbstractUser, project) -> None:
         """
         Orchestrator: Runs all checks.
         If any fail, they raise a ProposalPermissionDenied with a specific message.
         """
-        cls.check_user_eligibility(user.profile, gig)
-        cls.check_gig_eligibility(gig, user)
-        cls.check_financial_status(user.profile)
+        cls.check_user_eligibility(actor.profile, project)
+        cls.check_gig_eligibility(actor, project)
+        cls.check_financial_status(actor.profile)
         
     
     # ---- Accepting proposal workflow ------------
     @staticmethod
-    def validate_state_transition(user, proposal, new_state):
+    def validate_state_transition(actor: AbstractUser, proposal, new_state):
         """
         Ensures a provider can only move a proposal to a WITHDRAWN state.
         Any other transition requires recipient (Project Creator) authority.
         """
-        is_sender = proposal.sender == user
+        is_sender = proposal.sender == actor
         is_withdrawing = new_state == ProposalRoleStatus.WITHDRAWN
 
         if is_sender and not is_withdrawing:
@@ -141,15 +143,11 @@ class ProposalPolicy:
                 code=failure.code,
                 title=failure.title,
             )
-            
-    @staticmethod
-    def was_previously_assigned(gig_obj):
-        pass
     
     
     @classmethod
-    def should_modify_state(cls, user, proposal, payload:ModifyProposalState):
-        cls.validate_state_transition(user, proposal, payload.state)
-        cls.check_financial_status(user.profile)
+    def should_modify_state(cls, actor, proposal, payload:ModifyProposalState):
+        cls.validate_state_transition(actor, proposal, payload.state)
+        cls.check_financial_status(actor.profile)
         # checkif previously assigned for gigs with roles
         # if previously assigned check if reassign is in payload

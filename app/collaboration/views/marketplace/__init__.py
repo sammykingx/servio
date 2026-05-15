@@ -1,3 +1,3 @@
 from .detail import OppurtuniyDetailView
 from .list import OppurtunityListView
-from .submissions import SubmitProjectEngagementView
+from .submissions import ProposalSubmissionView

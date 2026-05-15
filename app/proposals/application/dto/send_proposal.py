@@ -1,29 +1,31 @@
 from collaboration.models.choices import PaymentOption
-from pydantic import BaseModel, Field, field_validator, model_validator
-from datetime import date, datetime
+from ...domain.constants import DurationUnit
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from datetime import datetime
 from decimal import Decimal
-from enum import Enum
-from typing import List, Union
+from typing import List, Literal, Union
+from uuid import UUID
 
-
-class DurationUnit(str, Enum):
-    DAYS = "days"
-    WEEKS = "weeks"
-    MONTHS = "months"
     
-class DeliverablesPayload(BaseModel):
+class ProposalDeliverable(BaseModel):
+    """
+    Represents a specific task or milestone within a proposed role.
+    Handles the sequencing, duration constraints, and financial weight 
+    of a single deliverable.
+    """
     title: str = Field(..., max_lenth=55)
     description: str = Field(..., max_length=2000)
     duration_unit: DurationUnit
     duration_value: int
-    due_date: date
+    release_percentage: float
+    order: int = Field(..., description="The sequence position for UI rendering")
 
     @field_validator("description", mode="after")
     def validate_description(cls, value) -> str:
         return value.strip()
     
     @model_validator(mode='after')
-    def validate_duration_logic(self) -> 'DeliverablesPayload':
+    def validate_duration_logic(self) -> 'ProposalDeliverable':
         unit = self.duration_unit
         value = self.duration_value
 
@@ -43,16 +45,30 @@ class DeliverablesPayload(BaseModel):
 
         return self
 
-class AppliedRoles(BaseModel):
-    industry_id: int 
-    niche_id: int
+class ProposedRole(BaseModel):
+    """
+    Represents a specific service category (Industry/Niche) the provider 
+    is applying for within the project.
+    """
+    industry_id: int = Field(..., description="Top-level service category ID")
+    niche_id: int = Field(..., description="Specific skill/expertise level ID")
+    niche_name: str = Field(..., description="Human-readable name of the expertise")
     role_amount: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)
     proposed_amount: Union[Decimal, None] = None
     payment_plan: PaymentOption = PaymentOption.SPLIT_50_50
+    deliverables: List[ProposalDeliverable] = Field(..., min_length=1)
     
     
-class ProjectEngagementPayload(BaseModel):
-    applied_roles: List[AppliedRoles]
-    deliverables: List[DeliverablesPayload]
-    proposal_value: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)
+class ProposalSubmissionPayload(BaseModel):
+    """
+    The root object for a proposal submission. 
+    Links the provider's applied roles and financial terms to a specific project.
+    """
+    model_config = ConfigDict(strict=True)
+    
+    project_id: UUID
+    applied_roles: List[ProposedRole] = Field(..., min_length=1)
+    total_value: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)
+    currency: Literal["USD", "NGN"]
     sent_at: datetime
+    

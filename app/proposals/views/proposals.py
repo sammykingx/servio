@@ -7,7 +7,7 @@ from django.views.generic import ListView, View
 from collaboration.models.choices import ProjectStatus, ProjectVisibility
 from ..models.choices import ProposalStatus
 from ..domain.exceptions import ProposalError
-from ..application.services import ProposalService
+from ..application.services import ProposalOrchestrationService
 from ..application.dto.modify_proposal_state import ModifyProposalState
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
@@ -143,7 +143,7 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
         try:
             payload = json.loads(request.body)
             data = ModifyProposalState(**payload)
-            proposal_service = ProposalService(self.request.user, request)
+            proposal_service = ProposalOrchestrationService(self.request.user, request)
             self.update_proposal_state(proposal_service, data)
             
         except json.JSONDecodeError:
@@ -209,8 +209,8 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
             
         return JsonResponse(resp, status=200)
         
-    def update_proposal_state(self, service: ProposalService, data:ModifyProposalState):
-        if not isinstance(service, ProposalService):
+    def update_proposal_state(self, service: ProposalOrchestrationService, data:ModifyProposalState):
+        if not isinstance(service, ProposalOrchestrationService):
             raise Exception("proposal_service must be an instance of ProposalService")
         service.modify_proposal_state(data)
             

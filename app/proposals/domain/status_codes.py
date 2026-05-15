@@ -41,14 +41,14 @@ class PolicyFailure:
     """
 
     # Format: FailureDetail(CODE, HUMAN_READABLE_TITLE)
-    CANNOT_APPLY_TO_OWN_GIG = FailureDetail(
+    CANNOT_APPLY_TO_OWN_PROJECT = FailureDetail(
         "CANNOT_APPLY_TO_OWN_GIG", "Self-Application Restricted"
     )
     EMAIL_NOT_VERIFIED = FailureDetail(
         "EMAIL_VERIFICATION_REQUIRED", "Email Verification Pending"
     )
-    GIG_NOT_PUBLISHED = FailureDetail("GIG_NOT_PUBLISHED", "Project Unavailable")
-    GIG_START_DATE_PASSED = FailureDetail(
+    PROJECT_NOT_PUBLISHED = FailureDetail("GIG_NOT_PUBLISHED", "Project Unavailable")
+    PROJECT_START_DATE_PASSED = FailureDetail(
         "GIG_START_DATE_PASSED", "Application Window Closed"
     )
     GIG_ALREADY_STARTED = FailureDetail("GIG_ALREADY_STARTED", "Project In Progress")

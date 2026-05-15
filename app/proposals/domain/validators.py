@@ -18,7 +18,7 @@ NON-GOALS:
 """
 from core.model_registry import registry
 from constants import SERVICE_FEE, DECIMAL_PLACE
-from proposals.application.dto.send_proposal import AppliedRoles, ProjectEngagementPayload
+from proposals.application.dto.send_proposal import AppliedRoles, ProposalSubmissionPayload
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure
 from datetime import timedelta
@@ -37,10 +37,10 @@ class ProposalValidator:
     """
 
     @classmethod
-    def validate(cls, payload: ProjectEngagementPayload, gig):
+    def validate(cls, payload: ProposalSubmissionPayload, gig):
         """Orchestrates cross-model validation logic."""
 
-        cls._validate_taxonomy_integrity(payload.applied_roles, payload.proposal_value)
+        cls._validate_taxonomy_integrity(payload.applied_roles, payload.total_value)
         # cls._validate_deliverables_timeline(payload.deliverables, gig.end_date)
 
     @classmethod

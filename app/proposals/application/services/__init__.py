@@ -1,1 +1,1 @@
-from .send_proposal import ProposalService
+from .send_proposal import ProposalOrchestrationService
