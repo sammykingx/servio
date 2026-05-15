@@ -1,11 +1,11 @@
 from django.db import models
 
 
-class GigVisibility(models.TextChoices):
+class ProjectVisibility(models.TextChoices):
     PUBLIC = "public", "Public"
     PRIVATE = "private", "Private"
 
-class GigStatus(models.TextChoices):
+class ProjectStatus(models.TextChoices):
     ARCHIVED = "archived", "Archived"
     DRAFT = "draft", "Draft"
     PENDING = "pending", "Pending"
@@ -50,7 +50,7 @@ class PaymentOption(models.TextChoices):
             self.SPLIT_50_30_20: "50% / 30% / 20%",
         }[self]
         
-class RoleStatus(models.TextChoices):
+class ProjectRoleStatus(models.TextChoices):
     ASSIGNED = "assigned", "Assigned"
     OPEN = "open", "Open"
     COMPLETED = "completed", "Completed"

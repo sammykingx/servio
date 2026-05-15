@@ -41,23 +41,6 @@ class PaymentEntity:
     def is_successful(self) -> bool:
         return self.status == PaymentStatus.SUCCESS
     
-    # def is_session_valid(self) -> bool:
-    # noneed since policy ensures it's withing the gateway specific
-    # time windowk
-    #     """
-    #     Determines if the payment session has exceeded the gateway's validity window.
-    #     """
-    #     now = datetime.now()
-    #     duration = now - self.created_at
-        
-    #     expiry_map = {
-    #         RegisteredPaymentProvider.PAYSTACK: 4,
-    #         RegisteredPaymentProvider.STRIPE: 24,
-    #     }
-        
-    #     limit_hours = expiry_map.get(self.gateway, 4)
-    #     return duration < timedelta(hours=limit_hours)
-    
     def _transition_to_terminal_failure(self, status: PaymentStatus, reason: str):
         """Private helper to handle shared terminal state logic."""
         self.status = status

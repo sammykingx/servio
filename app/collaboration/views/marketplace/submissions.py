@@ -3,11 +3,11 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from collaboration.models.choices import GigStatus, PaymentOption
+from collaboration.models.choices import ProjectStatus, PaymentOption
 from proposals.domain.exceptions import ProposalError
 from proposals.application.services import ProposalService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
-from proposals.application.dto.send_proposal import SendProposal
+from proposals.application.dto.send_proposal import ProjectEngagementPayload
 from core.model_registry import registry
 from core.url_names import MarketplaceURLS, ProposalURLS
 from template_map.collaboration import Collabs
@@ -29,7 +29,7 @@ class SubmitProjectEngagementView(LoginRequiredMixin, DetailView):
     
     def get_queryset(self):
         return super().get_queryset().select_related('creator').filter(
-            status=GigStatus.PUBLISHED
+            status=ProjectStatus.PUBLISHED
         ).exclude(creator=self.request.user)
     
     def dispatch(self, request, *args, **kwargs):
@@ -83,7 +83,7 @@ class SubmitProjectEngagementView(LoginRequiredMixin, DetailView):
         is_negotiating = request.GET.get("negotiating", None) == "true"
         try:
             payload = json.loads(request.body)
-            data = SendProposal(**payload)
+            data = ProjectEngagementPayload(**payload)
             ProposalService(request.user, request).send_proposal(self.object, data, is_negotiating)
             
         except json.JSONDecodeError:

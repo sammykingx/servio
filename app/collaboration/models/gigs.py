@@ -32,7 +32,7 @@ from django.utils import timezone
 from django.utils.formats import date_format
 from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE
 from uuid6 import uuid7
-from .choices import GigVisibility, GigStatus
+from .choices import ProjectVisibility, ProjectStatus
 from decimal import Decimal, ROUND_HALF_UP
 from dateutil.relativedelta import relativedelta
 
@@ -58,14 +58,14 @@ class Gig(models.Model):
     title = models.CharField(max_length=350)
     visibility = models.CharField(
         max_length=30,
-        choices=GigVisibility.choices,
-        default=GigVisibility.PUBLIC
+        choices=ProjectVisibility.choices,
+        default=ProjectVisibility.PUBLIC
     )
 
     status = models.CharField(
         max_length=30,
-        choices=GigStatus.choices,
-        default=GigStatus.DRAFT
+        choices=ProjectStatus.choices,
+        default=ProjectStatus.DRAFT
     )
 
     description = models.TextField()
@@ -111,7 +111,7 @@ class Gig(models.Model):
         """
             Returns True if the gig is published and still ongoing.
         """
-        return self.status == GigStatus.PUBLISHED
+        return self.status == ProjectStatus.PUBLISHED
 
     def duration(self):
         if self.start_date and self.end_date:

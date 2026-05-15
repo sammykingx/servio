@@ -5,7 +5,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
-from collaboration.models.choices import GigStatus
+from collaboration.models.choices import ProjectStatus
 from collaboration.schemas.modify_gig import ModifyLiveGig
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
@@ -119,10 +119,10 @@ class EditGigView(LoginRequiredMixin, DetailView):
         """
         try:
             self.object = self.get_object()
-            if self.object.status == GigStatus.PUBLISHED:
+            if self.object.status == ProjectStatus.PUBLISHED:
                 return redirect(CollaborationURLS.LIVE_COLLABORATION_EDIT, slug=self.object.slug)
             
-            if self.object.status not in (GigStatus.DRAFT, GigStatus.PENDING):
+            if self.object.status not in (ProjectStatus.DRAFT, ProjectStatus.PENDING):
                 return redirect(CollaborationURLS.LIST_COLLABORATIONS)
 
             return super().dispatch(request, *args, **kwargs)
@@ -276,7 +276,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
                     .get(slug=gig_slug, creator=self.request.user)
                 )
                 
-                if gig.status not in (GigStatus.DRAFT, GigStatus.PENDING):
+                if gig.status not in (ProjectStatus.DRAFT, ProjectStatus.PENDING):
                     raise GigError(
                         message="Live gigs can only be edited using the live update workflow.",
                         status_code=403,
@@ -295,9 +295,9 @@ class EditGigView(LoginRequiredMixin, DetailView):
                 gig.is_negotiable = data.payload.isNegotiable
                 gig.has_gig_roles = True if data.payload.roles else False
                 gig.status = (
-                    GigStatus.PUBLISHED
+                    ProjectStatus.PUBLISHED
                     if data.action == GigStates.PUBLISH
-                    else GigStatus.DRAFT
+                    else ProjectStatus.DRAFT
                 )
 
                 gig.full_clean()
@@ -444,7 +444,7 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
             .get_queryset()
             .filter(
                 creator=self.request.user,
-                status__in=[GigStatus.PUBLISHED]
+                status__in=[ProjectStatus.PUBLISHED]
             )
             .only(
                 "id",

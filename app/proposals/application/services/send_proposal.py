@@ -25,24 +25,25 @@ Services orchestrate. Domain modules decide and validate.
 """
 
 from django.contrib.auth.models import AbstractUser
-from django.urls import reverse_lazy
 from django.db import transaction, IntegrityError, OperationalError
+from django.http import HttpRequest
+from django.urls import reverse_lazy
 from core.model_registry import registry
 from core.url_names import PaymentURLS
 from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.send_proposal import (
     AppliedRoles,
     DeliverablesPayload,
-    SendProposal,
+    ProjectEngagementPayload,
 )
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from constants import SERVICE_FEE, DECIMAL_PLACE
 from services.email_service import EmailService
 from template_map.emails import ProposalMails
-from ..domain.exceptions import ProposalError, ProposalPermissionDenied
-from ..domain.polices import ProposalPolicy
-from ..domain.status_codes import PolicyFailure
-from ..domain.validators import ProposalValidator
+from proposals.domain.exceptions import ProposalError, ProposalPermissionDenied
+from proposals.domain.policies.proposal_rules import ProposalPolicy
+from proposals.domain.status_codes import PolicyFailure
+from proposals.domain.validators import ProposalValidator
 from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 from uuid import UUID
@@ -89,7 +90,7 @@ class ProposalService:
     constraints are satisfied.
     """
 
-    def __init__(self, user: AbstractUser, request):
+    def __init__(self, user: AbstractUser, request: HttpRequest):
         self.user = user
         self.request = request
         if not all([self.user, self.request]):
@@ -98,7 +99,7 @@ class ProposalService:
                 f"Received: user={type(user).__name__}, request={type(request).__name__}"
             )
 
-    def send_proposal(self, gig, payload: SendProposal, is_negotiating: bool):
+    def send_proposal(self, gig, payload: ProjectEngagementPayload, is_negotiating: bool):
         """
         Executes the end-to-end proposal submission process.
 
@@ -174,7 +175,7 @@ class ProposalService:
         return proposal_role
         
     @transaction.atomic
-    def create_proposal_bundle(self, gig, payload: SendProposal, is_negotiating: bool):
+    def create_proposal_bundle(self, gig, payload: ProjectEngagementPayload, is_negotiating: bool):
         gig = GigModel.objects.get(id=gig.id)
         proposal = self._create_proposal(
             gig, payload.proposal_value, payload.sent_at, is_negotiating

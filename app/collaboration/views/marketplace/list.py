@@ -3,7 +3,7 @@ from django.db.models import Exists, Q, OuterRef, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from core.model_registry import registry
-from collaboration.models.choices import GigStatus, GigVisibility, RoleStatus
+from collaboration.models.choices import ProjectStatus, ProjectVisibility, ProjectRoleStatus
 from template_map.collaboration import Collabs
 
 
@@ -65,8 +65,8 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
         base_qs = (
             super().get_queryset()
             .filter(
-                status=GigStatus.PUBLISHED,
-                visibility=GigVisibility.PUBLIC,
+                status=ProjectStatus.PUBLISHED,
+                visibility=ProjectVisibility.PUBLIC,
                 is_gig_active=True
             )
             .exclude(creator=user)
@@ -77,7 +77,7 @@ class OppurtunityListView(LoginRequiredMixin, ListView):
         )
 
         matched_roles = GigRole.objects.filter(
-            status=RoleStatus.OPEN,
+            status=ProjectRoleStatus.OPEN,
             niche_id=user_industry_id,
             role_id__in=user_niches,
         )

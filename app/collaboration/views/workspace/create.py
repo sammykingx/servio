@@ -4,7 +4,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.db.models import Model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
-from collaboration.models.choices import GigStatus
+from collaboration.models.choices import ProjectStatus
 from template_map.collaboration import Collabs
 from formatters.pydantic_formatter import format_pydantic_errors
 from core.model_registry import registry
@@ -159,9 +159,9 @@ class CreateCollaborationView(LoginRequiredMixin, View):
                     is_negotiable=payload.isNegotiable,
                     has_gig_roles=True if payload.roles else False,
                     status=(
-                        GigStatus.PUBLISHED
+                        ProjectStatus.PUBLISHED
                         if action == GigStates.PUBLISH
-                        else GigStatus.DRAFT
+                        else ProjectStatus.DRAFT
                     ),
                 )
 

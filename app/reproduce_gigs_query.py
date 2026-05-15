@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 from collaboration.models.gigs import Gig
 from collaboration.models.gigrole import GigRole
 from collaboration.models.gig_category import GigCategory
-from collaboration.models.choices import GigStatus, GigVisibility, RoleStatus
+from collaboration.models.choices import ProjectStatus, ProjectVisibility, ProjectRoleStatus
 from collaboration.views.marketplace.list import OppurtunityListView
 from django.test import RequestFactory
 from django.db.models import Exists, OuterRef, Prefetch, Q
@@ -49,8 +49,8 @@ def run():
     match_gig = Gig.objects.create(
         title="Backend Gig",
         creator=User.objects.create_user(email="client1@example.com", password="password"),
-        status=GigStatus.PENDING,
-        visibility=GigVisibility.PUBLIC,
+        status=ProjectStatus.PENDING,
+        visibility=ProjectVisibility.PUBLIC,
         total_budget=Decimal("1000.00"),
         has_gig_roles=True,
         description="A backend gig"
@@ -59,15 +59,15 @@ def run():
         gig=match_gig,
         niche=backend_niche,
         budget=Decimal("500.00"),
-        status=RoleStatus.OPEN
+        status=ProjectRoleStatus.OPEN
     )
 
     # Create Non-Match Gig (UI/UX role)
     non_match_gig = Gig.objects.create(
         title="Design Gig",
         creator=User.objects.create_user(email="client2@example.com", password="password"),
-        status=GigStatus.PENDING,
-        visibility=GigVisibility.PUBLIC,
+        status=ProjectStatus.PENDING,
+        visibility=ProjectVisibility.PUBLIC,
         total_budget=Decimal("1000.00"),
         has_gig_roles=True,
         description="A design gig"
@@ -76,15 +76,15 @@ def run():
         gig=non_match_gig,
         niche=ui_niche,
         budget=Decimal("500.00"),
-        status=RoleStatus.OPEN
+        status=ProjectRoleStatus.OPEN
     )
 
     # Create General Gig (No roles)
     general_gig = Gig.objects.create(
         title="General Gig",
         creator=User.objects.create_user(email="client3@example.com", password="password"),
-        status=GigStatus.PENDING,
-        visibility=GigVisibility.PUBLIC,
+        status=ProjectStatus.PENDING,
+        visibility=ProjectVisibility.PUBLIC,
         total_budget=Decimal("1000.00"),
         has_gig_roles=False,
         description="A general gig"
@@ -94,8 +94,8 @@ def run():
     mixed_gig = Gig.objects.create(
         title="Mixed Gig",
         creator=User.objects.create_user(email="client4@example.com", password="password"),
-        status=GigStatus.PENDING,
-        visibility=GigVisibility.PUBLIC,
+        status=ProjectStatus.PENDING,
+        visibility=ProjectVisibility.PUBLIC,
         total_budget=Decimal("2000.00"),
         has_gig_roles=True,
         description="A mixed gig"
@@ -104,13 +104,13 @@ def run():
         gig=mixed_gig,
         niche=backend_niche,
         budget=Decimal("500.00"),
-        status=RoleStatus.OPEN
+        status=ProjectRoleStatus.OPEN
     )
     GigRole.objects.create(
         gig=mixed_gig,
         niche=ui_niche,
         budget=Decimal("500.00"),
-        status=RoleStatus.OPEN
+        status=ProjectRoleStatus.OPEN
     )
 
     print("Data setup complete.")

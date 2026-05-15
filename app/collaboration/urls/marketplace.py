@@ -14,7 +14,7 @@ urlpatterns = [
         ),
     ),
      
-    path("all/", OppurtunityListView.as_view(),
+    path("for-you/", OppurtunityListView.as_view(),
          name=MarketplaceURLS.ALL
     ),
     

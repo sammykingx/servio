@@ -20,11 +20,11 @@ NON-GOALS:
 
 from django.utils import timezone
 from core.model_registry import registry
-from collaboration.models.choices import GigStatus, RoleStatus
+from collaboration.models.choices import ProjectStatus, ProjectRoleStatus
 from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
-from .exceptions import ProposalPermissionDenied
-from .status_codes import PolicyFailure
+from ..exceptions import ProposalPermissionDenied
+from ..status_codes import PolicyFailure
 
 
 GigsModel = registry.Gig
@@ -46,14 +46,14 @@ class ProposalPolicy:
                 title=PolicyFailure.CANNOT_APPLY_TO_OWN_GIG.title,
             )
 
-        if gig.status == GigStatus.IN_PROGRESS:
+        if gig.status == ProjectStatus.IN_PROGRESS:
             raise ProposalPermissionDenied(
-                "Applications for this gig are closed as the project has already commenced.",
+                "Applications for this project are closed as the project has already commenced.",
                 code=PolicyFailure.GIG_ALREADY_STARTED.code,
                 title=PolicyFailure.GIG_ALREADY_STARTED.title,
             )
 
-        if gig.status != GigStatus.PUBLISHED:
+        if gig.status != ProjectStatus.PUBLISHED:
             raise ProposalPermissionDenied(
                 "This project is no longer accepting applications.",
                 code=PolicyFailure.GIG_NOT_PUBLISHED.code,
@@ -85,7 +85,7 @@ class ProposalPolicy:
 
         if gig.has_gig_roles:
             is_qualified = GigRole.objects.filter(
-                status=RoleStatus.OPEN,
+                status=ProjectRoleStatus.OPEN,
                 niche_id=profile.industry_id,
                 role_id__in=profile.get_user_niches,
                 gig=gig,
@@ -97,6 +97,7 @@ class ProposalPolicy:
                     code=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.code,
                     title=PolicyFailure.NOT_QUALIFIED_FOR_ROLES.title,
                 )
+                
     @staticmethod
     def chack_max_proposals(gig):
         """Ensures the user is not floded with more proposals than they can handle"""

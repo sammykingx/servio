@@ -51,7 +51,7 @@ class AppliedRoles(BaseModel):
     payment_plan: PaymentOption = PaymentOption.SPLIT_50_50
     
     
-class SendProposal(BaseModel):
+class ProjectEngagementPayload(BaseModel):
     applied_roles: List[AppliedRoles]
     deliverables: List[DeliverablesPayload]
     proposal_value: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)

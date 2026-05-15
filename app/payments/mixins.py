@@ -2,7 +2,7 @@ from django.apps import apps
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from core.url_names import CollaborationURLS
-from collaboration.models.choices import GigStatus
+from collaboration.models.choices import ProjectStatus
 
 
 GigModel = apps.get_model("collaboration","Gig")
@@ -24,7 +24,7 @@ class GigPaymentMixin:
             .filter(
                 id=self.kwargs["gig_id"],
                 creator=self.request.user,
-                status=GigStatus.PENDING,
+                status=ProjectStatus.PENDING,
             )
             .first()
         )

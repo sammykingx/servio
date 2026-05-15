@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models.address import AddressType
-from collaboration.models.choices import GigStatus, PaymentOption
+from collaboration.models.choices import ProjectStatus, PaymentOption
 from core.model_registry import registry
 from core.url_names import MarketplaceURLS
 from template_map.collaboration import Collabs
@@ -24,10 +24,10 @@ class OppurtuniyDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return super().get_queryset().select_related('creator').filter(
             status__in=[
-                GigStatus.PUBLISHED,
-                GigStatus.IN_PROGRESS,
-                GigStatus.COMPLETED,
-                GigStatus.CANCELLED,
+                ProjectStatus.PUBLISHED,
+                ProjectStatus.IN_PROGRESS,
+                ProjectStatus.COMPLETED,
+                ProjectStatus.CANCELLED,
             ]
         )
         

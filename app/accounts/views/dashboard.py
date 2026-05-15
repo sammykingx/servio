@@ -40,7 +40,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         if not user.is_verified:
             context["toast"] = {
-                "message": "Please verify your email to access all features.",
+                "message": "Go to Profile > Security & Trust to verify your email and access all features.",
                 "type": "warning",
                 "title": "Email Not Verified",
             }

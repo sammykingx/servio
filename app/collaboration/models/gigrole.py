@@ -1,5 +1,5 @@
 from django.db import models
-from .choices import PaymentOption, RoleStatus
+from .choices import PaymentOption, ProjectRoleStatus
 from uuid6 import uuid7
 
 
@@ -25,7 +25,7 @@ class GigRole(models.Model):
     niche_name = models.CharField(
         max_length=100,
         blank=True,
-        help_text="Optional specific role title (e.g. Senior Frontend Engineer)"
+        help_text="Optional specific to the choosen niche (e.g. Senior Frontend Engineer)"
     )
     role_id = models.PositiveIntegerField(
         null=True,
@@ -46,12 +46,12 @@ class GigRole(models.Model):
     slots = models.PositiveIntegerField(default=1)
     status = models.CharField(
         max_length=40,
-        choices=RoleStatus.choices,
-        default=RoleStatus.OPEN
+        choices=ProjectRoleStatus.choices,
+        default=ProjectRoleStatus.OPEN
     )
     is_negotiable = models.BooleanField(
         default=False,
-        help_text="Indicates if the budget is negotiable"
+        help_text="Indicates if the budget is negotiable,used by providers if they want client tonegotiate the amount"
     )
     show_role_budget = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -78,13 +78,13 @@ class GigRole(models.Model):
         """
             Returns True if the role is currently open for applications.
         """
-        return self.status == RoleStatus.OPEN
+        return self.status == ProjectRoleStatus.OPEN
 
     def is_assigned(self):
         """
             Returns True if the role has been assigned to someone.
         """
-        return self.status == RoleStatus.ASSIGNED
+        return self.status == ProjectRoleStatus.ASSIGNED
 
     def total_budget(self):
         """

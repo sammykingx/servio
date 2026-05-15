@@ -1,5 +1,5 @@
 """
-Domain-specific exceptions for proposal workflows.
+Domain-specific exceptions for sending proposal workflows.
 ===================
 """
 

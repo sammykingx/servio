@@ -3,7 +3,7 @@ from django.db.models import Count, Sum, F, Q, Prefetch
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from core.model_registry import registry
-from collaboration.models.choices import GigStatus
+from collaboration.models.choices import ProjectStatus
 from template_map.collaboration import Collabs
 
 
@@ -51,7 +51,7 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         queryset =  (
             super().get_queryset()
             .filter(creator=self.request.user)
-            .exclude(status=GigStatus.ARCHIVED)
+            .exclude(status=ProjectStatus.ARCHIVED)
             .prefetch_related(proposal_prefetch)
             .annotate(total_proposals=Count("proposals"))
             .only(
@@ -83,20 +83,20 @@ class CollaborationListView(LoginRequiredMixin, ListView):
         This data is primarily used for dashboard-style UI elements
         such as status tabs, counters, or filters.
         """
-        from collaboration.models.choices import GigStatus
+        from collaboration.models.choices import ProjectStatus
         context = super().get_context_data(**kwargs)
 
         gig_status_counts = (
             super().get_queryset()
             .filter(creator=self.request.user)
-            .exclude(status=GigStatus.ARCHIVED)
+            .exclude(status=ProjectStatus.ARCHIVED)
             .aggregate(
                 total=Count("id"),
-                draft=Count("id", filter=Q(status=GigStatus.DRAFT)),
-                published=Count("id", filter=Q(status=GigStatus.PUBLISHED)),
-                pending=Count("id", filter=Q(status=GigStatus.PENDING)),
-                in_progress=Count("id", filter=Q(status=GigStatus.IN_PROGRESS)),
-                completed=Count("id", filter=Q(status=GigStatus.COMPLETED)),
+                draft=Count("id", filter=Q(status=ProjectStatus.DRAFT)),
+                published=Count("id", filter=Q(status=ProjectStatus.PUBLISHED)),
+                pending=Count("id", filter=Q(status=ProjectStatus.PENDING)),
+                in_progress=Count("id", filter=Q(status=ProjectStatus.IN_PROGRESS)),
+                completed=Count("id", filter=Q(status=ProjectStatus.COMPLETED)),
             )
         )
         context["gig_status_counts"] = gig_status_counts

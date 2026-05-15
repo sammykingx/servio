@@ -5,7 +5,7 @@ from django.db import transaction, IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
-from collaboration.models.choices import GigStatus
+from collaboration.models.choices import ProjectStatus
 
 from ...exceptions import GigError
 
@@ -78,10 +78,10 @@ class DeleteGigView(LoginRequiredMixin, View):
         Marks the gig as archived without deleting records.
         Preserves data integrity and allows for potential restoration.
         """
-        if gig.status == GigStatus.ARCHIVED:
+        if gig.status == ProjectStatus.ARCHIVED:
             return
         
-        gig.status = GigStatus.ARCHIVED
+        gig.status = ProjectStatus.ARCHIVED
         gig.is_gig_active = False
         gig.save(update_fields=["status", "is_gig_active"])
         
@@ -92,8 +92,8 @@ class DeleteGigView(LoginRequiredMixin, View):
         """
                     
         can_hard_delete = (
-            gig.status in {GigStatus.DRAFT, GigStatus.PENDING} or 
-            (gig.status == GigStatus.PUBLISHED and not has_proposals)
+            gig.status in {ProjectStatus.DRAFT, ProjectStatus.PENDING} or 
+            (gig.status == ProjectStatus.PUBLISHED and not has_proposals)
         )
         
         if not has_proposals and can_hard_delete:

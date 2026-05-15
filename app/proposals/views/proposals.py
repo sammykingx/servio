@@ -4,7 +4,7 @@ from django.db.models.functions import Coalesce
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
-from collaboration.models.choices import GigStatus, GigVisibility
+from collaboration.models.choices import ProjectStatus, ProjectVisibility
 from ..models.choices import ProposalStatus
 from ..domain.exceptions import ProposalError
 from ..application.services import ProposalService
@@ -35,8 +35,8 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
             .get_queryset()
             .filter(
                 creator=self.request.user,
-                status=GigStatus.PUBLISHED,
-                visibility=GigVisibility.PUBLIC,
+                status=ProjectStatus.PUBLISHED,
+                visibility=ProjectVisibility.PUBLIC,
                 is_gig_active=True,
             )
         )
@@ -63,7 +63,7 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
         
         gig_filter = Q(
             creator=self.request.user,
-            status=GigStatus.PUBLISHED,
+            status=ProjectStatus.PUBLISHED,
             is_gig_active=True,
         )
 
@@ -78,8 +78,8 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
 
         proposal_filter = Q(
             proposal__gig__creator=self.request.user,
-            proposal__gig__status=GigStatus.PUBLISHED,
-            proposal__gig__visibility=GigVisibility.PUBLIC,
+            proposal__gig__status=ProjectStatus.PUBLISHED,
+            proposal__gig__visibility=ProjectVisibility.PUBLIC,
             proposal__gig__is_gig_active=True,
         )
 
