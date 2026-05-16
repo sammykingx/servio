@@ -1,4 +1,4 @@
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import DetailView
@@ -79,13 +79,13 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
             context["role_payment_plan"] = role_payment_plan
         return context
     
-    def post(self, request, *args, **kwargs):
+    def post(self, request:HttpRequest, *args, **kwargs):
         self.object = self.get_object()
         is_negotiating = request.GET.get("negotiating", None) == "true"
         try:
             # payload = json.loads(request.body)
             data = ProposalSubmissionPayload.model_validate(MOCK_PROPOSAL_PAYLOAD, strict=True) # ProposalSubmissionPayload.model_validate_json(payload, strict=True)
-            ProposalOrchestrationService(request.user, request).submit_proposal(self.object, data, is_negotiating)
+            ProposalOrchestrationService(request.user, request).submit_proposal(data)
             
         except json.JSONDecodeError:
             return JsonResponse(

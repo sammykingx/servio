@@ -16,7 +16,7 @@ Responsibilities:
 
 
 from core.model_registry import registry
-from proposals.domain.entities import ProjectEntity
+from proposals.domain.entities import ProjectEntity, ProjectRoleEntity
 from proposals.domain.exceptions import ProposalPersistenceError
 from proposals.domain.status_codes import PolicyFailure
 from typing import Optional
@@ -41,8 +41,12 @@ class ProjectRepository:
                 otherwise None.
         """
         try:
-            project = None
-            queryset = self.model.objects.filter(id=project_id).select_related("creator")
+            queryset = (
+                self.model.objects
+                .select_related("creator")
+                .filter(id=project_id)
+                .prefetch_related("required_roles") 
+            )
             if with_lock:
                 project = queryset.select_for_update(nowait=True).first
             else:
@@ -101,6 +105,24 @@ class ProjectRepository:
         Returns:
             ProjectEntity: Pure domain representation of the project.
         """
+        project_roles = [
+            {
+                ProjectRoleEntity(
+                    id=role.id,
+                    niche=role.niche,
+                    niche_name=role.niche_name,
+                    role_id=role.role_role_id,
+                    role_name=role.role_name,
+                    description=role.description,
+                    budget=role.budget,
+                    payment_plan=role.payment_option,
+                    status=role.status,
+                    slots=role.slots
+                )
+            }
+            for role in project.required_roles.all()
+        ]
+        
         return ProjectEntity(
             id=project.id,
             title=project.title,
@@ -114,6 +136,7 @@ class ProjectRepository:
             status=project.status,
             start_date=project.start_date,
             end_date=project.end_date,
+            required_roles=project_roles
         )
     
     

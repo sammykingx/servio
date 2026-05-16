@@ -130,39 +130,3 @@ class GigCategory(models.Model):
         for subcat in self.subcategories.all():
             descendants |= subcat.all_descendants()
         return descendants
-
-    def gigs_count(self):
-        """
-        Returns the number of gigs directly associated with this category
-        through roles or if the category is assigned directly in future enhancements.
-        """
-        GigRole = apps.get_model("collaboration", "GigRole")
-        return GigRole.objects.filter(niche=self).count()
-
-    def gigs(self):
-        """
-        Returns a queryset of all gigs associated with this category through roles.
-        """
-        GigRole = apps.get_model("collaboration", "GigRole")
-        Gig = apps.get_model("collaboration", "Gig")
-        
-        gig_ids = GigRole.objects.filter(niche=self).values_list('gig_id', flat=True)
-
-        return Gig.objects.filter(id__in=gig_ids).distinct()
-
-    def roles(self):
-        """
-        Returns a queryset of all GigRoles associated with this category.
-        """
-        GigRole = apps.get_model("collaboration", "GigRole")
-        return GigRole.objects.filter(niche=self)
-
-    def top_level_category(self):
-        """
-        Returns the root parent category for this category.
-        If this category is already top-level, returns self.
-        """
-        category = self
-        while category.parent is not None:
-            category = category.parent
-        return category

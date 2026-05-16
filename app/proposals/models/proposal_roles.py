@@ -12,7 +12,7 @@ class ProposalRole(models.Model):
         related_name="roles",
     )
 
-    gig_role = models.ForeignKey(
+    role = models.ForeignKey(
         "collaboration.GigRole",
         on_delete=models.PROTECT,
         related_name="proposal_roles_by_gig_role",
@@ -24,7 +24,7 @@ class ProposalRole(models.Model):
         ),
     )
     
-    gig_category = models.ForeignKey(
+    category = models.ForeignKey(
         "collaboration.GigCategory",
         on_delete=models.PROTECT,
         related_name="proposal_roles_by_category",
@@ -33,10 +33,10 @@ class ProposalRole(models.Model):
         help_text="Link to a GigCategory if the gig does not have structured roles."
     )
 
-    role_amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-    )
+    # amount = models.DecimalField(
+    #     max_digits=10,
+    #     decimal_places=2,
+    # )
 
     proposed_amount = models.DecimalField(
         max_digits=10,
@@ -44,6 +44,7 @@ class ProposalRole(models.Model):
         null=True,
         blank=True,
     )
+    currency = models.CharField(max_length=10)
 
     payment_plan = models.CharField(
         max_length=20,
@@ -67,15 +68,15 @@ class ProposalRole(models.Model):
         Returns the name of the role, whether it's from a GigRole or a GigCategory.
         This makes template rendering simple.
         """
-        if self.gig_role:
-            return self.gig_role.role_name
-        elif self.gig_category:
-            return self.gig_category.name
+        if self.role:
+            return self.role.role_name
+        elif self.category:
+            return self.category.name
         return "Unknown Role"
     
     @property
     def dynamic_budget_range(self):
-        amount = self.role_amount
+        amount = self.proposed_amount
         lower_raw = amount * Decimal('0.6')
         upper_raw = amount * Decimal('1.1')
 
@@ -87,30 +88,30 @@ class ProposalRole(models.Model):
 
         return f"${display_lower:,.0f} - ${upper:,.0f}"
     
-    @property
-    def budget_difference(self):
-        diff = self.proposed_amount - self.role_amount
-        return f"+${diff:,.2f}" if diff > 0 else f"-${abs(diff):,.2f}" if diff < 0 else "No Change"
+    # @property
+    # def budget_difference(self):
+    #     diff = self.proposed_amount - self.role_amount
+    #     return f"+${diff:,.2f}" if diff > 0 else f"-${abs(diff):,.2f}" if diff < 0 else "No Change"
     
-    @property
-    def service_fee(self):
-        return (
-            self.final_amount * Decimal(str(SERVICE_FEE))
-        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+    # @property
+    # def service_fee(self):
+    #     return (
+    #         self.final_amount * Decimal(str(SERVICE_FEE))
+    #     ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
     
-    @property
-    def payout_amount(self):
-        return (
-            self.final_amount - self.service_fee
-        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+    # @property
+    # def payout_amount(self):
+    #     return (
+    #         self.final_amount - self.service_fee
+    #     ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
         
     def clean(self):
         from django.core.exceptions import ValidationError
         
-        if self.gig_role and self.gig_category:
-            raise ValidationError("A ProposalRole can only have either a gig_role or a gig_category, not both.")
-        if not self.gig_role and not self.gig_category:
-            raise ValidationError("A ProposalRole must have either a gig_role or a gig_category,not both.")
+        if self.role and self.category:
+            raise ValidationError("A ProposalRole can only have either a role or a category, not both.")
+        if not self.role and not self.category:
+            raise ValidationError("A ProposalRole must have either a role or a category, not both.")
         
     def save(self, *args, **kwargs):
         self.full_clean()

@@ -53,7 +53,7 @@ class ProposedRole(BaseModel):
     industry_id: int = Field(..., description="Top-level service category ID")
     niche_id: int = Field(..., description="Specific skill/expertise level ID")
     niche_name: str = Field(..., description="Human-readable name of the expertise")
-    role_amount: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)
+    role_amount: Decimal = Field(..., gt=10, max_digits=12, decimal_places=2)
     currency: Literal["USD", "NGN"]
     proposed_amount: Union[Decimal, None] = None
     payment_plan: PaymentOption = PaymentOption.SPLIT_50_50

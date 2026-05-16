@@ -5,9 +5,23 @@ from proposals.models.choices import ProposalStatus
 from datetime import datetime
 from uuid import UUID
 from decimal import Decimal
-from typing import Union
+from typing import List
 
 
+@dataclass(frozen=True) 
+class ProjectRoleEntity:
+    id: UUID
+    niche: int
+    niche_name: str
+    role_id: int
+    role_name: str
+    description: str
+    budget: Decimal
+    payment_plan: PaymentOption
+    status: str
+    slots: int
+    
+    
 @dataclass(frozen=True)
 class ProjectEntity:
     id: UUID
@@ -22,21 +36,7 @@ class ProjectEntity:
     status: ProjectStatus
     start_date: datetime
     end_date: datetime
-   
-
-@dataclass(frozen=True) 
-class RoleEntity:
-    id: UUID
-    project: ProjectEntity
-    niche: int
-    niche_name: str
-    role_id: int
-    role_name: str
-    description: str
-    budget: Decimal
-    payment_plan: PaymentOption
-    start_date: datetime
-    end_date: datetime
+    required_roles: List[ProjectRoleEntity] = []
     
     
 @dataclass(frozen=True)

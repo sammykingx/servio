@@ -17,13 +17,13 @@ NON-GOALS:
 - Orchestration (e.g., Sending emails or updating state).
 """
 from core.model_registry import registry
-from constants import SERVICE_FEE, DECIMAL_PLACE
-from proposals.application.dto.send_proposal import AppliedRoles, ProposalSubmissionPayload
+from proposals.application.dto.send_proposal import ProposedRole, ProposalSubmissionPayload
+from proposals.domain.entities import ProjectEntity
+from proposals.domain.status_codes import ValidationFailure
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure
-from datetime import timedelta
-from decimal import Decimal, ROUND_HALF_UP
-from typing import List
+from decimal import Decimal
+from typing import Dict, Set
 
 
 GigCategory = registry.GigCategory
@@ -37,110 +37,79 @@ class ProposalValidator:
     """
 
     @classmethod
-    def validate(cls, payload: ProposalSubmissionPayload, gig):
+    def validate(cls, payload: ProposalSubmissionPayload, project: ProjectEntity):
         """Orchestrates cross-model validation logic."""
 
-        cls._validate_taxonomy_integrity(payload.applied_roles, payload.total_value)
-        # cls._validate_deliverables_timeline(payload.deliverables, gig.end_date)
-
-    @classmethod
-    def _validate_taxonomy_integrity(
-        cls, applied_roles: List[AppliedRoles], proposal_value: Decimal
-    ):
         industry_ids = set()
-        niche_ids = set()
-        calc_role_value = Decimal("0")
-
-        for role in applied_roles:
+        applied_role_ids = set()
+        calc_role_amount = Decimal("0")
+        applied_roles_map:Dict[int, str] = {} # { role_id: role_name }
+        payload_taxonmy_map = {} # { industry_id: { niche_ids } }
+        
+        for role in payload.applied_roles:
             industry_ids.add(role.industry_id)
-            niche_ids.add(role.niche_id)
-            cls._validate_minimum_role_amount(role)
-            calc_role_value += role.proposed_amount or role.role_amount
-
-        validated_industry = cls._validate_industry(industry_ids)
-        cls._validate_total_proposal_amount(proposal_value, calc_role_value)
-        cls._validate_niche(niche_ids, validated_industry)
-
+            applied_role_ids.add(role.niche_id)
+            calc_role_amount += role.proposed_amount
+            applied_roles_map[role.niche_id] = role.niche_name
+            if role.industry_id not in payload_taxonmy_map:
+                payload_taxonmy_map[role.industry_id] = set()
+            payload_taxonmy_map[role.industry_id].add(role.niche_id)
+            
+        if project.has_gig_roles:
+            cls._validate_defined_project_roles(
+                project, applied_role_ids, applied_roles_map
+            )
+            
+        else:
+            cls._validate_open_project_taxonomy(
+                payload_taxonmy_map, applied_roles_map
+            )
+            
+        # cls._validate_deliverables_timeline(payload.deliverables, gig.end_date)
+    
     @classmethod
-    def _validate_total_proposal_amount(
-        cls, proposal_value: Decimal, calc_role_value: Decimal
-    ):
-        service_fee = (calc_role_value * Decimal(str(SERVICE_FEE))).quantize(
-            Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP
-        )
-        calc_proposal_value = calc_role_value - service_fee
-        if proposal_value != calc_proposal_value:
-            message = (
-                f"Double-check your numbers! The proposal worth (${proposal_value:,.2f}) "
-                f"doesn't quite match the your roles worth (${calc_proposal_value:,.2f}). "
-                "Please ensure they balance out before proceeding."
-            )
+    def _validate_defined_project_roles(cls, project: ProjectEntity, applied_role_ids: Set[int], applied_roles_map: Dict[int, str]):
+        allowed_role_ids = {role.role_id for role in project.required_roles}
+        invalid_roles = applied_role_ids - allowed_role_ids
+        if invalid_roles:
+            invalid_role_names = [ applied_roles_map[role] for role in invalid_roles]
             raise ProposalValidationError(
-                message,
-                code=ValidationFailure.UNBALANCED_BUDGET.code,
-                title=ValidationFailure.UNBALANCED_BUDGET.title,
+                f"The Selected roles {invalid_role_names} are not requested within this project's scope.",
+                code=ValidationFailure.INVALID_ROLE.code,
+                title=ValidationFailure.INVALID_ROLE.title
             )
-
+    
     @classmethod
-    def _validate_industry(cls, industry_ids: set):
-        if len(industry_ids) > 1:
-            raise ProposalValidationError(
-                "Applying to multiple industries in one proposal is not allowed.",
-                code=ValidationFailure.MULTIPLE_INDUSTRIES_NOT_ALLOWED.code,
-                title=ValidationFailure.MULTIPLE_INDUSTRIES_NOT_ALLOWED.title,
+    def _validate_open_project_taxonomy(cls, payload_map: Dict[int, Set[int]], applied_roles_map: Dict[int, str]) -> None:
+        """
+        Validates open taxonomy by batching subcategory verification per industry.
+        Guarantees 1 query per industry instead of querying for every single sub-role.
+        """
+        for industry_id, applied_niche_ids in payload_map.items():
+            valid_subcategories_in_db = (
+                GigCategory.objects
+                .filter(
+                    parent_id=industry_id, 
+                    is_active=True, 
+                    id__in=applied_niche_ids
+                )
+                .values_list("id", flat=True)
             )
-
-        industry_id = next(iter(industry_ids))
-        try:
-            industry_obj = GigCategory.objects.get(
-                id=industry_id, parent__isnull=True, is_active=True
-            )
-        except GigCategory.DoesNotExist:
-            raise ProposalValidationError(
-                f"Industry ID {industry_id} is invalid or inactive.",
-                code=ValidationFailure.INVALID_INDUSTRY,
-                title=ValidationFailure.INVALID_INDUSTRY.title,
-            )
-
-        return industry_obj
-
-    @classmethod
-    def _validate_niche(cls, niche_ids: set, validated_industry):
-        valid_niche_ids = set(
-            validated_industry.active_subcategories().values_list("id", flat=True)
-        )
-        invalid_niche_ids = niche_ids - valid_niche_ids
-        if invalid_niche_ids:
-            raise ProposalValidationError(
-                f"Niches {list(invalid_niche_ids)} do not belong to the selected industry.",
-                code=ValidationFailure.INVALID_ROLE,
-                title=ValidationFailure.INVALID_ROLE.title,
-            )
-
-    @classmethod
-    def _validate_minimum_role_amount(cls, role: AppliedRoles):
-        final_amount = (
-            role.proposed_amount
-            if role.proposed_amount is not None
-            else role.role_amount
-        )
-        if final_amount < 50:
-            raise ProposalValidationError(
-                "Quality work deserves more than pocket change! Please ensure each role amount is at least $50.",
-                code=ValidationFailure.INVALID_AMOUNT,
-                title=ValidationFailure.INVALID_AMOUNT.title,
-            )
-
-    @classmethod
-    def _validate_deliverables_timeline(cls, deliverables, gig_end_date):
-        if not gig_end_date:
-            return
-
-        cutoff_date = gig_end_date - timedelta(days=3)
-        for d in deliverables:
-            if d.due_date > cutoff_date:
+            
+            valid_niche_set = set(valid_subcategories_in_db)
+            invalid_niches = applied_niche_ids - valid_niche_set
+            
+            if not valid_niche_set:
                 raise ProposalValidationError(
-                    f"Deliverable due date must be on or before {cutoff_date}.",
-                    code=ValidationFailure.DURATION_EXCEEDS_LIMIT,
-                    title=ValidationFailure.DURATION_EXCEEDS_LIMIT.title,
+                    "You selected and unrecognized industry",
+                    code=ValidationFailure.INVALID_INDUSTRY.code,
+                    title=ValidationFailure.INVALID_INDUSTRY.title
+                )
+                
+            if invalid_niches:
+                invalid_role_names = [applied_roles_map[role_id] for role_id in invalid_niches]
+                raise ProposalValidationError(
+                    f"These roles {invalid_role_names} isn't part of a recognized industry",
+                    code=ValidationFailure.INVALID_ROLE.code,
+                    title=ValidationFailure.INVALID_ROLE.title
                 )

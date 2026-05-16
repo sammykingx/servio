@@ -9,16 +9,25 @@ class ProposalRepository:
     def  __init__(self):
         self.model = registry.Proposal
         
-    def create_proposal(self, *, project: ProjectEntity, provider: AbstractUser, value: Decimal, status: str, currency: str, sent_at: datetime) -> ProposalEntity:
+    def create_proposal(
+        self,
+        *, 
+        project: ProjectEntity, 
+        provider: AbstractUser, 
+        value: Decimal, 
+        currency: str,
+        sent_at: datetime
+    ) -> ProposalEntity:
         proposal = self.model.objects.create(
             project=project,
             provider=provider,
             total_value=value,
             currency=currency,
-            status=status,
             sent_at=sent_at
         )
         return self._to_entity(proposal)
+        # return None
+        
         
     def _to_entity(self, proposal) -> ProposalEntity:
         return ProposalEntity(

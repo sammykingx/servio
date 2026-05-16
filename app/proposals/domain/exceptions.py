@@ -63,3 +63,6 @@ class ProposalValidationError(ProposalError):
     """
 
     pass
+
+class ProposalPersistenceError(ProposalError):
+    pass

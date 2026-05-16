@@ -45,7 +45,7 @@ from proposals.domain.exceptions import ProposalError, ProposalPermissionDenied,
 from proposals.domain.policies.proposal_rules import ProposalPolicy
 from proposals.domain.status_codes import PolicyFailure
 from proposals.domain.validators import ProposalValidator
-from proposals.infrastructure.repositories import ProjectRepository, ProposalRepository
+from proposals.infrastructure.repositories import ProjectRepository, ProposalRepository, ProposalRoleRepository
 from decimal import Decimal, ROUND_HALF_UP
 from typing import List
 from uuid import UUID
@@ -97,18 +97,17 @@ class ProposalOrchestrationService:
         self.request = request
         self.project_repository = ProjectRepository()
         self.proposal_repository = ProposalRepository()
-        # self.role_repository = ProposalRoleRepository()
+        self.role_repository = ProposalRoleRepository()
         # self.deliverable_repository = ProposalDeliverableRepository()
 
-    def submit_proposal(self, payload: ProposalSubmissionPayload, is_negotiating: bool):
+    def submit_proposal(self, payload: ProposalSubmissionPayload):
         try:
             project = self.project_repository.get_by_id(project_id=payload.project_id)
             ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
-            # validate if the roles belong to the project
 
             proposal = self.create_proposal_bundle(payload)
-            self.notifications_flow(project)
+            # self.notifications_flow(project)
 
         except ProposalPermissionDenied as e:
             if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
@@ -136,6 +135,12 @@ class ProposalOrchestrationService:
                 currency=payload.currency,
                 sent_at=payload.sent_at
             )
+            # self.role_repository.create_roles(
+            #     proposal=proposal,
+            #     amount
+            # )
+            # create roles todeliverables bundle
+            
         except IntegrityError as err:
             if getattr(err.__cause__, "args", None):
                 db_error_code = err.__cause__.args[0]
