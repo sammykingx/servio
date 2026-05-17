@@ -31,23 +31,19 @@ from django.urls import reverse_lazy
 from core.model_registry import registry
 from core.url_names import PaymentURLS
 from proposals.models.choices import ProposalRoleStatus
-from proposals.application.dto.send_proposal import (
-    ProposedRole,
-    ProposalDeliverable,
-    ProposalSubmissionPayload,
-)
+from proposals.application.dto.send_proposal import ProposalSubmissionPayload
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
-from constants import SERVICE_FEE, DECIMAL_PLACE
 from services.email_service import EmailService
 from template_map.emails import ProposalMails
 from proposals.domain.entities import ProjectEntity
-from proposals.domain.exceptions import ProposalError, ProposalPermissionDenied, ProposalPersistenceError
+from proposals.domain.exceptions import ProposalError, ProposalPermissionDenied
 from proposals.domain.policies.proposal_rules import ProposalPolicy
 from proposals.domain.status_codes import PolicyFailure
 from proposals.domain.validators import ProposalValidator
-from proposals.infrastructure.repositories import ProjectRepository, ProposalRepository, ProposalRoleRepository
-from decimal import Decimal, ROUND_HALF_UP
-from typing import List
+from proposals.infrastructure.repositories import (
+    ProjectRepository, ProposalRepository, ProposalRoleRepository, 
+    ProjectDeliverablesRepository
+)
 from uuid import UUID
 import logging
 
@@ -98,31 +94,25 @@ class ProposalOrchestrationService:
         self.project_repository = ProjectRepository()
         self.proposal_repository = ProposalRepository()
         self.role_repository = ProposalRoleRepository()
-        # self.deliverable_repository = ProposalDeliverableRepository()
+        self.deliverables_repo = ProjectDeliverablesRepository()
 
     def submit_proposal(self, payload: ProposalSubmissionPayload):
+        """
+        Validates, persists, and orchestrates notifications for a new project proposal submission.
+        """
         try:
             project = self.project_repository.get_by_id(project_id=payload.project_id)
             ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
 
             proposal = self._create_proposal_bundle(payload)
-            # self.notifications_flow(project)
+            self.notifications_flow(project)
+            return proposal
 
         except ProposalPermissionDenied as e:
             if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
                 e.redirect_url = get_error_redirect(e.code)
             raise e
-
-        except ProposalError:
-            raise
-
-        except Exception as e:
-            # import traceback
-            # traceback.print_exc()
-            raise
-
-        return proposal
         
     @transaction.atomic
     def _create_proposal_bundle(self, payload: ProposalSubmissionPayload):
@@ -131,7 +121,9 @@ class ProposalOrchestrationService:
         3 SQL insert transactions. Safe for resource-constrained cPanel environments.
         """
         try:
-            project = self.project_repository.get_by_id(project_id=payload.project_id, with_lock=True)
+            project = self.project_repository.get_by_id(
+                project_id=payload.project_id, with_lock=True, as_entity=False
+            )
             proposal = self.proposal_repository.create_proposal(
                 project=project,
                 provider=self.actor,
@@ -142,6 +134,7 @@ class ProposalOrchestrationService:
             for applied_role in payload.applied_roles:
                 role_fk_id = applied_role.niche_id if project.has_gig_roles else None
                 category_fk_id = None if project.has_gig_roles else applied_role.niche_id
+                
                 saved_role = self.role_repository.create_roles(
                     proposal=proposal,
                     role=role_fk_id,
@@ -151,28 +144,9 @@ class ProposalOrchestrationService:
                     currency=applied_role.currency,
                     payment_plan=applied_role.payment_plan,
                 )
-                deliverables_to_create = [
-                    # to model repo method
-                    self.deliverable_model(
-                        proposal_role=saved_role,
-                        provider=self.actor,
-                        phase=deliv_data.phase,
-                        description=deliv_data.description,
-                        duration_unit=deliv_data.duration_unit,
-                        duration_value=deliv_data.duration_value,
-                        release_percentage=deliv_data.release_percentage,
-                        rendering_order=deliv_data.rendering_order
-                    )
-                    for deliv_data in applied_role.deliverables
-                ]
-                if deliverables_to_create:
-                    self.deliverable_model.objects.bulk_create(deliverables_to_create)
-                    
-            # self.role_repository.create_roles(
-            #     proposal=proposal,
-            #     amount
-            # )
-            # create roles todeliverables bundle
+                self.deliverables_repo.bulk_create_from_payload(
+                    saved_role, self.actor, applied_role.deliverables
+                )
             
         except IntegrityError as err:
             if getattr(err.__cause__, "args", None):
@@ -197,134 +171,6 @@ class ProposalOrchestrationService:
                 },
             )
             raise err
-        
-        self._create_proposal_roles(project, proposal, payload.applied_roles)
-        self._create_deliverables(proposal, payload.deliverables)
-
-    def _get_role_object(self, gig, role_id):
-        try:
-            return gig.required_roles.get(role_id=role_id)
-
-        except GigRoleModel.DoesNotExist:
-            raise ProposalPermissionDenied(
-                "It looks like this specific role isn't part of this project's current needs.",
-                code=PolicyFailure.INVALID_ROLE.code,
-                title=PolicyFailure.INVALID_ROLE.title,
-            )
-
-        except GigRoleModel.MultipleObjectsReturned:
-            raise ProposalPermissionDenied(
-                "There seems to be a configuration issue with this role.",
-                code=PolicyFailure.INVALID_ROLE.code,
-                title=PolicyFailure.INVALID_ROLE.title,
-            )
-
-    def _create_proposal_roles(self, gig, proposal, applied_roles: list):
-        role_instances = []
-        role_obj = None
-
-        for role_payload in applied_roles:
-            if gig.has_gig_roles:
-                try:
-                    role_obj = gig.required_roles.get(role_id=role_payload.niche_id)
-                except GigRoleModel.DoesNotExist:
-                    raise ProposalPermissionDenied(
-                        "It looks like this specific role isn't part of this project's current needs.",
-                        code=PolicyFailure.INVALID_ROLE.code,
-                        title=PolicyFailure.INVALID_ROLE.title,
-                    )
-                except GigRoleModel.MultipleObjectsReturned:
-                    raise ProposalPermissionDenied(
-                        "There seems to be a configuration issue with this role.",
-                        code=PolicyFailure.INVALID_ROLE.code,
-                        title=PolicyFailure.INVALID_ROLE.title,
-                    )
-                role_instances.append(
-                    Proposal(
-                        proposal=proposal,
-                        gig_role=role_obj,
-                        gig_category=None,
-                        role_amount=role_payload.role_amount,
-                        proposed_amount=role_payload.proposed_amount,
-                        payment_plan=role_payload.payment_plan,
-                    )
-                )
-
-            else:
-                category_obj = GigCategoryModel.objects.get(
-                    id=role_payload.niche_id, parent_id=role_payload.industry_id
-                )
-                
-                Proposal.objects.create(
-                    proposal=proposal,
-                    gig_role=None,
-                    gig_category=category_obj,
-                    role_amount=role_payload.role_amount,
-                    proposed_amount=role_payload.proposed_amount,
-                    payment_plan=role_payload.payment_plan,
-                )
-
-        if gig.has_gig_roles:
-            ProposalRole.objects.bulk_create(role_instances)
-
-    def _create_deliverables(self, proposal, deliverables: list):
-        deliverable_instances = [
-            ProposalDeliverable(
-                proposal=proposal,
-                sender=self.actor,
-                title=d.title,
-                description=d.description,
-                duration_unit=d.duration_unit,
-                duration_value=d.duration_value,
-                due_date=d.due_date,
-                order=idx,
-            )
-            for idx, d in enumerate(deliverables)
-        ]
-
-        ProposalDeliverable.objects.bulk_create(deliverable_instances)
-        
-    @transaction.atomic
-    def _transition_proposal_status(self, payload:ModifyProposalState):
-        try:
-            proposal_role = ProposalRole.objects.select_for_update().get(
-                proposal_id=payload.proposal_id,
-                gig_role_id=payload.role_id,
-            )
-        
-            # comeback to
-            proposal = Proposal.objects.select_for_update().get(
-                id=payload.proposal_id
-            )
-            
-            role_update_fields = []
-
-            if proposal_role.status != payload.state:
-                proposal_role.status = payload.state
-                role_update_fields.append("status")
-
-            if payload.state == ProposalRoleStatus.ACCEPTED:
-                proposal_role.final_amount = (
-                    proposal_role.proposed_amount or proposal_role.role_amount
-                )
-                role_update_fields.append("final_amount")
-
-            if role_update_fields:
-                proposal_role.save(update_fields=role_update_fields)
-                
-            if proposal.status != payload.state:
-                proposal.status = payload.state
-
-                # change gig_role to assign if gig has roles
-                proposal.save(update_fields=["status"])
-        
-        except OperationalError:
-            import traceback
-            traceback.print_exc()
-            raise ProposalError(
-                message="This proposal is currently being updated by another action. Please wait a moment and try again.",
-                title="Action in Progress",
-            )
         
     def notifications_flow(self, gig):
         self._notify_creator_by_mail(gig)
@@ -362,80 +208,3 @@ class ProposalOrchestrationService:
         """creates in-app notifications for both providers and creators"""
         # notify the both project creator and service providers
         return None
-    
-    def modify_proposal_state(self, payload:ModifyProposalState):
-        """User in this context is the project/project creator"""
-
-        try:
-            proposal_role = self._get_proposal_role(payload.proposal_id, payload.role_id)
-            proposal_obj = proposal_role.proposal
-            ProposalPolicy.should_modify_state(self.actor, proposal_obj, payload)
-            self._transition_proposal_status(payload)
-
-        except ProposalPermissionDenied as e:
-            if e.code == PolicyFailure.SUBSCRIPTION_REQUIRED.code:
-                e.redirect_url = get_error_redirect(e.code, {"gig_id": proposal_obj.gig})
-            raise e
-    
-    def _get_proposal_role(self, proposal_id:UUID, proposal_role_id:UUID):
-        proposal_role = (
-            ProposalRole.objects
-            .select_related("proposal", "proposal__gig")
-            .filter(
-                gig_role_id=proposal_role_id,
-                proposal_id=proposal_id,
-                proposal__gig__creator=self.actor
-            )
-            .first()
-        )
-
-        if not proposal_role:
-            raise ProposalPermissionDenied(
-                message="We couldn't find that specific proposal in your project records. Please make sure you're accessing the correct link.",
-                code=PolicyFailure.APPLICATION_RESTRICTED.code,
-                title=PolicyFailure.APPLICATION_RESTRICTED.title
-            )
-        
-        return proposal_role
-    
-    # -------------------------------
-    # def _create_proposal(self, gig, proposal_value, sent_at, is_negotiating):
-    #     service_fee_rate = Decimal(str(SERVICE_FEE))
-    #     precision = Decimal(str(DECIMAL_PLACE))
-
-    #     excl_service_fee = (proposal_value / (Decimal('1') + service_fee_rate)).quantize(
-    #         precision, rounding=ROUND_HALF_UP
-    #     )
-        
-    #     try:
-    #         proposal = Proposal.objects.create(
-    #             gig=gig,
-    #             provider=self.actor,
-    #             total_cost=excl_service_fee,
-    #             sent_at=sent_at,
-    #         )
-    #         return proposal
-
-    #     except IntegrityError as err:
-    #         if getattr(err.__cause__, "args", None):
-    #             db_error_code = err.__cause__.args[0]
-    #             # MYSQL 1st then sqlite
-    #             if db_error_code == 1062 or "UNIQUE constraint failed" in db_error_code:
-    #                 message = (
-    #                     "It looks like you’ve already shared your "
-    #                     "vision for this project!. Sit tight whilst "
-    #                     "the previous proposal is been reviewed."
-    #                 )
-    #                 raise ProposalPermissionDenied(
-    #                     message,
-    #                     code=PolicyFailure.DUPLICATE_APPLICATION.code,
-    #                     title=PolicyFailure.DUPLICATE_APPLICATION.title,
-    #                 )
-    #         logger.error(
-    #             "Unexpected IntegrityError during proposal creation",
-    #             extra={
-    #                 "user_id": str(self.actor.id),
-    #                 "gig_id": str(gig.id),
-    #             },
-    #         )
-    #         raise err

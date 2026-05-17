@@ -1,7 +1,8 @@
 from django.db import models
 from collaboration.models.choices import PaymentOption
-from .choices import ProposalRoleStatus
+from .choices import ProposalRoleStatus,DurationUnit
 from decimal import Decimal, ROUND_HALF_UP
+from typing import Optional
 
 
 class ProposalRole(models.Model):
@@ -53,7 +54,7 @@ class ProposalRole(models.Model):
     status = models.CharField(
         max_length=20,
         choices=ProposalRoleStatus.choices,
-        default=ProposalRoleStatus.SUBMITTED,
+        default=ProposalRoleStatus.PENDING,
     )
     created_at = models.DateField(auto_now_add=True)
     
@@ -61,6 +62,18 @@ class ProposalRole(models.Model):
         db_table = "proposal_roles"
         verbose_name = "Proposal Role"
         verbose_name_plural = "Proposal Roles"
+        
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        
+        if self.role and self.category:
+            raise ValidationError("A ProposalRole can only have either a role or a category, not both.")
+        if not self.role and not self.category:
+            raise ValidationError("A ProposalRole must have either a role or a category, not both.")
+        
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
         
     @property
     def role_name(self):
@@ -88,31 +101,50 @@ class ProposalRole(models.Model):
 
         return f"${display_lower:,.0f} - ${upper:,.0f}"
     
-    # @property
-    # def budget_difference(self):
-    #     diff = self.proposed_amount - self.role_amount
-    #     return f"+${diff:,.2f}" if diff > 0 else f"-${abs(diff):,.2f}" if diff < 0 else "No Change"
+    def timeline_summary(self) -> Optional[str]:
+        """
+        Calculates a human-friendly cumulative timeline string based on all 
+        child deliverables for this role, using the DurationUnit multipliers.
+        """
+        deliverables = self.deliverables.all()
+        if not deliverables:
+            return None
+
+        conversion_factors = {
+            DurationUnit.DAYS: 1,
+            DurationUnit.WEEKS: 7,
+            DurationUnit.MONTHS: 30,
+        }
+
+        total_days = 0
+
+        for item in deliverables:
+            unit_key = str(item.duration_unit).lower()
+            multiplier = conversion_factors.get(unit_key)
+            total_days += item.duration_value * multiplier
+
+        if total_days == 0:
+            return None
+
+        months = total_days // 30
+        remaining_days = total_days % 30
+        
+        weeks = remaining_days // 7
+        days = remaining_days % 7
+
+        parts = []
+        if months > 0:
+            parts.append(f"{months} month{'s' if months > 1 else ''}")
+        if weeks > 0:
+            parts.append(f"{weeks} week{'s' if weeks > 1 else ''}")
+        if days > 0:
+            parts.append(f"{days} day{'s' if days > 1 else ''}")
+
+        if len(parts) == 3:
+            return f"{parts[0]}, {parts[1]} and {parts[2]}" # e.g. "1 month, 2 weeks and 4 days"
+            
+        return " and ".join(parts) if parts else None
     
-    # @property
-    # def service_fee(self):
-    #     return (
-    #         self.final_amount * Decimal(str(SERVICE_FEE))
-    #     ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
-    
-    # @property
-    # def payout_amount(self):
-    #     return (
-    #         self.final_amount - self.service_fee
-    #     ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
-        
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        
-        if self.role and self.category:
-            raise ValidationError("A ProposalRole can only have either a role or a category, not both.")
-        if not self.role and not self.category:
-            raise ValidationError("A ProposalRole must have either a role or a category, not both.")
-        
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
+    def count_deliverable(self):
+        """Returns the total number of deliverables for this proposal."""
+        return self.deliverables.count()

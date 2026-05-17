@@ -13,15 +13,15 @@ class ProposalDeliverable(BaseModel):
     Handles the sequencing, duration constraints, and financial weight 
     of a single deliverable.
     """
-    phase: str = Field(..., max_lenth=55)
+    phase: str = Field(..., max_length=70)
     description: str = Field(..., max_length=2000)
     duration_unit: DurationUnit
     duration_value: int
-    release_percentage: float
+    release_percentage: float = Field(..., ge=10.0, le=100.0)
     rendering_order: int = Field(..., description="The sequence position for UI rendering")
 
     @field_validator("description", mode="after")
-    def validate_description(cls, value) -> str:
+    def validate_description(cls, value: str) -> str:
         return value.strip()
     
     @model_validator(mode='after')
@@ -58,6 +58,18 @@ class ProposedRole(BaseModel):
     proposed_amount: Union[Decimal, None] = None
     payment_plan: PaymentOption = PaymentOption.SPLIT_50_50
     deliverables: List[ProposalDeliverable] = Field(..., min_length=1)
+    
+    @model_validator(mode='after')
+    def validate_total_release_percentage(self) -> 'ProposedRole':
+        total_percentage = sum(deliverable.release_percentage for deliverable in self.deliverables)
+        
+        if total_percentage != 100.0:
+            raise ValueError(
+                f"The total release percentage for all deliverables must equal 100%. "
+                f"Current total is {total_percentage}%."
+            )
+            
+        return self
     
     
 class ProposalSubmissionPayload(BaseModel):

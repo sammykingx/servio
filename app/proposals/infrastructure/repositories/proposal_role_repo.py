@@ -1,3 +1,4 @@
+from django.db.models import Model
 from core.model_registry import registry
 from collaboration.models.choices import PaymentOption
 from proposals.domain.entities import ProposalEntity
@@ -20,7 +21,7 @@ class ProposalRoleRepository:
         role: Union[int, None] = None,
         category: Union[int, None] = None,
         client_budget: Union[Decimal, None] = None
-    ):
+    ) -> Model:
         obj = self.model.objects.create(
             proposal=proposal,
             role=role,

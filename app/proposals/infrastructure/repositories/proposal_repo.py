@@ -1,8 +1,10 @@
 from core.model_registry import registry
-from proposals.domain.entities import ProjectEntity, ProposalEntity
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Model
+from proposals.domain.entities import ProjectEntity, ProposalEntity
 from decimal import Decimal
 from datetime import datetime
+from uuid import UUID
 
 
 class ProposalRepository:
@@ -12,12 +14,12 @@ class ProposalRepository:
     def create_proposal(
         self,
         *, 
-        project: ProjectEntity, 
+        project: Model, 
         provider: AbstractUser, 
         value: Decimal, 
         currency: str,
         sent_at: datetime
-    ) -> ProposalEntity:
+    ) -> Model:
         proposal = self.model.objects.create(
             project=project,
             provider=provider,
@@ -25,10 +27,8 @@ class ProposalRepository:
             currency=currency,
             sent_at=sent_at
         )
-        return self._to_entity(proposal)
-        # return None
-        
-        
+        return proposal
+    
     def _to_entity(self, proposal) -> ProposalEntity:
         return ProposalEntity(
             id=proposal.id,

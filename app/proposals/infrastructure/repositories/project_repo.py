@@ -14,12 +14,12 @@ Responsibilities:
 - Converting ORM models into domain entities
 """
 
-
+from django.db.models import Model
 from core.model_registry import registry
 from proposals.domain.entities import ProjectEntity, ProjectRoleEntity
 from proposals.domain.exceptions import ProposalPersistenceError
 from proposals.domain.status_codes import PolicyFailure
-from typing import Optional
+from typing import Union
 from uuid import UUID
 
 
@@ -27,42 +27,39 @@ class ProjectRepository:
     def __init__(self):
         self.model = registry.Gig
         
-        
-    def get_by_id(self, project_id: UUID, with_lock:bool=False) -> Optional[ProjectEntity]:
+    def get_by_id(self, project_id: UUID, *, with_lock:bool=False, as_entity: bool = True) -> Union[Model, ProjectEntity]:
         """
-        Retrieves a single project by its unique identifier.
+        Fetches a project by ID with optimized relations, optionally locking the row or bypassing domain conversion.
 
         Args:
             project_id (UUID): Unique identifier of the project.
-
-        Returns:
-            ProjectEntity | None:
-                A domain entity representing the project if found,
-                otherwise None.
+            with_lock (bool): If True, applies an exclusive row-level lock (SELECT FOR UPDATE).
+            as_entity (bool): If True, converts the Django model instance into a domain entity. 
+                Set to False to return the raw ORM object for foreign key assignments.
         """
-        try:
-            queryset = (
-                self.model.objects
-                .select_related("creator")
-                .filter(id=project_id)
-                .prefetch_related("required_roles") 
-            )
-            if with_lock:
-                project = queryset.select_for_update(nowait=True).first
-            else:
-                project = queryset.first()
-                
-        except self.model.DoesNotExist:
+        queryset = (
+            self.model.objects
+            .select_related("creator")
+            .filter(id=project_id)
+            .prefetch_related("required_roles") 
+        )
+        
+        if with_lock:
+            project = queryset.select_for_update(nowait=True).first()
+        else:
+            project = queryset.first()
+
+        if not project:
             raise ProposalPersistenceError(
                 "Invalid referenced project",
                 code=PolicyFailure.INVALID_OBJECT.code,
                 title=PolicyFailure.INVALID_OBJECT.title
             )
 
-        return self._to_entity(project)
+        return self._to_entity(project) if as_entity else project
     
 
-    def get_by_slug(self, slug: str) -> Optional[ProjectEntity]:
+    def get_by_slug(self, slug: str) -> ProjectEntity:
         """
         Retrieves a project by its slug.
 

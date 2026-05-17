@@ -33,12 +33,14 @@ class Proposal(models.Model):
             "This is filled during and after the proposal creation or accepted."
         )
     )
+    
     currency = models.CharField(max_length=10)
     status = models.CharField(
         max_length=20,
         choices=ProposalStatus.choices,
         default=ProposalStatus.SENT,
     )
+    
     sent_at = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -50,70 +52,25 @@ class Proposal(models.Model):
         ordering = ["-created_at"]
         constraints = [
             models.UniqueConstraint(
-                fields=["gig", "provider"],
-                name="unique_provider_proposal_per_gig",
+                fields=["project", "provider"],
+                name="unique_provider_proposal_per_project",
             )
         ]
         indexes = [
-            models.Index(fields=['provider', 'status'], name='proposal_provider_status_idx'),
-            models.Index(fields=['gig', 'status'], name='proposal_gig_status_idx'),
-            models.Index(fields=['provider', 'gig'], name='provider_proposal__gig_idx'),
+            models.Index(fields=['provider', 'project'], name='provider_proposal__project_idx'),
+            models.Index(fields=['provider', 'project', 'status'], name='proposal_provider_project_status_idx'),
         ]
     
-    def calculate_total_role_cost(self):
-        """
-        Calculates the sum of proposed_amounts, falling back to 
-        role_amount for each role where proposed_amount is null.
-        """
-        result = self.roles.aggregate(
-            total=Sum(Coalesce('proposed_amount', 'role_amount'))
-        )
-        return result['total'] or 0.00
+    # def calculate_total_role_cost(self):
+    #     """
+    #     Calculates the sum of proposed_amounts, falling back to 
+    #     role_amount for each role where proposed_amount is null.
+    #     """
+    #     result = self.roles.aggregate(
+    #         total=Sum(Coalesce('proposed_amount', 'role_amount'))
+    #     )
+    #     return result['total'] or 0.00
     
-    def timeline_summary(self):
-        deliverables = self.deliverables.order_by("order")
-
-        first = deliverables.first()
-        last = deliverables.last()
-
-        if not first or not last:
-            return None
-
-        start_date = first.due_date
-        end_date = last.due_date
-
-        if not start_date or not end_date:
-            return None
-
-        total_days = (end_date - start_date).days
-
-        if total_days == 0:
-            return "1 day"
-
-        return self._format_duration(total_days)
-
-    def _format_duration(self, days):
-        """Helper to break days into Months, Weeks, and Days"""
-        months = days // 30
-        remaining_days = days % 30
-        
-        weeks = remaining_days // 7
-        final_days = remaining_days % 7
-
-        parts = []
-        if months > 0:
-            parts.append(f"{months} month{'s' if months > 1 else ''}")
-        if weeks > 0:
-            parts.append(f"{weeks} week{'s' if weeks > 1 else ''}")
-        if final_days > 0:
-            parts.append(f"{final_days} day{'s' if final_days > 1 else ''}")
-
-        return " and ".join(parts) if len(parts) > 1 else parts[0]
-    
-    
-    def get_deliverable_count(self):
-        """Returns the total number of deliverables for this proposal."""
-        return self.deliverables.count()
     
     def get_role_count(self):
         """returns the total number of roles associated with the proposal"""
