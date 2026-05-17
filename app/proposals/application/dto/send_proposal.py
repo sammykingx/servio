@@ -13,12 +13,12 @@ class ProposalDeliverable(BaseModel):
     Handles the sequencing, duration constraints, and financial weight 
     of a single deliverable.
     """
-    title: str = Field(..., max_lenth=55)
+    phase: str = Field(..., max_lenth=55)
     description: str = Field(..., max_length=2000)
     duration_unit: DurationUnit
     duration_value: int
     release_percentage: float
-    order: int = Field(..., description="The sequence position for UI rendering")
+    rendering_order: int = Field(..., description="The sequence position for UI rendering")
 
     @field_validator("description", mode="after")
     def validate_description(cls, value) -> str:

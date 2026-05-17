@@ -106,7 +106,7 @@ class ProposalOrchestrationService:
             ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
 
-            proposal = self.create_proposal_bundle(payload)
+            proposal = self._create_proposal_bundle(payload)
             # self.notifications_flow(project)
 
         except ProposalPermissionDenied as e:
@@ -125,7 +125,11 @@ class ProposalOrchestrationService:
         return proposal
         
     @transaction.atomic
-    def create_proposal_bundle(self, payload: ProposalSubmissionPayload):
+    def _create_proposal_bundle(self, payload: ProposalSubmissionPayload):
+        """
+        Persists the entire Proposal, Roles, and Deliverables tree in exactly 
+        3 SQL insert transactions. Safe for resource-constrained cPanel environments.
+        """
         try:
             project = self.project_repository.get_by_id(project_id=payload.project_id, with_lock=True)
             proposal = self.proposal_repository.create_proposal(
@@ -135,6 +139,35 @@ class ProposalOrchestrationService:
                 currency=payload.currency,
                 sent_at=payload.sent_at
             )
+            for applied_role in payload.applied_roles:
+                role_fk_id = applied_role.niche_id if project.has_gig_roles else None
+                category_fk_id = None if project.has_gig_roles else applied_role.niche_id
+                saved_role = self.role_repository.create_roles(
+                    proposal=proposal,
+                    role=role_fk_id,
+                    category=category_fk_id,
+                    client_budget=None,
+                    proposed_amount=applied_role.role_amount,
+                    currency=applied_role.currency,
+                    payment_plan=applied_role.payment_plan,
+                )
+                deliverables_to_create = [
+                    # to model repo method
+                    self.deliverable_model(
+                        proposal_role=saved_role,
+                        provider=self.actor,
+                        phase=deliv_data.phase,
+                        description=deliv_data.description,
+                        duration_unit=deliv_data.duration_unit,
+                        duration_value=deliv_data.duration_value,
+                        release_percentage=deliv_data.release_percentage,
+                        rendering_order=deliv_data.rendering_order
+                    )
+                    for deliv_data in applied_role.deliverables
+                ]
+                if deliverables_to_create:
+                    self.deliverable_model.objects.bulk_create(deliverables_to_create)
+                    
             # self.role_repository.create_roles(
             #     proposal=proposal,
             #     amount
@@ -171,12 +204,14 @@ class ProposalOrchestrationService:
     def _get_role_object(self, gig, role_id):
         try:
             return gig.required_roles.get(role_id=role_id)
+
         except GigRoleModel.DoesNotExist:
             raise ProposalPermissionDenied(
                 "It looks like this specific role isn't part of this project's current needs.",
                 code=PolicyFailure.INVALID_ROLE.code,
                 title=PolicyFailure.INVALID_ROLE.title,
             )
+
         except GigRoleModel.MultipleObjectsReturned:
             raise ProposalPermissionDenied(
                 "There seems to be a configuration issue with this role.",

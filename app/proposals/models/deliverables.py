@@ -10,14 +10,14 @@ class ProposalDeliverable(models.Model):
         related_name="deliverables",
     )
     
-    sender = models.ForeignKey(
+    provider = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         to_field="email",
         related_name="proposal_deliverables",
     )
 
-    title = models.CharField(max_length=60)
+    phase = models.CharField(max_length=60)
     description = models.TextField(max_length=2010)
 
     duration_unit = models.CharField(
@@ -26,9 +26,7 @@ class ProposalDeliverable(models.Model):
     )
 
     duration_value = models.PositiveIntegerField()
-    # due_date = models.DateField()
-    is_completed = models.BooleanField(default=False)
-    order = models.PositiveIntegerField(
+    rendering_order = models.PositiveIntegerField(
         default=0,
         help_text="Defines the display sequence to preserve the order in which deliverables were entered.",
     )
@@ -37,9 +35,10 @@ class ProposalDeliverable(models.Model):
         decimal_places=2,
         help_text="Percentage of agreed_amount released upon approval of this deliverable. All deliverables on a role must sum to 100."
     )
+    created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         db_table="deliverables"
-        ordering = ["order", "pk"]
+        ordering = ["rendering_order", "pk"]
         verbose_name = "Proposal Deliverable"
         verbose_name_plural = "Proposal Deliverables"

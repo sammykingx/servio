@@ -1,7 +1,6 @@
 from django.db import models
 from collaboration.models.choices import PaymentOption
 from .choices import ProposalRoleStatus
-from constants import DECIMAL_PLACE, SERVICE_FEE
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -18,10 +17,7 @@ class ProposalRole(models.Model):
         related_name="proposal_roles_by_gig_role",
         blank=True,
         null=True,
-        help_text=(
-            "Optional only if the parent Gig use structured roles. "
-            "Must be provided for role-specific proposals to ensure contract integrity."
-        ),
+        help_text="the project role this bid is for (scoped projects)",
     )
     
     category = models.ForeignKey(
@@ -30,25 +26,28 @@ class ProposalRole(models.Model):
         related_name="proposal_roles_by_category",
         blank=True,
         null=True,
-        help_text="Link to a GigCategory if the gig does not have structured roles."
+        help_text="Link to a GigCategory if it's an open project."
     )
 
-    # amount = models.DecimalField(
-    #     max_digits=10,
-    #     decimal_places=2,
-    # )
-
-    proposed_amount = models.DecimalField(
+    client_budget = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         null=True,
         blank=True,
+        help_text="The amount stated by client (scoped project)"
+    )
+
+    proposed_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Provider's asking price, independent of client budget"
     )
     currency = models.CharField(max_length=10)
 
     payment_plan = models.CharField(
         max_length=20,
         choices=PaymentOption.choices,
+        help_text="Provider's preferred installment structure"
     )
     
     status = models.CharField(
@@ -56,6 +55,7 @@ class ProposalRole(models.Model):
         choices=ProposalRoleStatus.choices,
         default=ProposalRoleStatus.SUBMITTED,
     )
+    created_at = models.DateField(auto_now_add=True)
     
     class Meta:
         db_table = "proposal_roles"
@@ -76,7 +76,7 @@ class ProposalRole(models.Model):
     
     @property
     def dynamic_budget_range(self):
-        amount = self.proposed_amount
+        amount = self.client_budget
         lower_raw = amount * Decimal('0.6')
         upper_raw = amount * Decimal('1.1')
 
