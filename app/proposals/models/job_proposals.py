@@ -57,8 +57,8 @@ class Proposal(models.Model):
             )
         ]
         indexes = [
-            models.Index(fields=['provider', 'project'], name='provider_proposal__project_idx'),
-            models.Index(fields=['provider', 'project', 'status'], name='proposal_provider_project_status_idx'),
+            models.Index(fields=['provider', 'project'], name='provider_project_idx'),
+            models.Index(fields=['provider', 'project', 'status'], name='provider_project_status_idx'),
         ]
     
     # def calculate_total_role_cost(self):

@@ -139,7 +139,7 @@ class ProposalOrchestrationService:
                     proposal=proposal,
                     role=role_fk_id,
                     category=category_fk_id,
-                    client_budget=None,
+                    client_budget=applied_role.role_amount,
                     proposed_amount=applied_role.role_amount,
                     currency=applied_role.currency,
                     payment_plan=applied_role.payment_plan,

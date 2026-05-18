@@ -1,10 +1,10 @@
 from django.db.models import Model
 from core.model_registry import registry
 from collaboration.models.choices import PaymentOption
-from proposals.domain.entities import ProposalEntity
-from proposals.models.choices import ProposalRoleStatus
+from proposals.domain.entities import ProposalRoleEntity
 from decimal import Decimal
 from typing import Union, Literal
+from uuid import UUID
 
 
 class ProposalRoleRepository:
@@ -14,7 +14,7 @@ class ProposalRoleRepository:
     def create_roles(
         self,
         *,
-        proposal: ProposalEntity,
+        proposal: Model,
         proposed_amount: Decimal,
         currency: Literal["NGN", "USD"],
         payment_plan: PaymentOption, 
@@ -33,3 +33,31 @@ class ProposalRoleRepository:
         )
         
         return obj
+    
+    def get_by_id(self, role_id: UUID) -> ProposalRoleEntity:
+        """Fetches a ProposalRole model and maps it to its pure domain entity."""
+        # select_related avoids an N+1 query when accessing parent proposal data later
+        try:
+            db_obj = (
+                self.model.objects
+                .select_related("proposal")
+                .get(id=role_id)
+            )
+            return self._to_entity(db_obj)
+        except self.model.DoesNotExist:
+            return None
+        
+    def save_status(self, entity: ProposalRoleEntity) -> None:
+        """Persists a domain entity's status modification back to the database."""
+        self.model.objects.filter(id=entity.id).update(status=entity.status)
+        
+    def _to_entity(self, role_obj) -> ProposalRoleEntity:
+        return ProposalRoleEntity(
+            id=role_obj.id,
+            project_role=role_obj.role if role_obj.role else role_obj.category,
+            client_budget=role_obj.client_budget,
+            proposed_amount=role_obj.proposed_amount,
+            currency=role_obj.currency,
+            payment_plan=role_obj.payment_plan,
+            status=role_obj.status
+        )
