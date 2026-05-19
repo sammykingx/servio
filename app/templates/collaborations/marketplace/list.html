@@ -5,7 +5,7 @@
 {% block browser_title %}Find Oppurtunities{% endblock %}
 {% block content %}
 
-{% if not gigs %}
+{% if not projects %}
 {% include "components/empty-states/no-oppurtunities.html" %}
 {% else %}
 <section class="min-h-screen w-full max-w-[1380px] flex flex-col gap-6">
@@ -23,23 +23,23 @@
     <!-- Opportunity Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 px-3">
         
-        {% for gig in gigs %}
+        {% for project in projects %}
             <div class="relative flex flex-col bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-all group">
                 <div class="p-6 flex flex-col gap-4">
-                    <a href="{% url OPPURTUNITIES.DETAIL slug=gig.slug %}" class="absolute inset-0 z-1" aria-label="{{ gig.title }}"></a>
+                    <a href="{% url OPPURTUNITIES.DETAIL slug=project.slug %}" class="absolute inset-0 z-1" aria-label="{{ project.title }}"></a>
                     <div class="flex justify-between items-start">
-                        {% if gig.priority_score == 3 %}
+                        {% if project.priority_score == 3 %}
                             <span class="flex items-center gap-1 px-3 py-1 
                                 bg-purple-100 dark:bg-purple-900/30 
                                 text-purple-700 dark:text-purple-400 
                                 text-xs font-semibold rounded-full
                                 uppercase tracking-wide"
                             >🤖 AI Match · High Priority</span>
-                        {% elif gig.priority_score == 2 %}
+                        {% elif project.priority_score == 2 %}
                             <span class="flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900/30
                                     text-blue-700 dark:text-blue-400 text-xs font-semibold
                                     rounded-full"
-                            >🤖 AI Match · {{ gig.match_percentage }}%</span>
+                            >🤖 AI Match · {{ project.match_percentage }}%</span>
                         {% else %}
                             <span class="px-3 py-1 bg-emerald-100 dark:bg-green-900/30 text-emerald-500 dark:text-emerald-400 text-xs font-medium rounded-full uppercase tracking-wider">Open for Collaboration</span>
                         {% endif %}
@@ -48,54 +48,56 @@
                         </button>
                     </div>
                     <div>
-                        <h3 class="text-slate-900 dark:text-white text-lg font-semibold transition-colors">{{ gig.title|truncatewords:8|title }}</h3>
+                        <h3 class="text-slate-900 dark:text-white text-lg font-semibold transition-colors">{{ project.title|truncatewords:8|title }}</h3>
                         <div class="flex items-center gap-2 mt-2">
                             <div class="size-6 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-white">
-                                {% if gig.creator.profile.avatar_url %}
-                                    <img src="{{ gig.creator.profile.avatar_url.url }}" 
-                                        alt="{{ gig.creator.get_full_name }}" 
+                                {% if project.creator.profile.avatar_url %}
+                                    <img src="{{ project.creator.profile.avatar_url.url }}" 
+                                        alt="{{ project.creator.get_full_name }}" 
                                         class="w-full h-full object-cover" />
                                 {% else %}
                                     <span class="text-sm font-semibold text-brand-500">
-                                        {{ gig.creator.first_name|slice:":1"|upper }}{{ gig.creator.last_name|slice:":1"|upper }}
+                                        {{ project.creator.first_name|slice:":1"|upper }}{{ project.creator.last_name|slice:":1"|upper }}
                                     </span>
                                 {% endif %}
                             </div>
-                            <p class="text-slate-500 dark:text-slate-400 text-sm">{{ gig.creator.full_name|title }} <span class="text-amber-500 font-semibold ml-1">4.9★</span></p>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">{{ project.creator.full_name|title }} <span class="text-amber-500 font-semibold ml-1">4.9★</span></p>
                         </div>
                     </div>
 
                     <div class="flex flex-col gap-2 pt-2">
                         <div class="flex items-center gap-2 text-brand-500 dark:text-brand-400">
                             <span class="material-symbols-outlined text-lg">payments</span>
-                            {% if gig.match_count > 1 %}
+                            {% if project.match_count > 1 %}
                                 <span class="text-base font-semibold">
-                                    ${{ gig.min_budget|intcomma }} – ${{ gig.max_budget|intcomma }}
+                                    ${{ project.min_budget|intcomma }} – ${{ project.max_budget|intcomma }}
                                 </span>
-                            {% elif gig.match_count == 1 %}
+                            {% elif project.match_count == 1 %}
                                 <span class="text-base font-semibold">
-                                    ${{ gig.display_budget|intcomma }}
+                                    ${{ project.display_budget|intcomma }}
                                 </span>
                             {% else %}
                                 <span class="text-base font-semibold">
-                                    {{ gig.dynamic_range }}
+                                    {{ project.dynamic_range }}
                                 </span>
                             {% endif %}
                         </div>
                         
                         <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
                             <span class="material-symbols-outlined text-lg">calendar_today</span>
-                            <span class="text-sm">{{ gig.start_date|date:"M d" }} — {{ gig.end_date|date:"M d" }}</span>
+                            <span class="text-sm">{{ project.start_date|date:"M d" }} — {{ project.end_date|date:"M d" }}</span>
                         </div>
                     </div>
                     <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-2">
-                        {{ gig.display_description|striptags|truncatewords:25 }}
+                        {{ project.display_description|striptags|truncatewords:25 }}
                     </p>
                 </div>
+                
+                
                 <div class="mt-auto p-4 bg-slate-50 z-2 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-3">
-                    <a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_ENGAGEMENT slug=gig.slug %}" class="flex h-10 items-center justify-center rounded-lg bg-brand-500 text-white text-sm font-semibold hover:bg-brand-500/90 transition-colors">Accept Offer</a>
-                    {% if gig.has_gig_roles %}
-                        <a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_ENGAGEMENT slug=gig.slug %}?negotiating=true" class="flex h-10 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Counteroffer</a>
+                    <a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_PROPOSAL slug=project.slug %}" class="flex h-10 items-center justify-center rounded-lg bg-brand-500 text-white text-sm font-semibold hover:bg-brand-500/90 transition-colors">Accept Offer</a>
+                    {% if project.has_project_roles %}
+                        <a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_PROPOSAL slug=project.slug %}?negotiating=true" class="flex h-10 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Counteroffer</a>
                     {% else %}
                         <a 
                             @click="showToast('Counteroffers require specific project roles.', 'info', 'Action Restricted')"
@@ -107,6 +109,7 @@
                         >Counteroffer</a>
                     {% endif %}
                 </div>
+                
             </div>
         {% endfor %}
     </div>

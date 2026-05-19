@@ -64,8 +64,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ProposalModel = registry.Proposal
         return (
             ProposalModel.objects
-            .filter(gig__creator=self.request.user)
-            .select_related("provider", "gig")
+            .filter(project__creator=self.request.user)
+            .select_related("provider", "project")
             # .only(
             #     "id",
             #     "status",

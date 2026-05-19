@@ -15,13 +15,13 @@ urlpatterns = [
     ),
      
     path("for-you/", OppurtunityListView.as_view(),
-         name=MarketplaceURLS.ALL
+        name=MarketplaceURLS.ALL
     ),
     
     path("details/<slug:slug>/", OppurtuniyDetailView.as_view(),
-         name=MarketplaceURLS.DETAIL
+        name=MarketplaceURLS.DETAIL
     ),
     path("engagement/<slug:slug>/", ProposalSubmissionView.as_view(),
-         name=MarketplaceURLS.SUBMIT_PROJECT_PROPOSAL
+        name=MarketplaceURLS.SUBMIT_PROJECT_PROPOSAL
     ),
 ]
