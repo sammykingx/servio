@@ -1,755 +1,749 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
-{% block browser_title %}Accept Project{% endblock %}
+
+{% block browser_title %}Project Proposal Builder{% endblock %}
+
 {% block custom_page_css %}
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<style>
+    /* Premium Smooth Transition Architecture */
+    .wizard-step {
+        transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .wizard-step.step-hidden {
+        display: none !important;
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    .wizard-step.step-entering {
+        display: block !important;
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    .wizard-step.step-active {
+        display: block !important;
+        opacity: 100;
+        transform: translateY(0);
+    }
+    .wizard-step.step-exiting {
+        display: block !important;
+        opacity: 0;
+        transform: translateY(-16px);
+    }
+    
+    /* Stepper Line Progress Indicator */
+    .step-indicator {
+        transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+    }
+</style>
 {% endblock %}
+
 {% block content %}
-<section class="flex flex-col flex-1 max-w-7xl mx-auto w-full px-2 py-8 gap-8">
-    <div class="flex flex-col gap-4">
-        <!-- Title Row -->
-        <div class="flex items-center gap-3">
-
-            <!-- Accent Bar -->
-            <div class="h-8 w-1.5 rounded-full bg-brand-600/90"></div>
-
-            <div>
-                <h2 class="text-title-sm md:text-title-md font-semibold
-                    text-slate-900 dark:text-white
-                    tracking-tight leading-tight mb-2">
-                    Apply to Project
-                </h2>
-
-                <p class="text-sm font-medium text-slate-500 dark:text-slate-400">
-                    Submitting your proposal for
-                    <span class="text-slate-700 dark:text-slate-300 font-semibold">
-                        {{ gig.title|truncatewords:8|title }}
+<div class="min-h-screen py-12 px-1 sm:px-4 lg:px-6">
+    <div class="max-w-5xl mx-auto">
+        
+        <!-- Header & Stepper Tracker Container -->
+        <div class="mb-10 select-none">
+            <div class="flex flex-row items-start sm:items-center justify-between gap-x-4 gap-y-2 mb-8">
+                <div class="min-w-0 flex-1">
+                    <span class="text-xs font-medium tracking-wider text-brand-500 dark:text-brand-400 uppercase block whitespace-nowrap">
+                        Proposal Engine
                     </span>
-                </p>
+                    <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white tracking-tight mt-0.5 truncate drop-shadow-sm">
+                        Submit Project Proposal
+                    </h1>
+                </div>
+                
+                <div class="shrink-0 text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 px-3 py-1.5 rounded-full shadow-theme-xs flex items-center gap-1">
+                    <span>Step</span> 
+                    <span id="current-step-badge" class="italic text-gray-700 dark:text-gray-300">1</span> 
+                    <span class="text-gray-400 dark:text-gray-600">of</span> 
+                    <span class="text-gray-500 dark:text-gray-400">5</span>
+                </div>
             </div>
 
+            <div class="relative px-1">
+                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 h-0.5 rounded-full"></div>
+                    <div id="progress-line" class="absolute left-0 bg-[var(--color-brand-500)] h-0.5 rounded-full transition-all duration-500 ease-out" style="width: 0%;"></div>
+                </div>
+                
+                <div class="relative flex justify-between">
+                    <button type="button" onclick="wizard.goToStep(1)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[var(--color-brand-500)] border-2 border-[var(--color-brand-500)] text-white flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none shadow-theme-sm z-10" id="dot-1">1</button>
+                    <button type="button" onclick="wizard.goToStep(2)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-2">2</button>
+                    <button type="button" onclick="wizard.goToStep(3)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-3">3</button>
+                    <button type="button" onclick="wizard.goToStep(4)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-4">4</button>
+                    <button type="button" onclick="wizard.goToStep(5)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-5">5</button>
+                </div>
+            </div>
         </div>
 
-    </div>
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <div class="lg:col-span-2 flex flex-col gap-8">
-            <section 
-                id="gig-summary-section" 
-                data-has-roles="{{ gig.has_gig_roles|yesno:'true,false' }}" 
-                data-end-date="{{ gig.end_date }}" 
-                data-csrf-token="{{ csrf_token }}"
-                data-end-point="{% url OPPURTUNITIES.SUBMIT_PROJECT_PROPOSAL slug=gig.slug %}" 
-                class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6"
-            >
-                <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white mb-5">
-                    Overview
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <!-- Commencement Date -->
-                    <div class="flex items-center gap-4 rounded-xl 
-						bg-fuchsia-50/80 dark:bg-fuchsia-800/40 p-3">
-                        <div class="flex size-8 items-center justify-center 
-							rounded-lg bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400">
-                            <span class="material-symbols-outlined">calendar_check</span>
+        <!-- Main Wizard Card Panel -->
+        <div class="bg-white dark:bg-transparent rounded-2xl border border-slate-200/80 dark:border-gray-700 min-h-[480px] flex flex-col overflow-hidden">
+            <form id="proposal-form" onsubmit="event.preventDefault();" class="flex-1 flex flex-col justify-between p-8 sm:p-10">
+                
+                <!-- PHASE 1: Project Overview Context -->
+                <section id="step-1" class="wizard-step step-active space-y-6">
+                    <div class="border-b border-slate-100 dark:border-gray-700 pb-5">
+                        <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Project Brief & Guidelines</h2>
+                        <p class="text-sm text-gray-500 mt-1">Review the structural project details before designing your proposals.</p>
+                    </div>
+                    
+                    <div class="bg-slate-50 dark:bg-transparent rounded-xl py-5 px-3.5 md:p-5 border border-slate-200/60 dark:border-gray-800 space-y-6">
+                        <div>
+                            <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Project Title</label>
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-gray-200 mt-0.5">{{ project.title|default:"Enterprise Digital Marketplace Infrastructure Development" }}</h3>
                         </div>
-                        <div class="flex flex-col">
-                            <span class="text-[11px] uppercase tracking-wider 
-								text-slate-500 dark:text-slate-400">
-                                Project Timeline
-                            </span>
-                            <span class="text-sm font-medium text-slate-900 dark:text-white">
-                                {{ gig.start_date|date:"M d" }} – {{ gig.end_date|date:"M d" }}
-                            </span>
+                        <div>
+                            <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">About Project</label>
+                            <div class="text-sm text-slate-500 leading-relaxed mt-1">
+                                {{ project.description|safe|default:"We are seeking an experienced technical partner to design and build our core digital marketplace platform. The scope includes engineering a robust service provider onboarding journey, payment splits via modern processing gateways, real-time tracking dashboards, and background push architecture." }}
+                            </div>
                         </div>
                     </div>
-                    <!-- Timeline -->
-                    <div class="flex items-center gap-4 rounded-xl 
-						bg-amber-50/80 dark:bg-amber-800/40 p-3">
-                        <div class="flex size-8 items-center justify-center 
-							rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                            <span class="material-symbols-outlined">calendar_clock</span>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-[11px] uppercase tracking-wider 
-								text-slate-500 dark:text-slate-400">
-                                Estimated Duration
-                            </span>
-                            <span class="text-sm font-medium text-slate-900 dark:text-white">
-                                {{ gig.gig_duration }}
-                            </span>
+                    
+                    <div class="p-4 bg-amber-50 border border-amber-200/70 rounded-xl flex gap-3">
+                        <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div class="text-sm text-amber-800">
+                            <span class="font-semibold">Review Requirements Carefully:</span> Ensure your milestones match the scope of work described. Budgets and deliverables defined down-funnel must strictly bind to this blueprint.
                         </div>
                     </div>
-                    <!-- Project budget -->
-                    <div class="flex items-center gap-4 rounded-xl 
-						bg-emerald-50/80 dark:bg-emerald-800/40 p-3">
-                        <div class="flex size-8 items-center justify-center 
-							rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                            <span class="material-symbols-outlined">account_balance_wallet</span>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-[11px] uppercase tracking-wider 
-								text-slate-500 dark:text-slate-400">
-                                Project Budget
-                            </span>
-                            <span class="text-sm font-medium text-slate-900 dark:text-white">
-                                {{ gig.dynamic_range }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <div class="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-				<div class="p-6 flex flex-col gap-6">
-					<div>
-						<h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Project Description</h3>
-						<div class="quill-content max-w-none text-gray-500 dark:text-gray-4=600 space-y-4 leading-relaxed">
-							{{ gig.description|safe }}
-						</div>
-					</div>
-					<div class="pt-4 border-t border-slate-100 dark:border-slate-800">
-						<p class="mb-3 text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
-                            <span class="font-semibold text-brand-400 dark:text-brand-300">Critical:</span> Review the project requirements thoroughly. Your proposal deliverables and dates will form the basis of the binding agreement.
+                <!-- PHASE 2: Service/Role Configuration -->
+                {# for scoped projects #}
+                <div id="step-2" class="wizard-step step-hidden space-y-6">
+                    <div class="border-b border-gray-100 dark:border-gray-800 pb-5">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Available Project Roles</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            This project has explicit structural scope roles. Expand any role card to view requirements and toggle your application interest.
                         </p>
-					</div>
-				</div>
-			</div>
-
-            
-            <section 
-                class="flex flex-col gap-4" 
-                x-data="roleApplicationManager([
-                    {% for role in roles %}
-                    {
-                        industry_id: {{ role.niche_id }},
-                        niche_id: {{ role.role_id }},
-                        niche_name: '{{ role.niche_name }}',
-                        role_amount: {{ role.budget|default:0 }},
-                        payment_plan: '{{ role.payment_option }}',
-                        is_active: false,
-                    }{% if not forloop.last %},{% endif %}
-                    {% endfor %}
-                ])" 
-                x-ref="roleApplicationsUnit"
-            >
-                {% if roles %}
-                    <div class="flex flex-col">
-                        <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-white">Select Your Role</h3>
-                        <span class="text-xs font-light text-slate-400 uppercase">Multiple Selection Allowed if qualified</span>
                     </div>
-                    <div class="grid grid-cols-1 gap-5">
-                        {% for role in roles %}
-                            {% if role.can_apply %}
-                                <label class="relative group cursor-pointer">
-                                    <!-- Hidden Checkbox -->
-                                    <input 
-                                        type="checkbox" 
-                                        class="sr-only role-checkbox"
-                                        :checked="isRoleActive({{ role.role_id }})"
-                                        data-role-id="{{ role.niche_id }}"
-                                        data-can-apply="{{ role.can_apply|yesno:'true,false' }}"
-                                        @change="toggleRole({{ role.role_id }})"
-                                    />
-                                    <!-- Subtle Ambient Glow -->
-                                    <div class="absolute -inset-1 rounded-2xl opacity-0 blur-2xl bg-gradient-to-r
-                                        from-brand-500/10 via-brand-500/5 to-transparent transition duration-300"
-                                        :class="isRoleActive({{ role.role_id }}) ? 'opacity-200' : 'opacity-0'">
+
+                    <div class="space-y-4">
+                        <div id="role-card-101" class="border border-gray-200 dark:border-gray-800 rounded-2xl bg-white dark:bg-gray-900 overflow-hidden transition-all duration-300 shadow-theme-xs hover:border-gray-300 dark:hover:border-gray-700">
+                            <div onclick="toggleRoleAccordion(101)" class="w-full flex items-center justify-between p-5 cursor-pointer select-none group">
+                                <div class="flex items-center gap-4 min-w-0">
+                                    <div id="role-dot-101" class="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700 transition-colors duration-200 shrink-0"></div>
+                                    <div class="min-w-0">
+                                        <span class="text-xs uppercase tracking-wider text-gray-400 dark:text-gray-500 block mb-0.5">Software Development</span>
+                                        <h4 class="text-base font-medium text-gray-900 dark:text-white truncate">Backend Systems Engineer (Python/Django)</h4>
                                     </div>
-                                    <!-- Card -->
-                                    <div class="relative rounded-2xl bg-white dark:bg-[#151c2a]
-                                        border p-6 hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
-                                        transition-all duration-300
-                                        "
-                                        :class="isRoleActive({{ role.role_id }}) 
-                                            ? 'shadow-[0_12px_32px_rgba(0,0,0,0.10)] border-brand-500 dark:border-brand-400' 
-                                            : 'border-slate-200/80 dark:border-slate-700/60 shadow-[0_2px_8px_rgba(0,0,0,0.04)]'"
-                                    >
-                                        <div class="flex flex-col gap-5 space-y-3">
-                                            <!-- Top Row -->
-                                            <div class="flex items-start justify-between gap-4">
-                                                <!-- Role -->
-                                                <div class="flex items-start gap-4">
-                                                    <!-- Selection Indicator -->
-                                                    <div 
-                                                        class="flex size-9 shrink-0 items-center justify-center
-                                                            rounded-xl shadow-sm transition"
-                                                        :class="isRoleActive({{ role.role_id }})
-                                                            ? 'bg-brand-500 text-white'
-                                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-400'"
-                                                    >
-                                                        <span class="material-symbols-outlined text-[18px]">
-                                                            work_outline
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <h4 class="font-semibold text-slate-900 dark:text-gray-200 leading-tight">
-                                                            {{ role.niche_name }}
-                                                        </h4>
-                                                        <p class="text-sm text-slate-500 dark:text-slate-400">
-                                                            {{ role.role_name }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400 text-justify">{{ role.description|truncatewords:35|capfirst }}</p>
-                                            <!-- Budget Row (Always Inline) -->
-                                            <div class="grid grid-cols-2 md:grid-cols-3 items-center justify-evenly gap-4">
-                                                <!-- Budget Allocation -->
-                                                <div class="">
-                                                    <p class="text-[10px] uppercase tracking-wide font-medium text-slate-400">
-                                                        Budget Allocation
-                                                    </p>
-                                                    <p class="text-base font-normal text-slate-900 dark:text-gray-200">
-                                                        ${{ role.budget|intcomma }}
-                                                    </p>
-                                                </div>
-                                                
-                                                {% if negotiating %}
-                                                <!-- Proposed Amount -->
-                                                <div class="w-40">
-                                                    <label class="text-[10px] uppercase tracking-wide
-                                                        font-medium text-slate-400 block mb-1">
-                                                        Proposed Amount
-                                                    </label>
-                                                    <div class="relative">
-                                                        <span class="absolute left-3 top-1/2 
-                                                            -translate-y-1/2 text-slate-400 dark:text-gray-300 font-semibold">$</span>
-                                                        <input
-                                                            type="number"
-                                                            name="proposed_amount"
-                                                            :class="isFieldDisabled( {{ role.role_id }}, {{ role.can_apply|yesno:'true,false' }}) ? 'cursor-not-allowed opacity-60 bg-slate-100' : 'cursor-pointer'"
-                                                            :disabled="isFieldDisabled({{ role.role_id }}, {{ role.can_apply|yesno:'true,false' }})"
-                                                            @change="updateRoleField({{ role.role_id }}, 'proposed_amount', $event.target.value)"
-                                                            value="{{ role.budget|intcomma }}"
-                                                            class="w-full pl-7 pr-3 py-2.5
-                                                                rounded-xl bg-slate-50 dark:bg-slate-800    
-                                                                border border-slate-200 dark:border-slate-700
-                                                                text-sm font-normal text-slate-700 dark:text-gray-300
-                                                                focus:outline-none focus:ring-0
-                                                                focus:border-brand-500
-                                                                transition-colors duration-200
-                                                            "
-                                                        />
-                                                    </div>
-                                                </div>
-                                                {% endif %}
-
-                                                {# Gigs with roles #}
-                                                <div x-data="renderPaymentPlans({{ role.can_apply|yesno:'true,false' }})">
-                                                    <p class="mb-1 text-[10px] uppercase tracking-wide font-medium text-slate-400">
-                                                        Payment Plan
-                                                    </p>
-                                                    {% if not negotiating %}
-                                                        <select 
-                                                            disabled
-                                                            class="w-full h-12 rounded-xl border border-slate-200 dark:border-slate-700 
-                                                                bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-500 
-                                                                px-4 text-sm font-normal cursor-not-allowed opacity-75"
-                                                        >
-                                                            <option selected x-text="plans.find(p => p.value === '{{ role.payment_option }}')?.label || '{{ role.payment_option }}'"></option>
-                                                        </select>
-                                                    {% else %}
-                                                        <select 
-                                                            x-model="selectedPaymentPlan"
-                                                            class="w-full h-12 rounded-xl
-                                                                bg-slate-50 dark:bg-slate-800
-                                                                border border-slate-200 dark:border-slate-700
-                                                                px-4 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                                focus:outline-none focus:ring-0
-                                                                focus:ring-brand-500/25
-                                                                focus:border-brand-500 transition"
-                                                            :class="!canSelect ? 'cursor-not-allowed opacity-60 bg-slate-100' : 'cursor-pointer'"
-                                                            :disabled="!canSelect"
-                                                            @change="updateRoleField({{ role.role_id }}, 'payment_plan', $event.target.value)"
-                                                        >
-                                                            <option value="">select option</option>
-                                                            <template x-for="plan in plans" :key="plan.value">
-                                                                <option :value="plan.value" x-text="plan.label"></option>
-                                                            </template>
-                                                        </select>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </label>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                {% else %}
-                {# When project/gig has no specific roles #}
-                <div class="relative">
-                    <!-- Ambient Frame -->
-                    <div
-                        class="absolute -inset-1 rounded-3xl
-                            bg-gradient-to-r from-slate-200/40 via-white/20 to-slate-200/40
-                            dark:from-slate-800/40 dark:via-slate-900/10 dark:to-slate-800/40
-                            blur-xl">
-                    </div>
-
-                    <!-- Card -->
-                    <div
-                        class="relative rounded-3xl bg-white dark:bg-[#151c2a]
-                            border border-slate-200/80 dark:border-slate-700/60
-                            shadow-[0_6px_18px_rgba(0,0,0,0.05)]
-                            p-6 lg:p-8">
-
-                        <!-- Header -->
-                        <div class="mb-8">
-                            <h4 class="text-base font-semibold text-slate-800 dark:text-white mb-3">
-                                Define Your Role for This Project
-                            </h4>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-xl">
-                                Choose the industry and specialization that best matches your contribution.
-                                Then enter the amount you’d like to receive for this role.
-                            </p>
-                        </div>
-
-                        <!-- Fields -->
-                        <div x-data="taxonomyPicker()" x-ref="projectRole" class="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-                            <!-- Industry -->
-                            <div>
-                                <label
-                                    class="text-[10px] uppercase tracking-wide font-medium
-                                        text-slate-400 block mb-1"
-                                >Industry</label>
-
-                                <select
-                                    x-model="selectedIndustryId"
-                                    class="w-full h-12 rounded-xl
-                                        bg-slate-50 dark:bg-slate-800
-                                        border border-slate-200 dark:border-slate-700
-                                        px-4 text-sm font-normal text-slate-800 dark:text-gray-300
-                                        focus:ring-0 focus:ring-brand-500/25
-                                        focus:border-brand-500 transition"
-                                    >
-                                        <option value="">Select industry</option>
-                                        <template x-for="item in industries" :key="item.id">
-                                            <option :value="item.id" x-text="item.name"></option>
-                                        </template>
-                                </select>
-                            </div>
-
-                            <!-- Niche -->
-                            <div>
-                                <label
-                                    class="text-[10px] uppercase tracking-wide font-medium
-                                        text-slate-400 block mb-1"
-                                >Specialization</label>
-
-                                <select
-                                    class="w-full h-12 rounded-xl bg-slate-100
-                                        dark:bg-slate-800 border border-slate-200
-                                        dark:border-slate-700 focus:ring-0 focus:ring-brand-500/25
-                                        focus:border-brand-500 transition
-                                        px-4 text-sm font-normal text-slate-400"
-                                    :class="!selectedIndustryId ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-gray-300 border border-slate-200 dark:border-slate-700'"
-                                    :disabled="!selectedIndustryId"
-                                    x-model="selectedNicheId"
-                                >
-                                    <option value="" x-text="!selectedIndustryId ? 'Select industry first' : 'Select specialization'"></option>
-                                    <template x-for="sub in filteredSubcategories()" :key="sub.id">
-                                        <option :value="sub.id" x-text="sub.name"></option>
-                                    </template>
-                                </select>
-                            </div>
-
-                            <!-- Price -->
-                            <div>
-                                <label class="text-[10px] uppercase tracking-wide font-medium
-                                    text-slate-400 block mb-1"
-                                >Proposed Amount</label>
-
-                                <div class="relative">
-                                    <span
-                                        class="absolute left-3 top-1/2 -translate-y-1/2
-                                            text-slate-400 font-semibold"
-                                    >$</span>
-
-                                    <input
-                                        x-model="roleAmount"
-                                        type="number"
-                                        @change="getSummary()"
-                                        placeholder="0.00"
-                                        class="w-full h-12 pl-7 rounded-xl
-                                            bg-slate-50 dark:bg-slate-800
-                                            border border-slate-200 dark:border-slate-700
-                                            text-sm font-medium text-slate-800 dark:text-gray-300
-                                            focus:outline-none
-                                            focus:ring-0 focus:ring-brand-500/25
-                                            focus:border-brand-500 transition"
-                                    />
+                                </div>
+                                
+                                <div class="flex items-center gap-4 shrink-0 pl-2">
+                                    <span id="role-badge-101" class="hidden text-xs font-mono px-2.5 py-1 bg-brand-50 dark:bg-brand-950/40 text-brand-500 dark:text-brand-300 rounded-lg border border-brand-100 dark:border-brand-900/50 shadow-theme-xs">
+                                        Selected
+                                    </span>
+                                    <svg id="role-chevron-101" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                                    </svg>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
 
-            </section>
-            {% if not gig.required_roles.all %}
-            <!-- Payment Plan -->
-            <section class="relative">
-                <!-- Ambient Frame -->
-                <div class="absolute -inset-1 rounded-3xl
-                    bg-gradient-to-r from-slate-200/40 via-white/20 to-slate-200/40
-                    dark:from-slate-800/40 dark:via-slate-900/10 dark:to-slate-800/40
-                    blur-xl"
-                ></div>
-                <!-- Card -->
-                <div class="relative rounded-3xl shadow-sm
-                    bg-white dark:bg-[#151c2a] p-6 lg:p-8
-                    border border-slate-200 dark:border-slate-700"
-                >
-                    <div class="flex flex-col gap-6">
+                            <div id="role-drawer-101" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-gray-25/50 dark:bg-gray-950/20 border-t border-gray-200 dark:border-gray-800">
+                                <div class="p-6 space-y-5">
+                                    <div class="space-y-3">
+                                        <h5 class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Creator Guideline View & Criteria</h5>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
+                                            Providers should possess strong knowledge of Domain-Driven Design (DDD), robust isolation of business layers, clean infrastructure abstractions, and secure, transaction-safe API integrations. Experience with asynchronous worker patterns (Celery/Redis) is highly preferred.
+                                        </p>
+                                    </div>
 
-                        <!-- Header -->
-                        <div>
-                            <h3 class="text-base font-semibold
-                            text-slate-900 dark:text-white">
-                                Payment Structure
-                            </h3>
-
-                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 max-w-lg">
-                                Choose how you'd like payments released throughout the project.
-                            </p>
-                        </div>
-
-                        <!-- Grid -->
-                        <div 
-                            
-                            class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 items-end"
-                        >
-                            {# For gigs without roles #}
-                            <div x-data="renderPaymentPlans(true)"  x-ref="gigPaymentPlan" class="flex flex-col gap-2">
-                                <label class="text-xs font-medium uppercase tracking-wide
-                                text-slate-500 dark:text-slate-400">
-                                    Percentage Split
-                                </label>
-                                <select
-                                    x-model="selectedPaymentPlan"
-                                    class="w-full h-12 rounded-xl
-                                        bg-slate-50 dark:bg-slate-800
-                                        border border-slate-200 dark:border-slate-700
-                                        px-4 text-sm font-normal text-slate-700 dark:text-gray-300
-                                        focus:outline-none focus:ring-0
-                                        focus:ring-brand-500/25
-                                        focus:border-brand-500 transition"
-                                >
-                                    <option value="">select option</option>
-                                    <template x-for="plan in plans" :key="plan.value">
-                                        <option :value="plan.value" x-text="plan.label"></option>
-                                    </template>
-                                </select>
-                            </div>
-
-                            <!-- Info Panel -->
-                            <div class="rounded-2xl
-                                bg-success-25 dark:bg-slate-800/50
-                                border border-success-100 dark:border-slate-700
-                                px-4 py-3 text-sm max-w-sm
-                                text-emerald-500/60 dark:text-slate-400"
-                            >
-                                Funds are released according to your agreed payment plan and set dates.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            {% endif %}
-            <section class="relative">
-                <!-- Ambient Frame -->
-                <div class="absolute -inset-1 rounded-3xl
-                    bg-gradient-to-r from-slate-200/40 via-white/20 to-slate-200/40
-                    dark:from-slate-800/40 dark:via-slate-900/10 dark:to-slate-800/40
-                    blur-xl">
-                </div>
-
-                <!-- Card -->
-                <div class="relative rounded-3xl shadow-sm
-                    bg-white dark:bg-[#151c2a] p-6 lg:p-8
-                    border border-slate-200 dark:border-slate-700">
-                    <div class="flex flex-col gap-7">
-                        <!-- Header -->
-                        <div class=>
-                            <h3 class="text-base font-semibold text-slate-900 dark:text-white mb-2">
-                                Deliverables & Timeline
-                            </h3>
-
-                            <p class="mt-1 text-sm text-slate-500 font-normal dark:text-slate-400 max-w-lg text-justify">
-                                Outline what you’ll deliver and how long each stage will take. Clear milestones speed up approvals and payments.
-                            </p>
-                        </div>
-
-                        <!-- Deliverables Builder -->
-                        <div x-data="deliverablesManager()" x-ref="deliverablesUnit" class="flex flex-col gap-5">
-                            <template x-for="(item, index) in items" :key="item.id">
-                                <!-- Milestone Row -->
-                                <div
-                                    class="group relative rounded-2xl
-                                        bg-slate-50 dark:bg-slate-800/60
-                                        border border-slate-200 dark:border-slate-700
-                                        p-4 transition hover:shadow-sm">
-
-                                    <div class="grid grid-cols-1 gap-4">
-                                        <button x-show="items.length > 1" @click="removeItem(item.id)" 
-                                            class="absolute -top-2 -right-2 size-6 bg-red-100 text-error-500 rounded-full flex items-center justify-center hover:bg-red-200 transition">
-                                            <span class="material-symbols-outlined text-xs">close</span>
-                                        </button>
-                                        <div>
-                                            <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                Deliverable Title <span class="text-error-500">*</span>
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                x-model="item.title"
-                                                @input="item.title.length > 50 ? item.title = item.title.substring(0, 50) : null"
-                                                placeholder="e.g. System Architecture Design"
-                                                class="w-full h-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-4 text-sm font-normal text-slate-700 dark:text-gray-300 focus:outline-none focus:border-brand-500 focus:ring-0 transition-colors duration-200"
-                                            />
-                                            <span :class="item.title.length >= 50 ? 'text-error-500' : 'text-slate-400'" 
-                                                class="text-[9px] font-mono pl-3">
-                                                <span x-text="item.title.length"></span>/50
+                                    <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-2 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800/80 shadow-theme-xs">
+    
+                                        <div class="min-w-0">
+                                            <span class="text-sm font-semibold text-gray-900 dark:text-white block">
+                                                Include this role in your proposal?
+                                            </span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 mt-1 block leading-normal">
+                                                Activating maps corresponding deliverable sequences to this focus vertical.
                                             </span>
                                         </div>
-                                        <div>
-                                            <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                Deliverable Description <span class="text-error-500">*</span>
-                                            </label>
-                                            <textarea
-                                                rows="8"
-                                                x-model="item.description"
-                                                placeholder="e.g. Homepage design, API integration, campaign strategy..."
-                                                class="w-full resize-none rounded-xl
-                                                    bg-white dark:bg-slate-900
-                                                    border border-slate-200 dark:border-slate-700
-                                                    px-4 py-3 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                    focus:outline-none focus:border-brand-500 focus:ring-0
-                                                    transition-colors duration-200"
-                                            ></textarea>
+                                        
+                                        <div class="flex justify-end sm:block shrink-0">
+                                            <button type="button" onclick="toggleRoleSelection(101, 1, 'Backend Systems Engineer (Python/Django)')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200 dark:bg-gray-800" id="role-toggle-101" role="switch" aria-checked="false">
+                                                <span id="role-toggle-knob-101" aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-theme-md ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+                                            </button>
                                         </div>
 
-                                        <!-- Duration & Due Date side by side -->
-                                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-
-                                            <!-- Duration -->
-                                            <div>
-                                                <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                    Duration <span class="text-error-500">*</span>
-                                                </label>
-                                                <select
-                                                    x-model="item.unit"                                     
-                                                    class="w-full h-12 rounded-xl
-                                                        bg-white dark:bg-slate-900
-                                                        border border-slate-200 dark:border-slate-700
-                                                        px-3 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                        focus:outline-none focus:border-brand-500 focus:ring-0
-                                                        transition-colors duration-200"
-                                                >
-                                                    <option value="days">Days</option>
-                                                    <option value="weeks">Weeks</option>
-                                                    <option value="months">Months</option>
-                                                </select>
-                                            </div>
-
-                                            <div>
-                                                <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                    Value <span class="text-error-500">*</span>
-                                                </label>
-                                                <select
-                                                    x-model="item.value"
-                                                    class="w-full h-12 rounded-xl
-                                                        bg-white dark:bg-slate-900
-                                                        border border-slate-200 dark:border-slate-700
-                                                        px-3 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                        focus:outline-none focus:border-brand-500 focus:ring-0
-                                                        transition-colors duration-200"
-                                                >
-                                                    <template x-for="num in getValueOptions(item.unit)" :key="num">
-                                                        <option :value="num" x-text="num + ' ' + (num > 1 ? item.unit : item.unit.replace(/s$/, ''))"></option>
-                                                    </template>
-                                                </select>
-                                            </div>
-
-                                            <!-- Due Date -->
-                                            <div>
-                                                <label class="text-[10px] uppercase tracking-wide font-medium text-slate-400 block mb-1">
-                                                    Due by <span class="text-error-500">*</span>
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    x-model="item.due_by"
-                                                    class="w-full h-12 rounded-xl
-                                                        bg-white dark:bg-slate-900 placeholder:text-xs
-                                                        border border-slate-200 dark:border-slate-700
-                                                        px-3 text-sm font-normal text-slate-700 dark:text-gray-300
-                                                        focus:outline-none focus:border-brand-500 focus:ring-0
-                                                        transition-colors duration-200"
-                                                />
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
-                            </template>
-
-                            <!-- Add Deliverable -->
-                            <button
-                                type="button"
-                                @click="addDeliverable()"
-                                class="group inline-flex items-center gap-2 self-start
-                                    px-4 py-2.5 rounded-xl
-                                    bg-brand-50 dark:bg-brand-500/10
-                                    text-brand-600 dark:text-gray-400
-                                    text-sm font-medium dark:hover:text-gray-300
-                                    hover:bg-brand-100 dark:hover:bg-gray-500/20
-                                    transition">
-
-                                <span class="material-symbols-outlined text-[18px]">
-                                    add_circle
-                                </span>
-
-                                Add another deliverable
-                            </button>
-
+                            </div>
                         </div>
 
-                        <!-- Guidance -->
-                        <div
-                            class="flex items-start gap-3 rounded-2xl
-                                bg-slate-50 dark:bg-slate-800/50
-                                border border-slate-100 dark:border-slate-700
-                                p-4">
+                        <div id="role-card-102" class="border border-gray-200 dark:border-gray-800 rounded-2xl bg-white dark:bg-gray-900 overflow-hidden transition-all duration-300 shadow-theme-xs hover:border-gray-300 dark:hover:border-gray-700">
+                            <div onclick="toggleRoleAccordion(102)" class="w-full flex items-center justify-between p-5 cursor-pointer select-none group">
+                                <div class="flex items-center gap-4 min-w-0">
+                                    <div id="role-dot-102" class="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700 transition-colors duration-200 shrink-0"></div>
+                                    <div class="min-w-0">
+                                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 block mb-0.5">Software Development</span>
+                                        <h4 class="text-base font-semibold text-gray-900 dark:text-white truncate">Frontend Core Infrastructure Engineer</h4>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-4 shrink-0 pl-2">
+                                    <span id="role-badge-102" class="hidden text-xs font-semibold px-2.5 py-1 bg-[var(--color-brand-25)] dark:bg-[var(--color-brand-950)]/40 text-[var(--color-brand-500)] dark:text-[var(--color-brand-300)] rounded-lg border border-[var(--color-brand-100)] dark:border-[var(--color-brand-900)]/50 shadow-theme-xs">
+                                        Selected to Apply
+                                    </span>
+                                    <svg id="role-chevron-102" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                                    </svg>
+                                </div>
+                            </div>
 
-                            <span
-                                class="material-symbols-outlined text-[18px]
-                                    text-gray-500">
-                                schedule
-                            </span>
+                            <div id="role-drawer-102" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-gray-25/50 dark:bg-gray-950/20 border-t border-transparent">
+                                <div class="p-6 space-y-5">
+                                    <div class="space-y-3">
+                                        <h5 class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Creator Guideline View & Criteria</h5>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
+                                            Responsible for crafting highly reusable, composable component models using Tailwind token variants and performant modern JavaScript runtimes. Absolute priority placed on visual alignment metrics, fluid screen responsiveness bounds, and fast loading states.
+                                        </p>
+                                    </div>
 
-                            <p
-                                class="text-sm text-slate-500 dark:text-slate-400 max-w-xl">
-                                Break work into clear stages. Smaller deliverables reduce approval delays and
-                                increase client confidence during the project.
-                            </p>
-
+                                    <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800/80 shadow-theme-xs">
+                                        <div class="min-w-0 pr-2">
+                                            <span class="text-sm font-semibold text-gray-900 dark:text-white block">Include this role in your proposal?</span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 block">Activating maps corresponding deliverable sequences to this focus vertical.</span>
+                                        </div>
+                                        
+                                        <button type="button" onclick="toggleRoleSelection(102, 1, 'Frontend Core Infrastructure Engineer')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200 dark:bg-gray-800" id="role-toggle-102" role="switch" aria-checked="false">
+                                            <span id="role-toggle-knob-102" aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-theme-md ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
-
                 </div>
-            </section>
-        </div>
-        <div class="flex flex-col gap-6 lg:sticky lg:top-24">
-            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
-                <div class="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
-                    <h3 class="text-slate-500 text-sm font-medium leading-normal">Your Proposal Summary</h3>
+
+                <!-- PHASE 3: Financial & Commercial Architecture -->
+                <div id="step-3" class="wizard-step step-hidden space-y-6">
+                    <div class="border-b border-slate-100 pb-5">
+                        <h2 class="text-xl font-semibold text-slate-900">Financial Terms & Commercials</h2>
+                        <p class="text-sm text-gray-500 mt-1">Specify your proposed contract valuation and structural payout milestones.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-slate-700">Currency Unit</label>
+                            <select id="currency-select" class="block w-full rounded-xl border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-11 px-3 border">
+                                <option value="USD">USD ($)</option>
+                                <option value="NGN">NGN (₦)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2 md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700">Proposed Gross Amount</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <input type="number" step="0.01" id="proposed-amount" class="block w-full rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-11 pl-4 pr-12 border" placeholder="0.00">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400 text-sm font-semibold currency-label">USD</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block text-sm font-medium text-slate-700">Payment Escrow Milestone Distribution</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="relative bg-white border border-slate-200 rounded-xl p-4 flex cursor-pointer hover:border-slate-300 focus:outline-none transition-all has-[:checked]:border-indigo-600 has-[:checked]:ring-1 has-[:checked]:ring-indigo-600">
+                                <input type="radio" name="payment_plan" value="SPLIT_50_50" checked class="sr-only">
+                                <div class="flex flex-col">
+                                    <span class="block text-sm font-semibold text-slate-900">Balanced Split</span>
+                                    <span class="mt-1 text-xs text-gray-500">50% upfront deposit / 50% closing release milestone.</span>
+                                </div>
+                            </label>
+                            <label class="relative bg-white border border-slate-200 rounded-xl p-4 flex cursor-pointer hover:border-slate-300 focus:outline-none transition-all has-[:checked]:border-indigo-600 has-[:checked]:ring-1 has-[:checked]:ring-indigo-600">
+                                <input type="radio" name="payment_plan" value="UPFRONT_100" class="sr-only">
+                                <div class="flex flex-col">
+                                    <span class="block text-sm font-semibold text-slate-900">100% Retainer</span>
+                                    <span class="mt-1 text-xs text-gray-500">Full gross funding released upfront upon engagement activation.</span>
+                                </div>
+                            </label>
+                            <label class="relative bg-white border border-slate-200 rounded-xl p-4 flex cursor-pointer hover:border-slate-300 focus:outline-none transition-all has-[:checked]:border-indigo-600 has-[:checked]:ring-1 has-[:checked]:ring-indigo-600">
+                                <input type="radio" name="payment_plan" value="MILESTONE_BASED" class="sr-only">
+                                <div class="flex flex-col">
+                                    <span class="block text-sm font-semibold text-slate-900">Custom Dynamic</span>
+                                    <span class="mt-1 text-xs text-gray-500">Flexible tracking tied directly to sequence deliverable rules.</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-6 flex flex-col gap-6">
-                    <div id="proposalSummary" class="flex flex-col gap-4">
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-slate-500">Selected Roles (<span id="summary-count">0</span>)</span>
-                            <span id="summary-subtotal" class="text-slate-900 dark:text-gray-400 font-semibold">$0.00</span>
+
+                <!-- PHASE 4: Granular Deliverables Sub-Form -->
+                <div id="step-4" class="wizard-step step-hidden space-y-6">
+                    <div class="border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between pb-5 gap-4">
+                        <div>
+                            <h2 class="text-xl font-semibold text-slate-900">Deliverable Blueprint Sequences</h2>
+                            <p class="text-sm text-gray-500 mt-1">Deconstruct your roadmap into distinct, verifiable phases.</p>
                         </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-slate-500">Service Fee (5%)</span>
-                            <span id="summary-fee" class="text-slate-900 dark:text-gray-400 font-semibold">$0.00</span>
-                        </div>
-                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                            <span class="text-base font-medium text-slate-900 dark:text-gray-300">Proposal Worth</span>
-                            <span id="summary-total" class="text-2xl font-semibold text-brand-500 dark:text-gray-200">$0.00</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 px-4 py-3 bg-green-50 dark:bg-green-900/10 rounded-xl border border-green-100 dark:border-green-900/20">
-                        <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-xl">verified_user</span>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] font-black text-green-700 dark:text-green-400 uppercase tracking-widest leading-none mb-0.5">Escrow Protection</span>
-                            <span class="text-[11px] text-green-600/80 dark:text-green-400/80 leading-tight">Funds are secured before work starts.</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-4" x-data="{ agreed: false }">
-                        <label class="flex items-start gap-3 cursor-pointer group">
-                            <input 
-                                x-model="agreed" 
-                                class="mt-1 size-4 rounded border-slate-300 dark:border-slate-700 
-                                    text-brand-500 focus:ring-brand-500" 
-                                type="checkbox"
-                            />
-                            <span class="text-[11px] text-slate-500 leading-normal group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">
-                                I agree to the <a class="text-brand-500 dark:text-brand-300 font-semibold underline" href="#">Terms of Engagement</a> and confirm that I can meet the project deadlines.
-                            </span>
-                        </label>
-                        <button 
-                            id="sndProposalBtn"
-                            type="button"
-                            @click="sendProposal()"
-                            :disabled="!agreed"
-                            :class="agreed ? 'text-white bg-brand-500 shadow-brand-500/30 hover:bg-brand-500/90 active:scale-[0.98]' : 'text-white/80 dark:text-gray-500 bg-brand-400/30 dark:bg-gray-700/30 cursor-not-allowed shadow-none'"
-                            class="w-full py-4 rounded-xl font-semibold text-base shadow-lg transition-all flex items-center justify-center gap-2">
-                            <span>Send Proposal</span>
-                            <span class="material-symbols-outlined text-xl">send</span>
+                        <button type="button" onclick="deliverableManager.addEmptyRow()" class="inline-flex items-center gap-1.5 px-3.5 py-2 border border-slate-200 bg-white rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                            Append Deliverable
                         </button>
-                        <p class="text-[10px] text-center text-slate-400 px-4">
-                            The client will have 72 hours to review and accept your proposal.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="p-5 bg-amber-50/50 dark:bg-amber-900/10 rounded-2xl border border-amber-200/60 dark:border-amber-500/20 backdrop-blur-sm">
-                <div class="flex gap-4">
-                    <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-500/20">
-                        <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-[22px]">lightbulb</span>
                     </div>
 
-                    <div class="flex flex-col gap-1">
-                        <p class="text-sm font-medium text-amber-900 dark:text-amber-100 tracking-tight">
-                            First time applying?
-                        </p>
-                        <p class="text-xs leading-relaxed text-amber-800/80 dark:text-amber-200/70">
-                            Read our guide on how to craft a winning proposal and secure roles faster.
-                        </p>
-                        <a href="#" class="group mt-2 inline-flex items-center text-xs font-medium text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-200 transition-colors">
-                            Read Guide
-                            <span class="material-symbols-outlined text-[14px] ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                        </a>
+                    <!-- Dynamic Row Mount Node Container -->
+                    <div id="deliverables-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
+                        <!-- Component items are injected here via JS -->
+                    </div>
+
+                    <!-- Live Running Validator Aggregates -->
+                    <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-wrap items-center justify-between text-sm gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-500 font-medium">Aggregated Release Allocation:</span>
+                            <span id="allocation-tracker" class="font-semibold text-slate-900">0%</span>
+                        </div>
+                        <div id="allocation-warning" class="text-xs text-red-600 hidden font-medium flex items-center gap-1">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            Allocation aggregate must total exactly 100% to protect payload alignment.
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <!-- PHASE 5: Integrity Verification & Summary Review -->
+                <div id="step-5" class="wizard-step step-hidden space-y-6">
+                    <div class="border-b border-slate-100 pb-5">
+                        <h2 class="text-xl font-semibold text-slate-900">Final Verification Review</h2>
+                        <p class="text-sm text-gray-500 mt-1">Ensure total validation alignment before executing ledger commit.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-5 border border-slate-100 bg-slate-50/50 rounded-xl">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Assigned Niche Profile</span>
+                            <span id="review-niche" class="text-base font-semibold text-slate-800 mt-1 block">—</span>
+                        </div>
+                        <div class="p-5 border border-slate-100 bg-slate-50/50 rounded-xl">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Gross Valuation Lock</span>
+                            <span id="review-value" class="text-base font-semibold text-indigo-600 mt-1 block">—</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-blue-100 bg-blue-50/40 space-y-1.5 text-sm text-blue-900">
+                        <div class="font-semibold flex items-center gap-2">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.028M15.75 9.25a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Execution Manifest
+                        </div>
+                        <p class="text-blue-800/90 leading-relaxed text-xs">
+                            Active structures contain <span id="review-deliverables-count" class="font-semibold">0</span> sequenced execution components. All milestones are tied to the verified escrow release logic.
+                        </p>
+                    </div>
+
+                    <!-- Strict Platform Constraints Warning -->
+                    <div class="p-4 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600 space-y-1">
+                        <span class="font-semibold text-slate-800 uppercase tracking-wider block">Platform Submission Policy Disclaimers</span>
+                        <p>1. Only one single proposal submission may be active per user per core project instance.</p>
+                        <p>2. Active submissions freeze state adjustments. Edits or modifications require a complete proposal withdraw transaction.</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Navigation Control Button Row Footer -->
+                <div class="flex items-center justify-between pt-8 border-t border-slate-100 mt-10">
+                    <button type="button" id="prev-btn" onclick="wizard.prev()" class="inline-flex items-center justify-center h-11 px-5 border border-slate-200 bg-white rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none visibility-hidden">
+                        Back Phase
+                    </button>
+                    
+                    <button type="button" id="next-btn" onclick="wizard.next()" class="inline-flex items-center justify-center h-11 px-6 bg-slate-900 dark:bg-brand-500 hover:bg-slate-800 dark:hover:bg-brand-400 text-white rounded-xl text-sm font-semibold transition-all shadow-md focus:outline-none ml-auto">
+                        Continue
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</section>
+</div>
 {% endblock %}
-{% block custom_page_js %}
-<script id="taxonomy-data" type="application/json" x-ref="taxonomy">
-{{ taxonomy_json|safe }}
-</script>
-<script id="payment-options-data" type="application/json" x-ref="paymentPlans">
-  {{ payment_options|safe }}
-</script>
-<script>
-document.querySelectorAll(".role-checkbox").forEach(cb => {
-    cb.addEventListener("click", (e) => {
-        if (cb.dataset.canApply === "false") {
-            e.preventDefault();
-            e.stopPropagation();
 
-            showToast(
-                "You can’t apply for this role because it doesn’t match your expertise.",
-                "info",
-                "Ineligible Role"
-            );
-        }
-    });
-});
-</script>
+{% block custom_page_js %}
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-<script src="{% static 'js/utils/sendRequest.js' %}"></script>
-<script src="{% static 'js/utils/updateProposalUI.js' %}"></script>
-<script src="{% static 'js/utils/renderIndustryTaxonomy.js' %}"></script>
-<script src="{% static 'js/utils/renderPaymentOptions.js' %}"></script>
-<script src="{% static 'js/collaboration/managers/deliverables.js' %}"></script>
-<script src="{% static 'js/collaboration/managers/roleApplication.js' %}"></script>
-<script src="{% static 'js/collaboration/accept-offer.js' %}"></script>
+<script>
+    /**
+     * Unified State Management Engine
+     * Holds internal layout structures mimicking Python Pydantic Schema rules.
+     */
+    const formState = {
+        projectId: "00000000-0000-0000-0000-000000000000", // Bind real server UUID here
+        industryId: null,
+        nicheId: null,
+        nicheName: "",
+        proposedAmount: 0.00,
+        currency: "USD",
+        paymentPlan: "SPLIT_50_50",
+        deliverables: []
+    };
+
+    /**
+     * Navigation Wizard Orchestrator (Entrance & Exit Animations)
+     */
+    class ProposalWizard {
+        constructor() {
+            this.currentStep = 1;
+            this.totalSteps = 5;
+            this.isAnimating = false;
+        }
+
+        updateUIElements() {
+            // Document references
+            document.getElementById('current-step-badge').textContent = this.currentStep;
+            document.getElementById('progress-line').style.width = `${((this.currentStep - 1) / (this.totalSteps - 1)) * 100}%`;
+
+            // Back button toggle visibility rules
+            const prevBtn = document.getElementById('prev-btn');
+            if (this.currentStep === 1) {
+                prevBtn.classList.add('invisible');
+            } else {
+                prevBtn.classList.remove('invisible');
+            }
+
+            // Next / Confirm button text configurations
+            const nextBtn = document.getElementById('next-btn');
+            if (this.currentStep === this.totalSteps) {
+                nextBtn.textContent = "Confirm & Dispatch Bid";
+                nextBtn.classList.replace('bg-slate-900', 'bg-indigo-600');
+                nextBtn.classList.replace('hover:bg-slate-800', 'hover:bg-indigo-700');
+            } else {
+                nextBtn.textContent = "Continue";
+                nextBtn.classList.replace('bg-indigo-600', 'bg-slate-900');
+                nextBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-slate-800');
+            }
+
+            // Stepper indicator updates
+            for (let i = 1; i <= this.totalSteps; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (!dot) continue;
+                if (i <= this.currentStep) {
+                    dot.classList.remove('border-slate-200', 'text-slate-400', 'bg-white');
+                    dot.classList.add('border-indigo-600', 'text-white', 'bg-indigo-600');
+                } else {
+                    dot.classList.remove('border-indigo-600', 'text-white', 'bg-indigo-600');
+                    dot.classList.add('border-slate-200', 'text-slate-400', 'bg-white');
+                }
+            }
+            
+            if (this.currentStep === 5) this.hydrateReviewScreen();
+        }
+
+        async goToStep(targetStep) {
+            if (this.isAnimating || targetStep === this.currentStep || targetStep < 1 || targetStep > this.totalSteps) return;
+            
+            // Prevent forward skipping without validating intermediate steps
+            if (targetStep > this.currentStep + 1) return;
+
+            this.isAnimating = true;
+
+            const currentElement = document.getElementById(`step-${this.currentStep}`);
+            const targetElement = document.getElementById(`step-${targetStep}`);
+
+            // 1. Fire Exit Animation on current step
+            currentElement.classList.remove('step-active');
+            currentElement.classList.add('step-exiting');
+
+            // Wait for transition duration (400ms matching CSS config)
+            await new Promise(resolve => setTimeout(resolve, 350));
+
+            currentElement.classList.remove('step-exiting');
+            currentElement.classList.add('step-hidden');
+
+            // 2. Clear state properties and mount target element inside view pipeline
+            targetElement.classList.remove('step-hidden');
+            targetElement.classList.add('step-entering');
+            
+            // Force browser layout repaint to catch the start state for entry
+            targetElement.offsetHeight;
+
+            targetElement.classList.remove('step-entering');
+            targetElement.classList.add('step-active');
+
+            this.currentStep = targetStep;
+            this.updateUIElements();
+
+            this.isAnimating = false;
+        }
+
+        next() {
+            if (this.currentStep === this.totalSteps) {
+                this.executePayloadSubmission();
+                return;
+            }
+            this.goToStep(this.currentStep + 1);
+        }
+
+        prev() {
+            this.goToStep(this.currentStep - 1);
+        }
+
+        hydrateReviewScreen() {
+            this.syncInputsToState();
+            document.getElementById('review-niche').textContent = formState.nicheName || "Not Configured";
+            document.getElementById('review-value').textContent = `${formState.currency} ${Number(formState.proposedAmount).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('review-deliverables-count').textContent = formState.deliverables.length;
+        }
+
+        syncInputsToState() {
+            const indSel = document.getElementById('industry-select');
+            const nchSel = document.getElementById('niche-select');
+            
+            formState.industryId = indSel.value ? parseInt(indSel.value) : null;
+            formState.nicheId = nchSel.value ? parseInt(nchSel.value) : null;
+            formState.nicheName = nchSel.options[nchSel.selectedIndex]?.getAttribute('data-name') || "";
+            
+            formState.proposedAmount = parseFloat(document.getElementById('proposed-amount').value) || 0.00;
+            formState.currency = document.getElementById('currency-select').value;
+            formState.paymentPlan = document.querySelector('input[name="payment_plan"]:checked')?.value || "SPLIT_50_50";
+        }
+
+        executePayloadSubmission() {
+            this.syncInputsToState();
+            deliverableManager.saveAllRows();
+            
+            // Assemble final Pydantic-compliant schema mirror
+            const payload = {
+                project_id: formState.projectId,
+                applied_roles: [
+                    {
+                        industry_id: formState.industryId,
+                        niche_id: formState.nicheId,
+                        niche_name: formState.nicheName,
+                        role_amount: formState.proposedAmount,
+                        proposed_amount: formState.proposedAmount,
+                        currency: formState.currency,
+                        payment_plan: formState.paymentPlan,
+                        deliverables: formState.deliverables
+                    }
+                ],
+                total_value: formState.proposedAmount,
+                currency: formState.currency,
+                sent_at: new Date().toISOString()
+            };
+
+            console.log("VALIDATED TRANSACTION MANIFEST PAYLOAD PACKAGE:", JSON.stringify(payload, null, 2));
+            alert("Payload built and verified successfully! Check console parameters log structure context.");
+        }
+    }
+
+    /**
+     * Component Row Builder Object for Step 4 Deliverables Matrix
+     */
+    class DeliverableRowManager {
+        constructor(containerId) {
+            this.container = document.getElementById(containerId);
+            this.rowCount = 0;
+        }
+
+        addEmptyRow() {
+            this.rowCount++;
+            const id = this.rowCount;
+            
+            const itemHTML = `
+                <div id="del-row-${id}" class="p-5 border border-slate-200 rounded-xl bg-white space-y-4 shadow-sm relative group">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Component Deliverable #${id}</span>
+                        <button type="button" onclick="deliverableManager.removeRow(${id})" class="text-slate-400 hover:text-red-500 transition-colors focus:outline-none">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-2 space-y-1">
+                            <label class="text-xs font-medium text-slate-600">Phase Title</label>
+                            <input type="text" class="del-phase block w-full rounded-lg border-slate-200 text-sm h-10 border px-3" max_length="70" placeholder="e.g., Core Engine Infrastructure Design">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-slate-600">Release Allocation (%)</label>
+                            <input type="number" oninput="deliverableManager.recalculateTotals()" class="del-pct block w-full rounded-lg border-slate-200 text-sm h-10 border px-3" min="10" max="100" placeholder="10.0 - 100">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-slate-600">Duration Metric Unit</label>
+                            <select class="del-unit block w-full rounded-lg border-slate-200 text-sm h-10 border px-2">
+                                <option value="DAYS">DAYS (Bounds: 1-11)</option>
+                                <option value="WEEKS">WEEKS (Bounds: 1-4)</option>
+                                <option value="MONTHS">MONTHS (Bounds: 1-12)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-slate-600">Duration Expected Value</label>
+                            <input type="number" class="del-dur-val block w-full rounded-lg border-slate-200 text-sm h-10 border px-3" placeholder="Specify duration scale">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-medium text-slate-600">Granular Performance Specifications</label>
+                        <textarea class="del-desc block w-full rounded-lg border-slate-200 text-sm p-3 border" rows="3" max_length="2000" placeholder="Detailed architectural breakdown description parameters..."></textarea>
+                    </div>
+                </div>
+            `;
+            
+            this.container.insertAdjacentHTML('beforeend', itemHTML);
+            this.recalculateTotals();
+        }
+
+        removeRow(id) {
+            const target = document.getElementById(`del-row-${id}`);
+            if (target) {
+                target.remove();
+                this.recalculateTotals();
+            }
+        }
+
+        recalculateTotals() {
+            let totalPct = 0;
+            const pctInputs = document.querySelectorAll('.del-pct');
+            pctInputs.forEach(input => {
+                totalPct += parseFloat(input.value) || 0;
+            });
+
+            const tracker = document.getElementById('allocation-tracker');
+            const warning = document.getElementById('allocation-warning');
+            
+            tracker.textContent = `${totalPct}%`;
+            
+            if (totalPct !== 100 && pctInputs.length > 0) {
+                tracker.classList.replace('text-slate-900', 'text-red-600');
+                warning.classList.remove('hidden');
+            } else {
+                tracker.classList.replace('text-red-600', 'text-slate-900');
+                warning.classList.add('hidden');
+            }
+        }
+
+        saveAllRows() {
+            formState.deliverables = [];
+            const rows = this.container.children;
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                formState.deliverables.push({
+                    phase: row.querySelector('.del-phase').value,
+                    description: row.querySelector('.del-desc').value.trim(),
+                    duration_unit: row.querySelector('.del-unit').value,
+                    duration_value: parseInt(row.querySelector('.del-dur-val').value) || 0,
+                    release_percentage: parseFloat(row.querySelector('.del-pct').value) || 0.0,
+                    rendering_order: i + 1
+                });
+            }
+        }
+    }
+
+    // Instantiations on load runtime
+    const wizard = new ProposalWizard();
+    const deliverableManager = new DeliverableRowManager('deliverables-container');
+
+    // Attach currency label sync changes listeners
+    document.getElementById('currency-select').addEventListener('change', (e) => {
+        document.querySelectorAll('.currency-label').forEach(el => el.textContent = e.target.value);
+    });
+
+    // Initialize with single bare row item setup
+    document.addEventListener('DOMContentLoaded', () => {
+        deliverableManager.addEmptyRow();
+    });
+
+    /**
+ * Global track objects to map selected roles index scopes 
+ */
+let activeScopedRolesMap = {};
+
+/**
+ * Handles smooth drawer expansions across pre-defined structural elements 
+ * @param {Number} nicheId - Unique identifier key for target role configuration
+ */
+function toggleRoleAccordion(nicheId) {
+    const drawer = document.getElementById(`role-drawer-${nicheId}`);
+    const chevron = document.getElementById(`role-chevron-${nicheId}`);
+    const card = document.getElementById(`role-card-${nicheId}`);
+
+    if (drawer.style.maxHeight && drawer.style.maxHeight !== "0px") {
+        // Close Task Action
+        drawer.style.maxHeight = "0px";
+        drawer.style.opacity = "0";
+        drawer.classList.add('border-transparent');
+        chevron.classList.remove('rotate-180');
+    } else {
+        // Open Expand Task Action
+        drawer.classList.remove('border-transparent');
+        drawer.classList.add('dark:border-gray-800/60');
+        drawer.style.maxHeight = drawer.scrollHeight + "px";
+        drawer.style.opacity = "1";
+        chevron.classList.add('rotate-180');
+    }
+}
+
+/**
+ * Commits interactive switch activations straight to internal payload tracker state array
+ */
+function toggleRoleSelection(nicheId, industryId, nicheName) {
+    const toggleButton = document.getElementById(`role-toggle-${nicheId}`);
+    const toggleKnob = document.getElementById(`role-toggle-knob-${nicheId}`);
+    const indicatorDot = document.getElementById(`role-dot-${nicheId}`);
+    const selectionBadge = document.getElementById(`role-badge-${nicheId}`);
+    const outerCard = document.getElementById(`role-card-${nicheId}`);
+
+    const isChecked = toggleButton.getAttribute('aria-checked') === 'true';
+    const nextState = !isChecked;
+
+    toggleButton.setAttribute('aria-checked', nextState.toString());
+
+    if (nextState) {
+        // Selected Activation Styles Engine Pass
+        toggleButton.classList.replace('bg-gray-200', 'bg-[var(--color-brand-500)]');
+        toggleButton.classList.remove('dark:bg-gray-800');
+        toggleKnob.classList.replace('translate-x-0', 'translate-x-5');
+        indicatorDot.classList.replace('bg-gray-300', 'bg-[var(--color-brand-500)]');
+        indicatorDot.classList.remove('dark:bg-gray-700');
+        selectionBadge.classList.remove('hidden');
+        outerCard.classList.replace('border-gray-200', 'border-[var(--color-brand-500)]');
+        outerCard.classList.add('dark:border-[var(--color-brand-500)]');
+
+        // Append Node Data values to selection matrix dictionary
+        activeScopedRolesMap[nicheId] = {
+            industry_id: industryId,
+            niche_id: nicheId,
+            niche_name: nicheName
+        };
+    } else {
+        // Deactivated Safe Rollback Pass
+        toggleButton.classList.replace('bg-[var(--color-brand-500)]', 'bg-gray-200');
+        toggleButton.classList.add('dark:bg-gray-800');
+        toggleKnob.classList.replace('translate-x-5', 'translate-x-0');
+        indicatorDot.classList.replace('bg-[var(--color-brand-500)]', 'bg-gray-300');
+        indicatorDot.classList.add('dark:bg-gray-700');
+        selectionBadge.classList.add('hidden');
+        outerCard.classList.replace('border-[var(--color-brand-500)]', 'border-gray-200');
+        outerCard.classList.remove('dark:border-[var(--color-brand-500)]');
+
+        // Delete from selection memory footprint map
+        delete activeScopedRolesMap[nicheId];
+    }
+}
+
+/**
+ * Override baseline single select sync method to capture dynamic dynamic multi-selected structures mapping arrays
+ */
+ProposalWizardOrchestrator.prototype.syncInputsToState = function() {
+    formState.proposedAmount = parseFloat(document.getElementById('proposed-amount').value) || 0.00;
+    formState.currency = document.getElementById('currency-select').value;
+    formState.paymentPlan = document.querySelector('input[name="payment_plan"]:checked')?.value || "SPLIT_50_50";
+    
+    // Inject selected dynamic elements into the root payload model properties tracking array frame
+    formState.appliedRolesTargetRef = Object.values(activeScopedRolesMap);
+    
+    // Setup fallbacks definitions to preserve summary screen rendering variables logic intact
+    if (formState.appliedRolesTargetRef.length > 0) {
+        formState.industryId = formState.appliedRolesTargetRef[0].industry_id;
+        formState.nicheId = formState.appliedRolesTargetRef[0].niche_id;
+        formState.nicheName = formState.appliedRolesTargetRef.map(r => r.niche_name).join(', ');
+    } else {
+        formState.industryId = null;
+        formState.nicheId = null;
+        formState.nicheName = "";
+    }
+
+    if (document.getElementById('deliverables-container').children.length > 0) {
+        deliverableManager.saveAllRows();
+    }
+};
+
+</script>
 {% endblock %}

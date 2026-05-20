@@ -24,7 +24,7 @@ GigRoleModel = registry.GigRole
 class ProposalSubmissionView(LoginRequiredMixin, DetailView):
     model = GigModel
     template_name = Collabs.Marketplace.ENGAGEMENT_SUBMISSION
-    context_object_name = "gig"
+    context_object_name = "project"
     slug_field = "slug"
     slug_url_kwarg = "slug"
     
