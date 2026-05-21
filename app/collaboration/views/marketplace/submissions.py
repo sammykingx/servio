@@ -29,7 +29,7 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "slug"
     
     def get_queryset(self):
-        return super().get_queryset().select_related('creator').filter(
+        return super().get_queryset().prefetch_related('required_roles').filter(
             status=ProjectStatus.PUBLISHED
         ).exclude(creator=self.request.user)
     
@@ -48,55 +48,30 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context =super().get_context_data(**kwargs)
-        context["taxonomy_json"] = GigCategoryModel.objects.get_taxonomy_json()
         context["payment_options"] = json.dumps(PAYMENT_OPTIONS)
-        context["negotiating"] = True if self.request.GET.get("negotiating") == "true" else False
-        roles = self.object.required_roles.all()
-        role_payment_plan = {}
-        if roles:
+        project = self.object
+        roles = []
+        if project.has_gig_roles:
+            roles = project.required_roles.all()
             for role in roles:
                 role.can_apply = self.user_can_apply_for_role(self.request.user, role)
-                payment_value = role.payment_option
-
-                is_split = PaymentOption.is_split(payment_value)
-
-                role_payment_plan[role.id] = {
-                    "type": "Percentage Split" if is_split else "Full Upfront",
-                    "installments": (
-                        PaymentOption.installments_count(payment_value)
-                        if is_split
-                        else 1
-                    ),
-                    "split": (
-                        PaymentOption.percentages(payment_value)
-                        if is_split
-                        else [100]
-                    ),
-                    "label": PaymentOption(payment_value).label,
-                }
-                
-            context["roles"] = roles
-            context["role_payment_plan"] = role_payment_plan
+        else:
+            roles.extend(self.request.user.profile.get_niche_roles_list())
+        context["roles"] = roles
         return context
     
     def post(self, request:HttpRequest, *args, **kwargs):
-        self.object = self.get_object()
-        is_negotiating = request.GET.get("negotiating", None) == "true"
         try:
-            # payload = json.loads(request.body)
-            data = ProposalSubmissionPayload.model_validate(MOCK_PROPOSAL_PAYLOAD, strict=True) # ProposalSubmissionPayload.model_validate_json(payload, strict=True)
-            ProposalOrchestrationService(request.user, request).submit_proposal(data)
-            
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {
-                    "error": "Invalid JSON payload",
-                    "message": "Request body should be a valid JSON data, check and try again.",
-                },
-                status=400,
-            )
-            
-        except ValidationError:                
+            data = ProposalSubmissionPayload.model_validate_json(request.body)
+            import time
+            time.sleep(5)
+            # data = ProposalSubmissionPayload.model_validate(MOCK_PROPOSAL_PAYLOAD, strict=True)
+            # ProposalOrchestrationService(request.user, request).submit_proposal(data)
+
+        except ValidationError as err:
+            from formatters.pydantic_formatter import format_pydantic_errors
+            fields = format_pydantic_errors(err)
+            print(fields)
             return JsonResponse(
                 {
                     "error": "Validation error",

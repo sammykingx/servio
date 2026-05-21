@@ -55,7 +55,7 @@ class ProposedRole(BaseModel):
     niche_name: str = Field(..., description="Human-readable name of the expertise")
     role_amount: Union[Decimal, None] = None
     proposed_amount: Decimal = Field(..., gt=10, max_digits=12, decimal_places=2)
-    currency: Literal["USD", "NGN"]
+    currency: Literal["USD"] = "USD"
     payment_plan: PaymentOption = PaymentOption.SPLIT_50_50
     deliverables: List[ProposalDeliverable] = Field(..., min_length=1)
     
@@ -82,6 +82,6 @@ class ProposalSubmissionPayload(BaseModel):
     project_id: UUID
     applied_roles: List[ProposedRole] = Field(..., min_length=1)
     total_value: Decimal = Field(..., gt=5, max_digits=12, decimal_places=2)
-    currency: Literal["USD", "NGN"]
+    currency: Literal["USD"] = "USD"
     sent_at: datetime
     

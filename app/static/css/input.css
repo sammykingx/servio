@@ -953,4 +953,14 @@ span.flatpickr-weekday,
 .quill-content .ql-align-right { text-align: right; }
 .quill-content .ql-align-justify { text-align: justify; }
 
+/* For proposal submission animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+}

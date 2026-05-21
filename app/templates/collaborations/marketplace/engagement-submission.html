@@ -36,14 +36,20 @@
     .step-indicator {
         transition: color 0.3s, border-color 0.3s, background-color 0.3s;
     }
+    .animate-fade-in {
+        animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-shake {
+        animation: shake 0.3s ease-in-out;
+    }
+    
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen py-12 px-1 sm:px-4 lg:px-6">
+<div id="proposal-container" data-submission-endpoint="{% url OPPURTUNITIES.SUBMIT_PROJECT_PROPOSAL slug=project.slug %}" data-csrf-token="{{ csrf_token }}" class="min-h-screen py-12 px-1 sm:px-4 lg:px-6">
     <div class="max-w-5xl mx-auto">
-        
-        <!-- Header & Stepper Tracker Container -->
         <div class="mb-10 select-none">
             <div class="flex flex-row items-start sm:items-center justify-between gap-x-4 gap-y-2 mb-8">
                 <div class="min-w-0 flex-1">
@@ -70,11 +76,11 @@
                 </div>
                 
                 <div class="relative flex justify-between">
-                    <button type="button" onclick="wizard.goToStep(1)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[var(--color-brand-500)] border-2 border-[var(--color-brand-500)] text-white flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none shadow-theme-sm z-10" id="dot-1">1</button>
-                    <button type="button" onclick="wizard.goToStep(2)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-2">2</button>
-                    <button type="button" onclick="wizard.goToStep(3)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-3">3</button>
-                    <button type="button" onclick="wizard.goToStep(4)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-4">4</button>
-                    <button type="button" onclick="wizard.goToStep(5)" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-5">5</button>
+                    <button type="button" data-step="1" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-brand-500 border-2 border-brand-500 text-white flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none shadow-theme-sm z-10" id="dot-1">1</button>
+                    <button type="button" data-step="2" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-2">2</button>
+                    <button type="button" data-step="3" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-3">3</button>
+                    <button type="button" data-step="4" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-4">4</button>
+                    <button type="button" data-step="5" class="step-indicator w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center text-xs sm:text-sm font-semibold focus:outline-none z-10" id="dot-5">5</button>
                 </div>
             </div>
         </div>
@@ -84,7 +90,7 @@
             <form id="proposal-form" onsubmit="event.preventDefault();" class="flex-1 flex flex-col justify-between p-8 sm:p-10">
                 
                 <!-- PHASE 1: Project Overview Context -->
-                <section id="step-1" class="wizard-step step-active space-y-6">
+                <section id="step-1" data-project-id="{{ project.id }}" class="wizard-step step-active space-y-6">
                     <div class="border-b border-slate-100 dark:border-gray-700 pb-5">
                         <h2 class="text-xl font-semibold text-slate-900 dark:text-white">Project Brief & Guidelines</h2>
                         <p class="text-sm text-gray-500 mt-1">Review the structural project details before designing your proposals.</p>
@@ -98,7 +104,7 @@
                         <div>
                             <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">About Project</label>
                             <div class="text-sm text-slate-500 leading-relaxed mt-1">
-                                {{ project.description|safe|default:"We are seeking an experienced technical partner to design and build our core digital marketplace platform. The scope includes engineering a robust service provider onboarding journey, payment splits via modern processing gateways, real-time tracking dashboards, and background push architecture." }}
+                                {{ project.description|safe|default:"We are seeking an experienced technical partner to design and build our core digital marketplace platform." }}
                             </div>
                         </div>
                     </div>
@@ -108,245 +114,193 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                         <div class="text-sm text-amber-800">
-                            <span class="font-semibold">Review Requirements Carefully:</span> Ensure your milestones match the scope of work described. Budgets and deliverables defined down-funnel must strictly bind to this blueprint.
+                            <span class="font-semibold">Review Requirements Carefully:</span> Ensure your milestones match the scope of work described.
                         </div>
                     </div>
                 </section>
 
                 <!-- PHASE 2: Service/Role Configuration -->
-                {# for scoped projects #}
-                <div id="step-2" class="wizard-step step-hidden space-y-6">
+                <section id="step-2" class="wizard-step step-hidden space-y-6">
                     <div class="border-b border-gray-100 dark:border-gray-800 pb-5">
-                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Available Project Roles</h2>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            {% if project.has_gig_roles %}
+                                Available Project Roles
+                            {% else %}
+                                Your Skill Set
+                            {% endif %}
+                        </h2>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            This project has explicit structural scope roles. Expand any role card to view requirements and toggle your application interest.
+                            {% if project.has_gig_roles %}
+                                This project has explicit structural scope roles. Expand any role card to view requirements and toggle your application interest.
+                            {% else %}
+                                Select the skills you bring to the table based on the project's scope.
+                            {% endif %}
                         </p>
                     </div>
 
                     <div class="space-y-4">
-                        <div id="role-card-101" class="border border-gray-200 dark:border-gray-800 rounded-2xl bg-white dark:bg-gray-900 overflow-hidden transition-all duration-300 shadow-theme-xs hover:border-gray-300 dark:hover:border-gray-700">
-                            <div onclick="toggleRoleAccordion(101)" class="w-full flex items-center justify-between p-5 cursor-pointer select-none group">
-                                <div class="flex items-center gap-4 min-w-0">
-                                    <div id="role-dot-101" class="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700 transition-colors duration-200 shrink-0"></div>
-                                    <div class="min-w-0">
-                                        <span class="text-xs uppercase tracking-wider text-gray-400 dark:text-gray-500 block mb-0.5">Software Development</span>
-                                        <h4 class="text-base font-medium text-gray-900 dark:text-white truncate">Backend Systems Engineer (Python/Django)</h4>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center gap-4 shrink-0 pl-2">
-                                    <span id="role-badge-101" class="hidden text-xs font-mono px-2.5 py-1 bg-brand-50 dark:bg-brand-950/40 text-brand-500 dark:text-brand-300 rounded-lg border border-brand-100 dark:border-brand-900/50 shadow-theme-xs">
-                                        Selected
-                                    </span>
-                                    <svg id="role-chevron-101" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div id="role-drawer-101" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-gray-25/50 dark:bg-gray-950/20 border-t border-gray-200 dark:border-gray-800">
-                                <div class="p-6 space-y-5">
-                                    <div class="space-y-3">
-                                        <h5 class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Creator Guideline View & Criteria</h5>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
-                                            Providers should possess strong knowledge of Domain-Driven Design (DDD), robust isolation of business layers, clean infrastructure abstractions, and secure, transaction-safe API integrations. Experience with asynchronous worker patterns (Celery/Redis) is highly preferred.
-                                        </p>
-                                    </div>
-
-                                    <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-2 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800/80 shadow-theme-xs">
-    
-                                        <div class="min-w-0">
-                                            <span class="text-sm font-semibold text-gray-900 dark:text-white block">
-                                                Include this role in your proposal?
-                                            </span>
-                                            <span class="text-xs text-gray-400 dark:text-gray-500 mt-1 block leading-normal">
-                                                Activating maps corresponding deliverable sequences to this focus vertical.
-                                            </span>
-                                        </div>
+                    
+                            {% for role in roles %}
+                                {% if role.can_apply %}
+                                    <div data-industry-id="{{ role.niche_id }}" 
+                                        data-niche-id="{{ role.role_id }}" 
+                                        data-niche-name="{{ role.role_name }}" 
+                                        data-budget="{{ role.budget }}"
+                                        data-payment-plan="{{ role.payment_option }}"
+                                        id="role-card-{{ role.role_id }}" 
+                                        class="border border-gray-200 dark:border-gray-800 
+                                            rounded-2xl bg-white dark:bg-gray-900 overflow-hidden 
+                                            transition-all duration-300 shadow-theme-xs hover:border-gray-300 
+                                            dark:hover:border-gray-700"
+                                    >
                                         
-                                        <div class="flex justify-end sm:block shrink-0">
-                                            <button type="button" onclick="toggleRoleSelection(101, 1, 'Backend Systems Engineer (Python/Django)')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200 dark:bg-gray-800" id="role-toggle-101" role="switch" aria-checked="false">
-                                                <span id="role-toggle-knob-101" aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-theme-md ring-0 transition duration-200 ease-in-out translate-x-0"></span>
-                                            </button>
+                                        <div class="role-accordion-trigger w-full flex items-center justify-between p-5 cursor-pointer select-none group" data-target-id="{{ role.role_id }}">
+                                            <div class="flex items-center gap-4 min-w-0">
+                                                <div id="role-dot-{{ role.role_id }}" class="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700 transition-colors duration-200 shrink-0"></div>
+                                                <div class="min-w-0">
+                                                    <span class="text-xs uppercase tracking-wider text-gray-400 dark:text-gray-500 block mb-0.5">{{ role.niche_name }}</span>
+                                                    <h4 class="text-base font-medium text-gray-900 dark:text-white truncate">{{ role.role_name }}</h4>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center gap-4 shrink-0 pl-2">
+                                                <span id="role-badge-{{ role.role_id }}" class="hidden text-xs font-mono px-2.5 py-1 bg-brand-50 dark:bg-brand-950/40 text-brand-500 dark:text-brand-300 rounded-lg border border-brand-100 dark:border-brand-900/50 shadow-theme-xs">
+                                                    Selected
+                                                </span>
+                                                <svg id="role-chevron-{{ role.role_id }}" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                                                </svg>
+                                            </div>
                                         </div>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        <div id="role-drawer-{{ role.role_id }}" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-gray-25/50 dark:bg-gray-950/20 border-t border-transparent">
+                                            <div class="p-6 space-y-5">
+                                                <div class="space-y-3">
+                                                    <h5 class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Creator Guideline & Criteria</h5>
+                                                    <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
+                                                        {{ role.description|safe|default:"Review requirements, guidelines, and milestone allocation constraints defined down-funnel for this marketplace segment." }}
+                                                    </p>
+                                                </div>
 
-                        <div id="role-card-102" class="border border-gray-200 dark:border-gray-800 rounded-2xl bg-white dark:bg-gray-900 overflow-hidden transition-all duration-300 shadow-theme-xs hover:border-gray-300 dark:hover:border-gray-700">
-                            <div onclick="toggleRoleAccordion(102)" class="w-full flex items-center justify-between p-5 cursor-pointer select-none group">
-                                <div class="flex items-center gap-4 min-w-0">
-                                    <div id="role-dot-102" class="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700 transition-colors duration-200 shrink-0"></div>
-                                    <div class="min-w-0">
-                                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 block mb-0.5">Software Development</span>
-                                        <h4 class="text-base font-semibold text-gray-900 dark:text-white truncate">Frontend Core Infrastructure Engineer</h4>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center gap-4 shrink-0 pl-2">
-                                    <span id="role-badge-102" class="hidden text-xs font-semibold px-2.5 py-1 bg-[var(--color-brand-25)] dark:bg-[var(--color-brand-950)]/40 text-[var(--color-brand-500)] dark:text-[var(--color-brand-300)] rounded-lg border border-[var(--color-brand-100)] dark:border-[var(--color-brand-900)]/50 shadow-theme-xs">
-                                        Selected to Apply
-                                    </span>
-                                    <svg id="role-chevron-102" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-transform duration-300 ease-out" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
-                                    </svg>
-                                </div>
-                            </div>
-
-                            <div id="role-drawer-102" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out bg-gray-25/50 dark:bg-gray-950/20 border-t border-transparent">
-                                <div class="p-6 space-y-5">
-                                    <div class="space-y-3">
-                                        <h5 class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">Creator Guideline View & Criteria</h5>
-                                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-normal">
-                                            Responsible for crafting highly reusable, composable component models using Tailwind token variants and performant modern JavaScript runtimes. Absolute priority placed on visual alignment metrics, fluid screen responsiveness bounds, and fast loading states.
-                                        </p>
-                                    </div>
-
-                                    <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800/80 shadow-theme-xs">
-                                        <div class="min-w-0 pr-2">
-                                            <span class="text-sm font-semibold text-gray-900 dark:text-white block">Include this role in your proposal?</span>
-                                            <span class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 block">Activating maps corresponding deliverable sequences to this focus vertical.</span>
+                                                <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-2 p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800/80 shadow-theme-xs">
+                                                    <div class="min-w-0">
+                                                        <span class="text-sm font-semibold text-gray-900 dark:text-white block">
+                                                            Include this role in your proposal?
+                                                        </span>
+                                                        <span class="text-xs text-gray-400 dark:text-gray-500 mt-1 block leading-normal">
+                                                            you're expected to create the deliverables for each role selected
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <div class="flex justify-end sm:block shrink-0">
+                                                        <button type="button" 
+                                                                class="role-toggle-switch relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200 dark:bg-gray-800" 
+                                                                id="role-toggle-{{ role.role_id }}" 
+                                                                role="switch" 
+                                                                aria-checked="false"
+                                                                data-role-id="{{ role.role_id }}"
+                                                                data-role-name="{{ role.role_name }}">
+                                                            <span id="role-toggle-knob-{{ role.role_id }}" aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-theme-md ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        
-                                        <button type="button" onclick="toggleRoleSelection(102, 1, 'Frontend Core Infrastructure Engineer')" class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-200 dark:bg-gray-800" id="role-toggle-102" role="switch" aria-checked="false">
-                                            <span id="role-toggle-knob-102" aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-theme-md ring-0 transition duration-200 ease-in-out translate-x-0"></span>
-                                        </button>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
+                                {% endif %}
+                            {% endfor %}
+                        
                     </div>
-                </div>
+                </section>
 
                 <!-- PHASE 3: Financial & Commercial Architecture -->
-                <div id="step-3" class="wizard-step step-hidden space-y-6">
-                    <div class="border-b border-slate-100 pb-5">
-                        <h2 class="text-xl font-semibold text-slate-900">Financial Terms & Commercials</h2>
-                        <p class="text-sm text-gray-500 mt-1">Specify your proposed contract valuation and structural payout milestones.</p>
+                <section id="step-3" class="wizard-step step-hidden">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
+                            Pricing & Payment Terms
+                        </h3>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 leading-normal">
+                            Define your compensation expectations, payment schedule, and pricing structure for each selected role.
+                        </p>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="space-y-2">
-                            <label class="block text-sm font-medium text-slate-700">Currency Unit</label>
-                            <select id="currency-select" class="block w-full rounded-xl border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-11 px-3 border">
-                                <option value="USD">USD ($)</option>
-                                <option value="NGN">NGN (₦)</option>
-                            </select>
-                        </div>
-                        <div class="space-y-2 md:col-span-2">
-                            <label class="block text-sm font-medium text-slate-700">Proposed Gross Amount</label>
-                            <div class="relative rounded-xl shadow-sm">
-                                <input type="number" step="0.01" id="proposed-amount" class="block w-full rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm h-11 pl-4 pr-12 border" placeholder="0.00">
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400 text-sm font-semibold currency-label">USD</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <label class="block text-sm font-medium text-slate-700">Payment Escrow Milestone Distribution</label>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <label class="relative bg-white border border-slate-200 rounded-xl p-4 flex cursor-pointer hover:border-slate-300 focus:outline-none transition-all has-[:checked]:border-indigo-600 has-[:checked]:ring-1 has-[:checked]:ring-indigo-600">
-                                <input type="radio" name="payment_plan" value="SPLIT_50_50" checked class="sr-only">
-                                <div class="flex flex-col">
-                                    <span class="block text-sm font-semibold text-slate-900">Balanced Split</span>
-                                    <span class="mt-1 text-xs text-gray-500">50% upfront deposit / 50% closing release milestone.</span>
-                                </div>
-                            </label>
-                            <label class="relative bg-white border border-slate-200 rounded-xl p-4 flex cursor-pointer hover:border-slate-300 focus:outline-none transition-all has-[:checked]:border-indigo-600 has-[:checked]:ring-1 has-[:checked]:ring-indigo-600">
-                                <input type="radio" name="payment_plan" value="UPFRONT_100" class="sr-only">
-                                <div class="flex flex-col">
-                                    <span class="block text-sm font-semibold text-slate-900">100% Retainer</span>
-                                    <span class="mt-1 text-xs text-gray-500">Full gross funding released upfront upon engagement activation.</span>
-                                </div>
-                            </label>
-                            <label class="relative bg-white border border-slate-200 rounded-xl p-4 flex cursor-pointer hover:border-slate-300 focus:outline-none transition-all has-[:checked]:border-indigo-600 has-[:checked]:ring-1 has-[:checked]:ring-indigo-600">
-                                <input type="radio" name="payment_plan" value="MILESTONE_BASED" class="sr-only">
-                                <div class="flex flex-col">
-                                    <span class="block text-sm font-semibold text-slate-900">Custom Dynamic</span>
-                                    <span class="mt-1 text-xs text-gray-500">Flexible tracking tied directly to sequence deliverable rules.</span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                    <div id="financial-roles-container" class="space-y-5"></div>
+                    
+                </section>
 
                 <!-- PHASE 4: Granular Deliverables Sub-Form -->
-                <div id="step-4" class="wizard-step step-hidden space-y-6">
-                    <div class="border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between pb-5 gap-4">
-                        <div>
-                            <h2 class="text-xl font-semibold text-slate-900">Deliverable Blueprint Sequences</h2>
-                            <p class="text-sm text-gray-500 mt-1">Deconstruct your roadmap into distinct, verifiable phases.</p>
-                        </div>
-                        <button type="button" onclick="deliverableManager.addEmptyRow()" class="inline-flex items-center gap-1.5 px-3.5 py-2 border border-slate-200 bg-white rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none">
-                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                            Append Deliverable
-                        </button>
-                    </div>
-
-                    <!-- Dynamic Row Mount Node Container -->
-                    <div id="deliverables-container" class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
-                        <!-- Component items are injected here via JS -->
-                    </div>
-
-                    <!-- Live Running Validator Aggregates -->
-                    <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-wrap items-center justify-between text-sm gap-4">
-                        <div class="flex items-center gap-2">
-                            <span class="text-gray-500 font-medium">Aggregated Release Allocation:</span>
-                            <span id="allocation-tracker" class="font-semibold text-slate-900">0%</span>
-                        </div>
-                        <div id="allocation-warning" class="text-xs text-red-600 hidden font-medium flex items-center gap-1">
-                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            Allocation aggregate must total exactly 100% to protect payload alignment.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PHASE 5: Integrity Verification & Summary Review -->
-                <div id="step-5" class="wizard-step step-hidden space-y-6">
-                    <div class="border-b border-slate-100 pb-5">
-                        <h2 class="text-xl font-semibold text-slate-900">Final Verification Review</h2>
-                        <p class="text-sm text-gray-500 mt-1">Ensure total validation alignment before executing ledger commit.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-5 border border-slate-100 bg-slate-50/50 rounded-xl">
-                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Assigned Niche Profile</span>
-                            <span id="review-niche" class="text-base font-semibold text-slate-800 mt-1 block">—</span>
-                        </div>
-                        <div class="p-5 border border-slate-100 bg-slate-50/50 rounded-xl">
-                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Gross Valuation Lock</span>
-                            <span id="review-value" class="text-base font-semibold text-indigo-600 mt-1 block">—</span>
-                        </div>
-                    </div>
-
-                    <div class="p-4 rounded-xl border border-blue-100 bg-blue-50/40 space-y-1.5 text-sm text-blue-900">
-                        <div class="font-semibold flex items-center gap-2">
-                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.028M15.75 9.25a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            Execution Manifest
-                        </div>
-                        <p class="text-blue-800/90 leading-relaxed text-xs">
-                            Active structures contain <span id="review-deliverables-count" class="font-semibold">0</span> sequenced execution components. All milestones are tied to the verified escrow release logic.
+                <section id="step-4" class="wizard-step step-hidden">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
+                            Deliverables & Execution Plan
+                        </h3>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1 leading-normal">
+                            Define the work you’ll deliver, organize it into clear phases, and outline timelines, responsibilities, and budget allocation for each milestone.
                         </p>
                     </div>
 
-                    <!-- Strict Platform Constraints Warning -->
-                    <div class="p-4 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-600 space-y-1">
-                        <span class="font-semibold text-slate-800 uppercase tracking-wider block">Platform Submission Policy Disclaimers</span>
-                        <p>1. Only one single proposal submission may be active per user per core project instance.</p>
-                        <p>2. Active submissions freeze state adjustments. Edits or modifications require a complete proposal withdraw transaction.</p>
+                    <div id="deliverables-roles-container" class="space-y-4"></div>
+                </section>
+
+                <!-- PHASE 5: Integrity Verification & Summary Review -->
+                <div id="step-5" class="wizard-step step-hidden space-y-6">
+                    <div class="border-b border-slate-100 dark:border-slate-800/80 pb-5">
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Review Your Proposal</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Review your proposed scope, deliverables, and compensation to ensure everything is clear and aligned.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-5 border border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-gray-900/40 rounded-2xl transition-all duration-200">
+                            <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Applied Roles</span>
+                            <span id="review-niche" class="text-base font-semibold text-slate-800 dark:text-slate-200 mt-1.5 block truncate">—</span>
+                        </div>
+
+                        <div class="p-5 border border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-gray-900/40 rounded-2xl transition-all duration-200">
+                            <span class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Gross Proposal Valuation</span>
+                            <span id="review-value" class="text-2xl font-mono text-emerald-500 dark:text-brand-400 mt-1.5 block">—</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl border border-blue-100/70 dark:border-blue-950/40 bg-blue-50/40 dark:bg-blue-950/10 space-y-2 text-sm">
+                        <div class="font-bold text-blue-900 dark:text-blue-400 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.028M15.75 9.25a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Execution Manifest
+                        </div>
+                        <p class="text-blue-800/90 dark:text-blue-300/80 leading-relaxed text-xs">
+                            Active structures contain <span id="review-deliverables-count" class="font-bold text-blue-950 dark:text-blue-200 underline decoration-blue-400/40 decoration-2 underline-offset-2">0</span> sequenced execution components. All milestones are tied directly to the service contract.
+                        </p>
+                    </div>
+
+                    <div class="p-5 bg-amber-50/40 dark:bg-amber-950/10 border border-amber-100/60 dark:border-amber-950/30 rounded-2xl space-y-3">
+                        <div class="flex items-center gap-2 text-amber-800 dark:text-amber-400">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            </svg>
+                            <span class="font-bold text-[11px] uppercase tracking-wider">Platform Submission Policies</span>
+                        </div>
+                        <ul class="space-y-2 text-xs text-amber-800/90 dark:text-amber-400/80 list-none pl-0">
+                            <li class="flex items-start gap-2">
+                                <span class="font-semibold text-amber-600 dark:text-amber-500">1.</span>
+                                <span>Only <strong class="font-semibold text-amber-950 dark:text-amber-300">one active proposal submission</strong> is permitted per service provider per core project brief.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-semibold text-amber-600 dark:text-amber-500">2.</span>
+                                <span>Active submissions lock state records completely. Post-submission edits require a full proposal withdraw transaction.</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
                 <!-- Bottom Navigation Control Button Row Footer -->
-                <div class="flex items-center justify-between pt-8 border-t border-slate-100 mt-10">
-                    <button type="button" id="prev-btn" onclick="wizard.prev()" class="inline-flex items-center justify-center h-11 px-5 border border-slate-200 bg-white rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none visibility-hidden">
-                        Back Phase
+                <div class="flex items-center justify-between pt-8 border-t border-slate-100 dark:border-gray-700 mt-10">
+                    <button type="button" id="prev-btn" class="inline-flex items-center justify-center h-11 px-5 border border-slate-200 bg-white rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none invisible">
+                        Go Back
                     </button>
-                    
-                    <button type="button" id="next-btn" onclick="wizard.next()" class="inline-flex items-center justify-center h-11 px-6 bg-slate-900 dark:bg-brand-500 hover:bg-slate-800 dark:hover:bg-brand-400 text-white rounded-xl text-sm font-semibold transition-all shadow-md focus:outline-none ml-auto">
+
+                    <button type="button" id="next-btn" class="inline-flex items-center justify-center h-11 px-6 bg-brand-500 hover:bg-brand-600 dark:hover:bg-brand-400 text-white rounded-xl text-sm font-semibold transition-all shadow-md focus:outline-none ml-auto">
                         Continue
                     </button>
                 </div>
@@ -357,393 +311,9 @@
 {% endblock %}
 
 {% block custom_page_js %}
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-<script>
-    /**
-     * Unified State Management Engine
-     * Holds internal layout structures mimicking Python Pydantic Schema rules.
-     */
-    const formState = {
-        projectId: "00000000-0000-0000-0000-000000000000", // Bind real server UUID here
-        industryId: null,
-        nicheId: null,
-        nicheName: "",
-        proposedAmount: 0.00,
-        currency: "USD",
-        paymentPlan: "SPLIT_50_50",
-        deliverables: []
-    };
-
-    /**
-     * Navigation Wizard Orchestrator (Entrance & Exit Animations)
-     */
-    class ProposalWizard {
-        constructor() {
-            this.currentStep = 1;
-            this.totalSteps = 5;
-            this.isAnimating = false;
-        }
-
-        updateUIElements() {
-            // Document references
-            document.getElementById('current-step-badge').textContent = this.currentStep;
-            document.getElementById('progress-line').style.width = `${((this.currentStep - 1) / (this.totalSteps - 1)) * 100}%`;
-
-            // Back button toggle visibility rules
-            const prevBtn = document.getElementById('prev-btn');
-            if (this.currentStep === 1) {
-                prevBtn.classList.add('invisible');
-            } else {
-                prevBtn.classList.remove('invisible');
-            }
-
-            // Next / Confirm button text configurations
-            const nextBtn = document.getElementById('next-btn');
-            if (this.currentStep === this.totalSteps) {
-                nextBtn.textContent = "Confirm & Dispatch Bid";
-                nextBtn.classList.replace('bg-slate-900', 'bg-indigo-600');
-                nextBtn.classList.replace('hover:bg-slate-800', 'hover:bg-indigo-700');
-            } else {
-                nextBtn.textContent = "Continue";
-                nextBtn.classList.replace('bg-indigo-600', 'bg-slate-900');
-                nextBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-slate-800');
-            }
-
-            // Stepper indicator updates
-            for (let i = 1; i <= this.totalSteps; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if (!dot) continue;
-                if (i <= this.currentStep) {
-                    dot.classList.remove('border-slate-200', 'text-slate-400', 'bg-white');
-                    dot.classList.add('border-indigo-600', 'text-white', 'bg-indigo-600');
-                } else {
-                    dot.classList.remove('border-indigo-600', 'text-white', 'bg-indigo-600');
-                    dot.classList.add('border-slate-200', 'text-slate-400', 'bg-white');
-                }
-            }
-            
-            if (this.currentStep === 5) this.hydrateReviewScreen();
-        }
-
-        async goToStep(targetStep) {
-            if (this.isAnimating || targetStep === this.currentStep || targetStep < 1 || targetStep > this.totalSteps) return;
-            
-            // Prevent forward skipping without validating intermediate steps
-            if (targetStep > this.currentStep + 1) return;
-
-            this.isAnimating = true;
-
-            const currentElement = document.getElementById(`step-${this.currentStep}`);
-            const targetElement = document.getElementById(`step-${targetStep}`);
-
-            // 1. Fire Exit Animation on current step
-            currentElement.classList.remove('step-active');
-            currentElement.classList.add('step-exiting');
-
-            // Wait for transition duration (400ms matching CSS config)
-            await new Promise(resolve => setTimeout(resolve, 350));
-
-            currentElement.classList.remove('step-exiting');
-            currentElement.classList.add('step-hidden');
-
-            // 2. Clear state properties and mount target element inside view pipeline
-            targetElement.classList.remove('step-hidden');
-            targetElement.classList.add('step-entering');
-            
-            // Force browser layout repaint to catch the start state for entry
-            targetElement.offsetHeight;
-
-            targetElement.classList.remove('step-entering');
-            targetElement.classList.add('step-active');
-
-            this.currentStep = targetStep;
-            this.updateUIElements();
-
-            this.isAnimating = false;
-        }
-
-        next() {
-            if (this.currentStep === this.totalSteps) {
-                this.executePayloadSubmission();
-                return;
-            }
-            this.goToStep(this.currentStep + 1);
-        }
-
-        prev() {
-            this.goToStep(this.currentStep - 1);
-        }
-
-        hydrateReviewScreen() {
-            this.syncInputsToState();
-            document.getElementById('review-niche').textContent = formState.nicheName || "Not Configured";
-            document.getElementById('review-value').textContent = `${formState.currency} ${Number(formState.proposedAmount).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-            document.getElementById('review-deliverables-count').textContent = formState.deliverables.length;
-        }
-
-        syncInputsToState() {
-            const indSel = document.getElementById('industry-select');
-            const nchSel = document.getElementById('niche-select');
-            
-            formState.industryId = indSel.value ? parseInt(indSel.value) : null;
-            formState.nicheId = nchSel.value ? parseInt(nchSel.value) : null;
-            formState.nicheName = nchSel.options[nchSel.selectedIndex]?.getAttribute('data-name') || "";
-            
-            formState.proposedAmount = parseFloat(document.getElementById('proposed-amount').value) || 0.00;
-            formState.currency = document.getElementById('currency-select').value;
-            formState.paymentPlan = document.querySelector('input[name="payment_plan"]:checked')?.value || "SPLIT_50_50";
-        }
-
-        executePayloadSubmission() {
-            this.syncInputsToState();
-            deliverableManager.saveAllRows();
-            
-            // Assemble final Pydantic-compliant schema mirror
-            const payload = {
-                project_id: formState.projectId,
-                applied_roles: [
-                    {
-                        industry_id: formState.industryId,
-                        niche_id: formState.nicheId,
-                        niche_name: formState.nicheName,
-                        role_amount: formState.proposedAmount,
-                        proposed_amount: formState.proposedAmount,
-                        currency: formState.currency,
-                        payment_plan: formState.paymentPlan,
-                        deliverables: formState.deliverables
-                    }
-                ],
-                total_value: formState.proposedAmount,
-                currency: formState.currency,
-                sent_at: new Date().toISOString()
-            };
-
-            console.log("VALIDATED TRANSACTION MANIFEST PAYLOAD PACKAGE:", JSON.stringify(payload, null, 2));
-            alert("Payload built and verified successfully! Check console parameters log structure context.");
-        }
-    }
-
-    /**
-     * Component Row Builder Object for Step 4 Deliverables Matrix
-     */
-    class DeliverableRowManager {
-        constructor(containerId) {
-            this.container = document.getElementById(containerId);
-            this.rowCount = 0;
-        }
-
-        addEmptyRow() {
-            this.rowCount++;
-            const id = this.rowCount;
-            
-            const itemHTML = `
-                <div id="del-row-${id}" class="p-5 border border-slate-200 rounded-xl bg-white space-y-4 shadow-sm relative group">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Component Deliverable #${id}</span>
-                        <button type="button" onclick="deliverableManager.removeRow(${id})" class="text-slate-400 hover:text-red-500 transition-colors focus:outline-none">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="md:col-span-2 space-y-1">
-                            <label class="text-xs font-medium text-slate-600">Phase Title</label>
-                            <input type="text" class="del-phase block w-full rounded-lg border-slate-200 text-sm h-10 border px-3" max_length="70" placeholder="e.g., Core Engine Infrastructure Design">
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-xs font-medium text-slate-600">Release Allocation (%)</label>
-                            <input type="number" oninput="deliverableManager.recalculateTotals()" class="del-pct block w-full rounded-lg border-slate-200 text-sm h-10 border px-3" min="10" max="100" placeholder="10.0 - 100">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label class="text-xs font-medium text-slate-600">Duration Metric Unit</label>
-                            <select class="del-unit block w-full rounded-lg border-slate-200 text-sm h-10 border px-2">
-                                <option value="DAYS">DAYS (Bounds: 1-11)</option>
-                                <option value="WEEKS">WEEKS (Bounds: 1-4)</option>
-                                <option value="MONTHS">MONTHS (Bounds: 1-12)</option>
-                            </select>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-xs font-medium text-slate-600">Duration Expected Value</label>
-                            <input type="number" class="del-dur-val block w-full rounded-lg border-slate-200 text-sm h-10 border px-3" placeholder="Specify duration scale">
-                        </div>
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-xs font-medium text-slate-600">Granular Performance Specifications</label>
-                        <textarea class="del-desc block w-full rounded-lg border-slate-200 text-sm p-3 border" rows="3" max_length="2000" placeholder="Detailed architectural breakdown description parameters..."></textarea>
-                    </div>
-                </div>
-            `;
-            
-            this.container.insertAdjacentHTML('beforeend', itemHTML);
-            this.recalculateTotals();
-        }
-
-        removeRow(id) {
-            const target = document.getElementById(`del-row-${id}`);
-            if (target) {
-                target.remove();
-                this.recalculateTotals();
-            }
-        }
-
-        recalculateTotals() {
-            let totalPct = 0;
-            const pctInputs = document.querySelectorAll('.del-pct');
-            pctInputs.forEach(input => {
-                totalPct += parseFloat(input.value) || 0;
-            });
-
-            const tracker = document.getElementById('allocation-tracker');
-            const warning = document.getElementById('allocation-warning');
-            
-            tracker.textContent = `${totalPct}%`;
-            
-            if (totalPct !== 100 && pctInputs.length > 0) {
-                tracker.classList.replace('text-slate-900', 'text-red-600');
-                warning.classList.remove('hidden');
-            } else {
-                tracker.classList.replace('text-red-600', 'text-slate-900');
-                warning.classList.add('hidden');
-            }
-        }
-
-        saveAllRows() {
-            formState.deliverables = [];
-            const rows = this.container.children;
-            
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
-                formState.deliverables.push({
-                    phase: row.querySelector('.del-phase').value,
-                    description: row.querySelector('.del-desc').value.trim(),
-                    duration_unit: row.querySelector('.del-unit').value,
-                    duration_value: parseInt(row.querySelector('.del-dur-val').value) || 0,
-                    release_percentage: parseFloat(row.querySelector('.del-pct').value) || 0.0,
-                    rendering_order: i + 1
-                });
-            }
-        }
-    }
-
-    // Instantiations on load runtime
-    const wizard = new ProposalWizard();
-    const deliverableManager = new DeliverableRowManager('deliverables-container');
-
-    // Attach currency label sync changes listeners
-    document.getElementById('currency-select').addEventListener('change', (e) => {
-        document.querySelectorAll('.currency-label').forEach(el => el.textContent = e.target.value);
-    });
-
-    // Initialize with single bare row item setup
-    document.addEventListener('DOMContentLoaded', () => {
-        deliverableManager.addEmptyRow();
-    });
-
-    /**
- * Global track objects to map selected roles index scopes 
- */
-let activeScopedRolesMap = {};
-
-/**
- * Handles smooth drawer expansions across pre-defined structural elements 
- * @param {Number} nicheId - Unique identifier key for target role configuration
- */
-function toggleRoleAccordion(nicheId) {
-    const drawer = document.getElementById(`role-drawer-${nicheId}`);
-    const chevron = document.getElementById(`role-chevron-${nicheId}`);
-    const card = document.getElementById(`role-card-${nicheId}`);
-
-    if (drawer.style.maxHeight && drawer.style.maxHeight !== "0px") {
-        // Close Task Action
-        drawer.style.maxHeight = "0px";
-        drawer.style.opacity = "0";
-        drawer.classList.add('border-transparent');
-        chevron.classList.remove('rotate-180');
-    } else {
-        // Open Expand Task Action
-        drawer.classList.remove('border-transparent');
-        drawer.classList.add('dark:border-gray-800/60');
-        drawer.style.maxHeight = drawer.scrollHeight + "px";
-        drawer.style.opacity = "1";
-        chevron.classList.add('rotate-180');
-    }
-}
-
-/**
- * Commits interactive switch activations straight to internal payload tracker state array
- */
-function toggleRoleSelection(nicheId, industryId, nicheName) {
-    const toggleButton = document.getElementById(`role-toggle-${nicheId}`);
-    const toggleKnob = document.getElementById(`role-toggle-knob-${nicheId}`);
-    const indicatorDot = document.getElementById(`role-dot-${nicheId}`);
-    const selectionBadge = document.getElementById(`role-badge-${nicheId}`);
-    const outerCard = document.getElementById(`role-card-${nicheId}`);
-
-    const isChecked = toggleButton.getAttribute('aria-checked') === 'true';
-    const nextState = !isChecked;
-
-    toggleButton.setAttribute('aria-checked', nextState.toString());
-
-    if (nextState) {
-        // Selected Activation Styles Engine Pass
-        toggleButton.classList.replace('bg-gray-200', 'bg-[var(--color-brand-500)]');
-        toggleButton.classList.remove('dark:bg-gray-800');
-        toggleKnob.classList.replace('translate-x-0', 'translate-x-5');
-        indicatorDot.classList.replace('bg-gray-300', 'bg-[var(--color-brand-500)]');
-        indicatorDot.classList.remove('dark:bg-gray-700');
-        selectionBadge.classList.remove('hidden');
-        outerCard.classList.replace('border-gray-200', 'border-[var(--color-brand-500)]');
-        outerCard.classList.add('dark:border-[var(--color-brand-500)]');
-
-        // Append Node Data values to selection matrix dictionary
-        activeScopedRolesMap[nicheId] = {
-            industry_id: industryId,
-            niche_id: nicheId,
-            niche_name: nicheName
-        };
-    } else {
-        // Deactivated Safe Rollback Pass
-        toggleButton.classList.replace('bg-[var(--color-brand-500)]', 'bg-gray-200');
-        toggleButton.classList.add('dark:bg-gray-800');
-        toggleKnob.classList.replace('translate-x-5', 'translate-x-0');
-        indicatorDot.classList.replace('bg-[var(--color-brand-500)]', 'bg-gray-300');
-        indicatorDot.classList.add('dark:bg-gray-700');
-        selectionBadge.classList.add('hidden');
-        outerCard.classList.replace('border-[var(--color-brand-500)]', 'border-gray-200');
-        outerCard.classList.remove('dark:border-[var(--color-brand-500)]');
-
-        // Delete from selection memory footprint map
-        delete activeScopedRolesMap[nicheId];
-    }
-}
-
-/**
- * Override baseline single select sync method to capture dynamic dynamic multi-selected structures mapping arrays
- */
-ProposalWizardOrchestrator.prototype.syncInputsToState = function() {
-    formState.proposedAmount = parseFloat(document.getElementById('proposed-amount').value) || 0.00;
-    formState.currency = document.getElementById('currency-select').value;
-    formState.paymentPlan = document.querySelector('input[name="payment_plan"]:checked')?.value || "SPLIT_50_50";
-    
-    // Inject selected dynamic elements into the root payload model properties tracking array frame
-    formState.appliedRolesTargetRef = Object.values(activeScopedRolesMap);
-    
-    // Setup fallbacks definitions to preserve summary screen rendering variables logic intact
-    if (formState.appliedRolesTargetRef.length > 0) {
-        formState.industryId = formState.appliedRolesTargetRef[0].industry_id;
-        formState.nicheId = formState.appliedRolesTargetRef[0].niche_id;
-        formState.nicheName = formState.appliedRolesTargetRef.map(r => r.niche_name).join(', ');
-    } else {
-        formState.industryId = null;
-        formState.nicheId = null;
-        formState.nicheName = "";
-    }
-
-    if (document.getElementById('deliverables-container').children.length > 0) {
-        deliverableManager.saveAllRows();
-    }
-};
-
+<script id="payment-options-data" type="application/json" x-ref="paymentPlans">
+  {{ payment_options|safe }}
 </script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script type="module" src="{% static 'js/proposals/builder/wizard.js' %}"></script>
 {% endblock %}

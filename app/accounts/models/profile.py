@@ -106,3 +106,27 @@ class UserProfile(models.Model):
         if not self.has_paid_onetime_fee:
             self.has_paid_onetime_fee = True
             self.save(update_fields=["has_paid_onetime_fee"])
+
+    def get_niche_roles_list(self) -> list:
+        """
+        Returns a list of dictionaries detailing the user's selected niches
+        and their parent industry categories.
+
+        Note:
+            The 'can_apply' attribute is intentionally included for each role 
+            to streamline dynamic frontend rendering and simplify backend 
+            validation during proposal submission.
+        """
+        roles = []
+        user_niches = self.niches.select_related('parent').all()
+        
+        for niche in user_niches:
+            roles.append({
+                "niche": niche.parent.id if niche.parent else None,
+                "niche_name": niche.parent.name if niche.parent else None,
+                "role_id": niche.id,
+                "role_name": niche.name,
+                "can_apply": True
+            })
+            
+        return roles

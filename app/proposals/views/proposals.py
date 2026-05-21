@@ -67,7 +67,7 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
             is_gig_active=True,
         )
 
-        proposal_exists = ProposalModel.objects.filter(gig=OuterRef("pk"))
+        proposal_exists = ProposalModel.objects.filter(project=OuterRef("pk"))
 
         total_budget = (
             self.model.objects.filter(gig_filter)
@@ -77,10 +77,10 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
         )
 
         proposal_filter = Q(
-            proposal__gig__creator=self.request.user,
-            proposal__gig__status=ProjectStatus.PUBLISHED,
-            proposal__gig__visibility=ProjectVisibility.PUBLIC,
-            proposal__gig__is_gig_active=True,
+            proposal__project__creator=self.request.user,
+            proposal__project__status=ProjectStatus.PUBLISHED,
+            proposal__project__visibility=ProjectVisibility.PUBLIC,
+            proposal__project__is_gig_active=True,
         )
 
         metrics = ProposalRoleModel.objects.filter(proposal_filter).aggregate(
@@ -124,11 +124,10 @@ class SentProposalListView(LoginRequiredMixin, ListView):
             .only(
                 "id",
                 "status",
-                "is_negotiating",
                 "sent_at",
-                "gig__title",
-                "gig__total_budget",
-                "gig__slug",
+                "project__title",
+                "project__total_budget",
+                "project__slug",
             )
             .order_by("-sent_at")
         )
