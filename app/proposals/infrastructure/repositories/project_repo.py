@@ -17,7 +17,7 @@ Responsibilities:
 from django.db.models import Model
 from core.model_registry import registry
 from proposals.domain.entities import ProjectEntity, ProjectRoleEntity
-from proposals.domain.exceptions import ProposalPersistenceError
+from proposals.domain.exceptions import ProposalError
 from proposals.domain.status_codes import PolicyFailure
 from typing import Union
 from uuid import UUID
@@ -26,7 +26,7 @@ from uuid import UUID
 class ProjectRepository:
     def __init__(self):
         self.model = registry.Gig
-        
+
     def get_by_id(self, project_id: UUID, *, with_lock:bool=False, as_entity: bool = True) -> Union[Model, ProjectEntity]:
         """
         Fetches a project by ID with optimized relations, optionally locking the row or bypassing domain conversion.
@@ -37,20 +37,15 @@ class ProjectRepository:
             as_entity (bool): If True, converts the Django model instance into a domain entity. 
                 Set to False to return the raw ORM object for foreign key assignments.
         """
-        queryset = (
-            self.model.objects
-            .select_related("creator")
-            .filter(id=project_id)
-            .prefetch_related("required_roles") 
-        )
+        queryset = self.model.objects.select_related("creator")
         
         if with_lock:
-            project = queryset.select_for_update(nowait=True).first()
+            project = queryset.select_for_update(nowait=True).filter(id=project_id).first()
         else:
-            project = queryset.first()
+            project = queryset.filter(id=project_id).first()
 
         if not project:
-            raise ProposalPersistenceError(
+            raise ProposalError(
                 "Invalid referenced project",
                 code=PolicyFailure.INVALID_OBJECT.code,
                 title=PolicyFailure.INVALID_OBJECT.title
@@ -76,14 +71,12 @@ class ProjectRepository:
                 .get(slug=slug)
             )
         except self.model.DoesNotExist:
-            raise ProposalPersistenceError(
+            raise ProposalError(
                 "Invalid referenced project",
                 code=PolicyFailure.INVALID_OBJECT.code,
                 title=PolicyFailure.INVALID_OBJECT.title
             )
-
         return self._to_entity(project)
-
 
     # ------------------------------------------------------------
     # INTERNAL MAPPING LAYER
@@ -91,35 +84,25 @@ class ProjectRepository:
 
     def _to_entity(self, project) -> ProjectEntity:
         """
-        Converts a Django ORM project model into a ProjectEntity.
-
-        This is the anti-corruption layer that ensures the domain layer
-        never depends on ORM structures.
-
-        Args:
-            project (Gig): Django ORM instance.
-
-        Returns:
-            ProjectEntity: Pure domain representation of the project.
+            Converts a Django ORM project model into a ProjectEntity.
+            This acts as the anti-corruption layer separating domain from data.
         """
         project_roles = [
-            {
-                ProjectRoleEntity(
-                    id=role.id,
-                    niche=role.niche,
-                    niche_name=role.niche_name,
-                    role_id=role.role_role_id,
-                    role_name=role.role_name,
-                    description=role.description,
-                    budget=role.budget,
-                    payment_plan=role.payment_option,
-                    status=role.status,
-                    slots=role.slots
-                )
-            }
+            ProjectRoleEntity(
+                id=role.id,
+                niche=role.niche_id,
+                niche_name=role.niche_name,
+                role_id=role.role_id,
+                role_name=role.role_name,
+                description=role.description,
+                budget=role.budget,
+                payment_plan=role.payment_option,
+                status=role.status,
+                slots=role.slots
+            )
             for role in project.required_roles.all()
-        ]
-        
+        ] if project.has_gig_roles else []
+
         return ProjectEntity(
             id=project.id,
             title=project.title,

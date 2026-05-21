@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, DecimalField, Exists, F, OuterRef, Q, Sum
 from django.db.models.functions import Coalesce
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
 from collaboration.models.choices import ProjectStatus, ProjectVisibility
@@ -99,6 +99,21 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
 
 
 class SentProposalListView(LoginRequiredMixin, ListView):
+    """
+    Renders a paginated list of proposals sent by the currently authenticated user.
+
+    This view fetches all `ProposalModel` instances where the logged-in user is 
+    the provider. It optimizes database performance by leveraging select_related 
+    and prefetch_related to prevent N+1 query issues, annotates aggregate data 
+    directly from the database, and uses deferred loading to only fetch required fields.
+
+    Attributes:
+        template_name (str): The path to the template used to render the list.
+        context_object_name (str): The variable name used to access the list 
+            within the template context ('proposals').
+        paginate_by (int): The number of proposals displayed per page (7).
+        model (Model): The Django model associated with this list view (ProposalModel).
+    """
     template_name = Collabs.Proposals.SENT_PROPOSALS
     context_object_name = "proposals"
     paginate_by = 7
@@ -110,7 +125,7 @@ class SentProposalListView(LoginRequiredMixin, ListView):
             .get_queryset()
             .filter(provider=self.request.user)
             .select_related(
-                "gig",
+                "project",
             )
             .prefetch_related("roles")
             .annotate(
@@ -133,15 +148,15 @@ class SentProposalListView(LoginRequiredMixin, ListView):
         )
         return qs
     
+    
 class UpdateProposalStateView(LoginRequiredMixin, View):
     """Updates the state of a service provider proposal"""
     
     allowed_http_names = ["PATCH"]
     
-    def patch(self, request, *args, **kwrags) -> HttpResponse:
+    def patch(self, request:HttpRequest, *args:tuple, **kwrags:dict) -> HttpResponse:
         try:
-            payload = json.loads(request.body)
-            data = ModifyProposalState(**payload)
+            data = ModifyProposalState.model_validate_json(request.body)
             proposal_service = ProposalOrchestrationService(self.request.user, request)
             self.update_proposal_state(proposal_service, data)
             

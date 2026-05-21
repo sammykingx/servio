@@ -51,8 +51,10 @@ class ProposalValidator:
             applied_role_ids.add(role.niche_id)
             calc_role_amount += role.proposed_amount
             applied_roles_map[role.niche_id] = role.niche_name
+            
             if role.industry_id not in payload_taxonmy_map:
                 payload_taxonmy_map[role.industry_id] = set()
+                
             payload_taxonmy_map[role.industry_id].add(role.niche_id)
             
         if project.has_gig_roles:
@@ -76,7 +78,7 @@ class ProposalValidator:
             raise ProposalValidationError(
                 f"The Selected roles {invalid_role_names} are not requested within this project's scope.",
                 code=ValidationFailure.INVALID_ROLE.code,
-                title=ValidationFailure.INVALID_ROLE.title
+                title=ValidationFailure.INVALID_ROLE.title,
             )
     
     @classmethod

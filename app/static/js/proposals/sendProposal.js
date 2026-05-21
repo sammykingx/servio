@@ -1,4 +1,4 @@
-import { ProposalState } from "./builder/payload.js";
+import { ProposalState, resetProposalState } from "./builder/payload.js";
 
 
 export class ProposalSubmissionOrchestrator {
@@ -51,7 +51,98 @@ export class ProposalSubmissionOrchestrator {
         });
     }
 
+    /**
+     * Executes a deep structural validation check on the active ProposalState payload
+     * @returns {boolean} True if payload passes all business logic and schema requirements
+     */
+    validatePayloadIntegrity() {
+        if (!this.state.project_id || typeof this.state.project_id !== 'string') {
+            this.logValidationFailure("Invalid or missing Project Identification reference.");
+            return false;
+        }
+
+        if (!this.state.applied_roles || this.state.applied_roles.length === 0) {
+            this.logValidationFailure("You must have at least one active role to submit a proposal.");
+            return false;
+        }
+
+        for (const role of this.state.applied_roles) {
+            if (!role.industry_id || !role.niche_id) {
+                this.logValidationFailure(`Role metadata is missing identifiers.`);
+                return false;
+            }
+
+            if (Number(role.proposed_amount) < 10.00) {
+                this.logValidationFailure(`Proposed custom pricing for "${role.niche_name || 'Selected Role'}" must be at least $10.00.`);
+                return false;
+            }
+
+            if (!role.deliverables || role.deliverables.length === 0) {
+                this.logValidationFailure(`The role "${role.niche_name}" requires at least one project milestone or deliverable.`);
+                return false;
+            }
+
+            // 3. Deliverable Milestone Validation
+            let totalReleasePercentage = 0;
+
+            for (const deliverable of role.deliverables) {
+                if (!deliverable.phase || deliverable.phase.trim().length > 70) {
+                    this.logValidationFailure("Milestone titles must be provided and capped at 70 characters.");
+                    return false;
+                }
+
+                if (!deliverable.description || deliverable.description.trim().length > 2000) {
+                    this.logValidationFailure("Milestone descriptions must be present and under 2,000 characters.");
+                    return false;
+                }
+
+                if (!['days', 'weekS', 'months'].includes(deliverable.duration_unit)) {
+                    this.logValidationFailure("Invalid milestone duration interval configuration flag.");
+                    return false;
+                }
+
+                const pct = Number(deliverable.release_percentage) || 0;
+                if (pct < 10.0 || pct > 100.0) {
+                    this.logValidationFailure("Financial release milestone weights must fall between 10% and 100%.");
+                    return false;
+                }
+
+                totalReleasePercentage += pct;
+            }
+
+            // Business Logic Guard: Escrow release milestones must add up to exactly 100%
+            // Using an epsilon check to prevent floating-point rounding issues (e.g., 99.99999)
+            if (Math.abs(totalReleasePercentage - 100.0) > 0.01) {
+                this.logValidationFailure(`Milestone financial weights for "${role.niche_name}" must sum up to exactly 100%. Current total: ${totalReleasePercentage}%`);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    logValidationFailure(reason) {
+        if (typeof showToast === 'function') {
+            showToast(reason, "warning", "Validation Error");
+        } else {
+            console.warn(`[Payload Validation Failure]: ${reason}`);
+        }
+    }
+
     async executePayloadDispatchPipeline() {
+        const container = document.getElementById('proposal-container');
+        if (container && container.dataset.hasSubmitted === 'true') {
+            showToast("This proposal has already been transmitted successfully.", "info", "Action Restrained");
+            setTimeout(() => {
+                const url = container.dataset.marketplaceUrl || '/collaboration/oppurtunities/for-you/';
+                window.location.replace(url);
+            }, 2000);
+            return;
+        }
+        if (!this.validatePayloadIntegrity()) {
+            return;
+        }
+
         // Optional: Ensure validation lock has been checked prior to data transmission
         const integrityCheckbox = document.getElementById('chk-integrity-lock');
         if (integrityCheckbox && !integrityCheckbox.checked) {
@@ -72,7 +163,7 @@ export class ProposalSubmissionOrchestrator {
         const finalizedImmutablePayload = Object.freeze(JSON.parse(JSON.stringify(this.state)));
 
         // 2. Extract network destination vectors and CSRF indicators
-        const container = document.getElementById('proposal-container');
+
         const endpoint = container.dataset.submissionEndpoint || window.location.href;
         const csrfToken = container.dataset.csrfToken || document.querySelector('[name="csrfmiddlewaretoken"]')?.value;
 
@@ -93,17 +184,23 @@ export class ProposalSubmissionOrchestrator {
             const responseData = await response.json();
 
             if (response.ok) {
+                if (container) container.dataset.hasSubmitted = 'true';
                 showToast(responseData.message, responseData.status, responseData.title);
                 this.dispatchGlobalLifecycleNotification('proposalSubmittedSuccess', responseData);
-                setTimeout(() => { 
+                setTimeout(() => {
+                    resetProposalState();
                     window.location.assign(responseData.url);
-                }, 1500);
+                }, 2000);
             } else {
                 showToast(responseData.message, responseData.status, responseData.error);
                 this.dispatchGlobalLifecycleNotification('proposalSubmittedFailure', responseData);
             }
         } catch (error) {
-            showToast('Critical operational failure dispatching system payload metric', error, 'Error');
+            showToast(
+                "Unable to reach the server. Please check your connection and try again.",
+                "error",
+                "Connection Error"
+            );
             this.dispatchGlobalLifecycleNotification('proposalSubmittedFailure', { error: error.message });
         } finally {
             this.toggleProcessingInterfaceVisualState(false);

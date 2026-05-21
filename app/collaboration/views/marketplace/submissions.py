@@ -14,7 +14,6 @@ from template_map.collaboration import Collabs
 from pydantic import ValidationError
 import json
 
-from proposals.domain.constants import MOCK_PROPOSAL_PAYLOAD, MALFORMED_PROPOSAL_PAYLOAD
 
 GigCategoryModel = registry.GigCategory
 GigModel = registry.Gig
@@ -22,6 +21,29 @@ GigRoleModel = registry.GigRole
 
 
 class ProposalSubmissionView(LoginRequiredMixin, DetailView):
+    """
+    Handles both the rendering and processing of project proposal submissions.
+
+    **Core Objectives:**
+    1. Provide service providers with an interface displaying target project details, 
+       available roles, matching eligibility, and standard payment options (GET).
+    2. Securely ingest, validate, and orchestrate the parsing of a provider's multi-layered 
+       proposal terms via a strict Pydantic JSON payload interface (POST).
+
+    **Operational Routing & Guardrails:**
+    - Requires authentication; automatically redirects unauthenticated requests.
+    - Isolates projects by enforcing that only `PUBLISHED` status projects are viewable.
+    - Blocks creators from bidding on their own projects via query exclusions.
+    - Catches missing/hidden records (`Http404`) and gracefully reverts users back 
+      to the primary marketplace index.
+
+    Attributes:
+        model (Model): Target model backing the detail lookup (`GigModel`).
+        template_name (str): Path to the layout for engagement configurations.
+        context_object_name (str): Variable name alias assigned within the template (`project`).
+        slug_field (str): Database field name used for URL keyword resolution ('slug').
+        slug_url_kwarg (str): URL pattern keyword argument capturing identifier token ('slug').
+    """
     model = GigModel
     template_name = Collabs.Marketplace.ENGAGEMENT_SUBMISSION
     context_object_name = "project"
@@ -62,11 +84,10 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
     
     def post(self, request:HttpRequest, *args, **kwargs):
         try:
-            data = ProposalSubmissionPayload.model_validate_json(request.body)
+            data = ProposalSubmissionPayload.model_validate_json(request.body, strict=True)
+            ProposalOrchestrationService(request.user, request).submit_proposal(data)
             import time
             time.sleep(5)
-            # data = ProposalSubmissionPayload.model_validate(MOCK_PROPOSAL_PAYLOAD, strict=True)
-            # ProposalOrchestrationService(request.user, request).submit_proposal(data)
 
         except ValidationError as err:
             from formatters.pydantic_formatter import format_pydantic_errors
@@ -91,16 +112,9 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
             }, status=400)
             
         except Exception as err:
-            message = (
-                "We’ve encountered a brief hiccup while "
-                "processing your request. Our team has been "
-                "notified and is already looking into it. "
-                "Please try again in a moment, or reach out "
-                "if the issue persists."
-            )
             return JsonResponse({
                 "error": "Technical Alignment in-progress",
-                "message": message,
+                "message": "An unexpected server error occurred. Please try again in a moment.",
             }, status=500)
  
         return JsonResponse({
@@ -110,5 +124,3 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
             "url": reverse_lazy(ProposalURLS.SENT_PROPOSALS)
         })
     
-
-

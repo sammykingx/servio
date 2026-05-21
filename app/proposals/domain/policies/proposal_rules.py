@@ -68,7 +68,7 @@ class ProposalPolicy:
                 code=PolicyFailure.PROJECT_START_DATE_PASSED.code,
                 title=PolicyFailure.PROJECT_START_DATE_PASSED.title,
             )
-            
+
     @staticmethod
     def check_role_eligibility(project):
         # if gig has roles, and the role is assigned prevent from applying
@@ -111,7 +111,7 @@ class ProposalPolicy:
             )
             
     @classmethod
-    def ensure_can_apply(cls, actor: AbstractUser, project) -> None:
+    def ensure_can_apply(cls, actor: AbstractUser, project: ProjectEntity) -> None:
         """
         Orchestrator: Runs all checks.
         If any fail, they raise a ProposalPermissionDenied with a specific message.

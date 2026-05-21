@@ -19,11 +19,12 @@ MOCK_PROPOSAL_PAYLOAD = {
       "niche_id": 12,
       "niche_name": "Fullstack Engineering",
       "role_amount": 2500.00,
-      "payment_plan": "50_50",
+      "proposed_amount": 1500.00,
+      "payment_plan": "split_50_50",
       "deliverables": [
         {
-          "order": 1,
-          "title": "System Architecture",
+          "rendering_order": 1,
+          "phase": "System Architecture",
           "description": "Designing the database schema and cloud infrastructure.",
           "duration_unit": "weeks",
           "duration_value": 2,

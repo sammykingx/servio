@@ -80,8 +80,8 @@ export class Step2RoleSelectionManager {
 
             if (!this.state.applied_roles.some(item => item.niche_id === roleData.niche_id)) {
                 this.state.applied_roles.push({
-                    industry_id: roleData.industry_id,
-                    niche_id: roleData.niche_id,
+                    industry_id: parseInt(roleData.industry_id, 10),
+                    niche_id: parseInt(roleData.niche_id, 10),
                     niche_name: roleData.niche_name,
                     role_amount: roleData.role_amount,
                     proposed_amount: roleData.proposed_amount,

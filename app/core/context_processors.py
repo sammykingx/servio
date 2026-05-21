@@ -56,6 +56,7 @@ def app_urlnames(request):
         "NGN_SUBSCRIPTION_FEE": APP_SUBSCRIPTION_FEE * USD_TO_NGN_RATE,
     }
 
+
 def firebase_settings(request):
     from django.conf import settings
     

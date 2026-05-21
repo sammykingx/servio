@@ -106,7 +106,7 @@ class ProposalOrchestrationService:
             ProposalValidator.validate(payload, project)
 
             proposal = self._create_proposal_bundle(payload)
-            self.notifications_flow(project)
+            # self.notifications_flow(project)
             return proposal
 
         except ProposalPermissionDenied as e:
