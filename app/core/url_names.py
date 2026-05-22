@@ -1,3 +1,6 @@
+class PageURLS:
+    WAIT_LIST = "wait-list"
+    
 class AuthURLNames:
     LOGIN = "account_login"
     LOGIN_LINK = "account_request_login_code"

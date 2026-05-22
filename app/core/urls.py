@@ -31,6 +31,7 @@ import notifications.urls
 import payments.urls
 import smart_release.urls
 from pages.views.waitlist import WaitingListView
+from .url_names import PageURLS
 
 
 handler404 = "core.views.custom_404"
@@ -43,7 +44,7 @@ urlpatterns = [
     # path("business/", include(business_accounts.urls)),
     
     path("", TemplateView.as_view(template_name="index.html"), name="index-page"),
-    path("waiting-list/", WaitingListView.as_view(), name="waiting-list-page"),
+    path("waiting-list/", WaitingListView.as_view(), name=PageURLS.WAIT_LIST),
     path("accounts/", include(accounts.urls)),
     path("collaboration/", include(collaboration.urls)),
     path("contracts/", include(contracts.urls)),

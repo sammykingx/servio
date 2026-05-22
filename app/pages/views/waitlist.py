@@ -10,7 +10,7 @@ class WaitingListView(View):
     template_name = "waiting-list.html"
 
     def get(self, request: HttpRequest):
-        launch_date = datetime(2026, 7, 15, 11, 50, 59)
+        launch_date = settings.LAUNCH_DATE
         return render(request, self.template_name, {"launch_date": launch_date})
 
     def post(self, request: HttpRequest):

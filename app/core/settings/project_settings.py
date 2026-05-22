@@ -1,6 +1,7 @@
 # project related settings
 
-from core.url_names import AuthURLNames
+from core.url_names import AuthURLNames, PageURLS
+from datetime import datetime
 from decouple import config
 
 # custom user model
@@ -23,6 +24,7 @@ LOCAL_APPS = [
 ]
 
 LOCAL_MIDDLEWARES = [
+    "middlewares.pre_launch.PreLaunchMiddleware",
     "middlewares.onboarding.OnboardingMiddleware",
     "middlewares.provider_only.ProviderOnlyMiddleware",
 ]
@@ -41,3 +43,15 @@ CACHES = {
 
 PAYSTACK_SECRET_KEY = config("PAYSTACK_TEST_SECRET_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_SECRET_KEY")
 PAYSTACK_PUBLIC_KEY = config("PAYSTACK_TEST_PUBLIC_KEY") if config("ENVIRONMENT") == "development" else config("PAYSTACK_LIVE_PUBLIC_KEY")
+
+LAUNCH_DATE = datetime(2026, 7, 15, 11, 50, 59)
+
+ALLOWED_PRE_LAUNCH_URL_NAMES = {
+    PageURLS.WAIT_LIST,
+    # AuthURLNames.LOGIN,
+}
+
+ALLOWED_PATH_PREFIXES = (
+    "/static/",
+    "/media/",
+)
