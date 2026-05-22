@@ -70,11 +70,6 @@ class ProposalPolicy:
             )
 
     @staticmethod
-    def check_role_eligibility(project):
-        # if gig has roles, and the role is assigned prevent from applying
-        pass
-
-    @staticmethod
     def check_user_eligibility(profile, project: ProjectEntity):
         """Validates if the user is qualified for this specific project."""
 
@@ -117,7 +112,7 @@ class ProposalPolicy:
         If any fail, they raise a ProposalPermissionDenied with a specific message.
         """
         cls.check_user_eligibility(actor.profile, project)
-        cls.check_project_state(actor, project)
+        cls.check_project_state(project, actor)
         # cls.check_financial_status(actor.profile)
         
     

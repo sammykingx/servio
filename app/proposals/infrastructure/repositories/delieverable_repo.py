@@ -20,7 +20,6 @@ class ProjectDeliverablesRepository:
         Translates domain payload objects into Django infrastructure models
         and bulk inserts them in a single query transaction.
         """
-        # Formulate pure, un-saved Django ORM model instances
         model_instances = [
             self.model(
                 proposal_role=saved_role,

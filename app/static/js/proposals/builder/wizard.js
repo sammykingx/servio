@@ -74,6 +74,7 @@ class ProposalWizardCoordinator {
                 }
                 return true;
             case 3:
+                console.log(JSON.stringify(this.state, null, 2));
                 if (!this.state.applied_roles || this.state.applied_roles.length === 0) {
                     showToast("No applied roles detected in proposal state. Return to step 2.", "error", "Validation Error");
                     return false;
@@ -90,7 +91,7 @@ class ProposalWizardCoordinator {
                 });
 
                 if (!allRolesFullyConfigured) {
-                    showToast("Please assign a valid rate ($) and choose a payment structure for all selected tracks.", "warning", "Validation Error");
+                    showToast("Role data is incomplete. Please go back a step to finish setting up your tracks.", "warning", "Validation Error");
                     return false;
                 }
                 // console.log(JSON.stringify(this.state, null, 2));

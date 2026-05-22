@@ -102,7 +102,7 @@ class ProposalOrchestrationService:
         """
         try:
             project = self.project_repository.get_by_id(project_id=payload.project_id)
-            ProposalPolicy.ensure_can_apply(self.actor, project)
+            # ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
 
             proposal = self._create_proposal_bundle(payload)
@@ -132,13 +132,15 @@ class ProposalOrchestrationService:
                 sent_at=payload.sent_at
             )
             for applied_role in payload.applied_roles:
-                role_fk_id = applied_role.niche_id if project.has_gig_roles else None
-                category_fk_id = None if project.has_gig_roles else applied_role.niche_id
+                role_instance = project.required_roles.get(role_id=applied_role.niche_id) if project.has_gig_roles else None
+                category_instance = None if project.has_gig_roles else GigCategoryModel.objects.get(
+                    id=applied_role.niche_id, parent_id=applied_role.industry_id
+                )
                 
                 saved_role = self.role_repository.create_roles(
                     proposal=proposal,
-                    role=role_fk_id,
-                    category=category_fk_id,
+                    role_instance=role_instance,
+                    category_instance=category_instance,
                     client_budget=applied_role.role_amount,
                     proposed_amount=applied_role.proposed_amount,
                     currency=applied_role.currency,
@@ -171,6 +173,14 @@ class ProposalOrchestrationService:
                 },
             )
             raise err
+        
+        except OperationalError as err:
+            print(err)
+            raise ProposalError(
+                "This proposal is currently being processed by another action. Please try again later.",
+                code=PolicyFailure.APPLICATION_RESTRICTED.code,
+                title="Server Busy",
+            )
         
     def notifications_flow(self, gig):
         self._notify_creator_by_mail(gig)

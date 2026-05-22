@@ -14,7 +14,7 @@ Responsibilities:
 - Converting ORM models into domain entities
 """
 
-from django.db.models import Model
+from django.db.models import Model, Prefetch
 from core.model_registry import registry
 from proposals.domain.entities import ProjectEntity, ProjectRoleEntity
 from proposals.domain.exceptions import ProposalError
@@ -37,10 +37,36 @@ class ProjectRepository:
             as_entity (bool): If True, converts the Django model instance into a domain entity. 
                 Set to False to return the raw ORM object for foreign key assignments.
         """
-        queryset = self.model.objects.select_related("creator")
-        
+        queryset = (
+            self.model.objects
+            .select_related("creator")
+            .prefetch_related(
+                Prefetch(
+                    "required_roles",
+                    queryset=registry.GigRole.objects.only(
+                        "id",
+                        "gig_id",
+                        "niche_id",
+                        "niche_name",
+                        "role_id",
+                        "role_name",
+                        "description",
+                        "budget",
+                        "payment_option",
+                        "status",
+                        "slots",
+                    )
+                )
+            )
+        )
+
         if with_lock:
-            project = queryset.select_for_update(nowait=True).filter(id=project_id).first()
+            project = (
+                queryset
+                .select_for_update(nowait=True)
+                .filter(id=project_id)
+                .first()
+            )
         else:
             project = queryset.filter(id=project_id).first()
 
@@ -52,31 +78,21 @@ class ProjectRepository:
             )
 
         return self._to_entity(project) if as_entity else project
-    
+        # queryset = self.model.objects.select_related("creator")
+        
+        # if with_lock:
+        #     project = queryset.select_for_update(nowait=True).filter(id=project_id).first()
+        # else:
+        #     project = queryset.filter(id=project_id).first()
 
-    def get_by_slug(self, slug: str) -> ProjectEntity:
-        """
-        Retrieves a project by its slug.
+        # if not project:
+        #     raise ProposalError(
+        #         "Invalid referenced project",
+        #         code=PolicyFailure.INVALID_OBJECT.code,
+        #         title=PolicyFailure.INVALID_OBJECT.title
+        #     )
 
-        Args:
-            slug (str): Human-readable unique identifier of the project.
-
-        Returns:
-            ProjectEntity | None: Domain representation of the project.
-        """
-        try:
-            project = (
-                self.model.objects
-                .select_related("creator")
-                .get(slug=slug)
-            )
-        except self.model.DoesNotExist:
-            raise ProposalError(
-                "Invalid referenced project",
-                code=PolicyFailure.INVALID_OBJECT.code,
-                title=PolicyFailure.INVALID_OBJECT.title
-            )
-        return self._to_entity(project)
+        # return self._to_entity(project) if as_entity else project
 
     # ------------------------------------------------------------
     # INTERNAL MAPPING LAYER

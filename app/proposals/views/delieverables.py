@@ -6,12 +6,12 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from core.model_registry import registry
 from core.url_names import AuthURLNames
-from template_map.collaboration import Collabs
+from template_map.proposals import Proposals as ProposalTemplates
 
 
 class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
     model = registry.Proposal
-    template_name = Collabs.Proposals.VIEW_DELIEVERABLES
+    template_name = ProposalTemplates.VIEW_DELIEVERABLES
     context_object_name = "proposal"
     pk_url_kwarg = "proposal_id"
     
@@ -27,29 +27,29 @@ class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
         
         qs = (
             super().get_queryset()
-            .select_related("gig", "provider", "provider__profile")
+            .select_related("project", "provider", "provider__profile")
             .only(
-                "gig__has_gig_roles", "gig__title", "gig__description", "gig__total_budget",
+                "project__has_gig_roles", "project__title", "project__description", "project__total_budget",
                 "provider__first_name", "provider__last_name", "provider__is_verified", "provider__profile__headline"
             )
             .prefetch_related(
                 Prefetch(
                     "roles",
                     queryset=ProposalRole.objects.only(
-                        "id", "proposal_id", "role_amount", 
-                        "proposed_amount", "gig_role", "gig_category"
+                        "id", "proposal_id", "client_budget", 
+                        "proposed_amount", "role", "category"
                     )
                 ),
-                Prefetch(
-                    "deliverables",
-                    queryset=(
-                        ProposalDeliverable.objects
-                        .order_by("order")
-                    )
-                )
+                # Prefetch(
+                #     "deliverables",
+                #     queryset=(
+                #         ProposalDeliverable.objects
+                #         .order_by("rendering_order")
+                #     )
+                # )
             )
             .filter(
-                Q(provider=self.request.user) | Q(gig__creator=self.request.user)
+                Q(provider=self.request.user) | Q(project__creator=self.request.user)
             )
             
         )

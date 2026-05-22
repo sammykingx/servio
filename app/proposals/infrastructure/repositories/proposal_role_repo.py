@@ -18,14 +18,14 @@ class ProposalRoleRepository:
         proposed_amount: Decimal,
         currency: Literal["NGN", "USD"],
         payment_plan: PaymentOption, 
-        role: Union[int, None] = None,
-        category: Union[int, None] = None,
+        role_instance: Union[int, None] = None,
+        category_instance: Union[int, None] = None,
         client_budget: Union[Decimal, None] = None
     ) -> Model:
         obj = self.model.objects.create(
             proposal=proposal,
-            role=role,
-            category=category,
+            role=role_instance,
+            category=category_instance,
             client_budget=client_budget,
             proposed_amount=proposed_amount,
             currency=currency,

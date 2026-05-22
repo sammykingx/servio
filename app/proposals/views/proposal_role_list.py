@@ -6,12 +6,12 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
-from template_map.collaboration import Collabs
+from template_map.proposals import Proposals as ProposalTemplates
 
 
 
 class ProposalRoleListView(LoginRequiredMixin, ListView):
-    template_name = Collabs.Proposals.PROPOSAL_LIST
+    template_name = ProposalTemplates.PROPOSAL_LIST
     context_object_name = "applications"
     paginate_by = 18
     model = registry.Proposal
@@ -24,11 +24,11 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
         the request is redirected to the collaboration list view instead of
         raising a 404 error.
         """
-        gig_slug = kwargs.get("gig_slug")
+        project_slug = kwargs.get("gig_slug")
         Proposal = self.model
 
         proposal_exists = Proposal.objects.filter(
-            gig__slug=gig_slug, gig__creator=request.user
+            project__slug=project_slug, project__creator=request.user
         ).exists()
 
         if not proposal_exists:
@@ -37,7 +37,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        gig_slug = self.kwargs.get("gig_slug")
+        project_slug = self.kwargs.get("gig_slug")
         proposal_status = self.request.GET.get("proposal_status")
 
         ProposalRole = registry.ProposalRole
@@ -45,7 +45,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
         qs = (
             super()
             .get_queryset()
-            .filter(gig__slug=gig_slug, gig__creator=self.request.user)
+            .filter(project__slug=project_slug, project__creator=self.request.user)
             .select_related("sender", "sender__profile")
             .prefetch_related(
                 Prefetch(
@@ -92,9 +92,9 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
         return super().render_to_response(context, **response_kwargs)
 
     def _fetch_gig(self):
-        gig_slug = self.kwargs.get("gig_slug")
+        project_slug = self.kwargs.get("gig_slug")
         GigModel = registry.Gig
         gig_obj = GigModel.objects.only(
             "title", "total_budget", "start_date", "end_date"
-        ).get(slug=gig_slug)
+        ).get(slug=project_slug)
         return gig_obj

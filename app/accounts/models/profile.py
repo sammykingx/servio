@@ -122,7 +122,7 @@ class UserProfile(models.Model):
         
         for niche in user_niches:
             roles.append({
-                "niche": niche.parent.id if niche.parent else None,
+                "niche_id": niche.parent.id if niche.parent else None,
                 "niche_name": niche.parent.name if niche.parent else None,
                 "role_id": niche.id,
                 "role_name": niche.name,

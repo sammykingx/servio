@@ -16,15 +16,6 @@ class Collabs:
         EDIT_PROJECT =  f"{__SUB_FOLDER}/edit.html"
         LIVE_PROJECT_EDIT = f"{__SUB_FOLDER}/live-edit.html"
         
-    class Proposals:
-        __SUB_FOLDER = _BASE_FOLDER.subfolder("proposals")
-        
-        RECEIVED_PROPOSALS = f"{__SUB_FOLDER}/recieved-proposals.html"
-        SENT_PROPOSALS = f"{__SUB_FOLDER}/sent-proposals.html"
-        PROPOSAL_LIST = f"{__SUB_FOLDER}/proposal-list.html"
-        DETAILS = f"{__SUB_FOLDER}/detail.html"
-        VIEW_DELIEVERABLES = f"{__SUB_FOLDER}/view-delieverables.html"
-        
     class Marketplace:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("marketplace")
         

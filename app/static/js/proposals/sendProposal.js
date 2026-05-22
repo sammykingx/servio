@@ -96,7 +96,7 @@ export class ProposalSubmissionOrchestrator {
                     return false;
                 }
 
-                if (!['days', 'weekS', 'months'].includes(deliverable.duration_unit)) {
+                if (!['days', 'weeks', 'months'].includes(deliverable.duration_unit)) {
                     this.logValidationFailure("Invalid milestone duration interval configuration flag.");
                     return false;
                 }

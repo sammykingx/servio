@@ -60,23 +60,18 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         except Http404:
             return redirect(reverse_lazy(MarketplaceURLS.ALL))
-        
-    def user_can_apply_for_role(self, user, role) -> bool:
-        if not user.is_authenticated:
-            return False
-
-        user_niches = set(user.profile.get_user_niches)
-        return role.role_id in user_niches
     
     def get_context_data(self, **kwargs):
         context =super().get_context_data(**kwargs)
         context["payment_options"] = json.dumps(PAYMENT_OPTIONS)
         project = self.object
+        user_niches = set(self.request.user.profile.get_user_niches)
         roles = []
         if project.has_gig_roles:
             roles = project.required_roles.all()
             for role in roles:
-                role.can_apply = self.user_can_apply_for_role(self.request.user, role)
+                if role.role_id in user_niches:
+                    role.can_apply = True
         else:
             roles.extend(self.request.user.profile.get_niche_roles_list())
         context["roles"] = roles
@@ -85,18 +80,17 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
     def post(self, request:HttpRequest, *args, **kwargs):
         try:
             data = ProposalSubmissionPayload.model_validate_json(request.body, strict=True)
-            ProposalOrchestrationService(request.user, request).submit_proposal(data)
-            import time
-            time.sleep(5)
+            ProposalOrchestrationService(self.request.user, request).submit_proposal(data)
 
         except ValidationError as err:
             from formatters.pydantic_formatter import format_pydantic_errors
             fields = format_pydantic_errors(err)
-            print(fields)
             return JsonResponse(
                 {
                     "error": "Validation error",
                     "message": "Some required information is missing or invalid.",
+                    "status": "warning",
+                    "data": fields
                 },
                 status=400,
             )
@@ -113,6 +107,7 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
             
         except Exception as err:
             return JsonResponse({
+                "status": "warning",
                 "error": "Technical Alignment in-progress",
                 "message": "An unexpected server error occurred. Please try again in a moment.",
             }, status=500)

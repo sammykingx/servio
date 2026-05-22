@@ -11,7 +11,7 @@ from ..application.services import ProposalOrchestrationService
 from ..application.dto.modify_proposal_state import ModifyProposalState
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
-from template_map.collaboration import Collabs
+from template_map.proposals import Proposals as ProposalTemplates
 from decimal import Decimal
 from pydantic import ValidationError
 from formatters.pydantic_formatter import format_pydantic_errors
@@ -23,7 +23,7 @@ ProposalRoleModel = registry.ProposalRole
 
     
 class RecievedProposalListView(LoginRequiredMixin, ListView):
-    template_name = Collabs.Proposals.RECEIVED_PROPOSALS
+    template_name = ProposalTemplates.RECEIVED_PROPOSALS
     context_object_name = "gigs"
     paginate_by = 7
     model = registry.Gig
@@ -114,7 +114,7 @@ class SentProposalListView(LoginRequiredMixin, ListView):
         paginate_by (int): The number of proposals displayed per page (7).
         model (Model): The Django model associated with this list view (ProposalModel).
     """
-    template_name = Collabs.Proposals.SENT_PROPOSALS
+    template_name = ProposalTemplates.SENT_PROPOSALS
     context_object_name = "proposals"
     paginate_by = 7
     model = ProposalModel
