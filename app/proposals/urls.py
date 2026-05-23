@@ -6,7 +6,7 @@ from .views import (
     ProposalRoleListView,
     SentProposalListView,
     UpdateProposalStateView,
-    RenderProposalDeliverablesView
+    RenderProposalDetailView
 )
 
 
@@ -34,7 +34,7 @@ urlpatterns = [
     ),
     path(
         "details/<uuid:proposal_id>/",
-        RenderProposalDeliverablesView.as_view(),
+        RenderProposalDetailView.as_view(),
         name=ProposalURLS.VIEW_DETAILS,
     ),
     

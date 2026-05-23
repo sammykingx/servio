@@ -29,7 +29,7 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
     model = registry.Gig
 
     def get_queryset(self):
-        proposals = ProposalModel.objects.filter(gig=OuterRef("pk"))
+        proposals = ProposalModel.objects.filter(project=OuterRef("pk"))
         base_qs = (
             super()
             .get_queryset()
@@ -84,11 +84,11 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
 
         metrics = ProposalRoleModel.objects.filter(proposal_filter).aggregate(
             negotiating_worth=Coalesce(
-                Sum("proposed_amount", filter=Q(proposal__is_negotiating=True)),
+                Sum("proposed_amount", filter=Q(proposal__project__is_negotiable=True)),
                 Decimal("0.00"),
             ),
             accepted_worth=Coalesce(
-                Sum("role_amount", filter=Q(proposal__is_negotiating=False)),
+                Sum("client_budget", filter=Q(proposal__project__is_negotiable=False)),
                 Decimal("0.00"),
             ),
         )

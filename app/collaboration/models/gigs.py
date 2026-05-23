@@ -136,40 +136,6 @@ class Gig(models.Model):
         )
         return result['total'] or 0
 
-    # not used yet
-    def open_role_count(self):
-        """
-            Returns the number of roles that are currently open (not assigned or completed).
-        """
-        return self.required_roles.filter(status='open').count()
-
-    # not used yet
-    def assigned_role_count(self):
-        """
-            Returns the number of roles that have been assigned.
-        """
-        return self.required_roles.filter(status='assigned').count()
-
-    # not used yet
-    def total_workload_summary(self):
-        """
-            Returns a summary of roles by workload type as a dictionary.
-            Example: {'fixed_hours': 3, 'flexible': 2, 'professional_discretion': 1}
-        """
-        from django.db.models import Count
-        qs = self.required_roles.values('workload').annotate(count=Count('id'))
-        return {item['workload']: item['count'] for item in qs}
-
-    # not used yet
-    def top_level_categories(self):
-        """
-        Returns a list of unique top-level categories (parents) for all roles in this gig.
-        Useful for displaying the main categories of the gig.
-        """
-        return self.required_roles.filter(
-            niche__parent__isnull=False
-        ).values_list('niche__parent__name', flat=True).distinct()
-        
     @property
     def active_proposals_count(self):
         return self.proposals.count()

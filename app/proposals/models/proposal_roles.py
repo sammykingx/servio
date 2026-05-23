@@ -88,7 +88,7 @@ class ProposalRole(models.Model):
         return "Unknown Role"
     
     @property
-    def dynamic_budget_range(self):
+    def client_budget_range(self):
         amount = self.client_budget
         lower_raw = amount * Decimal('0.6')
         upper_raw = amount * Decimal('1.1')

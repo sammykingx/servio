@@ -9,9 +9,9 @@ from core.url_names import AuthURLNames
 from template_map.proposals import Proposals as ProposalTemplates
 
 
-class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
+class RenderProposalDetailView(LoginRequiredMixin, DetailView):
     model = registry.Proposal
-    template_name = ProposalTemplates.VIEW_DELIEVERABLES
+    template_name = ProposalTemplates.DETAILS
     context_object_name = "proposal"
     pk_url_kwarg = "proposal_id"
     
@@ -25,6 +25,36 @@ class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
         ProposalRole = registry.ProposalRole
         ProposalDeliverable = registry.ProposalDeliverable
         
+        deliverables_qs = (
+            ProposalDeliverable.objects
+            .only(
+                "id",
+                "phase",
+                "description",
+                "duration_unit",
+                "duration_value",
+                "rendering_order",
+                "release_percentage",
+                "created_at",
+            )
+            .order_by("rendering_order", "created_at")
+        )
+        
+        roles_qs = (
+            ProposalRole.objects
+            .select_related("role", "category")
+            .only(
+                "id", "proposal_id", "client_budget", 
+                "proposed_amount", "role", "category"
+            )
+            .prefetch_related(
+                Prefetch(
+                    "deliverables",
+                    queryset=deliverables_qs,
+                )
+            )
+        )
+        
         qs = (
             super().get_queryset()
             .select_related("project", "provider", "provider__profile")
@@ -35,18 +65,8 @@ class RenderProposalDeliverablesView(LoginRequiredMixin, DetailView):
             .prefetch_related(
                 Prefetch(
                     "roles",
-                    queryset=ProposalRole.objects.only(
-                        "id", "proposal_id", "client_budget", 
-                        "proposed_amount", "role", "category"
-                    )
+                    queryset=roles_qs
                 ),
-                # Prefetch(
-                #     "deliverables",
-                #     queryset=(
-                #         ProposalDeliverable.objects
-                #         .order_by("rendering_order")
-                #     )
-                # )
             )
             .filter(
                 Q(provider=self.request.user) | Q(project__creator=self.request.user)
