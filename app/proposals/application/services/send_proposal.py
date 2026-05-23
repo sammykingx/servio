@@ -102,9 +102,8 @@ class ProposalOrchestrationService:
         """
         try:
             project = self.project_repository.get_by_id(project_id=payload.project_id)
-            # ProposalPolicy.ensure_can_apply(self.actor, project)
+            ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
-
             proposal = self._create_proposal_bundle(payload)
             # self.notifications_flow(project)
             return proposal
@@ -169,13 +168,12 @@ class ProposalOrchestrationService:
                 "Unexpected IntegrityError during proposal creation",
                 extra={
                     "user_id": str(self.actor.id),
-                    "gig_id": str(project.id),
+                    "project_id": str(project.id),
                 },
             )
             raise err
         
         except OperationalError as err:
-            print(err)
             raise ProposalError(
                 "This proposal is currently being processed by another action. Please try again later.",
                 code=PolicyFailure.APPLICATION_RESTRICTED.code,

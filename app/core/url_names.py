@@ -95,7 +95,7 @@ class ProposalURLS:
     RECEIVED_PROPOSALS = "gig_with_proposals_listings"
     PROPOSAL_LISTINGS = "proposal_listings"
     UPDATE_PROPOSAL_STATUS = "update_proposal_status"
-    VIEW_DELIEVERABLES = "view_proposal_deliverables"
+    VIEW_DETAILS = "view_proposal_deliverables"
     
     # not used
     DETAILS = "negotiation_details"

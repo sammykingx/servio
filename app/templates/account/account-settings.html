@@ -55,6 +55,19 @@
 					<div x-show="activeTab === 'addresses'" class="absolute right-3 hidden h-1.5 w-1.5 rounded-full bg-brand-500 dark:bg-brand-300 lg:block"></div>
 				</button>
 				{% endcomment %}
+
+				<!-- Payouts Navigation Button -->
+				<button @click="activeTab = 'payouts'" 
+					:class="activeTab === 'payouts' ? 'bg-white dark:bg-white/10 text-brand-600 dark:text-white shadow-sm ring-1 ring-gray-200 dark:ring-white/10' : 'text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5'"
+					class="relative flex flex-1 items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all duration-200 lg:flex-none">
+					<div :class="activeTab === 'payouts' ? 'bg-brand-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-400'" class="flex h-8 w-8 items-center justify-center rounded-lg transition-colors">
+						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+						</svg>
+					</div>
+					<span>Payouts</span>
+					<div x-show="activeTab === 'payouts'" class="absolute right-3 hidden h-1.5 w-1.5 rounded-full bg-brand-500 dark:bg-brand-300 lg:block"></div>
+				</button>
             </nav>
         </div>
     </aside>
@@ -266,6 +279,190 @@
 			</form>
 		</div>
 		{% endcomment %}
+
+		<!-- Payouts Content Pane -->
+		<div x-show="activeTab === 'payouts'" 
+			x-data="{ 
+				payoutMethod: '{{ user.profile.payout_method|default:'usd' }}',
+				usd: { routing: '{{ user.profile.usd_routing|default:'' }}', account: '{{ user.profile.usd_account|default:'' }}', type: 'checking' },
+				cad: { institution: '{{ user.profile.cad_institution|default:'' }}', transit: '{{ user.profile.cad_transit|default:'' }}', account: '{{ user.profile.cad_account|default:'' }}' },
+				ngn: { bank_code: '{{ user.profile.ngn_bank_code|default:'' }}', account: '{{ user.profile.ngn_account|default:'' }}', account_name: '{{ user.profile.ngn_account_name|default:'' }}' }
+			}"
+			x-transition:enter="transition duration-500" 
+			x-transition:enter-start="opacity-0 scale-95" 
+			x-transition:enter-end="opacity-100 scale-100">
+			
+			<header class="mb-10">
+				<h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-500 dark:text-brand-300">Treasury</h2>
+				<h3 class="text-2xl font-semibold text-gray-800 dark:text-white">Payout Settings</h3>
+				<p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage where your local earnings are automatically deposited.</p>
+			</header>
+
+			<form hx-post="" hx-swap="none" class="space-y-8">
+				{% csrf_token %}
+				
+				<!-- Currency / Region Selector Grid -->
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+					<!-- USD Method -->
+					<label class="relative flex cursor-pointer rounded-2xl border p-5 focus:outline-none transition-all duration-200"
+						:class="payoutMethod === 'usd' ? 'border-brand-500 bg-brand-50/20 dark:bg-brand-500/5 ring-1 ring-brand-500' : 'border-gray-200 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5'">
+						<input type="radio" name="payout_currency" value="usd" x-model="payoutMethod" class="sr-only">
+						<div class="flex w-full items-center justify-between">
+							<div class="flex items-center gap-3">
+								<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 font-semibold text-xs tracking-wider">
+									🇺🇸
+								</div>
+								<div>
+									<p class="text-sm font-semibold text-gray-800 dark:text-white">United States</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400">ACH / Wire Transfer</p>
+								</div>
+							</div>
+							<div class="h-4 w-4 rounded-full border flex items-center justify-center transition-colors"
+								:class="payoutMethod === 'usd' ? 'border-brand-500 bg-brand-500' : 'border-gray-300'">
+								<div class="h-1.5 w-1.5 rounded-full bg-white" x-show="payoutMethod === 'usd'"></div>
+							</div>
+						</div>
+					</label>
+
+					<!-- CAD Method -->
+					<label class="relative flex cursor-pointer rounded-2xl border p-5 focus:outline-none transition-all duration-200"
+						:class="payoutMethod === 'cad' ? 'border-brand-500 bg-brand-50/20 dark:bg-brand-500/5 ring-1 ring-brand-500' : 'border-gray-200 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5'">
+						<input type="radio" name="payout_currency" value="cad" x-model="payoutMethod" class="sr-only">
+						<div class="flex w-full items-center justify-between">
+							<div class="flex items-center gap-3">
+								<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-500 font-semibold text-xs tracking-wider">
+									🇨🇦
+								</div>
+								<div>
+									<p class="text-sm font-semibold text-gray-800 dark:text-white">Canada</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400">EFT Direct Deposit</p>
+								</div>
+							</div>
+							<div class="h-4 w-4 rounded-full border flex items-center justify-center transition-colors"
+								:class="payoutMethod === 'cad' ? 'border-brand-500 bg-brand-500' : 'border-gray-300'">
+								<div class="h-1.5 w-1.5 rounded-full bg-white" x-show="payoutMethod === 'cad'"></div>
+							</div>
+						</div>
+					</label>
+
+					<!-- NGN Method -->
+					<label class="relative flex cursor-pointer rounded-2xl border p-5 focus:outline-none transition-all duration-200"
+						:class="payoutMethod === 'ngn' ? 'border-brand-500 bg-brand-50/20 dark:bg-brand-500/5 ring-1 ring-brand-500' : 'border-gray-200 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5'">
+						<input type="radio" name="payout_currency" value="ngn" x-model="payoutMethod" class="sr-only">
+						<div class="flex w-full items-center justify-between">
+							<div class="flex items-center gap-3">
+								<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 font-semibold text-xs tracking-wider">
+									🇳🇬
+								</div>
+								<div>
+									<p class="text-sm font-semibold text-gray-800 dark:text-white">Nigeria</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400">Local Bank Transfer</p>
+								</div>
+							</div>
+							<div class="h-4 w-4 rounded-full border flex items-center justify-center transition-colors"
+								:class="payoutMethod === 'ngn' ? 'border-brand-500 bg-brand-500' : 'border-gray-300'">
+								<div class="h-1.5 w-1.5 rounded-full bg-white" x-show="payoutMethod === 'ngn'"></div>
+							</div>
+						</div>
+					</label>
+				</div>
+
+				<!-- Input Forms Wrapper Container -->
+				<div class="rounded-[2rem] border border-gray-100 bg-gray-50/30 p-6 md:p-8 dark:border-white/5 dark:bg-white/5 transition-all">
+					
+					<!-- USD Dynamic Fields Form -->
+					<div x-show="payoutMethod === 'usd'" x-cloak class="space-y-6">
+						<h4 class="text-base font-semibold text-gray-800 dark:text-white mb-4">US Bank Account (ACH/Wire)</h4>
+						<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+							<div class="relative">
+								<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Routing Number (ABA)</label>
+								<input type="text" name="usd_routing" x-model="usd.routing" placeholder="9-digit routing number" class="w-full rounded-xl border border-gray-200 bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+							</div>
+							<div class="relative">
+								<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Account Number</label>
+								<input type="text" name="usd_account" x-model="usd.account" placeholder="Enter account number" class="w-full rounded-xl border border-gray-200 bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+							</div>
+						</div>
+					</div>
+
+					<!-- CAD Dynamic Fields Form -->
+					<div x-show="payoutMethod === 'cad'" x-cloak class="space-y-6">
+						<h4 class="text-base font-semibold text-gray-800 dark:text-white mb-4">Canadian Bank Account (EFT)</h4>
+						<div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+							<div class="relative">
+								<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Institution ID</label>
+								<input type="text" name="cad_institution" x-model="cad.institution" placeholder="3 digits (e.g., 001)" class="w-full rounded-xl border border-gray-200 bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+							</div>
+							<div class="relative">
+								<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Transit Number</label>
+								<input type="text" name="cad_transit" x-model="cad.transit" placeholder="5 digits" class="w-full rounded-xl border border-gray-200 bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+							</div>
+							<div class="relative sm:col-span-1">
+								<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Account Number</label>
+								<input type="text" name="cad_account" x-model="cad.account" placeholder="7 to 12 digits" class="w-full rounded-xl border border-gray-200 bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+							</div>
+						</div>
+					</div>
+
+					<!-- NGN Dynamic Fields Form -->
+					<div x-show="payoutMethod === 'ngn'" x-cloak class="space-y-6">
+						<h4 class="text-base font-semibold text-gray-800 dark:text-white mb-4">Nigerian Local Bank Transfer</h4>
+						<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+							<div class="relative">
+								<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Select Bank</label>
+								<select name="ngn_bank_code" x-model="ngn.bank_code" class="w-full rounded-xl border border-gray-200 bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all appearance-none">
+									<option value="" class="dark:bg-gray-900">Choose your bank...</option>
+									<option value="011" class="dark:bg-gray-900">First Bank of Nigeria</option>
+									<option value="058" class="dark:bg-gray-900">GTBank</option>
+									<option value="033" class="dark:bg-gray-900">United Bank for Africa (UBA)</option>
+									<option value="057" class="dark:bg-gray-900">Zenith Bank</option>
+									<option value="232" class="dark:bg-gray-900">Sterling Bank</option>
+									<!-- Add additional core bank codes here -->
+								</select>
+								<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+								</div>
+							</div>
+							<div class="relative">
+								<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">NUBAN Account Number</label>
+								<input type="text" name="ngn_account" x-model="ngn.account" maxlength="10" placeholder="10-digit account number" class="w-full rounded-xl border border-gray-200 bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+							</div>
+						</div>
+
+						<!-- Verified Account Name Display (Notion/Vercel Auto-lookup Indicator) -->
+						<div class="relative mt-2">
+							<label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Account Holder Name</label>
+							<input type="text" name="ngn_account_name" x-model="ngn.account_name" placeholder="Name resolves automatically once account number is complete" class="w-full rounded-xl border border-gray-200 dark:bg-white/5 font-medium bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white outline-none transition-all" readonly>
+							<div class="absolute right-4 top-3.5 flex items-center gap-1.5 text-[11px] text-gray-400">
+								<svg class="w-3.5 h-3.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a.75.75 0 00-.708-.523.75.75 0 00-.75.75v3c0 .414.336.75.75.75h3a.75.75 0 000-1.5H7.28l5.47-5.47a.75.75 0 00-1.06-1.06L6.267 3.455z"/></svg>
+								Auto-verified
+							</div>
+						</div>
+					</div>
+
+					<!-- Context Info Notice Box -->
+					<div class="mt-6 flex items-start gap-3 rounded-xl bg-gray-100/50 p-4 dark:bg-white/5">
+						<svg class="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+						</svg>
+						<p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+							Please ensure that the account details provided exactly match your legal identity registration. Payout modifications take up to 24 hours to clear security audits before incoming routing switches over.
+						</p>
+					</div>
+				</div>
+
+				<!-- Form Submission Control Actions -->
+				<div class="mt-12 flex items-center justify-end gap-4 pt-6 border-t border-gray-100 dark:border-white/5">
+					<button type="button" @click="activeTab = 'overview'" class="px-6 py-3 text-sm font-semibold text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+						Discard
+					</button>
+					<button type="submit" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-brand-500 text-white font-semibold rounded-2xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all">
+						Save Account
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+					</button>
+				</div>
+			</form>
+		</div>
     </section>
 </div>
 

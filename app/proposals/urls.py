@@ -33,9 +33,9 @@ urlpatterns = [
         name=ProposalURLS.PROPOSAL_LISTINGS,
     ),
     path(
-        "deliverables/<uuid:proposal_id>/",
+        "details/<uuid:proposal_id>/",
         RenderProposalDeliverablesView.as_view(),
-        name=ProposalURLS.VIEW_DELIEVERABLES,
+        name=ProposalURLS.VIEW_DETAILS,
     ),
     
 ]

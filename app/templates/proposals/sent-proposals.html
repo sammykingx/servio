@@ -1,244 +1,320 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
-{% block browser_title %}Project Proposals{% endblock %}
+{% block browser_title %}Sent Project Proposals{% endblock %}
 {% block content %}
 
-<div class="w-full max-w-7xl mx-auto flex flex-col gap-6 py-5">
-	<div class="absolute top-0 right-0 w-64 h-64 bg-brand-400/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-    {% if proposals %}
-        <!-- Header Section -->
-        <div class="flex flex-wrap justify-between items-end gap-3 px-2">
-            <div class="flex min-w-72 flex-col gap-1">
-                <p class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">Proposals</p>
-                <p class="text-title-xs md:text-sm text-gray-800 dark:text-gray-400">Select a project to view RFPs and start your project workflow.
-            </div>
-            <a href="{% url COLLABORATION_URLS.CREATE_COLLABORATION %}" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-brand-500 text-white text-sm font-semibold leading-normal tracking-[0.015em] hover:bg-brand-500/90 transition-all shadow-lg shadow-brand-500/20">
-            <span class="truncate">Create Project</span>
-            </a>
-        </div>
-    {% endif %}
-
-    <!-- Proposals List -->
-    {% for proposal in proposals %}
-        <div class="w-full mx-auto p-2">
-            <div class="group relative rounded-[2.5rem] border border-slate-200/80 bg-white p-6 md:p-10 shadow-xl shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none transition-all duration-500 hover:border-brand-500/30 dark:hover:border-brand-300/30">
+{% if not proposals %}
+<!-- ==============Empty state ============================ -->
+<div class="flex flex-col min-h-[550px] items-center justify-center py-12 px-4 animate-fade-in">
+    <div class="relative flex flex-col items-center justify-center max-w-md w-full text-center">
+        <!-- Cool Background Aura (Top Left) -->
+        <div class="absolute -top-12 -left-12 w-72 h-72 bg-blue-500/10 dark:bg-indigo-500/5 rounded-full blur-[90px] pointer-events-none mix-blend-screen"></div>
+        
+        <!-- Warm Background Aura (Bottom Right) -->
+        <div class="absolute -bottom-6 -right-12 w-72 h-72 bg-amber-400/10 dark:bg-rose-500/5 rounded-full blur-[100px] pointer-events-none mix-blend-screen"></div>
+        <div class="relative flex items-center justify-center size-44 mb-10">
+            <div class="absolute size-40 rounded-full bg-gradient-to-tr from-amber-300/20 via-blue-400/10 to-indigo-500/20 blur-2xl animate-pulse" style="animation-duration: 6s;"></div>
+            <div class="absolute size-36 rounded-full border border-zinc-200/60 dark:border-slate-800/40"></div>
+            <div class="relative z-10 flex items-center justify-center size-24 
+                        bg-white/70 dark:bg-slate-900/75 backdrop-blur-md rounded-2xl
+                        shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)]
+                        border border-white/60 dark:border-slate-800/80 transition-transform hover:scale-105 duration-300">
                 
-                <div class="absolute -top-12 -right-12 w-40 h-40 bg-brand-500/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                <div class="absolute size-14 bg-zinc-50/50 dark:bg-slate-800/50 rounded-xl -z-10"></div>
+                
+                <span class="text-3xl select-none transform transition-transform hover:rotate-6 duration-300" 
+                      x-text="darkMode ? '🗂️' : '📋'">
+                </span>
+            </div>
 
-                <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-10">
-                    <div class="space-y-2">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full
-                            {% if proposal.is_negotiating %}
-                                bg-amber-100 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20
-                            {% else %}
-                                bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
-                            {% endif %}
-                            text-[10px] font-medium uppercase tracking-widest"
-                        >
-                            <span class="size-1.5 rounded-full
-                                {% if proposal.is_negotiating %}
-                                    bg-amber-500
-                                {% else %}
-                                    bg-emerald-500
-                                {% endif %}
-                                "></span>
-                            {% if proposal.is_negotiating %}
-                                Counter-Offer Sent
-                            {% else %}
-                                Directly Accepted
-                            {% endif %}
-                        </div>
-                        <h3 class="text-xl md:text-2xl font-medium text-slate-800 dark:text-white leading-tight">
-                            {{ proposal.project.title }}
-                        </h3>
-                        <div class="flex items-center gap-4 text-xs font-normal text-slate-400">
-                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> {{ proposal.sent_at|date:"M d, Y" }}</span>
-                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">history</span> Sent {{ proposal.sent_ago }} ago</span>
-                        </div>
-                    </div>
+            <div class="absolute -top-1 -right-1 size-11 bg-gradient-to-tr from-amber-500 to-rose-400 
+                        rounded-xl shadow-lg shadow-amber-500/10
+                        flex items-center justify-center rotate-12 hover:rotate-0 transition-transform duration-350">
+                <span class="material-symbols-outlined text-white text-lg font-medium">
+                    send
+                </span>
+            </div>
 
-                    <div class="flex flex-col items-end gap-2">
-                        <span class="px-5 py-2 rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 text-xs font-medium uppercase tracking-widest border border-amber-100 dark:border-amber-500/20">
-                            Under Review
-                        </span>
-                    </div>
-                </div>
-                {% for role in proposal.roles.all %}
-                    <div class="space-y-4 mb-3">
-                        <div class="hidden md:grid grid-cols-4 px-6 text-[11px] font-normal uppercase tracking-[0.15em] text-slate-400">
-                            <span>Applied Role</span>
-                            <span>Client Budget</span>
-                            <span>Your Quote</span>
-                            <span class="text-right">Status</span>
-                        </div>
-
-                        <div class="grid gap-3">
-                            <div class="grid grid-cols-2 md:grid-cols-4 items-center gap-4 bg-slate-50/80 dark:bg-slate-800/40 rounded-[1.5rem] p-5 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all">
-                                <div class="col-span-2 md:col-span-1 flex flex-col">
-                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Role</span>
-                                    <span class="font-medium text-slate-900 dark:text-white">{{ role.role_name|title }}</span>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Budget</span>
-                                    <span class="text-slate-500 dark:text-slate-400 font-normal">
-                                        {% if proposal.project.has_gig_roles %}
-                                            {{ role.dynamic_budget_range }}
-                                        {% else %}
-                                            {{ proposal.project.dynamic_range }}
-                                        {% endif %}
-                                    </span>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Quote</span>
-                                    <span class="text-brand-600 dark:text-brand-400 font-normal">${{ role.proposed_amount|default:role.client_budget|intcomma }}</span>
-                                </div>
-                                <div class="flex flex-col md:items-end">
-                                    <span class="md:hidden text-[9px] font-medium text-slate-400 uppercase mb-1">Status</span>
-                                    <span class="inline-flex items-center gap-1.5 
-                                        {% if role.status == 'accepted' %}
-                                            text-emerald-600 dark:text-emerald-400
-                                        {% elif role.status == 'rejected' %}
-                                            text-red-600 dark:text-red
-                                        {% else %}
-                                            text-amber-600 dark:text-amber-400
-                                        {% endif %}
-                                        text-[11px] font-medium
-                                    ">{{ role.status|title }}</span>                            
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                <div class="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-6">
-                    <div class="flex items-center gap-6">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] uppercase font-normal text-slate-400 tracking-tighter">Total Proposed</span>
-                            <span class="text-xl font-normal text-slate-900 dark:text-white">${{ proposal.total_value|default:0|intcomma }}</span>
-                        </div>
-                        <a href="{% url PROPOSALS.VIEW_DELIEVERABLES proposal_id=proposal.id %}" class="text-sm font-medium text-slate-400 hover:text-brand-500 dark:hover:text-brand-300 flex items-center gap-1 group/btn">
-                            more details
-                            <span class="material-symbols-outlined text-lg group-hover/btn:translate-x-1 transition-transform">arrow_right_alt</span>
-                        </a>
-                    </div>
-
-                    <div class="flex items-center gap-3 w-full sm:w-auto">
-                        {% comment %}
-                            <button class="flex-1 sm:flex-none px-8 py-3 rounded-2xl bg-brand-500 text-white text-sm font-semibold hover:scale-105 transition-transform shadow-lg shadow-slate-900/10">
-                                Build Contract
-                            </button>
-                        {% endcomment %}
-                        <button title="withdraw proposal sent" class="px-3 py-2 rounded-2xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors">
-                            <span class="material-symbols-outlined text-lg block">delete</span>
-                        </button>
-                    </div>
-                </div>
+            <div class="absolute -bottom-2 -left-2 size-9 bg-white dark:bg-slate-800
+                        rounded-lg shadow-sm border border-zinc-100 dark:border-slate-700/60
+                        flex items-center justify-center -rotate-12">
+                <span class="size-2 rounded-full bg-blue-500 animate-ping absolute opacity-75"></span>
+                <span class="size-2 rounded-full bg-blue-500 relative"></span>
             </div>
         </div>
-    {% empty %}
-        <div class="flex flex-col">
-            <div class="flex-1 flex items-center justify-center py-16">
-                <div class="flex flex-col items-center justify-center max-w-xl w-full text-center">
-                    <!-- Visual Cluster -->
-                    <div class="relative flex items-center justify-center size-40 mb-8">                            <!-- Soft Background Glow -->
-                        <div class="absolute size-36 bg-brand-400/10 rounded-full blur-2xl"></div>
-                            <!-- Main Card -->
-                            <div class="relative z-10 flex items-center justify-center size-20
-                                bg-white dark:bg-slate-900 rounded-2xl
-                                shadow-lg border border-slate-100 dark:border-slate-700">
-                                <span 
-                                    class="material-symbols-outlined icon-negotiations" 
-                                    x-text="darkMode ? '🗂️' : '📋'"
-                                ></span>
-                            </div>
+        <h2 class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white mb-3">
+            Your pipeline is waiting
+        </h2>
 
-                            <!-- Floating Accent -->
-                            <div class="absolute -top-3 -right-3 size-10 bg-white dark:bg-slate-800 
-                                rounded-xl shadow-md border border-slate-100 dark:border-slate-700 
-                                flex items-center justify-center rotate-12">
-                                <span class="material-symbols-outlined text-blue-500 text-lg">
-                                    send
+        <p class="text-zinc-500 dark:text-slate-400 text-sm leading-relaxed max-w-sm mb-10">
+            You haven't submitted any proposals yet. Explore active opportunities to propose terms, set milestones, and launch new contracts.
+        </p>
+        <a href="{% url OPPURTUNITIES.ALL %}"
+           class="group relative inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl
+                  bg-brand-500 hover:bg-brand-600 dark:bg-white dark:hover:bg-zinc-100
+                  text-white dark:text-slate-900 text-sm font-medium
+                  shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_20px_rgba(255,255,255,0.05)]
+                  transition-all duration-200 hover:-translate-y-0.5 focus:outline-none">
+            
+            <span class="material-symbols-outlined text-[16px] text-gray-300 dark:text-gray-500 group-hover:text-white dark:group-hover:text-gray-900 transition-colors duration-200">
+                search
+            </span>
+            <span>Explore Opportunities</span>
+        </a>
+    </div>
+</div>
+{% else %}
+    <div class="w-full max-w-7xl mx-auto flex flex-col gap-6 py-5">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 pb-6 dark:border-gray-800">
+            <div class="space-y-1">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-title-sm md:text-title-md font-semibold text-gray-800 dark:text-gray-300 tracking-tight mb-2.5">
+                        Proposals
+                    </h1>
+                    <span class="inline-flex items-center rounded-md bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 font-mono">
+                        {{ page_obj.paginator.count|default:"0" }} total
+                    </span>
+                </div>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">
+                    Track, manage, and monitor your active project bids, role breakdowns, and status.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-3 self-start sm:self-center">
+                <div class="inline-flex items-center gap-1 rounded-lg bg-slate-100 p-1 dark:bg-slate-800/80">
+                    <!-- All Tab -->
+                    <a href="{% url PROPOSALS.SENT_PROPOSALS %}" 
+                    class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if not current_status %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                        All
+                    </a>
+
+                    {% if accepted_count > 0 %}
+                        <a href="?status=accepted" 
+                            class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'accepted' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                                Accepted <span class="ml-1 text-[8px] opacity-60 font-mono">({{ accepted_count }})</span>
+                        </a>
+                    {% else %}
+                        <span class="rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
+                            Accepted
+                        </span>
+                    {% endif %}
+
+                    {% if withdrawn_count > 0 %}
+                        <a href="?status=withdrawn" 
+                            class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'withdrawn' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                                Withdrawn <span class="ml-1 text-[8px] opacity-60 font-mono">({{ withdrawn_count }})</span>
+                        </a>
+                        {% else %}
+                        <span class="rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
+                            Withdrawn
+                        </span>
+                    {% endif %}
+
+                    {% if reviewed_count > 0 %}
+                        <a href="?status=reviewed" 
+                        class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'reviewed' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                            Reviewed <span class="ml-1 text-[8px] opacity-60 font-mono">({{ reviewed_count }})</span>
+                        </a>
+                    {% else %}
+                        <span class="rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
+                            Reviewed
+                        </span>
+                    {% endif %}
+                </div>
+                <a href="{% url OPPURTUNITIES.ALL %}" class="inline-flex items-center justify-center rounded-md bg-brand-500 px-2.5 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors shadow-sm">
+                    <span class="material-symbols-outlined">manage_search</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            {% for proposal in proposals %}
+                <div class="group relative rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xl shadow-slate-200/40 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none transition-all duration-500 hover:border-brand-500/30 dark:hover:border-brand-300/30">
+                    
+                    <!-- Top Section: Project Context, Metadata & Status -->
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800/60">
+                        <div class="space-y-1">
+                            <span class="inline-flex items-center text-xs font-medium text-zinc-400 dark:text-zinc-500 font-mono tracking-tight">
+                                Sent {{ proposal.sent_at|naturaltime }}
+                            </span>
+                            <h3 class="text-base font-medium tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+                                {{ proposal.project.title }}
+                            </h3>
+                        </div>
+                        
+                        <!-- Financial Summary & Status Actions -->
+                        <div class="flex items-center justify-between sm:justify-end gap-4 sm:text-right">
+                            <div class="space-y-0.5">
+                                <p class="text-xs text-zinc-400 dark:text-zinc-500 uppercase tracking-wider font-semibold">Total Bid</p>
+                                <p class="text-base font-medium font-mono text-emerald-500 dark:text-emerald-400">
+                                    {% if proposal.currency == "USD" %}${% elif proposal.currency == "NGN" %}₦{% else %}{{ proposal.currency }} {% endif %}{{ proposal.total_value|intcomma }}
+                                </p>
+                            </div>
+                            
+                            <!-- Status Badge -->
+                            <div class="flex items-center gap-3 pl-2">
+                                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium 
+                                    {% if proposal.status == 'sent' %}
+                                        bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/10 dark:bg-amber-500/10 dark:text-amber-400 dark:ring-amber-500/20
+                                    {% elif proposal.status == 'accepted' %}
+                                        bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/10 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20
+                                    {% elif proposal.status == 'rejected' %}
+                                        bg-rose-50 text-rose-600 ring-1 ring-inset ring-rose-500/10 dark:bg-rose-800 dark:text-rose-400 dark:ring-rose-700
+                                    {% elif proposal.status == 'withdrawn' %}
+                                        bg-zinc-50 text-zinc-600 ring-1 ring-inset ring-zinc-500/10 dark:bg-zinc-800 dark:text-zinc-400 dark:ring-zinc-700
+                                    {% else %}
+                                        bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20
+                                    {% endif %}">
+                                    <span class="h-1.5 w-1.5 rounded-full 
+                                        {% if proposal.status == 'sent' %}bg-amber-500 animate-pulse
+                                        {% elif proposal.status == 'accepted' %}bg-emerald-600 dark:bg-emerald-400
+                                        {% elif proposal.status == 'withdrawn' %}bg-zinc-400 dark:bg-zinc-500
+                                        {% else %}bg-blue-600 dark:bg-blue-400{% endif %}"></span>
+                                    {{ proposal.status|title }}
                                 </span>
                             </div>
-
                         </div>
+                    </div>
 
-                        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
-                            You haven’t submitted any proposals yet
-                        </h2>
+                    <!-- Middle Section: Nested Role Ledger Breakdown -->
+                    <div class="mt-4 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Role Breakdown</p>
+                            <span class="text-[11px] text-zinc-400 dark:text-zinc-500 hidden sm:inline">Role Status</span>
+                        </div>
+                        
+                        <div class="divide-y divide-zinc-100/60 dark:divide-slate-800/40 rounded-lg border border-zinc-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/40">
+                            {% for prop_role in proposal.roles.all %}
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 gap-2 text-sm transition-colors hover:bg-slate-200/30 dark:hover:bg-slate-700/20">
+                                    
+                                    <!-- Left: Role Title & Payment Plan Structure -->
+                                    <div class="flex flex-col gap-0.5">
+                                        <span class="font-medium text-zinc-800 dark:text-zinc-200">
+                                            {{ prop_role.role_name }}
+                                        </span>
+                                        <span class="text-xs text-gray-400 dark:text-gray-500 capitalize">
+                                            Installment Structure: {{ prop_role.get_payment_plan_display }}
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Right: Price & Granular Role Status -->
+                                    <div class="flex items-center justify-between sm:justify-end gap-4">
+                                        <!-- Role Price -->
+                                        <div class="font-mono text-zinc-700 dark:text-zinc-300 text-left sm:text-right">
+                                            {% if prop_role.currency == "USD" %}${% elif prop_role.currency == "NGN" %}₦{% else %}{{ prop_role.currency }} {% endif %}{{ prop_role.proposed_amount|intcomma }}
+                                        </div>
+                                        
+                                        <!-- Mini Role Status Pill/Dot -->
+                                        <div class="flex items-center">
+                                            <span class="inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium border
+                                                {% if prop_role.status == 'pending' %}
+                                                    bg-yellow-50 text-yellow-600 border-yellow-200 dark:bg-yellow-800/40 dark:text-yellow-500 dark:border-yellow-800/60
+                                                {% elif prop_role.status == 'accepted' %}
+                                                    bg-emerald-50/60 text-emerald-700 border-emerald-200/60 dark:bg-emerald-500/5 dark:text-emerald-400 dark:border-emerald-500/20
+                                                {% elif prop_role.status == 'rejected' or prop_role.status == 'DECLINED' %}
+                                                    bg-red-50 text-red-700 border-red-100 dark:bg-red-500/5 dark:text-red-400 dark:border-red-500/20
+                                                {% else %}
+                                                    bg-sky-50 text-sky-500 border-sky-200 dark:bg-sky-800/40 dark:text-sky-400 dark:border-sky-700/20
+                                                {% endif %}">
+                                                <span class="h-1 w-1 rounded-full 
+                                                    {% if prop_role.status == 'pending' %}bg-yellow-400 dark:bg-yellow-500 animate-pulse-slow
+                                                    {% elif prop_role.status == 'accepted' %}bg-emerald-500
+                                                    {% elif prop_role.status == 'rejected' or prop_role.status == 'DECLINED' %}bg-red-500
+                                                    {% else %}bg-sky-400{% endif %}"></span>
+                                                {{ prop_role.get_status_display|title }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
 
-                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
-                            Browse available projects and send proposals to start collaborating.
-                            Once submitted, they’ll appear here for tracking and updates.
-                        </p>
+                    <!-- Bottom Section: Inline Actions -->
+                    <div class="mt-4 flex items-center justify-end gap-2.5 pt-3 border-t border-dashed border-zinc-100 dark:border-zinc-800/60">
+                        
+                        <!-- Secondary Action: View Proposal Details -->
+                        <a href="{% url PROPOSALS.VIEW_DETAILS proposal_id=proposal.id %}" 
+                            class="inline-flex items-center gap-1.5 rounded-md bg-gray-200/40 dark:bg-gray-800/40 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:text-gray-300 dark:ring-gray-800 dark:hover:bg-gray-700/80 dark:hover:text-white transition-all duration-150">
+                            <svg class="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-500 dark:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            View Details
+                        </a>
 
-                        <!-- CTA -->
-                        <a href="{% url OPPURTUNITIES.ALL %}"
-                            class="flex items-center gap-2 px-6 py-3 rounded-xl
-                            bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold
-                            shadow-lg shadow-brand-500/20 transition-all duration-200
-                            hover:-translate-y-0.5">
+                        <!-- Destructive Action: Withdraw (Conditional placement) -->
+                        {% if proposal.status != 'withdrawn' and proposal.status != 'accepted' %}
+                            <form action="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" method="POST" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" 
+                                        onclick="return confirm('Are you sure you want to withdraw this proposal? This action cannot be undone.');"
+                                        class="inline-flex items-center gap-1.5 rounded-md bg-gray-100 dark:bg-gray-800/40 px-3 py-1.5 text-xs font-medium text-zinc-500 hover:text-red-500 dark:text-zinc-400 dark:hover:text-red-400 transition-all duration-150 hover:cursor-pointer">
+                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>
+                                    Withdraw
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-                            <span class="material-symbols-outlined text-[20px]">
-                                search
+        <!-- ============== Paginator ============================ -->
+        {% if is_paginated %}
+            <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row dark:border-slate-800">
+                <p class="text-xs font-light text-gray-500 dark:text-shadow-gray-600">
+                    Showing page <span class="font-medium font-mono text-gray-700 dark:text-gray-300">{{ page_obj.number }}</span> of <span class="font-medium font-mono text-gray-700 dark:text-gray-300">{{ page_obj.paginator.num_pages }}</span>
+                </p>
+
+                <!-- Buttons -->
+                <div class="flex items-center gap-2">
+                    <!-- Previous -->
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-400 dark:border-slate-700">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </a>
+                    {% else %}
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-200 dark:border-slate-700">
+                            <span class="material-symbols-outlined">chevron_left</span>
                         </span>
-                        Explore Job Offers
-                    </a>
+                    {% endif %}
+
+                    <!-- Page Numbers -->
+                    {% for num in paginator.page_range %}
+                        {% if num == page_obj.number %}
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-xs font-semibold text-white">
+                            {{ num }}
+                        </span>
+                        {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+                        <a href="?page={{ num }}" class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+                            {{ num }}
+                        </a>
+                        {% elif num == 1 or num == paginator.num_pages %}
+                        <a href="?page={{ num }}" class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+                            {{ num }}
+                        </a>
+                        {% elif forloop.first or forloop.last %}
+                        ...
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Next -->
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </a>
+                    {% else %}
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-200 dark:border-slate-700">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </span>
+                    {% endif %}
                 </div>
             </div>
-        </div>
-    {% endfor %}
-    {% if is_paginated %}
-        <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 sm:flex-row dark:border-slate-800">
-            <!-- Summary -->
-            <p class="text-sm font-medium text-slate-500">
-                Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }} proposals
-            </p>
-
-            <!-- Buttons -->
-            <div class="flex items-center gap-2">
-                <!-- Previous -->
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-400 dark:border-slate-700">
-                        <span class="material-symbols-outlined">chevron_left</span>
-                    </a>
-                {% else %}
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-200 dark:border-slate-700">
-                        <span class="material-symbols-outlined">chevron_left</span>
-                    </span>
-                {% endif %}
-
-                <!-- Page Numbers -->
-                {% for num in paginator.page_range %}
-                    {% if num == page_obj.number %}
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-xs font-semibold text-white">
-                        {{ num }}
-                    </span>
-                    {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
-                    <a href="?page={{ num }}" class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
-                        {{ num }}
-                    </a>
-                    {% elif num == 1 or num == paginator.num_pages %}
-                    <a href="?page={{ num }}" class="flex h-9 w-9 items-center justify-center rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
-                        {{ num }}
-                    </a>
-                    {% elif forloop.first or forloop.last %}
-                    ...
-                    {% endif %}
-                {% endfor %}
-
-                <!-- Next -->
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800">
-                        <span class="material-symbols-outlined">chevron_right</span>
-                    </a>
-                {% else %}
-                    <span class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-200 dark:border-slate-700">
-                        <span class="material-symbols-outlined">chevron_right</span>
-                    </span>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
+{% endif %}
 {% endblock %}

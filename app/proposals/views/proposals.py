@@ -59,7 +59,6 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         
         gig_filter = Q(
             creator=self.request.user,
@@ -120,33 +119,41 @@ class SentProposalListView(LoginRequiredMixin, ListView):
     model = ProposalModel
 
     def get_queryset(self):
+        status_filter = self.request.GET.get("status", "").strip().lower()
         qs = (
-            super()
-            .get_queryset()
+            super().get_queryset()
             .filter(provider=self.request.user)
-            .select_related(
-                "project",
-            )
+            .select_related("project")
             .prefetch_related("roles")
-            .annotate(
-                role_count=Count("roles"),
-                total_proposed=Coalesce(
-                    Sum("roles__proposed_amount"),
-                    0,
-                    output_field=DecimalField(),
-                ),
-            )
             .only(
                 "id",
                 "status",
                 "sent_at",
                 "project__title",
-                "project__total_budget",
-                "project__slug",
             )
             .order_by("-sent_at")
         )
+        self.unfiltered_user_qs = qs
+        if status_filter:
+            qs = qs.filter(roles__status=status_filter).distinct()
+
         return qs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_status"] = self.request.GET.get("status", "").strip().lower()
+
+        counts = self.unfiltered_user_qs.aggregate(
+            total_accepted=Count("id", filter=Q(roles__status="accepted"), distinct=True),
+            total_reviewed=Count("id", filter=Q(roles__status="reviewed"), distinct=True),
+            total_withdrawn=Count("id", filter=Q(roles__status="withdrawn"), distinct=True),
+        )
+
+        context["accepted_count"] = counts["total_accepted"] or 0
+        context["reviewed_count"] = counts["total_reviewed"] or 0
+        context["withdrawn_count"] = counts["total_withdrawn"] or 0
+
+        return context
     
     
 class UpdateProposalStateView(LoginRequiredMixin, View):

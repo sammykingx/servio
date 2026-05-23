@@ -109,7 +109,11 @@
 								Total Budget
 								</span>
 								<span class="text-sm font-semibold text-slate-900 dark:text-white">
-								{{ gig.dynamic_range }}
+								{% if gig.is_negotiable %}
+									{{ gig.dynamic_range }}
+								{% else %}
+									{{ gig.total_budget|intcomma }}
+								{% endif %}
 								</span>
 							</div>
 						</div>
@@ -271,7 +275,13 @@
 				<div class="flex flex-col gap-6">
 					<div class="flex flex-col gap-1">
 						<p class="text-slate-500 text-sm font-medium leading-normal">Total Project Budget</p>
-						<p class="text-3xl font-semibold text-slate-800 dark:text-white">{{ gig.dynamic_range }}</p>
+						<p class="text-3xl font-semibold text-slate-800 dark:text-white">
+							{% if gig.is_negotiable %}
+								{{ gig.dynamic_range }}
+							{% else %}
+								{{ gig.total_budget|intcomma }}
+							{% endif %}
+						</p>
 					</div>
 					<div class="flex items-center gap-2 px-3 py-2 bg-success-500/5 rounded-lg border border-success-500/10">
 						<span class="material-symbols-outlined text-success-600 text-xl">verified_user</span>
@@ -279,13 +289,8 @@
 					</div>
 					<div class="flex flex-col gap-3">
 						<a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_PROPOSAL slug=gig.slug %}" class="w-full py-4 bg-brand-500 text-white rounded-xl font-semibold text-base shadow-lg shadow-brand-500/30 hover:bg-brand-400/90 transition-all text-center">
-							Accept Terms
+							Send Proposal
 						</a>
-						{% if gig.has_gig_roles %}
-							<a href="{% url OPPURTUNITIES.SUBMIT_PROJECT_PROPOSAL slug=gig.slug %}?negotiating=true" class="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold text-base text-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
-								Send Counteroffer
-							</a>
-						{% endif %}
 					</div>
 					<p class="text-[11px] text-center text-slate-400 px-4">
 						By clicking 'Accept Terms', you agree to the project timeline and milestones as outlined.
@@ -319,10 +324,10 @@
 						border-slate-300 dark:border-slate-700 
 						bg-slate-50/60 dark:bg-slate-800/40 p-5">
 						<p class="font-medium text-slate-800 dark:text-white mb-1">
-							Escrow schedule pending
+							Payment Plan Required
 						</p>
 						<p class="text-sm text-slate-500 leading-relaxed">
-							Payment terms and any applicable deliverables are to be agreed with the project owner prior to project commencement.
+							Finalize your payment terms (your plan or the client’s) at the proposal stage, prior to project kickoff.
 						</p>
 					</div>
 					<!-- 3D Glow Emoji -->
@@ -358,8 +363,7 @@
 						{% endif %}
 						
 						<p class="text-[11px] text-center text-slate-400 px-4 leading-relaxed">
-							Funds will be locked in escrow once both parties approve the
-							payment structure.
+							With Smart Release, funds are securely committed once both parties agree on the structure.
 						</p>
 					</div>
 				</div>
