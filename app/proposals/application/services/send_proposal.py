@@ -101,7 +101,7 @@ class ProposalSubmissionService:
         Validates, persists, and orchestrates notifications for a new project proposal submission.
         """
         try:
-            project = self.project_repository.get_by_id(project_id=payload.project_id)
+            project = self.project_repository.get_by_pk(project_id=payload.project_id)
             ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
             proposal = self._create_proposal_bundle(payload)
@@ -120,7 +120,7 @@ class ProposalSubmissionService:
         3 SQL insert transactions. Safe for resource-constrained cPanel environments.
         """
         try:
-            project = self.project_repository.get_by_id(
+            project = self.project_repository.get_by_pk(
                 project_id=payload.project_id, with_lock=True, as_entity=False
             )
             proposal = self.proposal_repository.create_proposal(

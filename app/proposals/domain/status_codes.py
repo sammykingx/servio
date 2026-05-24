@@ -66,8 +66,11 @@ class PolicyFailure:
     DUPLICATE_APPLICATION = FailureDetail(
         "DUPLICATE_APPLICATION", "Proposal Already in Review"
     )
-    INVALID_ACTION_FOR_PROVIDER = FailureDetail(
-        "INVALID_SENDER_ACTION", "Action Restricted"
+    INVALID_ACTION = FailureDetail(
+        "INVALID_ACTION", "Action Restricted"
+    )
+    PROPOSAL_FINALIZED = FailureDetail(
+    "PROPOSAL_FINALIZED", "Proposal Already Finalized"
     )
 
 

@@ -22,7 +22,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from core.model_registry import registry
 from collaboration.models.choices import ProjectStatus, ProjectRoleStatus
-from proposals.models.choices import ProposalRoleStatus
+from proposals.models.choices import ProposalRoleStatus, ProposalStatus
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from ..exceptions import ProposalPermissionDenied
 from ..status_codes import PolicyFailure
@@ -117,27 +117,91 @@ class ProposalPolicy:
         # cls.check_financial_status(actor.profile)
         
     
+    #----------------- PROPOSAL STATE TRANSISTIONING METHODS ----------------
+    
     @staticmethod
-    def validate_state_transition(actor: AbstractUser, proposal: ProposalEntity, new_state: ProposalRoleStatus):
+    def _ensure_no_roles_are_finalized(proposal: ProposalEntity) -> None:
         """
-        Ensures a provider can only move a proposal to a WITHDRAWN state.
-        Any other transition requires recipient (Project Creator) authority.
-        """
-        is_provider = proposal.provider == actor
-        is_withdrawing = new_state == ProposalRoleStatus.WITHDRAWN
+        Validates that none of the proposal's individual roles have reached a terminal state.
 
-        if is_provider and not is_withdrawing:
-            failure = PolicyFailure.INVALID_ACTION_FOR_PROVIDER
+        A provider is blocked from withdrawing a proposal if the project creator has
+        already made a definitive decision (ACCEPTED or REJECTED) on any role within it.
+
+        Args:
+            proposal (ProposalEntity): The proposal domain entity with its child 
+                roles already cached and available via `.roles`.
+
+        Raises:
+            ProposalPermissionDenied: If at least one role in the proposal has an 
+                existing status of ACCEPTED or REJECTED.
+        """
+        finalized_statuses = {ProposalRoleStatus.ACCEPTED, ProposalRoleStatus.REJECTED}
+        has_finalized_role = any(role.status in finalized_statuses for role in proposal.roles)
+
+        if has_finalized_role:
+            failure = PolicyFailure.PROPOSAL_FINALIZED
             raise ProposalPermissionDenied(
-                "Only the project creators can authorize this action.",
+                "Cannot withdraw this proposal because one or more roles has reached a terminal state.",
                 code=failure.code,
                 title=failure.title,
             )
-    
+             
+    @staticmethod
+    def _ensure_provider_only_withdraws(state:ProposalStatus) -> None:
+        """
+        Restricts the provider's state modification authority exclusively to structural withdrawals.
+
+        Service providers are only allowed to self-mitigate their application by transitioning 
+        it to a WITHDRAWN state. Directing the proposal into any other state (like ACCEPTED) 
+        requires recipient (Project Creator) authority.
+
+        Args:
+            actor (AbstractUser): The user attempting to perform the action.
+            proposal (ProposalEntity): The domain representation of the proposal. 
+            new_state (ProposalRoleStatus): The target status the actor wants to transition to.
+
+        Raises:
+            ProposalPermissionDenied: If the provider attempts any state transition 
+                other than ProposalRoleStatus.WITHDRAWN.
+        """
+        is_withdrawing = state == ProposalStatus.WITHDRAWN
+
+        if not is_withdrawing:
+            failure = PolicyFailure.INVALID_ACTION
+            raise ProposalPermissionDenied(
+                "Only project creators/owners can authorize this action.",
+                code=failure.code,
+                title=failure.title,
+            )
+            
+    @staticmethod
+    def _ensure_is_mutable(cls, proposal: ProposalEntity, payload: ModifyProposalState):
+        """
+        Validates that the proposal is in a mutable state.
+
+        Raises:
+            ProposalPermissionDenied: If the proposal or the specific role has already 
+                been finalized (ACCEPTED or WITHDRAWN).
+        """
+        prop_role = proposal.roles.get(role_id=payload.role_id)
+        if prop_role.status == ProposalRoleStatus.ACCEPTED or proposal.status == ProposalRoleStatus.WITHDRAWN:
+            raise ProposalPermissionDenied(
+                "No further action is required because of it's existing decision state.",
+                code=PolicyFailure.PROPOSAL_FINALIZED.code,
+                title=PolicyFailure.PROPOSAL_FINALIZED.title,
+            )
     
     @classmethod
-    def should_modify_state(cls, actor, proposal: ProposalEntity, payload:ModifyProposalState):
-        cls.validate_state_transition(actor, proposal, payload.state)
+    def check_proposal_action(cls, actor, proposal: ProposalEntity, data: ModifyProposalState):
         # cls.check_financial_status(actor.profile)
-        # checkif previously assigned for gigs with roles
-        # if previously assigned check if reassign is in payload
+        is_provider = proposal.provider == actor
+        
+        match is_provider:
+            case True:
+                # service provider validation
+                cls._ensure_no_roles_are_finalized(proposal)
+                cls._ensure_provider_only_withdraws(data.state)
+                
+            case False:
+                # project creator validation
+                cls._ensure_is_mutable(proposal, data)

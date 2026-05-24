@@ -2,9 +2,13 @@ from django.db.models import Model
 from core.model_registry import registry
 from collaboration.models.choices import PaymentOption
 from proposals.domain.entities import ProposalRoleEntity
+from proposals.models.choices import ProposalRoleStatus
 from decimal import Decimal
-from typing import Union, Literal
+from typing import Union, Literal, List, TypeVar
 from uuid import UUID
+
+
+ProposalRoleModelT = TypeVar("ProposalRole")
 
 
 class ProposalRoleRepository:
@@ -34,7 +38,7 @@ class ProposalRoleRepository:
         
         return obj
     
-    def get_by_id(self, role_id: UUID) -> ProposalRoleEntity:
+    def get_by_id(self, role_id: UUID, ) -> Union[ProposalRoleEntity, Model]:
         """Fetches a ProposalRole model and maps it to its pure domain entity."""
         try:
             db_obj = (
@@ -46,9 +50,14 @@ class ProposalRoleRepository:
         except self.model.DoesNotExist:
             return None
         
-    def save_status(self, entity: ProposalRoleEntity) -> None:
-        """Persists a domain entity's status modification back to the database."""
-        self.model.objects.filter(id=entity.id).update(status=entity.status)
+    def update_status(self, role_instance) -> None:
+        """Persists the ProposalRole instance 'role_instance' status modification back to the database."""
+        self.model.objects.filter(id=role_instance.id).update(status=role_instance.status)
+        
+    def withdraw_roles(self, roles:List[ProposalRoleModelT]):
+        for role in roles:
+            role.status = ProposalRoleStatus.WITHDRAWN
+        self.model.objects.bulk_update(roles, fields=["status"])
         
     def _to_entity(self, role_obj) -> ProposalRoleEntity:
         return ProposalRoleEntity(

@@ -10,7 +10,7 @@ from ..domain.exceptions import ProposalError
 from ..application.services import ProposalSubmissionService, ProposalTransitionService
 from ..application.dto.modify_proposal_state import ModifyProposalState
 from core.model_registry import registry
-from core.url_names import CollaborationURLS
+from core.url_names import ContractURLS
 from template_map.proposals import Proposals as ProposalTemplates
 from decimal import Decimal
 from pydantic import ValidationError
@@ -171,14 +171,14 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
                 "title": f"Proposal {data.state.title()}",
                 "message": f"The proposal has been {data.state} and the service provider has been notified.",
             }
-            # if data.state == ProposalStatus.ACCEPTED:
-            #     resp.update(
-            #         url=reverse_lazy(
-            #             CollaborationURLS.START_COLLABORATION,
-            #             kwargs={'proposal_id': data.proposal_id, "role_id": data.role_id}
-            #         ),
-            #         redirect=True
-            #     )    
+            if data.state == ProposalStatus.ACCEPTED:
+                resp.update(
+                    url=reverse_lazy(
+                        ContractURLS.PREVIEW_CONTRACT,
+                        kwargs={'proposal_id': data.proposal_id, "role_id": data.role_id}
+                    ),
+                    redirect=True
+                )   
             return JsonResponse(resp, status=200)
         
         except ValidationError as err:

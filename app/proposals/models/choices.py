@@ -16,7 +16,7 @@ class ProposalStatus(models.TextChoices):
     # NEGOTIATING = "negotiating", "Negotiation"
       
     # Final Outcomes
-    ACTION_TAKEN = "reviewed", "Reviewed" # Some roles are "Accepted/Rejected", but some are still "Pending"
+    REVIEWED = "reviewed", "Reviewed" # Some roles are "Accepted/Rejected", but some are still "Pending"
     ACCEPTED = "accepted", "Accepted"
     REJECTED = "rejected", "Rejected"
     WITHDRAWN = "withdrawn", "Withdrawn" # providers can withdraw their proposal

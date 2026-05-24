@@ -27,9 +27,9 @@ class ProjectRepository:
     def __init__(self):
         self.model = registry.Gig
 
-    def get_by_id(self, project_id: UUID, *, with_lock:bool=False, as_entity: bool = True) -> Union[Model, ProjectEntity]:
+    def get_by_pk(self, project_id: UUID, *, with_lock:bool=False, as_entity: bool = True) -> Union[Model, ProjectEntity]:
         """
-        Fetches a project by ID with optimized relations, optionally locking the row or bypassing domain conversion.
+        Fetches a project by it's primary key with optimized relations, optionally locking the row or bypassing domain conversion.
 
         Args:
             project_id (UUID): Unique identifier of the project.
@@ -64,7 +64,7 @@ class ProjectRepository:
             project = (
                 queryset
                 .select_for_update(nowait=True)
-                .filter(id=project_id)
+                .filter(pk=project_id)
                 .first()
             )
         else:
@@ -78,21 +78,6 @@ class ProjectRepository:
             )
 
         return self._to_entity(project) if as_entity else project
-        # queryset = self.model.objects.select_related("creator")
-        
-        # if with_lock:
-        #     project = queryset.select_for_update(nowait=True).filter(id=project_id).first()
-        # else:
-        #     project = queryset.filter(id=project_id).first()
-
-        # if not project:
-        #     raise ProposalError(
-        #         "Invalid referenced project",
-        #         code=PolicyFailure.INVALID_OBJECT.code,
-        #         title=PolicyFailure.INVALID_OBJECT.title
-        #     )
-
-        # return self._to_entity(project) if as_entity else project
 
     # ------------------------------------------------------------
     # INTERNAL MAPPING LAYER

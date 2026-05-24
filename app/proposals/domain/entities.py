@@ -5,7 +5,11 @@ from proposals.models.choices import ProposalStatus, ProposalRoleStatus
 from datetime import datetime
 from uuid import UUID
 from decimal import Decimal
-from typing import List, Literal
+from typing import List, Literal, TypeVar
+
+
+ProposalRoleModelT = TypeVar("ProposalRole")
+ProposalModelT = TypeVar("Proposal")
 
 
 @dataclass(frozen=True) 
@@ -37,7 +41,8 @@ class ProjectEntity:
     start_date: datetime
     end_date: datetime
     required_roles: List[ProjectRoleEntity] = field(default_factory=list)
-   
+
+ 
 @dataclass
 class ProposalEntity:
     id: UUID
@@ -61,17 +66,18 @@ class ProposalRoleEntity:
     currency: Literal["USD", "NGN"]
     payment_plan: PaymentOption
     status: ProposalRoleStatus
-    
-    def accept(self) -> bool:
-        """Transitions the role state to ACCEPTED if valid."""
-        if self.status == ProposalRoleStatus.ACCEPTED:
-            return  False
-        self.status = ProposalRoleStatus.ACCEPTED
-        return True
 
-    def reject(self) -> bool:
-        """Transitions the role state to REJECTED."""
-        if self.status == ProposalRoleStatus.REJECTED:
-            return False
-        self.status = ProposalRoleStatus.REJECTED
-        return True
+    # not used
+    @classmethod
+    def from_model(cls, model_instance: ProposalRoleModelT) -> "ProposalRoleEntity":
+        """Factory method to create a domain entity from the proposal role model."""
+        return cls(
+            id=model_instance.id,
+            role_fk=model_instance.role_id, 
+            category_fk=model_instance.category_id,
+            client_budget=model_instance.client_budget,
+            proposed_amount=model_instance.proposed_amount,
+            currency=model_instance.currency,
+            payment_plan=model_instance.payment_plan,
+            status=model_instance.status
+        )
