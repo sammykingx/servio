@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction, IntegrityError, OperationalError
 from django.db.models import Model, Prefetch, QuerySet
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
@@ -160,7 +160,7 @@ class EditGigView(LoginRequiredMixin, DetailView):
 
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args, **kwargs):
         """
         Processes updates to an existing gig.
 
@@ -176,21 +176,8 @@ class EditGigView(LoginRequiredMixin, DetailView):
         """
         gig_slug = kwargs.get("slug")
         try:
-            payload = json.loads(request.body)
-            gig_data = CreateGigRequest(**payload)
+            gig_data = CreateGigRequest.model_validate_json(request.body)
             self.update_gig_data(gig_slug, gig_data)
-            
-        except GigModel.DoesNotExist:
-            return redirect(CollaborationURLS.LIST_COLLABORATIONS)
-        
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {
-                    "error": "Invalid JSON payload",
-                    "message": "Request body should be a valid JSON data, check and try again.",
-                },
-                status=400,
-            )
         
         except ValidationError as e:
             return JsonResponse(
@@ -437,11 +424,18 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = "slug"
     context_object_name = "gig"
     
-    # from django internals, get_object calls get_queryset
+    
     def get_queryset(self) -> QuerySet:
+        proposals_qs = (
+            registry.Proposal.objects
+            .select_related("provider", "provider__profile")
+            .only(
+                "id", "project_id", "provider__email", "provider__first_name", 
+                "provider__last_name", "provider__profile__avatar_url",
+            )
+        )
         return (
-            super()
-            .get_queryset()
+            super().get_queryset()
             .filter(
                 creator=self.request.user,
                 status__in=[ProjectStatus.PUBLISHED]
@@ -453,6 +447,9 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
                 "start_date",
                 "end_date",
                 "total_budget",
+            )
+            .prefetch_related(
+                Prefetch("proposals", queryset=proposals_qs)
             )
         )
 
@@ -480,42 +477,15 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         except Http404:
             return redirect(CollaborationURLS.LIST_COLLABORATIONS)
-        
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        gig = self.object
-        # proposals = (
-        #     ProposalModel.objects
-        #     .filter(gig=gig)
-        #     .select_related("provider__profile")
-        #     .order_by("-created_at")
-        #     .only(
-        #         "provider__first_name", 
-        #         "provider__last_name", 
-        #         "provider__profile__avatar_url"
-        #     )
-        # )
-        
-        context["proposals"] = None #proposals
 
         return context
     
-    def post(self, request, *args, **kwargs):
+    def post(self, request:HttpRequest, *args, **kwargs):
         self.object = self.get_object()
         try:
-            payload = json.loads(request.body)
-            gig_data = ModifyLiveGig(**payload)
+            gig_data = ModifyLiveGig.model_validate_json(request.body)
             self.validate_gig(gig_data)
             self.partial_gig_update(gig_data)
-            
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {
-                    "error": "Invalid JSON payload",
-                    "message": "Request body should be a valid JSON data, check and try again.",
-                },
-                status=400,
-            )
             
         except ValidationError as e:
             return JsonResponse(
@@ -558,7 +528,7 @@ class LiveEditCollaborationView(LoginRequiredMixin, DetailView):
             "message": "Your project modifications are now active for all collaborators."
         }, status=200)
         
-    def validate_gig(self, payload:ModifyLiveGig):
+    def validate_gig(self, payload: ModifyLiveGig):
         from django.utils import timezone
         from decimal import Decimal
     

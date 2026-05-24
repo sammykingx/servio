@@ -26,7 +26,8 @@ from proposals.models.choices import ProposalRoleStatus
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from ..exceptions import ProposalPermissionDenied
 from ..status_codes import PolicyFailure
-from ...domain.entities import ProjectEntity
+from ...domain.entities import ProjectEntity, ProposalEntity
+from typing import Literal
 
 
 GigsModel = registry.Gig
@@ -116,18 +117,17 @@ class ProposalPolicy:
         # cls.check_financial_status(actor.profile)
         
     
-    # ---- Accepting proposal workflow ------------
     @staticmethod
-    def validate_state_transition(actor: AbstractUser, proposal, new_state):
+    def validate_state_transition(actor: AbstractUser, proposal: ProposalEntity, new_state: ProposalRoleStatus):
         """
         Ensures a provider can only move a proposal to a WITHDRAWN state.
         Any other transition requires recipient (Project Creator) authority.
         """
-        is_sender = proposal.sender == actor
+        is_provider = proposal.provider == actor
         is_withdrawing = new_state == ProposalRoleStatus.WITHDRAWN
 
-        if is_sender and not is_withdrawing:
-            failure = PolicyFailure.INVALID_ACTION_FOR_SENDER
+        if is_provider and not is_withdrawing:
+            failure = PolicyFailure.INVALID_ACTION_FOR_PROVIDER
             raise ProposalPermissionDenied(
                 "Only the project creators can authorize this action.",
                 code=failure.code,
@@ -136,8 +136,8 @@ class ProposalPolicy:
     
     
     @classmethod
-    def should_modify_state(cls, actor, proposal, payload:ModifyProposalState):
+    def should_modify_state(cls, actor, proposal: ProposalEntity, payload:ModifyProposalState):
         cls.validate_state_transition(actor, proposal, payload.state)
-        cls.check_financial_status(actor.profile)
+        # cls.check_financial_status(actor.profile)
         # checkif previously assigned for gigs with roles
         # if previously assigned check if reassign is in payload

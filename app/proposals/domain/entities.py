@@ -38,7 +38,7 @@ class ProjectEntity:
     end_date: datetime
     required_roles: List[ProjectRoleEntity] = field(default_factory=list)
    
-
+@dataclass
 class ProposalEntity:
     id: UUID
     project: ProjectEntity
@@ -48,23 +48,30 @@ class ProposalEntity:
     status: ProposalStatus
     sent_at: datetime
     created_at: datetime
+    roles: List[ProjectRoleEntity]
+    
 
-
+@dataclass
 class ProposalRoleEntity:
     id: UUID
-    project_role: UUID
+    role_fk: UUID
+    category_fk: int
     client_budget: Decimal
     proposed_amount: Decimal
     currency: Literal["USD", "NGN"]
     payment_plan: PaymentOption
     status: ProposalRoleStatus
     
-    def accept(self) -> None:
+    def accept(self) -> bool:
         """Transitions the role state to ACCEPTED if valid."""
-        # if self.status == ProposalRoleStatus.REJECTED:
-            # raise DomainValidationError("Cannot accept a previously rejected proposal role.")
+        if self.status == ProposalRoleStatus.ACCEPTED:
+            return  False
         self.status = ProposalRoleStatus.ACCEPTED
+        return True
 
-    def reject(self) -> None:
+    def reject(self) -> bool:
         """Transitions the role state to REJECTED."""
+        if self.status == ProposalRoleStatus.REJECTED:
+            return False
         self.status = ProposalRoleStatus.REJECTED
+        return True

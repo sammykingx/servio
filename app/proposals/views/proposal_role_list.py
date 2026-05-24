@@ -11,7 +11,7 @@ from template_map.proposals import Proposals as ProposalTemplates
 
 
 class ProposalRoleListView(LoginRequiredMixin, ListView):
-    template_name = ProposalTemplates.PROPOSAL_LIST
+    template_name = ProposalTemplates.PROJECT_PROPOSAL_LIST
     context_object_name = "applications"
     paginate_by = 18
     model = registry.Proposal
@@ -24,7 +24,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
         the request is redirected to the collaboration list view instead of
         raising a 404 error.
         """
-        project_slug = kwargs.get("gig_slug")
+        project_slug = kwargs.get("project_slug")
         Proposal = self.model
 
         proposal_exists = Proposal.objects.filter(
@@ -37,7 +37,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        project_slug = self.kwargs.get("gig_slug")
+        project_slug = self.kwargs.get("project_slug")
         proposal_status = self.request.GET.get("proposal_status")
 
         ProposalRole = registry.ProposalRole
@@ -46,13 +46,13 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
             super()
             .get_queryset()
             .filter(project__slug=project_slug, project__creator=self.request.user)
-            .select_related("sender", "sender__profile")
+            .select_related("provider", "provider__profile")
             .prefetch_related(
                 Prefetch(
                     "roles",
                     queryset=ProposalRole.objects.only(
                         "proposal_id",
-                        "role_amount",
+                        "client_budget",
                         "proposed_amount",
                         "payment_plan",
                     ),
@@ -61,12 +61,11 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
             .only(
                 "id",
                 "status",
-                "is_negotiating",
                 "sent_at",
-                "sender__first_name",
-                "sender__last_name",
-                "sender__profile__headline",
-                "sender__profile__avatar_url",
+                "provider__first_name",
+                "provider__last_name",
+                "provider__profile__headline",
+                "provider__profile__avatar_url",
             )
             .order_by("-sent_at")
         )
@@ -75,7 +74,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["gig"] = self._fetch_gig()
+        context["project"] = self._fetch_project()
         return context
 
     def render_to_response(self, context, **response_kwargs):
@@ -91,8 +90,8 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
 
         return super().render_to_response(context, **response_kwargs)
 
-    def _fetch_gig(self):
-        project_slug = self.kwargs.get("gig_slug")
+    def _fetch_project(self):
+        project_slug = self.kwargs.get("project_slug")
         GigModel = registry.Gig
         gig_obj = GigModel.objects.only(
             "title", "total_budget", "start_date", "end_date"

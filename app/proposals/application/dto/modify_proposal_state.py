@@ -5,7 +5,7 @@ from uuid import UUID
 
 class ModifyProposalState(BaseModel):
     proposal_id: UUID
-    role_id: UUID
+    role_id: int
     state: ProposalRoleStatus
     re_assign: bool = False
     

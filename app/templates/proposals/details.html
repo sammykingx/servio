@@ -321,7 +321,7 @@
                                     </div>
 
                                     <!-- Proposal Actions -->
-                                    <div data-proposal-actions data-endpoint="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" data-proposal-id="{{ proposal.id }}" data-role-id="{{ role.gig_role.id }}" data-csrf-token="{{ csrf_token }}" class="col-span-1">
+                                    <div data-proposal-actions data-endpoint="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" data-proposal-id="{{ proposal.id }}" data-role-id="{{ role.id }}" data-csrf-token="{{ csrf_token }}" class="col-span-1">
                                         <!-- Desktop view -->
                                         <div class="hidden md:block relative text-right group/menu">
                                             <button class="inline-flex items-center justify-center size-10 bg-brand-400 dark:bg-gray-100 text-white dark:text-slate-900 rounded-xl hover:bg-brand-500 dark:hover:bg-brand-500 dark:hover:text-white transition-all">

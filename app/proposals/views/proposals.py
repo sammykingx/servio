@@ -7,7 +7,7 @@ from django.views.generic import ListView, View
 from collaboration.models.choices import ProjectStatus, ProjectVisibility
 from ..models.choices import ProposalStatus
 from ..domain.exceptions import ProposalError
-from ..application.services import ProposalOrchestrationService
+from ..application.services import ProposalSubmissionService, ProposalTransitionService
 from ..application.dto.modify_proposal_state import ModifyProposalState
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
@@ -15,7 +15,6 @@ from template_map.proposals import Proposals as ProposalTemplates
 from decimal import Decimal
 from pydantic import ValidationError
 from formatters.pydantic_formatter import format_pydantic_errors
-import json
 
 
 ProposalModel = registry.Proposal
@@ -44,10 +43,8 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
         gigs = (
             base_qs.annotate(total_proposals=Count("proposals"))
             .annotate(has_proposals=Exists(proposals))
-            # .annotate(latest_proposal_date=Max("proposals__created_at"))
             .filter(has_proposals=True)
             .order_by("created_at")
-            # .order_by("-latest_proposal_date")
         )
 
         proposal_status = self.request.GET.get("proposal_status")
@@ -163,26 +160,35 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
     
     def patch(self, request:HttpRequest, *args:tuple, **kwrags:dict) -> HttpResponse:
         try:
+            should_withdraw = request.GET.get('status', None) == 'withdraw'
+            service = ProposalTransitionService(self.request.user, request)
+            if should_withdraw:
+                pass
             data = ModifyProposalState.model_validate_json(request.body)
-            proposal_service = ProposalOrchestrationService(self.request.user, request)
-            self.update_proposal_state(proposal_service, data)
-            
-        except json.JSONDecodeError:
-            return JsonResponse(
-                {
-                    "status": "error",
-                    "title": "Invalid JSON payload",
-                    "message": "Request body should be a valid JSON data, check and try again.",
-                },
-                status=400,
-            )
-            
+            service.modify_state(data)
+            resp = {
+                "status": "success",
+                "title": f"Proposal {data.state.title()}",
+                "message": f"The proposal has been {data.state} and the service provider has been notified.",
+            }
+            # if data.state == ProposalStatus.ACCEPTED:
+            #     resp.update(
+            #         url=reverse_lazy(
+            #             CollaborationURLS.START_COLLABORATION,
+            #             kwargs={'proposal_id': data.proposal_id, "role_id": data.role_id}
+            #         ),
+            #         redirect=True
+            #     )    
+            return JsonResponse(resp, status=200)
+        
         except ValidationError as err:
+            
             return JsonResponse(
                 {
                     "title": "Invalid Data Format",
                     "message": "It looks like some of the information provided doesn't match our requirements. Please check your details and try again.",
-                    "status": "error"
+                    "status": "error",
+                    "feilds": format_pydantic_errors(err)
                 },
                 status=400,
             )
@@ -212,27 +218,4 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
                     "message": "We encountered an unexpected hiccup. Please try again shortly!",
                     "status": "error",
                 }, status=500)
-        
-        resp = {
-            "status": "success",
-            "title": f"Proposal {data.state.title()}",
-            "message": f"The proposal has been {data.state} and the service provider has been notified.",
-        }
-        
-        if data.state == ProposalStatus.ACCEPTED:
-            resp.update(
-                url=reverse_lazy(
-                    CollaborationURLS.START_COLLABORATION,
-                    kwargs={'proposal_id': data.proposal_id, "role_id": data.role_id}
-                ),
-                redirect=True
-            )
-            
-        return JsonResponse(resp, status=200)
-        
-    def update_proposal_state(self, service: ProposalOrchestrationService, data:ModifyProposalState):
-        if not isinstance(service, ProposalOrchestrationService):
-            raise Exception("proposal_service must be an instance of ProposalService")
-        service.modify_proposal_state(data)
-            
     

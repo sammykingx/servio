@@ -36,11 +36,10 @@ class ProposalRoleRepository:
     
     def get_by_id(self, role_id: UUID) -> ProposalRoleEntity:
         """Fetches a ProposalRole model and maps it to its pure domain entity."""
-        # select_related avoids an N+1 query when accessing parent proposal data later
         try:
             db_obj = (
                 self.model.objects
-                .select_related("proposal")
+                # .select_related("proposal")
                 .get(id=role_id)
             )
             return self._to_entity(db_obj)
@@ -54,7 +53,8 @@ class ProposalRoleRepository:
     def _to_entity(self, role_obj) -> ProposalRoleEntity:
         return ProposalRoleEntity(
             id=role_obj.id,
-            project_role=role_obj.role if role_obj.role else role_obj.category,
+            role_fk=role_obj.role_id,
+            category_fk=role_obj.category_id,
             client_budget=role_obj.client_budget,
             proposed_amount=role_obj.proposed_amount,
             currency=role_obj.currency,

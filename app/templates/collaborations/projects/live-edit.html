@@ -165,9 +165,9 @@
                             
                             <div class="flex justify-between items-center">
                                 <span class="text-[11px] font-bold text-gray-500 uppercase tracking-tight">Active Proposals</span>
-                                {% if proposals %}
+                                {% if gig.proposals %}
                                     <div class="flex -space-x-2">
-                                        {% for proposal in proposals|slice:":3" %}
+                                        {% for proposal in gig.proposals.all|slice:":3" %}
                                             {% if proposal.provider.profile.avatar_url %}
                                                 <div 
                                                     class="size-8 rounded-full border-2 border-white dark:border-gray-900 bg-cover bg-center"

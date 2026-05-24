@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
-{% block browser_title %}Project Proposals{% endblock %}
+{% block browser_title %}Received Project Proposals{% endblock %}
 {% block content %}
 {% if not gigs %}
 {% include "components/empty-states/no-proposals.html" %}
@@ -153,7 +153,7 @@
 					transition-all duration-300 cursor-pointer"
 				>
 					<a 
-						href="{% url PROPOSALS.PROPOSAL_LISTINGS gig_slug=gig.slug %}"
+						href="{% url PROPOSALS.PROPOSAL_LISTINGS project_slug=gig.slug %}"
 						class="absolute inset-0 z-10" 
 						aria-label="{{ gig.title }}">
     				</a>
@@ -319,7 +319,7 @@
 			>
 			<div class="p-8 space-y-10 overflow-y-auto">
 				<div>
-					<h2 class="text-xl font-bold text-slate-900 dark:text-white">
+					<h2 class="text-xl font-semibold text-slate-900 dark:text-white">
 						Proposal Insights
 					</h2>
 					<p class="text-sm text-slate-500 dark:text-slate-400">
@@ -365,6 +365,7 @@
 						</div>
 					</div>
 
+					{% comment "enable when negotiations is available" %}
 					<!-- Active Negotiations -->
 					<div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50
 						border border-slate-200 dark:border-slate-700">
@@ -382,6 +383,7 @@
 							</p>
 						</div>
 					</div>
+					{% endcomment %}
 				</div>
 				<!-- Calm Callout -->
 				<div class="p-6 rounded-2xl bg-gradient-to-br

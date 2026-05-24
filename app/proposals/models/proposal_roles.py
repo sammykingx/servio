@@ -88,6 +88,13 @@ class ProposalRole(models.Model):
         return "Unknown Role"
     
     @property
+    def applied_role(self):
+        if self.role:
+            return self.role_id
+        
+        return self.category_id
+    
+    @property
     def client_budget_range(self):
         amount = self.client_budget
         lower_raw = amount * Decimal('0.6')

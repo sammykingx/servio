@@ -17,8 +17,8 @@ NON-GOALS:
 - Orchestration (e.g., Sending emails or updating state).
 """
 from core.model_registry import registry
-from proposals.application.dto.send_proposal import ProposedRole, ProposalSubmissionPayload
-from proposals.domain.entities import ProjectEntity
+from proposals.application.dto import ProposalSubmissionPayload, ModifyProposalState
+from proposals.domain.entities import ProjectEntity, ProposalEntity
 from proposals.domain.status_codes import ValidationFailure
 from .exceptions import ProposalValidationError
 from .status_codes import ValidationFailure

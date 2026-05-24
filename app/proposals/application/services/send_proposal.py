@@ -78,7 +78,7 @@ def get_error_redirect(code: str, context: dict = None) -> str:
     return mapping.get(code)
 
 
-class ProposalOrchestrationService:
+class ProposalSubmissionService:
     """
     Domain Service for orchestrating the Proposal lifecycle.
 

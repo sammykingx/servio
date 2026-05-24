@@ -1,12 +1,23 @@
 from django.contrib.auth.models import AbstractUser
+from django.http import HttpRequest
 from proposals.infrastructure.repositories import ProposalRepository, ProposalRoleRepository
+from proposals.application.dto.modify_proposal_state import ModifyProposalState
+from proposals.domain.policies.proposal_rules import ProposalPolicy
 
 
-class ProposalAcceptanceService:
-    def __init__(self, user: AbstractUser):
+class ProposalTransitionService:
+    def __init__(self, user: AbstractUser, request: HttpRequest):
         self.actor = user
+        self.request = request
         self.proposal_repository = ProposalRepository()
         self.role_repository = ProposalRoleRepository()
+        
+    def modify_state(self, data: ModifyProposalState):
+        proposal = self.proposal_repository.get_by_id(proposal_id=data.proposal_id)
+        ProposalPolicy.should_modify_state(self.actor, proposal, data)
+        
+    def withdraw_proposal(self):
+        pass
     
     # @transaction.atomic
     # def _transition_proposal_status(self, payload:ModifyProposalState):

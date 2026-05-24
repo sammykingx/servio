@@ -5,7 +5,7 @@ from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from collaboration.models.choices import ProjectStatus, PaymentOption
 from proposals.domain.exceptions import ProposalError
-from proposals.application.services import ProposalOrchestrationService
+from proposals.application.services import ProposalSubmissionService
 from collaboration.schemas.gig_role import PAYMENT_OPTIONS
 from proposals.application.dto.send_proposal import ProposalSubmissionPayload
 from core.model_registry import registry
@@ -80,7 +80,7 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
     def post(self, request:HttpRequest, *args, **kwargs):
         try:
             data = ProposalSubmissionPayload.model_validate_json(request.body, strict=True)
-            ProposalOrchestrationService(self.request.user, request).submit_proposal(data)
+            ProposalSubmissionService(self.request.user, request).submit_proposal(data)
 
         except ValidationError as err:
             from formatters.pydantic_formatter import format_pydantic_errors
