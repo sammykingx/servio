@@ -95,7 +95,7 @@ class ProposalTransitionService:
         Args:
             proposal: The Proposal ORM instance to withdraw.
         """
-        self.role_repository.withdraw_roles(proposal.roles)
+        self.role_repository.withdraw_roles(proposal.roles.all())
         self.proposal_repository.withdraw_proposal(proposal)
     
     def _update_role_state(self, proposal, data: ModifyProposalState, role_status: ProposalRoleStatus) -> None:
@@ -112,7 +112,9 @@ class ProposalTransitionService:
             data: The transition payload, used to resolve the target role via role_id.
             role_status: The specific status to apply to the resolved role.
         """
-        role = proposal.roles.get(role_id=data.role_id)
-        role.status = role_status
-        self.role_repository.update_status(role)
-        self.proposal_repository.update_status(proposal, data.state)
+        role = proposal.roles.get(pk=data.role_id)
+        if role.status != role_status:
+            role.status = role_status
+            self.role_repository.update_status(role)
+            self.proposal_repository.update_status(proposal, data.state)
+        role.role_id

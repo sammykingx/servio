@@ -1,7 +1,7 @@
 from core.url_names import (
     AuthURLNames, BusinessURLS, CollaborationURLS,  SmartReleaseURLS,
     NotificationsURLNames, OnboardingURLS, MarketplaceURLS,
-    ProposalURLS, ReviewURLS, PaymentURLS,
+    ProposalURLS, ReviewURLS, PaymentURLS, ContractURLS
 )
 from notifications.models.notification_channels import NotificationChannels
 from accounts.models.profile import UserRole
@@ -44,6 +44,7 @@ def app_urlnames(request):
         "AUTH_URLS": AuthURLNames,
         "BIZ_URLS": BusinessURLS,
         "COLLABORATION_URLS": CollaborationURLS,
+        "CONTRACTS": ContractURLS,
         "SMART_RELEASE": SmartReleaseURLS,
         "NOTIFICATION_URLS": NotificationsURLNames,
         "OPPURTUNITIES": MarketplaceURLS,

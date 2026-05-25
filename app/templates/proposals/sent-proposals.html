@@ -177,87 +177,89 @@
                         </div>
                     </div>
 
-                    <!-- Middle Section: Nested Role Ledger Breakdown -->
-                    <div class="mt-4 space-y-2.5">
-                        <div class="flex items-center justify-between">
-                            <p class="text-xs font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Role Breakdown</p>
-                            <span class="text-[11px] text-zinc-400 dark:text-zinc-500 hidden sm:inline">Role Status</span>
-                        </div>
-                        
-                        <div class="divide-y divide-zinc-100/60 dark:divide-slate-800/40 rounded-lg border border-zinc-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/40">
-                            {% for prop_role in proposal.roles.all %}
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 gap-2 text-sm transition-colors hover:bg-slate-200/30 dark:hover:bg-slate-700/20">
-                                    
-                                    <!-- Left: Role Title & Payment Plan Structure -->
-                                    <div class="flex flex-col gap-0.5">
-                                        <span class="font-medium text-zinc-800 dark:text-zinc-200">
-                                            {{ prop_role.role_name }}
-                                        </span>
-                                        <span class="text-xs text-gray-400 dark:text-gray-500 capitalize">
-                                            Installment Structure: {{ prop_role.get_payment_plan_display }}
-                                        </span>
-                                    </div>
-                                    
-                                    <!-- Right: Price & Granular Role Status -->
-                                    <div class="flex items-center justify-between sm:justify-end gap-4">
-                                        <!-- Role Price -->
-                                        <div class="font-mono text-zinc-700 dark:text-zinc-300 text-left sm:text-right">
-                                            {% if prop_role.currency == "USD" %}${% elif prop_role.currency == "NGN" %}₦{% else %}{{ prop_role.currency }} {% endif %}{{ prop_role.proposed_amount|intcomma }}
-                                        </div>
+                    
+                    <div class="proposal-card-wrapper">
+                        <!-- Middle Section: Nested Role Ledger Breakdown -->
+                        <div class="mt-4 space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <p class="text-xs font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Role Breakdown</p>
+                                <span class="text-[11px] text-zinc-400 dark:text-zinc-500 hidden sm:inline">Role Status</span>
+                            </div>
+                            
+                            <div class="divide-y divide-zinc-100/60 dark:divide-slate-800/40 rounded-lg border border-zinc-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/40">
+                                {% for prop_role in proposal.roles.all %}
+                                    <div data-role-container data-proposal-id="{{ proposal.id }}" data-role-id="{{ prop_role.id }}" class="flex flex-col sm:flex-row sm:items-center justify-between p-3 gap-2 text-sm transition-colors hover:bg-slate-200/30 dark:hover:bg-slate-700/20">
                                         
-                                        <!-- Mini Role Status Pill/Dot -->
-                                        <div class="flex items-center">
-                                            <span class="inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium border
-                                                {% if prop_role.status == 'pending' %}
-                                                    bg-yellow-50 text-yellow-600 border-yellow-200 dark:bg-yellow-800/40 dark:text-yellow-500 dark:border-yellow-800/60
-                                                {% elif prop_role.status == 'accepted' %}
-                                                    bg-emerald-50/60 text-emerald-700 border-emerald-200/60 dark:bg-emerald-500/5 dark:text-emerald-400 dark:border-emerald-500/20
-                                                {% elif prop_role.status == 'rejected' or prop_role.status == 'DECLINED' %}
-                                                    bg-red-50 text-red-700 border-red-100 dark:bg-red-500/5 dark:text-red-400 dark:border-red-500/20
-                                                {% else %}
-                                                    bg-sky-50 text-sky-500 border-sky-200 dark:bg-sky-800/40 dark:text-sky-400 dark:border-sky-700/20
-                                                {% endif %}">
-                                                <span class="h-1 w-1 rounded-full 
-                                                    {% if prop_role.status == 'pending' %}bg-yellow-400 dark:bg-yellow-500 animate-pulse-slow
-                                                    {% elif prop_role.status == 'accepted' %}bg-emerald-500
-                                                    {% elif prop_role.status == 'rejected' or prop_role.status == 'DECLINED' %}bg-red-500
-                                                    {% else %}bg-sky-400{% endif %}"></span>
-                                                {{ prop_role.get_status_display|title }}
+                                        <!-- Left: Role Title & Payment Plan Structure -->
+                                        <div class="flex flex-col gap-0.5">
+                                            <span class="font-medium text-zinc-800 dark:text-zinc-200">
+                                                {{ prop_role.role_name }}
+                                            </span>
+                                            <span class="text-xs text-gray-400 dark:text-gray-500 capitalize">
+                                                Installment Structure: {{ prop_role.get_payment_plan_display }}
                                             </span>
                                         </div>
+                                        
+                                        <!-- Right: Price & Granular Role Status -->
+                                        <div class="flex items-center justify-between sm:justify-end gap-4">
+                                            <!-- Role Price -->
+                                            <div class="font-mono text-zinc-700 dark:text-zinc-300 text-left sm:text-right">
+                                                {% if prop_role.currency == "USD" %}${% elif prop_role.currency == "NGN" %}₦{% else %}{{ prop_role.currency }} {% endif %}{{ prop_role.proposed_amount|intcomma }}
+                                            </div>
+                                            
+                                            <!-- Mini Role Status Pill/Dot -->
+                                            <div class="flex items-center">
+                                                <span class="inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs font-medium border
+                                                    {% if prop_role.status == 'pending' %}
+                                                        bg-yellow-50 text-yellow-600 border-yellow-200 dark:bg-yellow-800/40 dark:text-yellow-500 dark:border-yellow-800/60
+                                                    {% elif prop_role.status == 'accepted' %}
+                                                        bg-emerald-50/60 text-emerald-700 border-emerald-200/60 dark:bg-emerald-500/5 dark:text-emerald-400 dark:border-emerald-500/20
+                                                    {% elif prop_role.status == 'rejected' or prop_role.status == 'DECLINED' %}
+                                                        bg-red-50 text-red-700 border-red-100 dark:bg-red-500/5 dark:text-red-400 dark:border-red-500/20
+                                                    {% else %}
+                                                        bg-sky-50 text-sky-500 border-sky-200 dark:bg-sky-800/40 dark:text-sky-400 dark:border-sky-700/20
+                                                    {% endif %}">
+                                                    <span class="h-1 w-1 rounded-full 
+                                                        {% if prop_role.status == 'pending' %}bg-yellow-400 dark:bg-yellow-500 animate-pulse-slow
+                                                        {% elif prop_role.status == 'accepted' %}bg-emerald-500
+                                                        {% elif prop_role.status == 'rejected' or prop_role.status == 'DECLINED' %}bg-red-500
+                                                        {% else %}bg-sky-400{% endif %}"></span>
+                                                    {{ prop_role.get_status_display|title }}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Bottom Section: Inline Actions -->
-                    <div class="mt-4 flex items-center justify-end gap-2.5 pt-3 border-t border-dashed border-zinc-100 dark:border-zinc-800/60">
-                        
-                        <!-- Secondary Action: View Proposal Details -->
-                        <a href="{% url PROPOSALS.VIEW_DETAILS proposal_id=proposal.id %}" 
-                            class="inline-flex items-center gap-1.5 rounded-md bg-gray-200/40 dark:bg-gray-800/40 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:text-gray-300 dark:ring-gray-800 dark:hover:bg-gray-700/80 dark:hover:text-white transition-all duration-150">
-                            <svg class="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-500 dark:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-                            View Details
-                        </a>
+                        <!-- Bottom Section: Inline Actions -->
+                        <div class="mt-4 flex items-center justify-end gap-2.5 pt-3 border-t border-dashed border-zinc-100 dark:border-zinc-800/60">
+                            
+                            <!-- Secondary Action: View Proposal Details -->
+                            <a href="{% url PROPOSALS.VIEW_DETAILS proposal_id=proposal.id %}" 
+                                class="action-btn inline-flex items-center gap-1.5 rounded-md bg-gray-200/40 dark:bg-gray-800/40 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:text-gray-300 dark:ring-gray-800 dark:hover:bg-gray-700/80 dark:hover:text-white transition-all duration-150">
+                                <svg class="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-500 dark:text-zinc-500 dark:group-hover:text-zinc-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                                View Details
+                            </a>
 
-                        <!-- Destructive Action: Withdraw (Conditional placement) -->
-                        {% if proposal.status != 'withdrawn' and proposal.status != 'accepted' %}
-                            <form action="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}?status=withdraw" method="PATCH" class="inline">
-                                {% csrf_token %}
-                                <button type="submit" 
-                                        onclick="return confirm('Are you sure you want to withdraw this proposal? This action cannot be undone.');"
-                                        class="inline-flex items-center gap-1.5 rounded-md bg-gray-100 dark:bg-gray-800/40 px-3 py-1.5 text-xs font-medium text-zinc-500 hover:text-red-500 dark:text-zinc-400 dark:hover:text-red-400 transition-all duration-150 hover:cursor-pointer">
-                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
-                                    </svg>
-                                    Withdraw
-                                </button>
-                            </form>
-                        {% endif %}
+                            <!-- Destructive Action: Withdraw (Conditional placement) -->
+                            {% if proposal.status != 'withdrawn' and proposal.status != 'accepted' %}
+                                <form action="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}" method="POST" class="withdraw-form inline">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                            class="action-btn inline-flex items-center gap-1.5 rounded-md bg-gray-100 dark:bg-gray-800/40 px-3 py-1.5 text-xs font-medium text-zinc-500 hover:text-red-500 dark:text-zinc-400 dark:hover:text-red-400 transition-all duration-150 hover:cursor-pointer">
+                                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                                        </svg>
+                                        Withdraw
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endfor %}
@@ -317,4 +319,87 @@
         {% endif %}
     </div>
 {% endif %}
+{% endblock %}
+{% block custom_page_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.body.addEventListener('submit', async (event) => {
+            const form = event.target.closest('.withdraw-form');
+            if (!form) return;
+            event.preventDefault();
+            const confirmed = confirm('Are you sure you want to withdraw this proposal? This action cannot be undone.');
+            if (!confirmed) return;
+
+            const wrapper = form.closest('.proposal-card-wrapper');
+            if (!wrapper) return;
+
+            const actionElements = wrapper.querySelectorAll('.action-btn, button, a');
+            const firstRoleContainer = wrapper.querySelector('[data-role-container]');
+
+            if (!firstRoleContainer) {
+                showToast('Required data is missing. Please refresh or contact support.', 'warning', 'Page Error');
+                return;
+            }
+
+            const proposalId = firstRoleContainer.dataset.proposalId;
+            const proposalRoleId = firstRoleContainer.dataset.roleId;
+            
+            const payload = {
+                proposal_id: proposalId,
+                role_id: parseInt(proposalRoleId, 10),
+                state: 'withdrawn'
+            };
+
+            const url = form.getAttribute('action');
+            const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+            toggleUIState(actionElements, true);
+
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    showToast(data.message, data.status || 'warning', data.title || 'Proposal Engine');
+                    return;
+                }
+                showToast(data.message, data.status || 'success', data.title || 'Proposal Engine');
+                setTimeout( () => {
+                    window.location.reload(); 
+                }, 1800);
+                
+
+            } catch (error) {
+                showToast('An unexpected error occurred processing your request. Please try again.', 'info', 'Proposal Engine'); 
+                return;           
+            } finally {
+                toggleUIState(actionElements, false);
+            }
+        });
+    });
+
+    /**
+    * Utility helper to handle batch UI visual changes cleanly
+    * @param {NodeList|Array} elements - Target items to alter
+    * @param {boolean} isDisabled - True sets visual state to loading/disabled
+    */
+    function toggleUIState(elements, isDisabled) {
+        elements.forEach(el => {
+            if (isDisabled) {
+                el.classList.add('blur-[1px]', 'opacity-60', 'pointer-events-none');
+                if (el.tagName === 'BUTTON') el.disabled = true;
+            } else {
+                el.classList.remove('blur-[1px]', 'opacity-60', 'pointer-events-none');
+                if (el.tagName === 'BUTTON') el.disabled = false;
+            }
+        });
+    }
+</script>
 {% endblock %}

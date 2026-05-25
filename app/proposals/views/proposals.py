@@ -28,7 +28,15 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
     model = registry.Gig
 
     def get_queryset(self):
-        proposals = ProposalModel.objects.filter(project=OuterRef("pk"))
+        
+        active_proposals = ProposalModel.objects.exclude(
+            status=ProposalStatus.WITHDRAWN
+        )
+
+        proposal_exists = active_proposals.filter(
+            project=OuterRef("pk")
+        )
+        
         base_qs = (
             super()
             .get_queryset()
@@ -41,17 +49,29 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
         )
 
         gigs = (
-            base_qs.annotate(total_proposals=Count("proposals"))
-            .annotate(has_proposals=Exists(proposals))
+            base_qs
+            .annotate(
+                total_proposals=Count(
+                    "proposals",
+                    filter=~Q(proposals__status=ProposalStatus.WITHDRAWN)
+                )
+            )
+            .annotate(
+                has_proposals=Exists(proposal_exists)
+            )
             .filter(has_proposals=True)
-            .order_by("created_at")
+            .order_by("-created_at")
         )
 
         proposal_status = self.request.GET.get("proposal_status")
 
         if proposal_status:
-            base_qs = base_qs.filter(proposals__status=proposal_status).distinct()
-
+            gigs = (
+                gigs
+                .filter(proposals__status=proposal_status)
+                .exclude(proposals__status=ProposalStatus.WITHDRAWN)
+                .distinct()
+            )
         return gigs
 
     def get_context_data(self, **kwargs):
@@ -63,7 +83,11 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
             is_gig_active=True,
         )
 
-        proposal_exists = ProposalModel.objects.filter(project=OuterRef("pk"))
+        proposal_exists = ProposalModel.objects.exclude(
+            status=ProposalStatus.WITHDRAWN
+        ).filter(
+            project=OuterRef("pk")
+        )
 
         total_budget = (
             self.model.objects.filter(gig_filter)
@@ -77,15 +101,17 @@ class RecievedProposalListView(LoginRequiredMixin, ListView):
             proposal__project__status=ProjectStatus.PUBLISHED,
             proposal__project__visibility=ProjectVisibility.PUBLIC,
             proposal__project__is_gig_active=True,
+        ) & ~Q(
+            proposal__status=ProposalStatus.WITHDRAWN
         )
 
         metrics = ProposalRoleModel.objects.filter(proposal_filter).aggregate(
-            negotiating_worth=Coalesce(
-                Sum("proposed_amount", filter=Q(proposal__project__is_negotiable=True)),
-                Decimal("0.00"),
-            ),
-            accepted_worth=Coalesce(
-                Sum("client_budget", filter=Q(proposal__project__is_negotiable=False)),
+            # negotiating_worth=Coalesce(
+            #     Sum("client_budget", filter=Q(proposal__project__is_negotiable=True)),
+            #     Decimal("0.00"),
+            # ),
+            bid_worth=Coalesce(
+                Sum("proposed_amount", filter=Q(proposal__project__is_negotiable=False)),
                 Decimal("0.00"),
             ),
         )
@@ -160,12 +186,8 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
     
     def patch(self, request:HttpRequest, *args:tuple, **kwrags:dict) -> HttpResponse:
         try:
-            should_withdraw = request.GET.get('status', None) == 'withdraw'
-            service = ProposalTransitionService(self.request.user, request)
-            if should_withdraw:
-                pass
             data = ModifyProposalState.model_validate_json(request.body)
-            service.modify_state(data)
+            ProposalTransitionService(self.request.user, request).modify_state(data)
             resp = {
                 "status": "success",
                 "title": f"Proposal {data.state.title()}",
@@ -175,7 +197,7 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
                 resp.update(
                     url=reverse_lazy(
                         ContractURLS.PREVIEW_CONTRACT,
-                        kwargs={'proposal_id': data.proposal_id, "role_id": data.role_id}
+                        # kwargs={'proposal_id': data.proposal_id, "role_id": data.role_id}
                     ),
                     redirect=True
                 )   

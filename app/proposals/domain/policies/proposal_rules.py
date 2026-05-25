@@ -136,7 +136,7 @@ class ProposalPolicy:
                 existing status of ACCEPTED or REJECTED.
         """
         finalized_statuses = {ProposalRoleStatus.ACCEPTED, ProposalRoleStatus.REJECTED}
-        has_finalized_role = any(role.status in finalized_statuses for role in proposal.roles)
+        has_finalized_role = any(role.status in finalized_statuses for role in proposal.roles.all())
 
         if has_finalized_role:
             failure = PolicyFailure.PROPOSAL_FINALIZED
@@ -175,7 +175,7 @@ class ProposalPolicy:
             )
             
     @staticmethod
-    def _ensure_is_mutable(cls, proposal: ProposalEntity, payload: ModifyProposalState):
+    def _ensure_is_mutable(proposal: ProposalEntity, payload: ModifyProposalState):
         """
         Validates that the proposal is in a mutable state.
 
@@ -183,7 +183,7 @@ class ProposalPolicy:
             ProposalPermissionDenied: If the proposal or the specific role has already 
                 been finalized (ACCEPTED or WITHDRAWN).
         """
-        prop_role = proposal.roles.get(role_id=payload.role_id)
+        prop_role = proposal.roles.get(pk=payload.role_id)
         if prop_role.status == ProposalRoleStatus.ACCEPTED or proposal.status == ProposalRoleStatus.WITHDRAWN:
             raise ProposalPermissionDenied(
                 "No further action is required because of it's existing decision state.",

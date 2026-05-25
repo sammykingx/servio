@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
+from proposals.models.choices import ProposalStatus
 from template_map.proposals import Proposals as ProposalTemplates
 
 
@@ -29,7 +30,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
 
         proposal_exists = Proposal.objects.filter(
             project__slug=project_slug, project__creator=request.user
-        ).exists()
+        ).exclude(status=ProposalStatus.WITHDRAWN).exists()
 
         if not proposal_exists:
             return redirect(reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS))
@@ -46,6 +47,7 @@ class ProposalRoleListView(LoginRequiredMixin, ListView):
             super()
             .get_queryset()
             .filter(project__slug=project_slug, project__creator=self.request.user)
+            .exclude(status=ProposalStatus.WITHDRAWN)
             .select_related("provider", "provider__profile")
             .prefetch_related(
                 Prefetch(

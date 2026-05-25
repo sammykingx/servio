@@ -75,7 +75,8 @@
                         <div class="rounded-2xl border border-slate-100 bg-slate-50/50 dark:bg-slate-800/40 dark:border-slate-700/50 p-4 relative">
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 
-                                <div class="flex-1 min-w-0 pr-8 sm:pr-0"> <div class="flex items-center gap-2 mb-1.5">
+                                <div class="flex-1 min-w-0 pr-8 sm:pr-0"> 
+                                    <div class="flex items-center gap-2 mb-1.5">
                                         <h4 class="font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-200 truncate">{{ role.role_name|title }}</h4>
                                         {% if role.status == 'accepted' %}
                                             <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] uppercase
@@ -91,6 +92,11 @@
                                                 text-error-700">
                                                 {{ role.status }}
                                             </span>
+                                        {% else %}
+                                            <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] font-medium uppercase tracking-wider
+                                                bg-amber-50 border border-amber-200 text-amber-700
+                                                dark:bg-amber-950/40 dark:border-amber-800/60 dark:text-amber-400"
+                                            >{{ role.status }}</span>
                                         {% endif %}
 
                                     </div>
@@ -127,7 +133,7 @@
                                         <div
                                             id="proposalActions"
                                             data-proposal-id="{{ proposal.id }}"
-                                            data-proposal-role-id="{{ role.role_id }}"
+                                            data-proposal-role-id="{{ role.id }}"
                                             data-csrf-token="{{ csrf_token }}"
                                             data-endpoint="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}"
                                             x-show="open" 
@@ -266,7 +272,7 @@
                             },
                             body: JSON.stringify({
                                 proposal_id: proposalId,
-                                role_id: roleId,
+                                role_id: parseInt(roleId, 10),
                                 state: status
                             })
                         });
@@ -292,6 +298,9 @@
                                 window.location.assign(data.url)
                             }, 1600);
                         }
+                        setTimeout(() => {
+                            window.location.reload();
+                        })
 
                     } catch {
                         showToast(
