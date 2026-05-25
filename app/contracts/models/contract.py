@@ -12,7 +12,7 @@ class Contract(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
     reference = models.CharField(max_length=35, unique=True)
     slug = models.SlugField(
-        max_length=230,
+        max_length=150,
         unique=True,
         editable=False,
         db_index=True

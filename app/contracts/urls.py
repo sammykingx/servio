@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from template_map.contracts import Contract
 from core.url_names import ContractURLS
-
+from .views import RenderProposalRoleContractView
 
 urlpatterns = [
-    path("preview/<uuid:proposal_id>/<uuid:role_id>",
-        login_required(TemplateView.as_view(template_name=Contract.VIEW_CONTRACT)),
+    path("preview/<uuid:role_id>",
+        RenderProposalRoleContractView.as_view(),
         name=ContractURLS.PREVIEW_CONTRACT
     ),
 ]

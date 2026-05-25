@@ -9,12 +9,11 @@ from core.url_names import AuthURLNames
 from template_map.contracts import Contract as ContractTemplates
 
 
-# noting used
 class RenderProposalRoleContractView(LoginRequiredMixin, DetailView):
-    model = registry.Proposal
+    model = registry.Contract
     template_name = ContractTemplates.VIEW_CONTRACT
-    context_object_name = "proposal"
-    pk_url_kwarg = "proposal_id"
+    context_object_name = "contract"
+    pk_url_kwarg = "slug"
     
     def dispatch(Self, request, *args, **kwargs):
         try:
@@ -23,56 +22,27 @@ class RenderProposalRoleContractView(LoginRequiredMixin, DetailView):
             return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
         
     def get_queryset(self):
-        ProposalRole = registry.ProposalRole
         ProposalDeliverable = registry.ProposalDeliverable
-        
-        deliverables_qs = (
-            ProposalDeliverable.objects
-            .only(
-                "id",
-                "phase",
-                "description",
-                "duration_unit",
-                "duration_value",
-                "rendering_order",
-                "release_percentage",
-                "created_at",
-            )
-            .order_by("rendering_order", "created_at")
-        )
-        
-        roles_qs = (
-            ProposalRole.objects
-            .select_related("role", "category")
-            .only(
-                "id", "proposal_id", "proposed_amount", 
-                "role", "category"
-            )
-            .prefetch_related(
-                Prefetch(
-                    "deliverables",
-                    queryset=deliverables_qs,
-                )
-            )
-        )
-        
         qs = (
             super().get_queryset()
-            .select_related("project", "provider", "provider__profile")
+            .select_related(
+                "proposal_role", "project", 
+                "provider", "provider__profile"
+            )
             .only(
-                "project__has_gig_roles", "project__title", "project__description", "project__total_budget",
-                "provider__first_name", "provider__last_name", "provider__is_verified", "provider__profile__headline"
+                "agreed_amount", "currency", "payment_plan", "status", "signed_at", "reference",
+                "project__id", "project__has_gig_roles", "project__title", "project__description", 
+                "proposal_role__id", "proposal_role__description", "provider__email", "provider__first_name", 
+                "provider__last_name", "provider__is_verified", "provider__profile__headline"
             )
             .prefetch_related(
                 Prefetch(
-                    "roles",
-                    queryset=roles_qs
-                ),
+                    "proposal_role__deliverables",
+                    queryset=ProposalDeliverable.objects.only(
+                        "id", "phase", "description", "duration_unit", "duration_value", "release_percentage"
+                    ).order_by("rendering_order"),
+                )
             )
-            .filter(
-                Q(provider=self.request.user) | Q(project__creator=self.request.user)
-            )
-            
         )
         
         return qs

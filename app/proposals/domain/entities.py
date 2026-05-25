@@ -61,6 +61,7 @@ class ProposalRoleEntity:
     id: UUID
     role_fk: UUID
     category_fk: int
+    description: str
     client_budget: Decimal
     proposed_amount: Decimal
     currency: Literal["USD", "NGN"]

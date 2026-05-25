@@ -31,7 +31,12 @@ class ProposalRole(models.Model):
         null=True,
         help_text="Link to a GigCategory if it's an open project."
     )
-
+    role_name = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Human friendly role title (e.g. Senior Frontend Engineer). This is used for open projects where the provider can specify the role title they are applying for."
+    )
+    description = models.TextField(blank=True, null=True)
     client_budget = models.DecimalField(
         max_digits=10,
         decimal_places=2,

@@ -197,7 +197,7 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
                 resp.update(
                     url=reverse_lazy(
                         ContractURLS.PREVIEW_CONTRACT,
-                        kwargs={'proposal_id': data.proposal_id, 'role_id': data.role_id}
+                        kwargs={'role_id': data.role_id}
                     ),
                     redirect=True
                 )   

@@ -8,7 +8,10 @@ atomicity guarantees before persisting any state change.
 
 from django.contrib.auth.models import AbstractUser
 from django.db import transaction
+from django.db.models import Model
 from django.http import HttpRequest
+from contracts.domains.entities import ContractGenerationContext
+from contracts.application.services import ContractCreationService
 from proposals.application.dto.modify_proposal_state import ModifyProposalState
 from proposals.domain.policies.proposal_rules import ProposalPolicy
 from proposals.domain.exceptions import ProposalPermissionDenied
@@ -76,8 +79,9 @@ class ProposalTransitionService:
             case ProposalRoleStatus.REJECTED:
                 self._update_role_state(proposal, data, ProposalRoleStatus.REJECTED)
             case ProposalRoleStatus.ACCEPTED:
-                self._update_role_state(proposal, data, ProposalRoleStatus.ACCEPTED)
-                # generate contract
+                updated_role = self._update_role_state(proposal, data, ProposalRoleStatus.ACCEPTED)
+                handoff_context = self._contract_handoff_context(proposal, updated_role)
+                ContractCreationService(self.actor).create_contract(handoff_context)
             case _:
                 raise ProposalPermissionDenied(
                     "Unregcognized state/action on the requested proposal",
@@ -98,7 +102,7 @@ class ProposalTransitionService:
         self.role_repository.withdraw_roles(proposal.roles.all())
         self.proposal_repository.withdraw_proposal(proposal)
     
-    def _update_role_state(self, proposal, data: ModifyProposalState, role_status: ProposalRoleStatus) -> None:
+    def _update_role_state(self, proposal, data: ModifyProposalState, role_status: ProposalRoleStatus) -> Model:
         """
         Applies a status update to a single proposal role, then recalculates
         and persists the parent proposal's aggregate status.
@@ -117,3 +121,12 @@ class ProposalTransitionService:
             role.status = role_status
             self.role_repository.update_status(role)
             self.proposal_repository.update_status(proposal, data.state)
+        return role
+            
+    def _contract_handoff_context(self, proposal: Model, prop_role: Model):
+        proposal.refresh_from_db()
+        prop_role.refresh_from_db()
+        return ContractGenerationContext(
+            proposal=proposal,
+            accepted_role=prop_role
+        )

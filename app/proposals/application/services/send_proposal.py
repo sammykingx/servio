@@ -135,11 +135,13 @@ class ProposalSubmissionService:
                 category_instance = None if project.has_gig_roles else GigCategoryModel.objects.get(
                     id=applied_role.niche_id, parent_id=applied_role.industry_id
                 )
+                description = role_instance.description if project.has_gig_roles else None
                 
                 saved_role = self.role_repository.create_roles(
                     proposal=proposal,
                     role_instance=role_instance,
                     category_instance=category_instance,
+                    description=description,
                     client_budget=applied_role.role_amount,
                     proposed_amount=applied_role.proposed_amount,
                     currency=applied_role.currency,

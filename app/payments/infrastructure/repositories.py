@@ -2,7 +2,7 @@
 
 from django.contrib.auth.models import AbstractUser
 from django.db import OperationalError
-from django.utils.timezone import now
+from django.utils import timezone
 from payments.models.payments import Payment
 from payments.domain.entities.payments import PaymentEntity
 from payments.domain.enums import PaymentStatus, PaymentType, PaymentPurpose, RegisteredPaymentProvider
@@ -153,7 +153,7 @@ class PaymentRepository:
             gateway_response=entity.gateway_response,
             status=entity.status,
             metadata=entity.metadata,
-            updated_at=now() 
+            updated_at=timezone.now() 
         )
         
     def update_status(self, entity: PaymentEntity) -> None:
@@ -165,7 +165,7 @@ class PaymentRepository:
         ).update(
             status=entity.status,
             gateway_response=entity.gateway_response,
-            updated_at=now()
+            updated_at=timezone.now()
         )
         
     def update_as_successful(self, entity: PaymentEntity) -> None:
@@ -183,7 +183,7 @@ class PaymentRepository:
             metadata=entity.metadata,
             paid_at=entity.paid_at,
             is_processed=entity.is_processed,
-            updated_at=now()
+            updated_at=timezone.now()
         )
     
     def update_as_abandoned(self, entity: PaymentEntity) -> None:
@@ -196,7 +196,7 @@ class PaymentRepository:
             status=entity.status,
             gateway_response=entity.gateway_response,
             metadata=entity.metadata,
-            updated_at=now()
+            updated_at=timezone.now()
         )
     
     def update_as_initialized(self, entity: PaymentEntity) -> None:
