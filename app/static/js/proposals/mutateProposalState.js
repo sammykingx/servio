@@ -69,7 +69,7 @@ const ProposalManager = (() => {
                 },
                 body: JSON.stringify({
                     proposal_id: proposalId,
-                    role_id: parseInt(roleId, 10),
+                    role_id: roleId,
                     state: action
                 })
             });

@@ -117,4 +117,3 @@ class ProposalTransitionService:
             role.status = role_status
             self.role_repository.update_status(role)
             self.proposal_repository.update_status(proposal, data.state)
-        role.role_id

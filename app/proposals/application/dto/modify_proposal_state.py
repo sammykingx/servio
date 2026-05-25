@@ -14,12 +14,12 @@ class ModifyProposalState(BaseModel):
     Attributes:
         proposal_id (UUID): The primary key identifier (`id`) of the target 
             `Proposal` record.
-        role_id (int): The primary key identifier of the specific `ProposalRole` 
+        role_id (UUID): The primary key identifier of the specific `ProposalRole` 
             record within the proposal.
         state (ProposalRoleStatus): The target status enum value being applied 
             to the proposal role (e.g., ACCEPTED, REJECTED, WITHDRAWN).
     """
     proposal_id: UUID
-    role_id: int
+    role_id: UUID
     state: ProposalRoleStatus
     

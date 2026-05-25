@@ -7,7 +7,7 @@ from collaboration.views.workspace import (
      EditGigView, LiveEditCollaborationView, DeleteGigView
 )
 
-from collaboration.views.start_collaboration import StartCollaborationView
+from collaboration.views.workspace.start_collaboration import StartCollaborationView
 from template_map.collaboration import Collabs
 from template_map.contracts import Contract
 
@@ -45,7 +45,7 @@ urlpatterns = [
     path("delete/<slug:slug>", DeleteGigView.as_view(),
          name=CollaborationURLS.DELETE_COLLABORATION,
     ),
-#     path("contract/<uuid:proposal_id>/<uuid:role_id>/",
+#     path("<uuid:proposal_id>/<uuid:role_id>/",
 #          StartCollaborationView.as_view(),
 #          name=CollaborationURLS.START_COLLABORATION,
 #      ),

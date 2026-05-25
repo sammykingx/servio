@@ -27,7 +27,7 @@ class Contract(models.Model):
         on_delete=models.PROTECT,
         related_name="contract",
     )
-    gig = models.ForeignKey(
+    project = models.ForeignKey(
         "collaboration.Gig",
         on_delete=models.PROTECT,
         related_name="contracts",

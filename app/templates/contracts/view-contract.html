@@ -649,18 +649,20 @@
                     <div class="mt-8 flex items-start gap-3 p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
                         <span class="material-symbols-outlined text-brand-500-400 text-sm">shield_lock</span>
                         <p class="text-[11px] text-slate-400 leading-relaxed">
-                            Funds are held securely by <span class="text-slate-200 underline">Servio Escrow</span> and released only upon your milestone approval or within 24hrs of delivery.
+                            Funds are processed securely by <span class="text-teal-200 underline">trusted gateways</span> and released based on contract terms.
                         </p>
                     </div>
                 </div>
 
-                <div class="bg-brand-500 border border-gray-700 rounded-2xl p-6 text-center">
-                    <p class="text-sm text-slate-300 mb-4">Have questions about this draft?</p>
-                    <button class="inline-flex items-center gap-2 text-white font-semibold text-sm hover:text-brand-500-700">
-                        <span class="material-symbols-outlined text-base">chat_bubble</span>
-                        Chat with John Doe
-                    </button>
-                </div>
+                {% comment "enable when chat feature is available" %}
+                    <div class="bg-brand-500 border border-gray-700 rounded-2xl p-6 text-center">
+                        <p class="text-sm text-slate-300 mb-4">Have questions about this draft?</p>
+                        <button class="inline-flex items-center gap-2 text-white font-semibold text-sm hover:text-brand-500-700">
+                            <span class="material-symbols-outlined text-base">chat_bubble</span>
+                            Chat with John Doe
+                        </button>
+                    </div>
+                {% endcomment %}
             </div>
         </div>
     </div>

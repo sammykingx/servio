@@ -3,9 +3,11 @@ from collaboration.models.choices import PaymentOption
 from .choices import ProposalRoleStatus,DurationUnit
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Optional
+from uuid6 import uuid7
 
 
 class ProposalRole(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
     proposal = models.ForeignKey(
         "Proposal",
         on_delete=models.CASCADE,

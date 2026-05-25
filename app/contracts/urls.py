@@ -6,12 +6,8 @@ from core.url_names import ContractURLS
 
 
 urlpatterns = [
-    path("preview/",
+    path("preview/<uuid:proposal_id>/<uuid:role_id>",
         login_required(TemplateView.as_view(template_name=Contract.VIEW_CONTRACT)),
         name=ContractURLS.PREVIEW_CONTRACT
     ),
-    # path("<uuid:proposal_id>/<uuid:role_id>/",
-    #      StartCollaborationView.as_view(),
-    #      name=CollaborationURLS.START_COLLABORATION,
-    #  ),
 ]

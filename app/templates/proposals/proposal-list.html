@@ -3,7 +3,7 @@
 {% load humanize %}
 {% block browser_title %}Proposals{% endblock %}
 {% block content %}
-<section class="w-full max-w-7xl mx-auto px-3 py-4">
+<section class="w-full max-w-7xl mx-auto px-2 py-4">
     <div class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <!-- Left: Gig Info -->
         <div class="flex flex-col gap-2">
@@ -117,12 +117,16 @@
                                         <p class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">${{ role.proposed_amount|default:role.client_budget|intcomma }}</p>
                                     </div>
                                     <div class="text-right sm:min-w-[60px]">
-                                        {% if role.proposed_amount > role.client_budget %}
-                                            <span class="text-[10px] font-bold text-red-500">{{ role.budget_difference }}</span>
-                                        {% elif role.proposed_amount < role.client_budget %}
-                                            <span class="text-[10px] font-bold text-emerald-500">{{ role.budget_difference }}</span>
+                                        {% if role.client_budget %}
+                                            {% if role.proposed_amount > role.client_budget %}
+                                                <span class="text-[11px] font-mono text-red-500">Exceeds Budget</span>
+                                            {% elif role.proposed_amount < role.client_budget %}
+                                                <span class="text-[11px] font-mono text-emerald-500">Within Budget</span>
+                                            {% else %}
+                                                <span class="text-[11px] font-mono text-brand-500 dark:text-brand-400">Target Alignment</span>
+                                            {% endif %}
                                         {% else %}
-                                            <span class="text-[10px] font-bold text-brand-500 dark:text-brand-400">Match</span>
+                                            <span class="text-[11px] font-mono text-teal-500 dark:text-teal-400">Not Set</span>
                                         {% endif %}
                                     </div>
 
@@ -272,7 +276,7 @@
                             },
                             body: JSON.stringify({
                                 proposal_id: proposalId,
-                                role_id: parseInt(roleId, 10),
+                                role_id: roleId,
                                 state: status
                             })
                         });
