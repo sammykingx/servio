@@ -24,7 +24,8 @@ class AuthUser(AbstractUser):
     last_password_reset = models.DateTimeField(blank=True, null=True)
     onboarding_step = models.PositiveSmallIntegerField(default=0)
     onboarding_completed = models.BooleanField(default=False)
-
+    is_pre_launch_whitelisted = models.BooleanField(default=False)
+    
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 

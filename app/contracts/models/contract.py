@@ -56,6 +56,9 @@ class Contract(models.Model):
         default=ContractStatus.AWAITING,
     )
 
+    client_signed_at = models.DateTimeField(null=True, blank=True)
+    provider_signed_at = models.DateTimeField(null=True, blank=True)
+    
     signed_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

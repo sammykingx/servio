@@ -1,7 +1,7 @@
 from core.url_names import PageURLS
 from datetime import datetime
 from django.conf import settings
-from django.http import Http404
+from django.http import Http404, HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse, resolve, Resolver404
 from django.views.defaults import page_not_found
@@ -16,7 +16,7 @@ class PreLaunchMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest):
         if settings.DEBUG:
             return self.get_response(request)
         
@@ -34,5 +34,8 @@ class PreLaunchMiddleware:
                 return self.get_response(request)
         except Resolver404:
             return page_not_found(request, Http404())
+        
+        if request.user.is_authenticated and request.user.is_pre_launch_whitelisted:
+            return self.get_response(request)
 
         return redirect(reverse(PageURLS.WAIT_LIST))

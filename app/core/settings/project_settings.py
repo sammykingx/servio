@@ -48,7 +48,7 @@ LAUNCH_DATE = datetime(2026, 7, 15, 11, 50, 59)
 
 ALLOWED_PRE_LAUNCH_URL_NAMES = {
     PageURLS.WAIT_LIST,
-    # AuthURLNames.LOGIN,
+    AuthURLNames.LOGIN,
 }
 
 ALLOWED_PATH_PREFIXES = (
