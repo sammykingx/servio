@@ -87,3 +87,7 @@ class Contract(models.Model):
         return (
             self.agreed_amount + self.service_fee + self.tax
         ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+        
+    @property
+    def payment_plan_display(self):
+        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip().title() + "%"

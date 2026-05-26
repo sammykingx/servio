@@ -81,18 +81,6 @@ class ProposalRole(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
-        
-    # @property
-    # def role_name(self):
-    #     """
-    #     Returns the name of the role, whether it's from a GigRole or a GigCategory.
-    #     This makes template rendering simple.
-    #     """
-    #     if self.role:
-    #         return self.role.role_name
-    #     elif self.category:
-    #         return self.category.name
-    #     return "Unknown Role"
     
     @property
     def applied_role(self):

@@ -29,7 +29,7 @@
 				<div class="absolute bottom-1 right-1 size-3 bg-green-500 border-2 border-white rounded-full"></div>
 			</div>
 			<h2 class="text-md font-medium text-gray-700 dark:text-gray-400">{{ contract.provider.full_name|title }}</h2>
-			<p class="text-brand-500 dark:text-gray-500 font-normal tracking-wide uppercase text-xs mb-2">{{ contract.provider.profile.headline|default:"Servio Professional" }}</p>
+			<p class="text-brand-500 dark:text-brand-300 font-normal tracking-wide uppercase text-xs mb-2">{{ contract.provider.profile.headline|default:"Servio Professional" }}</p>
 			{% comment 'enable later on reviews' %}
 			<div class="flex items-center gap-3 bg-white px-4 py-1.5 rounded-full border border-slate-200 shadow-sm">
 				<div class="flex items-center gap-1 text-amber-500">
@@ -113,7 +113,7 @@
 					<div class="p-6 bg-slate-900 rounded-[2rem] flex flex-col justify-center items-center text-center text-white border border-slate-800 shadow-xl">
 						<span class="material-symbols-outlined text-brand-400 mb-2">analytics</span>
 						<p class="text-sm text-slate-400 font-medium">Combined Professional Fee</p>
-						<p class="text-3xl font-black mt-1">${{ contract.amount_payable|intcomma }}</p>
+						<p class="text-3xl font-semibold mt-1">${{ contract.amount_payable|intcomma }}</p>
 						<div class="mt-4 px-4 py-1 bg-white/10 rounded-full text-[10px] font-semibold uppercase tracking-[0.2em]">Gross Fee + service fee + Tax</div>
 					</div>
 				</div>
@@ -133,9 +133,9 @@
 						<div class="absolute w-full top-[41px] left-20 right-20 h-0.5 bg-slate-100 dark:bg-gray-700"></div>
 						{% for deliverable in contract.proposal_role.deliverables.all %}
 						<div class="relative min-w-[280px] flex flex-col items-center group">
-							<div class="size-5 rounded-full bg-white dark:bg-gray-900 border-4 {% if forloop.first %}border-brand-500{% else %}border-slate-300 dark:border-gray-600{% endif %} z-10 mb-6 group-hover:border-brand-500 group-hover:scale-110 transition-all"></div>
+							<div class="size-5 rounded-full bg-white dark:bg-gray-900 border-4 {% if forloop.first %}border-brand-500 dark:border-brand-300{% else %}border-slate-300 dark:border-gray-600{% endif %} z-10 mb-6 group-hover:border-brand-500 group-hover:scale-110 transition-all"></div>
 							<div class="text-center px-4 w-full">
-								<p class="text-[10px] font-bold {% if forloop.first %}text-brand-500 dark:text-brand-400{% else %}text-slate-400 dark:text-gray-500{% endif %} uppercase mb-2 tracking-wider">
+								<p class="text-[10px] font-semibold {% if forloop.first %}text-brand-500 dark:text-brand-400{% else %}text-slate-400 dark:text-gray-500{% endif %} uppercase mb-2 tracking-wider">
 									{{ deliverable.phase|default:"Milestone" }}
 								</p>
 								<h4 class="text-[10px] font-medium text-slate-500 dark:text-gray-200 truncate max-w-[220px] mx-auto mb-1" 
@@ -230,7 +230,7 @@
 								{% endif %}
 							</p>
 						</div>
-						<p class="text-[10px] font-mono text-brand-500 dark:text-brand-400 bg-white dark:bg-gray-800 px-3 py-1 rounded-full border border-slate-200 dark:border-gray-700 uppercase tracking-wide shrink-0">
+						<p class="text-[10px] font-mono text-brand-500 dark:text-brand-300 bg-white dark:bg-gray-800 px-3 py-1 rounded-full border border-slate-200 dark:border-gray-700 uppercase tracking-wide shrink-0">
 							Servio Contract Engine
 						</p>
 					</div>
@@ -242,7 +242,7 @@
 					<h3 class="text-md md:text-xl font-semibold text-slate-800 dark:text-gray-400 tracking-tight">Payment Structure</h3>
 				</div>
 				<div class="space-y-6">
-					{% if contract.proposal_role.payment_plann %}
+					{% comment %}
 					<div class="relative p-6 bg-brand-500 rounded-[2rem] text-white shadow-md shadow-brand-600/30 overflow-hidden group">
 						<div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform">
 							<span class="material-symbols-outlined text-6xl">bolt</span>
@@ -255,7 +255,7 @@
 								</div>
 								<div class="text-left md:text-right">
 									<p class="text-3xl font-semibold">
-										{{ contract.currency }}0.00
+										${{ deliverable.release_amount|intcomma }}
 									</p>
 									<p class="text-xs font-medium opacity-80 underline underline-offset-4">Initial Secure Escrow Deposit Required</p>
 								</div>
@@ -267,55 +267,68 @@
 							</div>
 						</div>
 					</div>
-					{% endif %}
+					{% endcomment %}
 					{% for deliverable in contract.proposal_role.deliverables.all %}
-					<div class="group bg-white dark:bg-gray-900 border {% if forloop.last %}border-dashed border-slate-300 dark:border-gray-700 bg-slate-50/40{% else %}border-slate-200 dark:border-gray-800{% endif %} rounded-[2rem] p-6 md:p-8 hover:border-brand-300 dark:hover:border-brand-500/50 transition-all shadow-sm">
-						<div class="flex flex-col md:flex-row justify-between items-start gap-6">
-							<div class="flex-1 w-full">
-								<div class="flex items-center gap-3 mb-3">
-									<span class="size-8 rounded-lg {% if forloop.last %}bg-white border dark:bg-gray-800 dark:border-gray-700 text-slate-400{% else %}bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300{% endif %} flex items-center justify-center font-semibold text-sm leading-none">
-									{% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}
-									</span>
-									<h4 class="text-md font-semibold text-slate-800 dark:text-gray-200 tracking-tight">
-										{{ deliverable.phase|title }}
-									</h4>
-								</div>
-								<div class="space-y-3 mb-6 pl-0 sm:pl-11">
-									<p class="text-[10px] font-semibold text-slate-400 dark:text-gray-500 uppercase tracking-widest">Requirements for Release</p>
-									<div class="text-[11px] md:text-sm text-slate-600 dark:text-gray-400 font-normal leading-relaxed break-words whitespace-pre-line">
-										{{ deliverable.description }}
+						<div class="group bg-white dark:bg-gray-900 border {% if forloop.last %}border-dashed border-slate-300 dark:border-gray-700 bg-slate-50/40{% else %}border-slate-200 dark:border-gray-800{% endif %} rounded-[2rem] p-6 md:p-8 hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-300 shadow-sm hover:shadow-md">
+							
+							<div class="grid grid-cols-1 md:grid-cols-4 items-start gap-6">
+								
+								<div class="md:col-span-3 w-full space-y-4">
+									
+									<div class="flex items-center gap-3">
+										<span class="size-8 text-xs font-bold rounded-xl shrink-0 tracking-tight {% if forloop.last %}bg-white border dark:bg-gray-800 dark:border-gray-700 text-slate-400{% else %}bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300{% endif %} flex items-center justify-center shadow-sm">
+											{% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}
+										</span>
+										<h4 class="text-base font-semibold text-slate-800 dark:text-gray-200 tracking-tight">
+											{{ deliverable.phase|title }}
+										</h4>
+									</div>
+									
+									<div class="space-y-2 pl-0 md:pl-11 w-full">
+										<p class="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest">Requirements for Release</p>
+										
+										<div class="text-xs md:text-sm text-slate-600 dark:text-gray-400 font-normal leading-relaxed break-words whitespace-pre-line w-full block">
+											{{ deliverable.description }}
+										</div>
+									</div>
+									
+									<div class="pl-0 md:pl-11 flex flex-wrap items-center gap-2">
+										<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-gray-800/60 border border-slate-100 dark:border-gray-800 text-xs text-slate-500 dark:text-gray-400 font-medium">
+											<span class="material-symbols-outlined text-[14px] text-slate-400">schedule</span>
+											<span>Estimated Allocation:</span>
+											<span class="text-slate-700 dark:text-gray-300 font-semibold">
+												{{ deliverable.duration_value }} {{ deliverable.get_duration_unit_display|default:deliverable.duration_unit }}
+											</span>
+										</div>
 									</div>
 								</div>
-								<p class="text-xs text-slate-500 dark:text-gray-400 font-medium pl-0 sm:pl-11">
-									<span class="text-brand-500 dark:text-brand-400 font-semibold">Estimated Allocation:</span> 
-									{{ deliverable.duration_value }} {{ deliverable.get_duration_unit_display|default:deliverable.duration_unit }}
-								</p>
-							</div>
-							<div class="w-full md:w-auto md:text-right border-t md:border-t-0 border-slate-100 dark:border-gray-800 pt-4 md:pt-0 shrink-0">
-								<p class="text-2xl font-semibold text-slate-800 dark:text-white">
-									${{ deliverable.release_amount|intcomma }}
-								</p>
-								<p class="text-xs font-mono text-slate-400 dark:text-gray-500 uppercase tracking-tighter mt-1">
-									{% if forloop.last %}
-									Final {{ deliverable.release_percentage }}% Handover Balance
-									{% else %}
-									{{ deliverable.release_percentage }}% Total Value
-									{% endif %}
-								</p>
+								
+								<div class="w-full md:col-span-1 md:text-right border-t md:border-t-0 border-slate-100 dark:border-gray-800 pt-4 md:pt-1 shrink-0 flex flex-row md:flex-col justify-between items-center md:items-end gap-1">
+									<div>
+										<p class="text-[10px] font-semibold text-slate-400 dark:text-gray-500 uppercase tracking-widest md:hidden mb-1">Phase Payout</p>
+										<p class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+											${{ deliverable.release_amount|intcomma }}
+										</p>
+									</div>
+									
+									<span class="inline-block md:block text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-wider md:mt-1 bg-slate-50 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent px-2 py-0.5 md:p-0 rounded">
+										{% if forloop.last %}
+											Final {{ deliverable.release_percentage }}% Balance
+										{% else %}
+											{{ deliverable.release_percentage }}% Value
+										{% endif %}
+									</span>
+								</div>
+								
 							</div>
 						</div>
-					</div>
-					{% empty %}
-					<div class="text-center py-12 border-2 border-dashed border-slate-200 dark:border-gray-700 rounded-[2rem] text-slate-400 italic bg-slate-50/50">
-						No specified milestones or financial breakdown tracks exist on this current proposal role.
-					</div>
 					{% endfor %}
 				</div>
 			</section>
 			<section>
 				<div class="flex items-center gap-3 mb-6">
 					<div class="size-10 rounded-xl bg-slate-900 dark:bg-gray-800 text-white flex items-center justify-center font-serif italic text-md shadow-lg">06</div>
-					<h3 class="text-md md:text-xl font-semibold text-slate-800 dark:text-gray-200 tracking-tight">Termination & Dispute Policy</h3>
+					<h3 class="text-md md:text-xl font-semibold text-slate-800 dark:text-gray-200 tracking-tight">Collaboration Terms & Commitments</h3>
 				</div>
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 					<!-- Engagement Commitment -->
@@ -328,7 +341,7 @@
 						</div>
 						<div class="space-y-6 flex-1">
 							<div class="group">
-								<p class="text-[10px] font-black text-brand-500 uppercase tracking-widest mb-1">
+								<p class="text-[10px] font-semibold text-brand-500 dark:text-brand-300 uppercase tracking-widest mb-1">
 									Provider Responsibility
 								</p>
 								<h5 class="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
@@ -339,7 +352,7 @@
 								</p>
 							</div>
 							<div class="group">
-								<p class="text-[10px] font-black text-brand-500 uppercase tracking-widest mb-1">
+								<p class="text-[10px] font-semibold text-brand-500 dark:text-brand-300 uppercase tracking-widest mb-1">
 									Client Responsibility
 								</p>
 								<h5 class="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-2">
@@ -425,7 +438,7 @@
 				</div>
 				<div class="bg-slate-50 dark:bg-gray-800/20 border border-slate-200 dark:border-gray-700 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
 					<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
-						<h2 class="text-[9rem] md:text-[12rem] font-black tracking-tighter dark:text-gray-300">SERVIO</h2>
+						<h2 class="text-[9rem] md:text-[12rem] font-semibold tracking-tighter dark:text-gray-300">SERVIO</h2>
 					</div>
 					<div class="relative z-10 max-w-3xl mx-auto text-center">
 						<span class="inline-flex items-center gap-2 px-3 py-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-full text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-6">
@@ -433,7 +446,7 @@
 						Intermediary Statement
 						</span>
 						<h4 class="text-xl font-semibold text-slate-800 dark:text-gray-100 mb-4">Nature of Service</h4>
-						<p class="text-sm text-slate-600 dark:text-gray-400 leading-relaxed mb-8">
+						<p class=" text-xs sm:text-sm text-slate-600 dark:text-gray-400 leading-relaxed mb-8">
 							This document is a private agreement executed between the <span class="font-semibold text-slate-800 dark:text-gray-200">Provider ({{ contract.provider.get_full_name|title }})</span> and the <span class="font-semibold text-slate-800 dark:text-gray-200">Client({{ contract.client.get_full_name|title }})</span>. 
 							<span class="text-brand-600 dark:text-brand-400 font-semibold">Servio</span> operates strictly as a third-party technology intermediary facilitating the escrow, communication, and management of this engagement.
 						</p>
@@ -543,6 +556,14 @@
 						</div>
 						<div class="flex justify-between items-center text-sm">
 							<div class="flex items-center gap-1.5 text-slate-400">
+								<span>Payment Plan</span>
+							</div>
+							<span class="font-medium text-sky-400">
+								{{ contract.payment_plan_display }}
+							</span>
+						</div>
+						<div class="flex justify-between items-center text-sm">
+							<div class="flex items-center gap-1.5 text-slate-400">
 								<span>Service Surcharge</span>
 								<span class="text-[10px] font-medium bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">5%</span>
 							</div>
@@ -568,16 +589,16 @@
 						<div class="flex items-start gap-3 p-4 bg-slate-950/40 rounded-2xl border border-slate-800/80">
 							<span class="material-symbols-outlined text-teal-400 text-lg shrink-0 mt-0.5">verified_user</span>
 							<div class="space-y-1">
-								<p class="text-xs font-medium text-slate-200">Regulatory Assurance Statement</p>
+								<p class="text-xs font-medium text-slate-200">Transparent & Secure Payments</p>
 								<p class="text-[11px] text-slate-400 leading-relaxed">
-									This transaction complies strictly with localized standard fiscal processing provisions and secure banking protocols. Payout milestones are guarded under automated cross-border encryption channels.
+									We believe in complete financial transparency. Your payments are processed strictly according to local regulations and secure banking standards.
 								</p>
 							</div>
 						</div>
 						<div class="flex items-start gap-3 p-4 bg-slate-950/40 rounded-2xl border border-slate-800/80">
 							<span class="material-symbols-outlined text-brand-400 text-lg shrink-0 mt-0.5">gavel</span>
 							<div class="space-y-1">
-								<p class="text-xs font-medium text-slate-200">Automated Legal Escrow Protection</p>
+								<p class="text-xs font-medium text-slate-200">Automated Funds Release</p>
 								<p class="text-[11px] text-slate-400 leading-relaxed">
 									Funds remain securely held in localized neutral clearing vaults, minimizing operational risk. Capital releases only trigger once explicit milestone deliverables fulfill compliance requirements.
 								</p>
