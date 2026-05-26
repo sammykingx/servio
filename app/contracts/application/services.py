@@ -29,4 +29,3 @@ class ContractCreationService:
                 context: The validated DTO handed off by the proposal domain.
         """
         self.contract_repo.create_contract(actor=self.actor, context=context)
-        print(f"Contract successfully generated for Role {context.accepted_role.id} under Proposal {context.proposal.id}")

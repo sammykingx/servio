@@ -142,6 +142,7 @@ class ProposalSubmissionService:
                     role_instance=role_instance,
                     category_instance=category_instance,
                     description=description,
+                    role_name=applied_role.niche_name,
                     client_budget=applied_role.role_amount,
                     proposed_amount=applied_role.proposed_amount,
                     currency=applied_role.currency,

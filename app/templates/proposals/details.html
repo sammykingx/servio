@@ -330,17 +330,21 @@
                                                 <span class="material-symbols-outlined">more_horiz</span>
                                             </button>
                                             
+                                            {% if role.status != 'accepted' %}
                                             <div class="invisible group-hover/menu:visible opacity-0 group-hover/menu:opacity-100 absolute right-0 top-full mt-2 w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-30 transition-all p-1.5">
                                                 <button data-action="accepted" class="flex items-center w-full px-3 py-2 text-[11px] font-medium text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-lg">
                                                     <span class="material-symbols-outlined text-sm mr-2">check_circle</span> ACCEPT
                                                 </button>
+
                                                 <button data-action="rejected" class="flex items-center w-full px-3 py-2 text-[11px] font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg">
                                                     <span class="material-symbols-outlined text-sm mr-2">block</span> REJECT
                                                 </button>
                                             </div>
+                                            {% endif %}
                                         </div>
 
                                         <!-- Mobile view -->
+                                        {% if role.status != 'accepted' %}
                                         <div class="grid grid-cols-2 gap-3 md:hidden">
                                             <button data-action="accepted" class="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 rounded-xl text-[10px] font-medium uppercase tracking-widest border border-emerald-100 dark:border-emerald-500/20">
                                                 <span class="material-symbols-outlined text-sm">check</span> Accept
@@ -349,6 +353,7 @@
                                                 <span class="material-symbols-outlined text-sm">close</span> Reject
                                             </button>
                                         </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

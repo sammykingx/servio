@@ -1,187 +1,176 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 {% load humanize %}
-{% block browser_title %}Proposals{% endblock %}
+{% block browser_title %}{{ project|title|truncatewords:3 }} Proposals{% endblock %}
 {% block content %}
 <section class="w-full max-w-7xl mx-auto px-2 py-4">
-    <div class="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <!-- Left: Gig Info -->
-        <div class="flex flex-col gap-2">
-            <h1 class="text-2xl md:text-3xl font-semibold text-slate-900 dark:text-white tracking-tight truncate">
+    <div class="mb-10 pb-6 border-b border-slate-200/80 dark:border-zinc-800/80 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="flex flex-col gap-2 min-w-0">
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-400 dark:text-zinc-500">
+                <span class="hover:text-slate-600 dark:hover:text-zinc-300 transition-colors">Projects</span>
+                <span class="font-normal opacity-40">/</span>
+                <div class="flex items-center gap-1.5 font-medium text-slate-600 dark:text-zinc-400">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                    Active Proposals
+                </div>
+            </div>
+
+            <h1 class="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-zinc-50 truncate" title="{{ project.title|title }}">
                 {{ project.title|title }}
             </h1>
+        </div>
 
-            <div class="mt-2 flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-400">
-                <span class="flex items-center gap-1.5 text-success-500 dark:text-success-400">
-                    <span class="material-symbols-outlined text-sm">payments</span>
-                    Budget: <span class="font-semibold">${{ project.total_budget|intcomma }}</span>
-                </span>
-
-                <span class="flex items-center gap-1.5 text-red-600 dark:text-red-400">
-                    <span class="material-symbols-outlined text-sm">event</span>
-                    Deadline: {{ project.end_date|date:"M d, Y" }}
-                </span>
-
-                <span class="flex items-center gap-1.5 text-sky-500 dark:text-sky-400">
-                    <span class="material-symbols-outlined text-sm">group</span>
-                    {{ project.proposals.count }} Proposals
-                </span>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-500 dark:text-zinc-400 font-normal">
+            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-zinc-800 dark:bg-zinc-900/30">
+                <span class="material-symbols-outlined text-base text-slate-400 dark:text-zinc-500">payments</span>
+                <span class="text-slate-400 dark:text-zinc-500">Budget:</span>
+                <span class="font-mono font-medium text-slate-800 dark:text-zinc-200">${{ project.total_budget|intcomma }}</span>
             </div>
+
+            <!-- Deadline Metric Component -->
+            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-zinc-800 dark:bg-zinc-900/30">
+                <span class="material-symbols-outlined text-base text-slate-400 dark:text-zinc-500">calendar_today</span>
+                <span class="text-slate-400 dark:text-zinc-500">Due:</span>
+                <span class="font-medium text-slate-800 dark:text-zinc-200">{{ project.end_date|date:"M d, Y" }}</span>
+            </div>
+
+            <!-- Total Submissions Tracker Counter -->
+            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-zinc-800 dark:bg-zinc-900/30">
+                <span class="material-symbols-outlined text-base text-slate-400 dark:text-zinc-500">folder_open</span>
+                <span class="font-medium text-slate-800 dark:text-zinc-200">{{ project.proposals.count }}</span>
+                <span class="text-slate-400 dark:text-zinc-500">proposals</span>
+            </div>
+            
         </div>
 
-        <!-- Right: Actions -->
-        <div class="flex gap-3">
-            <a href="{% url COLLABORATION_URLS.LIVE_COLLABORATION_EDIT slug=project.slug %}" class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-brand-500/90 transition-all">
-                <span class="material-symbols-outlined text-lg">edit</span> Edit Project
-            </a>
-
-            <button class="inline-flex h-11 w-11 items-center justify-center 
-                rounded-xl border border-slate-200 dark:border-slate-700 
-                bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 
-                hover:bg-slate-50 hover:text-slate-700 transition-colors">
-                <span class="material-symbols-outlined">more_horiz</span>
-            </button>
-        </div>
     </div>
     
     <!-- Proposals List -->
     <div class="space-y-6">
         {% for proposal in applications %}
-            <div class="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 backdrop-blur-sm p-3 sm:p-4 transition-all duration-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/60"> 
-                <div class="flex flex-col gap-5">
-                    <div class="flex items-center gap-3 sm:gap-4">
+            <a href="{% url PROPOSALS.VIEW_DETAILS proposal_id=proposal.id %}" 
+                class="group relative flex flex-col gap-5 rounded-2xl border border-slate-200/60 bg-white p-5 transition-all duration-300 hover:border-slate-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:border-slate-800/80 dark:bg-gray-900 dark:hover:border-gray-700 block text-inherit no-underline">
+
+                <!-- Top Section: Provider Meta Info Profile Layout Structure -->
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <!-- Avatar Layout Context -->
                         {% if proposal.provider.profile.avatar_url %}
-                            <div class="size-12 sm:size-14 shrink-0 rounded-2xl bg-cover bg-center border border-slate-200 dark:border-slate-700" style="background-image: url('{{ proposal.provider.profile.avatar_url.url }}');"></div>
+                            <img src="{{ proposal.provider.profile.avatar_url.url }}" 
+                                alt="{{ proposal.provider.get_full_name }}"
+                                class="h-11 w-11 shrink-0 rounded-xl object-cover border border-slate-100 dark:border-zinc-800" />
                         {% else %}
-                            <div class="size-12 sm:size-14 shrink-0 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 text-white flex items-center justify-center text-base sm:text-lg font-bold">
+                            <div class="h-11 w-11 shrink-0 rounded-xl bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-300 flex items-center justify-center text-sm font-semibold tracking-wider">
                                 {{ proposal.provider.first_name|first }}{{ proposal.provider.last_name|first }}
                             </div>
                         {% endif %}
 
                         <div class="min-w-0">
-                            <h3 class="text-base sm:text-lg font-semibold text-slate-900 dark:text-white truncate">
+                            <h3 class="text-[15px] font-semibold text-slate-900 dark:text-zinc-100 tracking-tight leading-none mb-1.5">
                                 {{ proposal.provider.get_full_name|title }}
                             </h3>
-                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-0.5">
-                                <span class="text-[11px] sm:text-xs text-slate-400">Sent {{ proposal.sent_ago }} ago</span>
-                                <span class="hidden sm:block size-1 bg-slate-300 rounded-full"></span>
-                                <span class="text-[11px] sm:text-xs font-medium text-brand-500 dark:text-brand-300 truncate">{{ proposal.provider.profile.headline|default:"Professional" }}</span>
+                            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                <span class="text-xs font-medium text-slate-500 dark:text-zinc-400">
+                                    {{ proposal.provider.profile.headline|default:"Professional" }}
+                                </span>
+                                <span class="hidden sm:inline text-slate-300 dark:text-zinc-700">•</span>
+                                <span class="text-xs text-slate-400 dark:text-zinc-500">
+                                    {{ proposal.sent_at|timesince }}
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="grid gap-3">
-                        {% for role in proposal.roles.all %}
-                        <div class="rounded-2xl border border-slate-100 bg-slate-50/50 dark:bg-slate-800/40 dark:border-slate-700/50 p-4 relative">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                
-                                <div class="flex-1 min-w-0 pr-8 sm:pr-0"> 
-                                    <div class="flex items-center gap-2 mb-1.5">
-                                        <h4 class="font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-200 truncate">{{ role.role_name|title }}</h4>
-                                        {% if role.status == 'accepted' %}
-                                            <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] uppercase
-                                                bg-emerald-50 dark:bg-emerald-700/40 border 
-                                                border-emerald-300 dark:border-emerald-400
-                                                text-emerald-700 dark:text-emerald-300">
-                                                {{ role.status|default:"Pending" }}
-                                            </span>
-                                        {% elif role.status == 'rejected' %}
-                                            <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] uppercase
-                                                bg-error-50 dark:bg-error-200 border 
-                                                border-error-300 dark:border-error-700
-                                                text-error-700">
-                                                {{ role.status }}
-                                            </span>
-                                        {% else %}
-                                            <span class="shrink-0 px-2 py-0.5 rounded-md text-[9px] font-medium uppercase tracking-wider
-                                                bg-amber-50 border border-amber-200 text-amber-700
-                                                dark:bg-amber-950/40 dark:border-amber-800/60 dark:text-amber-400"
-                                            >{{ role.status }}</span>
-                                        {% endif %}
+                    <div class="shrink-0 flex items-center">
+                        
+                        <!-- Desktop Display Trigger: Hidden on mobile layouts -->
+                        <span class="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 bg-white shadow-sm group-hover:bg-slate-50 group-hover:text-slate-900 transition-colors dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:group-hover:bg-zinc-800 dark:group-hover:text-zinc-200">
+                            View Proposal
+                            <svg class="h-3 w-3 opacity-60 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
 
+                        <!-- Mobile Display Trigger: Compact navigation icon showing pulse accent animation -->
+                        <div class="sm:hidden flex items-center justify-center h-8 w-8 rounded-full bg-slate-50 dark:bg-zinc-800/40 text-slate-400 dark:text-zinc-500 group-hover:text-slate-700 dark:group-hover:text-zinc-300 transition-colors">
+                            <svg class="h-4 w-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Applied roles -->
+                <div class="overflow-hidden rounded-xl border border-slate-100 bg-slate-50/40 dark:border-zinc-800/50 dark:bg-zinc-950/20">
+                    <div class="divide-y divide-slate-100 dark:divide-zinc-800/60">
+                        {% for role in proposal.roles.all %}
+                            <div class="grid grid-cols-1 md:grid-cols-12 items-center p-4 gap-4 transition-colors group-hover:bg-slate-50/30 dark:group-hover:bg-zinc-900/10">
+                                
+                                <div class="md:col-span-5 min-w-0">
+                                    <div class="flex items-center gap-2.5 mb-1">
+                                        <h4 class="font-medium text-[13.5px] text-slate-800 dark:text-zinc-200 truncate">
+                                            {{ role.role_name|title }}
+                                        </h4>
+                                        <span class="inline-flex px-2 py-0.5 rounded-md text-[10px] font-medium tracking-wide border 
+                                            {% if role.status == 'accepted' %}
+                                                bg-emerald-50/50 border-emerald-200 text-emerald-700 dark:bg-emerald-500/5 dark:border-emerald-500/20 dark:text-emerald-400
+                                            {% elif role.status == 'rejected' %}
+                                                bg-rose-50/50 border-rose-200 text-rose-700 dark:bg-rose-500/5 dark:border-rose-500/20 dark:text-rose-400
+                                            {% else %}
+                                                bg-amber-50/50 border-amber-200 text-amber-700 dark:bg-amber-500/5 dark:border-amber-500/20 dark:text-amber-400
+                                            {% endif %}">
+                                            {{ role.status|default:"Pending"|title }}
+                                        </span>
                                     </div>
-                                    <p class="text-[11px] text-slate-500 font-medium flex items-center gap-1">
-                                        <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                                        <span class="font-normal">Split: </span>
-                                        {{ role.get_payment_plan_display|default:"Milestones" }}
+                                    <p class="text-xs text-slate-400 dark:text-zinc-500 flex items-center gap-1.5">
+                                        <span class="opacity-60">Payment Setup:</span>
+                                        <span class="font-medium text-slate-500 dark:text-zinc-400">{{ role.get_payment_plan_display|default:"Milestones" }}</span>
                                     </p>
                                 </div>
 
-                                <div class="flex items-center justify-between sm:justify-end gap-4 sm:gap-8 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-200/60">
-                                    <div class="text-left sm:text-right">
-                                        <p class="text-[9px] uppercase text-slate-400 font-bold tracking-widest">Budget</p>
-                                        <p class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-gray-400">${{ role.client_budget|intcomma }}</p>
+                                <div class="md:col-span-7 grid grid-cols-3 items-center gap-2 text-left md:text-right border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-zinc-800">
+                                    <div>
+                                        <span class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-zinc-500 mb-0.5">Budget</span>
+                                        <span class="text-xs font-mono font-medium text-slate-500 dark:text-zinc-400">
+                                            ${{ role.client_budget|intcomma }}
+                                        </span>
                                     </div>
-                                    <div class="text-left sm:text-right">
-                                        <p class="text-[9px] uppercase text-slate-400 font-bold tracking-widest">Asking</p>
-                                        <p class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">${{ role.proposed_amount|default:role.client_budget|intcomma }}</p>
+                                    
+                                    <div>
+                                        <span class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-zinc-500 mb-0.5">Asking</span>
+                                        <span class="text-xs font-mono font-semibold text-slate-800 dark:text-zinc-200">
+                                            ${{ role.proposed_amount|default:role.client_budget|intcomma }}
+                                        </span>
                                     </div>
-                                    <div class="text-right sm:min-w-[60px]">
+
+                                    <div class="flex md:justify-end">
                                         {% if role.client_budget %}
                                             {% if role.proposed_amount > role.client_budget %}
-                                                <span class="text-[11px] font-mono text-red-500">Exceeds Budget</span>
+                                                <span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium text-rose-600 dark:text-rose-400 bg-rose-50/40 dark:bg-rose-500/5">
+                                                    + Exceeds Budget
+                                                </span>
                                             {% elif role.proposed_amount < role.client_budget %}
-                                                <span class="text-[11px] font-mono text-emerald-500">Within Budget</span>
+                                                <span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50/40 dark:bg-emerald-500/5">
+                                                    Under Budget
+                                                </span>
                                             {% else %}
-                                                <span class="text-[11px] font-mono text-brand-500 dark:text-brand-400">Target Alignment</span>
+                                                <span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium text-slate-500 dark:text-zinc-400 bg-slate-100/60 dark:bg-zinc-800/40">
+                                                    On Match
+                                                </span>
                                             {% endif %}
                                         {% else %}
-                                            <span class="text-[11px] font-mono text-teal-500 dark:text-teal-400">Not Set</span>
+                                            <span class="text-xs font-mono text-slate-400 dark:text-zinc-500">• Open Budget</span>
                                         {% endif %}
                                     </div>
-
-                                    <div class="relative pr-5 md:pr-0" x-data="{ open: false }">
-                                        <button @click="open = !open" class="p-2 -mr-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors">
-                                            <svg class="size-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                                        </button>
-                                        <div
-                                            id="proposalActions"
-                                            data-proposal-id="{{ proposal.id }}"
-                                            data-proposal-role-id="{{ role.id }}"
-                                            data-csrf-token="{{ csrf_token }}"
-                                            data-endpoint="{% url PROPOSALS.UPDATE_PROPOSAL_STATUS %}"
-                                            x-show="open" 
-                                            @click.away="open = false" 
-                                            x-transition:enter="transition ease-out duration-100"
-                                            x-transition:enter-start="transform opacity-0 scale-95"
-                                            class="absolute right-0 mt-2 w-40 rounded-xl border border-slate-200 bg-white shadow-xl z-20 py-1.5 dark:bg-slate-800 dark:border-slate-700">
-                                            <button 
-                                                id="acceptProposal"
-                                                class="w-full text-left px-4 py-2 text-sm text-emerald-500 dark:text-emerald-400 hover:bg-emerald-50"
-                                                data-proposal-id="{{ proposal.id }}" 
-                                                data-role-id="{{ role.id }}"
-                                                data-action="accepted"
-                                            >
-                                                Accept Role
-                                            </button>
-                                            <button 
-                                                id="rejectProposal"
-                                                class="w-full text-left px-4 py-2 text-sm text-red-500 dark:text-red-400 hover:bg-red-50"
-                                                data-proposal-id="{{ proposal.id }}" 
-                                                data-role-id="{{ role.id }}"
-                                                data-action="rejected">
-                                                Reject Role
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
+
                             </div>
-                        </div>
                         {% endfor %}
                     </div>
-
-                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <a href="{% url PROPOSALS.VIEW_DETAILS proposal_id=proposal.id %}" class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-brand-500 text-white hover:bg-brand-400 transition-all text-sm font-semibold">
-                            <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                            More Details
-                        </a>
-                        
-                        <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium italic">
-                            Deliverables are tailored to the provider's applied role.
-                        </p>
-                    </div>
                 </div>
-            </div>
+
+            </a>
         {% endfor %}
     </div>
     <!-- Pagination/Footer Area -->
@@ -238,97 +227,4 @@
         </div>
     {% endif %}
 </section>
-{% endblock %}
-{% block custom_page_js %}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const actionContainer = document.getElementById('proposalActions');
-
-            if (actionContainer) {
-                actionContainer.addEventListener('click', async (e) => {
-                    
-                    const button = e.target.closest('button');
-                    if (!button) return;
-
-                    const isAccept = button.id === 'acceptProposal';
-                    const status = isAccept ? 'accepted' : 'rejected';
-                    
-                    // Get data from attributes
-                    const baseUrl = actionContainer.getAttribute('data-endpoint');
-                    const csrfToken = actionContainer.getAttribute('data-csrf-token');
-                    const proposalId = actionContainer.getAttribute('data-proposal-id');
-                    const roleId = actionContainer.getAttribute('data-proposal-role-id');
-
-                    const buttons = actionContainer.querySelectorAll('button');
-
-                    try {
-                        buttons.forEach(btn => {
-                            btn.disabled = true;
-                            btn.classList.add('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
-                        });
-
-                        const response = await fetch(baseUrl, {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': csrfToken,
-                                'X-Requested-With': 'XMLHttpRequest'
-                            },
-                            body: JSON.stringify({
-                                proposal_id: proposalId,
-                                role_id: roleId,
-                                state: status
-                            })
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok) {
-                            showToast(
-                                data.message || "We’ve updated the proposal state for you",
-                                data.status || "success",
-                                data.title || "Proposal Updated"
-                            );
-                        } else {
-                            showToast(
-                                data.message || "We couldn't update the proposal state.",
-                                data.status || "error",
-                                data.title || "Update didn't go through"
-                            );
-                        }
-
-                        if (data.redirect && data.url) {
-                            setTimeout(() => {
-                                window.location.assign(data.url)
-                            }, 1600);
-                        }
-                        setTimeout(() => {
-                            window.location.reload();
-                        })
-
-                    } catch {
-                        showToast(
-                            "We couldn't reach the server. Please check your internet connection and try again.",
-                            "error",
-                            "Client Side Error",
-                        );
-                    } finally {
-                        buttons.forEach(btn => {
-                            btn.disabled = false;
-                            btn.classList.remove('opacity-50', 'blur-[1px]', 'cursor-not-allowed');
-                        });
-                    }
-                });
-            } else {
-                setTimeout(() => {
-                    showToast(
-                        "Proposal settings failed to load. Refresh to try again or contact support.",
-                        "error", 
-                        "Configuration Error"
-                    );
-                }, 1100);
-            }
-        });
-    </script>
-
 {% endblock %}

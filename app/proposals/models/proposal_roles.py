@@ -1,8 +1,8 @@
 from django.db import models
+from django.utils.functional import cached_property
 from collaboration.models.choices import PaymentOption
 from .choices import ProposalRoleStatus,DurationUnit
 from decimal import Decimal, ROUND_HALF_UP
-from typing import Optional
 from uuid6 import uuid7
 
 
@@ -82,17 +82,17 @@ class ProposalRole(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
         
-    @property
-    def role_name(self):
-        """
-        Returns the name of the role, whether it's from a GigRole or a GigCategory.
-        This makes template rendering simple.
-        """
-        if self.role:
-            return self.role.role_name
-        elif self.category:
-            return self.category.name
-        return "Unknown Role"
+    # @property
+    # def role_name(self):
+    #     """
+    #     Returns the name of the role, whether it's from a GigRole or a GigCategory.
+    #     This makes template rendering simple.
+    #     """
+    #     if self.role:
+    #         return self.role.role_name
+    #     elif self.category:
+    #         return self.category.name
+    #     return "Unknown Role"
     
     @property
     def applied_role(self):
@@ -115,37 +115,37 @@ class ProposalRole(models.Model):
 
         return f"${display_lower:,.0f} - ${upper:,.0f}"
     
-    def timeline_summary(self) -> Optional[str]:
+    @cached_property
+    def estimated_timeline(self) -> str:
         """
-        Calculates a human-friendly cumulative timeline string based on all 
-        child deliverables for this role, using the DurationUnit multipliers.
+        Calculates the total timeline by converting all related deliverables 
+        to days, summing them, and breaking them down cleanly into 
+        Months, Weeks, and Days based on business logic limits.
         """
+        # Prefetching avoids N+1 queries if you call this in a loop or template
         deliverables = self.deliverables.all()
         if not deliverables:
-            return None
-
-        conversion_factors = {
-            DurationUnit.DAYS: 1,
-            DurationUnit.WEEKS: 7,
-            DurationUnit.MONTHS: 30,
-        }
+            return "0 days"
 
         total_days = 0
+        
+        # 1. Normalize everything to Days
+        for d in deliverables:
+            if d.duration_unit == DurationUnit.DAYS:
+                total_days += d.duration_value
+            elif d.duration_unit == DurationUnit.WEEKS:
+                total_days += d.duration_value * 7
+            elif d.duration_unit == DurationUnit.MONTHS:
+                total_days += d.duration_value * 30
 
-        for item in deliverables:
-            unit_key = str(item.duration_unit).lower()
-            multiplier = conversion_factors.get(unit_key)
-            total_days += item.duration_value * multiplier
-
-        if total_days == 0:
-            return None
-
+        # 2. Convert back to optimized, human-readable units
         months = total_days // 30
         remaining_days = total_days % 30
         
         weeks = remaining_days // 7
         days = remaining_days % 7
 
+        # 3. Format the output string based on your scale limits
         parts = []
         if months > 0:
             parts.append(f"{months} month{'s' if months > 1 else ''}")
@@ -154,10 +154,7 @@ class ProposalRole(models.Model):
         if days > 0:
             parts.append(f"{days} day{'s' if days > 1 else ''}")
 
-        if len(parts) == 3:
-            return f"{parts[0]}, {parts[1]} and {parts[2]}" # e.g. "1 month, 2 weeks and 4 days"
-            
-        return " and ".join(parts) if parts else None
+        return ", ".join(parts) if parts else "0 days"
     
     def count_deliverable(self):
         """Returns the total number of deliverables for this proposal."""

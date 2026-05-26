@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from .choices import DurationUnit
+from decimal import Decimal
 
 
 class ProposalDeliverable(models.Model):
@@ -42,3 +43,15 @@ class ProposalDeliverable(models.Model):
         ordering = ["rendering_order", "pk"]
         verbose_name = "Proposal Deliverable"
         verbose_name_plural = "Proposal Deliverables"
+        
+    @property
+    def release_amount(self) -> Decimal:
+        """
+        Dynamically calculates the absolute currency amount allocated to 
+        this deliverable based on the role's total proposed_amount.
+        """
+        if not self.proposal_role or not self.proposal_role.proposed_amount:
+            return Decimal("0.00")
+        
+        amount = (self.release_percentage / Decimal("100")) * self.proposal_role.proposed_amount
+        return amount.quantize(Decimal("0.01"))

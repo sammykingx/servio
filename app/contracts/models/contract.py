@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 from uuid6 import uuid7
+from decimal import Decimal, ROUND_HALF_UP
+from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE
 
 
 class ContractStatus(models.TextChoices):
@@ -67,3 +69,21 @@ class Contract(models.Model):
             models.Index(fields=["client", "status"]),
             models.Index(fields=["provider", "status"]),
         ]
+
+    @property
+    def service_fee(self):
+        return (
+            self.agreed_amount * Decimal(str(SERVICE_FEE))
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+    
+    @property   
+    def tax(self):
+        return (
+            self.agreed_amount * Decimal(str(GST_TAX_FEE))
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+
+    @property
+    def amount_payable(self):
+        return (
+            self.agreed_amount + self.service_fee + self.tax
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)

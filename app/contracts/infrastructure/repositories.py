@@ -40,7 +40,7 @@ class ContractRepository:
     
     def _generate_reference(self) -> str:
         safe_characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        ref_id = f"srv_con{generate(safe_characters, 18)}"
+        ref_id = f"srv_con_{generate(safe_characters, 22)}"
         return ref_id
     
     def _generate_slug(self, ref: str, role_name: str) -> str:

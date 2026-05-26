@@ -204,7 +204,6 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
             return JsonResponse(resp, status=200)
         
         except ValidationError as err:
-            
             return JsonResponse(
                 {
                     "title": "Invalid Data Format",
@@ -222,14 +221,12 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
                 "message": err.message,
                 "status": "error"
             }
-
             if err.redirect_url:
                 status_code = 402
                 data.update({
                     "redirect": True,
                     "url": err.redirect_url
                 })
-
             return JsonResponse(data, status=status_code)
             
         except Exception:

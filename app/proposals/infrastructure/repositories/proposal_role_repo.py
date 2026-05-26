@@ -23,6 +23,7 @@ class ProposalRoleRepository:
         currency: Literal["NGN", "USD"],
         payment_plan: PaymentOption,
         description: str, 
+        role_name: str,
         role_instance: Union[int, None] = None,
         category_instance: Union[int, None] = None,
         client_budget: Union[Decimal, None] = None
@@ -31,6 +32,7 @@ class ProposalRoleRepository:
             proposal=proposal,
             role=role_instance,
             category=category_instance,
+            role_name=role_name,
             description=description,
             client_budget=client_budget,
             proposed_amount=proposed_amount,
