@@ -1,0 +1,172 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Contract {{ contract.reference }} | Timeline{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto py-8 px-4 transition-colors duration-300 select-none">
+    
+    <!-- Top Minimal Breadcrumb/Navigation Link -->
+    <nav class="mb-6 px-1">
+        <a href="{% url CONTRACTS.LIST_CONTRACTS %}" class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+            <span class="material-symbols-outlined text-[14px]">west</span>
+            Back to Agreements
+        </a>
+    </nav>
+
+    <!-- Split-Grid Workspace Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- LEFT PANEL: Meta Metadata Metadata (4 Columns Wide) -->
+        <section class="lg:col-span-4 bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.01)] space-y-6">
+            
+            <!-- Reference Identity Core Header -->
+            <div>
+                <span class="text-[10px] font-mono tracking-widest uppercase text-brand-500 dark:text-brand-300 font-semibold">Contract Identifier</span>
+                <h1 class="text-md font-medium text-slate-900 dark:text-white tracking-tight mt-1">{{ contract.reference }}</h1>
+                <p class="text-xs text-slate-400 mt-1">Initialized on {{ contract.created_at|date:"M d, Y" }}</p>
+            </div>
+
+            <div class="h-[1px] bg-slate-100 dark:bg-slate-900"></div>
+
+            <!-- Financial Structure Breakdown -->
+            <div class="space-y-3">
+                <span class="text-[10px] font-medium tracking-wider uppercase text-slate-400 dark:text-slate-500">Escrow Value Details</span>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-mono font-semibold text-slate-800 dark:text-white">
+                        {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.agreed_amount|intcomma }}
+                    </span>
+                    <span class="text-xs font-medium text-slate-400 uppercase tracking-wide">
+                        {{ contract.currency }}
+                    </span>
+                </div>
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400">
+                    <span class="material-symbols-outlined text-[13px] text-slate-400">lock</span>
+                    <span>Billing Plan: <strong class="font-semibold">{{ contract.payment_plan_display|title }}</strong></span>
+                </div>
+            </div>
+
+            <div class="h-[1px] bg-slate-100 dark:bg-slate-900"></div>
+
+            <!-- Parties Involved In Flow -->
+            <div class="space-y-4">
+                <span class="text-[10px] font-medium tracking-wider uppercase text-slate-400 dark:text-slate-500">Involved Stakeholders</span>
+                <div class="flex items-center gap-3">
+                    <div class="h-8 w-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-semibold uppercase border border-indigo-100/30">
+                        {{ contract.client.first_name|slice:":1" }} {{ contract.client.last_name|slice:":1" }}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">{{ contract.client.get_full_name|default:contract.client.email }}</p>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">Agreement Principal / Client</p>
+                    </div>
+                </div>
+
+                <!-- Provider Meta Box -->
+                <div class="flex items-center gap-3">
+                    <div class="h-8 w-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-semibold uppercase border border-emerald-100/30">
+                        {{ contract.provider.first_name|slice:":1" }} {{ contract.provider.last_name|slice:":1" }}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">{{ contract.provider.get_full_name|default:contract.provider.email }}</p>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">Fulfillment Lead / Provider</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if contract.status == 'awaiting' or contract.status == 'signed' %}
+                <div class="h-[1px] bg-slate-100 dark:bg-slate-900"></div>
+                
+                <!-- Contextual Primary Actions Block (Appears inline below info panel if awaiting steps) -->
+                <div>
+                    {% if contract.status == 'awaiting' %}
+                        {% if request.user == contract.client and not contract.client_accepted_terms_at %}
+                            <a href="{% url CONTRACTS.ACCEPT_CONTRACT_TERMS role_id=contract.proposal_role_id %}" class="w-full inline-flex items-center justify-center py-2.5 bg-indigo-600 text-white text-xs font-semibold uppercase tracking-wider rounded-xl hover:bg-indigo-700 transition-all shadow-sm">
+                                Accept Legal Terms
+                            </a>
+                        {% elif request.user == contract.provider and not contract.provider_accepted_terms_at %}
+                            <a href="{% url CONTRACTS.ACCEPT_CONTRACT_TERMS role_id=contract.proposal_role_id %}" class="w-full inline-flex items-center justify-center py-2.5 bg-indigo-600 text-white text-xs font-semibold uppercase tracking-wider rounded-xl hover:bg-indigo-700 transition-all shadow-sm">
+                                Execute Counter-Signature
+                            </a>
+                        {% else %}
+                            <p class="text-center text-xs italic text-slate-400 py-1">Waiting for counterparty to signature file...</p>
+                        {% endif %}
+                    {% elif contract.status == 'signed' and request.user == contract.client %}
+                        <a href="{% url CONTRACTS.FUND_CONTRACT role_id=contract.proposal_role_id %}" class="w-full inline-flex items-center justify-center py-2.5 bg-emerald-600 text-white text-xs font-semibold uppercase tracking-wider rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
+                            Fund Project
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </section>
+
+        <!-- RIGHT PANEL: Live Flow Timeline Progression Canvas (8 Columns Wide) -->
+        <section class="lg:col-span-8 space-y-6">
+            
+            <!-- Live Progression Hub Container Component -->
+            <div class="w-full bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.01)]">
+                
+                <!-- Header Monitor Meta Strip -->
+                <div class="flex items-center justify-between mb-10">
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-50 tracking-tight">Lifecycle Pipeline Flow</h3>
+                        <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Real-time sequence state verification logs</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-100/50 dark:border-indigo-900/40 text-indigo-600 dark:text-indigo-400">
+                        <span class="relative flex h-1.5 w-1.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-500"></span>
+                        </span>
+                        <span class="text-[9px] font-medium uppercase tracking-wider">State: {{ contract.get_status_display }}</span>
+                    </div>
+                </div>
+
+                <!-- Stepper Horizontal-to-Vertical Node Pipeline Track -->
+                <div class="relative pl-6 border-l border-slate-100 dark:border-slate-900 space-y-8 ml-3 py-2">
+            
+            {% for event in timeline_events %}
+                <div class="relative group">
+                    
+                    <!-- Milestone Node Indicator Dot -->
+                    <div class="absolute -left-[38px] top-0.5 flex items-center justify-center w-6 h-6 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-{{ event.color }}-500 dark:text-{{ event.color }}-400 group-hover:border-{{ event.color }}-500 group-hover:text-{{ event.color }}-600 transition-colors duration-200 shadow-sm z-10">
+                        <span class="material-symbols-outlined text-[10px]">
+                            {{ event.icon }}
+                        </span>
+                    </div>
+
+                    <!-- Meta Log Row Details -->
+                    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5">
+                        <h4 class="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors">
+                            {{ event.title }}
+                        </h4>
+                        <time class="text-[10px] font-mono text-gray-400 dark:text-gray-500">
+                            {{ event.timestamp|date:"M d, Y • H:i" }}
+                        </time>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed max-w-xl">
+                        {{ event.desc }}
+                    </p>
+                </div>
+            {% endfor %}
+
+            <!-- Pending Next Step Overlay (If contract isn't fully completed yet) -->
+            {% if not contract.completed_at %}
+                <div class="relative opacity-60">
+                    <div class="absolute -left-[35px] top-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 z-10"></div>
+                    <div class="flex items-baseline justify-between">
+                        <h4 class="text-xs font-medium text-slate-400 italic">Awaiting remaining completion parameters...</h4>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+            </div>
+            
+            <!-- Bottom Context Info Box detailing dispute terms or general help -->
+            <div class="p-4 bg-slate-50 dark:bg-slate-900/40 rounded-xl border border-slate-100 dark:border-slate-800 text-[11px] text-slate-400 flex items-start gap-2.5 leading-relaxed">
+                <span class="material-symbols-outlined text-[16px] text-slate-400 mt-0.5">info</span>
+                <p>This audit log maps legal agreements chronologically as timestamps hit the ledger. Actions are unalterable once executed and are logged transparently to protect all participating accounts from workflow friction or signature disputes.</p>
+            </div>
+        </section>
+
+    </div>
+</div>
+{% endblock %}

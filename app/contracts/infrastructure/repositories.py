@@ -1,9 +1,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Model
 from django.utils.text import slugify
+from django.utils import timezone
 from contracts.domains.entities import ContractGenerationContext, ContractEntity
 from core.model_registry import registry
-from datetime import datetime
 from nanoid import generate
 from uuid6 import uuid7
 
@@ -45,9 +45,10 @@ class ContractRepository:
             currency=contract.currency,
             payment_plan=contract.payment_plan,
             status=contract.status,
-            client_signed_at=contract.client_signed_at,
-            provider_signed_at=contract.provider_signed_at,
-            signed_at=contract.signed_at
+            client_accepted_terms_at=contract.client_accepted_terms_at,
+            client_paid_at=contract.client_paid_at,
+            provider_accepted_terms_at=contract.provider_accepted_terms_at,
+            completed_at=contract.completed_at
         )
         
     def create_contract(self, actor:AbstractUser, context: ContractGenerationContext) -> Model:
@@ -76,17 +77,17 @@ class ContractRepository:
         except self.model.DoesNotExist:
             return None
         
-    def persist_provider_sign(self, contract: ContractEntity) -> Model:
+    def persist_contract_acceptance(self, contract: ContractEntity, field_prefix: str) -> None:
+        """
+        Consolidated persistence for both client and provider.
+        field_prefix should be 'client' or 'provider'.
+        """
+        update_field = f"{field_prefix}_accepted_terms_at"
+        timestamp_value = getattr(contract, update_field)
+        
         self.model.objects.filter(pk=contract.id).update(
-            provider_signed_at=contract.provider_signed_at,
+            **{update_field: timestamp_value},
             status=contract.status,
-            updated_at=datetime.now()
-        )
-    
-    def persist_client_sign(self, contract: ContractEntity) -> Model:
-        self.model.objects.filter(pk=contract.id).update(
-            client_signed_at=contract.client_signed_at,
-            status=contract.status,
-            updated_at=datetime.now()
+            updated_at=timezone.now()
         )
     

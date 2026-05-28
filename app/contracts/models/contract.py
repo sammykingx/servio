@@ -6,9 +6,13 @@ from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE
 
 
 class ContractStatus(models.TextChoices):
-    AWAITING = "awaiting", "awaiting"
+    AWAITING = "awaiting", "Awaiting Signatures"
     SIGNED = "signed", "Signed"
-    DECLINED = "declined", "Declined"
+    FUNDED = "funded", "Funded"
+    COMPLETED = "completed", "Completed"
+    CANCELLED = "cancelled", "Cancelled"
+    DISPUTED = "disputed", "Disputed"
+
 
 class Contract(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid7, editable=False)
@@ -55,11 +59,25 @@ class Contract(models.Model):
         choices=ContractStatus.choices,
         default=ContractStatus.AWAITING,
     )
-
-    client_signed_at = models.DateTimeField(null=True, blank=True)
-    provider_signed_at = models.DateTimeField(null=True, blank=True)
     
-    signed_at = models.DateTimeField(null=True, blank=True)
+    client_accepted_terms_at = models.DateTimeField(
+        null=True, 
+        blank=True,
+        help_text="Timestamp when the client accpeted the terms of the role contract but has not yet paid for the contract"
+    )
+    client_paid_at = models.DateTimeField(
+        null=True, 
+        blank=True,
+        help_text="Timestamp when the client paid for the contract"
+    )
+    
+    provider_accepted_terms_at = models.DateTimeField(null=True, blank=True)
+    
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Timestamp when the contract was fully executed by both parties and marked as completed",
+    )
     expires_at = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -71,22 +89,37 @@ class Contract(models.Model):
         indexes = [
             models.Index(fields=["client", "status"]),
             models.Index(fields=["provider", "status"]),
+            models.Index(fields=["slug"]),
+            models.Index(fields=["reference"]),
         ]
         
-    property
+        constraints = [
+            models.CheckConstraint(
+                name="check_contract_signed_requirements",
+                condition=(
+                    ~models.Q(status=ContractStatus.SIGNED) | 
+                    (
+                        models.Q(client_accepted_terms_at__isnull=False) & 
+                        models.Q(provider_accepted_terms_at__isnull=False)
+                    )
+                )
+            ),
+        ]
+        
+    @property
     def is_fully_signed(self) -> bool:
         """Checks if both the client and provider have executed the contract."""
-        return bool(self.client_signed_at and self.provider_signed_at)
+        return bool(self.client_paid_at and self.provider_accepted_terms_at)
 
     @property
-    def has_client_signed(self) -> bool:
+    def has_client_accepted_terms(self) -> bool:
         """Helper checking only client timestamp presence."""
-        return bool(self.client_signed_at)
+        return bool(self.client_accepted_terms_at)
 
     @property
-    def has_provider_signed(self) -> bool:
+    def has_provider_accepted_terms(self) -> bool:
         """Helper checking only provider timestamp presence."""
-        return bool(self.provider_signed_at)
+        return bool(self.provider_accepted_terms_at)
 
     @property
     def service_fee(self):

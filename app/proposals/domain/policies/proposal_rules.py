@@ -118,7 +118,7 @@ class ProposalPolicy:
         pass
         
     
-    #----------------- PROPOSAL STATE TRANSISTIONING METHODS ----------------
+    #----------------- PROPOSAL STATE TRANSISTIONING CHECKS ----------------
     
     @staticmethod
     def _ensure_no_roles_are_finalized(proposal: ProposalEntity) -> None:

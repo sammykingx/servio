@@ -103,8 +103,13 @@ class ProposalURLS:
     
     
 class ContractURLS:
-    PREVIEW_CONTRACT = "preview_contract"
+    ACCEPT_CONTRACT_TERMS = "accept_contract_terms"
+    VIEW_CONTRACT = "view_contract"
     BUILD_CONTRACT = "build_contract"
+    LIST_CONTRACTS = "list_contracts"
+    VIEW_CONTRACT = "view_contract"
+    FUND_CONTRACT = "fund_contract"
+    CONTRACT_TIMELINE = "contract_timeline"
     
     
 class PaymentURLS:

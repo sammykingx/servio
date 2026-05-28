@@ -196,7 +196,7 @@ class UpdateProposalStateView(LoginRequiredMixin, View):
             if data.state == ProposalStatus.ACCEPTED:
                 resp.update(
                     url=reverse_lazy(
-                        ContractURLS.PREVIEW_CONTRACT,
+                        ContractURLS.ACCEPT_CONTRACT_TERMS,
                         kwargs={'role_id': data.role_id}
                     ),
                     redirect=True

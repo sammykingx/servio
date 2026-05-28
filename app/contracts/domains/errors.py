@@ -25,7 +25,7 @@ class ContractPolicyFailure:
 
     INVALID_CONTRACT = ContractFailureDetail("INVALID_CONTRACT", "Contract Not Found")
     NOT_AUTHORIZED = ContractFailureDetail("NOT_AUTHORIZED", "Unauthorized Action")
-    ALREADY_SIGNED = ContractFailureDetail("ALREADY_SIGNED", "Contract Already Signed")
+    TERMS_ALREADY_ACCEPTED = ContractFailureDetail("TERMS_ALREADY_ACCEPTED", "Contract Terms Already Accepted")
     TERMS_NOT_ACKNOWLEDGED = ContractFailureDetail(
         "TERMS_NOT_ACKNOWLEDGED", "Terms Acknowledgment Required"
     )

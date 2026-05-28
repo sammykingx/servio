@@ -31,22 +31,18 @@ class ContractPolicy:
             )
             
     @staticmethod
-    def _has_signed(user: AbstractUser, contract: ContractEntity):
-        if user == contract.client and contract.client_signed_at:
+    def _has_accepted_terms(user: AbstractUser, contract: ContractEntity):
+        client_has_accepted = (user == contract.client and contract.client_accepted_terms_at)
+        provider_has_accepted = (user == contract.provider and contract.provider_accepted_terms_at)
+
+        if client_has_accepted or provider_has_accepted:
             raise ContractPolicyViolation(
-                code=ContractPolicyFailure.ALREADY_SIGNED.code,
-                message="You have already signed this agreement.",
-                title=ContractPolicyFailure.ALREADY_SIGNED.title
-            )
-            
-        if user == contract.provider and contract.provider_signed_at:
-            raise ContractPolicyViolation(
-                code=ContractPolicyFailure.ALREADY_SIGNED.code,
-                message="You have already signed this agreement.",
-                title=ContractPolicyFailure.ALREADY_SIGNED.title
+                code=ContractPolicyFailure.TERMS_ALREADY_ACCEPTED.code,
+                message="You have already accepted the terms of this agreement.",
+                title=ContractPolicyFailure.TERMS_ALREADY_ACCEPTED.title
             )
             
     @classmethod
     def check_signing_eligibility(cls, user: AbstractUser, contract: ContractEntity):
         cls._is_authorized_party(user, contract)
-        cls._has_signed(user, contract)
+        cls._has_accepted_terms(user, contract)

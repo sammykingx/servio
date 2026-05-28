@@ -9,14 +9,14 @@ from contracts.application.services import ContractSigningService
 from contracts.domains.errors import ContractPolicyFailure
 from contracts.domains.exceptions import ContractException
 from core.model_registry import registry
-from core.url_names import AuthURLNames
+from core.url_names import AuthURLNames, ContractURLS
 from template_map.contracts import Contract as ContractTemplates
 from pydantic import ValidationError
 
 
-class RenderProposalRoleContractView(LoginRequiredMixin, DetailView):
+class RoleContractTermsAcceptanceView(LoginRequiredMixin, DetailView):
     model = registry.Contract
-    template_name = ContractTemplates.VIEW_CONTRACT
+    template_name = ContractTemplates.ACCEPT_CONTRACT_TERMS
     context_object_name = "contract"
     
     
@@ -37,11 +37,11 @@ class RenderProposalRoleContractView(LoginRequiredMixin, DetailView):
                     "provider", "provider__profile"
                 )
                 .only(
-                    "agreed_amount", "currency", "payment_plan", "status", "signed_at", "reference",
-                    "project__id", "project__has_gig_roles", "project__title", "project__description", 
-                    "proposal_role__id", "proposal_role__description", "proposal_role__role_name", 
-                    "provider__email", "provider__first_name", "provider__last_name", "client__email", 
-                    "client__first_name", "client__last_name", "provider__is_verified", 
+                    "agreed_amount", "currency", "payment_plan", "status", "client_accepted_terms_at", "reference",
+                    "provider_accepted_terms_at", "client_paid_at", "completed_at", "project__id", "project__has_gig_roles", 
+                    "project__title", "project__description", "proposal_role__id", "proposal_role__description", 
+                    "proposal_role__role_name", "provider__email", "provider__first_name", "provider__last_name", 
+                    "client__email", "client__first_name", "client__last_name", "provider__is_verified", 
                     "provider__profile__headline", "provider__profile__avatar_url"
                 )
                 .prefetch_related(
@@ -62,29 +62,34 @@ class RenderProposalRoleContractView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         """Injects dynamic calculation states into template context with zero db-cost."""
         context = super().get_context_data(**kwargs)
-        contract = self.object
-        user = self.request.user
+        contract, user = self.object, self.request.user
 
-        has_signed = False
-        if user == contract.client:
-            has_signed = contract.has_client_signed
-        elif user == contract.provider:
-            has_signed = contract.has_provider_signed
-
-        context["has_signed"] = has_signed
+        is_client = (user == contract.client)
+        
+        context["has_accepted_terms"], context["counter_party_accepted"] = (
+            (contract.has_client_accepted_terms, contract.has_provider_accepted_terms) if is_client 
+            else (contract.has_provider_accepted_terms, contract.has_client_accepted_terms)
+        )
+        
         return context
-    
+        
     def post(self, request: HttpRequest, *args, **kwargs):
         try:
             contract = self.get_object()
             SignContractDTO.model_validate_json(request.body, strict=True)
             service = ContractSigningService(request.user)
             contract_entity = service.to_entity(contract)
-            service.sign_contract(contract_entity)
-
+            service.accept_contract_terms(contract_entity)
+            
+            url = (
+                reverse_lazy(ContractURLS.LIST_CONTRACTS)
+                if contract.provider == request.user 
+                else reverse_lazy(ContractURLS.LIST_CONTRACTS)
+            )
+            
             return JsonResponse({
                 "status": "success",
-                "redirect_url": request.path,
+                "redirect_url": url,
             }, status=200)
             
         except Http404:

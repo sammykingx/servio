@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from django.db.models import Model
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from contracts.models.contract import ContractStatus
 from datetime import datetime
@@ -36,9 +37,10 @@ class ContractEntity:
     currency: Literal["USD", "NGN"]
     payment_plan: str
     status: ContractStatus
-    client_signed_at: datetime
-    provider_signed_at: datetime
-    signed_at: datetime
+    client_paid_at: datetime
+    client_accepted_terms_at: datetime
+    provider_accepted_terms_at: datetime
+    completed_at: datetime
     
     
     @classmethod
@@ -60,20 +62,24 @@ class ContractEntity:
             currency=instance.currency,
             payment_plan=instance.payment_plan,
             status=instance.status,
-            client_signed_at=instance.client_signed_at,
-            provider_signed_at=instance.provider_signed_at,
-            signed_at=instance.signed_at,
+            client_accepted_terms_at=instance.client_accepted_terms_at,
+            client_paid_at=instance.client_paid_at,
+            provider_accepted_terms_at=instance.provider_accepted_terms_at,
+            completed_at=instance.completed_at,
+            
         )
     
-    def provider_sign(self):
+    def provider_accepted_terms(self):
         """Marks the contract as signed by the provider and updates status if client has also signed."""
-        self.provider_signed_at = datetime.now()
-        if self.client_signed_at:
+        self.provider_accepted_terms_at = timezone.now()
+        if self.client_accepted_terms_at:
             self.status = ContractStatus.SIGNED
+            self.completed_at = timezone.now()
             
-    def client_signed(self):
+    def client_accepted_terms(self):
         """Marks the contract as signed by the client and updates status if provider has also signed."""
-        self.client_signed_at = datetime.now()
-        if self.provider_signed_at:
+        self.client_accepted_terms_at = timezone.now()
+        if self.provider_accepted_terms_at:
             self.status = ContractStatus.SIGNED
+            self.completed_at = timezone.now()
     
