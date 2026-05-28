@@ -7,8 +7,8 @@ All operations within this service are executed with transactional integrity to 
 """
 
 from django.contrib.auth.models import AbstractUser
-from ..domains.entities import ContractGenerationContext
-from ..infrastructure.repositories import ContractRepository
+from contracts.domains.entities import ContractGenerationContext
+from contracts.infrastructure.repositories import ContractRepository
 
 
 class ContractCreationService:

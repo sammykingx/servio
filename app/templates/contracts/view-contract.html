@@ -5,16 +5,58 @@
 {% block content %}
 <section class="flex-1 py-12 px-3">
 	<section class="max-w-5xl mx-auto mb-10 text-center">
-		<div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold rounded-full mb-4">
-			<span class="relative flex h-2 w-2">
-			<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-			<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+		{% if contract.is_fully_signed %}
+			<!-- STATE 1: Everything is finalized -->
+			<div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-400 text-xs font-semibold rounded-full mb-4 select-none">
+				<span class="relative flex h-2 w-2">
+					<span class="inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+				</span>
+				Signed & Executed
+			</div>
+
+		{% elif user == contract.client and not contract.has_client_signed %}
+			<!-- STATE 2A: Logged-in user is the Client and needs to sign -->
+			<div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 text-amber-800 dark:text-amber-400 text-xs font-semibold rounded-full mb-4 select-none animate-pulse">
+				<span class="relative flex h-2 w-2">
+					<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+					<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+				</span>
+				Pending Your Signature
+			</div>
+
+		{% elif user == contract.provider and not contract.has_provider_signed %}
+			<!-- STATE 2B: Logged-in user is the Provider and needs to sign -->
+			<div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 text-amber-800 dark:text-amber-400 text-xs font-semibold rounded-full mb-4 select-none animate-pulse">
+				<span class="relative flex h-2 w-2">
+					<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+					<span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+				</span>
+				Pending Your Signature
+			</div>
+
+		{% else %}
+			<!-- STATE 3: User has signed, waiting for the counterparty to complete -->
+			<div class="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-gray-400 text-xs font-semibold rounded-full mb-4 select-none">
+				<span class="relative flex h-2 w-2">
+					<span class="relative inline-flex rounded-full h-2 w-2 bg-slate-400 dark:bg-gray-500"></span>
+				</span>
+				{% if not contract.has_client_signed %}
+					Pending Client Signature
+				{% else %}
+					Pending Provider Signature
+				{% endif %}
+			</div>
+		{% endif %}
+		<h1 class="text-3xl font-serif text-gray-700 dark:text-gray-200 mb-3">Service Agreement</h1>
+		<p class="text-slate-500 font-medium my-2">Project: {{ contract.project.title|title }}</p>
+		<div class="inline-flex items-center gap-2 bg-slate-100 dark:bg-gray-800/80 px-3 py-1 rounded-lg border border-slate-200/60 dark:border-gray-700/50">
+			<span class="text-[10px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1 border-r border-slate-200 dark:border-gray-700 pr-2 select-none">
+				<span class="material-symbols-outlined text-xs">verified_user</span> REF
 			</span>
-			Pending Your Signature
+			<span class="font-mono text-xs font-bold text-slate-700 dark:text-slate-300 tracking-wide select-all">
+				{{ contract.reference }}
+			</span>
 		</div>
-		<h1 class="text-4xl font-serif text-gray-700 dark:text-gray-200 mb-3">Service Agreement</h1>
-		<p class="text-slate-500 font-medium">Project: {{ contract.project.title|title }}</p>
-		<p class="text-slate-500 font-mono">ref: {{ contract.reference }}</p>
 		<div class="flex flex-col items-center my-5">
 			<div class="relative mb-4">
 				{% if contract.provider.profile.avatar_url %}
@@ -28,8 +70,14 @@
 				{% endif %}
 				<div class="absolute bottom-1 right-1 size-3 bg-green-500 border-2 border-white rounded-full"></div>
 			</div>
-			<h2 class="text-md font-medium text-gray-700 dark:text-gray-400">{{ contract.provider.full_name|title }}</h2>
-			<p class="text-brand-500 dark:text-brand-300 font-normal tracking-wide uppercase text-xs mb-2">{{ contract.provider.profile.headline|default:"Servio Professional" }}</p>
+			<h2 class="text-md font-medium text-gray-700 dark:text-gray-400 my-2">{{ contract.provider.full_name|title }}</h2>
+			
+			<div class="mb-3 flex flex-wrap justify-center md:justify-start">
+				<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase bg-brand-50/70 dark:bg-brand-950/40 text-brand-500 dark:text-brand-300 border border-brand-100/50 dark:border-brand-900/30 backdrop-blur-sm">
+					{{ contract.provider.profile.headline|default:"Servio Professional" }}
+				</span>
+			</div>
+			
 			{% comment 'enable later on reviews' %}
 			<div class="flex items-center gap-3 bg-white px-4 py-1.5 rounded-full border border-slate-200 shadow-sm">
 				<div class="flex items-center gap-1 text-amber-500">
@@ -80,8 +128,8 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<div class="group p-6 bg-white dark:bg-slate-800/30 border border-slate-200  dark:border-gray-700 rounded-[2rem] hover:border-brand-400 hover:shadow-md transition-all">
 						<div class="flex justify-between items-start mb-4">
-							<div class="size-12 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition-colors">
-								<span class="material-symbols-outlined">architecture</span>
+							<div class="size-12 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+								<span class="material-symbols-outlined">enterprise</span>
 							</div>
 							<span class="text-[10px] font-medium text-teal-600 bg-teal-50 px-2 py-1 rounded-lg uppercase tracking-wider">Accepted</span>
 						</div>
@@ -112,9 +160,15 @@
 						</div> -->
 					<div class="p-6 bg-slate-900 rounded-[2rem] flex flex-col justify-center items-center text-center text-white border border-slate-800 shadow-xl">
 						<span class="material-symbols-outlined text-brand-400 mb-2">analytics</span>
-						<p class="text-sm text-slate-400 font-medium">Combined Professional Fee</p>
-						<p class="text-3xl font-semibold mt-1">${{ contract.amount_payable|intcomma }}</p>
-						<div class="mt-4 px-4 py-1 bg-white/10 rounded-full text-[10px] font-semibold uppercase tracking-[0.2em]">Gross Fee + service fee + Tax</div>
+						{% if contract.client  == user %}
+							<p class="text-sm text-slate-400 font-medium">Combined Professional Fee</p>
+							<p class="text-3xl font-semibold mt-1">${{ contract.amount_payable|intcomma }}</p>
+							<div class="mt-4 px-4 py-1 bg-white/10 rounded-full text-[10px] font-semibold uppercase tracking-[0.2em]">Gross Fee + service fee + Tax</div>
+						{% else %}
+							<p class="text-sm text-slate-400 font-medium">Total Project Compensation</p>
+							<p class="text-3xl font-semibold mt-1">${{ contract.amount_receivable|intcomma }}</p>
+							<div class="mt-4 px-4 py-1 bg-white/10 rounded-full text-[10px] font-semibold uppercase tracking-[0.2em]">Net Amount after service fee</div>
+						{% endif %}
 					</div>
 				</div>
 			</section>
@@ -242,31 +296,31 @@
 					<h3 class="text-md md:text-xl font-semibold text-slate-800 dark:text-gray-400 tracking-tight">Payment Structure</h3>
 				</div>
 				<div class="space-y-6">
-					{% comment %}
-					<div class="relative p-6 bg-brand-500 rounded-[2rem] text-white shadow-md shadow-brand-600/30 overflow-hidden group">
-						<div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform">
-							<span class="material-symbols-outlined text-6xl">bolt</span>
-						</div>
-						<div class="relative z-10">
-							<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-								<div>
-									<span class="px-3 py-1 bg-white/20 rounded-full text-[10px] font-semibold tracking-widest uppercase">Immediate Release</span>
-									<h4 class="text-md md:text-xl font-semibold mt-2">Project Mobilization Fee</h4>
+					{% comment "immediate release amount" %}
+						<div class="relative p-6 bg-brand-500 rounded-[2rem] text-white shadow-md shadow-brand-600/30 overflow-hidden group">
+							<div class="absolute top-0 right-0 p-4 opacity-20 group-hover:scale-110 transition-transform">
+								<span class="material-symbols-outlined text-6xl">bolt</span>
+							</div>
+							<div class="relative z-10">
+								<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+									<div>
+										<span class="px-3 py-1 bg-white/20 rounded-full text-[10px] font-semibold tracking-widest uppercase">Immediate Release</span>
+										<h4 class="text-md md:text-xl font-semibold mt-2">Project Mobilization Fee</h4>
+									</div>
+									<div class="text-left md:text-right">
+										<p class="text-3xl font-semibold">
+											${{ deliverable.release_amount|intcomma }}
+										</p>
+										<p class="text-xs font-medium opacity-80 underline underline-offset-4">Initial Secure Escrow Deposit Required</p>
+									</div>
 								</div>
-								<div class="text-left md:text-right">
-									<p class="text-3xl font-semibold">
-										${{ deliverable.release_amount|intcomma }}
+								<div class="pt-4 border-t border-white/20">
+									<p class="text-sm opacity-90 leading-relaxed">
+										<span class="font-semibold">Release Condition:</span> This contract specifies dynamic phase release triggers. Monies allocated to milestones are locked safely in escrow and disbursed sequentially upon acceptance of the conditions below.
 									</p>
-									<p class="text-xs font-medium opacity-80 underline underline-offset-4">Initial Secure Escrow Deposit Required</p>
 								</div>
 							</div>
-							<div class="pt-4 border-t border-white/20">
-								<p class="text-sm opacity-90 leading-relaxed">
-									<span class="font-semibold">Release Condition:</span> This contract specifies dynamic phase release triggers. Monies allocated to milestones are locked safely in escrow and disbursed sequentially upon acceptance of the conditions below.
-								</p>
-							</div>
 						</div>
-					</div>
 					{% endcomment %}
 					{% for deliverable in contract.proposal_role.deliverables.all %}
 						<div class="group bg-white dark:bg-gray-900 border {% if forloop.last %}border-dashed border-slate-300 dark:border-gray-700 bg-slate-50/40{% else %}border-slate-200 dark:border-gray-800{% endif %} rounded-[2rem] p-6 md:p-8 hover:border-brand-300 dark:hover:border-brand-500/40 transition-all duration-300 shadow-sm hover:shadow-md">
@@ -306,9 +360,15 @@
 								<div class="w-full md:col-span-1 md:text-right border-t md:border-t-0 border-slate-100 dark:border-gray-800 pt-4 md:pt-1 shrink-0 flex flex-row md:flex-col justify-between items-center md:items-end gap-1">
 									<div>
 										<p class="text-[10px] font-semibold text-slate-400 dark:text-gray-500 uppercase tracking-widest md:hidden mb-1">Phase Payout</p>
-										<p class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-											${{ deliverable.release_amount|intcomma }}
-										</p>
+										{% if contract.client == user %}
+											<p class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+												${{ deliverable.release_amount|intcomma }}
+											</p>
+										{% else %}
+											<p class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+												${{ deliverable.provider_due_amount|intcomma }}
+											</p>
+										{% endif %}
 									</div>
 									
 									<span class="inline-block md:block text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-wider md:mt-1 bg-slate-50 dark:bg-gray-800 md:bg-transparent dark:md:bg-transparent px-2 py-0.5 md:p-0 rounded">
@@ -334,7 +394,7 @@
 					<!-- Engagement Commitment -->
 					<div class="bg-white dark:bg-gray-800/30 border border-slate-200 dark:border-gray-700 rounded-[2rem] p-6 md:p-8 flex flex-col">
 						<div class="flex items-center gap-3 mb-6">
-							<span class="material-symbols-outlined text-brand-500">assignment_turned_in</span>
+							<span class="material-symbols-outlined text-brand-500 dark:text-brand-300">assignment_turned_in</span>
 							<h4 class="font-semibold text-slate-800 dark:text-gray-200">
 								Engagement Commitment
 							</h4>
@@ -374,8 +434,8 @@
 						</span>
 						<div class="relative z-10">
 							<div class="flex items-center gap-3 mb-6">
-								<span class="material-symbols-outlined text-brand-400">
-								account_balance_wallet
+								<span class="material-symbols-outlined text-indigo-400 dark:text-brand-300">
+									account_balance_wallet
 								</span>
 								<h4 class="font-semibold text-white">
 									Financial & Role Alignment
@@ -470,79 +530,227 @@
 					</div>
 				</div>
 			</section>
+
+			<!-- contract signature -->
+			<!-- <section>
+				<div class="flex items-center gap-3 mb-6">
+					<div class="size-10 rounded-xl bg-slate-900 dark:bg-gray-800 text-white flex items-center justify-center font-serif italic text-md shadow-lg">08</div>
+					<h3 class="text-md md:text-xl font-semibold text-slate-800 dark:text-gray-200 tracking-tight">Final Confirmation</h3>
+				</div>
+
+				<div class="bg-white dark:bg-gray-900 border-2 border-slate-200 dark:border-gray-800 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/40 dark:shadow-none">
+					
+					<form method="POST" action="{% url CONTRACTS.PREVIEW_CONTRACT role_id=contract.proposal_role_id %}" id="legalConfirmationForm">
+						{% csrf_token %}
+						
+						<div class="p-5 sm:p-7 md:p-10">
+							<h4 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-2 text-center">
+								Confirm Commencement
+							</h4>
+							
+							<p class="text-xs md:text-sm text-slate-500 dark:text-gray-400 text-center mb-8 max-w-md mx-auto leading-relaxed">
+								{% if contract.is_fully_signed %}
+									<span class="text-emerald-500 font-medium text-xs flex items-center justify-center gap-1">
+										<span class="material-symbols-outlined text-xs">verified</span> Agreement signed by both parties.
+									</span>
+								{% elif has_signed %}
+									<span class="text-amber-500 font-medium text-xs flex items-center justify-center gap-1 animate-pulse">
+										<span class="material-symbols-outlined text-xs">hourglass_top</span> Signed! Waiting for counterparty to sign.
+									</span>
+								{% else %}
+									Review and sign the agreement below to start the project.
+								{% endif %}
+							</p>
+
+							<div class="max-w-2xl mx-auto space-y-4">
+								<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-800 {% if not has_signed %}hover:bg-slate-50 dark:hover:bg-gray-800/40 cursor-pointer{% else %}bg-slate-50/60 dark:bg-gray-800/20 cursor-default{% endif %} transition-all">
+									<div class="relative flex items-center justify-center mt-0.5 shrink-0">
+										<input type="checkbox" required name="terms_acknowledged" id="chkTerms"
+											{% if has_signed %}checked disabled{% endif %}
+											class="confirmation-check peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer disabled:cursor-default">
+										<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
+									</div>
+									<div class="flex-1">
+										<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Terms of Engagement</p>
+										<p class="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">I review and accept the {{ contract.proposal_role.estimated_timeline }} project timeline, payment plan, and delivery terms.</p>
+									</div>
+								</label>
+
+								<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-800 {% if not has_signed %}hover:bg-slate-50 dark:hover:bg-gray-800/40 cursor-pointer{% else %}bg-slate-50/60 dark:bg-gray-800/20 cursor-default{% endif %} transition-all">
+									<div class="relative flex items-center justify-center mt-0.5 shrink-0">
+										<input type="checkbox" required name="policy_acknowledged" id="chkPolicy"
+											{% if has_signed %}checked disabled{% endif %}
+											class="confirmation-check peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer disabled:cursor-default">
+										<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
+									</div>
+									<div class="flex-1">
+										<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Platform Policy & Regional Compliance</p>
+										<p class="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">I agree to follow Servio’s User Policies and confirm that this agreement is legal in my country.</p>
+									</div>
+								</label>
+
+								<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-800 {% if not has_signed %}hover:bg-slate-50 dark:hover:bg-gray-800/40 cursor-pointer{% else %}bg-slate-50/60 dark:bg-gray-800/20 cursor-default{% endif %} transition-all">
+									<div class="relative flex items-center justify-center mt-0.5 shrink-0">
+										<input type="checkbox" required name="escrow_acknowledged" id="chkEscrow"
+											{% if has_signed %}checked disabled{% endif %}
+											class="confirmation-check peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer disabled:cursor-default">
+										<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
+									</div>
+									<div class="flex-1">
+										<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Automated Payout Authorization</p>
+										<p class="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">I authorize the agreed amount of <span class="font-semibold text-slate-700 dark:text-gray-300">${{ contract.agreed_amount|intcomma }}</span> to be held securely and released in installments according to the defined milestone payment structure.</p>
+									</div>
+								</label>
+							</div>
+
+							<div class="mt-12 text-center space-y-5">
+								{% if not has_signed %}
+									<button type="submit" id="commenceProceedBtn"
+											class="w-full md:w-auto px-12 py-4 bg-slate-200 dark:bg-gray-800 text-slate-400 dark:text-gray-600 font-semibold text-sm md:text-base rounded-2xl transition-all shadow-none flex items-center justify-center gap-3 mx-auto cursor-not-allowed">
+										<span>Confirm Agreement</span>
+										<span class="material-symbols-outlined text-md">fingerprint</span>
+									</button>
+								{% endif %}
+
+								<div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 pt-2">
+									<p class="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest">Supported Payment Gateways:</p>
+									<div class="flex items-center gap-4">
+										<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 group cursor-default">
+											<img src="{% static 'images/gateways/paystack.ico' %}" class="w-3.5 h-3.5 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="Paystack">
+											Paystack
+										</span>
+										<div class="w-px h-3 bg-slate-200 dark:bg-gray-800"></div>
+										<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 group cursor-default">
+											<img src="{% static 'images/gateways/stripe.ico' %}" class="w-3.5 h-3.5 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="Stripe">
+											Stripe
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="bg-slate-50 dark:bg-gray-800/30 px-6 sm:px-8 py-4 border-t border-slate-100 dark:border-gray-800">
+							<p class="text-[10px] text-center text-slate-400 dark:text-gray-500 font-medium leading-normal max-w-xl mx-auto">
+								{% if contract.is_fully_signed %}
+									Execution cycle completed securely. This page serves as a verified cryptographic copy of active technical contract records.
+								{% else %}
+									Once you click confirm, this becomes a secure, officially binding agreement for both parties.
+								{% endif %}
+							</p>
+						</div>
+					</form>
+				</div>
+			</section> -->
 			<section>
 				<div class="flex items-center gap-3 mb-6">
 					<div class="size-10 rounded-xl bg-slate-900 dark:bg-gray-800 text-white flex items-center justify-center font-serif italic text-md shadow-lg">08</div>
 					<h3 class="text-md md:text-xl font-semibold text-slate-800 dark:text-gray-200 tracking-tight">Final Confirmation</h3>
 				</div>
-				<div class="bg-white dark:bg-gray-800/40 border-2 border-slate-200 dark:border-gray-700 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none">
-					<div class="p-8 md:p-12">
-						<h4 class="text-2xl font-semibold text-slate-900 dark:text-white mb-2 text-center">
-							Confirm Commencement
-						</h4>
-						<p class="text-sm text-slate-500 text-center mb-10 max-w-md mx-auto leading-relaxed">
-							Both parties must review and check every requirement below before work can officially begin. Ticking these boxes activates your project collaboration.
-						</p>
-						<div class="max-w-2xl mx-auto space-y-4">
-							<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50 transition-all cursor-pointer">
-								<div class="relative flex items-center justify-center mt-1">
-									<input type="checkbox" class="peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer">
-									<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
+				<div class="bg-white dark:bg-gray-900 border-2 border-slate-200 dark:border-gray-800 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/40 dark:shadow-none transition-all duration-300" id="signatureCardContainer">
+					<form method="POST" action="{% url CONTRACTS.PREVIEW_CONTRACT role_id=contract.proposal_role_id %}" id="legalConfirmationForm">
+						{% csrf_token %}
+						
+						<div class="p-5 sm:p-7 md:p-10 transition-all duration-300" id="formInteractiveArea">
+							<h4 class="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-2 text-center">
+								Confirm Commencement
+							</h4>
+							
+							<p class="text-xs md:text-sm text-slate-500 dark:text-gray-400 text-center mb-8 max-w-md mx-auto leading-relaxed" id="statusMessageBlock">
+								{% if contract.is_fully_signed %}
+									<span class="text-emerald-500 font-medium text-xs flex items-center justify-center gap-1">
+										<span class="material-symbols-outlined text-xs">verified</span> Agreement signed by both parties.
+									</span>
+								{% elif has_signed %}
+									<span class="text-amber-500 font-medium text-xs flex items-center justify-center gap-1 animate-pulse">
+										<span class="material-symbols-outlined text-xs">hourglass_top</span> Signed! Waiting for counterparty to sign.
+									</span>
+								{% else %}
+									Review and sign the agreement below to start the project.
+								{% endif %}
+							</p>
+
+							<div class="max-w-2xl mx-auto space-y-4">
+								<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-800 {% if not has_signed %}hover:bg-slate-50 dark:hover:bg-gray-800/40 cursor-pointer{% else %}bg-slate-50/60 dark:bg-gray-800/20 cursor-default{% endif %} transition-all">
+									<div class="relative flex items-center justify-center mt-0.5 shrink-0">
+										<input type="checkbox" required name="terms_acknowledged" id="chkTerms"
+											{% if has_signed %}checked disabled{% endif %}
+											class="confirmation-check peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer disabled:cursor-default">
+										<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
+									</div>
+									<div class="flex-1">
+										<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Terms of Engagement</p>
+										<p class="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">I review and accept the {{ contract.proposal_role.estimated_timeline }} project timeline, payment plan, and delivery terms.</p>
+									</div>
+								</label>
+
+								<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-800 {% if not has_signed %}hover:bg-slate-50 dark:hover:bg-gray-800/40 cursor-pointer{% else %}bg-slate-50/60 dark:bg-gray-800/20 cursor-default{% endif %} transition-all">
+									<div class="relative flex items-center justify-center mt-0.5 shrink-0">
+										<input type="checkbox" required name="policy_acknowledged" id="chkPolicy"
+											{% if has_signed %}checked disabled{% endif %}
+											class="confirmation-check peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer disabled:cursor-default">
+										<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
+									</div>
+									<div class="flex-1">
+										<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Platform Policy & Regional Compliance</p>
+										<p class="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">I agree to follow Servio’s User Policies and confirm that this agreement is legal in my country.</p>
+									</div>
+								</label>
+
+								<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-800 {% if not has_signed %}hover:bg-slate-50 dark:hover:bg-gray-800/40 cursor-pointer{% else %}bg-slate-50/60 dark:bg-gray-800/20 cursor-default{% endif %} transition-all">
+									<div class="relative flex items-center justify-center mt-0.5 shrink-0">
+										<input type="checkbox" required name="automated_payout_accepted" id="chkAutomatedPayout"
+											{% if has_signed %}checked disabled{% endif %}
+											class="confirmation-check peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer disabled:cursor-default">
+										<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
+									</div>
+									<div class="flex-1">
+										<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Automated Payout Authorization</p>
+										<p class="text-xs text-slate-500 dark:text-gray-400 leading-relaxed">I authorize the agreed amount of <span class="font-semibold text-slate-700 dark:text-gray-300">${{ contract.agreed_amount|intcomma }}</span> to be held securely and released in installments according to the defined milestone payment structure.</p>
+									</div>
+								</label>
+							</div>
+
+							<div class="mt-12 text-center space-y-5">
+								{% if not has_signed %}
+									<button type="submit" id="commenceProceedBtn" disabled
+											class="w-full md:w-auto px-12 py-4 bg-slate-200 dark:bg-gray-800 text-slate-400 dark:text-gray-600 font-semibold text-sm md:text-base rounded-2xl transition-all shadow-none flex items-center justify-center gap-3 mx-auto cursor-not-allowed">
+										<span id="btnText">Confirm Agreement</span>
+										<span class="material-symbols-outlined text-md" id="btnIcon">fingerprint</span>
+									</button>
+								{% endif %}
+
+								<div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 pt-2">
+									<p class="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest">Supported Payment Gateways:</p>
+									<div class="flex items-center gap-4">
+										<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 group cursor-default">
+											<img src="{% static 'images/gateways/paystack.ico' %}" class="w-3.5 h-3.5 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="Paystack">
+											Paystack
+										</span>
+										<div class="w-px h-3 bg-slate-200 dark:bg-gray-800"></div>
+										<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 group cursor-default">
+											<img src="{% static 'images/gateways/stripe.ico' %}" class="w-3.5 h-3.5 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="Stripe">
+											Stripe
+										</span>
+									</div>
 								</div>
-								<div class="flex-1">
-									<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Terms of Engagement</p>
-									<p class="text-xs text-slate-500 leading-relaxed">I have reviewed the {{ contract.proposal_role.estimated_timeline }} timeline, professional fee allocation, and deliverables release conditions.</p>
-								</div>
-							</label>
-							<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50 transition-all cursor-pointer">
-								<div class="relative flex items-center justify-center mt-1">
-									<input type="checkbox" class="peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer">
-									<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
-								</div>
-								<div class="flex-1">
-									<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Platform Policy & Regional Compliance</p>
-									<p class="text-xs text-slate-500 leading-relaxed">I agree to adhere to Servio’s User Policies and acknowledge that this contract complies with my local jurisdiction's digital service laws.</p>
-								</div>
-							</label>
-							{% comment 'escrow not integrated yet' %}
-							<label class="group flex items-start gap-4 p-5 rounded-2xl border border-slate-100 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800/50 transition-all cursor-pointer">
-								<div class="relative flex items-center justify-center mt-1">
-									<input type="checkbox" class="peer appearance-none size-6 rounded-lg border-2 border-slate-300 dark:border-gray-600 checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer">
-									<span class="material-symbols-outlined absolute text-white scale-0 peer-checked:scale-100 transition-transform text-md pointer-events-none">check</span>
-								</div>
-								<div class="flex-1">
-									<p class="text-sm font-semibold text-slate-800 dark:text-gray-200 mb-0.5">Escrow Authorization</p>
-									<p class="text-xs text-slate-500 leading-relaxed">I authorize Servio to hold the initial $2,500.00 deposit and release funds only upon the satisfaction of specific milestone conditions.</p>
-								</div>
-							</label>
-							{% endcomment %}
-						</div>
-						<div class="mt-12 text-center space-y-4">
-							<button class="w-full md:w-auto px-12 py-5 bg-brand-500 text-white font-medium text-md rounded-2xl shadow-xl hover:shadow-brand-500/20 hover:-translate-y-1 transition-all active:scale-[0.98] flex items-center justify-center gap-3 mx-auto">
-							Proceed
-							<span class="material-symbols-outlined">arrow_forward</span>
-							</button>
-							<div class="flex items-center justify-center gap-6">
-								<span class="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2 group cursor-default">
-								<img src="{% static 'images/gateways/paystack.ico' %}" class="w-4 h-4 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="Paystack">
-								Paystack
-								</span>
-								<div class="w-px h-3 bg-slate-300 dark:bg-slate-700"></div>
-								<span class="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2 group cursor-default">
-								<img src="{% static 'images/gateways/stripe.ico' %}" class="w-4 h-4 rounded-sm grayscale group-hover:grayscale-0 transition-all" alt="Stripe">
-								Stripe
-								</span>
 							</div>
 						</div>
-					</div>
-					<div class="bg-slate-50 dark:bg-gray-800 px-8 py-4 border-t border-slate-100 dark:border-gray-700">
-						<p class="text-[10px] text-center text-slate-400 font-medium">
-							Clicking "Proceed" we'll redirect you to our secure payment gateway to complete project commitment.
-						</p>
-					</div>
+
+						<div class="bg-slate-50 dark:bg-gray-800/30 px-6 sm:px-8 py-4 border-t border-slate-100 dark:border-gray-700">
+							<p class="text-[10px] text-center text-slate-400 dark:text-gray-500 font-medium leading-normal max-w-xl mx-auto" id="footerDisclaimerText">
+								{% if contract.is_fully_signed %}
+									Execution cycle completed securely. This page serves as a verified cryptographic copy of active technical contract records.
+								{% else %}
+									Once you click confirm, this becomes a secure, officially binding agreement for both parties.
+								{% endif %}
+							</p>
+						</div>
+					</form>
 				</div>
 			</section>
 		</div>
+
+		<!-- financial summary & chat -->
 		<div class="lg:col-span-4">
 			<div class="sticky top-12 space-y-6">
 				<div class="bg-slate-900 rounded-3xl border border-slate-800 p-8 text-white shadow-2xl relative overflow-hidden">
@@ -568,21 +776,33 @@
 								<span class="text-[10px] font-medium bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">5%</span>
 							</div>
 							<span class="font-medium text-amber-400">
-							+${{ contract.service_fee|intcomma }}
+							{% if contract.client == user %}
+								+${{ contract.service_fee|intcomma }}
+							{% else %}
+								-${{ contract.service_fee|intcomma }}
+							{% endif %}
 							</span>
 						</div>
-						<div class="flex justify-between items-center text-sm">
-							<div class="flex items-center gap-1.5 text-slate-400">
-								<span>Regulatory Tax / VAT</span>
-								<span class="text-[10px] font-medium bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">15%</span>
+						{% if contract.client == user %}
+							<div class="flex justify-between items-center text-sm">
+								<div class="flex items-center gap-1.5 text-slate-400">
+									<span>Regulatory Tax / VAT</span>
+									<span class="text-[10px] font-medium bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">15%</span>
+								</div>
+								<span class="font-medium text-slate-400">
+								+${{ contract.tax|intcomma }}
+								</span>
 							</div>
-							<span class="font-medium text-slate-400">
-							+${{ contract.tax|intcomma }}
-							</span>
-						</div>
+						{% endif %}
 						<div class="pt-5 border-t border-slate-800 flex justify-between items-end">
 							<span class="text-slate-400 text-xl">Total</span>
-							<span class="text-2xl font-semibold text-white">${{ contract.amount_payable|intcomma }}</span>
+							<span class="text-2xl font-semibold text-white">
+								{% if contract.client == user %}
+									${{ contract.amount_payable|intcomma }}
+								{% else %}
+									${{ contract.amount_receivable|intcomma }}
+								{% endif %}
+							</span>
 						</div>
 					</div>
 					<div class="mt-8 space-y-4 pt-6 border-t border-slate-800/60">
@@ -619,6 +839,89 @@
 		</div>
 	</div>
 </section>
+{% endblock %}
+{% block custom_page_js %}
+{% if not has_signed %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("legalConfirmationForm");
+        const checkboxes = document.querySelectorAll(".confirmation-check");
+        const actionBtn = document.getElementById("commenceProceedBtn");
+        const interactiveArea = document.getElementById("formInteractiveArea");
+
+        if (!actionBtn) return;
+
+        checkboxes.forEach(box => {
+            box.addEventListener("change", function() {
+                const isFormReady = Array.from(checkboxes).every(cb => cb.checked);
+
+                if (isFormReady) {
+                    actionBtn.disabled = false;
+                    actionBtn.classList.remove("bg-slate-200", "dark:bg-gray-800", "text-slate-400", "dark:text-gray-600", "cursor-not-allowed");
+                    actionBtn.classList.add("bg-brand-500", "text-white", "hover:bg-brand-400", "shadow-xl", "shadow-brand-500/10", "cursor-pointer");
+                } else {
+                    actionBtn.disabled = true;
+                    actionBtn.classList.add("bg-slate-200", "dark:bg-gray-800", "text-slate-400", "dark:text-gray-600", "cursor-not-allowed");
+                    actionBtn.classList.remove("bg-brand-500", "text-white", "hover:bg-brand-400", "shadow-xl", "shadow-brand-500/10", "cursor-pointer");
+                }
+            });
+        });
+
+        // 2. Asynchronous Payload POST Interception Logic 
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            actionBtn.disabled = true;
+            interactiveArea.classList.add("blur-[2px]", "pointer-events-none", "opacity-60");
+            
+            const textPlaceholder = document.getElementById("btnText");
+            const iconPlaceholder = document.getElementById("btnIcon");
+            if (textPlaceholder) textPlaceholder.textContent = "Processing Verification Hold...";
+            if (iconPlaceholder) iconPlaceholder.textContent = "hourglass_empty";
+
+            const payload = {
+                terms_acknowledged: document.getElementById("chkTerms").checked,
+                policy_acknowledged: document.getElementById("chkPolicy").checked,
+                automated_payout_accepted: document.getElementById("chkAutomatedPayout").checked
+            };
+
+            try {
+                const response = await fetch(form.action, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value,
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    if (data.redirect_url) {
+                        window.location.href = data.redirect_url;
+                        return;
+                    }
+                    window.location.reload();
+                } else {
+                    showToast(
+						data.error || "Couldn't sign the agreement. Please try again.", 
+						data.status || "warning", 
+						data.title || "Confirmation Failed"
+					);
+                }
+            } catch (error) {
+                showToast("Network communication timeout error. Review your internet connection.", "warning", "Connection Issues");
+            } finally {
+				actionBtn.disabled = false;
+                interactiveArea.classList.remove("blur-[2px]", "pointer-events-none", "opacity-60");
+                if (textPlaceholder) textPlaceholder.textContent = "Confirm Agreement";
+                if (iconPlaceholder) iconPlaceholder.textContent = "fingerprint";
+			}
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}
 <main class="flex-1 bg-slate-50/50 py-12">
 	<header class="max-w-4xl mx-auto mb-16 text-center">

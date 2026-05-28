@@ -72,6 +72,21 @@ class Contract(models.Model):
             models.Index(fields=["client", "status"]),
             models.Index(fields=["provider", "status"]),
         ]
+        
+    property
+    def is_fully_signed(self) -> bool:
+        """Checks if both the client and provider have executed the contract."""
+        return bool(self.client_signed_at and self.provider_signed_at)
+
+    @property
+    def has_client_signed(self) -> bool:
+        """Helper checking only client timestamp presence."""
+        return bool(self.client_signed_at)
+
+    @property
+    def has_provider_signed(self) -> bool:
+        """Helper checking only provider timestamp presence."""
+        return bool(self.provider_signed_at)
 
     @property
     def service_fee(self):
@@ -87,10 +102,18 @@ class Contract(models.Model):
 
     @property
     def amount_payable(self):
+        """The amount the client pays to kickstart the project, inclusive of service fee and tax"""
         return (
             self.agreed_amount + self.service_fee + self.tax
         ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
         
     @property
+    def amount_receivable(self):
+        """The amount the provider receives after deducting service fee"""
+        return (
+            self.agreed_amount - self.service_fee
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+        
+    @property
     def payment_plan_display(self):
-        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip().title() + "%"
+        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip() + "%"

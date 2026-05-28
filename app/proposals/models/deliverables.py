@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
 from .choices import DurationUnit
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
+from constants import SERVICE_FEE
 
 
 class ProposalDeliverable(models.Model):
@@ -45,13 +46,62 @@ class ProposalDeliverable(models.Model):
         verbose_name_plural = "Proposal Deliverables"
         
     @property
+    def is_last_deliverable(self) -> bool:
+        """Determines if this deliverable is the final one matching Meta ordering."""
+        sibling_ids = list(
+            self.proposal_role.deliverables.order_by("rendering_order", "pk")
+            .values_list("id", flat=True)
+        )
+        return sibling_ids[-1] == self.id if sibling_ids else False
+
+    @property
     def release_amount(self) -> Decimal:
         """
-        Dynamically calculates the absolute currency amount allocated to 
-        this deliverable based on the role's total proposed_amount.
+        Calculates the gross milestone amount paid by the client.
+        Sweeps the final milestone to perfectly match the total proposed_amount.
         """
         if not self.proposal_role or not self.proposal_role.proposed_amount:
             return Decimal("0.00")
-        
-        amount = (self.release_percentage / Decimal("100")) * self.proposal_role.proposed_amount
-        return amount.quantize(Decimal("0.01"))
+            
+        total_gross_amount = self.proposal_role.proposed_amount
+
+        if self.is_last_deliverable:
+            previous_deliverables = self.proposal_role.deliverables.exclude(id=self.id)
+            previous_total_paid = sum(
+                d._calculate_share(total_gross_amount) 
+                for d in previous_deliverables
+            )
+            gross_amount = total_gross_amount - previous_total_paid
+            return gross_amount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+        return self._calculate_share(total_gross_amount)
+
+    @property
+    def provider_due_amount(self) -> Decimal:
+        """
+            Calculates the net milestone amount received by the provider.
+            Sweeps the final milestone to perfectly match the net pool.
+        """
+        if not self.proposal_role or not self.proposal_role.proposed_amount:
+            return Decimal("0.00")
+
+        role_amount = self.proposal_role.proposed_amount
+        service_fee_amount = role_amount * Decimal(str(SERVICE_FEE))
+        total_net_amount = role_amount - service_fee_amount
+
+        if self.is_last_deliverable:
+            previous_deliverables = self.proposal_role.deliverables.exclude(id=self.id)
+            previous_total_received = sum(
+                d._calculate_share(total_net_amount) 
+                for d in previous_deliverables
+            )
+            due_amount = total_net_amount - previous_total_received
+            return due_amount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+        return self._calculate_share(total_net_amount)
+
+    def _calculate_share(self, base_pool: Decimal) -> Decimal:
+        """Reusable helper to cleanly extract a milestone's percentage share."""
+        percentage = self.release_percentage / Decimal("100")
+        amount = base_pool * percentage
+        return amount.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
