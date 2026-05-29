@@ -90,9 +90,11 @@
                             <p class="text-center text-xs italic text-slate-400 py-1">Waiting for counterparty to signature file...</p>
                         {% endif %}
                     {% elif contract.status == 'signed' and request.user == contract.client %}
-                        <a href="{% url CONTRACTS.FUND_CONTRACT role_id=contract.proposal_role_id %}" class="w-full inline-flex items-center justify-center py-2.5 bg-emerald-600 text-white text-xs font-semibold uppercase tracking-wider rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
+                        <a href="{% url PAYMENT_URLS.FUND_CONTRACT contract_slug=contract.slug %}" class="w-full inline-flex items-center justify-center py-2.5 bg-emerald-600 text-white text-xs font-semibold uppercase tracking-wider rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
                             Fund Project
                         </a>
+                    {% elif contract.status == 'signed' and request.user == contract.provider and not contract.client_paid_at %}
+                        <p class="text-center text-xs italic text-slate-400 py-1">Waiting for client to fund contract...</p>
                     {% endif %}
                 </div>
             {% endif %}
