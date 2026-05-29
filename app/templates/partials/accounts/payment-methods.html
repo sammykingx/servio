@@ -1,0 +1,142 @@
+<div x-show="activeTab === 'billing'" 
+     x-data="{ 
+        showAddCard: false,
+        newCard: { number: '', expiry: '', cvc: '', name: '', zip: '' }
+     }"
+     x-transition:enter="transition duration-500" 
+     x-transition:enter-start="opacity-0 scale-95" 
+     x-transition:enter-end="opacity-100 scale-100"
+     x-transition:leave="transition duration-300" 
+     x-transition:leave-start="opacity-100 scale-100" 
+     x-transition:leave-end="opacity-0 scale-95"
+>
+    
+    <header class="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-500 dark:text-brand-300">Finance</h2>
+            <h3 class="text-2xl font-semibold text-gray-800 dark:text-white">Billing</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage your cards and global billing preferences for Servio services.</p>
+        </div>
+        
+        <button type="button" @click="showAddCard = !showAddCard" 
+                class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white transition-all hover:bg-gray-800 active:scale-95 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
+            <svg x-show="!showAddCard" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <svg x-show="showAddCard" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <span x-text="showAddCard ? 'Cancel' : 'Add New Card'">Add New Card</span>
+        </button>
+    </header>
+
+    <div x-show="showAddCard" 
+         x-cloak
+         class="mb-8 rounded-[2rem] border border-brand-500/20 bg-brand-50/10 p-6 dark:border-white/10 dark:bg-white/5">
+        
+        <form hx-post="#" hx-swap="none" class="space-y-6">
+            {% csrf_token %}
+            <h4 class="text-sm font-semibold text-gray-800 dark:text-white">Card Information</h4>
+            
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+                <div class="relative md:col-span-2">
+                    <label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Cardholder Name</label>
+                    <input type="text" name="card_name" x-model="newCard.name" placeholder="John Doe" class="w-full rounded-xl border border-gray-200 bg-white dark:bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+                </div>
+
+                <div class="relative">
+                    <label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Billing Postal Code</label>
+                    <input type="text" name="card_zip" x-model="newCard.zip" placeholder="10001" class="w-full rounded-xl border border-gray-200 bg-white dark:bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+                </div>
+
+                <div class="relative md:col-span-2">
+                    <label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Card Number</label>
+                    <input type="text" name="card_number" x-model="newCard.number" maxlength="19" placeholder="•••• •••• •••• ••••" class="w-full rounded-xl border border-gray-200 bg-white dark:bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all">
+                    <div class="absolute right-4 top-3.5 text-gray-400">
+                        <svg class="h-5 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M2 4h20v16H2z" opacity=".1"/><path d="M4 10h3v2H4zm5 0h3v2H9zm5 0h6v2h-6z"/></svg>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="relative">
+                        <label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Expires</label>
+                        <input type="text" name="card_expiry" x-model="newCard.expiry" maxlength="5" placeholder="MM/YY" class="w-full rounded-xl border border-gray-200 bg-white dark:bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all text-center">
+                    </div>
+                    <div class="relative">
+                        <label class="absolute -top-2 left-4 bg-white dark:bg-gray-900 px-1 text-[10px] font-semibold uppercase tracking-widest text-gray-400">CVC</label>
+                        <input type="password" name="card_cvc" x-model="newCard.cvc" maxlength="4" placeholder="•••" class="w-full rounded-xl border border-gray-200 bg-white dark:bg-transparent py-3 px-4 text-sm text-gray-800 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 outline-none transition-all text-center">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+                <button type="button" @click="showAddCard = false" class="px-4 py-2 text-xs font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    Cancel
+                </button>
+                <button @click="showToast('we are still building this feature, kindly wait for full release', 'info', 'Coming Soon')" type="submit" class="rounded-xl bg-brand-500 px-5 py-2 text-xs font-semibold text-white shadow-lg hover:bg-brand-600 transition-all">
+                    Link Card Securely
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="space-y-4">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Saved Cards</h4>
+        
+        <div class="group flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-5 transition-all hover:shadow-md dark:border-white/5 dark:bg-white/5 sm:flex-row sm:items-center">
+            <div class="flex items-center gap-4">
+                <div class="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl bg-gray-50 border border-gray-100 p-2 dark:bg-white/5 dark:border-white/5">
+                    <svg class="h-auto w-10 text-blue-600 dark:text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-4h2v4zm0-5H9V9h2v2zm4 5h-2v-4h2v4zm0-5h-2V9h2v2z"/>
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+                        <p class="font-semibold text-gray-900 dark:text-white text-sm">Visa ending in 4242</p>
+                        <span class="inline-flex items-center rounded-full bg-brand-50 dark:bg-brand-500/10 px-2 py-0.5 text-[10px] font-medium text-brand-600 dark:text-brand-300 ring-1 ring-inset ring-brand-500/20">Default</span>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Expires 12/28 • Cardholder: {{ user.get_full_name|default:"Primary Account Holder" }}</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex items-center justify-end gap-4 border-t border-gray-50 pt-3 sm:mt-0 sm:border-none sm:pt-0">
+                <button type="button" class="text-xs font-semibold text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                    Edit
+                </button>
+                <button type="button" hx-delete="#" class="text-xs font-semibold text-red-400 hover:text-red-500 transition-colors">
+                    Remove
+                </button>
+            </div>
+        </div>
+
+        <div class="group flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 transition-all hover:shadow-md dark:border-white/5 dark:bg-white/5 sm:flex-row sm:items-center">
+            <div class="flex items-center gap-4">
+                <div class="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl bg-gray-50 border border-gray-100 p-2 dark:bg-white/5 dark:border-white/5">
+                    <svg class="h-auto w-10 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                    </svg>
+                </div>
+                <div class="min-w-0">
+                    <p class="font-semibold text-gray-900 dark:text-white text-sm">Mastercard ending in 8891</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Expires 04/27</p>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex items-center justify-end gap-4 border-t border-gray-50 pt-3 sm:mt-0 sm:border-none sm:pt-0">
+                <button type="button" hx-post="#" class="text-xs font-semibold text-brand-500 hover:text-brand-600 dark:text-brand-300 transition-colors">
+                    Make Default
+                </button>
+                <button type="button" hx-delete="#" class="text-xs font-semibold text-red-400 hover:text-red-500 transition-colors">
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 flex items-center gap-3 rounded-2xl border border-dashed border-gray-200 p-4 dark:border-white/10">
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+            Servio does not store full credit card numbers or sensitive security codes on its servers. Payment processing handles completely over tokenized, bank-level **PCI-DSS compliant standards**.
+        </p>
+    </div>
+</div>

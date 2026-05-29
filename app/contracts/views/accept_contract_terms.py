@@ -9,7 +9,7 @@ from contracts.application.services import ContractSigningService
 from contracts.domains.errors import ContractPolicyFailure
 from contracts.domains.exceptions import ContractException
 from core.model_registry import registry
-from core.url_names import AuthURLNames, ContractURLS
+from core.url_names import AuthURLNames, ContractURLS, PaymentURLS
 from template_map.contracts import Contract as ContractTemplates
 from pydantic import ValidationError
 
@@ -84,7 +84,7 @@ class RoleContractTermsAcceptanceView(LoginRequiredMixin, DetailView):
             url = (
                 reverse_lazy(ContractURLS.LIST_CONTRACTS)
                 if contract.provider == request.user 
-                else reverse_lazy(ContractURLS.LIST_CONTRACTS)
+                else reverse_lazy(PaymentURLS.FUND_CONTRACT, kwargs={"contract_slug": contract.slug})
             )
             
             return JsonResponse({

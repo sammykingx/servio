@@ -4,12 +4,13 @@
 {% block browser_title %}Project Contracts{% endblock %}
 {% block content %}
 <section class="space-y-8 max-w-7xl mx-auto transition-colors duration-300 py-5 px-2">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 px-3">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 px-3 mb-5 lg:mb-10">
         <div>
             <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-gray-800 dark:text-white">Contract Agreements</h1>
             <p class="text-gray-500 text-sm md:text-base dark:text-gray-400 mt-1">Monitor project lifecycle milestones, legal signatures, and escrow funding status.</p>
         </div>
         <div class="flex items-center gap-3">
+            {% comment "Export and create contract is set for future implementation, hence the # href and no JS handlers for now" %}
             <button class="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all shadow-sm">
                 <span class="material-symbols-outlined text-[20px]">file_download</span>
                 Export CSV
@@ -18,10 +19,11 @@
                 <span class="material-symbols-outlined text-[20px]">add</span>
                 Create Contract
             </a>
+            {% endcomment %}
         </div>
     </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-10">
         <div class="group relative p-5 rounded-[2.5rem] bg-sky-50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/30 transition-all hover:shadow-2xl hover:shadow-sky-500/10">
             <div class="relative flex flex-col gap-6">
                 <div class="w-12 h-12 rounded-2xl bg-white dark:bg-sky-900/40 shadow-sm flex items-center justify-center text-sky-600 dark:text-sky-400">
@@ -72,7 +74,7 @@
         </div>
     </div>
 
-    <div class="mt-8 relative">
+    <div class="mt-10 relative">
         <div class="overflow-hidden rounded-[2rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
             
             <div class="overflow-x-auto custom-scrollbar">
@@ -175,17 +177,17 @@
                                                 </a>
                                             {% endif %}
                                         {% elif contract.status == 'signed' and request.user == contract.client and not contract.client_paid_at %}
-                                            <a href="#" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
+                                            <a href="{% url PAYMENT_URLS.FUND_CONTRACT contract_slug=contract.slug %}" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
                                                 Fund Project
                                             </a>
                                         {% endif %}
 
                                         <button data-slug="{{ contract.slug }}" class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" title="Share Agreement File">
-                                            <span class="material-symbols-outlined text-[18px]">share</span>
+                                            <span class="material-symbols-outlined text-[16px]">share</span>
                                         </button>
 
                                         <a href="{% url CONTRACTS.CONTRACT_TIMELINE contract_slug=contract.slug %}" class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" title="View Contract Timeline">
-                                            <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                                            <span class="material-symbols-outlined text-[16px]">open_in_new</span>
                                         </a>
                                     </div>
                                 </td>

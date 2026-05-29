@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from core.url_names import PaymentURLS
 from template_map.payments import Payments
-from .views.gig_payments import GigPaymentSummaryView, ProcessGigPaymentView, SelectGigPaymentMethodView, GigCardInfoView, GigPaymentComplete
+from .views.fund_contract import FundContractRRoleView
 from .views.account_activation import AccountActivationView
 from .views.webhooks import PaystackWebhookView
 from .views.verification import PaymentVerificationView
@@ -52,6 +52,11 @@ urlpatterns = [
         UserPaymentsListView.as_view(), 
         name=PaymentURLS.USER_PAYMENT_SUMMARY
     ),
+    path(
+        "fund-contract/<slug:contract_slug>/",
+        FundContractRRoleView.as_view(),
+        name=PaymentURLS.FUND_CONTRACT
+    ),
     
     # WEBHOOKS URLS
     path(
@@ -60,29 +65,4 @@ urlpatterns = [
         name=PaymentURLS.PAYSTACK_WEBHOOK,
     ),
     
-    path(
-        "gig-payments/<uuid:gig_id>", 
-        GigPaymentSummaryView.as_view(),
-        name=PaymentURLS.GIG_PAYMENT_SUMMARY
-    ),
-    path(
-        "gig-payments/<uuid:gig_id>/options", 
-        SelectGigPaymentMethodView.as_view(),
-        name=PaymentURLS.SELECT_GIG_PAYMENT_METHOD
-    ),
-    path(
-        "gig-payments/<uuid:gig_id>/card", 
-        GigCardInfoView.as_view(),
-        name=PaymentURLS.GIG_CARD_PAYMENT
-    ),
-    path(
-        "gig-payments/<uuid:gig_id>/checkout", 
-        ProcessGigPaymentView.as_view(),
-        name=PaymentURLS.GIG_PAYMENT_RESPONSE
-    ),
-    path(
-        "gig-payments/<uuid:gig_id>/complete", 
-        GigPaymentComplete.as_view(),
-        name=PaymentURLS.GIG_PAYMENT_COMPLETE
-    )
 ]

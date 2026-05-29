@@ -7,13 +7,10 @@ class Payments:
     ANNUAL_SUBSCRIPTION = _BASE_FOLDER.base_folder_files("annual-subcriptions.html")
     
     class ServicePayments:
-        __SUB_FOLDER = _BASE_FOLDER.subfolder("gig-payment-flows")
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("service-payments")
         
-        GIG_OVERVIEW = f"{__SUB_FOLDER}/overview.html"
-        SELECT_PAYMENT_METHOD = f"{__SUB_FOLDER}/select-payment-method.html"
-        CARD_DETAILS = f"{__SUB_FOLDER}/card-details.html"
-        GIG_CHECKOUT_RESPONSE = f"{__SUB_FOLDER}/gig-checkout-response.html"
-        GIG_PAYMENT_COMPLETE = f"{__SUB_FOLDER}/gig-payment-successfull.html"
+        FUND_CONTRACT = f"{__SUB_FOLDER}/fund-contract.html"
+        
         
     class Checkouts:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("checkouts")
@@ -25,3 +22,13 @@ class Payments:
         PAYMENT_VERIFICATION = f"{__SUB_FOLDER}/payment-verification.html"
         CHECKOUT_COMPLETE = f"{__SUB_FOLDER}/checkout-complete.html"
         
+    class Unused:
+         class ServicePayments:
+            __SUB_FOLDER = _BASE_FOLDER.subfolder("gig-payment-flows")
+            
+            GIG_OVERVIEW = f"{__SUB_FOLDER}/overview.html"
+            SELECT_PAYMENT_METHOD = f"{__SUB_FOLDER}/select-payment-method.html"
+            CARD_DETAILS = f"{__SUB_FOLDER}/card-details.html"
+            GIG_CHECKOUT_RESPONSE = f"{__SUB_FOLDER}/gig-checkout-response.html"
+            GIG_PAYMENT_COMPLETE = f"{__SUB_FOLDER}/gig-payment-successfull.html"
+            
