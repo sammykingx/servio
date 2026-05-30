@@ -10,6 +10,7 @@ class AuthURLNames:
     # REGISTRATION
     SIGNUP = "account_signup"
     EMAIL_VERIFICATION_SENT = "account_email_verification_sent"
+    EMAIL_VERIFICATION_FAILED = "account_email_verification_failed"
     EMAIL_CONFIRMATION = "account_confirm_email"
     RESEND_VERIFICATION_EMAIL = "resend_verification_email"
 

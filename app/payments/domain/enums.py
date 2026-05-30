@@ -34,7 +34,7 @@ class PaymentPurpose(str, Enum):
         (e.g., ensuring an activation_fee is only paid once).
     """
     ACTIVATION_FEE = "activation_fee"
-    SERVICE_PAYMENT = "service_payment"
+    CONTRACT_FUNDING = "contract_funding"
     WALLET_FUNDING = "wallet_funding"
     
     @classmethod

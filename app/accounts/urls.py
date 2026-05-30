@@ -58,6 +58,13 @@ urlpatterns = [
         name=AuthURLNames.EMAIL_VERIFICATION_SENT,
     ),
     path(
+        "email/failed/",
+        TemplateView.as_view(
+            template_name=Accounts.Auth.SIGNUP_VERV_EMAIL_FAILED
+        ),
+        name=AuthURLNames.EMAIL_VERIFICATION_FAILED,
+    ),
+    path(
         "resend/verification-email/", 
         registration.ResendEmailVerificationView.as_view(), 
         name=AuthURLNames.RESEND_VERIFICATION_EMAIL

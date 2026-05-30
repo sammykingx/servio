@@ -7,6 +7,8 @@ from decouple import config
 # custom user model
 AUTH_USER_MODEL = "accounts.AuthUser"
 
+UNVERIFIED_USER_SESSION_KEY = "unverified_user_session"
+
 LOGIN_URL = AuthURLNames.LOGIN
 LOGOUT_REDIRECT_URL = AuthURLNames.LOGIN
 LOGIN_REDIRECT_URL = AuthURLNames.ACCOUNT_DASHBOARD

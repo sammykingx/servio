@@ -1,8 +1,11 @@
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
+from django.http import HttpResponse, HttpRequest
 from django.views import View
+from django.views.generic import CreateView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.http import HttpResponse
-from django.views.generic import CreateView
 from accounts.forms import UserSignupForm
 from services.email_service import EmailService
 from template_map.accounts import Accounts
@@ -24,6 +27,7 @@ class CustomSignup(CreateView):
     template_name = Accounts.Auth.SIGNUP
     form_class = UserSignupForm
     email_sent = False
+    success_url = reverse_lazy(AuthURLNames.EMAIL_VERIFICATION_SENT)
     
     def dispatch(self, request, *args, **kwargs):
         """
@@ -32,36 +36,22 @@ class CustomSignup(CreateView):
         """
         if request.user.is_authenticated:
             return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
-        return super().dispatch(request, *args, **kwargs)
-    
-    def get_success_url(self) -> str:
-        """
-        Returns the URL to redirect to after successful registration.
-
-        This method can be overridden to provide dynamic success URLs based
-        on the request or other factors. By default, it returns a static
-        URL defined in the `success_url` attribute.
-        """
-        if self.email_sent:
-            return reverse_lazy(AuthURLNames.EMAIL_VERIFICATION_SENT)
-        else:
-            return reverse_lazy(AuthURLNames.RESEND_VERIFICATION_EMAIL)
-            
+        return super().dispatch(request, *args, **kwargs)      
 
     def form_valid(self, form: UserSignupForm) -> HttpResponse:
         """
-        Process a valid registration form.
+            Process a valid registration form.
 
-        This method is called when the submitted signup form passes
-        validation. It saves the new user and performs any additional
-        processing required upon successful registration.
+            This method is called when the submitted signup form passes
+            validation. It saves the new user and performs any additional
+            processing required upon successful registration.
 
-        Args:
-            form (UserSignupForm): The validated signup form instance.
+            Args:
+                form (UserSignupForm): The validated signup form instance.
 
-        Returns:
-            HttpResponse: A redirect response to the next page after
-            successful registration.
+            Returns:
+                HttpResponse: A redirect response to the next page after
+                successful registration.
         """
         response = super().form_valid(form)
         result = UserToken.objects.generate_token(
@@ -69,6 +59,11 @@ class CustomSignup(CreateView):
             token_type=TokenType.EMAIL_VERIFICATION,
         )
         self.email_sent = self.send_verification_email(result.token)
+        
+        if not self.email_sent:
+            self.request.session[settings.UNVERIFIED_USER_SESSION_KEY] = self.object.email
+            self.request.session.save()
+            return redirect(reverse_lazy(AuthURLNames.RESEND_VERIFICATION_EMAIL))
 
         return response
 
@@ -109,26 +104,50 @@ class ResendEmailVerificationView(View):
 
     http_method_names = ["get"]
     
-    def get(self, request, *args, **kwargs) -> HttpResponse:
-        if self.request.user.is_verified:
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        user = self._resolve_user(request)
+
+        if user is None:
+            return redirect(reverse_lazy(AuthURLNames.SIGNUP))
+
+        if user.is_verified:
+            self._clear_session(request)
             return redirect(reverse_lazy(AuthURLNames.ACCOUNT_DASHBOARD))
-        
+
         result = UserToken.objects.generate_token(
-            user=self.request.user,
+            user=user,
             token_type=TokenType.EMAIL_VERIFICATION,
         )
+
+        sent = self.send_verification_email(user, result.token)
+        self._clear_session(request)
         
-        sent = self.send_verification_email(self.request.user, result.token)
-        if not sent:
-            return render(
-                request,
-                Accounts.Auth.SIGNUP_VERV_EMAIL_FAILED,
-            )
-            
-        return render(
-            request,
-            Accounts.Auth.SIGNUP_VERV_EMAIL_SENT,
+        url = (
+            reverse_lazy(AuthURLNames.EMAIL_VERIFICATION_SENT)
+            if sent else 
+            reverse_lazy(AuthURLNames.EMAIL_VERIFICATION_FAILED)
         )
+        return redirect(url)
+
+    def _resolve_user(self, request: HttpRequest) -> AbstractUser | None:
+        """
+        Returns the user from the request or session.
+        Returns None if the user cannot be resolved.
+        """
+        if not request.user.is_anonymous:
+            return request.user
+
+        user_email = request.session.get(settings.UNVERIFIED_USER_SESSION_KEY)
+        if not user_email:
+            return None
+
+        try:
+            return get_user_model().objects.get(email=user_email)
+        except get_user_model().DoesNotExist:
+            return None
+
+    def _clear_session(self, request: HttpRequest) -> None:
+        request.session.pop(settings.UNVERIFIED_USER_SESSION_KEY, None)
     
     def send_verification_email(self, user, token) -> None:
         acct_activation_url = self.request.build_absolute_uri(

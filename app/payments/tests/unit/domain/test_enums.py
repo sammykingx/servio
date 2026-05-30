@@ -25,7 +25,7 @@ class TestPaymentEnumContracts:
 
     @pytest.mark.parametrize("member, expected_value", [
         (PaymentPurpose.ACTIVATION_FEE, "activation_fee"),
-        (PaymentPurpose.SERVICE_PAYMENT, "service_payment"),
+        (PaymentPurpose.CONTRACT_FUNDING, "service_payment"),
         (PaymentPurpose.WALLET_FUNDING, "wallet_funding"),
     ])
     def test_payment_purpose_values(self, member, expected_value):
