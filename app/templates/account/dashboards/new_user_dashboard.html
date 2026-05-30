@@ -1,3 +1,8 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Member Dashboard - {{ site_name }}{% endblock %}
+{% block content %}
 <section 
     x-data="{ 
         metricView: 'all', 
@@ -112,6 +117,7 @@
         </div>
     </div>
 
+    <!-- Operational Priority Items -->
     <div class="bg-white dark:bg-gray-900/50 border border-gray-200/60 dark:border-gray-800/60 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-200/60 dark:border-gray-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h2 class="text-sm font-semibold tracking-wide">Operational Priority Items</h2>
@@ -273,3 +279,4 @@
         </div>
     </div>
 </section>
+{% endblock %}

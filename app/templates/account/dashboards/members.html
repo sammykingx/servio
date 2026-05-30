@@ -56,7 +56,7 @@
                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-100 dark:border-blue-900/30">Hiring</span>
             </div>
             <div class="mt-4">
-                <span class="text-2xl font-semibold tracking-tight font-mono">${{ escrow_committed|intcomma }}</span>
+                <span class="text-2xl font-semibold tracking-tight font-mono">${{ funded_contracts|intcomma }}</span>
                 <p class="text-[11px] text-gray-400 mt-1">Secured funds active inside funded contracts</p>
             </div>
         </div>
@@ -77,7 +77,7 @@
             </div>
             <div class="mt-4">
                 <span class="text-2xl font-semibold tracking-tight font-mono">${{ secured_income|intcomma }}</span>
-                <p class="text-[11px] text-gray-400 mt-1">Guaranteed funds awaiting release</p>
+                <p class="text-[11px] text-gray-400 mt-1">Guaranteed funds awaiting release from signed contract.</p>
             </div>
         </div>
 
@@ -104,6 +104,7 @@
         </div>
     </div>
 
+    <!-- Handoff Notification -->
     {% if handoff %}
     <div 
         x-show="!dismissHandOff" 
@@ -178,14 +179,24 @@
                                 {{ item.get_status_display }}
                             </span>
 
-                            <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border border-gray-200 dark:border-gray-700/40">
-                                {% if item.user_role == 'client' %}Hiring Party{% else %}Partner/Provider{% endif %}
-                            </span>
+                            {% if item.user_role == 'client' %}
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-sky-50/60 text-sky-600 dark:bg-sky-950/20 dark:text-sky-400 border border-sky-100/30">
+                                    Hiring Party
+                                </span>
+                            {% elif item.user_role == 'provider' %}
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-50/60 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400 border border-emerald-100/30">
+                                    Partner/Provider
+                                </span>
+                            {% else %}
+                                <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-50/60 text-gray-700 dark:bg-gray-950/20 dark:text-gray-400 border border-gray-100/30">
+                                    Associated Party
+                                </span>
+                            {% endif %}
                         </div>
                         <p class="text-gray-400">
-                            {% if item.status == 'disputed' %}Milestone escrow logic is locked due to an active fulfillment dispute.
+                            {% if item.status == 'disputed' %}Milestone funds locked due to an active fulfillment dispute.
                             {% elif item.status == 'awaiting' %}Awaiting terms verification execution signatures from both engine parties.
-                            {% else %}Signatures verified. Client deposit required to initialize active contract workflow status.{% endif %}
+                            {% else %}<span class="text-emerald-500 dark:text-emerald-400">Signatures verified.</span> Client deposit required to initialize contracted-role workflow.{% endif %}
                         </p>
                     </div>
                 </div>
@@ -209,12 +220,18 @@
                     <div class="space-y-0.5">
                         <div class="flex items-center gap-2 flex-wrap">
                             <span class="font-medium text-gray-900 dark:text-gray-100">{{ gig.title }}</span>
-                            <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50">Open Opportunity</span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700/50">
+                                {% if gig.has_gig_roles %}
+                                    Scoped Project
+                                {% else %}
+                                    Open Opportunity
+                                {% endif %}
+                            </span>
                         </div>
-                        <p class="text-gray-400">You have received <strong>{{ gig.pending_count }}</strong> new technical layout proposals from the marketplace framework.</p>
+                        <p class="text-gray-400">You have received <strong class="text-green-500 dark:text-green-400">{{ gig.pending_count }}</strong> new proposals from the marketplace framework.</p>
                     </div>
                 </div>
-                <a href="{% url 'gig_proposals' gig.slug %}" class="inline-flex items-center justify-center h-8 px-3 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium rounded-lg shadow-xs transition-colors whitespace-nowrap">Evaluate Proposals</a>
+                <a href="{% url PROPOSALS.PROPOSAL_LISTINGS project_slug=gig.slug %}" class="inline-flex items-center justify-center h-8 px-3 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium rounded-lg shadow-xs transition-colors whitespace-nowrap">Evaluate Proposals</a>
             </div>
             {% endfor %}
 
@@ -230,11 +247,34 @@
             </div>
             
             <div class="space-y-3">
-                <div class="h-2 w-full bg-gray-100 dark:bg-gray-800 rounded-full flex overflow-hidden">
-                    <div class="bg-amber-400 grow-[{{ funnel.awaiting }}]"></div>
-                    <div class="bg-blue-400 grow-[{{ funnel.signed }}]"></div>
-                    <div class="bg-emerald-500 grow-[{{ funnel.funded }}]"></div>
-                    <div class="bg-red-500 grow-[{{ funnel.disputed }}]"></div>
+                <div class="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-stretch overflow-hidden">
+                    <!-- Awaiting Scopes Segment -->
+                    <div 
+                        class="bg-amber-400 h-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
+                        style="flex-grow: {{ funnel.awaiting|default:0 }}; flex-basis: 0%;"
+                        title="Awaiting: {{ funnel.awaiting }}">
+                    </div>
+                    
+                    <!-- Signed Contracts Segment -->
+                    <div 
+                        class="bg-blue-400 h-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
+                        style="flex-grow: {{ funnel.signed|default:0 }}; flex-basis: 0%;"
+                        title="Signed: {{ funnel.signed }}">
+                    </div>
+                    
+                    <!-- Funded Escrow Segment -->
+                    <div 
+                        class="bg-emerald-500 h-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
+                        style="flex-grow: {{ funnel.funded|default:0 }}; flex-basis: 0%;"
+                        title="Funded: {{ funnel.funded }}">
+                    </div>
+                    
+                    <!-- Disputed Pipeline Segment -->
+                    <div 
+                        class="bg-red-500 h-full transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" 
+                        style="flex-grow: {{ funnel.disputed|default:0 }}; flex-basis: 0%;"
+                        title="Disputed: {{ funnel.disputed }}">
+                    </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-[11px] text-gray-500 dark:text-gray-400">
@@ -264,34 +304,51 @@
                 <p class="text-[11px] text-gray-400 mt-0.5">Transactions processed through your primary secure gateway pipelines.</p>
             </div>
             
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs border-collapse">
+            <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+                <table class="w-full text-left border-collapse table-fixed">
                     <thead>
-                        <tr class="border-b border-gray-100 dark:border-gray-800/80 text-gray-400">
-                            <th class="pb-2 font-medium">System Reference</th>
-                            <th class="pb-2 font-medium">Trigger Intent</th>
-                            <th class="pb-2 font-medium">Ledger Status</th>
-                            <th class="pb-2 font-medium text-right">Value</th>
+                        <tr class="border-b border-gray-100 dark:border-gray-800/80 text-gray-400 text-[11px] sm:text-xs uppercase tracking-wider font-medium">
+                            <th class="pb-3 pt-1 font-medium w-[28%] hidden sm:table-cell">System Reference</th>
+                            <th class="pb-3 pt-1 font-medium w-[40%] sm:w-[32%]">Trigger Intent</th>
+                            <th class="pb-3 pt-1 font-medium w-[32%] sm:w-[20%]">Ledger Status</th>
+                            <th class="pb-3 pt-1 font-medium w-[28%] sm:w-[20%] text-right">Value</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100/50 dark:divide-gray-800/40 text-gray-600 dark:text-gray-300">
+                    <tbody class="divide-y divide-gray-100/50 dark:divide-gray-800/40 text-[11px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-300">
                         {% for payment in recent_payments %}
-                        <tr>
-                            <td class="py-2.5 font-mono text-[11px] text-gray-400">{{ payment.reference }}</td>
-                            <td class="py-2.5 capitalize">{{ payment.get_payment_purpose_display }}</td>
-                            <td class="py-2.5">
-                                <span class="font-medium 
-                                    {% if payment.status == 'success' %}text-emerald-600 dark:text-emerald-400
-                                    {% elif payment.status == 'failed' %}text-red-500
-                                    {% else %}text-amber-500{% endif %}">
+                        <tr class="hover:bg-gray-50/40 dark:hover:bg-gray-900/10 transition-colors duration-150">
+                            <td class="py-3 font-mono text-[10px] sm:text-xs text-gray-400 hidden sm:table-cell truncate pr-4">
+                                {{ payment.reference }}
+                            </td>
+                            
+                            <td class="py-3 capitalize text-gray-400 dark:text-gray-200 font-light truncate pr-2">
+                                {{ payment.get_payment_purpose_display }}
+                            </td>
+                            
+                            <td class="py-3 whitespace-nowrap">
+                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-medium
+                                    {% if payment.status == 'success' %}bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400
+                                    {% elif payment.status == 'failed' %}bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400
+                                    {% else %}bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400{% endif %}">
                                     {{ payment.status|title }}
                                 </span>
                             </td>
-                            <td class="py-2.5 text-right font-mono text-gray-900 dark:text-white">${{ payment.amount_decimal|intcomma }}</td>
+                            
+                            <td class="py-3 text-right font-mono text-gray-600 dark:text-white font-semibold tabular-nums">
+                                {% if payment.currency == 'USD' %}
+                                    ${{ payment.amount_decimal|intcomma }}
+                                {% elif payment.currency == 'NGN' %}
+                                    ₦{{ payment.amount_decimal|intcomma }}
+                                {% else %}
+                                    {{ payment.amount_decimal|intcomma }}
+                                {% endif %}
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="py-4 text-center text-gray-400">No recent transaction attempts found inside the gateway channels.</td>
+                            <td colspan="4" class="py-8 text-center text-xs sm:text-sm text-gray-400 tracking-wide">
+                                No recent transaction attempts found inside the gateway channels.
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

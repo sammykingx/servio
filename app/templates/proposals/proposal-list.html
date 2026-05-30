@@ -4,41 +4,41 @@
 {% block browser_title %}{{ project|title|truncatewords:3 }} Proposals{% endblock %}
 {% block content %}
 <section class="w-full max-w-7xl mx-auto px-2 py-4">
-    <div class="mb-10 pb-6 border-b border-slate-200/80 dark:border-zinc-800/80 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div class="mb-10 pb-6 border-b border-slate-200/80 dark:border-gray-800/80 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div class="flex flex-col gap-2 min-w-0">
-            <div class="flex items-center gap-2 text-xs font-medium text-slate-400 dark:text-zinc-500">
-                <span class="hover:text-slate-600 dark:hover:text-zinc-300 transition-colors">Projects</span>
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-400 dark:text-gray-500">
+                <span class="hover:text-slate-600 dark:hover:text-gray-300 transition-colors">Projects</span>
                 <span class="font-normal opacity-40">/</span>
-                <div class="flex items-center gap-1.5 font-medium text-slate-600 dark:text-zinc-400">
+                <div class="flex items-center gap-1.5 font-medium text-slate-600 dark:text-gray-400">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
                     Active Proposals
                 </div>
             </div>
 
-            <h1 class="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-zinc-50 truncate" title="{{ project.title|title }}">
+            <h1 class="text-lg sm:text-xl md:text-2xl font-semibold tracking-tight text-slate-800 dark:text-gray-50 truncate" title="{{ project.title|title }}">
                 {{ project.title|title }}
             </h1>
         </div>
 
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-500 dark:text-zinc-400 font-normal">
-            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-zinc-800 dark:bg-zinc-900/30">
-                <span class="material-symbols-outlined text-base text-slate-400 dark:text-zinc-500">payments</span>
-                <span class="text-slate-400 dark:text-zinc-500">Budget:</span>
-                <span class="font-mono font-medium text-slate-800 dark:text-zinc-200">${{ project.total_budget|intcomma }}</span>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-500 dark:text-gray-400 font-normal">
+            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-gray-800 dark:bg-gray-900/30">
+                <span class="material-symbols-outlined text-base text-slate-400 dark:text-gray-500">payments</span>
+                <span class="text-slate-400 dark:text-gray-500">Budget:</span>
+                <span class="font-mono font-light text-slate-800 dark:text-gray-200">${{ project.total_budget|intcomma }}</span>
             </div>
 
             <!-- Deadline Metric Component -->
-            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-zinc-800 dark:bg-zinc-900/30">
-                <span class="material-symbols-outlined text-base text-slate-400 dark:text-zinc-500">calendar_today</span>
-                <span class="text-slate-400 dark:text-zinc-500">Due:</span>
-                <span class="font-medium text-slate-800 dark:text-zinc-200">{{ project.end_date|date:"M d, Y" }}</span>
+            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-gray-800 dark:bg-gray-900/30">
+                <span class="material-symbols-outlined text-base text-slate-400 dark:text-gray-500">calendar_today</span>
+                <span class="text-slate-400 dark:text-gray-500">Due:</span>
+                <span class="font-light text-slate-800 dark:text-gray-200">{{ project.end_date|date:"M d, Y" }}</span>
             </div>
 
             <!-- Total Submissions Tracker Counter -->
-            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-zinc-800 dark:bg-zinc-900/30">
-                <span class="material-symbols-outlined text-base text-slate-400 dark:text-zinc-500">folder_open</span>
-                <span class="font-medium text-slate-800 dark:text-zinc-200">{{ project.proposals.count }}</span>
-                <span class="text-slate-400 dark:text-zinc-500">proposals</span>
+            <div class="flex items-center gap-1.5 border border-slate-200 bg-slate-50/50 px-2.5 py-1 rounded-md dark:border-gray-800 dark:bg-gray-900/30">
+                <span class="material-symbols-outlined text-base text-slate-400 dark:text-gray-500">folder_open</span>
+                <span class="font-light text-slate-800 dark:text-gray-200">{{ project.proposals.count }}</span>
+                <span class="text-slate-400 dark:text-gray-500">proposals</span>
             </div>
             
         </div>
@@ -58,23 +58,23 @@
                         {% if proposal.provider.profile.avatar_url %}
                             <img src="{{ proposal.provider.profile.avatar_url.url }}" 
                                 alt="{{ proposal.provider.get_full_name }}"
-                                class="h-11 w-11 shrink-0 rounded-xl object-cover border border-slate-100 dark:border-zinc-800" />
+                                class="h-11 w-11 shrink-0 rounded-xl object-cover border border-slate-100 dark:border-gray-800" />
                         {% else %}
-                            <div class="h-11 w-11 shrink-0 rounded-xl bg-slate-100 text-slate-700 dark:bg-zinc-800 dark:text-zinc-300 flex items-center justify-center text-sm font-semibold tracking-wider">
+                            <div class="h-11 w-11 shrink-0 rounded-xl bg-slate-100 text-slate-700 dark:bg-gray-800 dark:text-gray-300 flex items-center justify-center text-sm font-semibold tracking-wider">
                                 {{ proposal.provider.first_name|first }}{{ proposal.provider.last_name|first }}
                             </div>
                         {% endif %}
 
                         <div class="min-w-0">
-                            <h3 class="text-[15px] font-semibold text-slate-900 dark:text-zinc-100 tracking-tight leading-none mb-1.5">
+                            <h3 class="text-[15px] font-semibold text-slate-900 dark:text-gray-100 tracking-tight leading-none mb-1.5">
                                 {{ proposal.provider.get_full_name|title }}
                             </h3>
                             <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-                                <span class="text-xs font-medium text-slate-500 dark:text-zinc-400">
+                                <span class="text-xs font-medium text-slate-500 dark:text-gray-400">
                                     {{ proposal.provider.profile.headline|default:"Professional" }}
                                 </span>
-                                <span class="hidden sm:inline text-slate-300 dark:text-zinc-700">•</span>
-                                <span class="text-xs text-slate-400 dark:text-zinc-500">
+                                <span class="hidden sm:inline text-slate-300 dark:text-gray-700">•</span>
+                                <span class="text-xs text-slate-400 dark:text-gray-500">
                                     {{ proposal.sent_at|timesince }}
                                 </span>
                             </div>
@@ -84,7 +84,7 @@
                     <div class="shrink-0 flex items-center">
                         
                         <!-- Desktop Display Trigger: Hidden on mobile layouts -->
-                        <span class="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 bg-white shadow-sm group-hover:bg-slate-50 group-hover:text-slate-900 transition-colors dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:group-hover:bg-zinc-800 dark:group-hover:text-zinc-200">
+                        <span class="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 bg-white shadow-sm group-hover:bg-slate-50 group-hover:text-slate-900 transition-colors dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:group-hover:bg-gray-800 dark:group-hover:text-gray-200">
                             View Proposal
                             <svg class="h-3 w-3 opacity-60 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
@@ -92,7 +92,7 @@
                         </span>
 
                         <!-- Mobile Display Trigger: Compact navigation icon showing pulse accent animation -->
-                        <div class="sm:hidden flex items-center justify-center h-8 w-8 rounded-full bg-slate-50 dark:bg-zinc-800/40 text-slate-400 dark:text-zinc-500 group-hover:text-slate-700 dark:group-hover:text-zinc-300 transition-colors">
+                        <div class="sm:hidden flex items-center justify-center h-8 w-8 rounded-full bg-slate-50 dark:bg-gray-800/40 text-slate-400 dark:text-gray-500 group-hover:text-slate-700 dark:group-hover:text-gray-300 transition-colors">
                             <svg class="h-4 w-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                             </svg>
@@ -102,14 +102,14 @@
                 </div>
 
                 <!-- Applied roles -->
-                <div class="overflow-hidden rounded-xl border border-slate-100 bg-slate-50/40 dark:border-zinc-800/50 dark:bg-zinc-950/20">
-                    <div class="divide-y divide-slate-100 dark:divide-zinc-800/60">
+                <div class="overflow-hidden rounded-xl border border-slate-100 bg-slate-50/40 dark:border-gray-800/50 dark:bg-gray-950/20">
+                    <div class="divide-y divide-slate-100 dark:divide-gray-800/60">
                         {% for role in proposal.roles.all %}
-                            <div class="grid grid-cols-1 md:grid-cols-12 items-center p-4 gap-4 transition-colors group-hover:bg-slate-50/30 dark:group-hover:bg-zinc-900/10">
+                            <div class="grid grid-cols-1 md:grid-cols-12 items-center p-4 gap-4 transition-colors group-hover:bg-slate-50/30 dark:group-hover:bg-gray-900/10">
                                 
                                 <div class="md:col-span-5 min-w-0">
                                     <div class="flex items-center gap-2.5 mb-1">
-                                        <h4 class="font-medium text-[13.5px] text-slate-800 dark:text-zinc-200 truncate">
+                                        <h4 class="font-medium text-[13.5px] text-slate-800 dark:text-gray-200 truncate">
                                             {{ role.role_name|title }}
                                         </h4>
                                         <span class="inline-flex px-2 py-0.5 rounded-md text-[10px] font-medium tracking-wide border 
@@ -123,23 +123,23 @@
                                             {{ role.status|default:"Pending"|title }}
                                         </span>
                                     </div>
-                                    <p class="text-xs text-slate-400 dark:text-zinc-500 flex items-center gap-1.5">
+                                    <p class="text-xs text-slate-400 dark:text-gray-500 flex items-center gap-1.5">
                                         <span class="opacity-60">Payment Setup:</span>
-                                        <span class="font-medium text-slate-500 dark:text-zinc-400">{{ role.get_payment_plan_display|default:"Milestones" }}</span>
+                                        <span class="font-medium text-slate-500 dark:text-gray-400">{{ role.get_payment_plan_display|default:"Milestones" }}</span>
                                     </p>
                                 </div>
 
-                                <div class="md:col-span-7 grid grid-cols-3 items-center gap-2 text-left md:text-right border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-zinc-800">
+                                <div class="md:col-span-7 grid grid-cols-3 items-center gap-2 text-left md:text-right border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-gray-800">
                                     <div>
-                                        <span class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-zinc-500 mb-0.5">Budget</span>
-                                        <span class="text-xs font-mono font-medium text-slate-500 dark:text-zinc-400">
+                                        <span class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-gray-500 mb-0.5">Budget</span>
+                                        <span class="text-xs font-mono font-medium text-slate-500 dark:text-gray-400">
                                             ${{ role.client_budget|intcomma }}
                                         </span>
                                     </div>
                                     
                                     <div>
-                                        <span class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-zinc-500 mb-0.5">Asking</span>
-                                        <span class="text-xs font-mono font-semibold text-slate-800 dark:text-zinc-200">
+                                        <span class="block text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-gray-500 mb-0.5">Asking</span>
+                                        <span class="text-xs font-mono font-semibold text-slate-800 dark:text-gray-200">
                                             ${{ role.proposed_amount|default:role.client_budget|intcomma }}
                                         </span>
                                     </div>
@@ -155,12 +155,12 @@
                                                     Under Budget
                                                 </span>
                                             {% else %}
-                                                <span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium text-slate-500 dark:text-zinc-400 bg-slate-100/60 dark:bg-zinc-800/40">
+                                                <span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-medium text-slate-500 dark:text-gray-400 bg-slate-100/60 dark:bg-gray-800/40">
                                                     On Match
                                                 </span>
                                             {% endif %}
                                         {% else %}
-                                            <span class="text-xs font-mono text-slate-400 dark:text-zinc-500">• Open Budget</span>
+                                            <span class="text-xs font-mono text-slate-400 dark:text-gray-500">• Open Budget</span>
                                         {% endif %}
                                     </div>
                                 </div>

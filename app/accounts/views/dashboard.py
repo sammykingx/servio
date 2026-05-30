@@ -28,7 +28,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # ---------------------------------------------------------------------
         # 1. METRICS & LIFECYCLE FUNNEL (Aggregated Contract Scan)
         # ---------------------------------------------------------------------
-        # We query the Contract engine exactly once to get totals for both roles
         contract_metrics = Contract.objects.filter(
             Q(client=user) | Q(provider=user)
         ).aggregate(
@@ -36,7 +35,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             total_active=Count('id', filter=Q(status__in=[ContractStatus.SIGNED, ContractStatus.FUNDED])),
             
             # Outbound Escrow: Client committed funds
-            escrow_committed=Sum('agreed_amount', filter=Q(client=user, status=ContractStatus.FUNDED)),
+            funded_contracts=Sum('agreed_amount', filter=Q(client=user, status=ContractStatus.FUNDED)),
             
             # Inbound Escrow: Provider guaranteed earning pipeline
             secured_income=Sum('agreed_amount', filter=Q(provider=user, status=ContractStatus.FUNDED)),
@@ -53,17 +52,17 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         )
 
         # Fallbacks for empty querysets (None -> 0)
-        escrow_out = contract_metrics['escrow_committed'] or 0
+        escrow_out = contract_metrics['funded_contracts'] or 0
         escrow_in = contract_metrics['secured_income'] or 0
         pipe_client = contract_metrics['pipeline_client'] or 0
         pipe_provider = contract_metrics['pipeline_provider'] or 0
 
-        context['escrow_committed'] = escrow_out
+        context['funded_contracts'] = escrow_out
         context['secured_income'] = escrow_in
         context['active_contracts_count'] = contract_metrics['total_active'] or 0
         context['pipeline_value'] = pipe_client + pipe_provider
 
-        # Inject layout funnel counts directly
+        # Contract Lifecycle Funnel Breakdown (for visual funnel component)
         context['funnel'] = {
             'awaiting': contract_metrics['count_awaiting'] or 0,
             'signed': contract_metrics['count_signed'] or 0,

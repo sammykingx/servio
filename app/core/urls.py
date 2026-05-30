@@ -58,7 +58,7 @@ urlpatterns = [
         name=ReviewURLS.OVERVIEW
     ),
     path("firebase-messaging-sw.js", service_worker, name="firebase-service-worker"),
-    
+    # path("new-db", TemplateView.as_view(template_name="account/dashboards/new_user_dashboard.html"), name="new_usser_Db"),
     # path(
     #     "client/",
     #     TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
