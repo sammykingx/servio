@@ -112,8 +112,8 @@ class ProposalPolicy:
         Orchestrator: Runs all checks.
         If any fail, they raise a ProposalPermissionDenied with a specific message.
         """
-        # cls.check_user_eligibility(actor.profile, project)
-        # cls.check_project_state(project, actor)
+        cls.check_user_eligibility(actor.profile, project)
+        cls.check_project_state(project, actor)
         # cls.check_financial_status(actor.profile)
         pass
         

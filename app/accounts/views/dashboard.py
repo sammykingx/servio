@@ -137,6 +137,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 # Fallback profile check assuming profile phone fields exist
                 'partner_phone': getattr(getattr(partner, 'profile', None), 'phone', ''), 
             }
+            
+        context['has_gig'] = Gig.objects.filter(creator=user).exists()
 
         return context
     # def get_template_names(self):

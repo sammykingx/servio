@@ -12,6 +12,29 @@ from datetime import timedelta
 #   is_active, date_joined, last_login
 #   is_staff(can login into django admin), is_superuser(has all perms)
 
+    
+class CustomUserManager(BaseUserManager):
+    # https://docs.djangoproject.com/en/5.2/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model
+    def create_user(
+        self,
+        *,
+        email: str = None,
+        password: str = None,
+        **extra_fields,
+    ) -> AbstractUser:
+        if not (email and password):
+            missing_field = "Email" if not email else "Password"
+            raise ValueError(f"Missing {missing_field} Field.")
+
+        user = self.model(
+            email=self.normalize_email(email),
+            date_joined=timezone.now(),
+            **extra_fields,
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+    
 
 class AuthUser(AbstractUser):
     """
@@ -28,6 +51,8 @@ class AuthUser(AbstractUser):
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+    
+    # objects = CustomUserManager()
 
     @property
     def full_name(self) -> str:
@@ -122,25 +147,3 @@ class AuthUser(AbstractUser):
             ),
         ]
 
-
-class CustomUserManager(BaseUserManager):
-    # https://docs.djangoproject.com/en/5.2/topics/auth/customizing/#writing-a-manager-for-a-custom-user-model
-    def create_user(
-        self,
-        *,
-        email: str = None,
-        password: str = None,
-        **extra_fields,
-    ) -> AbstractUser:
-        if not (email and password):
-            missing_field = "Email" if not email else "Password"
-            raise ValueError(f"Missing {missing_field} Field.")
-
-        user = self.model(
-            email=self.normalize_email(email),
-            date_joined=timezone.now(),
-            **extra_fields,
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user

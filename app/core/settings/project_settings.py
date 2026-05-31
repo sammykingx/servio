@@ -16,7 +16,6 @@ LOGIN_REDIRECT_URL = AuthURLNames.ACCOUNT_DASHBOARD
 LOCAL_APPS = [
     "accounts.apps.AccountsConfig",
     "business_accounts.apps.BusinessAccountsConfig",
-    # "business_services.apps.BusinessServicesConfig",
     
     "collaboration.apps.CollaborationConfig",
     "contracts.apps.ContractsConfig",
