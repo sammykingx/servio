@@ -168,6 +168,7 @@ async function submitBtn(action="publish") {
         }
 
         const result = await response.json();
+        console.log("server response: ", JSON.stringify(result, null, 2));
 
         showToast(result.message || "Gig successfully published!", "success", "Action Successfull");
         if (result?.url) {
@@ -176,7 +177,7 @@ async function submitBtn(action="publish") {
             }, 2000);
         }
     } catch (err) {
-        // Client-side error (network, fetch blocked, etc.)
+        showToast("An unexpected error occurred. Please try again.", "error", "Unexpected Error");
         return;
     }
 
@@ -228,19 +229,28 @@ function validatePayload(gigPayload) {
 
     const { title, description, projectBudget, startDate, endDate, roles } = gigPayload;
 
+    const plainDescription = (gigPayload.description || "")
+        .replace(/<[^>]*>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .trim();
+
     if (!title || title.trim().length < 10) {
         errors.push("Project title must be meaningful");
     }
 
     // const wordCount = description.trim().match(/\b\w+\b/g)?.length || 0;
     // This handles null, undefined, or missing description safely
-    const wordCount = (description || "").toString().trim().match(/\b\w+\b/g)?.length || 0;
+    const wordCount = plainDescription.match(/\b\w+\b/g)?.length || 0;
 
     if (wordCount < 6) {
         errors.push("Project description must be descriptive enough for professionals to understand");
     }
 
     if (description.length > 2000) {
+        console.log("Description length: ", description.length);
         errors.push("Project description is too long. Maximum allowed length is 2000 characters.");
     }
 

@@ -4,7 +4,7 @@ from typing import List
 from decimal import Decimal
 from enum import Enum
 from .gig_role import GigRolePayload
-import bleach
+import bleach, html
 
 ALLOWED_TAGS = [
     "p", "br", "strong", "b", "em", "i", "u",
@@ -34,7 +34,7 @@ class GigPayload(BaseModel):
     """Editting gig that is in draft mode"""
     
     title: str = Field(..., max_length=120)
-    description: str = Field(..., max_length=3000)
+    description: str
     projectBudget: Decimal = Field(..., gt=0, max_digits=12, decimal_places=2)
     visibility: VisibilityEnum
     startDate: date
@@ -51,6 +51,10 @@ class GigPayload(BaseModel):
         #     attributes=ALLOWED_ATTRIBUTES,
         #     strip=True
         # )
+        plain = bleach.clean(value, tags=ALLOWED_TAGS, strip=True)
+        sanitized = html.escape(plain).strip()
+        if len(sanitized) > 2900:
+            raise ValueError("Project description is too long, reduce the length to provide a better experience for professionals browsing through projects.")
         return value
     
     @field_validator("startDate", mode="after")

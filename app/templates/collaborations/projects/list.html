@@ -48,7 +48,7 @@
                     >
                         <span class="{% if not active_tab %}text-brand-500{% else %}text-gray-500{% endif %}
                             dark:text-gray-200 text-sm font-semibold whitespace-nowrap">
-                            All Gigs
+                            All
                         </span>
                         <span class="flex items-center justify-center
                             {% if not active_tab %}
@@ -88,6 +88,7 @@
                         </span>
                     </a>
 
+                    {% comment "enable when we start tracking pending status" %}
                     <a
                         href="{% if gig_status_counts.pending %}?project_status=pending{% else %}#{% endif %}"
                         class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
@@ -113,6 +114,7 @@
                             {{ gig_status_counts.pending }}
                         </span>
                     </a>
+                    {% endcomment %}
 
                     <a
                         href="{% if gig_status_counts.published %}?project_status=published{% else %}#{% endif %}"
@@ -140,6 +142,7 @@
                         </span>
                     </a>
 
+                    {% comment "enable when we stasrt traking projectsin progress and completed status" %}
                     <a
                         href="{% if gig_status_counts.in_progress %}?project_status=in_progress{% else %}#{% endif %}"
                         class="group flex items-center gap-2 pb-3 px-1 cursor-pointer
@@ -191,6 +194,7 @@
                             {{ gig_status_counts.completed }}
                         </span>
                     </a>
+                    {% endcomment %}
 
                 {% endwith %}
             </div>

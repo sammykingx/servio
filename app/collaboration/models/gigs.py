@@ -81,7 +81,7 @@ class Gig(models.Model):
     
     is_negotiable = models.BooleanField(
         default=False,
-        help_text="Indicates if the total budget is negotiable"
+        help_text="Indicates if the client is open to negotiation on the budget"
     )
     has_gig_roles = models.BooleanField(default=True)
     is_gig_active = models.BooleanField(default=True)
@@ -136,9 +136,9 @@ class Gig(models.Model):
         )
         return result['total'] or 0
 
-    @property
-    def active_proposals_count(self):
-        return self.proposals.count()
+    # @property
+    # def active_proposals_count(self):
+    #     return self.proposals.count()
     
     @property
     def updated_display(self):
@@ -161,7 +161,7 @@ class Gig(models.Model):
     @property
     def gig_duration(self):
         """
-            Returns the duration of the gig in days, if both start_date and end_date are set.
+            Returns the duration of the project in days, if both start_date and end_date are set.
         """
         if not self.start_date or not self.end_date:
             return None
