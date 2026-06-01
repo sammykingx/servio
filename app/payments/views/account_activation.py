@@ -31,6 +31,7 @@ class AccountActivationView(LoginRequiredMixin, View):
         
         amount = Decimal(str(APP_SUBSCRIPTION_FEE))
         entity = PaymentService(
+            request=request,
             gateway_name=provider,
             phase=PaymentPhase.INITIALIZATION, 
             user=self.request.user

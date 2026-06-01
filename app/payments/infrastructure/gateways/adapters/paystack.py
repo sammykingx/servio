@@ -2,6 +2,7 @@
 
 from core.url_names import PaymentURLS
 from django.conf import settings
+from django.http import HttpRequest
 from django.urls import reverse
 from requests.exceptions import HTTPError, Timeout, RequestException
 from payments.domain.contracts import PaymentGateway
@@ -20,10 +21,13 @@ logger = logging.getLogger(__name__)
 class PaystackAdapter(PaymentGateway):
     BASE_URL = "https://api.paystack.co"
 
-    def __init__(self):
+    def __init__(self, request: HttpRequest):
+        self.request = request
         self.secret_key = settings.PAYSTACK_SECRET_KEY
         self.public_key = settings.PAYSTACK_PUBLIC_KEY
-        self.callback_url = reverse(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
+        self.callback_url = request.build_absolute_uri(
+            reverse(PaymentURLS.PAYMENT_VERIFICATION, kwargs={"gateway": "paystack"})
+        )
         self.timeout = (5, 17) # (Connect Timeout, Read Timeout)
 
         if not all([self.secret_key, self.public_key, self.callback_url]):

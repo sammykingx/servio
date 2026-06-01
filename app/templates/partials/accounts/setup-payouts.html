@@ -24,8 +24,33 @@
 				<input type="radio" name="payout_currency" value="usd" x-model="payoutMethod" class="sr-only">
 				<div class="flex w-full items-center justify-between">
 					<div class="flex items-center gap-3">
+						{% comment %}
 						<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 font-semibold text-xs tracking-wider">
 							🇺🇸
+						</div>
+						{% endcomment %}
+						<div class="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden">
+							<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+								<!-- 13 stripes -->
+								<rect x="0" y="0" width="30" height="20" fill="#B22234"/>
+								<rect x="0" y="1.54" width="30" height="1.54" fill="#ffffff"/>
+								<rect x="0" y="4.62" width="30" height="1.54" fill="#ffffff"/>
+								<rect x="0" y="7.69" width="30" height="1.54" fill="#ffffff"/>
+								<rect x="0" y="10.77" width="30" height="1.54" fill="#ffffff"/>
+								<rect x="0" y="13.85" width="30" height="1.54" fill="#ffffff"/>
+								<rect x="0" y="16.92" width="30" height="1.54" fill="#ffffff"/>
+								<!-- canton -->
+								<rect x="0" y="0" width="12" height="10.77" fill="#3C3B6E"/>
+								<!-- stars (5x4 + 4x5 alternating rows, simplified at this size) -->
+								<g fill="#ffffff" font-size="1.6" font-family="sans-serif" text-anchor="middle">
+									<text x="1.5" y="2.2">★</text><text x="3.5" y="2.2">★</text><text x="5.5" y="2.2">★</text><text x="7.5" y="2.2">★</text><text x="9.5" y="2.2">★</text><text x="11.5" y="2.2">★</text>
+									<text x="2.5" y="3.8">★</text><text x="4.5" y="3.8">★</text><text x="6.5" y="3.8">★</text><text x="8.5" y="3.8">★</text><text x="10.5" y="3.8">★</text>
+									<text x="1.5" y="5.4">★</text><text x="3.5" y="5.4">★</text><text x="5.5" y="5.4">★</text><text x="7.5" y="5.4">★</text><text x="9.5" y="5.4">★</text><text x="11.5" y="5.4">★</text>
+									<text x="2.5" y="7">★</text><text x="4.5" y="7">★</text><text x="6.5" y="7">★</text><text x="8.5" y="7">★</text><text x="10.5" y="7">★</text>
+									<text x="1.5" y="8.6">★</text><text x="3.5" y="8.6">★</text><text x="5.5" y="8.6">★</text><text x="7.5" y="8.6">★</text><text x="9.5" y="8.6">★</text><text x="11.5" y="8.6">★</text>
+									<text x="2.5" y="10.2">★</text><text x="4.5" y="10.2">★</text><text x="6.5" y="10.2">★</text><text x="8.5" y="10.2">★</text><text x="10.5" y="10.2">★</text>
+								</g>
+							</svg>
 						</div>
 						<div>
 							<p class="text-sm font-semibold text-gray-800 dark:text-white">United States</p>
@@ -47,6 +72,18 @@
 						<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-500 font-semibold text-xs tracking-wider">
 							🇨🇦
 						</div>
+						{% comment %}
+						<div class="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden">
+							<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+								<rect x="0" y="0" width="30" height="20" fill="#ffffff"/>
+								<rect x="0" y="0" width="7.5" height="20" fill="#FF0000"/>
+								<rect x="22.5" y="0" width="7.5" height="20" fill="#FF0000"/>
+								<!-- maple leaf -->
+								<path d="M15,3 L16,6.5 L19.5,5.5 L18,8 L21,9.5 L18,10 L18.5,13 L15,11.5 L11.5,13 L12,10 L9,9.5 L12,8 L10.5,5.5 L14,6.5 Z" fill="#FF0000"/>
+								<rect x="14.25" y="13" width="1.5" height="3" fill="#FF0000"/>
+							</svg>
+						</div>
+						{% endcomment %}
 						<div>
 							<p class="text-sm font-semibold text-gray-800 dark:text-white">Canada</p>
 							<p class="text-xs text-gray-500 dark:text-gray-400">EFT Direct Deposit</p>
@@ -64,8 +101,17 @@
 				<input type="radio" name="payout_currency" value="ngn" x-model="payoutMethod" class="sr-only">
 				<div class="flex w-full items-center justify-between">
 					<div class="flex items-center gap-3">
+						{% comment %}
 						<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 font-semibold text-xs tracking-wider">
 							🇳🇬
+						</div>
+						{% endcomment %}
+						<div class="flex h-10 w-10 items-center justify-center rounded-xl overflow-hidden">
+							<svg viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+								<rect x="0" y="0" width="10" height="20" fill="#008751"/>
+								<rect x="10" y="0" width="10" height="20" fill="#ffffff"/>
+								<rect x="20" y="0" width="10" height="20" fill="#008751"/>
+							</svg>
 						</div>
 						<div>
 							<p class="text-sm font-semibold text-gray-800 dark:text-white">Nigeria</p>

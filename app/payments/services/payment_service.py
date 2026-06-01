@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import AbstractUser
 from django.db import OperationalError
+from django.http import HttpRequest
 from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.repositories import PaymentRepository
 from payments.domain.enums import (
@@ -27,7 +28,7 @@ logger = logging.getLogger("app_file")
 
 class PaymentService:
 
-    def __init__(self, gateway_name: RegisteredPaymentProvider, phase: PaymentPhase, user: Union[AbstractUser, None] = None):
+    def __init__(self, request: HttpRequest, gateway_name: RegisteredPaymentProvider, phase: PaymentPhase, user: Union[AbstractUser, None] = None):
         try:
             self.provider = RegisteredPaymentProvider(gateway_name)
             if self.provider not in GATEWAYS:
@@ -41,7 +42,7 @@ class PaymentService:
                 
             gateway_class = GATEWAYS[self.provider]
             self.user = user
-            self.gateway = gateway_class()
+            self.gateway = gateway_class(request)
             self.repo = PaymentRepository(self.user)
             self.currency = "NGN" if self.provider == RegisteredPaymentProvider.PAYSTACK else "USD"
             
