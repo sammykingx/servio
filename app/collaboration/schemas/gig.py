@@ -6,6 +6,7 @@ from enum import Enum
 from .gig_role import GigRolePayload
 import bleach, html
 
+
 ALLOWED_TAGS = [
     "p", "br", "strong", "b", "em", "i", "u",
     "ul", "ol", "li",
@@ -15,16 +16,6 @@ ALLOWED_TAGS = [
     "div"
 ]
 
-ALLOWED_ATTRIBUTES = {
-    "*": ["class", "style"],
-}
-
-ALLOWED_STYLES = [
-    "text-align",
-    "font-weight",
-    "font-style",
-    "text-decoration",
-]
 
 class VisibilityEnum(str, Enum):
     public = "public"
@@ -45,15 +36,10 @@ class GigPayload(BaseModel):
     @field_validator("description", mode="before")
     @classmethod
     def clean_description(cls, value: str):
-        # value = bleach.clean(
-        #     value,
-        #     tags=ALLOWED_TAGS,
-        #     attributes=ALLOWED_ATTRIBUTES,
-        #     strip=True
-        # )
         plain = bleach.clean(value, tags=ALLOWED_TAGS, strip=True)
-        sanitized = html.escape(plain).strip()
-        if len(sanitized) > 2900:
+        sanitized = bleach.clean(plain, tags=[], strip=True).strip()
+        
+        if len(sanitized) > 2000:
             raise ValueError("Project description is too long, reduce the length to provide a better experience for professionals browsing through projects.")
         return value
     

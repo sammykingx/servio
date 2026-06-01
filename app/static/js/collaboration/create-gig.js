@@ -168,9 +168,8 @@ async function submitBtn(action="publish") {
         }
 
         const result = await response.json();
-        console.log("server response: ", JSON.stringify(result, null, 2));
 
-        showToast(result.message || "Gig successfully published!", "success", "Action Successfull");
+        showToast(result.message || "Project successfully created!", "success", "Action Successfull");
         if (result?.url) {
             setTimeout(() => {
                 window.location.assign(result.url);
@@ -244,13 +243,11 @@ function validatePayload(gigPayload) {
     // const wordCount = description.trim().match(/\b\w+\b/g)?.length || 0;
     // This handles null, undefined, or missing description safely
     const wordCount = plainDescription.match(/\b\w+\b/g)?.length || 0;
-
     if (wordCount < 6) {
         errors.push("Project description must be descriptive enough for professionals to understand");
     }
 
-    if (description.length > 2000) {
-        console.log("Description length: ", description.length);
+    if (plainDescription.length > 2000) {
         errors.push("Project description is too long. Maximum allowed length is 2000 characters.");
     }
 
@@ -287,6 +284,10 @@ function validatePayload(gigPayload) {
                     errors.push(`Please provide a meaningful description for "${role.professional || role.niche}" to understand.`);
                 }
 
+                if (role.description.trim().length > 450) {
+                    errors.push(`Description for "${role.professional || role.niche}" is too long. Maximum allowed length is 250 characters.`);
+                }
+
                 if (!role.paymentOption) {
                     errors.push("Please select a payment option");
                 }
@@ -307,24 +308,24 @@ function validatePayload(gigPayload) {
     
 }
 
-async function publishGig(payload, endpoint, csrfToken) {
-    try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
-            },
-            body: JSON.stringify(payload),
-        });
+// async function publishGig(payload, endpoint, csrfToken) {
+//     try {
+//         const response = await fetch(endpoint, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': csrfToken,
+//             },
+//             body: JSON.stringify(payload),
+//         });
 
-        return response;
-    } catch (err) {
-        showToast(
-            "We couldn't reach the server. Please check your internet connection and try again.",
-            "error",
-            "Client Side Error"
-        );
-        throw err;
-    }
-}
+//         return response;
+//     } catch (err) {
+//         showToast(
+//             "We couldn't reach the server. Please check your internet connection and try again.",
+//             "error",
+//             "Client Side Error"
+//         );
+//         throw err;
+//     }
+// }

@@ -36,6 +36,8 @@ class PaymentPurpose(str, Enum):
     ACTIVATION_FEE = "activation_fee"
     CONTRACT_FUNDING = "contract_funding"
     WALLET_FUNDING = "wallet_funding"
+    PAYOUT = "payout"
+    PROJECT_KICKOFF = "project_kickoff"
     
     @classmethod
     def choices(cls):

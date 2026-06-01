@@ -364,129 +364,6 @@
             </div>
         </section>
 
-        {% comment "maybe enable later with an improved version" %}
-        <!-- Section: The Target Audience / Manifesto -->
-        <!-- Section: Servio Visual Architecture (PCB Imagery) -->
-        <section class="relative py-14 md:py-22 bg-charcoal overflow-hidden">
-            <!-- Technical Background -->
-            <div class="absolute inset-0 opacity-[0.03] pointer-events-none" 
-                style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
-            
-            <!-- Ambient Glows -->
-            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-
-            <div class="max-w-4xl mx-auto px-4 relative" data-aos="fade-up" data-aos-duration="1500">
-                <!-- The "Moderate" sized high-end container -->
-                <div class="relative bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-6 md:p-12 backdrop-blur-xl shadow-2xl overflow-hidden group">
-                    
-                    <!-- Technical Metadata Decor -->
-                    <div class="absolute top-6 left-10 flex items-center gap-2">
-                        <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                        <span class="text-[9px] font-mono text-emerald-500/60 uppercase tracking-[0.3em]">System: Active</span>
-                    </div>
-
-                    <svg viewBox="0 0 680 750" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-                        <style>
-                            :root { 
-                                --engine: #10b981;  /* Emerald */
-                                --process: #a78bfa; /* Purple */
-                                --execution: #fbbf24; /* Amber */
-                                --bg-chip: #161515;
-                            }
-                            
-                            /* Text Styles */
-                            .label-main { fill: #ffffff; font-family: 'Inter', sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-                            .label-sub { fill: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; }
-                            
-                            /* Trace Animations */
-                            .path-engine { stroke: var(--engine); stroke-dasharray: 100; stroke-dashoffset: 100; animation: traceFlow 3s linear infinite; opacity: 0.7; }
-                            .path-execution { stroke: var(--execution); stroke-dasharray: 100; stroke-dashoffset: 100; animation: traceFlow 3s linear infinite; opacity: 0.6; }
-                            
-                            @keyframes traceFlow {
-                                to { stroke-dashoffset: -100; }
-                            }
-
-                            /* Floating Nodes */
-                            .node-float { animation: float 6s ease-in-out infinite; }
-                            @keyframes float {
-                                0%, 100% { transform: translateY(0); }
-                                50% { transform: translateY(-5px); }
-                            }
-                        </style>
-
-                        <!-- 1. THE ENGINE (CPU) -->
-                        <g class="node-float">
-                            <rect x="240" y="40" width="200" height="140" rx="16" fill="var(--bg-chip)" stroke="var(--engine)" stroke-width="1.5"/>
-                            <rect x="255" y="55" width="170" height="110" rx="8" fill="#000" opacity="0.3"/>
-                            <text class="label-main" x="340" y="105" text-anchor="middle" font-size="20">SERVIO</text>
-                            <text class="label-sub" x="340" y="130" text-anchor="middle" font-size="8" opacity="0.5">Core Engine</text>
-                        </g>
-
-                        <!-- 2. ENGINE TO PROCESS TRACES (Emerald) -->
-                        <path class="path-engine" d="M340 180 V240 H100 V270" fill="none" stroke-width="1.5"/>
-                        <path class="path-engine" d="M340 180 V240 H260 V270" fill="none" stroke-width="1.5" style="animation-delay: 0.5s;"/>
-                        <path class="path-engine" d="M340 180 V240 H420 V270" fill="none" stroke-width="1.5" style="animation-delay: 1s;"/>
-                        <path class="path-engine" d="M340 180 V240 H580 V270" fill="none" stroke-width="1.5" style="animation-delay: 1.5s;"/>
-
-                        <!-- 3. PROCESS NODES (Purple) -->
-                        <g transform="translate(0, 270)">
-                            <rect x="40" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
-                            <text class="label-sub" x="100" y="30" text-anchor="middle" font-size="9" fill="#fff">Request</text>
-
-                            <rect x="200" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
-                            <text class="label-sub" x="260" y="30" text-anchor="middle" font-size="9" fill="#fff">Proposal</text>
-
-                            <rect x="360" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
-                            <text class="label-sub" x="420" y="30" text-anchor="middle" font-size="9" fill="#fff">Contract</text>
-
-                            <rect x="520" y="0" width="120" height="50" rx="10" fill="var(--bg-chip)" stroke="var(--process)" stroke-width="1"/>
-                            <text class="label-sub" x="580" y="30" text-anchor="middle" font-size="9" fill="#fff">Payment</text>
-                        </g>
-
-                        <!-- 4. PROCESS TO WORKER BUS (Amber) -->
-                        <!-- Convergence Bus -->
-                        <path d="M100 320 V380 H580 V320" stroke="var(--execution)" stroke-width="0.5" opacity="0.3"/>
-                        
-                        <!-- Animated Execution Traces -->
-                        <path class="path-execution" d="M100 320 V450 H180 V480" fill="none" stroke-width="1.5"/>
-                        <path class="path-execution" d="M340 320 V450 H340 V480" fill="none" stroke-width="1.5" style="animation-delay: 0.7s;"/>
-                        <path class="path-execution" d="M580 320 V450 H500 V480" fill="none" stroke-width="1.5" style="animation-delay: 1.4s;"/>
-
-                        <!-- 5. WORKER NODES (Final Execution) -->
-                        <g transform="translate(0, 480)">
-                            <!-- Digital Worker -->
-                            <rect x="120" y="0" width="120" height="70" rx="12" fill="rgba(251, 191, 36, 0.05)" stroke="var(--execution)" stroke-width="1" stroke-dasharray="4 4"/>
-                            <text class="label-sub" x="180" y="35" text-anchor="middle" font-size="9">Digital</text>
-                            <text class="label-sub" x="180" y="50" text-anchor="middle" font-size="7" opacity="0.4">Experts</text>
-
-                            <!-- Physical Worker -->
-                            <rect x="440" y="0" width="120" height="70" rx="12" fill="rgba(251, 191, 36, 0.05)" stroke="var(--execution)" stroke-width="1" stroke-dasharray="4 4"/>
-                            <text class="label-sub" x="500" y="35" text-anchor="middle" font-size="9">Physical</text>
-                            <text class="label-sub" x="500" y="50" text-anchor="middle" font-size="7" opacity="0.4">Specialists</text>
-
-                            <!-- Central Protocol -->
-                            <circle cx="340" cy="35" r="30" fill="var(--bg-chip)" stroke="var(--engine)" stroke-width="1"/>
-                            <text class="label-main" x="340" y="40" text-anchor="middle" font-size="8">S-v1</text>
-                        </g>
-                        
-                        <!-- Connection Junctions -->
-                        <circle cx="100" cy="320" r="3" fill="var(--process)"/>
-                        <circle cx="340" cy="320" r="3" fill="var(--process)"/>
-                        <circle cx="580" cy="320" r="3" fill="var(--process)"/>
-                    </svg>
-
-                    <!-- Bottom Detail -->
-                    <div class="mt-8 flex justify-between items-center opacity-30">
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                        <span class="px-4 font-mono text-[8px] text-white tracking-[0.4em] uppercase">End-to-End Execution Infrastructure</span>
-                        <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        {% endcomment %}
-
         <!-- Problem Section: The Chaos of Unstructured Hiring -->
         <section class="py-26 px-5 md:px-8 bg-charcoal relative overflow-hidden" id="problem">
             
@@ -605,7 +482,7 @@
                         
                         <!-- Video Element -->
                         <video id="servio-video-new" class="w-full h-full object-cover">
-                            <source src="{% static 'videos/servio-short-vid.mp4' %}" type="video/mp4">
+                            <source src="{% static 'videos/introducing-servio.mp4' %}" type="video/mp4">
                         </video>
 
                         <!-- Minimalist Play Overlay -->

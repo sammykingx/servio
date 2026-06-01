@@ -41,7 +41,7 @@
                     {% csrf_token %}
                     <a href="{% url COLLABORATION_URLS.EDIT_COLLABORATION slug=gig.slug %}" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <span class="material-symbols-outlined text-sm">edit</span>
-                        Edit Gig
+                        Edit
                     </a>
                     {% if gig.status == "draft" or gig.status == "pending" or gig.status == "published" %}
                         <button 
@@ -51,7 +51,7 @@
                             class="archive-btn w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                         >
                             <span class="material-symbols-outlined text-sm">delete_outline</span>
-                            Delete Gig
+                            Delete
                         </button>
                     {% endif %}
                 </form>

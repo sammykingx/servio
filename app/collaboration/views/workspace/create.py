@@ -1,14 +1,16 @@
-from django.db import transaction, IntegrityError, OperationalError
-from django.shortcuts import render
-from django.http.response import HttpResponse, JsonResponse
-from django.db.models import Model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction, IntegrityError, OperationalError
+from django.db.models import Model
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import View
+from core.url_names import CollaborationURLS
 from collaboration.models.choices import ProjectStatus
 from template_map.collaboration import Collabs
 from formatters.pydantic_formatter import format_pydantic_errors
 from core.model_registry import registry
-from ...schemas import CreateGigRequest, GigStates, get_response_msg
+from ...schemas import CreateGigRequest, GigStates
 from ...schemas.gig import GigPayload
 from ...schemas.gig_role import PAYMENT_OPTIONS
 from pydantic import ValidationError
@@ -74,11 +76,20 @@ class CreateCollaborationView(LoginRequiredMixin, View):
             of the gig creation process.
         """
         try:
-            payload = json.loads(request.body)
-            gig_data = CreateGigRequest(**payload)
-            print(gig_data.model_dump_json(indent=2))
-            gig = self.save_gig_data(gig_data.payload, gig_data.action)
-
+            gig_data = CreateGigRequest.model_validate_json(request.body)
+            self.save_gig_data(gig_data.payload, gig_data.action)
+            
+            message = (
+                "All set! Your project is published, Hurray 🎉."
+                if gig_data.action == GigStates.PUBLISH
+                else "Your project has been saved as a draft 📝, you can publish it later."
+            )
+            
+            return JsonResponse({
+                "message": message,
+                "url": reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS),
+            })
+        
         except json.JSONDecodeError:
             return JsonResponse(
                 {
@@ -115,13 +126,6 @@ class CreateCollaborationView(LoginRequiredMixin, View):
                 },
                 status=400,
             )
-
-        response = get_response_msg(gig_data.action, gig)
-        return JsonResponse(response.model_dump())
-        # return JsonResponse({
-        #     "message": "All done",
-            
-        # }, status=200)
 
     def save_gig_data(self, payload: GigPayload, action: GigStates) -> Model:
         """
