@@ -13,7 +13,7 @@ from payments.domain.exceptions import PaymentGatewayError
 from payments.schemas.payments import PaymentGatewayPayload
 from payments.schemas.paystack import PaystackInitResponseSchema, PaystackVerificationData
 import logging, requests
-
+from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
 
@@ -176,4 +176,93 @@ class PaystackAdapter(PaymentGateway):
 
     def charge_backs(self, reference):
         pass
+    
+    def get_ngn_banks(self) -> List[Dict[str, Any]]:
+        """Fetches a list of Nigerian banks from the API."""
+        query_params = {
+            "country": "nigeria",
+            # "use_cursor": "true",
+            # "perPage": 70,
+        }
+        url = f"{self.BASE_URL}/bank"
+        
+        try:
+            response = requests.get(
+                url,
+                headers=self._get_headers(),
+                params=query_params,
+                timeout=self.timeout,
+            )
+            response.raise_for_status()
+            json_data:dict = response.json()
+            return json_data.get("data", [])
+        
+        except Timeout:
+            raise PaymentGatewayError(
+                "Payment service timed out while fetching bank list. Please try again later.",
+                code=PaymentFailure.GATEWAY_TIMEOUT.code,
+                title=PaymentFailure.GATEWAY_TIMEOUT.title,
+            )
+
+        except HTTPError as e:
+            logger.exception(e)
+            raise PaymentGatewayError(
+                "Failed to retrieve bank list from payment provider.",
+                code=PaymentFailure.GATEWAY_ERROR.code,
+                title=PaymentFailure.GATEWAY_ERROR.title,
+                err_type="error"
+            )
+            
+        except RequestException as e:
+            logger.exception(e)
+            raise PaymentGatewayError(
+                f"Connection error: {str(e)}",
+                code=PaymentFailure.GATEWAY_ERROR.code,
+                title=PaymentFailure.GATEWAY_ERROR.title,
+                err_type="error"
+            )
+            
+    def resolve_account_number(self, account_number: str, bank_code: str) -> Dict[str, Any]:
+        url = f"{self.BASE_URL}/bank/resolve"
+        query_params = {
+            "account_number": account_number,
+            "bank_code": bank_code,
+        }
+        
+        try:
+            response = requests.get(
+                url,
+                headers=self._get_headers(),
+                params=query_params,
+                timeout=self.timeout,
+            )
+            response.raise_for_status()
+            json_data:dict = response.json()
+            # {'status': True, 'message': 'Account number resolved', 'data': {'account_number': '1234567890', 'account_name': 'John Doe', 'bank_id': 234}}
+            return json_data
+        
+        except Timeout:
+            raise PaymentGatewayError(
+                "Payment service timed out while resolving account details. Please try again later.",
+                code=PaymentFailure.GATEWAY_TIMEOUT.code,
+                title=PaymentFailure.GATEWAY_TIMEOUT.title,
+            )
+
+        except HTTPError as e:
+            logger.exception(e)
+            raise PaymentGatewayError(
+                "Failed to resolve account details with payment provider.",
+                code=PaymentFailure.GATEWAY_ERROR.code,
+                title=PaymentFailure.GATEWAY_ERROR.title,
+                err_type="error"
+            )
+            
+        except RequestException as e:
+            logger.exception(e)
+            raise PaymentGatewayError(
+                f"Connection error: {str(e)}",
+                code=PaymentFailure.GATEWAY_ERROR.code,
+                title=PaymentFailure.GATEWAY_ERROR.title,
+                err_type="error"
+            )
     

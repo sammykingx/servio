@@ -216,6 +216,16 @@
 <script type="module" src="{% static 'js/accounts/managers/pushNotification.js' %}"></script>
 <script src="{% static 'js/utils/validateAddress.js' %}"></script> <!--don't need this no longer-->
 <script src="{% static 'js/accounts/update-address.js' %}"></script>
+<script src="{% static 'js/payouts/ngnAccounts.js' %}"></script>
+<script>
+	payoutManager = new PayoutManager({
+        endpoints: {
+            banksUrl: "{% url PAGE_URLS.LIST_NGN_BANKS %}",
+            verifyUrl: "{% url PAGE_URLS.VERIFY_BANK_ACCOUNT %}",
+            submitUrl: "" // view handling raw JSON input data streams
+        }
+    });
+</script>
 <script type="module">
 	import WebPushManager from "{% static 'js/accounts/managers/pushNotification.js' %}";
 

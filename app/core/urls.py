@@ -30,7 +30,9 @@ import proposals.urls
 import notifications.urls
 import payments.urls
 import smart_release.urls
-from pages.views.waitlist import WaitingListView
+from pages.views import (
+    WaitingListView, RenderNGNBankListView, VerifyBankAccountView
+)
 from .url_names import PageURLS
 
 
@@ -45,6 +47,8 @@ urlpatterns = [
     
     path("", TemplateView.as_view(template_name="index.html"), name="index-page"),
     path("waiting-list/", WaitingListView.as_view(), name=PageURLS.WAIT_LIST),
+    path("ngn-banks/", RenderNGNBankListView.as_view(), name=PageURLS.LIST_NGN_BANKS),
+    path("verify-bank-account/", VerifyBankAccountView.as_view(), name=PageURLS.VERIFY_BANK_ACCOUNT),
     path("accounts/", include(accounts.urls)),
     path("collaboration/", include(collaboration.urls)),
     path("contracts/", include(contracts.urls)),

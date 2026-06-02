@@ -15,6 +15,7 @@ class NigeriaPayoutAccount(models.Model):
     bank_name = models.CharField(max_length=70)
     account_number = models.CharField(max_length=15)
     account_name = models.CharField(max_length=50)
+    receipient_code = models.CharField(max_length=30, blank=True, null=True)
 
     is_verified = models.BooleanField(default=False)
     

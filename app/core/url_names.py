@@ -1,5 +1,7 @@
 class PageURLS:
     WAIT_LIST = "wait-list"
+    LIST_NGN_BANKS = "ngn-banks"
+    VERIFY_BANK_ACCOUNT = "verify-bank-account"
     
 class AuthURLNames:
     LOGIN = "account_login"

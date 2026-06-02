@@ -21,6 +21,7 @@ app/*.txt
 
 # django files
 *.sqlite3
+.django_cache/
 app/media/*
 app/private_data/*
 app/staticfiles/*
