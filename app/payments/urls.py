@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from core.url_names import PaymentURLS
 from template_map.payments import Payments
-from .views.fund_contract import FundContractRRoleView
+from .views.contract_activation import ActivateContractRoleEnagementView
 from .views.account_activation import AccountActivationView
 from .views.webhooks import PaystackWebhookView
 from .views.verification import PaymentVerificationView
@@ -54,7 +54,7 @@ urlpatterns = [
     ),
     path(
         "fund-contract/<slug:contract_slug>/",
-        FundContractRRoleView.as_view(),
+        ActivateContractRoleEnagementView.as_view(),
         name=PaymentURLS.FUND_CONTRACT
     ),
     

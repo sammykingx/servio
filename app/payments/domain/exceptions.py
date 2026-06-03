@@ -1,7 +1,7 @@
 # Custom exceptions for payments domain.
 
 class DomainException(Exception):
-    """Base class for all business logic errors."""
+    """Base class for all payments business logic errors."""
     def __init__(self, message: str,*, code: str, title: str, err_type: str = "warning"):
         self.message = message
         self.code = code

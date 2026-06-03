@@ -35,6 +35,7 @@ class PaymentPurpose(str, Enum):
     """
     ACTIVATION_FEE = "activation_fee"
     CONTRACT_FUNDING = "contract_funding"
+    CONTRACT_ACTIVATION = "contract_activation" # collecting the initial payment to kickstart a project after contract signing.
     WALLET_FUNDING = "wallet_funding"
     PAYOUT = "payout"
     PROJECT_KICKOFF = "project_kickoff"

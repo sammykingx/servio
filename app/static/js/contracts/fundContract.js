@@ -119,9 +119,13 @@ const ContractPaymentCheckout = (() => {
 
             if (!response.ok) {
                 if (typeof showToast === "function") {
-                    showToast(result.message || "Activation handoff aborted.", "error", "Contract Activation Failed");
+                    showToast(
+                        result.message || "Activation handoff aborted.",
+                        result.status || "error",
+                        result.title || "Contract Activation Failed"
+                    );
                 } else {
-                    alert(result.message || "Activation handoff aborted.");
+                    alert(result.message || "ContractActivation handoff aborted.");
                 }
                 return;
             }
