@@ -46,14 +46,17 @@ class ActivateContractRoleEnagementView(LoginRequiredMixin, View):
             if contract is None:
                 return JsonResponse({"message": "Contract information is missing from payment flow"}, status=400)
             
-            payment = PaymentService(
-                request=request, user=self.request.user, gateway_name="paystack", phase=PaymentPhase.INITIALIZATION
-            ).initiate_payment(
-                amount=contract.agreed_amount,
-                payment_type=PaymentType.SERVICE,
-                payment_purpose=PaymentPurpose.CONTRACT_ACTIVATION
+            service = PaymentService(
+                request=request, user=self.request.user, gateway_name=payload.gateway, phase=PaymentPhase.INITIALIZATION
             )
-            return JsonResponse({"message": "Payment initiation endpoint. Implement payment processing logic here."}, status=200)
+            payment = service.initiate_contract_activation(contract)
+            gw_resp = service.process_payment(payment.reference)
+            url = gw_resp.get("data", {}).get("authorization_url")
+            self._clear_contract_from_session()
+            print(gw_resp)
+            return JsonResponse({
+                "message": "Secured payment initiated successfully",
+            }, status=200)
         
         except ValidationError:
             return JsonResponse({"message": "Invalid data provided"}, status=400)

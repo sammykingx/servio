@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import AbstractUser
 from django.db import OperationalError
+from django.db.models import Model
 from django.http import HttpRequest
 from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.repositories import PaymentRepository
@@ -173,6 +174,42 @@ class PaymentService:
             payment_purpose, 
             self.provider, 
             beneficiary
+        )
+        
+    def initiate_contract_activation(
+        self,
+        contract: Model,
+        beneficiary: Union[AbstractUser, None] = None,
+    ) -> PaymentEntity:
+        """
+        Idempotent payment initiation scoped to a specific contract.
+        Reuses or expires sessions identically to initiate_payment,
+        but discriminates by contract_reference inside metadata.
+        """
+        existing_entity = self.repo.find_active_contract_payment(
+            contract_reference=contract.reference,
+            purpose=PaymentPurpose.CONTRACT_ACTIVATION,
+        )
+        if existing_entity:
+            try:
+                PaymentPolicy.ensure_entity_is_processable(existing_entity, phase=PaymentPhase.INITIALIZATION)
+                return existing_entity
+            except PolicyViolationError as err:
+                if err.code == PaymentFailure.ALREADY_VERIFIED.code:
+                    return existing_entity
+                if err.code == PaymentFailure.PAYMENT_SESSION_EXPIRED.code:
+                    existing_entity.mark_as_expired(err.message)
+                    self.repo.update_status(existing_entity)
+                    
+        amount = contract.agreed_amount if self.currency == "USD" else contract.service_fee_to_ngn
+        return self.repo.create_record(
+            amount,
+            self.currency,
+            PaymentType.SERVICE,
+            PaymentPurpose.CONTRACT_ACTIVATION,
+            self.provider,
+            beneficiary,
+            metadata={"contract_reference": contract.reference},
         )
 
     def process_payment(self, reference: str) -> Dict[str, Any]:

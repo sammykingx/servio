@@ -96,6 +96,28 @@ class PaymentRepository:
             ]
         ).first()
         return self._map_to_entity(db_obj) if db_obj else None
+    
+    def find_active_contract_payment(
+        self, 
+        contract_reference: str,
+        purpose: PaymentPurpose,
+    ) -> Union[PaymentEntity, None]:
+        """
+        Scoped idempotency check for contract-bound payments.
+        Uses metadata.contract_reference as the discriminating key.
+        """
+        db_obj = self.model.objects.filter(
+            user=self.user,
+            payment_type=PaymentType.SERVICE,
+            payment_purpose=purpose,
+            metadata__contract_reference=contract_reference,
+            status__in=[
+                PaymentStatus.INITIATED,
+                PaymentStatus.PENDING,
+                PaymentStatus.UNDERPAID,
+            ]
+        ).first()
+        return self._map_to_entity(db_obj) if db_obj else None
 
     def create_record(
         self, 
@@ -104,7 +126,8 @@ class PaymentRepository:
         payment_type: PaymentType, 
         purpose: PaymentPurpose, 
         provider:RegisteredPaymentProvider,
-        beneficiary: Union[AbstractUser, None] = None
+        beneficiary: Union[AbstractUser, None] = None,
+        meta_data: dict = {}
     ) -> PaymentEntity:
         """
         Persists a new transaction after validating user context and converting currency.
@@ -137,6 +160,7 @@ class PaymentRepository:
             payment_purpose=purpose,
             gateway=provider,
             beneficiary=beneficiary,
+            metadata=meta_data
         )
         return self._map_to_entity(db_obj)
     

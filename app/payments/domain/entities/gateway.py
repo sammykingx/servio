@@ -41,7 +41,7 @@ class GatewayInitResponse:
             "message": self.message,
             "data": normalized_data
         }
- 
+
         
 @dataclass(frozen=True)
 class GatewayVerifyResponse:
