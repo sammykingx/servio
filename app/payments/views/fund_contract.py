@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from core.url_names import AuthURLNames, CollaborationURLS, ContractURLS
 from core.model_registry import registry
 from template_map.payments import Payments
+import json
 
 
 class FundContractRRoleView(LoginRequiredMixin, View):
@@ -34,4 +35,12 @@ class FundContractRRoleView(LoginRequiredMixin, View):
         }
         
         return render(request, self.template_name, context)
+    
+    def post(self, request: HttpRequest, *args, **kwargs):
+        # This endpoint is intended to be used as a form action for initiating the payment process.
+        # The actual payment processing and verification will be handled by separate endpoints and services.
+        print(json.loads(request.body))
+        import time
+        time.sleep(10)
+        return JsonResponse({"message": "Payment initiation endpoint. Implement payment processing logic here."}, status=200)
     

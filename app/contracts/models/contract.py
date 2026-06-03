@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from uuid6 import uuid7
 from decimal import Decimal, ROUND_HALF_UP
-from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE
+from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE, USD_TO_NGN_RATE, SUBSRIBERS_SERVICE_FEE
 
 
 class ContractStatus(models.TextChoices):
@@ -123,21 +123,32 @@ class Contract(models.Model):
 
     @property
     def service_fee(self):
-        return (
-            self.agreed_amount * Decimal(str(SERVICE_FEE))
-        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+        """
+        Calculates the fee dynamically by delegating the math directly 
+        to the client's profile system.
+        """
+        return self.client.profile.calculate_service_fee(self.agreed_amount)
+
+    @property
+    def service_fee_to_ngn(self):
+        """Calculates the service fee converted to NGN by delegating to the client's profile system."""
+        return self.client.profile.service_fee_to_ngn(self.agreed_amount)
     
     @property   
     def tax(self):
-        return (
-            self.agreed_amount * Decimal(str(GST_TAX_FEE))
-        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+        """Calculates the tax for the service based on the users region laws"""
+        # outsoure the tax calculation to the users profile
+        # to get the tax based on the users region and region taxing percent
+        # return (
+        #     self.agreed_amount * Decimal(str(GST_TAX_FEE))
+        # ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+        pass
 
     @property
     def amount_payable(self):
         """The amount the client pays to kickstart the project, inclusive of service fee and tax"""
         return (
-            self.agreed_amount + self.service_fee + self.tax
+            self.agreed_amount + self.service_fee #+ self.tax
         ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
         
     @property
@@ -149,4 +160,4 @@ class Contract(models.Model):
         
     @property
     def payment_plan_display(self):
-        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip() + "%"
+        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip() + "%"# 

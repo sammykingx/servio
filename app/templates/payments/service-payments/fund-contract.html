@@ -3,160 +3,321 @@
 {% load humanize %}
 {% block browser_title %}Fund Contract | {{ contract.reference }}{% endblock %}
 {% block body_content %}
-<main class="max-w-6xl mx-auto py-12 px-4 text-slate-900 dark:text-slate-100 select-none">
-    <form action="" method="POST" id="checkout-payment-form">
+<main id="payment-widget" 
+      data-reference="{{ contract.reference }}"
+      data-usd-amount="{{ contract.service_fee }}" 
+      data-ngn-amount="{{ contract.service_fee_to_ngn }}"
+      class="max-w-6xl mx-auto py-10 px-5 text-slate-600 dark:text-slate-400 select-none min-h-screen antialiased transition-colors duration-200">
+    <form action="{% url PAYMENT_URLS.FUND_CONTRACT contract_slug=contract.slug %}" method="POST" id="checkout-payment-form">
         {% csrf_token %}
         
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <header class="mb-8 pb-4 border-b border-slate-100 dark:border-slate-900">
+            <h1 class="text-xl font-semibold tracking-tight text-gray-800 dark:text-white">Activate contract</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1.5 max-w-2xl">
+                Pay the service fee to unlock your connection with the provider and officially begin the engagement.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             
-            <div class="lg:col-span-7 space-y-8">
-                <div>
-                    <h1 class="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Contract Funding Configuration</h1>
-                    <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Specify your protection milestone parameters and select a secure merchant routing channel.</p>
-                </div>
+            <div class="lg:col-span-7 space-y-10">
+                
+                <div class="space-y-4">
+                    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                        How activation works right now
+                    </h2>
+                    
+                    <div class="space-y-6 border-l border-slate-200 dark:border-slate-800 ml-2 pl-6">
+                        <div class="relative">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-blue-600 ring-4 ring-white dark:ring-slate-950"></div>
+                            <h3 class="text-sm font-medium text-gray-800 dark:text-white">Initiate the Engagement</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">The engagement is initiated with the service fee only</p>
+                        </div>
 
-                <div class="space-y-3">
-                    <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                        1. Funding Option
-                    </label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        
-                        <label class="relative flex flex-col p-4 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-900 rounded-2xl cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-500/60 transition-all group shadow-sm">
-                            <input type="radio" name="funding_tier" value="partial" checked
-                                   class="absolute right-4 top-4 text-indigo-600 focus:ring-indigo-500 dark:bg-slate-900 border-slate-300 dark:border-slate-800" 
-                                   data-percentage="0.5">
-                            <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">50% Minimum Deposit</span>
-                            <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-1 pr-6 leading-normal">
-                                Secure the provider by funding half the milestones now. Balance due upon mid-project completion.
-                            </span>
-                        </label>
+                        <div class="relative">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-blue-600 ring-4 ring-white dark:ring-slate-950"></div>
+                            <h3 class="text-sm font-medium text-gray-800 dark:text-white">Contract Activated</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">The contract becomes active and project work begins.</p>
+                        </div>
 
-                        <label class="relative flex flex-col p-4 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-900 rounded-2xl cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-500/60 transition-all group shadow-sm">
-                            <input type="radio" name="funding_tier" value="full"
-                                   class="absolute right-4 top-4 text-indigo-600 focus:ring-indigo-500 dark:bg-slate-900 border-slate-300 dark:border-slate-800"
-                                   data-percentage="1.0">
-                            <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">100% Upfront Capital</span>
-                            <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-1 pr-6 leading-normal">
-                                Fund the entire arrangement immediately. Funds remain withheld securely in escrow until milestones pass.
-                            </span>
-                        </label>
-                        
+                        <div class="relative opacity-60">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-800 ring-4 ring-white dark:ring-slate-950"></div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Launch your project workspace</h3>
+                                <span class="inline-block text-[10px] font-medium text-amber-600 dark:text-amber-500/90 bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded">v2</span>
+                            </div>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Instantly create a dedicated workspace where you and your provider can collaborate, share updates, and manage project activities.</p>
+                        </div>
+
+                        <div class="relative opacity-60">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-800 ring-4 ring-white dark:ring-slate-950"></div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Approve work and release payments</h3>
+                                <span class="inline-block text-[10px] font-medium text-amber-600 dark:text-amber-500/90 bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded">v2</span>
+                            </div>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">When deliverables are approved, Servio helps ensure providers are paid according to the terms agreed in the contract.</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="space-y-3">
-                    <label class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                        2. Secure Gateway Processor
-                    </label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-4">
+                    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                        Payment Gateway
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         
-                        <label class="relative flex items-center gap-4 p-4 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-900 rounded-2xl cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-500/60 transition-all shadow-sm">
-                            <input type="radio" name="payment_gateway" value="paystack" checked
-                                   class="text-indigo-600 focus:ring-indigo-500 dark:bg-slate-900 border-slate-300 dark:border-slate-800">
+                        <label class="relative flex items-start gap-3 p-4 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-all group">
+                            <input type="radio" name="payment_gateway" value="paystack" id="gateway-paystack"
+                                   class="peer text-blue-600 focus:ring-blue-500 dark:bg-slate-900 border-slate-300 dark:border-slate-700 w-4 h-4 mt-0.5">
                             <div class="flex flex-col">
-                                <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                                <span class="text-sm font-medium text-gray-800 dark:text-white flex items-center gap-2">
                                     Paystack 
-                                    <span class="text-[9px] font-normal uppercase tracking-wide bg-teal-50 dark:bg-teal-950 text-teal-600 dark:text-teal-400 px-1.5 py-0.5 rounded">Local/NGN</span>
+                                    <span class="text-[10px] font-normal lowercase bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-100 dark:border-emerald-500/20">local · NGN</span>
                                 </span>
-                                <span class="text-[11px] text-slate-400 mt-0.5">Cards, Bank Transfers, USSD channels</span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400 mt-1">Cards, bank transfers, USSD</span>
                             </div>
                         </label>
 
-                        <label class="relative flex items-center gap-4 p-4 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-900 rounded-2xl cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-500/60 transition-all shadow-sm">
-                            <input type="radio" name="payment_gateway" value="stripe"
-                                   class="text-indigo-600 focus:ring-indigo-500 dark:bg-slate-900 border-slate-300 dark:border-slate-800">
+                        <label class="relative flex items-start gap-3 p-4 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-all group">
+                            <input type="radio" name="payment_gateway" value="stripe" id="gateway-stripe"
+                                   class="peer text-blue-600 focus:ring-blue-500 dark:bg-slate-900 border-slate-300 dark:border-slate-700 w-4 h-4 mt-0.5">
                             <div class="flex flex-col">
-                                <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                                <span class="text-sm font-medium text-gray-800 dark:text-white flex items-center gap-2">
                                     Stripe
-                                    <span class="text-[9px] font-normal uppercase tracking-wide bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded">Global/FX</span>
+                                    <span class="text-[10px] font-normal lowercase bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-500/20">global · FX</span>
                                 </span>
-                                <span class="text-[11px] text-slate-400 mt-0.5">International credit cards, Apple Pay</span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400 mt-1">International cards, Apple Pay</span>
                             </div>
                         </label>
                         
                     </div>
-                </div>
-
-                <div class="p-4 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-900 text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed flex gap-2.5 items-start">
-                    <span class="material-symbols-outlined text-[16px] text-indigo-500 mt-0.5">verified_user</span>
-                    <p>Servio secures operations using programmatic vaulting algorithms. Your milestone disbursements require an explicit completion audit trigger or formal settlement resolution parameters before values cross to provider balance ledgers.</p>
                 </div>
             </div>
 
-            <div class="lg:col-span-5 lg:sticky lg:top-28 space-y-6">
-                <div class="bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-2xl p-6 shadow-sm space-y-6">
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Contract Summary</h3>
-                    
-                    <div class="space-y-1">
-                        <span class="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-widest font-mono">Reference ID</span>
-                        <div class="text-sm font-semibold text-slate-900 dark:text-white">{{ contract.reference }}</div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">Provider: {{ contract.provider.full_name|title }}</p>
+            <div class="lg:col-span-5 lg:sticky lg:top-12 space-y-6">
+                <div class="border border-slate-200 dark:border-slate-800 rounded-2xl p-6 bg-slate-50/50 dark:bg-slate-900/20 space-y-6">
+                    <div>
+                        <div class="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">{{ contract.reference }}</div>
+                        <h3 class="text-base font-semibold text-gray-800 dark:text-white">{{ contract.proposal_role.role_name|title|truncatewords:6 }}</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Provider: <span class="text-slate-700 dark:text-slate-300 font-medium">{{ contract.provider.full_name|title|default:"Adaeze Okonkwo" }}</span></p>
                     </div>
 
-                    <div class="h-[1px] bg-slate-100 dark:bg-slate-900"></div>
+                    <div class="h-[1px] bg-slate-200 dark:bg-slate-800/80"></div>
 
-                    <div class="space-y-3.5 text-xs font-medium text-slate-600 dark:text-slate-400">
-                        <div class="flex justify-between">
-                            <span>Agreed Contract Total</span>
-                            <span class="font-mono text-slate-900 dark:text-slate-200">
+                    <div class="space-y-3 text-xs">
+                        <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                            <span>Agreed contract amount</span>
+                            <span class="font-medium text-gray-800 dark:text-white">
                                 {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.agreed_amount|intcomma }}
                             </span>
                         </div>
-                        <div class="flex justify-between items-center text-slate-400 dark:text-slate-500">
-                            <span>Funding Ratio Assignment</span>
-                            <span class="text-[11px] font-mono font-semibold text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900 px-2 py-0.5 rounded" id="ui-percentage-badge">
-                                50%
-                            </span>
+                        <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                            <span>Service fee</span>
+                            <span id="summary-fee-tier" class="font-medium text-gray-800 dark:text-white">—</span>
                         </div>
                         
-                        <div class="h-[1px] bg-dashed border-t border-dashed border-slate-200 dark:border-slate-800 pt-1"></div>
+                        <div class="h-[1px] bg-slate-200 dark:bg-slate-800/80 my-2"></div>
                         
-                        <div class="flex justify-between items-baseline pt-1">
-                            <span class="text-sm font-semibold text-slate-900 dark:text-white">Amount Due Now</span>
-                            <div class="text-right">
-                                <span class="text-2xl font-mono font-semibold text-indigo-600 dark:text-indigo-400" id="ui-total-due-display">
-                                    {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.agreed_amount|intcomma }}
-                                </span>
-                                <span class="text-[10px] font-semibold uppercase tracking-wide text-slate-400 block mt-0.5">{{ contract.currency }}</span>
+                        <div class="flex justify-between items-center pt-1">
+                            <div>
+                                <span class="text-[11px] text-slate-400 dark:text-slate-500 block">You pay today</span>
+                                <span id="summary-total-payable" class="text-2xl font-bold text-blue-600 dark:text-blue-500 mt-1 block">—</span>
+                            </div>
+                            <div class="text-right flex items-center gap-1" title="Secured Payment">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-emerald-600 dark:text-emerald-400 transition-colors duration-200 select-none" aria-hidden="true">
+                                    <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 2l2.4 1.6L17 3l1 2.6L20.4 7 20 10l2 2-2 2 .4 3-2.4 1.4L17 21l-2.6-1L12 22l-2.4-1.6L7 21l-1-2.6L3.6 17 4 14l-2-2 2-2-.4-3 2.4-1.4L7 3l2.6 1z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md shadow-indigo-100 dark:shadow-none cursor-pointer">
-                        <span class="material-symbols-outlined text-[16px]">lock</span>
-                        <span>Authorize Funding</span>
+                    <button type="submit" id="submit-btn" class="w-full inline-flex items-center justify-center gap-3 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/70 disabled:cursor-not-allowed text-white font-medium text-sm rounded-xl transition-all cursor-pointer shadow-sm shadow-blue-500/10">
+                        <span id="btn-text">Pay & Activate</span>
                     </button>
+
+                    <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <p><span class="font-medium text-slate-800 dark:text-slate-200">Project Workspace </span> is actively in development. This fee activates your contract and gets you started now.</p>
+                    </div>
                 </div>
             </div>
 
         </div>
     </form>
 </main>
+
+
 {% endblock %}
 {% block js_files %}
+<script src="{% static 'js/contracts/fundContract.js' %}"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const baseAmount = parseFloat("{{ contract.agreed_amount|default:0 }}");
-        const currencySymbol = "$";
-        
-        const radioOptions = document.querySelectorAll('input[name="funding_tier"]');
-        const badgeDisplay = document.getElementById("ui-percentage-badge");
-        const totalDisplay = document.getElementById("ui-total-due-display");
-
-        radioOptions.forEach(radio => {
-            radio.addEventListener("change", function() {
-                const modifier = parseFloat(this.getAttribute("data-percentage"));
-                const activePercentage = modifier * 100;
-                const evaluatedTotal = baseAmount * modifier;
-
-                // Update UI elements smoothly
-                badgeDisplay.textContent = `${activePercentage}%`;
-                totalDisplay.textContent = currencySymbol + evaluatedTotal.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            });
-        });
+    document.addEventListener("DOMContentLoaded", () => {
+        ContractPaymentCheckout.init();
     });
 </script>
 {% endblock %}
+
+<main class="max-w-6xl mx-auto py-10 px-5 text-slate-600 dark:text-slate-400 select-none min-h-screen antialiased transition-colors duration-200">
+    <form action="" method="POST" id="checkout-payment-form">
+        {% csrf_token %}
+        
+        <!-- Header Section -->
+        <header class="mb-8 pb-4 border-b border-slate-100 dark:border-slate-900">
+            <h1 class="text-xl font-semibold tracking-tight text-gray-800 dark:text-white">Activate contract</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1.5 max-w-2xl">
+                Pay the service fee to unlock your connection with the provider and officially begin the engagement.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            
+            <!-- Left Column: Guide & Gateways -->
+            <div class="lg:col-span-7 space-y-10">
+                
+                <!-- Linear Timeline (Notion-inspired) -->
+                <div class="space-y-4">
+                    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                        How activation works right now
+                    </h2>
+                    
+                    <div class="space-y-6 border-l border-slate-200 dark:border-slate-800 ml-2 pl-6">
+                        
+                        <!-- Step 1 -->
+                        <div class="relative">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-blue-600 ring-4 ring-white dark:ring-slate-950"></div>
+                            <h3 class="text-sm font-medium text-gray-800 dark:text-white">Initiate the Engagement</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">The engagement is initiated with the service fee only</p>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="relative">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-blue-600 ring-4 ring-white dark:ring-slate-950"></div>
+                            <h3 class="text-sm font-medium text-gray-800 dark:text-white">Contract Activated</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">The contract becomes active and project work begins.</p>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="relative opacity-60">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-800 ring-4 ring-white dark:ring-slate-950"></div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Launch your project workspace</h3>
+                                <span class="inline-block text-[10px] font-medium text-amber-600 dark:text-amber-500/90 bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded">v2</span>
+                            </div>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Instantly create a dedicated workspace where you and your provider can collaborate, share updates, and manage project activities.</p>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="relative opacity-60">
+                            <div class="absolute -left-[31px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-800 ring-4 ring-white dark:ring-slate-950"></div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300">Approve work and release payments</h3>
+                                <span class="inline-block text-[10px] font-medium text-amber-600 dark:text-amber-500/90 bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 rounded">v2</span>
+                            </div>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">When deliverables are approved, Servio helps ensure providers are paid according to the terms agreed in the contract.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Payment Gateways -->
+                <div class="space-y-4">
+                    <h2 class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                        Payment Gateway
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        
+                        <!-- Paystack Option -->
+                        <label class="relative flex items-start gap-3 p-4 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-all group">
+                            <input type="radio" name="payment_gateway" value="paystack" checked
+                                   class="peer text-blue-600 focus:ring-blue-500 dark:bg-slate-900 border-slate-300 dark:border-slate-700 w-4 h-4 mt-0.5">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium text-gray-800 dark:text-white flex items-center gap-2">
+                                    Paystack 
+                                    <span class="text-[10px] font-normal lowercase bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-100 dark:border-emerald-500/20">local · NGN</span>
+                                </span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400 mt-1">Cards, bank transfers, USSD</span>
+                            </div>
+                        </label>
+
+                        <!-- Stripe Option -->
+                        <label class="relative flex items-start gap-3 p-4 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-all group">
+                            <input type="radio" name="payment_gateway" value="stripe"
+                                   class="peer text-blue-600 focus:ring-blue-500 dark:bg-slate-900 border-slate-300 dark:border-slate-700 w-4 h-4 mt-0.5">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium text-gray-800 dark:text-white flex items-center gap-2">
+                                    Stripe
+                                    <span class="text-[10px] font-normal lowercase bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-500/20">global · FX</span>
+                                </span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400 mt-1">International cards, Apple Pay</span>
+                            </div>
+                        </label>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Sticky Summary Panel -->
+            <div class="lg:col-span-5 lg:sticky lg:top-12 space-y-6">
+                <div class="border border-slate-200 dark:border-slate-800 rounded-2xl p-6 bg-slate-50/50 dark:bg-slate-900/20 space-y-6">
+                    <div>
+                        <div class="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">{{ contract.reference }}</div>
+                        <h3 class="text-base font-semibold text-gray-800 dark:text-white">{{ contract.proposal_role.role_name|title|truncatewords:6 }}</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Provider: <span class="text-slate-700 dark:text-slate-300 font-medium">{{ contract.provider.full_name|title|default:"Adaeze Okonkwo" }}</span></p>
+                    </div>
+
+                    <div class="h-[1px] bg-slate-200 dark:bg-slate-800/80"></div>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                            <span>Agreed contract amount</span>
+                            <span class="font-medium text-gray-800 dark:text-white">
+                                {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.agreed_amount|intcomma }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between text-slate-500 dark:text-slate-400">
+                            <span>Service fee (5%)</span>
+                            <span class="font-medium text-gray-800 dark:text-white">
+                                {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.service_fee|intcomma }}
+                            </span>
+                        </div>
+                        
+                        <div class="h-[1px] bg-slate-200 dark:bg-slate-800/80 my-2"></div>
+                        
+                        <div class="flex justify-between items-center pt-1">
+                            <div>
+                                <span class="text-[11px] text-slate-400 dark:text-slate-500 block">You pay today</span>
+                                <span class="text-2xl font-bold text-blue-600 dark:text-blue-500 mt-1 block">
+                                    {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.service_fee|intcomma }}
+                                </span>
+                            </div>
+                            <div class="text-right flex items-center gap-1" title="Secured Payment">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-emerald-600 dark:text-emerald-400 transition-colors duration-200 select-none" aria-hidden="true">
+                                    <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 2l2.4 1.6L17 3l1 2.6L20.4 7 20 10l2 2-2 2 .4 3-2.4 1.4L17 21l-2.6-1L12 22l-2.4-1.6L7 21l-1-2.6L3.6 17 4 14l-2-2 2-2-.4-3 2.4-1.4L7 3l2.6 1z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            {% comment "eventually replace the static held value with a dynamic calculation based on the selected funding ratio and agreed amount" %}
+                            <div class="text-right">
+                                <span class="text-[10px] text-slate-400 dark:text-slate-500 block">Contract value held</span>
+                                <span class="text-xs font-medium text-slate-600 dark:text-slate-400 block mt-1">
+                                    {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.held_value|default:"475,000" }} <span class="text-[10px] text-amber-600 dark:text-amber-500 font-normal">· v2</span>
+                                </span>
+                            </div>
+                            {% endcomment %}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition-all cursor-pointer shadow-sm shadow-blue-500/10">
+                        <span>Pay {% if contract.currency == 'NGN' %}₦{% else %}${% endif %}{{ contract.service_fee|default:"25,000" }} & Activate</span>
+                    </button>
+
+                    <!-- Notice Box -->
+                    <div class="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <p><span class="font-medium text-slate-800 dark:text-slate-200">Project Workspace </span> is actively in development. This fee activates your contract and gets you started now.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</main>

@@ -1,7 +1,8 @@
-from django.apps import apps
 from django.conf import settings
 from django.db import models, transaction
 from django.core.exceptions import ValidationError
+from decimal import Decimal, ROUND_HALF_UP
+from constants import SERVICE_FEE, SUBSRIBERS_SERVICE_FEE, DECIMAL_PLACE, USD_TO_NGN_RATE
 
 
 class UserRole(models.TextChoices):
@@ -99,6 +100,27 @@ class UserProfile(models.Model):
     def get_user_niches(self) -> list:
         return self.niches.values_list("id", flat=True)
     
+    @property
+    def service_fee_percentage(self) -> Decimal:
+        """
+        Returns the raw service fee percentage rate based on user payment status.
+        """
+        if self.has_paid_onetime_fee:
+            return Decimal(str(SUBSRIBERS_SERVICE_FEE))
+        return Decimal(str(SERVICE_FEE))
+    
+    @property
+    def service_fee_percentage_display(self) -> str:
+        """
+        Returns the service fee percentage rate formatted for display (e.g., '4%' or '17.5%').
+        """
+        if self.has_paid_onetime_fee:
+            rate = float(SUBSRIBERS_SERVICE_FEE) * 100
+        else:
+            rate = float(SERVICE_FEE) * 100
+
+        return f"{rate:g}%"
+    
     def all_user_niches(self):
         return self.niches.all()
     
@@ -130,3 +152,23 @@ class UserProfile(models.Model):
             })
             
         return roles
+    
+    def calculate_service_fee(self, amount: Decimal) -> Decimal:
+        """
+        Calculates the service fee amount for a given base amount 
+        using the user's specific fee percentage tier.
+        """
+        
+        return (
+            Decimal(str(amount)) * self.service_fee_percentage
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+        
+    def service_fee_to_ngn(self, amount: Decimal) -> Decimal:
+        """
+        Converts the calculated service fee to NGN using the current exchange rate.
+        """
+        fee = self.calculate_service_fee(amount)
+        return (
+            fee * Decimal(str(USD_TO_NGN_RATE))
+        ).quantize(Decimal(str(DECIMAL_PLACE)), rounding=ROUND_HALF_UP)
+    

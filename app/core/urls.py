@@ -62,14 +62,14 @@ urlpatterns = [
         name=ReviewURLS.OVERVIEW
     ),
     path("firebase-messaging-sw.js", service_worker, name="firebase-service-worker"),
-    path("new-db", TemplateView.as_view(template_name="account/dashboards/new_user_dashboard.html"), name="new_usser_Db"),
+    # path("new-db", TemplateView.as_view(template_name="account/dashboards/new_user_dashboard.html"), name="new_usser_Db"),
     # path(
     #     "client/",
     #     TemplateView.as_view(template_name=Accounts.Dashboards.MEMBERS),
     #     name="user-dashboard",
     # ),
     
-    # path("kyc", TemplateView.as_view(template_name="account/kyc.html"), name="kyc-view"),
+    path("kyc", TemplateView.as_view(template_name="account/kyc.html"), name="kyc-view"),
     # path("kyc-1", TemplateView.as_view(template_name="account/biz-kyc.html"), name="biz-director-view"),
     # path("kyc-2", TemplateView.as_view(template_name="account/kyc-2.html"), name="biz-doc-view"),
     # path("kyc-3", TemplateView.as_view(template_name="account/kyc-3.html"), name="kyc-3-view"),
