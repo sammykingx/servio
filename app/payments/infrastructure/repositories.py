@@ -110,7 +110,7 @@ class PaymentRepository:
             user=self.user,
             payment_type=PaymentType.SERVICE,
             payment_purpose=purpose,
-            metadata__contract_reference=contract_reference,
+            contract_ref=contract_reference,
             status__in=[
                 PaymentStatus.INITIATED,
                 PaymentStatus.PENDING,
@@ -125,9 +125,9 @@ class PaymentRepository:
         currency: str, 
         payment_type: PaymentType, 
         purpose: PaymentPurpose, 
-        provider:RegisteredPaymentProvider,
+        processor:RegisteredPaymentProvider,
         beneficiary: Union[AbstractUser, None] = None,
-        meta_data: dict = {}
+        contract_ref: Union[str, None] = None,
     ) -> PaymentEntity:
         """
         Persists a new transaction after validating user context and converting currency.
@@ -139,11 +139,11 @@ class PaymentRepository:
             - Maps the resulting database object to a domain Entity.
 
         Args:
-            amount: The raw monetary value to process.
+            amount: The raw monetary Decimal value to process in USD.
             currency: ISO 4217 code (e.g., 'NGN') used for unit conversion.
             payment_type: Categorization as ONE_TIME or SERVICE.
             purpose: The specific business intent of the payment.
-            provider: The gateway (e.g., Paystack) handling the request.
+            processor: The gateway (e.g., Paystack) handling the request.
 
         Returns:
             PaymentEntity: The domain-layer representation of the record.
@@ -158,17 +158,17 @@ class PaymentRepository:
             currency=currency,
             payment_type=payment_type,
             payment_purpose=purpose,
-            gateway=provider,
+            gateway=processor,
             beneficiary=beneficiary,
-            metadata=meta_data
+            contract_ref=contract_ref,
         )
         return self._map_to_entity(db_obj)
-    
+
     def persist_checkout_session(self, entity:PaymentEntity) -> None:
         """
         Persists gateway-specific session data to an existing payment record.
         
-        This saves the provider's reference, response and metadata so that 
+        This saves the processor's reference, response and metadata so that 
         subsequent checkout attempts reuse the existing gateway session 
         instead of creating a new one.
         """
@@ -244,6 +244,7 @@ class PaymentRepository:
             id=model.id,
             user=model.user,
             reference=model.reference,
+            contract_ref=model.contract_ref,
             beneficiary=model.beneficiary,
             status=model.status,
             amount_decimal=model.amount_decimal,

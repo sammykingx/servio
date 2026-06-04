@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from payments.domain.enums import PaymentStatus, RegisteredPaymentProvider
 from payments.schemas.paystack import PaystackVerificationData
-from typing import Any, Dict
+from typing import Any, Dict, Union
 from uuid import UUID
 from .gateway import GatewayInitResponse, GatewayVerifyResponse
 
@@ -14,6 +14,7 @@ class PaymentEntity:
     user: AbstractUser
     beneficiary: AbstractUser
     reference: str
+    contract_ref: Union[str, None]
     status: PaymentStatus
     amount_in_minor_units: int
     amount_decimal: int
@@ -96,6 +97,13 @@ class PaymentEntity:
         self.paid_at = gw_entity.data.paid_at
         self.gateway_order_id = gw_entity.data.id
         self.metadata = gw_entity.data.paystack_metadata
+        
+    def finalize_from_gateway_webhook(self, data):
+        """
+            Similar to finalize_from_gateway but designed for webhook processing where the payload structure may differ.
+            This method should be used when handling asynchronous webhook events to ensure the entity is updated correctly.
+        """
+        pass
         
     def _complete_paystack_payment(self, data: PaystackVerificationData):
         """

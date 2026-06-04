@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import OperationalError
 from django.db.models import Model
 from django.http import HttpRequest
+from contracts.application.services import ContractLifecycleService
 from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.repositories import PaymentRepository
 from payments.domain.enums import (
@@ -30,22 +31,34 @@ logger = logging.getLogger("app_file")
 class PaymentService:
 
     def __init__(self, request: HttpRequest, gateway_name: RegisteredPaymentProvider, phase: PaymentPhase, user: Union[AbstractUser, None] = None):
+        """Initializes the payment handler with a validated gateway and user repository.
+
+        Args:
+            request: The current HTTP request instance.
+            gateway_name: The targeted enum value representing the payment gateway.
+            phase: The current phase of the payment lifecycle.
+            user: The user performing the transaction, required if phase is INITIALIZATION.
+
+        Raises:
+            DomainException: If the gateway is valid but lacks a configured adapter,
+                or if the provided gateway name is unsupported.
+        """
         try:
-            self.provider = RegisteredPaymentProvider(gateway_name)
-            if self.provider not in GATEWAYS:
+            self.payment_processor = RegisteredPaymentProvider(gateway_name)
+            if self.payment_processor not in GATEWAYS:
                 raise DomainException(
-                    f"Gateway '{self.provider}' is registered but has no Adapter.",
+                    f"Gateway '{self.payment_processor}' is registered but has no Adapter.",
                     code=PaymentFailure.PROVIDER_NOT_CONFIGURED.code,
                     title=PaymentFailure.PROVIDER_NOT_CONFIGURED.title
                 )
             if phase == PaymentPhase.INITIALIZATION:
                 PaymentPolicy.is_authenticated_user(user)
                 
-            gateway_class = GATEWAYS[self.provider]
+            gateway_class = GATEWAYS[self.payment_processor]
             self.user = user
             self.gateway = gateway_class(request)
             self.repo = PaymentRepository(self.user)
-            self.currency = "NGN" if self.provider == RegisteredPaymentProvider.PAYSTACK else "USD"
+            self.currency = "NGN" if self.payment_processor == RegisteredPaymentProvider.PAYSTACK else "USD"
             
         except ValueError:
             raise DomainException(
@@ -61,7 +74,7 @@ class PaymentService:
             If the payment exists and its gateway differs from the current provider, 
             it re-initializes self.gateway to the correct provider class.
         """
-        if payment.gateway != self.provider:
+        if payment.gateway != self.payment_processor:
             gateway_class = GATEWAYS.get(payment.gateway)
             if gateway_class:
                 self.gateway = gateway_class()
@@ -91,6 +104,8 @@ class PaymentService:
             
             if payment.payment_type == PaymentType.ONE_TIME and payment.payment_purpose == PaymentPurpose.ACTIVATION_FEE:
                 self._activate_user_profile()
+            elif payment.payment_type == PaymentType.SERVICE and payment.payment_purpose == PaymentPurpose.CONTRACT_ACTIVATION:
+                ContractLifecycleService(self.user).activate_contract(payment.contract_ref)
                     
     def _activate_user_profile(self):
         """
@@ -172,7 +187,7 @@ class PaymentService:
             self.currency, 
             payment_type, 
             payment_purpose, 
-            self.provider, 
+            self.payment_processor, 
             beneficiary
         )
         
@@ -201,15 +216,14 @@ class PaymentService:
                     existing_entity.mark_as_expired(err.message)
                     self.repo.update_status(existing_entity)
                     
-        amount = contract.agreed_amount if self.currency == "USD" else contract.service_fee_to_ngn
         return self.repo.create_record(
-            amount,
+            contract.service_fee,
             self.currency,
             PaymentType.SERVICE,
             PaymentPurpose.CONTRACT_ACTIVATION,
-            self.provider,
+            self.payment_processor,
             beneficiary,
-            metadata={"contract_reference": contract.reference},
+            contract_ref=contract.reference,
         )
 
     def process_payment(self, reference: str) -> Dict[str, Any]:
@@ -284,7 +298,7 @@ class PaymentService:
         except PolicyViolationError as err:
             raise err
         
-    def handle_webhook(self, refernce:str):
+    def handle_webhook(self, reference:str, data: dict = None):
         """
             Coordinates the domain-level response to an external payment provider's webhook.
 
@@ -298,7 +312,8 @@ class PaymentService:
         # either itrigger the verify method from here that makes 
         # another API call to gateway or i trust the payload 
         # and call finalize method
-        pass
+        payment = self.repo.get_by_reference(reference, lock=True)
+        payment.finalize_from_gateway_webhook(data)
 
         
 # {'status': True, 'message': 'Verification successful', 'data': {'id': 6056669528, 'domain': 'test', 'status': 'success', 'reference': 'SRV-WY0Fnw10r4dwcvl', 'receipt_number': None, 'amount': 2800000, 'message': None, 'gateway_response': 'Successful', 'paid_at': '2026-04-19T23:38:10.000Z', 'created_at': '2026-04-19T23:37:16.000Z', 'channel': 'card', 'currency': 'NGN', 'ip_address': '102.89.46.38', 'metadata': {'cancel_action': '/payments/checkout/cancelled/'}, 'log': {'start_time': 1776641842, 'time_spent': 48, 'attempts': 1, 'errors': 0, 'success': True, 'mobile': True, 'input': [], 'history': [{'type': 'action', 'message': 'Set payment method to: card', 'time': 29}, {'type': 'action', 'message': 'Attempted to pay with card', 'time': 48}, {'type': 'success', 'message': 'Successfully paid with card', 'time': 48}]}, 'fees': 52000, 'fees_split': None, 'authorization': {'authorization_code': 'AUTH_wdu0om86xy', 'bin': '408408', 'last4': '4081', 'exp_month': '12', 'exp_year': '2030', 'channel': 'card', 'card_type': 'visa ', 'bank': 'TEST BANK', 'country_code': 'NG', 'brand': 'visa', 'reusable': True, 'signature': 'SIG_o6DImVqfL5I3m8UjPD3p', 'account_name': None, 'receiver_bank_account_number': None, 'receiver_bank': None}, 'customer': {'id': 355100918, 'first_name': None, 'last_name': None, 'email': 'dylar77@anhmaybietchoi.com', 'customer_code': 'CUS_ge21z2zt8xncvzr', 'phone': None, 'metadata': None, 'risk_action': 'default', 'international_format_phone': None}, 'plan': None, 'split': {}, 'order_id': None, 'paidAt': '2026-04-19T23:38:10.000Z', 'createdAt': '2026-04-19T23:37:16.000Z', 'requested_amount': 2800000, 'pos_transaction_data': None, 'source': None, 'fees_breakdown': None, 'connect': None, 'transaction_date': '2026-04-19T23:37:16.000Z', 'plan_object': {}, 'subaccount': {}}}

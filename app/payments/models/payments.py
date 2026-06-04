@@ -17,6 +17,7 @@ class Payment(models.Model):
         null=True,
     )
     reference = models.CharField(max_length=35, unique=True)
+    contract_ref = models.CharField(max_length=35, unique=True, null=True)
     gateway_reference = models.CharField(
         max_length=100, 
         null=True, 

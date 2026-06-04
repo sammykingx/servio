@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from contracts.application.dto import SignContractDTO
-from contracts.application.services import ContractSigningService
+from contracts.application.services import ContractLifecycleService
 from contracts.domains.errors import ContractPolicyFailure
 from contracts.domains.exceptions import ContractException
 from core.model_registry import registry
@@ -77,7 +77,7 @@ class RoleContractTermsAcceptanceView(LoginRequiredMixin, DetailView):
         try:
             contract = self.get_object()
             SignContractDTO.model_validate_json(request.body, strict=True)
-            service = ContractSigningService(request.user)
+            service = ContractLifecycleService(request.user)
             contract_entity = service.to_entity(contract)
             service.accept_contract_terms(contract_entity)
             

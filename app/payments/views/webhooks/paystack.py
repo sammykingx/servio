@@ -42,7 +42,7 @@ class PaystackWebhookView(View):
             data = payload.get('data')
             reference = data.get("reference")
             if event == 'charge.success' and reference:
-                self.handle_successful_charge(reference)
+                self.handle_successful_charge(reference, data)
             return HttpResponse(status=200)
         
         except json.JSONDecodeError:
@@ -57,7 +57,7 @@ class PaystackWebhookView(View):
             logger.exception(err)
             return HttpResponse(status=500)
                     
-    def handle_successful_charge(self, ref:str):
+    def handle_successful_charge(self, ref:str, data: dict):
         """
         Processes a confirmed successful charge event by coordinating 
         with the domain service to verify and finalize the transaction.
@@ -66,4 +66,4 @@ class PaystackWebhookView(View):
             gateway_name=RegisteredPaymentProvider.PAYSTACK, 
             phase=PaymentPhase.VERIFICATION
         )
-        service.handle_webhook(ref)
+        service.handle_webhook(ref, data)

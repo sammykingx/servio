@@ -7,7 +7,9 @@ from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE, USD_TO_NGN_RATE, 
 
 class ContractStatus(models.TextChoices):
     AWAITING = "awaiting", "Awaiting Signatures"
-    SIGNED = "signed", "Signed"
+    PENDING_ACTIVATION = "pending_activation", "Pending Activation"  # client signed + paid, awaiting provider
+    SIGNED = "signed", "Signed" # both signed, not yet paid
+    ACTIVATED = "activated", "Activated" # paid + both signed
     FUNDED = "funded", "Funded"
     COMPLETED = "completed", "Completed"
     CANCELLED = "cancelled", "Cancelled"

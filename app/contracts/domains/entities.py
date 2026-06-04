@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from django.db.models import Model
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
+from contracts.domains.errors import ContractPolicyFailure
+from contracts.domains.exceptions import ContractException
 from contracts.models.contract import ContractStatus
 from datetime import datetime
 from decimal import Decimal
@@ -70,16 +72,49 @@ class ContractEntity:
         )
     
     def provider_accepted_terms(self):
-        """Marks the contract as signed by the provider and updates status if client has also signed."""
+        """
+        Provider accepts terms.
+        If client has already paid, contract moves to ACTIVATED immediately.
+        If client has signed but not paid, contract moves to SIGNED.
+        If client hasn't signed at all, status stays AWAITING.
+        """
+        if self.provider_accepted_terms_at:
+            return
         self.provider_accepted_terms_at = timezone.now()
-        if self.client_accepted_terms_at:
+        
+        if self.client_paid_at:
+            self.status = ContractStatus.ACTIVATED
+        elif self.client_accepted_terms_at:
             self.status = ContractStatus.SIGNED
-            self.completed_at = timezone.now()
             
     def client_accepted_terms(self):
-        """Marks the contract as signed by the client and updates status if provider has also signed."""
+        """
+        Client accepts terms. Does not change status to SIGNED because
+        the provider may not have signed yet. Client proceeds to pay from
+        this state regardless of provider signature status.
+        """
+        if self.client_accepted_terms_at:
+            return
         self.client_accepted_terms_at = timezone.now()
+        
+    def client_paid(self):
+        """
+        Client completes activation payment.
+        If provider has already signed, contract is fully ACTIVATED.
+        If provider hasn't signed yet, contract moves to PENDING_ACTIVATION
+        to await the provider's signature.
+        """
+        if not self.client_accepted_terms_at:
+            raise ContractException(
+                "Client must accept contract terms before contract activiation.",
+                code=ContractPolicyFailure.TERMS_NOT_ACKNOWLEDGED.code,
+                title=ContractPolicyFailure.TERMS_NOT_ACKNOWLEDGED.title,
+            )
+        
+        self.client_paid_at = timezone.now()
+        
         if self.provider_accepted_terms_at:
-            self.status = ContractStatus.SIGNED
-            self.completed_at = timezone.now()
+            self.status = ContractStatus.ACTIVATED
+        else:
+            self.status = ContractStatus.PENDING_ACTIVATION
     

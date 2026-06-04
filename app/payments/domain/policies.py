@@ -38,6 +38,7 @@ class PaymentPolicy:
                 if phase == PaymentPhase.VERIFICATION else
                 "This payment has already been processed. We've blocked this attempt to ensure you aren't charged twice."
             )
+            print("here")
             raise PolicyViolationError(
                 msg,
                 code=PaymentFailure.ALREADY_VERIFIED.code,

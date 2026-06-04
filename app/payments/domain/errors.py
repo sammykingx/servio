@@ -24,6 +24,9 @@ class PaymentFailure:
     DUPLICATE_PAYMENT_REFERENCE = FailureDetail(
         "DUPLICATE_PAYMENT_REFERENCE", "Checkout Already Started"
     )
+    AMOUNT_LIMIT_EXCEEDED = FailureDetail(
+        "AMOUNT_LIMIT_EXCEEDED", "Transaction limit exceeded."
+    )
     GATEWAY_TIMEOUT = FailureDetail(
         "GATEWAY_TIMEOUT", "Payment Gateway Timed Out"
     )

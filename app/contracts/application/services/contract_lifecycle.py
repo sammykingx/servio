@@ -5,7 +5,7 @@ from contracts.domains.entities import ContractEntity
 from contracts.domains.policies import ContractPolicy
 
 
-class ContractSigningService:
+class ContractLifecycleService:
     def __init__(self, user: AbstractUser):
         self.actor = user
         self.contract_repo = ContractRepository()
@@ -24,4 +24,10 @@ class ContractSigningService:
 
         if action_method_name:
             getattr(contract, action_method_name)()
-            self.contract_repo.persist_contract_acceptance(contract, field_prefix)  
+            self.contract_repo.persist_contract_acceptance(contract, field_prefix)
+            
+    def activate_contract(self, reference:str):
+        # get object from db
+        # verify details
+        # change state to activated
+        pass

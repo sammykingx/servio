@@ -135,7 +135,9 @@ const ContractPaymentCheckout = (() => {
             }
 
             if (result.redirect_url) {
-                window.location.href = result.redirect_url;
+                setTimeout(() => {
+                    window.location.assign(result.redirect_url);
+                }, 1500);
             }
 
         } catch (error) {

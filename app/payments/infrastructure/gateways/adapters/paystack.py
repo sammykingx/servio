@@ -93,6 +93,8 @@ class PaystackAdapter(PaymentGateway):
             )
 
         except HTTPError as e:
+            err:dict = e.response.json()
+            logger.exception(err)
             if e.response.status_code == 401:
                 raise PaymentGatewayError(
                     "Invalid initialization data for gateway - paystack",
@@ -101,10 +103,18 @@ class PaystackAdapter(PaymentGateway):
                 )
 
             # 400
+            if err.get("code") == "amount_exceed_limit":
+                raise PaymentGatewayError(
+                  "This amount is over the maximum payment limit",
+                  code=PaymentFailure.AMOUNT_LIMIT_EXCEEDED.code,
+                  title=PaymentFailure.AMOUNT_LIMIT_EXCEEDED.title,
+                  err_type="warning",
+                )
+                
             raise PaymentGatewayError(
-                "Prevented a duplicate initialization to protect against double-charging.",
-                code=PaymentFailure.DUPLICATE_PAYMENT_REFERENCE.code,
-                title=PaymentFailure.DUPLICATE_PAYMENT_REFERENCE.title,
+                "We were unable to initialize your payment. Please try again or contact support.",
+                code=PaymentFailure.GATEWAY_ERROR.code,
+                title="Paystack Nigeria",
                 err_type="warning"
             )
             

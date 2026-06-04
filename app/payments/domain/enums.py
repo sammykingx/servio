@@ -3,6 +3,12 @@
 from enum import Enum
 
 class RegisteredPaymentProvider(str, Enum):
+    """Enumeration of supported third-party payment gateway providers.
+
+    Attributes:
+        PAYSTACK: Represents the Paystack payment gateway (defaults to NGN currency).
+        STRIPE: Represents the Stripe payment gateway (defaults to USD currency).
+    """
     PAYSTACK = "paystack"
     STRIPE = "stripe"
     
