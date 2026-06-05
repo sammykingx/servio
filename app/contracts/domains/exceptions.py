@@ -26,3 +26,9 @@ class ContractException(Exception):
     
 class ContractPolicyViolation(ContractException):
     pass
+
+class ContractPaymentVerificationFailure(ContractException):
+    def __init__(self, message="No successful payment record found for this contract."):
+        self.code = "PAYMENT_NOT_VERIFIED"
+        self.title = "Payment Required"
+        super().__init__(message)

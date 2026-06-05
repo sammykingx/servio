@@ -32,13 +32,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             Q(client=user) | Q(provider=user)
         ).aggregate(
             # Combined dashboard active count
-            total_active=Count('id', filter=Q(status__in=[ContractStatus.SIGNED, ContractStatus.FUNDED])),
+            total_active=Count('id', filter=Q(status__in=[ContractStatus.ACTIVATED, ContractStatus.FUNDED])),
             
             # Outbound Escrow: Client committed funds
-            funded_contracts=Sum('agreed_amount', filter=Q(client=user, status=ContractStatus.FUNDED)),
+            funded_contracts=Sum('agreed_amount', filter=Q(client=user, status=ContractStatus.ACTIVATED)),
             
             # Inbound Escrow: Provider guaranteed earning pipeline
-            secured_income=Sum('agreed_amount', filter=Q(provider=user, status=ContractStatus.FUNDED)),
+            secured_income=Sum('agreed_amount', filter=Q(provider=user, status=ContractStatus.ACTIVATED)),
             
             # Pipeline Volumes: Contracts created but not yet fully operationalized
             pipeline_client=Sum('agreed_amount', filter=Q(client=user, status__in=[ContractStatus.AWAITING, ContractStatus.SIGNED])),
@@ -47,7 +47,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             # Segmented Funnel Distribution Counts
             count_awaiting=Count('id', filter=Q(status=ContractStatus.AWAITING)),
             count_signed=Count('id', filter=Q(status=ContractStatus.SIGNED)),
-            count_funded=Count('id', filter=Q(status=ContractStatus.FUNDED)),
+            count_activated=Count('id', filter=Q(status=ContractStatus.ACTIVATED)),
+            # count_funded=Count('id', filter=Q(status=ContractStatus.FUNDED)),
             count_disputed=Count('id', filter=Q(status=ContractStatus.DISPUTED)),
         )
 
@@ -66,7 +67,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['funnel'] = {
             'awaiting': contract_metrics['count_awaiting'] or 0,
             'signed': contract_metrics['count_signed'] or 0,
-            'funded': contract_metrics['count_funded'] or 0,
+            'activated': contract_metrics['count_activated'] or 0,
             'disputed': contract_metrics['count_disputed'] or 0,
         }
 
@@ -112,7 +113,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Querying payments ledger for recent activity involving this user
         context['recent_payments'] = Payment.objects.filter(
             Q(user=user) | Q(beneficiary=user)
-        ).order_by('-created_at')[:5]
+        ).order_by('-created_at')[:4]
 
         # ---------------------------------------------------------------------
         # 5. POST-FUNDING HAND-OFF CONTEXT (WhatsApp/Email Bridge)
@@ -121,7 +122,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         time_threshold = timezone.now() - timedelta(hours=48)
         latest_funded_handoff = Contract.objects.filter(
             Q(client=user) | Q(provider=user),
-            status=ContractStatus.FUNDED,
+            status=ContractStatus.ACTIVATED,
             client_paid_at__gte=time_threshold
         ).select_related('client', 'provider', 'project').order_by('-client_paid_at').first()
 
@@ -139,82 +140,15 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             }
             
         context['has_gig'] = Gig.objects.filter(creator=user).exists()
+        
+        if not user.is_verified:
+            context["toast"] = {
+                "message": "Go to Profile > Security & Trust to verify your email and access all features.",
+                "type": "warning",
+                "title": "Email Not Verified",
+            }
 
         return context
-    # def get_template_names(self):
-    #     user = self.request.user
-    #     role = getattr(user.profile, "role", UserRole.MEMBERS)
-
-    #     template_map = {
-    #         UserRole.ADMIN: Accounts.Dashboards.ADMIN,
-    #         UserRole.MEMBERS: Accounts.Dashboards.MEMBERS,
-    #         UserRole.PROVIDERS: Accounts.Dashboards.PROVIDERS,
-    #         UserRole.STAFF: Accounts.Dashboards.STAFFS,
-    #     }
-
-    #     # if user.is_verified is False:
-    #     #     messages.warning(
-    #     #         self.request,
-    #     #         "Please verify your email to access all features.",
-    #     #         extra_tags="Email Not Verified",
-    #     #     )
-    #     # Return template based on role, fallback to default
-    #     return [template_map.get(role, self.template_name)]
-    
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["gigs"] = self.fetch_gig_info()
-    #     context["proposals"] = self.fetch_recent_proposals()
-    #     context["recent_payments"] = self.fetch_recent_payments()
-    #     user = self.request.user
-
-    #     if not user.is_verified:
-    #         context["toast"] = {
-    #             "message": "Go to Profile > Security & Trust to verify your email and access all features.",
-    #             "type": "warning",
-    #             "title": "Email Not Verified",
-    #         }
-
-    #     return context
-    
-    # def fetch_gig_info(self):
-    #     return (
-    #         self.request.user.gigs
-    #         .prefetch_related("required_roles")
-    #         .annotate(
-    #             role_count_db=Count("required_roles"),
-    #             total_role_budget_db=Sum(
-    #                 F("required_roles__budget") * F("required_roles__slots")
-    #             ),
-    #         )
-    #         .order_by("-created_at")[:3]
-    #     )
-        
-    # def fetch_recent_proposals(self):
-    #     ProposalModel = registry.Proposal
-    #     return (
-    #         ProposalModel.objects
-    #         .filter(project__creator=self.request.user)
-    #         .select_related("provider", "project")
-    #         # .only(
-    #         #     "id",
-    #         #     "status",
-    #         #     "sent_at",
-    #         #     "gig__title",
-    #         #     "sender__id",
-    #         #     "sender__username",
-    #         # )
-    #         .order_by("-created_at")[:4]
-    #     )
-    
-    # def fetch_recent_payments(self):
-    #     PaymentModel = registry.Payment
-    #     return (
-    #         PaymentModel.objects
-    #         .filter(user=self.request.user)
-    #         .select_related("beneficiary")
-    #         .order_by("-created_at")[:3]
-    #     )
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):

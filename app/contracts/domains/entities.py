@@ -18,8 +18,7 @@ class ContractGenerationContext:
     """
     proposal: Model
     accepted_role: Model
-
-
+    
 @dataclass
 class ContractEntity:
     """
@@ -70,6 +69,10 @@ class ContractEntity:
             completed_at=instance.completed_at,
             
         )
+        
+    @property
+    def payment_plan_display(self):
+        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip() + "%"
     
     def provider_accepted_terms(self):
         """
@@ -97,24 +100,21 @@ class ContractEntity:
             return
         self.client_accepted_terms_at = timezone.now()
         
-    def client_paid(self):
+    def mark_as_paid_by_client(self, paid_at: datetime):
         """
         Client completes activation payment.
         If provider has already signed, contract is fully ACTIVATED.
         If provider hasn't signed yet, contract moves to PENDING_ACTIVATION
         to await the provider's signature.
         """
-        if not self.client_accepted_terms_at:
-            raise ContractException(
-                "Client must accept contract terms before contract activiation.",
-                code=ContractPolicyFailure.TERMS_NOT_ACKNOWLEDGED.code,
-                title=ContractPolicyFailure.TERMS_NOT_ACKNOWLEDGED.title,
-            )
-        
-        self.client_paid_at = timezone.now()
+        self.client_paid_at = paid_at or timezone.now()
         
         if self.provider_accepted_terms_at:
             self.status = ContractStatus.ACTIVATED
         else:
             self.status = ContractStatus.PENDING_ACTIVATION
-    
+
+@dataclass(frozen=True)
+class ContractActivationResult:
+    contract: ContractEntity
+    payment: Model

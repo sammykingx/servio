@@ -69,11 +69,11 @@ class ContractTimelineView(LoginRequiredMixin, DetailView):
 
         if contract.client_paid_at:
             events_log.append({
-                "title": "Escrow Funded Successfully",
+                "title": "Contract Fully Activated",
                 "timestamp": contract.client_paid_at,
                 "icon": "payments",
                 "color": "emerald",
-                "desc": "Project funding safely deposited and held in smart-escrow storage protection."
+                "desc": "The contract is now fully active! Both parties have accepted terms, and work can officially begin."
             })
 
         if contract.completed_at:

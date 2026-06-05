@@ -32,3 +32,4 @@ class ContractPolicyFailure:
     POLICY_NOT_ACKNOWLEDGED = ContractFailureDetail(
         "POLICY_NOT_ACKNOWLEDGED", "Policy Acknowledgment Required"
     )
+    

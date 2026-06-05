@@ -46,3 +46,24 @@ class ContractPolicy:
     def check_signing_eligibility(cls, user: AbstractUser, contract: ContractEntity):
         cls._is_authorized_party(user, contract)
         cls._has_accepted_terms(user, contract)
+        
+    @classmethod
+    def check_activation_eligibility(cls, user: AbstractUser, contract: ContractEntity):
+        """
+        Ensures that only the assigned client can activate the contract, 
+        and they must have accepted the terms prior to activation.
+        """
+        if user != contract.client:
+            raise ContractPolicyViolation(
+                message="Only the designated client can activate this contract.",
+                code=ContractPolicyFailure.NOT_AUTHORIZED.code,
+                title=ContractPolicyFailure.NOT_AUTHORIZED.title,
+            )
+        
+        if not contract.client_accepted_terms_at:
+            raise ContractPolicyViolation(
+                message="You must accept the terms of the contract before activating it.",
+                code=ContractPolicyFailure.TERMS_NOT_ACKNOWLEDGED.code,
+                title=ContractPolicyFailure.TERMS_NOT_ACKNOWLEDGED.title,
+            )
+            

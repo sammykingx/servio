@@ -2,7 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
 from django.views.generic import ListView
 from core.model_registry import registry
+from contracts.models.contract import ContractStatus
 from template_map.contracts import Contract as ContractTemplates
+
 
 
 
@@ -37,25 +39,29 @@ class ContractListView(LoginRequiredMixin, ListView):
             self.model.objects.filter(Q(client=user) | Q(provider=user))
             .aggregate(
                 all_count=Count("id"),
-                completed_count=Count(
+                activated_count=Count(
                     "id", 
-                    filter=Q(status="completed")
+                    filter=Q(status=ContractStatus.ACTIVATED)
                 ),
                 pending_count=Count(
                     "id", 
-                    filter=Q(status__in=["awaiting", "signed", "funded"])
+                    filter=Q(status__in=[
+                            ContractStatus.AWAITING,
+                            ContractStatus.SIGNED,
+                        ]
+                    )
                 ),
                 
                 disputed_or_cancelled_count=Count(
                     "id", 
-                    filter=Q(status__in=["cancelled", "disputed"])
+                    filter=Q(status__in=[ContractStatus.DISPUTED, ContractStatus.CANCELLED])
                 ),
             )
         )
 
         context["stats"] = {
             "all": stats["all_count"],
-            "completed": stats["completed_count"],
+            "activated": stats["activated_count"],
             "pending": stats["pending_count"],
             "disputed_or_cancelled": stats["disputed_or_cancelled_count"],
         }

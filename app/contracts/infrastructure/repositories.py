@@ -92,3 +92,10 @@ class ContractRepository:
             updated_at=timezone.now()
         )
     
+    def persist_activation(self, contract: ContractEntity) -> None:
+        self.model.objects.filter(pk=contract.id).update(
+            status=contract.status,
+            client_paid_at=contract.client_paid_at,
+            updated_at=timezone.now()
+        )
+    
