@@ -4,22 +4,24 @@ from django.http import HttpRequest, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.urls import reverse_lazy
+
 from core.url_names import AuthURLNames, CollaborationURLS, ContractURLS
 from core.model_registry import registry
-from payments.domain.enums import PaymentType, PaymentPurpose, PaymentPhase
+from contracts.application.dto import ContractActivationPayload
+from payments.domain.enums import PaymentPhase
 from payments.domain.exceptions import DomainException
 from payments.services.payment_service import PaymentService
-from payments.schemas.contract_activation import ContractActivationPayload
-from template_map.payments import Payments
+from template_map.contracts import Contract as ContractTemplates
+
 from pydantic import ValidationError
 from typing import Tuple, Union
-import json, logging
+import logging
 
 
 logger = logging.getLogger(__name__)
 
-class ActivateContractRoleEnagementView(LoginRequiredMixin, View):
-    template_name = Payments.ServicePayments.FUND_CONTRACT
+class StartContractActivationView(LoginRequiredMixin, View):
+    template_name = ContractTemplates.INITIATE_CONTRACT_ACTIVATION
     model = registry.Contract
     
     def get(self, request: HttpRequest, *args, **kwargs):

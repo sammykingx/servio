@@ -5,13 +5,7 @@ _BASE_FOLDER = TemplateRegistryBase("payments")
 class Payments:
     PAYMENT_SUMMARY = _BASE_FOLDER.base_folder_files("payment-summary.html")
     ANNUAL_SUBSCRIPTION = _BASE_FOLDER.base_folder_files("annual-subcriptions.html")
-    
-    class ServicePayments:
-        __SUB_FOLDER = _BASE_FOLDER.subfolder("service-payments")
-        
-        FUND_CONTRACT = f"{__SUB_FOLDER}/fund-contract.html"
-        
-        
+     
     class Checkouts:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("checkouts")
         

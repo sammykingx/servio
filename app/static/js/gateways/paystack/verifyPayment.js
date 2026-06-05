@@ -49,9 +49,15 @@ class PaystackVerificationOrchestrator {
             });
 
             const result = await response.json();
+            const shouldRedirect = result.redirect === true && !!result.url;
 
             if (response.ok && result.status) {
-                this.handleSuccess(result);
+                this.handleSuccess(result, shouldRedirect);
+                if (shouldRedirect) {
+                    setTimeout(() => {
+                        window.location.assign(result.url);
+                    }, 2000);
+                }
             } else {
                 this.handleFailure(result);
             }
@@ -64,10 +70,14 @@ class PaystackVerificationOrchestrator {
         }
     }
 
-    handleSuccess(result) {
+    handleSuccess(result, shouldRedirect) {
         this.log("DONE", "Transaction verification complete 🥳!");
         this.log('DONE', result.message);
         this.updateUI("Verification Complete", 100);
+
+        if (shouldRedirect) {
+            this.updateUI("Redirecting ....", 100);
+        }
 
         // Update Badge and Icon
         if (this.statusBadge) {
@@ -77,9 +87,6 @@ class PaystackVerificationOrchestrator {
 
         // Stop SVG animation and swap icon
         this.stopSpinner("text-emerald-500", "check_circle");
-        // setTimeout(() => {
-        //     window.location.assign(this.config.successURL);
-        // }, 2000);
     }
 
     handleFailure(result) {

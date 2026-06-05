@@ -4,6 +4,8 @@ from django.views.generic import TemplateView
 from template_map.contracts import Contract
 from core.url_names import ContractURLS
 from .views import RoleContractTermsAcceptanceView, ContractListView, ContractTimelineView
+from .views.contract_activation import StartContractActivationView, FinalizeContractActivationView
+
 
 urlpatterns = [
     path("accept-terms/<uuid:role_id>",
@@ -20,4 +22,14 @@ urlpatterns = [
         ContractTimelineView.as_view(),
         name=ContractURLS.CONTRACT_TIMELINE
     ),
+    path(
+        "begin-activation/<slug:contract_slug>/",
+        StartContractActivationView.as_view(),
+        name=ContractURLS.INITIATE_CONTRACT_ACTIVATION
+    ),
+    path(
+        "activate/<str:contract_ref>/",
+        FinalizeContractActivationView.as_view(),
+        name=ContractURLS.ACTIVATE_CONTRACT
+    )
 ]

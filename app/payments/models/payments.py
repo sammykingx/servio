@@ -7,7 +7,13 @@ from constants import APP_NAME
 
 class Payment(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid7)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, to_field="email", related_name="payments", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        to_field="email", 
+        related_name="payments", 
+        on_delete=models.CASCADE,
+        help_text="THe user making the payments",
+    )
     beneficiary = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         to_field="email", 
@@ -15,9 +21,18 @@ class Payment(models.Model):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
+        help_text="To whom the payment is for, if it's to the platform then beneficiary is null"
     )
-    reference = models.CharField(max_length=35, unique=True)
-    contract_ref = models.CharField(max_length=35, unique=True, null=True)
+    reference = models.CharField(
+        max_length=35,
+        unique=True,
+        help_text="The payment record reference"
+    )
+    contract_ref = models.CharField(
+        max_length=35,
+        null=True,
+        help_text="a reference to the contract the payment is for"
+    )
     gateway_reference = models.CharField(
         max_length=100, 
         null=True, 
@@ -122,5 +137,8 @@ class Payment(models.Model):
     def display_recipient_name(self):
         if self.payment_purpose == PaymentPurpose.ACTIVATION_FEE:
             return f"{APP_NAME.title()} Platform"
+        if self.payment_purpose == PaymentPurpose.CONTRACT_ACTIVATION and self.beneficiary is None:
+            return f"{APP_NAME.title()} Platform"
+
         return self.user.full_name or self.user.email
     

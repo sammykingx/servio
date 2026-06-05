@@ -107,6 +107,8 @@ class ProposalURLS:
     
 class ContractURLS:
     ACCEPT_CONTRACT_TERMS = "accept_contract_terms"
+    INITIATE_CONTRACT_ACTIVATION = "initiate_contract_activation"
+    ACTIVATE_CONTRACT = "activate_contract"
     VIEW_CONTRACT = "view_contract"
     BUILD_CONTRACT = "build_contract"
     LIST_CONTRACTS = "list_contracts"
@@ -123,7 +125,6 @@ class PaymentURLS:
     PAYMENT_VERIFICATION = "payment_verification"
     CANCELLED_PAYMENT_CHECKOUT = "cancelled_payment_checkout"
     CHECKOUT_COMPLETE = "checkout_complete"
-    FUND_CONTRACT = "fund_contract"
     
     # WEBHOOKS
     PAYSTACK_WEBHOOK = "paytack_webhook"

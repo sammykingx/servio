@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from core.url_names import PaymentURLS
 from template_map.payments import Payments
-from .views.contract_activation import ActivateContractRoleEnagementView
 from .views.account_activation import AccountActivationView
 from .views.webhooks import PaystackWebhookView
 from .views.verification import PaymentVerificationView
@@ -51,11 +50,6 @@ urlpatterns = [
         "summary/", 
         UserPaymentsListView.as_view(), 
         name=PaymentURLS.USER_PAYMENT_SUMMARY
-    ),
-    path(
-        "fund-contract/<slug:contract_slug>/",
-        ActivateContractRoleEnagementView.as_view(),
-        name=PaymentURLS.FUND_CONTRACT
     ),
     
     # WEBHOOKS URLS

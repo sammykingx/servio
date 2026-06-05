@@ -177,8 +177,8 @@
                                                 </a>
                                             {% endif %}
                                         {% elif contract.status == 'signed' and request.user == contract.client and not contract.client_paid_at %}
-                                            <a href="{% url PAYMENT_URLS.FUND_CONTRACT contract_slug=contract.slug %}" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
-                                                Fund Project
+                                            <a href="{% url CONTRACTS.INITIATE_CONTRACT_ACTIVATION contract_slug=contract.slug %}" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
+                                                Activate
                                             </a>
                                         {% endif %}
 

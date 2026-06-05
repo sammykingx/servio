@@ -1,8 +1,8 @@
 # payments/schemas/payment.py
 
 from payments.domain.enums import PaymentStatus
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
-from typing import Any, Dict, Literal
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, HttpUrl
+from typing import Any, Dict, Literal, Union
 
 
 class PaymentGatewayPayload(BaseModel):
@@ -62,6 +62,8 @@ class PaymentManifest(BaseModel):
         description="Contains the gateway's response, including the checkout URL."
     )
     ui_intent: Literal["success", "warning", "error", "info"] = "success"
+    redirect: bool = False
+    url: Union[str, None] = None
 
 
     model_config = ConfigDict(
@@ -74,6 +76,8 @@ class PaymentManifest(BaseModel):
                         "title": "Payment Initialized",
                         "message": "Redirecting to Paystack...",
                         "ui_intent": "success",
+                        "redirect": True,
+                        "url": "/contracts/activate/srv_con-asdWEYDhkcnhfhr18339",
                         "data": {
                             "authorization_url": "https://checkout.paystack.com/0pk3904ntv",
                             "access_code": "0pk3904ntv",
@@ -88,6 +92,8 @@ class PaymentManifest(BaseModel):
                         "title": "Checkout Ready",
                         "message": "Redirecting to Stripe secure server...",
                         "ui_intent": "success",
+                        "redirect": False,
+                        "url": None,
                         "data": {
                             "id": "cs_test_a1b2c3d4",
                             "url": "https://checkout.stripe.com/pay/cst_standard_session",

@@ -1,0 +1,115 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load humanize %}
+{% block browser_title %}Contract Activation | {{ contract.reference }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto my-12 px-4 font-sans text-slate-800">
+    <div class="mb-8 border-b border-slate-100 dark:border-gray-700 pb-6">
+        <div class="flex items-center gap-3 text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+            <span>Ref: {{ contract.reference }}</span>
+            <span>•</span>
+            <span>Created {{ contract.created_at|naturaltime }}</span>
+        </div>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Contract Activation</h1>
+        <p class="text-sm text-slate-500 mt-1">Project: <span class="font-medium text-slate-700 dark:text-gray-400">{{ contract.project.title }}</span></p>
+    </div>
+
+    <div class="space-y-0 mb-8 border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+        
+        <div class="flex items-start p-4 border-b border-slate-100 bg-slate-50/50">
+            <div class="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 text-xs font-bold mr-4 mt-0.5">
+                ✓
+            </div>
+            <div class="flex-1">
+                <div class="text-sm font-medium text-slate-900">Contract Terms Formed</div>
+                <p class="text-xs text-slate-500">Agreed Amount: {{ contract.currency }} {{ contract.agreed_amount|floatformat:2|intcomma }} ({{ contract.payment_plan_display }})</p>
+            </div>
+            {% if contract.client_accepted_terms_at %}
+                <span class="text-xs text-slate-400 font-mono">{{ contract.client_accepted_terms_at|date:"M d, H:i" }}</span>
+            {% endif %}
+        </div>
+
+        <div class="flex items-start p-4 border-b border-slate-100 {% if contract.status == 'ACTIVATED' %}bg-slate-50/50{% endif %}">
+            <div class="flex items-center justify-center w-5 h-5 rounded-full mr-4 mt-0.5
+                {% if contract.status == 'ACTIVATED' %}
+                    bg-emerald-100 text-emerald-600 text-xs font-bold
+                {% elif payment and payment.status == 'FAILED' %}
+                    bg-red-100 text-red-600 text-xs font-bold
+                {% else %}
+                    bg-amber-100 text-amber-600 animate-pulse text-xs font-bold
+                {% endif %}">
+                {% if contract.status == 'ACTIVATED' %}✓{% elif payment and payment.status == 'FAILED' %}✕{% else %}⟳{% endif %}
+            </div>
+            <div class="flex-1">
+                <div class="text-sm font-medium text-slate-900">Payment Process Verification</div>
+                <p class="text-xs text-slate-500">
+                    {% if contract.status == 'ACTIVATED' %}
+                        Payment successfully cleared through {{ payment.gateway|title }}.
+                    {% elif payment and payment.status == 'FAILED' %}
+                        The payment attempt failed or was cancelled by the handler.
+                    {% else %}
+                        Verifying payment processing state. This might take a moment.
+                    {% endif %}
+                </p>
+            </div>
+            {% if contract.client_paid_at %}
+                <span class="text-xs text-slate-400 font-mono">{{ contract.client_paid_at|date:"M d, H:i" }}</span>
+            {% endif %}
+        </div>
+
+        <div class="flex items-start p-4 {% if contract.status == 'ACTIVATED' %}bg-emerald-50/20{% endif %}">
+            <div class="flex items-center justify-center w-5 h-5 rounded-full mr-4 mt-0.5
+                {% if contract.status == 'ACTIVATED' %}
+                    bg-emerald-600 text-white text-xs font-bold
+                {% else %}
+                    border-2 border-dashed border-slate-200 bg-white
+                {% endif %}">
+                {% if contract.status == 'ACTIVATED' %}✓{% endif %}
+            </div>
+            <div class="flex-1">
+                <div class="text-sm font-medium {% if contract.status == 'ACTIVATED' %}text-emerald-900{% else %}text-slate-400{% endif %}">
+                    Contract Activated
+                </div>
+                <p class="text-xs {% if contract.status == 'ACTIVATED' %}text-emerald-700{% else %}text-slate-400{% endif %}">
+                    {% if contract.status == 'ACTIVATED' %}
+                        The workspace is ready. The provider has been notified to begin execution.
+                    {% else %}
+                        Awaiting payment settlement confirmation to fully activate.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {% if contract.status == 'ACTIVATED' %}
+        <div class="bg-slate-900 text-white rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+                <h4 class="text-sm font-medium">All systems green</h4>
+                <p class="text-xs text-slate-400 mt-0.5">Your contract is operational and officially active.</p>
+            </div>
+            <a href="#" class="px-4 py-2 bg-white text-slate-950 font-medium text-xs rounded transition hover:bg-slate-100 whitespace-nowrap">
+                Go to Workspace →
+            </a>
+        </div>
+    {% else %}
+        <div class="border border-amber-200 bg-amber-50/60 rounded-lg p-5 
+            dark:border-amber-500/30 dark:bg-zinc-900/90 dark:shadow-[0_0_15px_rgba(245,158,11,0.05)]">
+            <h4 class="text-sm font-medium text-amber-900 dark:text-amber-400">
+                Action Required or Syncing
+            </h4>
+            <p class="text-xs text-amber-700 mt-1 leading-relaxed dark:text-amber-300/90">
+                If you have completed the payment and this screen hasn't updated within 30 seconds, please refresh. If your session explicitly timed out, you may safely retry the action below.
+            </p>
+            <div class="mt-4 flex gap-3">
+                <button onclick="window.location.reload();" class="px-3 py-1.5 bg-amber-600 text-white font-medium text-xs rounded transition hover:bg-amber-700 shadow-sm">
+                    Refresh Status
+                </button>
+                <a href="{% url CONTRACTS.CONTRACT_TIMELINE contract_slug=contract.slug %}" class="px-3 py-1.5 border border-slate-300 bg-white text-slate-700 font-medium text-xs rounded transition hover:bg-slate-50">
+                    View Timeline
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -52,6 +52,11 @@ class PaymentEntity:
         self.gateway_response = reason
         self.metadata = metadata
         
+    def mark_as_pending(self, reason:str, metadata: dict):
+        self.status = PaymentStatus.PENDING
+        self.gateway_response = reason
+        self.metadata = metadata
+        
     def mark_as_expired(self, reason: str):
         """Domain logic for transitioning to an expired state."""
         self._transition_to_terminal_failure(PaymentStatus.EXPIRED, f"Platform Policy Violation: {reason}")
@@ -69,7 +74,6 @@ class PaymentEntity:
         """
         self.gateway_response = result.message
         self.metadata = result.data.model_dump(mode="json")
-        self.status = PaymentStatus.PENDING
         if self.gateway == RegisteredPaymentProvider.PAYSTACK:
             self.gateway_reference = result.data.access_code
             

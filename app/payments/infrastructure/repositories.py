@@ -175,7 +175,7 @@ class PaymentRepository:
         self.model.objects.filter(user=entity.user, reference=entity.reference).update(
             gateway_reference=entity.gateway_reference,
             gateway_response=entity.gateway_response,
-            status=entity.status,
+            # status=entity.status,
             metadata=entity.metadata,
             updated_at=timezone.now() 
         )
@@ -232,6 +232,16 @@ class PaymentRepository:
             reference=entity.reference
         ).update(
             gateway_reference=entity.gateway_reference,
+            gateway_response=entity.gateway_response,
+            metadata=entity.metadata,
+        )
+    
+    def update_as_pending(self, entity: PaymentEntity) -> None:
+        self.model.objects.filter(
+            user=entity.user, 
+            reference=entity.reference
+        ).update(
+            status=entity.status,
             gateway_response=entity.gateway_response,
             metadata=entity.metadata,
         )

@@ -105,7 +105,7 @@ class ProposalSubmissionService:
             ProposalPolicy.ensure_can_apply(self.actor, project)
             ProposalValidator.validate(payload, project)
             proposal = self._create_proposal_bundle(payload)
-            # self.notifications_flow(project)
+            self.notifications_flow(project)
             return proposal
 
         except ProposalPermissionDenied as e:
@@ -183,9 +183,9 @@ class ProposalSubmissionService:
                 title="Server Busy",
             )
         
-    def notifications_flow(self, gig):
-        self._notify_creator_by_mail(gig)
-        self._in_app_notifications(gig.creator)
+    def notifications_flow(self, project:ProjectEntity):
+        self._notify_creator_by_mail(project)
+        self._in_app_notifications(project.creator)
 
     def _notify_creator_by_mail(self, project: ProjectEntity) -> bool:
         from core.url_names import ProposalURLS

@@ -104,6 +104,10 @@
                                                 <div class="h-10 w-10 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 text-xs font-semibold">
                                                     SP
                                                 </div>
+                                            {% elif tx.payment_purpose == 'contract_activation' and not self.beneciary %}
+                                                <div class="h-10 w-10 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 text-xs font-semibold">
+                                                    SP
+                                                </div>
                                             {% else %}
                                             <div class="h-10 w-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold">
                                                 {{ tx.beneficiary.first_name|title }}{{ tx.beneficiary.last_name|title }}
@@ -124,22 +128,22 @@
                                 {% if tx.payment_purpose == 'activation_fee' %}
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
-                                            <span class="material-symbols-outlined text-[12px] text-slate-500">sell</span>
-                                            <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400">Activation Fee</span>
+                                            <span class="material-symbols-outlined text-[9px] text-slate-500">sell</span>
+                                            <span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Activation Fee</span>
                                         </div>
                                     </td>
                                 {% elif tx.payment_purpose == 'wallet_funding' %}
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
-                                            <span class="material-symbols-outlined text-[12px] text-slate-500">account_balance_wallet</span>
-                                            <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400">Wallet Funding</span>
+                                            <span class="material-symbols-outlined text-[9px] text-slate-500">account_balance_wallet</span>
+                                            <span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Wallet Funding</span>
                                         </div>
                                     </td>
-                                {% elif tx.payment_purpose == 'service_payment' %}
+                                {% elif tx.payment_purpose == 'contract_activation' %}
                                     <td class="px-6 py-5 whitespace-nowrap">
                                         <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 w-fit">
-                                            <span class="material-symbols-outlined text-[12px] text-slate-500">bolt</span>
-                                            <span class="text-[11px] font-medium text-slate-600 dark:text-slate-400">Service Payment</span>
+                                            <span class="material-symbols-outlined text-[9px] text-slate-500">contract</span>
+                                            <span class="text-[10px] font-medium text-slate-600 dark:text-slate-400">Contract Activation</span>
                                         </div>
                                     </td>
                                 {% endif %}
@@ -199,9 +203,9 @@
                                 <td class="px-6 py-5 whitespace-nowrap text-right">
                                     <div class="flex items-center justify-end gap-2">
                                         {% if tx.status == 'pending' %}
-                                            <button class="px-4 py-2 bg-brand-500 dark:bg-white text-white dark:text-slate-950 text-[10px] font-medium uppercase rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md">
+                                            <a href="{% url PAYMENT_URLS.PAYMENT_VERIFICATION gateway=tx.gateway %}?reference={{ tx.reference }}" class="px-4 py-2 bg-brand-500 dark:bg-white text-white dark:text-slate-950 text-[10px] font-medium uppercase rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md">
                                                 Re-verify
-                                            </button>
+                                            </a>
                                         {% endif %}
                                         <button class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">open_in_new</span>

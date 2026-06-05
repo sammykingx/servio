@@ -205,9 +205,9 @@
                     {% if item.status == 'disputed' %}
                     <a href="{% url CONTRACTS.LIST_CONTRACTS %}" class="inline-flex items-center justify-center h-8 px-3 border border-red-200 dark:border-red-900/40 bg-red-50/30 hover:bg-red-50 text-red-700 dark:text-red-400 font-medium rounded-lg transition-colors whitespace-nowrap">Mediate Resolution</a>
                     {% elif item.status == 'awaiting' %}
-                    <a href="{% url CONTRACTS. ACCEPT_CONTRACT_TERMS role_id=item.proposal_role_id %}" class="inline-flex items-center justify-center h-8 px-3 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium rounded-lg shadow-xs transition-colors whitespace-nowrap">Review & Sign</a>
+                    <a href="{% url CONTRACTS.ACCEPT_CONTRACT_TERMS role_id=item.proposal_role_id %}" class="inline-flex items-center justify-center h-8 px-3 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium rounded-lg shadow-xs transition-colors whitespace-nowrap">Review & Sign</a>
                     {% elif item.status == 'signed' and item.client == user %}
-                    <a href="{% url PAYMENT_URLS.FUND_CONTRACT contract_slug=item.slug %}" class="inline-flex items-center justify-center h-8 px-3 bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 text-white font-medium rounded-lg shadow-xs transition-colors whitespace-nowrap">Fund Contract</a>
+                    <a href="{% url CONTRACTS.INITIATE_CONTRACT_ACTIVATION contract_slug=item.slug %}" class="inline-flex items-center justify-center h-8 px-3 bg-emerald-500 hover:bg-green-600 dark:hover:bg-teal-600 text-white font-medium rounded-lg shadow-xs transition-colors whitespace-nowrap">Activate</a>
                     {% endif %}
                 </div>
             </div>

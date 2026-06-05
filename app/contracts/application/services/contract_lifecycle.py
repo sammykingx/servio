@@ -27,6 +27,7 @@ class ContractLifecycleService:
             self.contract_repo.persist_contract_acceptance(contract, field_prefix)
             
     def activate_contract(self, reference:str):
+        contract = self.contract_repo.get_contract_by_reference(reference)
         # get object from db
         # verify details
         # change state to activated

@@ -8,7 +8,7 @@
       data-usd-amount="{{ contract.service_fee }}" 
       data-ngn-amount="{{ contract.service_fee_to_ngn }}"
       class="max-w-6xl mx-auto py-10 px-5 text-slate-600 dark:text-slate-400 select-none min-h-screen antialiased transition-colors duration-200">
-    <form action="{% url PAYMENT_URLS.FUND_CONTRACT contract_slug=contract.slug %}" method="POST" id="checkout-payment-form">
+    <form action="{% url CONTRACTS.INITIATE_CONTRACT_ACTIVATION contract_slug=contract.slug %}" method="POST" id="checkout-payment-form">
         {% csrf_token %}
         
         <header class="mb-8 pb-4 border-b border-slate-100 dark:border-slate-900">
@@ -145,11 +145,9 @@
         </div>
     </form>
 </main>
-
-
 {% endblock %}
 {% block js_files %}
-<script src="{% static 'js/contracts/fundContract.js' %}"></script>
+<script src="{% static 'js/contracts/initiateContractActivation.js' %}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         ContractPaymentCheckout.init();

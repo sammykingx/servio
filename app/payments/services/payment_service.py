@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import OperationalError
 from django.db.models import Model
 from django.http import HttpRequest
+from django.urls import reverse_lazy
 from contracts.application.services import ContractLifecycleService
 from payments.infrastructure.registry import GATEWAYS
 from payments.infrastructure.repositories import PaymentRepository
@@ -21,7 +22,7 @@ from payments.domain.errors import PaymentFailure
 from payments.domain.policies import PaymentPolicy
 from payments.schemas.payments import PaymentGatewayPayload
 from decimal import Decimal
-from typing import Any, Dict, Union
+from typing import Any, Dict, Tuple, Union
 import logging
 
 
@@ -104,9 +105,7 @@ class PaymentService:
             
             if payment.payment_type == PaymentType.ONE_TIME and payment.payment_purpose == PaymentPurpose.ACTIVATION_FEE:
                 self._activate_user_profile()
-            elif payment.payment_type == PaymentType.SERVICE and payment.payment_purpose == PaymentPurpose.CONTRACT_ACTIVATION:
-                ContractLifecycleService(self.user).activate_contract(payment.contract_ref)
-                    
+   
     def _activate_user_profile(self):
         """
         Retrieves the user profile and marks the one-time fee as paid.
@@ -125,6 +124,13 @@ class PaymentService:
                 metadata=gw_result.data.model_dump(mode="json")
             )
             return self.repo.update_as_abandoned(payment)
+
+        elif gw_result.status == PaymentStatus.PENDING:
+            payment.mark_as_pending(
+                reason=gw_result.message, 
+                metadata=gw_result.data.model_dump(mode="json")
+            )
+            return self.repo.update_as_pending(payment)
         
         payment.mark_as_failed(gw_result.message)
         return self.repo.update_status(payment)
@@ -258,7 +264,7 @@ class PaymentService:
         except PolicyViolationError as err:
             raise err
 
-    def verify(self, reference: str) -> GatewayVerifyResponse:
+    def verify(self, reference: str) -> Tuple[GatewayVerifyResponse, PaymentEntity]:
         """
         Coordinates the final verification handshake and persists the transaction outcome.
 
@@ -287,7 +293,7 @@ class PaymentService:
             self._resolve_gateway_provider(payment)
             gw_result = self.gateway.verify_payment(reference)
             self._finalize_verification(payment, gw_result)
-            return gw_result
+            return gw_result, payment
 
         except OperationalError:
             raise PaymentPersistenceError(

@@ -5,6 +5,7 @@ from django.utils import timezone
 from contracts.domains.entities import ContractGenerationContext, ContractEntity
 from core.model_registry import registry
 from nanoid import generate
+from typing import Union
 from uuid6 import uuid7
 
 
@@ -31,7 +32,7 @@ class ContractRepository:
         slug = f"{base}-{uuid7().hex[:12]}"
         return slug
     
-    def _tot_entity(self, contract: Model) -> ContractEntity:
+    def _to_entity(self, contract: Model) -> ContractEntity:
         return ContractEntity(
             id=contract.id,
             reference=contract.reference,
@@ -69,10 +70,10 @@ class ContractRepository:
         )
         return obj
     
-    def get_contract_by_reference(self, ref: str, as_entity: bool = True) -> Model:
+    def get_contract_by_reference(self, ref: str, as_entity: bool = True) -> Union[Model, ContractEntity]:
         try:
             obj = self.model.objects.filter(reference=ref).first()
-            return self._tot_entity(obj) if as_entity else obj
+            return self._to_entity(obj) if as_entity else obj
         
         except self.model.DoesNotExist:
             return None
