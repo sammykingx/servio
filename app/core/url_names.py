@@ -92,7 +92,11 @@ class MarketplaceURLS:
     DETAIL = "oppurtunity_detail"
     SUBMIT_PROJECT_PROPOSAL = "project_proposal_submission"
   
+  
+class WorkroomURLS:
+    OVERVIEW = "projects_workforce_overview"
     
+     
 class ProposalURLS:
     SENT_PROPOSALS = "sent_proposals"
     RECEIVED_PROPOSALS = "gig_with_proposals_listings"

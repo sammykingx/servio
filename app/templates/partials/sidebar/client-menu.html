@@ -79,6 +79,19 @@
                   Contracts
                </a>
             </li>
+
+            <li>
+               <a href="{% url WORKROOM.OVERVIEW %}" 
+                  class="block py-2 px-3 text-sm rounded-lg
+                        {% url WORKROOM.OVERVIEW as workroom_url %}
+                        {% if request.path == workroom_url %}
+                           menu-dropdown-item-active
+                        {% else %}
+                           menu-dropdown-item-inactive
+                        {% endif %}">
+                  Teams
+               </a>
+            </li>
          </ul>
       </li>
 

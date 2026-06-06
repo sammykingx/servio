@@ -23,4 +23,9 @@ class Collabs:
         DETAIL = f"{__SUB_FOLDER}/detail.html"
         ENGAGEMENT_SUBMISSION = f"{__SUB_FOLDER}/engagement-submission.html"
         
+    class Workforce:
+        __SUB_FOLDER = _BASE_FOLDER.subfolder("workroom")
+        
+        OVERVIEW = f"{__SUB_FOLDER}/overview.html"
+        
         
