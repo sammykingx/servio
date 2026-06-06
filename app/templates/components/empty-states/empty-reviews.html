@@ -51,22 +51,24 @@
     </div>
 
     <!-- Primary CTA -->
-    <button class="group flex items-center justify-center gap-2
-                   bg-brand-500 hover:bg-brand-600
-                   text-white font-semibold py-3 px-6 rounded-lg
-                   transition-all duration-200
-                   shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40
-                   transform hover:-translate-y-0.5">
+    <button @click="showToast('Reviews and feedback will launch in Servio v2.', 'success', 'Coming in v2 🚀')" class="group flex items-center justify-center gap-2
+        bg-brand-500 hover:bg-brand-600
+       text-white font-semibold py-3 px-6 rounded-lg
+        transition-all duration-200
+        shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40
+        transform hover:-translate-y-0.5"
+    >
       <span class="material-symbols-outlined text-[20px]">campaign</span>
       <span>Request Feedback</span>
     </button>
 
     <!-- Secondary Action -->
     <a href="#"
-       class="mt-6 text-sm font-medium text-slate-500 hover:text-brand-500
-              dark:text-slate-400 dark:hover:text-brand-300
-              transition-colors flex items-center gap-1">
-      Learn how to get more reviews
+      class="mt-6 text-sm font-medium text-slate-500 hover:text-brand-500
+        dark:text-slate-400 dark:hover:text-brand-300
+        transition-colors flex items-center gap-1"
+    >
+      See how it works
       <span class="material-symbols-outlined text-base">arrow_forward</span>
     </a>
 

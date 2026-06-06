@@ -180,10 +180,30 @@
                                             <a href="{% url CONTRACTS.INITIATE_CONTRACT_ACTIVATION contract_slug=contract.slug %}" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
                                                 Activate
                                             </a>
-                                        {% elif contract.status == 'activated' and request.user == contract.client and contract.client_paid_at %}
-                                            <a href="{% url CONTRACTS.INITIATE_CONTRACT_ACTIVATION contract_slug=contract.slug %}" class="px-3 py-1.5 bg-emerald-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-700 transition-all shadow-sm">
-                                                Start Project
-                                            </a>
+                                        {% elif contract.status == 'activated' %}
+                                            {% if request.user == contract.client %}
+                                                {% if contract.client_paid_at %}
+                                                    <a href="#" class="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-600 transition-all shadow-sm">
+                                                        Start Project
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url CONTRACTS.ACCEPT_CONTRACT_TERMS role_id=contract.proposal_role_id %}" class="px-3 py-1.5 bg-indigo-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-indigo-700 transition-all shadow-sm">
+                                                        Counter-Sign
+                                                    </a>
+                                                {% endif %}
+
+                                            {% elif request.user == contract.provider %}
+                                                {% if contract.provider_accepted_terms_at %}
+                                                    <a href="#" class="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-600 transition-all shadow-sm">
+                                                        Start Project
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url CONTRACTS.ACCEPT_CONTRACT_TERMS role_id=contract.proposal_role_id %}" class="px-3 py-1.5 bg-indigo-600 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-indigo-700 transition-all shadow-sm">
+                                                        Counter-Sign
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
+
                                         {% endif %}
 
                                         <button data-slug="{{ contract.slug }}" class="p-2 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors" title="Share Agreement File">

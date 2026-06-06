@@ -32,6 +32,7 @@ class FinalizeContractActivationView(LoginRequiredMixin, View):
         except ContractPolicyViolation as policy_err:
             context["error_title"] = policy_err.title
             context["error_message"] = policy_err.message
+            context["contract"] = contract_obj
             
         except ContractPaymentVerificationFailure as payment_err:
             context["error_title"] = payment_err.title

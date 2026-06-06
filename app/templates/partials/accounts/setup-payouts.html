@@ -1,14 +1,14 @@
 <div x-show="activeTab === 'payouts'" 
 	x-data="{ 
-	payoutMethod: '{{ user.profile.payout_method|default:'usd' }}',
-	usd: { routing: '{{ user.profile.usd_routing|default:'' }}', account: '{{ user.profile.usd_account|default:'' }}', type: 'checking' },
-	cad: { institution: '{{ user.profile.cad_institution|default:'' }}', transit: '{{ user.profile.cad_transit|default:'' }}', account: '{{ user.profile.cad_account|default:'' }}' },
-	ngn: { bank_code: '{{ user.profile.ngn_bank_code|default:'' }}', account: '{{ user.profile.ngn_account|default:'' }}', account_name: '{{ user.profile.ngn_account_name|default:'' }}' }
+		payoutMethod: '{{ user.profile.payout_method|default:'usd' }}',
+		usd: { routing: '{{ user.profile.usd_routing|default:'' }}', account: '{{ user.profile.usd_account|default:'' }}', type: 'checking' },
+		cad: { institution: '{{ user.profile.cad_institution|default:'' }}', transit: '{{ user.profile.cad_transit|default:'' }}', account: '{{ user.profile.cad_account|default:'' }}' },
+		ngn: { bank_code: '{{ user.profile.ngn_bank_code|default:'' }}', account: '{{ user.profile.ngn_account|default:'' }}', account_name: '{{ user.profile.ngn_account_name|default:'' }}' }
 	}"
 	x-transition:enter="transition duration-500" 
 	x-transition:enter-start="opacity-0 scale-95" 
 	x-transition:enter-end="opacity-100 scale-100"
-	>
+>
 	<header class="mb-10">
 		<h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-500 dark:text-brand-300">Treasury</h2>
 		<h3 class="text-2xl font-semibold text-gray-800 dark:text-white">Payout Settings</h3>

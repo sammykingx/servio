@@ -67,11 +67,11 @@
                     </div>
 
                     <div class="mt-4 flex items-center gap-2 border-t {% if payment_required %}border-amber-200/40 dark:border-amber-500/10{% else %}border-rose-200/40 dark:border-rose-500/10{% endif %} pt-3">
-                        <button onclick="window.location.reload();" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white dark:bg-gray-100 dark:hover:bg-white dark:text-gray-950 font-medium text-xs rounded transition shadow-sm">
-                            Retry Sync Engine
-                        </button>
+                        <a href="{% url CONTRACTS.ACCEPT_CONTRACT_TERMS role_id=contract.proposal_role_id %}" class="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white dark:bg-gray-100 dark:hover:bg-white dark:text-gray-950 font-medium text-xs rounded transition shadow-sm">
+                            Accept terms
+                        </a>
                         {% if payment_required %}
-                            <a href="#" class="px-2.5 py-1.5 border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-200 font-medium text-xs rounded transition hover:bg-slate-50 dark:hover:bg-gray-700/50">
+                            <a href="{% url PAYMENT_URLS.USER_PAYMENT_SUMMARY %}" class="px-2.5 py-1.5 border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-200 font-medium text-xs rounded transition hover:bg-slate-50 dark:hover:bg-gray-700/50">
                                 View Billing & Payments
                             </a>
                         {% endif %}
@@ -156,7 +156,7 @@
                         <p class="text-xs text-slate-300 dark:text-gray-600 mt-0.5">All verification thresholds passed. Project workspace initialized</p>
                     </div>
                     <a href="#" class="w-full sm:w-auto text-center px-4 py-2 bg-white hover:bg-slate-50 dark:bg-gray-950 dark:hover:bg-gray-900 text-slate-950 dark:text-white font-medium text-xs rounded transition whitespace-nowrap shadow-sm">
-                        Enter Workspace →
+                        Launch workforce →
                     </a>
                 </div>
             {% endif %}
