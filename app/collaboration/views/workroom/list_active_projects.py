@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Prefetch, Q, Sum
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from contracts.models.contract import ContractStatus
 from core.model_registry import registry
@@ -18,8 +18,6 @@ class ActivatedProjectContractView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         
-        # Prefetch ALL contracts for the project so the UI can build the complete team stack,
-        # regardless of who is viewing it.
         contracts_prefetch = Prefetch(
             'contracts',
             queryset=Contract.objects.select_related('provider').only(
@@ -35,4 +33,7 @@ class ActivatedProjectContractView(LoginRequiredMixin, ListView):
             total_combined_value=Sum('contracts__agreed_amount'),
             total_team_size=Count('contracts')
         ).prefetch_related(contracts_prefetch).order_by('-created_at')
-        
+    
+    
+class ContractedProviderRoleDetailView(LoginRequiredMixin, DetailView):
+    pass
