@@ -1,1 +1,1 @@
-from .list_active_projects import ActivatedProjectContractView
+from .post_hire import ContractedProjectListView

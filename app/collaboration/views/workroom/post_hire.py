@@ -9,7 +9,14 @@ from template_map.collaboration import Collabs
 
 Contract = registry.Contract
 
-class ActivatedProjectContractView(LoginRequiredMixin, ListView):
+class ContractedProjectListView(LoginRequiredMixin, ListView):
+    """
+    Displays an overview of active, contracted projects for both clients and providers.
+
+    Filters for projects where the current user has an activated contract, 
+    annotating each with total financial value and team size while prefetching 
+    optimized contract and counterpart contact details for workroom navigation.
+    """
     template_name = Collabs.Workforce.OVERVIEW
     model = registry.Gig
     context_object_name = "projects"
@@ -21,7 +28,8 @@ class ActivatedProjectContractView(LoginRequiredMixin, ListView):
         contracts_prefetch = Prefetch(
             'contracts',
             queryset=Contract.objects.select_related('provider').only(
-                'id', 'project_id', 'provider__email', 'provider__first_name', 'provider__last_name', 'status'
+                'id', 'project_id', 'provider__email', 'provider__first_name', 
+                'provider__last_name', 'status', 'slug'
             ),
             to_attr='all_contracts'
         )
@@ -35,5 +43,5 @@ class ActivatedProjectContractView(LoginRequiredMixin, ListView):
         ).prefetch_related(contracts_prefetch).order_by('-created_at')
     
     
-class ContractedProviderRoleDetailView(LoginRequiredMixin, DetailView):
+class ProjectWorkroomDetailView(LoginRequiredMixin, DetailView):
     pass

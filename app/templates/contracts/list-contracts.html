@@ -183,7 +183,7 @@
                                         {% elif contract.status == 'activated' %}
                                             {% if request.user == contract.client %}
                                                 {% if contract.client_paid_at %}
-                                                    <a href="#" class="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-600 transition-all shadow-sm">
+                                                    <a href="{% url WORKROOM.PROJECT_WORKROOM slug=contract.project.slug %}" class="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-600 transition-all shadow-sm">
                                                         Start Project
                                                     </a>
                                                 {% else %}
@@ -194,7 +194,7 @@
 
                                             {% elif request.user == contract.provider %}
                                                 {% if contract.provider_accepted_terms_at %}
-                                                    <a href="#" class="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-600 transition-all shadow-sm">
+                                                    <a href="{% url WORKROOM.PROJECT_WORKROOM slug=contract.project.slug %}" class="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-semibold uppercase rounded-xl hover:bg-emerald-600 transition-all shadow-sm">
                                                         Start Project
                                                     </a>
                                                 {% else %}

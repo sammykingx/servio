@@ -95,6 +95,7 @@ class MarketplaceURLS:
   
 class WorkroomURLS:
     OVERVIEW = "projects_workforce_overview"
+    PROJECT_WORKROOM = "project_workroom"
     
      
 class ProposalURLS:

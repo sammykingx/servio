@@ -28,5 +28,6 @@ class Collabs:
         
         OVERVIEW = f"{__SUB_FOLDER}/overview.html"
         DEMO = f"{__SUB_FOLDER}/demo.html"
+        PROJECT_WORKROOM = f"{__SUB_FOLDER}/project-workroom.html"
         
         
