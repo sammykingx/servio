@@ -12,7 +12,7 @@ class ContractListView(LoginRequiredMixin, ListView):
     model = registry.Contract
     template_name = ContractTemplates.LIST_CONTRACTS
     context_object_name = "contracts"
-    paginate_by = 10  # Built-in pagination matches your template page iteration
+    paginate_by = 10
 
     def get_queryset(self):
         """
@@ -23,7 +23,7 @@ class ContractListView(LoginRequiredMixin, ListView):
         return (
             super().get_queryset()
             .filter(Q(client=user) | Q(provider=user))
-            .select_related("client", "provider")
+            .select_related("client", "provider", "project")
             .order_by("-created_at")
         )
 

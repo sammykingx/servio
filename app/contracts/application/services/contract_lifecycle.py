@@ -42,7 +42,7 @@ class ContractLifecycleService:
             raise ContractPaymentVerificationFailure(
                 f"Cannot activate contract {contract.reference}. Payment has not been verified successfully."
             )
-        if contract.client_paid_at is None:
+        if not contract.client_paid_at:
             contract.mark_as_paid_by_client(paid_at=payment.paid_at)
             self.contract_repo.persist_activation(contract)
             

@@ -27,5 +27,6 @@ class Collabs:
         __SUB_FOLDER = _BASE_FOLDER.subfolder("workroom")
         
         OVERVIEW = f"{__SUB_FOLDER}/overview.html"
+        DEMO = f"{__SUB_FOLDER}/demo.html"
         
         

@@ -207,3 +207,26 @@ class Gig(models.Model):
 
         return f"${display_lower:,.0f} - ${upper:,.0f}"
     
+    # ------ contracts related methods ----------
+    @property
+    def pending_provider_acceptance_count(self) -> int:
+        """
+        Returns count of contracts where the provider has not yet accepted terms.
+        Uses the prefetched 'all_contracts' if available to save DB hits.
+        """
+        contracts = getattr(self, 'all_contracts', self.contracts.all())
+        return sum(1 for c in contracts if not c.provider_accepted_terms_at)
+
+    @property
+    def active_contracts_count(self) -> int:
+        """Counts only contracts currently in the 'activated' status."""
+        contracts = getattr(self, 'all_contracts', self.contracts.all())
+        # Assuming your Enum is ContractStatus.ACTIVATED
+        return sum(1 for c in contracts if c.status == "activated")
+
+    @property
+    def signed_contracts_count(self) -> int:
+        """Counts contracts that are signed but maybe not yet fully 'activated'."""
+        contracts = getattr(self, 'all_contracts', self.contracts.all())
+        return sum(1 for c in contracts if c.status == "signed")
+    

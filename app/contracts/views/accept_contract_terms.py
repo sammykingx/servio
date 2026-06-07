@@ -1,9 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, JsonResponse
 from django.db.models import Prefetch
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
+
 from contracts.application.dto import SignContractDTO
 from contracts.application.services import ContractLifecycleService
 from contracts.domains.errors import ContractPolicyFailure
@@ -11,6 +13,7 @@ from contracts.domains.exceptions import ContractException
 from core.model_registry import registry
 from core.url_names import AuthURLNames, ContractURLS
 from template_map.contracts import Contract as ContractTemplates
+
 from pydantic import ValidationError
 
 
@@ -20,7 +23,7 @@ class RoleContractTermsAcceptanceView(LoginRequiredMixin, DetailView):
     context_object_name = "contract"
     
     
-    def dispatch(Self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         try:
             return super().dispatch(request, *args, **kwargs)
         except Http404:
@@ -56,7 +59,7 @@ class RoleContractTermsAcceptanceView(LoginRequiredMixin, DetailView):
             )
             
             return qs
-        except self.model.DoesNotExist:
+        except ObjectDoesNotExist:
             raise Http404("Contract not found for this role.")
 
     def get_context_data(self, **kwargs):

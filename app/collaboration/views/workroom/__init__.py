@@ -1,0 +1,1 @@
+from .list_active_projects import ActivatedProjectContractView
