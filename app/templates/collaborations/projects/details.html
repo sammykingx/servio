@@ -16,7 +16,7 @@
     <div class="mb-8">
         <div class="flex flex-wrap justify-between items-end gap-6">
             <div class="flex flex-col gap-2">
-                <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-300 tracking-tight leading-tight mb-2">{{ gig.title|truncatewords:7|title }}</h1>
+                <h1 class="text-title-sm md:text-title-md font-semibold text-gray-700 dark:text-gray-100 tracking-tight leading-tight mb-2">{{ gig.title|truncatewords:7|title }}</h1>
                 <div class="flex items-center gap-3">
                     {% if gig.visibility == 'public' %}
                     <span class="px-2.5 py-1 rounded-full bg-blue-500/10 dark:bg-sky-500/10 text-blue-500 dark:text-sky-600 text-xs font-normal">{{ gig.visibility|title }}</span>
@@ -194,327 +194,125 @@
                 </div>
             </div>
             {% endif %}
+
             <!-- Tabbed Applications Interface -->
-            <div 
-                id="proposals-section"
-                class="bg-white dark:bg-slate-900 rounded-xl 
-                    border border-slate-100 dark:border-slate-800 
-                    shadow-sm"
-            >
-                <!-- Tabs -->
-                <div class="border-b border-slate-100 dark:border-slate-800 px-4 overflow-x-auto">
-                    <div class="flex gap-8 whitespace-nowrap">
-                        <h2 class="py-3 my-3 text-lg font-medium items-center text-gray-800 dark:text-gray-400">Recent Proposals</h2>
-                        {% comment "Enable when you want filtering based on status" %}
-                            <button data-tab="all" class="shrink-0 py-4 border-b-2 border-brand-500 dark:border-gray-200 text-brand-500 dark:text-gray-300 text-sm font-medium">
-                                All {% if proposal_count %}({{ proposal_count.total_proposals }}){% endif %}
-                            </button>
-                            <button data-tab="accepted" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-white text-sm font-medium">
-                                Accepted {% if proposal_count %}({{ proposal_count.accepted }}){% endif %}
-                            </button>
-                            <button data-tab="countered" class="shrink-0 py-4 border-b-2 border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-white text-sm font-medium">
-                                Countered {% if proposal_count %}({{ proposal_count.countered }}){% endif %}
-                            </button>
-                        {% endcomment %}
-                    </div>
-                </div>
-
+            
                 <!-- proposals -->
-                <div class="p-2 overflow-x-auto">
+                <div class="w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+    
+                    <div class="px-6 py-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-900 dark:text-white">Received Proposals</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Overview of bids submitted for this project role</p>
+                        </div>
+                        <a href="{% url PROPOSALS.PROPOSAL_LISTINGS project_slug=gig.slug %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors">
+                            View details
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+
                     {% if proposal_roles %}
-                        <div class="flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
-
-                            {% for proposal_role in proposal_roles %}
-
-                            <div 
-                                data-status="{% if proposal_role.proposal.is_negotiating %}countered{% else %}accepted{% endif %}"
-                                class="p-5 sm:p-6 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 
-                                    transition-all rounded-xl proposal-item"
-                            >
-                                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-
-                                    <!-- LEFT: Identity -->
-                                    <div class="flex items-start gap-4">
-
-                                        {% if proposal_role.proposal.provider.profile.avatar_url %}
-                                            <div 
-                                                class="size-12 sm:size-14 shrink-0 rounded-2xl bg-cover bg-center 
-                                                    border border-slate-200 dark:border-slate-700"
-                                                style="background-image: url('{{ proposal_role.proposal.provider.profile.avatar_url.url }}');">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/70 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800">
+                                        <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Provider</th>
+                                        <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Role Applied</th>
+                                        <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Asking Amount</th>
+                                        <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
+                                    {% for proposal_role in proposal_roles %}
+                                    <tr class="hover:bg-slate-50/40 dark:hover:bg-slate-800/20 transition-colors group">
+                                        
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center gap-3">
+                                                {% if proposal_role.proposal.provider.profile.avatar_url %}
+                                                    <img src="{{ proposal_role.proposal.provider.profile.avatar_url.url }}" 
+                                                        alt="{{ proposal_role.proposal.provider.full_name }}"
+                                                        class="size-9 rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-700" />
+                                                {% else %}
+                                                    <div class="size-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center justify-center text-xs font-semibold ring-1 ring-slate-200 dark:ring-slate-700">
+                                                        {{ proposal_role.proposal.provider.first_name|first|upper }}{{ proposal_role.proposal.provider.last_name|first|upper }}
+                                                    </div>
+                                                {% endif %}
+                                                <div class="flex flex-col">
+                                                    <span class="text-sm font-medium text-slate-900 dark:text-white group-hover:text-brand-500 transition-colors">
+                                                        {{ proposal_role.proposal.provider.full_name|title }}
+                                                    </span>
+                                                    <span class="text-[11px] text-slate-400 dark:text-slate-500">
+                                                        {{ proposal_role.proposal.created_at|timesince }} ago
+                                                    </span>
+                                                </div>
                                             </div>
-                                        {% else %}
-                                            <div class="size-12 sm:size-14 shrink-0 rounded-2xl bg-brand-500 text-white 
-                                                        flex items-center justify-center text-lg font-semibold shadow-sm">
-                                                {{ proposal_role.proposal.provider.first_name|first }}{{ proposal_role.proposal.provider.last_name|first }}
-                                            </div>
-                                        {% endif %}
+                                        </td>
 
-                                        <div class="min-w-0">
-                                            <div class="flex flex-wrap items-center gap-2">
-                                                <h4 class="text-sm sm:text-base font-semibold text-slate-900 dark:text-white truncate">
-                                                    {{ proposal_role.proposal.provider.full_name|title }}
-                                                </h4>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm text-slate-600 dark:text-slate-300 font-medium">
+                                                {% if proposal_role.role_name %}
+                                                    {{ proposal_role.role_name|title }}
+                                                {% else %}
+                                                    {{ proposal_role.role.role_name|title }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
 
-                                                <span class="px-2 py-0.5 text-[10px] sm:text-[11px] font-medium rounded-full
-                                                            bg-emerald-50 text-emerald-600
-                                                            dark:bg-emerald-900/20 dark:text-emerald-400">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm font-medium text-slate-800 dark:text-white">
+                                                ${{ proposal_role.proposed_amount|intcomma }}
+                                            </span>
+                                            <span class="text-xs text-slate-400 dark:text-slate-500 ml-0.5">{{ proposal_role.currency|upper }}</span>
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {% if proposal_role.status == "accepted" %}
+                                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/10 dark:ring-emerald-500/20">
+                                                    Accepted
+                                                </span>
+                                            {% elif proposal_role.status == "pending" %}
+                                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 ring-1 ring-inset ring-amber-600/10 dark:ring-amber-500/20">
+                                                    Pending
+                                                </span>
+                                            {% elif proposal_role.status == "rejected" %}
+                                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 ring-1 ring-inset ring-red-600/10 dark:ring-red-500/20">
+                                                    Rejected
+                                                </span>
+                                            {% else %}
+                                                <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md bg-slate-50 text-slate-700 dark:bg-slate-800 dark:text-slate-400 ring-1 ring-inset ring-slate-600/10 dark:ring-slate-700">
                                                     {{ proposal_role.proposal.status|title }}
                                                 </span>
-                                            </div>
-                                            {% if proposal_role.proposal.provider.profile.headline %}
-                                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 truncate">
-                                                    {{ proposal_role.proposal.provider.profile.headline|title }}
-                                                </p>
                                             {% endif %}
-
-                                            <p class="text-xs text-slate-400 mt-1">
-                                                Submitted {{ proposal_role.proposal.created_at|timesince }} ago
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <!-- MIDDLE: Role + Budget Comparison -->
-                                    <div class="flex-1 max-w-xl">
-                                        <!-- Role Applied For -->
-                                        <div class="mb-4">
-                                            <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
-                                                Role Applied For
-                                            </p>
-                                            <p class="text-sm font-semibold text-slate-900 dark:text-white">
-                                                {{ proposal_role.role_name|title }}
-                                            </p>
-                                        </div>
-
-                                        <!-- Comparison Card -->
-                                        <div class="rounded-xl bg-slate-50 dark:bg-slate-800/60
-                                            border border-slate-100 dark:border-slate-700
-                                            p-4 grid grid-cols-2 gap-4"
-                                        >
-                                            {% if gig.has_gig_roles %}
-                                                <div>
-                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
-                                                        Initial Offer
-                                                    </p>
-                                                    <p class="text-sm font-semibold text-slate-700 dark:text-white">
-                                                        ${{ proposal_role.role_amount|intcomma }}
-                                                    </p>
-                                                </div>
-
-                                                <div>
-                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
-                                                        Asking
-                                                    </p>
-                                                    <p class="text-sm font-semibold
-                                                            {% if proposal_role.proposed_amount > proposal_role.role_amount %}
-                                                                text-amber-600
-                                                            {% else %}
-                                                                text-emerald-600
-                                                            {% endif %}">
-                                                        ${{ proposal_role.proposed_amount|intcomma }}
-                                                    </p>
-                                                </div>
-                                            {% else %}
-                                                <div>
-                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
-                                                        Budget
-                                                    </p>
-                                                    <p class="text-sm font-semibold text-slate-700 dark:text-white">
-                                                        ${{ gig.total_budget|intcomma }}
-                                                    </p>
-                                                </div>
-
-                                                <div>
-                                                    <p class="text-[10px] uppercase tracking-wide text-slate-400 mb-1">
-                                                        Asking
-                                                    </p>
-                                                    <p class="text-sm font-semibold
-                                                            {% if proposal_role.role_amount > gig.total_budget %}
-                                                                text-amber-600
-                                                            {% else %}
-                                                                text-emerald-600
-                                                            {% endif %}">
-                                                        ${{ proposal_role.role_amount|intcomma }}
-                                                    </p>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-
-                                        <!-- Timeline -->
-                                            {% comment "Enable when you want to show proposed timelines in the proposal list" %}
-                                                {% if gig.has_gig_roles %}
-                                                    <p class="text-xs text-slate-400 mt-3">
-                                                        Timeline: {{ proposal_role.proposal.gig.gig_duration }}
-                                                    </p>
-                                                {% endif %}
-                                            {% endcomment %}
-                                        </div>
-
-
-                                    <!-- RIGHT: Actions -->
-                                    <div class="flex flex-col sm:flex-row lg:flex-col gap-3 lg:min-w-[180px]">
-
-                                        <a href="#"
-                                        class="w-full text-center px-4 py-2 rounded-lg
-                                                bg-brand-500 text-white text-sm font-medium
-                                                hover:bg-brand-600 transition-all shadow-sm">
-                                            View Deliverables
-                                        </a>
-
-                                        <div class="flex gap-2">
-                                            <button class="flex-1 px-3 py-2 text-sm rounded-lg
-                                                        bg-emerald-50 text-emerald-600
-                                                        hover:bg-emerald-100
-                                                        dark:bg-emerald-900/20 dark:text-emerald-400">
-                                                Accept
-                                            </button>
-
-                                            <button class="flex-1 px-3 py-2 text-sm rounded-lg
-                                                        bg-red-50 text-red-600
-                                                        hover:bg-red-100
-                                                        dark:bg-red-900/20 dark:text-red-400">
-                                                Reject
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                            {% if proposal_count.total_proposals > 4 %}
-                                <div class="p-6 text-center bg-slate-50/70 dark:bg-slate-800/40
-                                    border-t border-slate-100 dark:border-slate-800 rounded-b-xl"
-                                >
-                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                                        There are more proposals and ongoing negotiations for this project.
-                                    </p>
-                                    <a
-                                        href="#"
-                                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg
-                                            text-sm font-medium bg-white dark:bg-slate-900
-                                            border border-slate-200 dark:border-slate-700
-                                            text-slate-700 dark:text-slate-300
-                                            hover:bg-slate-100 dark:hover:bg-slate-800
-                                            transition-all shadow-sm"
-                                    >
-
-                                        View All proposals
-
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="w-4 h-4"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor">
-                                            <path stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
-                    {% else %}
-                        <div class="p-2 overflow-x-auto">
-                            <div class="relative flex flex-col gap-4 min-w-max">
-                                <!-- ===== Header Empty Message ===== -->
-                                <div
-                                    class="relative flex items-center gap-4 p-6 rounded-2xl
-                                        bg-slate-50/70 dark:bg-[#121826]/60
-                                        border border-slate-200/60 dark:border-slate-700/60
-                                        backdrop-blur-sm">
-
-                                    <!-- Radiant Icon -->
-                                    <div class="relative flex size-12 items-center justify-center shrink-0">
-
-                                        <div
-                                            class="absolute inset-0 rounded-full blur-xl opacity-70
-                                                bg-brand-400 dark:bg-brand-900/30 animate-pulse">
-                                        </div>
-
-                                        <div
-                                            class="relative flex size-10 items-center justify-center
-                                                rounded-xl bg-white dark:bg-[#1a202c]
-                                                border border-slate-100 dark:border-slate-700
-                                                shadow-md">
-
-                                            <span
-                                                class="material-symbols-outlined text-base
-                                                    text-brand-500 dark:text-white">
-                                                group
-                                            </span>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="max-w-md">
-
-                                        <h5 class="font-semibold text-slate-900 dark:text-white">
-                                            No Proposals yet
-                                        </h5>
-
-                                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                            Professionals will appear here once they apply to this project.
-                                            Below is a preview of how applications will be displayed.
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                                <!-- ===== Ghost Preview Rows ===== -->
-
-                                {% for i in "123" %}
-
-                                <div
-                                    class="relative flex flex-nowrap items-center gap-4 p-4 min-w-max
-                                        rounded-xl
-                                        bg-white/70 dark:bg-[#151c2a]/70
-                                        border border-slate-200/50 dark:border-slate-700/50
-                                        backdrop-blur-sm
-                                        opacity-70">
-
-                                    <!-- Glow -->
-                                    <div
-                                        class="pointer-events-none absolute inset-0 rounded-xl
-                                            bg-gradient-to-r from-brand-500/5 via-indigo-500/5 to-transparent">
-                                    </div>
-
-                                    <!-- Avatar -->
-                                    <div
-                                        class="size-12 shrink-0 rounded-xl bg-slate-200/70
-                                            dark:bg-slate-700/60 animate-pulse">
-                                    </div>
-
-                                    <!-- Text Skeleton -->
-                                    <div class="flex-1 min-w-[240px] space-y-2">
-                                        <div class="flex items-center gap-2">
-                                            <div class="h-4 w-28 rounded bg-slate-200/80 dark:bg-slate-700/70 animate-pulse"></div>
-                                            <div class="h-4 w-16 rounded bg-blue-100/60 dark:bg-blue-900/30"></div>
-                                        </div>
-                                        <div class="h-3 w-48 rounded bg-slate-200/60 dark:bg-slate-700/60 animate-pulse"></div>
-                                    </div>
-
-                                    <!-- Ghost Actions -->
-                                    <div class="flex gap-2 shrink-0 opacity-40">
-
-                                        <div class="size-8 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
-                                        <div class="size-8 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
-
-                                    </div>
-
-                                    <div
-                                        class="shrink-0 px-4 py-2 rounded-lg
-                                            bg-slate-200/60 dark:bg-slate-700/60
-                                            text-transparent">
-                                        View Proposal
-                                    </div>
-                                </div>
-                                {% endfor %}
+                        
+                        {% if proposal_count.total_proposals > 4 %}
+                            <div class="px-6 py-3 bg-slate-50/50 dark:bg-slate-800/20 border-t border-slate-100 dark:border-slate-800 text-center">
+                                <p class="text-xs text-slate-400 dark:text-slate-500">
+                                    Showing 4 of {{ proposal_count.total_proposals }} proposals received.
+                                </p>
                             </div>
+                        {% endif %}
+
+                    {% else %}
+                        <div class="px-6 py-12 flex flex-col items-center justify-center text-center">
+                            <div class="size-10 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 mb-3 shadow-inner">
+                                <span class="material-symbols-outlined text-xl">group</span>
+                            </div>
+                            <h4 class="text-sm font-semibold text-slate-900 dark:text-white">No proposals yet</h4>
+                            <p class="text-xs text-slate-400 dark:text-slate-500 max-w-xs mt-1">
+                                Professionals will appear here once applications to this project begin coming in.
+                            </p>
                         </div>
                     {% endif %}
                 </div>
-            </div>
+            
 
             <!-- Timeline & Milestones Section -->
             <div class="bg-white dark:bg-slate-900 rounded-xl p-8 border border-slate-100 dark:border-slate-800 shadow-sm">
@@ -673,11 +471,11 @@
                         {% endif %}
                     </div>
                     <div class="flex justify-between items-center text-sm">
-                        <span class="text-gray-500">In Escrow</span>
+                        <span class="text-gray-500">Contracts</span>
                         {% if escrowed %}
                             <span class="font-medium text-brand-500">$2,500.00</span>
                         {% else %}
-                            <span class="font-medium text-sm text-brand-500 dark:text-brand-300">Not Escrowed</span>
+                            <span class="font-medium text-sm text-brand-500 dark:text-brand-300">N/A</span>
                         {% endif %}
                     </div>
                     <div class="flex justify-between items-center text-sm">

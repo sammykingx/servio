@@ -160,7 +160,7 @@
                                     {% elif proposal.status == 'accepted' %}
                                         bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/10 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20
                                     {% elif proposal.status == 'rejected' %}
-                                        bg-rose-50 text-rose-600 ring-1 ring-inset ring-rose-500/10 dark:bg-rose-800 dark:text-rose-400 dark:ring-rose-700
+                                        bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/10 dark:bg-rose-500/10 dark:text-rose-400 dark:ring-rose-500/20
                                     {% elif proposal.status == 'withdrawn' %}
                                         bg-zinc-50 text-zinc-600 ring-1 ring-inset ring-zinc-500/10 dark:bg-zinc-800 dark:text-zinc-400 dark:ring-zinc-700
                                     {% else %}
@@ -169,6 +169,7 @@
                                     <span class="h-1.5 w-1.5 rounded-full 
                                         {% if proposal.status == 'sent' %}bg-teal-500 animate-pulse
                                         {% elif proposal.status == 'accepted' %}bg-emerald-600 dark:bg-emerald-400
+                                        {% elif proposal.status == 'rejected' %}bg-rose-500 dark:bg-rose-400
                                         {% elif proposal.status == 'withdrawn' %}bg-zinc-400 dark:bg-zinc-500
                                         {% else %}bg-blue-600 dark:bg-blue-400{% endif %}"></span>
                                     {{ proposal.status|title }}

@@ -107,6 +107,7 @@ class ProjectRepository:
         return ProjectEntity(
             id=project.id,
             title=project.title,
+            slug=project.slug,
             description=project.description,
             visibility=project.visibility,
             total_budget=project.total_budget,

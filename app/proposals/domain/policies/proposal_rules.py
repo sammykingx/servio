@@ -115,7 +115,6 @@ class ProposalPolicy:
         cls.check_user_eligibility(actor.profile, project)
         cls.check_project_state(project, actor)
         # cls.check_financial_status(actor.profile)
-        pass
         
     
     #----------------- PROPOSAL STATE TRANSISTIONING CHECKS ----------------

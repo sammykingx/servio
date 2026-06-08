@@ -4,9 +4,11 @@ from django.shortcuts import redirect
 from django.db.models import Prefetch
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from core.model_registry import registry
 from core.url_names import CollaborationURLS
 from collaboration.models.choices import PaymentOption
+from proposals.models.choices import ProposalStatus, ProposalRoleStatus
 from template_map.collaboration import Collabs
 
 
@@ -19,11 +21,6 @@ ProposalRoleModel = registry.ProposalRole
 class GigDetailView(LoginRequiredMixin, DetailView):
     """
     Displays detailed information for a single gig/project owned by the authenticated user.
-
-    This view enforces ownership access, ensuring users can only view gigs
-    they created. In addition to core gig data, it enriches the context with
-    role-level payment metadata and prefetches related role proposals for
-    efficient rendering.
     """
     model = GigModel
     template_name = Collabs.Workspace.DETAILS
@@ -31,22 +28,28 @@ class GigDetailView(LoginRequiredMixin, DetailView):
     slug_field = "slug"
     slug_url_kwarg = "slug"
     
+    
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS))
+
+    def get_queryset(self):
+        return (
+            super().get_queryset()
+            .filter(creator=self.request.user)
+            .select_related("creator")
+            .prefetch_related(
+                Prefetch(
+                    "required_roles",
+                    queryset=GigRoleModel.objects.select_related("niche"),
+                )
+            )
+        )
+    
     def get_context_data(self, **kwargs):
-        """
-        Extends the context with editable state rules and role payment metadata.
-
-        Adds:
-        - A list of gig statuses that allow editing
-        - Computed payment details for each required role, including:
-            - Payment type (full upfront or percentage split)
-            - Number of installments
-            - Split percentages per installment
-            - Human-readable payment option label
-
-        This metadata is structured for direct consumption by the UI layer.
-        """
         context = super().get_context_data(**kwargs)
-
         proposal_roles, proposal_count = self.fetch_proposal_roles(self.object)
         
         context["editable_statuses"] = ["pending", "draft"]
@@ -58,7 +61,6 @@ class GigDetailView(LoginRequiredMixin, DetailView):
         if roles:
             for role in roles:
                 payment_value = role.payment_option
-
                 is_split = PaymentOption.is_split(payment_value)
 
                 role_payment_meta[role.id] = {
@@ -78,53 +80,23 @@ class GigDetailView(LoginRequiredMixin, DetailView):
                 
             context["role_payment_meta"] = role_payment_meta
         return context
-
-    def get_queryset(self):
-        """
-        Restricts gig access to user-owned records and optimizes related queries.
-
-        The queryset:
-        - Limits access to gigs created by the current user
-        - Eager-loads the gig creator
-        - Prefetches required roles, their associated niches, and role proposals
-          along with applicant user data to minimize database queries
-
-        Returns:
-            QuerySet: An optimized queryset scoped to the authenticated user.
-        """
-        return (
-            super().get_queryset()
-            .filter(creator=self.request.user)
-            .select_related("creator")
-            .prefetch_related(
-                Prefetch(
-                    "required_roles",
-                    queryset=GigRoleModel.objects.select_related("niche"),
-                )
-            )
-        )
         
     def fetch_proposal_roles(self, gig):
         """
         Retrieves proposal roles associated with the gig's required roles.
-
-        This method gathers all proposal roles linked to the gig's required roles,
-        including related proposal and applicant user data for comprehensive context.
-
-        Args:
-            gig (Gig): The gig instance for which to fetch proposal roles.
-
-        Returns:
-            QuerySet: A queryset of ProposalRole instances with related data.
         """
+        all_proposals = ProposalModel.objects.filter(project=gig)
+        
         preview_roles = (
             ProposalRoleModel.objects
-            .filter(proposal__gig=gig)
-            .select_related("proposal__provider__profile", "gig_role")
+            .filter(proposal__project=gig, status__in=[ProposalRoleStatus.PENDING, ProposalRoleStatus.ACCEPTED, ProposalRoleStatus.REJECTED])
+            .select_related("proposal__provider__profile", "role") 
             .only(
-                "role_amount",
+                "id",
+                "proposal__id",
                 "proposed_amount",
-                "gig_role__role_name",
+                "role__role_name",
+                "role_name",
                 "proposal__provider__profile__avatar_url",
                 "proposal__provider__profile__headline",
                 "proposal__status",
@@ -132,24 +104,11 @@ class GigDetailView(LoginRequiredMixin, DetailView):
             )
             .order_by("-proposal__created_at")[:4]
         )
-        all_proposals = ProposalModel.objects.filter(gig=gig)
-        role_count = {
+        
+        proposal_count = {
             "total_proposals": all_proposals.count(),
-            "accepted": all_proposals.filter(is_negotiating=False).count(),
-            "countered": all_proposals.filter(is_negotiating=True).count()
+            "accepted": all_proposals.filter(status=ProposalStatus.ACCEPTED).count(),
+            "reviewed": all_proposals.filter(status=ProposalStatus.REVIEWED).count()
         }
-        return preview_roles, role_count
+        return preview_roles, proposal_count
     
-    def dispatch(self, request, *args, **kwargs):
-        """
-        Handles invalid or unauthorized access gracefully.
-
-        If the requested gig/project does not exist or does not belong to the user,
-        the request is redirected to the collaboration list view instead of
-        raising a 404 error.
-        """
-        try:
-            return super().dispatch(request, *args, **kwargs)
-        except Http404:
-            return redirect(reverse_lazy(CollaborationURLS.LIST_COLLABORATIONS))
-

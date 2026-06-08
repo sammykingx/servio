@@ -136,9 +136,9 @@ class Gig(models.Model):
         )
         return result['total'] or 0
 
-    # @property
-    # def active_proposals_count(self):
-    #     return self.proposals.count()
+    @property
+    def active_proposals_count(self):
+        return self.proposals.count()
     
     @property
     def updated_display(self):

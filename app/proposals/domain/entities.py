@@ -30,6 +30,7 @@ class ProjectRoleEntity:
 class ProjectEntity:
     id: UUID
     title: str
+    slug: str
     description: str
     visibility: ProjectVisibility
     total_budget: Decimal

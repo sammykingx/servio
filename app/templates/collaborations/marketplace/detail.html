@@ -109,11 +109,14 @@
 								Total Budget
 								</span>
 								<span class="text-sm font-semibold text-slate-900 dark:text-white">
-								{% if gig.is_negotiable %}
+								{% comment %}
+									{% if gig.is_negotiable %}
 									{{ gig.dynamic_range }}
 								{% else %}
 									${{ gig.total_budget|intcomma }}
 								{% endif %}
+								{% endcomment %}
+								$********
 								</span>
 							</div>
 						</div>
@@ -276,11 +279,14 @@
 					<div class="flex flex-col gap-1">
 						<p class="text-slate-500 text-sm font-medium leading-normal">Total Project Budget</p>
 						<p class="text-3xl font-semibold text-slate-800 dark:text-white">
-							{% if gig.is_negotiable %}
+							{% comment %}
+								{% if gig.is_negotiable %}
 								{{ gig.dynamic_range }}
 							{% else %}
 								${{ gig.total_budget|intcomma }}
 							{% endif %}
+							{% endcomment %}
+							$********
 						</p>
 					</div>
 					<div class="flex items-center gap-2 px-3 py-2 bg-success-500/5 rounded-lg border border-success-500/10">

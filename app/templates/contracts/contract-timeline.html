@@ -17,7 +17,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         <!-- LEFT PANEL: Meta Metadata Metadata (4 Columns Wide) -->
-        <section class="lg:col-span-4 bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.01)] space-y-6">
+        <section class="lg:col-span-4 bg-white dark:bg-gray-900/90 border border-slate-100 dark:border-gray-800 rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.01)] space-y-6">
             
             <!-- Reference Identity Core Header -->
             <div>
@@ -26,7 +26,7 @@
                 <p class="text-xs text-slate-400 mt-1">Initialized on {{ contract.created_at|date:"M d, Y" }}</p>
             </div>
 
-            <div class="h-[1px] bg-slate-100 dark:bg-slate-900"></div>
+            <div class="h-[1px] bg-slate-100 dark:bg-gray-800"></div>
 
             <!-- Financial Structure Breakdown -->
             <div class="space-y-3">
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="h-[1px] bg-slate-100 dark:bg-slate-900"></div>
+            <div class="h-[1px] bg-slate-100 dark:bg-gray-800"></div>
 
             <!-- Parties Involved In Flow -->
             <div class="space-y-4">
@@ -104,10 +104,10 @@
         <section class="lg:col-span-8 space-y-6">
             
             <!-- Live Progression Hub Container Component -->
-            <div class="w-full bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.01)]">
+            <div class="w-full bg-white dark:bg-gray-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.01)]">
                 
                 <!-- Header Monitor Meta Strip -->
-                <div class="flex items-center justify-between mb-10">
+                <div class="flex items-center justify-between mb-10 pb-5 border-b border-slate-100 dark:border-slate-800">
                     <div>
                         <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-50 tracking-tight">Contract Lifecycle Flow</h3>
                         <p class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Real-time log sequence for contract state</p>
@@ -122,44 +122,44 @@
                 </div>
 
                 <!-- Stepper Horizontal-to-Vertical Node Pipeline Track -->
-                <div class="relative pl-6 border-l border-slate-100 dark:border-slate-900 space-y-8 ml-3 py-2">
+                <div class="relative pl-6 border-l border-slate-100 dark:border-slate-800 space-y-8 ml-3 py-2">
             
-            {% for event in timeline_events %}
-                <div class="relative group">
-                    
-                    <!-- Milestone Node Indicator Dot -->
-                    <div class="absolute -left-[38px] top-0.5 flex items-center justify-center w-6 h-6 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-{{ event.color }}-500 dark:text-{{ event.color }}-400 group-hover:border-{{ event.color }}-500 group-hover:text-{{ event.color }}-600 transition-colors duration-200 shadow-sm z-10">
-                        <span class="material-symbols-outlined text-[10px]">
-                            {{ event.icon }}
-                        </span>
-                    </div>
+                    {% for event in timeline_events %}
+                        <div class="relative group">
+                            
+                            <!-- Milestone Node Indicator Dot -->
+                            <div class="absolute -left-[38px] top-0.5 flex items-center justify-center w-6 h-6 rounded-lg bg-white dark:bg-gray-900 border border-slate-200 dark:border-slate-800 text-{{ event.color }}-500 dark:text-{{ event.color }}-400 group-hover:border-{{ event.color }}-500 group-hover:text-{{ event.color }}-600 transition-colors duration-200 shadow-sm z-10">
+                                <span class="material-symbols-outlined text-[10px]">
+                                    {{ event.icon }}
+                                </span>
+                            </div>
 
-                    <!-- Meta Log Row Details -->
-                    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5">
-                        <h4 class="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors">
-                            {{ event.title }}
-                        </h4>
-                        <time class="text-[10px] font-mono text-gray-400 dark:text-gray-500">
-                            {{ event.timestamp|date:"M d, Y • H:i" }}
-                        </time>
-                    </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed max-w-xl">
-                        {{ event.desc }}
-                    </p>
+                            <!-- Meta Log Row Details -->
+                            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5">
+                                <h4 class="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors">
+                                    {{ event.title }}
+                                </h4>
+                                <time class="text-[10px] font-mono text-gray-400 dark:text-gray-500">
+                                    {{ event.timestamp|date:"M d, Y • H:i" }}
+                                </time>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed max-w-xl">
+                                {{ event.desc }}
+                            </p>
+                        </div>
+                    {% endfor %}
+
+                    <!-- Pending Next Step Overlay (If contract isn't fully completed yet) -->
+                    {% if not contract.completed_at %}
+                        <div class="relative opacity-60">
+                            <div class="absolute -left-[35px] top-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 z-10"></div>
+                            <div class="flex items-baseline justify-between">
+                                <h4 class="text-xs font-medium text-slate-400 italic">Awaiting remaining completion parameters...</h4>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 </div>
-            {% endfor %}
-
-            <!-- Pending Next Step Overlay (If contract isn't fully completed yet) -->
-            {% if not contract.completed_at %}
-                <div class="relative opacity-60">
-                    <div class="absolute -left-[35px] top-1.5 w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 z-10"></div>
-                    <div class="flex items-baseline justify-between">
-                        <h4 class="text-xs font-medium text-slate-400 italic">Awaiting remaining completion parameters...</h4>
-                    </div>
-                </div>
-            {% endif %}
-
-        </div>
             </div>
             
             <!-- Bottom Context Info Box detailing dispute terms or general help -->

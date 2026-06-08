@@ -106,6 +106,9 @@ class ProposalSubmissionView(LoginRequiredMixin, DetailView):
             }, status=400)
             
         except Exception as err:
+            print(err)
+            import traceback
+            traceback.print_exc()
             return JsonResponse({
                 "status": "warning",
                 "error": "Technical Alignment in-progress",
