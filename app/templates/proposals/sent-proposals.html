@@ -81,49 +81,50 @@
                 </p>
             </div>
 
-            <div class="flex items-center gap-3 self-start sm:self-center">
-                <div class="inline-flex items-center gap-1 rounded-lg bg-slate-100 p-1 dark:bg-slate-800/80">
-                    <!-- All Tab -->
+            <div class="flex items-center gap-3 self-start sm:self-center max-w-full">
+                <div class="inline-flex items-center gap-1 rounded-lg bg-slate-100 p-1 dark:bg-slate-800/80 overflow-x-auto scrollbar-none max-w-full">
+                    
                     <a href="{% url PROPOSALS.SENT_PROPOSALS %}" 
-                    class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if not current_status %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                    class="whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if not current_status %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
                         All
                     </a>
 
                     {% if accepted_count > 0 %}
                         <a href="?status=accepted" 
-                            class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'accepted' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
-                                Accepted <span class="ml-1 text-[8px] opacity-60 font-mono">({{ accepted_count }})</span>
+                        class="whitespace-nowrap inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'accepted' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                            Accepted <span class="ml-1 text-[9px] opacity-75 font-mono">({{ accepted_count }})</span>
                         </a>
                     {% else %}
-                        <span class="rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
+                        <span class="whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
                             Accepted
                         </span>
                     {% endif %}
 
                     {% if withdrawn_count > 0 %}
                         <a href="?status=withdrawn" 
-                            class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'withdrawn' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
-                                Withdrawn <span class="ml-1 text-[8px] opacity-60 font-mono">({{ withdrawn_count }})</span>
+                        class="whitespace-nowrap inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'withdrawn' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                            Withdrawn <span class="ml-1 text-[9px] opacity-75 font-mono">({{ withdrawn_count }})</span>
                         </a>
-                        {% else %}
-                        <span class="rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
+                    {% else %}
+                        <span class="whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
                             Withdrawn
                         </span>
                     {% endif %}
 
                     {% if reviewed_count > 0 %}
                         <a href="?status=reviewed" 
-                        class="rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'reviewed' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
-                            Reviewed <span class="ml-1 text-[8px] opacity-60 font-mono">({{ reviewed_count }})</span>
+                        class="whitespace-nowrap inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium transition-all {% if current_status == 'reviewed' %}bg-white shadow-sm text-zinc-900 dark:bg-slate-700 dark:text-white{% else %}text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200{% endif %}">
+                            Reviewed <span class="ml-1 text-[9px] opacity-75 font-mono">({{ reviewed_count }})</span>
                         </a>
                     {% else %}
-                        <span class="rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
+                        <span class="whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed select-none">
                             Reviewed
                         </span>
                     {% endif %}
                 </div>
-                <a href="{% url OPPURTUNITIES.ALL %}" class="inline-flex items-center justify-center rounded-md bg-brand-500 px-2.5 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors shadow-sm">
-                    <span class="material-symbols-outlined">manage_search</span>
+
+                <a href="{% url OPPURTUNITIES.ALL %}" class="shrink-0 inline-flex items-center justify-center rounded-md bg-brand-500 px-2.5 py-1 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors shadow-sm h-[32px]">
+                    <span class="material-symbols-outlined text-[18px]">manage_search</span>
                 </a>
             </div>
         </div>

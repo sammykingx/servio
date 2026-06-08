@@ -31,7 +31,7 @@
 							{% if user.profile.avatar_url %}
 							<img src="{{ user.profile.avatar_url.url }}" class="w-full h-full object-cover" />
 							{% else %}
-							<span class="flex h-full w-full items-center justify-center text-2xl font-semibold text-brand-500">
+							<span class="flex h-full w-full items-center justify-center text-2xl font-semibold text-brand-500 dark:text-gray-300">
 							{{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
 							</span>
 							{% endif %}
