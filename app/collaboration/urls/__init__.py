@@ -7,5 +7,5 @@ from . import workroom
 urlpatterns = [
     path("workspace/", include(workspace)),
     path("oppurtunities/", include(marketplace)),
-    path("workforce/", include(workroom)),
+    path("workroom/", include(workroom)),
 ]

@@ -155,8 +155,8 @@
                         <h4 class="text-xs font-semibold uppercase tracking-wider text-emerald-400 dark:text-emerald-700">Verification Complete</h4>
                         <p class="text-xs text-slate-300 dark:text-gray-600 mt-0.5">All verification thresholds passed. Project workspace initialized</p>
                     </div>
-                    <a href="#" class="w-full sm:w-auto text-center px-4 py-2 bg-white hover:bg-slate-50 dark:bg-gray-950 dark:hover:bg-gray-900 text-slate-950 dark:text-white font-medium text-xs rounded transition whitespace-nowrap shadow-sm">
-                        Launch workforce →
+                    <a href="{% url WORKROOM.PROJECT_WORKROOM slug=project_slug %}" class="w-full sm:w-auto text-center px-4 py-2 bg-white hover:bg-slate-50 dark:bg-gray-950 dark:hover:bg-gray-900 text-slate-950 dark:text-white font-medium text-xs rounded transition whitespace-nowrap shadow-sm">
+                        Open Team area →
                     </a>
                 </div>
             {% endif %}

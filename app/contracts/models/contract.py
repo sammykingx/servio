@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.db import models
+
 from uuid6 import uuid7
 from decimal import Decimal, ROUND_HALF_UP
 from constants import SERVICE_FEE, GST_TAX_FEE, DECIMAL_PLACE, USD_TO_NGN_RATE, SUBSRIBERS_SERVICE_FEE
-
+import urllib
 
 class ContractStatus(models.TextChoices):
     AWAITING = "awaiting", "Awaiting Signatures"
@@ -162,4 +163,101 @@ class Contract(models.Model):
         
     @property
     def payment_plan_display(self):
-        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip() + "%"# 
+        return self.payment_plan.strip("split_").replace("_", "% , ").rstrip() + "%"
+    
+    @property
+    def client_whatsapp_msg(self):
+        project_title = self.project.title.title()
+        number = self.client.profile.mobile_num
+        message = (
+                f"Hi {self.client.first_name.title()},\n\n"
+                f"I'm reaching out regarding our project *\"{project_title}\"* on *Servio*.\n\n"
+                "Everything looks good on my end regarding the deliverables and payment terms, "
+                "and I'm ready to get started.\n\n"
+                "Happy to coordinate here for updates and next steps.\n\n"
+                "_— sent via *Servio* by DivGM_"
+            )
+        encoded_message = urllib.parse.quote(message)
+        return f"https://wa.me/{number}?text={encoded_message}"
+    
+    @property
+    def client_mail_msg(self):
+        project_title = self.project.title.title()
+        subject = f"Project Kickoff: {project_title} (via Servio)"
+        email = self.client.email
+        
+        body = f"""
+            Hi {self.client.first_name.title()},
+
+            I hope you're doing well.
+
+            I'm reaching out regarding our confirmed collaboration on the project "{project_title}" via Servio.
+
+            Everything looks good on my end regarding the agreed scope and payment terms for my role, and I'm ready to get started.
+
+            Please let me know the next steps or any initial direction you'd like me to follow.
+
+            Happy to coordinate here or via WhatsApp for updates and communication.
+
+            Looking forward to working with you.
+
+            Best regards,  
+            {self.provider.full_name.title()}
+
+            —
+            Sent via Servio by DivGM
+            """
+
+        encoded_subject = urllib.parse.quote(subject.strip())
+        encoded_body = urllib.parse.quote(body.strip())
+
+        return f"mailto:{email}?subject={encoded_subject}&body={encoded_body}"
+        
+    @property
+    def provider_whatsapp_msg(self):
+        number = self.provider.profile.mobile_num
+        project_title = self.project.title.title()
+        message = (
+           f"Hi {self.provider.first_name.title()},\n\n"
+           f"I'm reaching out regarding our project *\"{project_title}\"* on *Servio*.\n\n"
+           "We've aligned on the deliverables and payment structure, and I'm looking forward "
+           "to getting started with you.\n\n"
+           "Feel free to use this chat for updates, coordination, and any questions along the way.\n\n"
+           "_— sent via *Servio* by DivGM_"
+        )
+        
+        encoded_message = urllib.parse.quote(message)
+        return f"https://wa.me/{number}?text={encoded_message}"
+    
+    @property
+    def provider_mail_msg(self):
+        project_title = self.project.title.title()
+        subject = f"Project Kickoff: {project_title} (via Servio)"
+        email = self.provider.email
+        
+        body = f"""
+            Hi {self.provider.first_name.title()},
+
+            I hope you're doing well.
+
+            I'm reaching out regarding our confirmed collaboration on the project "{project_title}" via Servio.
+
+            Everything looks good on my end regarding the agreed scope and payment terms for my role, and I'm ready to get started.
+
+            Please let me know the next steps or any initial direction you'd like me to follow.
+
+            Happy to coordinate here or via WhatsApp for updates and communication.
+
+            Looking forward to working with you.
+
+            Best regards,  
+            {self.client.full_name.title()}
+
+            —
+            Sent via Servio by DivGM
+            """
+
+        encoded_subject = urllib.parse.quote(subject.strip())
+        encoded_body = urllib.parse.quote(body.strip())
+
+        return f"mailto:{email}?subject={encoded_subject}&body={encoded_body}"

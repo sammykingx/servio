@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-
+# not used
 class ContractDeliverable(models.Model):
     contract = models.ForeignKey(
         "contracts.Contract",
@@ -14,7 +14,7 @@ class ContractDeliverable(models.Model):
         on_delete=models.CASCADE,
         to_field="email",
     )
-    title = models.CharField(max_length=255)
+    phase = models.CharField(max_length=255)
     description = models.TextField()
     due_date = models.DateField()
     release_percentage = models.DecimalField(

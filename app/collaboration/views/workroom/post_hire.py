@@ -1,10 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Prefetch, Q, Sum
+from django.http import HttpRequest
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.views.generic import DetailView, ListView
 
 from contracts.models.contract import ContractStatus
 from core.model_registry import registry
+from core.url_names import WorkroomURLS
 from template_map.collaboration import Collabs
+
+import urllib
 
 
 Contract = registry.Contract
@@ -44,4 +50,40 @@ class ContractedProjectListView(LoginRequiredMixin, ListView):
     
     
 class ProjectWorkroomDetailView(LoginRequiredMixin, DetailView):
-    pass
+    template_name = Collabs.Workforce.PROJECT_WORKROOM
+    model = registry.Gig
+    context_object_name = "project"
+    
+
+    def dispatch(self, request:HttpRequest, *args, **kwargs):
+        self.object = self.get_object()
+        user = request.user
+
+        is_owner = self.object.creator == user
+
+        is_provider = Contract.objects.filter(
+            project=self.object,
+            provider=user,
+            provider_accepted_terms_at__isnull=False
+        ).exists()
+
+        if not (is_owner or is_provider):
+            return redirect(reverse(WorkroomURLS.OVERVIEW))
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        contracts = Contract.objects.filter(
+            project=self.object,
+            provider_accepted_terms_at__isnull=False
+        ).select_related(
+            'provider', 
+            'provider__profile', 
+            'proposal_role'
+        ).prefetch_related(
+            'proposal_role__deliverables'
+        )
+
+        context['contracts'] = contracts
+        return context

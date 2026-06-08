@@ -4,192 +4,227 @@
 {% load pretify_status %}
 {% block browser_title %}Activatd Contracted Projects{% endblock %}
 {% block content %}
-
-<div class="px-2 md:px-3 min-h-screen max-w-7xl mx-auto w-full text-slate-800 dark:text-gray-100 font-sans antialiased transition-colors duration-200">
-    <section class="bg-white dark:bg-[#09090b] border-b border-slate-200/60 dark:border-zinc-850 py-3 text-xs transition-colors duration-200">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            
-            <div class="flex items-center gap-3 min-w-0">
-                <span class="relative flex h-2 w-2 shrink-0">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400/60 dark:bg-blue-500/40 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600 dark:bg-blue-500"></span>
-                </span>
-                
-                <p class="text-[13px] font-normal leading-relaxed text-slate-600 dark:text-zinc-400 min-w-0">
-                    <span class="font-medium text-slate-900 dark:text-zinc-200">System Mode Notice:</span> 
-                    Work tracking and automated payments are coming in v2. Please coordinate communications directly with your providers for now.
-                </p>
+{% if not projects %}
+    {% include "components/empty-states/no-project-team.html" %}
+{% else %}
+<div class="py-5 min-h-screen max-w-7xl mx-auto w-full text-slate-800 dark:text-gray-100 font-sans antialiased transition-colors duration-200">
+    <section class="space-y-8">
+        
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-slate-200/80 dark:border-gray-800/80">
+            <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    <span class="text-[11px] font-mono tracking-widest text-slate-400 dark:text-gray-500 uppercase">Operational Overview</span>
+                </div>
+                <h1 class="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Project Workroom</h1>
+                <p class="text-sm text-slate-500 dark:text-gray-400">Central system for tracking contracted provider and project metrics.</p>
             </div>
             
-            <div class="flex items-center shrink-0 self-start sm:self-auto pl-5 sm:pl-0">
-                <a href="#" class="inline-flex items-center gap-1 text-[12px] font-medium text-slate-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 bg-slate-50 dark:bg-zinc-900 hover:bg-slate-100 dark:hover:bg-zinc-800/80 px-2.5 py-1 rounded-md border border-slate-200/60 dark:border-zinc-800 transition-all duration-150 group">
-                    <span>View Product Roadmap</span>
-                    <svg class="h-3.5 w-3.5 text-slate-400 group-hover:text-current transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                </a>
-            </div>
-            
-        </div>
-    </section>
-
-    <section class="py-8">
-        <!-- Page header -->
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 pb-6 border-b border-slate-200/80 dark:border-gray-800/80">
-            <div>
-                <h1 class="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">Project Workroom</h1>
-                <p class="text-sm text-slate-500 dark:text-gray-400 mt-1">Central repository for tracking contracted provider delivery pipelines.</p>
+            <div class="hidden md:flex items-center gap-3 bg-slate-100/80 dark:bg-gray-900/50 border border-slate-200/60 dark:border-gray-800/80 rounded-xl p-3 text-xs">
+                <div class="space-y-0.5">
+                    <span class="text-slate-400 dark:text-gray-500 block text-[10px] uppercase font-mono tracking-wide">Servio workroom</span>
+                    <span class="font-medium text-slate-900 dark:text-gray-200 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        engine synced
+                    </span>
+                </div>
             </div>
         </div>
 
-        <div class="space-y-4 mt-10">
+        <div class="space-y-10 mt-6">
             {% for project in projects %}
-            <div class="group relative border border-slate-200/80 dark:border-gray-800/80 rounded-xl bg-white dark:bg-gray-900/30 p-6 shadow-sm hover:border-slate-300 dark:hover:border-gray-700/80 hover:shadow transition-all duration-150">
-                <div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+            <div class="group relative bg-white dark:bg-gray-900/40 border border-slate-200/90 dark:border-gray-800/90 rounded-3xl p-6 shadow-[0_2px_8px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.03)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] hover:border-slate-300 dark:hover:border-gray-700/80 transition-all duration-300 overflow-hidden">
+                
+                <div class="absolute -top-24 -right-24 w-72 h-72 bg-gradient-to-br from-blue-500/10 to-indigo-500/0 dark:from-blue-500/5 dark:to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
                     
-                    <!-- Left: Identity Core Info -->
-                    <div class="flex-1 min-w-0 space-y-2">
-                        <div class="flex items-center gap-2.5 flex-wrap">
-                            <h3 class="text-base font-semibold tracking-tight text-slate-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2.5">
+                            <div class="flex items-center gap-2.5 flex-wrap">
+                                <span class="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-gray-800 text-slate-500 dark:text-gray-400 border border-slate-200/60 dark:border-gray-700/60">
+                                    PROJ-{{ forloop.counter|stringformat:"03d" }}
+                                </span>
+                                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/40 dark:border-emerald-500/20 shadow-sm">
+                                    {{ project.get_status_display }}
+                                </span>
+                            </div>
+                            
+                            <h3 class="text-lg font-semibold tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                 <a href="{% url WORKROOM.PROJECT_WORKROOM slug=project.slug %}" class="focus:outline-none">
                                     <span class="absolute inset-0" aria-hidden="true"></span>
                                     {{ project.title|title }}
                                 </a>
                             </h3>
-                            <span class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200/40 dark:border-emerald-900/30">
-                                {{ project.get_status_display }}
-                            </span>
+                            
+                            <p class="text-xs text-slate-500 dark:text-gray-400 leading-relaxed line-clamp-3">
+                                {{ project.description|safe|truncatewords:30 }}
+                            </p>
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-gray-400 max-w-xl leading-relaxed line-clamp-2">
-                            {{ project.description|safe|truncatewords:30 }}
-                        </p>
+
+                        <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400 dark:text-gray-500 pt-2">
+                            {% if project.active_contracts_count > 0 %}
+                                {% if project.creator == user %}
+                                    <span class="text-emerald-600 dark:text-emerald-400 font-medium">{{ project.active_contracts_count }} Active contract{{ project.active_contracts_count|pluralize }}</span>
+                                {% else %}
+                                    <span class="text-emerald-600 dark:text-emerald-400 font-medium">Active Contract</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="italic text-slate-400 dark:text-gray-600">No contracts</span>
+                            {% endif %}
+                        </div>
                     </div>
 
-                    <!-- Right: Dynamic Financial & Volume Metrics -->
-                    <div class="flex items-center gap-6 text-xs text-slate-500 dark:text-gray-400 shrink-0 border-t md:border-t-0 pt-4 md:pt-0 border-slate-100 dark:border-gray-800">
-                        {% if project.creator == user %}
-                        <div class="text-left md:text-right">
-                            <span class="block text-[10px] uppercase fonnt-semibold text-slate-400 tracking-wider">Combined Value</span>
-                            <span class="font-medium text-slate-800 dark:text-gray-200 font-mono mt-0.5 block">
+                    {% if project.creator == user %}
+                    <div class="lg:col-span-3 rounded-2xl bg-gradient-to-br from-brand-900 via-brand-950 to-blue-950 dark:from-gray-900 dark:via-black dark:to-gray-900/80 p-5 flex flex-col justify-between text-white border border-slate-800 shadow-sm relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                        
+                        <div class="relative z-10 flex items-center justify-between">
+                            <span class="text-[10px] font-mono tracking-widest text-slate-400 uppercase">Combined Valuation</span>
+                            <div class="h-6 w-6 rounded-lg bg-white/10 flex items-center justify-center text-green-400">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                        </div>
+                        <div class="relative z-10 mt-4 sm:mt-0">
+                            <span class="text-2xl font-mono font-semibold tracking-tight text-white block">
                                 ${{ project.total_combined_value|intcomma|default:"0.00" }}
                             </span>
+                            <span class="text-[9px] text-slate-400 block mt-1 font-mono">across active contracts</span>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="lg:col-span-3 rounded-2xl bg-white dark:bg-gray-800/40 p-8 flex flex-col justify-center items-center text-center border border-dashed border-gray-200 dark:border-gray-800 shadow-sm transition-all duration-300">
+                        <!-- Subtle Icon Indicator -->
+                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-500">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                            </svg>
                         </div>
                         
-                        <div class="h-8 w-px bg-slate-200/60 dark:bg-gray-800"></div>
-                        {% endif %}
-                        <div class="text-left md:text-right">
-                            <span class="block text-[10px] uppercase fonnt-semibold text-slate-400 tracking-wider">Team Size</span>
-                            <span class="font-medium text-slate-800 dark:text-gray-200 mt-0.5 block">{{ project.total_team_size }} Provider{{ project.total_team_size|pluralize }}</span>
-                        </div>
+                        <!-- Text Elements -->
+                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-200 tracking-tight">Locked</h4>
+                        <p class="mt-1 text-xs text-gray-400 dark:text-gray-500 max-w-[240px]">✨ Project details are private</p>
                     </div>
-                </div>
+                    {% endif %}
 
-                <div class="mt-6 pt-4 border-t border-slate-100 dark:border-gray-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    
-                    <div class="flex items-center gap-4 flex-wrap">
-                        <div class="flex -space-x-2 overflow-hidden">
-                            {% for contract in project.all_contracts|slice:":4" %}
-                                <div class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 text-[10px] font-bold text-slate-800 dark:text-slate-100 ring-2 ring-white dark:ring-zinc-900 transition-colors" 
-                                    title="{{ contract.provider.get_full_name|default:contract.provider.email }}">
-                                    {% if contract.provider.first_name %}
-                                        {{ contract.provider.first_name|slice:":1"|upper }}{% if contract.provider.last_name %}{{ contract.provider.last_name|slice:":1"|upper }}{% endif %}
-                                    {% else %}
-                                        {{ contract.provider.email|slice:":2"|upper }}
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-                            
-                            {% if project.total_team_size > 4 %}
-                            <div class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 dark:bg-blue-950/40 text-[9px] fonnt-medium text-blue-600 dark:text-blue-400 ring-2 ring-white dark:ring-[#0c0c0e] border border-blue-100 dark:border-blue-900/30">
-                                +{{ project.total_team_size|add:"-4" }}
+                    <div class="lg:col-span-4 rounded-2xl bg-slate-50 dark:bg-gray-900/30 border border-slate-200/60 dark:border-gray-800/60 p-5 flex flex-col justify-between gap-4">
+                        <div class="flex justify-between items-center">
+                            <div class="space-y-0.5">
+                                <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-gray-500 block">Assigned Resource Pool</span>
+                                {% if project.creator == user %}
+                                    <span class="text-sm font-semibold text-slate-900 dark:text-gray-100 block">{{ project.total_team_size }} Dedicated Provider{{ project.total_team_size|pluralize }}</span>
+                                {% else %}
+                                    <span class="text-sm font-semibold text-slate-900 dark:text-gray-100 block">Get started</span>
+                                {%endif %}
                             </div>
-                            {% endif %}
+                            <div class="h-8 w-8 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xs font-mono">
+                                {{ project.total_team_size }}
+                            </div>
                         </div>
 
-                        <!-- 2. Breakdown Statuses (Logic usually handled via model method or simple counting) -->
-                        <div class="text-[10px] text-slate-400 dark:text-gray-500 font-medium">
-                            {% if project.active_contracts_count > 0 %}
-                                <span class="text-emerald-600 dark:text-emerald-400 font-semibold">
-                                    {{ project.active_contracts_count }} Active
-                                </span>
-                            {% endif %}
-
-                            {% if project.signed_contracts_count > 0 %}
-                                {% if project.active_contracts_count > 0 %}<span class="mx-1">•</span>{% endif %}
-                                <span class="text-blue-600 dark:text-blue-400">
-                                    {{ project.signed_contracts_count }} Signed
-                                </span>
-                            {% endif %}
-
-                            {% if project.pending_provider_acceptance_count > 0 %}
-                                {% if project.active_contracts_count > 0 or project.signed_contracts_count > 0 %}
-                                    <span class="mx-1">•</span>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-200/40 dark:border-gray-800/40">
+                            <div class="flex -space-x-2.5 overflow-hidden">
+                                {% for contract in project.all_contracts|slice:":4" %}
+                                    <div class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-slate-200 to-slate-300 dark:from-gray-700 dark:to-gray-800 text-[10px] font-mono font-semibold text-slate-800 dark:text-gray-200 ring-4 ring-white dark:ring-gray-900 transition-transform group-hover:scale-105" 
+                                         title="{{ contract.provider.get_full_name|default:contract.provider.email }}">
+                                        {% if contract.provider.first_name %}
+                                            {{ contract.provider.first_name|slice:":1"|upper }}{% if contract.provider.last_name %}{{ contract.provider.last_name|slice:":1"|upper }}{% endif %}
+                                        {% else %}
+                                            {{ contract.provider.email|slice:":2"|upper }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                
+                                {% if project.total_team_size > 4 %}
+                                <div class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-[10px] font-mono font-semibold text-white ring-4 ring-white dark:ring-gray-900">
+                                    +{{ project.total_team_size|add:"-4" }}
+                                </div>
                                 {% endif %}
-                                <span class="text-amber-600 dark:text-amber-500">
-                                    {{ project.pending_provider_acceptance_count }} Awaiting Provider
-                                </span>
-                            {% endif %}
-                            
-                            {% if project.total_team_size == 0 %}
-                                <span class="italic text-slate-400">No active contracts</span>
-                            {% endif %}
+                            </div>
+
+                            <span class="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 shadow-sm text-slate-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all duration-300 relative z-20">
+                                <svg class="h-4 w-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                            </span>
                         </div>
                     </div>
 
-                    <span class="text-xs font-medium text-slate-400 group-hover:text-slate-900 dark:group-hover:text-gray-200 transition-colors flex items-center gap-1 self-end sm:self-auto">
-                        Open Workroom
-                        <svg class="h-3.5 w-3.5 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-                    </span>
                 </div>
+
+                <div class="mt-4 pt-4 border-t border-slate-100 dark:border-gray-800/40 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-slate-400 dark:text-gray-500">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        {% if project.signed_contracts_count > 0 %}
+                            <span class="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium">
+                                <span class="h-1 w-1 bg-blue-500 rounded-full"></span>
+                                {{ project.signed_contracts_count }} Signed{{ project.signed_contracts_count|pluralize }}
+                            </span>
+                        {% endif %}
+
+                        {% if project.pending_provider_acceptance_count > 0 %}
+                            {% if project.signed_contracts_count > 0 %}<span class="text-slate-300 dark:text-gray-800">•</span>{% endif %}
+                            <span class="flex items-center gap-1.5 text-amber-600 dark:text-amber-400">
+                                <span class="h-1 w-1 bg-amber-500 rounded-full"></span>
+                                {{ project.pending_provider_acceptance_count }} Awaiting
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <span class="text-[10px] text-slate-300 dark:text-gray-700 hidden sm:inline">System Verified Hash // ID-{{ project.slug|slice:":8"|upper }}</span>
+                </div>
+
             </div>
             {% empty %}
-            <div class="py-12 text-center border-2 border-dashed border-slate-200 dark:border-gray-800 rounded-xl">
-                <p class="text-sm text-slate-500">No activated project contracts found.</p>
+            <div class="py-16 text-center border-2 border-dashed border-slate-200 dark:border-gray-800 rounded-3xl bg-slate-50/50 dark:bg-gray-900/10">
+                <div class="h-10 w-10 bg-slate-100 dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-xl flex items-center justify-center mx-auto text-slate-400 mb-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414a1 1 0 00-.707-.293H4"/></svg>
+                </div>
+                <p class="text-sm font-medium text-slate-600 dark:text-gray-400">No activated contracts found.</p>
+                <p class="text-xs text-slate-400 dark:text-gray-500 mt-0.5">accepted projectcontracts will show up here.</p>
             </div>
             {% endfor %}
 
             {% if is_paginated %}
-                <div class="mt-8 flex items-center justify-between border-t border-slate-200/80 dark:border-gray-800/80 pt-6">
-                    <div class="flex flex-1 justify-between sm:hidden">
-                        {% if page_obj.has_previous %}
-                            <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-md border border-slate-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-sm font-medium text-slate-700 dark:text-gray-300 hover:bg-slate-50">Previous</a>
-                        {% endif %}
-                        {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}" class="relative ml-3 inline-flex items-center rounded-md border border-slate-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-sm font-medium text-slate-700 dark:text-gray-300 hover:bg-slate-50">Next</a>
-                        {% endif %}
+            <div class="mt-8 flex items-center justify-between border-t border-slate-200/80 dark:border-gray-800/80 pt-6">
+                <div class="flex flex-1 justify-between sm:hidden">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-xl border border-slate-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-xs font-medium text-slate-700 dark:text-gray-300 hover:bg-slate-50">Previous</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="relative ml-3 inline-flex items-center rounded-xl border border-slate-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 text-xs font-medium text-slate-700 dark:text-gray-300 hover:bg-slate-50">Next</a>
+                    {% endif %}
+                </div>
+                
+                <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between font-mono text-[11px]">
+                    <div>
+                        <p class="text-slate-400 dark:text-gray-500">
+                            Showing <span class="font-medium text-slate-900 dark:text-white">{{ page_obj.start_index }}</span> to <span class="font-medium text-slate-900 dark:text-white">{{ page_obj.end_index }}</span> of <span class="font-medium text-slate-900 dark:text-white">{{ paginator.count }}</span> nodes
+                        </p>
                     </div>
-                    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-xs text-slate-500 dark:text-gray-400">
-                                Showing <span class="font-medium text-slate-900 dark:text-white">{{ page_obj.start_index }}</span> to <span class="font-medium text-slate-900 dark:text-white">{{ page_obj.end_index }}</span> of <span class="font-medium text-slate-900 dark:text-white">{{ paginator.count }}</span> projects
-                            </p>
-                        </div>
-                        <div>
-                            <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                                {% if page_obj.has_previous %}
-                                <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 dark:ring-gray-800 hover:bg-slate-50 dark:hover:bg-gray-900 focus:z-20 focus:outline-offset-0">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" /></svg>
-                                </a>
-                                {% endif %}
+                    <div>
+                        <nav class="isolate inline-flex -space-x-px rounded-xl shadow-sm" aria-label="Pagination">
+                            {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-l-xl px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-200 dark:ring-gray-800 hover:bg-slate-50 dark:hover:bg-gray-900 focus:z-20">
+                                <span class="sr-only">Previous</span>
+                                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" /></svg>
+                            </a>
+                            {% endif %}
 
-                                <!-- Current Page Indicator -->
-                                <span class="relative z-10 inline-flex items-center bg-blue-600 px-4 py-2 text-xs font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                    {{ page_obj.number }}
-                                </span>
+                            <span class="relative z-10 inline-flex items-center bg-blue-600 px-3 py-2 text-xs font-semibold text-white focus:z-20">
+                                {{ page_obj.number }}
+                            </span>
 
-                                {% if page_obj.has_next %}
-                                <a href="?page={{ page_obj.next_page_number }}" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 dark:ring-gray-800 hover:bg-slate-50 dark:hover:bg-gray-900 focus:z-20 focus:outline-offset-0">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>
-                                </a>
-                                {% endif %}
-                            </nav>
-                        </div>
+                            {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}" class="relative inline-flex items-center rounded-r-xl px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-200 dark:ring-gray-800 hover:bg-slate-50 dark:hover:bg-gray-900 focus:z-20">
+                                <span class="sr-only">Next</span>
+                                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>
+                            </a>
+                            {% endif %}
+                        </nav>
                     </div>
                 </div>
-                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </section>
 </div>
+{% endif %}
 {% endblock %}
