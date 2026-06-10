@@ -71,7 +71,14 @@
             clients who truly value your skills.
         </p>
     </div>
-	<form id="expertise" x-data="expertiseForm()" x-init="init()" class="space-y-8">
+	<form 
+        id="expertise" 
+        x-data="expertiseForm()" 
+        x-init="init()"
+        data-industry="{{ profile.industry_id|default:'' }}"
+        data-bio="{{ profile.bio|default:'' }}"
+        data-user-niches="{{ niche_list|default:'[]' }}"
+        class="space-y-8">
 		{% csrf_token %}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Primary Industry -->
@@ -108,33 +115,6 @@
                             <option :value="industry.id" x-text="industry.name"></option>
                         </template>
                     </select>
-
-                    <!-- <select
-                        id="industry"
-                        name="industry"
-                        required
-                        class="
-                            h-12 w-full
-                            rounded-xl
-                            border border-gray-300 dark:border-gray-700
-                            bg-white dark:bg-gray-900
-                            pl-4 pr-12
-                            text-sm text-gray-800 dark:text-white/90
-                            shadow-sm
-                            transition-all duration-200
-                            appearance-none cursor-pointer
-
-                            focus:outline-none
-                            focus:border-brand-500
-                            focus:ring-1 focus:ring-brand-500/30
-                        "
-                    >
-                        <option value="tech" selected>Technology &amp; IT</option>
-                        <option value="creative">Creative &amp; Design</option>
-                        <option value="legal">Legal Services</option>
-                        <option value="marketing">Marketing &amp; Sales</option>
-                        <option value="finance">Finance &amp; Accounting</option>
-                    </select> -->
 
                     <span
                         class="
@@ -334,12 +314,6 @@
                     processing…
                 </span>
             </button>
-
-
-			<!-- <a href="{% url USER_ONBOARDING_URLS.OBJECTIVES %}" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-500-hover text-white rounded-xl px-10 py-3.5 text-sm font-bold shadow-md hover:shadow-lg hover:shadow-brand-500/20 transition-all duration-200" type="submit">
-			    Next Step
-			<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </a> -->
 		</div>
 	</form>
 </div>

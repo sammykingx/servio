@@ -1,25 +1,29 @@
 from django.apps import apps
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Prefetch
 from django.http import JsonResponse
 from django.views.generic import TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from pydantic import ValidationError
+
 from accounts.onboarding.exception import OnboardingError
 from accounts.onboarding.manager import UserOnboardingManager
 from accounts.onboarding.schemas import OnboardingStepTwoPayload
 from accounts.onboarding.users.mixins import OnboardingStepMixin
+from core.model_registry import registry
 from template_map.accounts import Accounts
+
+from pydantic import ValidationError
 import json
 
 
 
-GigCategory = apps.get_model("collaboration", "GigCategory")
+GigCategory = registry.GigCategory
 
 
 class ExpertiseView(LoginRequiredMixin, OnboardingStepMixin, TemplateView):
     template_name = Accounts.Onboarding.EXPERTISE
     view_step = 2
+    model = registry.UserProfile
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -33,7 +37,17 @@ class ExpertiseView(LoginRequiredMixin, OnboardingStepMixin, TemplateView):
             )
             .order_by("name")
         )
-
+        profile = (
+            self.model.objects
+            .filter(user=self.request.user)
+            .select_related("industry")
+            .prefetch_related("niches")
+            .first()
+        )
+        niches_list = list(profile.get_user_niches)
+        
+        context["niche_list"] = niches_list
+        context["profile"] = profile
         context["taxonomy"] = [
             {
                 "id": industry.id,

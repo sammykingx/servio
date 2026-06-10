@@ -46,9 +46,9 @@ class ModelRegistry:
 
         # ACCOUNTS APP
         "Address": ("accounts", "Address"),
-        "Profile": ("accounts", "Profile"),
+        "UserProfile": ("accounts", "UserProfile"),
         "SocialLink": ("accounts", "SocialLink"),
-        "Tokentype": ("accounts", "Tokentype"),
+        "UserToken": ("accounts", "UserToken"),
         "UserOnboardingIntent": ("accounts", "UserOnboardingIntent"),
         
         # BUSINESS APP

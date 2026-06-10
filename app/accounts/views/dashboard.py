@@ -156,11 +156,22 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     View to display the user's profile page.
     """
 
+    model = registry.UserProfile
     template_name = Accounts.ACCOUNT_PROFILE
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        profile = (
+            self.model.objects
+            .filter(user=self.request.user)
+            .select_related("industry")
+            .prefetch_related("niches")
+            .first()
+        )
         addresses = self.request.user.addresses
+        
+        ctx["profile"] = profile
+        ctx["user_niches"] = profile.niches.all()
         ctx["social_links"] = {
             link.platform: link.url
             for link in self.request.user.social_links.all()

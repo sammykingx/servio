@@ -18,16 +18,43 @@ function expertiseForm() {
                 document.getElementById("taxonomy").textContent
             );
 
+            const savedIndustry = this.$el.dataset.industry;
+            const savedBio = this.$el.dataset.bio;
+            const savedNiches = this.$el.dataset.userNiches;
+
             // defaults for industry
-            if (this.taxonomy.length) {
+            if (savedIndustry) {
+                this.industryId = Number(savedIndustry);
+            } else if (this.taxonomy.length) {
                 this.industryId = this.taxonomy[0].id;
             }
+            console.log(savedIndustry, savedNiches, this.industryId);
             this.experience = "0-2";
+            this.bio = savedBio ? savedBio : "";
             this.bioWordCount = this.countWords(this.bio || "")
 
+            // if (savedNiches) {
+            //     try {
+                    
+            //         this.selectedNiches = JSON.parse(savedNiches);
+            //     } catch (e) {
+            //         this.selectedNiches = [];
+            //     }
+            // }
+
+            // if your'e enabling this then you're disabling the next watcher
+            // this.$nextTick(() => {
+            //     this.$watch("industryId", (newValue, oldValue) => {
+            //         // Only wipe selection if the change happens because of a deliberate user click interaction
+            //         if (oldValue !== null) {
+            //             this.selectedNiches = [];
+            //         }
+            //     });
+            // });
+
             this.$watch("industryId", () => {
-            this.selectedNiches = [];
-    });
+                this.selectedNiches = [];
+            });
         },
 
         get industry() {
