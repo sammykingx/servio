@@ -1,4 +1,4 @@
-# core/management/commands/create_launch_user.py
+# accounts/management/commands/create_launch_user.py
 
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth import get_user_model
@@ -39,7 +39,7 @@ class Command(BaseCommand):
         ))
         
 # Basic user
-# python manage.py create_launch_user --email sammy@servio.com --password securepass123
+# python manage.py create_launch_user --email demoacc1@servio.com --password eniol@O20 --first-name Eniola --last-name Olaniyan
 
 # Staff/admin user
 # python manage.py create_launch_user --email sammy@servio.com --password securepass123 --staff

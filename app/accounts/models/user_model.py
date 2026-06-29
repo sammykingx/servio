@@ -52,7 +52,7 @@ class AuthUser(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     
-    # objects = CustomUserManager()
+    objects = CustomUserManager()
 
     @property
     def full_name(self) -> str:
